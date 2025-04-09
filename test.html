@@ -3,146 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipment Store</title>
+    <title>Fitness Tracker</title>
+    <!-- Include Normalize.css for better cross-browser consistency -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
-            background-color: #f0f0f0;
-            color: #333;
         }
 
-        .header {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
+        nav {
+            background-color: #333;
             padding: 1rem;
-            margin-bottom: 2rem;
+            text-align: center;
         }
 
-        .nav-bar {
-            display: flex;
-            justify-content: space-around;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .nav-bar a {
+        nav a {
+            color: white;
             text-decoration: none;
-            color: #333;
+            margin: 0 1rem;
             padding: 0.5rem 1rem;
             border-radius: 4px;
             transition: background-color 0.3s;
         }
 
-        .nav-bar a:hover {
-            background-color: #4CAF50;
+        nav a:hover {
+            background-color: #555;
         }
 
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .product-grid {
+        .dashboard {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            padding: 2rem;
+            margin-top: 2rem;
         }
 
-        .product-card {
+        .card {
             background-color: white;
+            padding: 2rem;
             border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .product-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 4px;
+        h1, h2 {
             margin-bottom: 1rem;
+            color: #333;
         }
 
-        .product-info {
-            text-align: center;
+        .activity-form {
+            display: grid;
+            gap: 1rem;
         }
 
-        .price {
-            font-size: 1.5rem;
-            color: #2c3e50;
-            margin-top: 0.5rem;
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
         }
 
-        .add-to-cart {
+        input, select, button {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        button {
             background-color: #4CAF50;
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-top: 1rem;
+            border: none;
+            cursor: pointer;
         }
 
-        .add-to-cart:hover {
+        button:hover {
             background-color: #45a049;
         }
 
-        .footer {
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .progress-card {
+            background-color: white;
             padding: 1rem;
-            margin-top: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <h1>Equipment Store</h1>
-    </header>
-
-    <nav class="nav-bar">
-        <a href="#home">Home</a>
-        <a href="#products">Products</a>
-        <a href="#about">About Us</a>
-        <a href="#contact">Contact</a>
+    <nav>
+        <a href="#activity">Activity</a>
+        <a href="#progress">Progress</a>
+        <a href="#settings">Settings</a>
     </nav>
 
-    <main class="main-content">
-        <section class="product-grid">
-            <!-- Product 1 -->
-            <article class="product-card">
-                <img src="product1.jpg" alt="Product 1" class="product-image">
-                <h3>Product 1</h3>
-                <p class="price">$99.99</p>
-                <a href="#" class="add-to-cart">Add to Cart</a>
-            </article>
+    <main class="container">
+        <h1>Fitness Tracker Dashboard</h1>
+        
+        <div class="dashboard">
+            <!-- Activity Logging Card -->
+            <div class="card">
+                <h2>Log Activity</h2>
+                <form id="activityForm" class="activity-form">
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" required>
+                    </div>
 
-            <!-- Product 2 -->
-            <article class="product-card">
-                <img src="product2.jpg" alt="Product 2" class="product-image">
-                <h3>Product 2</h3>
-                <p class="price">$199.99</p>
-                <a href="#" class="add-to-cart">Add to Cart</a>
-            </article>
+                    <div class="form-group">
+                        <label for="activityType">Activity Type:</label>
+                        <select id="activityType" required>
+                            <option value="">Select Activity</option>
+                            <option value="running">Running</option>
+                            <option value="cycling">Cycling</option>
+                            <option value="swimming">Swimming</option>
+                            <option value="yoga">Yoga</option>
+                        </select>
+                    </div>
 
-            <!-- Product 3 -->
-            <article class="product-card">
-                <img src="product3.jpg" alt="Product 3" class="product-image">
-                <h3>Product 3</h3>
-                <p class="price">$299.99</p>
-                <a href="#" class="add-to-cart">Add to Cart</a>
-            </article>
-        </section>
+                    <div class="form-group">
+                        <label for="duration">Duration (minutes):</label>
+                        <input type="number" id="duration" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="calories">Calories Burned:</label>
+                        <input type="number" id="calories" min="1" required>
+                    </div>
+
+                    <button type="submit" id="logActivity">Log Activity</button>
+                </form>
+            </div>
+
+            <!-- Progress Overview Card -->
+            <div class="card">
+                <h2>Progress Overview</h2>
+                <div class="progress-grid">
+                    <div class="progress-card">
+                        <h3>Total Activities</h3>
+                        <p id="totalActivities">0</p>
+                    </div>
+
+                    <div class="progress-card">
+                        <h3>Total Calories</h3>
+                        <p id="totalCalories">0 kcal</p>
+                    </div>
+
+                    <div class="progress-card">
+                        <h3>Average Duration</h3>
+                        <p id="averageDuration">0 min</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2023 Equipment Store. All rights reserved.</p>
-    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 </body>
 </html>
-
