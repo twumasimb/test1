@@ -4,193 +4,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness Tracker</title>
+    <title>Virtual Museum Timeline</title>
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f0f0f0;
-            color: #333;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            padding: 20px;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .main-content {
-            margin-top: 20px;
+            color: var(--primary-color);
             background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        h1,
-        h2 {
-            text-align: center;
+        .timeline-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+            scroll-behavior: smooth;
         }
 
-        .form-container {
-            max-width: 400px;
+        .timeline-wrapper {
+            display: flex;
+            min-width: 150%;
+            padding: 20px 0;
+        }
+
+        .timeline {
+            position: relative;
+            width: 100%;
+            height: 4px;
+            background-color: #ddd;
             margin: 0 auto;
         }
 
-        .food-entry-form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        input,
-        select {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-            width: auto;
-        }
-
-        button {
-            padding: 8px 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
+        .timeline-event {
+            position: relative;
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            margin: 0 20px;
+            vertical-align: top;
             cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            transition: transform 0.3s ease-in-out;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .timeline-event::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background-color: var(--secondary-color);
+            bottom: -38px;
+            left: 0;
         }
 
-        .food-list {
-            margin-top: 20px;
-            padding-left: 20px;
-        }
-
-        .calories-display {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.2em;
+        .event-year {
+            position: relative;
+            color: var(--secondary-color);
             font-weight: bold;
+            margin-bottom: 10px;
         }
 
-        @media (max-width: 600px) {
-            .main-content {
-                padding: 15px;
+        .event-card {
+            width: 350px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .event-card.active {
+            opacity: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-description {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .timeline-wrapper {
+                min-width: 100%;
             }
 
-            input,
-            select {
-                width: 100%;
+            .timeline-event {
+                margin: 0 10px;
             }
+        }
+
+        /* Accessibility */
+        .timeline-event:focus-within,
+        .timeline-event:hover {
+            transform: scale(1.2);
+            outline: none;
+        }
+
+        .event-card[aria-hidden="false"] {
+            opacity: 1;
+        }
+
+        .hidden {
+            display: none;
+            position: absolute;
+            clip: rect(0, 0, 0, 0);
+            width: 1px;
+            height: 1px;
         }
     </style>
 </head>
 
 <body>
     <header>
-        <h1>Fitness Tracker</h1>
+        <h1>Virtual Museum Timeline</h1>
+        <p>Explore historical artifacts and exhibits through time</p>
     </header>
-    <div class="container">
-        <main class="main-content">
-            <h2>Food Tracker</h2>
-            <form id="foodForm">
-                <div class="form-container">
-                    <input type="text" id="foodName" name="foodName" placeholder="Enter food item" required>
-                    <select id="calories" name="calories" required>
-                        <option value="">Select calories</option>
-                        <option value="100">100 kcal</option>
-                        <option value="200">200 kcal</option>
-                        <option value="300">300 kcal</option>
-                        <option value="400">400 kcal</option>
-                    </select>
-                    <button type="submit" id="addButton" class="btn btn-primary">Add Food</button>
-                </div>
-            </form>
-            <ul id="foodList" class="food-list"></ul>
-            <div class="calories-display">
-                <p>Total Calories: <span id="totalCalories">0</span> kcal</p>
-                <button type="button" id="clearButton">Clear Form</button>
+    <main class="timeline-container">
+        <div class="timeline-wrapper">
+            <div class="timeline">
             </div>
-        </main>
-    </div>
+            <!-- Event 1 -->
+            <div class="timeline-event" tabindex="0">
+                <span class="event-year">1900</span>
+                <div class="event-card hidden">
+                    <h2>Early Artifacts</h2>
+                    <p class="event-description">Discover the origins of human-made tools and early civilization.</p>
+                </div>
+            </div>
+            <!-- Event 2 -->
+            <div class="timeline-event" tabindex="0">
+                <span class="event-year">1950</span>
+                <div class="event-card hidden">
+                    <h2>Modern Era Beginnings</h2>
+                    <p class="event-description">Explore the transition from traditional to modern
+                        technologies.</p>
+                </div>
+            </div>
+            <!-- Event 3 -->
+            <div class="timeline-event" tabindex="0">
+                <span class="event-year">2000</span>
+                <div class="event-card hidden">
+                    <h2>Digital Revolution</h2>
+                    <p class="event-description">Experience the impact of digital
+                        technology on society.</p>
+                </div>
+            </div>
+            <!-- Event 4 -->
+            <div class="timeline-event" tabindex="0">
+                <span class="event-year">2023</span>
+                <div class="event-card hidden">
+                    <h2>Present Day</h2>
+                    <p class="event-description">See how
+                        technology continues to shape our world today.</p>
+                </div>
+            </div>
+        </div>
+    </main>
     <script>
-        const foodForm = document.getElementById('foodForm');
-        const foodList = document.getElementById('foodList');
-        const totalCaloriesDisplay = document.getElementById('totalCalories');
-        const clearButton = document.getElementById('clearButton');
-        let caloriesTotal = 0;
-        let foodEntries = [];
-
-        function addFoodEntry() {
-            const foodName = document.getElementById('foodName').value;
-            const caloriesStr = document.getElementById('calories').value;
+        document.addEventListener('DOMContentLoaded', () => {
+            const timelineEvents = document.querySelectorAll('.timeline-event');
             
-            if (!foodName || !caloriesStr) return;
-            
-            const caloriesPerServing = parseInt(caloriesStr);
-            
-            // Add to array and DOM
-            foodEntries.push({
-                name: foodName,
-                calories: caloriesPerServing
-            });
-            
-            const li = document.createElement('li');
-            li.className = 'food-item';
-            li.innerHTML = `${foodName} - ${caloriesPerServing} kcal`;
-            foodList.appendChild(li);
-            
-            // Update total calories
-            caloriesTotal += caloriesPerServing;
-            totalCaloriesDisplay.textContent = caloriesTotal;
-            
-            // Clear form inputs
-            document.getElementById('foodName').value = '';
-            document.getElementById('calories').selectedIndex = 0;
-        }
-
-        function clearForm() {
-            foodEntries = [];
-            caloriesTotal = 0;
-            foodList.innerHTML = '';
-            totalCaloriesDisplay.textContent = '0';
-            
-            // Reset form fields
-            document.getElementById('foodName').value = '';
-            document.getElementById('calories').selectedIndex = 0;
-        }
-
-        // Event Listeners
-        foodForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            addFoodEntry();
-        });
-
-        clearButton.addEventListener('click', clearForm);
-
-        // Initial form fields accessibility setup
-        document.querySelectorAll('input, select, button').forEach(element => {
-            element.tabIndex = 0;
-            element.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && this.type !== 'select-one') {
-                    e.preventDefault();
+            function activateEvent(eventElement) {
+                // Deactivate all events
+                timelineEvents.forEach(event => {
+                    event.classList.remove('active');
+                    const card = event.querySelector('.event-card');
+                    if (card) {
+                        card.setAttribute('aria-hidden', 'true');
+                    }
+                });
+                
+                // Activate current event
+                eventElement.classList.add('active');
+                const currentCard = eventElement.querySelector('.event-card');
+                if (currentCard) {
+                    currentCard.classList.remove('hidden');
+                    currentCard.setAttribute('aria-hidden', 'false');
                 }
+                
+                // Smooth scroll to active event
+                document.documentElement.scrollTo({
+                    top: 0,
+                    left: eventElement.offsetLeft - 250,
+                    behavior: 'smooth'
+                });
+            }
+            
+            timelineEvents.forEach(event => {
+                event.addEventListener('click', () => activateEvent(event));
+                
+                // Keyboard navigation
+                event.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        activateEvent(event);
+                    }
+                });
+                
+                // Focus handling
+                event.addEventListener('focusin', () => {
+                    const card = event.querySelector('.event-card');
+                    if (card) {
+                        card.classList.remove('hidden');
+                        card.setAttribute('aria-hidden', 'false');
+                    }
+                });
+                
+                event.addEventListener('focusout', () => {
+                    const card = event.querySelector('.event-card');
+                    if (card && !event.contains(document.activeElement)) {
+                        card.classList.add('hidden');
+                        card.setAttribute('aria-hidden', 'true');
+                    }
+                });
             });
+            
+            // Initialize first event
+            timelineEvents[0].classList.add('active');
+            timelineEvents[0].querySelector('.event-card').setAttribute('aria-hidden', 'false');
         });
     </script>
 </body>
