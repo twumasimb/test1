@@ -1,186 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitness Tracker</title>
-    <!-- Include Normalize.css for better cross-browser consistency -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <!-- Include Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
             color: #333;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
         }
 
-        nav {
-            background-color: #333;
-            padding: 1rem;
+        header {
             text-align: center;
-        }
-
-        nav a {
+            padding: 20px;
+            background-color: #4CAF50;
             color: white;
-            text-decoration: none;
-            margin: 0 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        nav a:hover {
-            background-color: #555;
-        }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .card {
-            background-color: white;
-            padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        h1, h2 {
-            margin-bottom: 1rem;
-            color: #333;
+        .main-content {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .activity-form {
-            display: grid;
-            gap: 1rem;
+        h1,
+        h2 {
+            text-align: center;
         }
 
-        .form-group {
-            display: grid;
-            gap: 0.5rem;
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
         }
 
-        input, select, button {
-            padding: 0.8rem;
+        .food-entry-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input,
+        select {
+            padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 16px;
+            width: auto;
         }
 
         button {
+            padding: 8px 16px;
             background-color: #4CAF50;
             color: white;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
 
         button:hover {
             background-color: #45a049;
         }
 
-        .progress-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+        .food-list {
+            margin-top: 20px;
+            padding-left: 20px;
         }
 
-        .progress-card {
-            background-color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .calories-display {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
         }
 
-        @media (max-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr;
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 15px;
+            }
+
+            input,
+            select {
+                width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
-    <nav>
-        <a href="#activity">Activity</a>
-        <a href="#progress">Progress</a>
-        <a href="#settings">Settings</a>
-    </nav>
-
-    <main class="container">
-        <h1>Fitness Tracker Dashboard</h1>
-        
-        <div class="dashboard">
-            <!-- Activity Logging Card -->
-            <div class="card">
-                <h2>Log Activity</h2>
-                <form id="activityForm" class="activity-form">
-                    <div class="form-group">
-                        <label for="date">Date:</label>
-                        <input type="date" id="date" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="activityType">Activity Type:</label>
-                        <select id="activityType" required>
-                            <option value="">Select Activity</option>
-                            <option value="running">Running</option>
-                            <option value="cycling">Cycling</option>
-                            <option value="swimming">Swimming</option>
-                            <option value="yoga">Yoga</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="duration">Duration (minutes):</label>
-                        <input type="number" id="duration" min="1" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="calories">Calories Burned:</label>
-                        <input type="number" id="calories" min="1" required>
-                    </div>
-
-                    <button type="submit" id="logActivity">Log Activity</button>
-                </form>
-            </div>
-
-            <!-- Progress Overview Card -->
-            <div class="card">
-                <h2>Progress Overview</h2>
-                <div class="progress-grid">
-                    <div class="progress-card">
-                        <h3>Total Activities</h3>
-                        <p id="totalActivities">0</p>
-                    </div>
-
-                    <div class="progress-card">
-                        <h3>Total Calories</h3>
-                        <p id="totalCalories">0 kcal</p>
-                    </div>
-
-                    <div class="progress-card">
-                        <h3>Average Duration</h3>
-                        <p id="averageDuration">0 min</p>
-                    </div>
+    <header>
+        <h1>Fitness Tracker</h1>
+    </header>
+    <div class="container">
+        <main class="main-content">
+            <h2>Food Tracker</h2>
+            <form id="foodForm">
+                <div class="form-container">
+                    <input type="text" id="foodName" name="foodName" placeholder="Enter food item" required>
+                    <select id="calories" name="calories" required>
+                        <option value="">Select calories</option>
+                        <option value="100">100 kcal</option>
+                        <option value="200">200 kcal</option>
+                        <option value="300">300 kcal</option>
+                        <option value="400">400 kcal</option>
+                    </select>
+                    <button type="submit" id="addButton" class="btn btn-primary">Add Food</button>
                 </div>
+            </form>
+            <ul id="foodList" class="food-list"></ul>
+            <div class="calories-display">
+                <p>Total Calories: <span id="totalCalories">0</span> kcal</p>
+                <button type="button" id="clearButton">Clear Form</button>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
+    <script>
+        const foodForm = document.getElementById('foodForm');
+        const foodList = document.getElementById('foodList');
+        const totalCaloriesDisplay = document.getElementById('totalCalories');
+        const clearButton = document.getElementById('clearButton');
+        let caloriesTotal = 0;
+        let foodEntries = [];
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+        function addFoodEntry() {
+            const foodName = document.getElementById('foodName').value;
+            const caloriesStr = document.getElementById('calories').value;
+            
+            if (!foodName || !caloriesStr) return;
+            
+            const caloriesPerServing = parseInt(caloriesStr);
+            
+            // Add to array and DOM
+            foodEntries.push({
+                name: foodName,
+                calories: caloriesPerServing
+            });
+            
+            const li = document.createElement('li');
+            li.className = 'food-item';
+            li.innerHTML = `${foodName} - ${caloriesPerServing} kcal`;
+            foodList.appendChild(li);
+            
+            // Update total calories
+            caloriesTotal += caloriesPerServing;
+            totalCaloriesDisplay.textContent = caloriesTotal;
+            
+            // Clear form inputs
+            document.getElementById('foodName').value = '';
+            document.getElementById('calories').selectedIndex = 0;
+        }
+
+        function clearForm() {
+            foodEntries = [];
+            caloriesTotal = 0;
+            foodList.innerHTML = '';
+            totalCaloriesDisplay.textContent = '0';
+            
+            // Reset form fields
+            document.getElementById('foodName').value = '';
+            document.getElementById('calories').selectedIndex = 0;
+        }
+
+        // Event Listeners
+        foodForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            addFoodEntry();
+        });
+
+        clearButton.addEventListener('click', clearForm);
+
+        // Initial form fields accessibility setup
+        document.querySelectorAll('input, select, button').forEach(element => {
+            element.tabIndex = 0;
+            element.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.type !== 'select-one') {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>
