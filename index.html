@@ -3,107 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Finder - Find Recipes Based on Your Ingredients</title>
+    <title>Soccer Jerseys</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header role="banner">
-        <h1>Recipe Finder</h1>
-        <nav role="navigation" aria-label="Main navigation">
+    <header>
+        <nav>
             <ul>
-                <li><a href="#search">Search</a></li>
-                <li><a href="#recipes">Recipes</a></li>
-                <li><a href="#favorites">Favorites</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <main role="main">
-        <section id="search" aria-labelledby="search-heading">
-            <h2 id="search-heading">Find Recipes by Ingredients</h2>
-            <form role="search" aria-label="Recipe search">
-                <div class="ingredient-input">
-                    <label for="ingredients">Enter Your Ingredients:</label>
-                    <input 
-                        type="text" 
-                        id="ingredients" 
-                        name="ingredients"
-                        placeholder="e.g., chicken, rice, tomatoes"
-                        aria-describedby="input-help"
-                    >
-                    <span id="input-help" class="help-text">Separate ingredients with commas</span>
-                </div>
-                
-                <div class="filters">
-                    <fieldset>
-                        <legend>Dietary Preferences</legend>
-                        <div>
-                            <input type="checkbox" id="vegetarian" name="diet">
-                            <label for="vegetarian">Vegetarian</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="vegan" name="diet">
-                            <label for="vegan">Vegan</label>
-                        </div>
-                        <div>
-                            <input type="checkbox" id="gluten-free" name="diet">
-                            <label for="gluten-free">Gluten-Free</label>
-                        </div>
-                    </fieldset>
-                </div>
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Soccer Jerseys</h1>
+            <p>Find the best soccer jerseys for your team!</p>
+            <a href="#products" class="btn">Shop Now</a>
+        </div>
+    </section>
 
-                <button type="submit" aria-label="Search for recipes">
-                    Find Recipes
-                </button>
-            </form>
-        </section>
+    <section id="about" class="about">
+        <div class="container">
+            <h2>About Us</h2>
+            <p>We provide high-quality soccer jerseys for all teams. Our jerseys are made from the best materials to ensure durability and comfort.</p>
+        </div>
+    </section>
 
-        <section id="results" aria-labelledby="results-heading">
-            <h2 id="results-heading">Recipe Results</h2>
-            <div class="recipe-grid" role="list">
-                <!-- Recipe Card Template -->
-                <article class="recipe-card" role="listitem">
-                    <h3>
-                        <a href="#recipe-detail" class="recipe-link">
-                            Chicken Stir Fry
-                        </a>
-                    </h3>
-                    <img 
-                        src="stir-fry.jpg" 
-                        alt="Colorful chicken stir fry with vegetables in a wok"
-                        class="recipe-image"
-                    >
-                    <div class="recipe-details">
-                        <p><strong>Cooking Time:</strong> <span>30 minutes</span></p>
-                        <p><strong>Difficulty:</strong> <span>Medium</span></p>
-                        <ul class="ingredient-list" aria-label="Required ingredients">
-                            <li>Chicken breast</li>
-                            <li>Bell peppers</li>
-                            <li>Broccoli</li>
-                            <li>Soy sauce</li>
-                        </ul>
-                    </div>
-                </article>
+    <section id="products" class="products">
+        <div class="container">
+            <h2>Our Products</h2>
+            <div class="product-card">
+                <img src="jersey1.jpg" alt="Soccer Jersey 1">
+                <h3>Team A Jersey</h3>
+                <p>Comfortable and stylish jersey for Team A.</p>
+                <a href="#" class="btn">Buy Now</a>
             </div>
-        </section>
-    </main>
+            <div class="product-card">
+                <img src="jersey2.jpg" alt="Soccer Jersey 2">
+                <h3>Team B Jersey</h3>
+                <p>High-quality jersey for Team B.</p>
+                <a href="#" class="btn">Buy Now</a>
+            </div>
+        </div>
+    </section>
 
-    <footer role="contentinfo">
-        <p>&copy; 2023 Recipe Finder. All rights reserved.</p>
-        <nav aria-label="Footer navigation">
-            <ul>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="#privacy">Privacy Policy</a></li>
-            </ul>
-        </nav>
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2023 Soccer Jerseys. All rights reserved.</p>
     </footer>
 
-    <!-- Live Region for Dynamic Updates -->
-    <div 
-        role="status" 
-        aria-live="polite" 
-        class="sr-only" 
-        id="live-region">
-    </div>
+    <script src="script.js"></script>
 </body>
 </html>
