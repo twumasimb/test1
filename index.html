@@ -3,73 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soccer Jerseys</title>
+    <title>Shopping Website</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Navigation bar -->
     <header>
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Products</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact Us</a></li>
             </ul>
         </nav>
     </header>
-
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Welcome to Soccer Jerseys</h1>
-            <p>Find the best soccer jerseys for your team!</p>
-            <a href="#products" class="btn">Shop Now</a>
-        </div>
+    
+    <!-- Background Image -->
+    <div class="background-image"></div>
+    
+    <!-- Text Description -->
+    <section class="text-description">
+        <h1>Welcome to Our Shopping Website!</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget semper libero. Aenean sed tortor eros. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
     </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About Us</h2>
-            <p>We provide high-quality soccer jerseys for all teams. Our jerseys are made from the best materials to ensure durability and comfort.</p>
-        </div>
+    
+    <!-- Buttons -->
+    <section class="buttons">
+        <button>Shop Now</button>
+        <button>View Cart</button>
     </section>
-
-    <section id="products" class="products">
-        <div class="container">
-            <h2>Our Products</h2>
-            <div class="product-card">
-                <img src="jersey1.jpg" alt="Soccer Jersey 1">
-                <h3>Team A Jersey</h3>
-                <p>Comfortable and stylish jersey for Team A.</p>
-                <a href="#" class="btn">Buy Now</a>
-            </div>
-            <div class="product-card">
-                <img src="jersey2.jpg" alt="Soccer Jersey 2">
-                <h3>Team B Jersey</h3>
-                <p>High-quality jersey for Team B.</p>
-                <a href="#" class="btn">Buy Now</a>
-            </div>
-        </div>
+    
+    <!-- Videos -->
+    <div class="videos">
+        <video src="video.mp4" controls></video>
+    </div>
+    
+    <!-- Images -->
+    <div class="images">
+        <img src="image1.jpg" alt="Image 1">
+        <img src="image2.jpg" alt="Image 2">
+        <img src="image3.jpg" alt="Image 3">
+    </div>
+    
+    <!-- Text Fields -->
+    <section class="text-fields">
+        <label for="name">Name:</label>
+        <input type="text" id="name">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email">
     </section>
-
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Contact Us</h2>
-            <form id="contact-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="4" required></textarea>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
-        </div>
-    </section>
-
+    
+    <!-- Search Filters -->
+    <div class="search-filters">
+        <h2>Search Filters</h2>
+        <form action="/action_page.php">
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="books">Books</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="home goods">Home Goods</option>
+            </select>
+            <br>
+            <label for="price">Price:</label>
+            <input type="text" id="price" name="price">
+            <br>
+            <label for="brand">Brand:</label>
+            <input type="text" id="brand" name="brand">
+            <br>
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color">
+            <br>
+            <label for="size">Size:</label>
+            <input type="text" id="size" name="size">
+            <br>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    
+    <!-- Sorting Filters -->
+    <div class="sorting-filters">
+        <h2>Sorting Filters</h2>
+        <form action="/action_page.php">
+            <label for="price-low">Price (Low to High):</label>
+            <input type="radio" id="price-low" name="sort" value="low-high">
+            <br>
+            <label for="price-high">Price (High to Low):</label>
+            <input type="radio" id="price-high" name="sort" value="high-low">
+            <br>
+            <label for="brand-a-z">Brand (A-Z):</label>
+            <input type="radio" id="brand-a-z" name="sort" value="brand-az">
+            <br>
+            <label for="brand-z-a">Brand (Z-A):</label>
+            <input type="radio" id="brand-z-a" name="sort" value="brand-za">
+            <br>
+            <button type="submit">Sort</button>
+        </form>
+    </div>
+    
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2023 Soccer Jerseys. All rights reserved.</p>
+        <p>&copy; 2023 Shopping Website</p>
     </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
