@@ -4,161 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Finder - Find Recipes Based on Your Ingredients</title>
-    <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --background-color: #f9f9f9;
-            --text-color: #333;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--background-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .skip-link {
-            position: absolute;
-            left: -9999px;
-            z-index: 999;
-            padding: 1em;
-            background-color: var(--secondary-color);
-            color: white;
-        }
-
-        .skip-link:focus {
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .search-section {
-            margin-bottom: 2rem;
-        }
-
-        .ingredient-input {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .ingredient-input input {
-            flex: 1;
-            padding: 0.5rem;
-            border: 2px solid var(--primary-color);
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover, button:focus {
-            background-color: #2980b9;
-            outline: 3px solid #1abc9c;
-        }
-
-        .recipe-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .recipe-card {
-            background: white;
-            border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .recipe-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-    </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
     <header role="banner">
         <h1>Recipe Finder</h1>
-        <p>Find delicious recipes based on ingredients you have!</p>
+        <nav role="navigation" aria-label="Main navigation">
+            <ul>
+                <li><a href="#search">Search</a></li>
+                <li><a href="#recipes">Recipes</a></li>
+                <li><a href="#favorites">Favorites</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <main id="main-content" role="main">
-        <section class="search-section" aria-label="Search ingredients">
-            <form id="ingredient-form">
+    <main role="main">
+        <section id="search" aria-labelledby="search-heading">
+            <h2 id="search-heading">Find Recipes by Ingredients</h2>
+            <form role="search" aria-label="Recipe search">
                 <div class="ingredient-input">
-                    <label for="ingredient-search">Enter ingredients (comma-separated):</label>
+                    <label for="ingredients">Enter Your Ingredients:</label>
                     <input 
                         type="text" 
-                        id="ingredient-search" 
-                        name="ingredient-search"
+                        id="ingredients" 
+                        name="ingredients"
                         placeholder="e.g., chicken, rice, tomatoes"
-                        aria-describedby="search-help"
+                        aria-describedby="input-help"
                     >
-                    <button type="submit" aria-label="Search for recipes">Search</button>
+                    <span id="input-help" class="help-text">Separate ingredients with commas</span>
                 </div>
-                <p id="search-help" class="help-text">Separate multiple ingredients with commas</p>
+                
+                <div class="filters">
+                    <fieldset>
+                        <legend>Dietary Preferences</legend>
+                        <div>
+                            <input type="checkbox" id="vegetarian" name="diet">
+                            <label for="vegetarian">Vegetarian</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="vegan" name="diet">
+                            <label for="vegan">Vegan</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="gluten-free" name="diet">
+                            <label for="gluten-free">Gluten-Free</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <button type="submit" aria-label="Search for recipes">
+                    Find Recipes
+                </button>
             </form>
         </section>
 
-        <section class="results-section" aria-label="Recipe results">
-            <h2 id="results-heading">Available Recipes</h2>
-            <div class="recipe-grid" role="list" aria-labelledby="results-heading">
-                <!-- Example recipe card -->
+        <section id="results" aria-labelledby="results-heading">
+            <h2 id="results-heading">Recipe Results</h2>
+            <div class="recipe-grid" role="list">
+                <!-- Recipe Card Template -->
                 <article class="recipe-card" role="listitem">
-                    <img src="recipe-placeholder.jpg" alt="Prepared chicken and rice dish with vegetables" />
-                    <h3>Chicken and Rice Stir-Fry</h3>
-                    <p>A delicious Asian-inspired dish combining tender chicken with fluffy rice and fresh vegetables.</p>
-                    <ul aria-label="Recipe ingredients">
-                        <li>Chicken breast</li>
-                        <li>White rice</li>
-                        <li>Mixed vegetables</li>
-                    </ul>
-                    <button 
-                        type="button" 
-                        onclick="viewRecipe(1)" 
-                        onkeydown="if(event.key==='Enter')viewRecipe(1)"
-                        aria-label="View full recipe for Chicken and Rice Stir-Fry"
+                    <h3>
+                        <a href="#recipe-detail" class="recipe-link">
+                            Chicken Stir Fry
+                        </a>
+                    </h3>
+                    <img 
+                        src="stir-fry.jpg" 
+                        alt="Colorful chicken stir fry with vegetables in a wok"
+                        class="recipe-image"
                     >
-                        View Recipe
-                    </button>
+                    <div class="recipe-details">
+                        <p><strong>Cooking Time:</strong> <span>30 minutes</span></p>
+                        <p><strong>Difficulty:</strong> <span>Medium</span></p>
+                        <ul class="ingredient-list" aria-label="Required ingredients">
+                            <li>Chicken breast</li>
+                            <li>Bell peppers</li>
+                            <li>Broccoli</li>
+                            <li>Soy sauce</li>
+                        </ul>
+                    </div>
                 </article>
             </div>
         </section>
     </main>
 
     <footer role="contentinfo">
-        <p>&copy; 2024 Recipe Finder. All rights reserved.</p>
+        <p>&copy; 2023 Recipe Finder. All rights reserved.</p>
+        <nav aria-label="Footer navigation">
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#privacy">Privacy Policy</a></li>
+            </ul>
+        </nav>
     </footer>
 
-    <script>
-        // Placeholder function for recipe viewing
-        function viewRecipe(id) {
-            // Implementation would go here
-            console.log(`Viewing recipe ${id}`);
-        }
-    </script>
+    <!-- Live Region for Dynamic Updates -->
+    <div 
+        role="status" 
+        aria-live="polite" 
+        class="sr-only" 
+        id="live-region">
+    </div>
 </body>
 </html>
