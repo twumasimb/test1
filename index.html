@@ -3,804 +3,892 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Elements with Accessible Animations</title>
+    <title>Accessible Music Player</title>
     <style>
-        /* Base styles with accessibility considerations */
-        :root {
-            --primary-color: #2a6496;
-            --secondary-color: #4a90e2;
-            --accent-color: #f8f9fa;
-            --text-color: #333333;
-            --light-text: #ffffff;
-            --focus-color: #0066cc;
-            --error-color: #d32f2f;
-            --success-color: #388e3c;
-            --transition-speed: 0.3s;
-        }
-
-        * {
+        /* CSS Reset and Base Styles */
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
+            color: #333;
             background-color: #f5f5f5;
             padding: 0;
             margin: 0;
             min-height: 100vh;
         }
 
-        /* Ensure all interactive elements have visible focus indicators */
-        button:focus, 
-        input:focus, 
-        select:focus, 
-        textarea:focus, 
-        a:focus,
-        .card:focus,
-        .interactive-box:focus {
-            outline: 3px solid var(--focus-color);
+        /* Accessibility Focus Styles */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus, 
+        .playlist-item:focus, .control-button:focus {
+            outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
 
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, 
-        .dark-bg a:focus,
-        header button:focus,
-        header a:focus,
-        footer button:focus,
-        footer a:focus {
+        .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
 
-        /* Skip to main content link - hidden until focused */
+        /* Skip Link */
         .skip-link {
-            background: var(--primary-color);
-            color: white;
-            font-weight: bold;
-            left: 50%;
-            padding: 8px;
             position: absolute;
-            transform: translateY(-100%);
-            transition: transform 0.3s;
+            top: -40px;
+            left: 0;
+            background: #0066cc;
+            color: white;
+            padding: 8px;
             z-index: 100;
+            transition: top 0.3s;
         }
 
         .skip-link:focus {
-            transform: translateY(0%);
+            top: 0;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
         }
 
         header {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 1.5rem;
-        }
-
-        .nav-links a {
-            color: var(--light-text);
-            text-decoration: none;
-            position: relative;
-            padding: 0.5rem 0;
-            transition: color var(--transition-speed);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--light-text);
-            transition: width var(--transition-speed);
-        }
-
-        .nav-links a:hover::after,
-        .nav-links a:focus::after {
-            width: 100%;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-color);
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
         }
 
         main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            padding: 2rem 0;
         }
 
-        h1 {
-            font-size: 2.5rem;
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        /* Music Player Styles */
+        .player-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .player-header {
+            background-color: #3498db;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .now-playing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .album-art {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
             margin-bottom: 1.5rem;
-            color: var(--primary-color);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        h2 {
-            font-size: 1.8rem;
-            margin: 2rem 0 1rem;
-            color: var(--primary-color);
+        .song-info {
+            margin-bottom: 1.5rem;
         }
 
-        h3 {
-            font-size: 1.3rem;
-            margin: 1.5rem 0 0.75rem;
+        .song-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
         }
 
-        p {
+        .song-artist {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+        }
+
+        /* Controls */
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .control-button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .control-button:hover, .control-button:focus {
+            background-color: #2980b9;
+        }
+
+        .control-button:active {
+            transform: scale(0.95);
+        }
+
+        .play-pause {
+            width: 60px;
+            height: 60px;
+        }
+
+        .control-button .icon {
+            font-size: 1.2rem;
+        }
+
+        .play-pause .icon {
+            font-size: 1.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #3498db;
+            width: 0;
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        /* Volume Control */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 auto 2rem;
+            max-width: 200px;
+        }
+
+        .volume-icon {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+
+        .volume-slider {
+            flex-grow: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #3498db;
+            cursor: pointer;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #3498db;
+            cursor: pointer;
+            border: none;
+        }
+
+        /* Playlist */
+        .playlist-container {
+            padding: 1.5rem;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .playlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 1rem;
         }
 
-        section {
-            margin-bottom: 3rem;
+        .playlist-title {
+            color: #2c3e50;
         }
 
-        /* Button styles with accessible hover and focus states */
-        .btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color var(--transition-speed), transform var(--transition-speed);
-            text-decoration: none;
-        }
-
-        .btn:hover, 
-        .btn:focus {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-secondary:hover,
-        .btn-secondary:focus {
-            background-color: rgba(74, 144, 226, 0.1);
-            color: var(--secondary-color);
-            border-color: var(--secondary-color);
-        }
-
-        /* Card grid with hover effects */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-            position: relative;
-            cursor: pointer;
-        }
-
-        .card:hover,
-        .card:focus {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .card-content {
-            padding: 1.5rem;
-        }
-
-        .card h3 {
-            margin-top: 0;
-        }
-
-        /* Interactive boxes section */
-        .interactive-boxes {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .interactive-box {
-            flex: 1 1 300px;
-            height: 200px;
-            background-color: var(--primary-color);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.5rem;
-            transition: all var(--transition-speed);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .interactive-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-            opacity: 0;
-            transition: opacity var(--transition-speed);
-        }
-
-        .interactive-box:hover,
-        .interactive-box:focus {
-            transform: scale(1.05) rotate(2deg);
-        }
-
-        .interactive-box:hover::before,
-        .interactive-box:focus::before {
-            opacity: 1;
-        }
-
-        .box1 { background-color: #3498db; }
-        .box2 { background-color: #e74c3c; }
-        .box3 { background-color: #2ecc71; }
-
-        /* Form with accessible styles */
-        .contact-form {
-            max-width: 600px;
-            margin: 2rem 0;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .required::after {
-            content: " *";
-            color: var(--error-color);
-        }
-
-        input,
-        textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-        }
-
-        input:hover,
-        textarea:hover {
-            border-color: var(--secondary-color);
-        }
-
-        input:focus,
-        textarea:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-
-        input.error,
-        textarea.error {
-            border-color: var(--error-color);
-        }
-
-        /* Animated icon section */
-        .icon-section {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin: 3rem 0;
-        }
-
-        .icon-item {
-            text-align: center;
-            margin: 1rem;
-            transition: transform var(--transition-speed);
-        }
-
-        .icon {
-            width: 80px;
-            height: 80px;
-            background-color: var(--accent-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            transition: background-color var(--transition-speed), transform var(--transition-speed);
-            color: var(--primary-color);
-            font-size: 2rem;
-        }
-
-        .icon-item:hover .icon,
-        .icon-item:focus-within .icon {
-            background-color: var(--primary-color);
-            color: white;
-            transform: rotate(360deg);
-        }
-
-        .icon-item:hover,
-        .icon-item:focus-within {
-            transform: translateY(-10px);
-        }
-
-        /* Footer styles */
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 2rem 1rem;
-            margin-top: 3rem;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .footer-section {
-            flex: 1 1 300px;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-section h3 {
-            margin-top: 0;
-            color: white;
-        }
-
-        .footer-links {
+        .playlist {
             list-style: none;
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
-        .footer-links li {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-links a {
-            color: var(--accent-color);
-            text-decoration: none;
-            transition: color var(--transition-speed);
-        }
-
-        .footer-links a:hover,
-        .footer-links a:focus {
-            color: white;
-            text-decoration: underline;
-        }
-
-        .copyright {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* Animation for success message */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .success-message {
-            background-color: var(--success-color);
-            color: white;
+        .playlist-item {
             padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-            display: none;
-            animation: fadeIn 0.5s ease-out;
+            border-bottom: 1px solid #ecf0f1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
         }
 
-        /* Responsive design */
+        .playlist-item:last-child {
+            border-bottom: none;
+        }
+
+        .playlist-item:hover, .playlist-item:focus {
+            background-color: #ecf0f1;
+        }
+
+        .playlist-item.active {
+            background-color: #e3f2fd;
+            border-left: 4px solid #3498db;
+        }
+
+        .playlist-item-number {
+            margin-right: 1rem;
+            color: #7f8c8d;
+            font-weight: bold;
+            min-width: 25px;
+        }
+
+        .playlist-item-info {
+            flex-grow: 1;
+        }
+
+        .playlist-item-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.25rem;
+        }
+
+        .playlist-item-artist {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .playlist-item-duration {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .nav-links {
-                margin-top: 1rem;
-                flex-direction: column;
-                align-items: flex-end;
+            .album-art {
+                width: 150px;
+                height: 150px;
             }
 
-            .nav-links li {
-                margin: 0.5rem 0;
+            .player-controls {
+                gap: 0.5rem;
             }
 
-            .card-grid {
-                grid-template-columns: 1fr;
+            .control-button {
+                width: 40px;
+                height: 40px;
             }
 
-            .interactive-boxes {
-                flex-direction: column;
-            }
-
-            .footer-content {
-                flex-direction: column;
+            .play-pause {
+                width: 50px;
+                height: 50px;
             }
         }
 
-        /* Reduced motion preference support */
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
+        @media (max-width: 480px) {
+            .album-art {
+                width: 120px;
+                height: 120px;
             }
+
+            .song-title {
+                font-size: 1.2rem;
+            }
+
+            .song-artist {
+                font-size: 1rem;
+            }
+
+            .player-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Screen reader only class */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Loading indicator */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error message */
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            padding: 1rem;
+            background-color: #fadbd8;
+            border-radius: 5px;
+            margin: 1rem 0;
         }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-
+    
     <header>
-        <nav role="navigation" aria-label="Main navigation">
-            <div class="logo">Interactive Elements</div>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#interactive-boxes">Interactive Boxes</a></li>
-                <li><a href="#cards">Cards</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main id="main-content">
-        <section>
-            <h1>Interactive Elements with Smooth Animations</h1>
-            <p>Explore our collection of accessible interactive elements with smooth hover effects, transitions, and animations. All elements are designed to be keyboard navigable and screen reader friendly.</p>
-            <div class="buttons">
-                <button class="btn" type="button">Primary Button</button>
-                <button class="btn btn-secondary" type="button">Secondary Button</button>
-            </div>
-        </section>
-
-        <section id="features">
-            <h2>Feature Icons</h2>
-            <p>Hover or focus on these icons to see smooth rotation and color transition effects.</p>
-            <div class="icon-section" aria-label="Feature icons with animations">
-                <div class="icon-item" tabindex="0">
-                    <div class="icon" aria-hidden="true">★</div>
-                    <h3>Feature One</h3>
-                    <p>Interactive elements with smooth transitions</p>
-                </div>
-                <div class="icon-item" tabindex="0">
-                    <div class="icon" aria-hidden="true">♥</div>
-                    <h3>Feature Two</h3>
-                    <p>Accessible hover and focus states</p>
-                </div>
-                <div class="icon-item" tabindex="0">
-                    <div class="icon" aria-hidden="true">✓</div>
-                    <h3>Feature Three</h3>
-                    <p>Keyboard navigable interactive elements</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="interactive-boxes">
-            <h2>Interactive Boxes</h2>
-            <p>These boxes transform on hover and focus. Try using keyboard navigation to see the focus effects.</p>
-            <div class="interactive-boxes">
-                <div class="interactive-box box1" tabindex="0" role="button" aria-label="Interactive box 1" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                    Box 1
-                </div>
-                <div class="interactive-box box2" tabindex="0" role="button" aria-label="Interactive box 2" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                    Box 2
-                </div>
-                <div class="interactive-box box3" tabindex="0" role="button" aria-label="Interactive box 3" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                    Box 3
-                </div>
-            </div>
-        </section>
-
-        <section id="cards">
-            <h2>Interactive Cards</h2>
-            <p>These cards elevate and show a shadow effect when hovered or focused. Each card is fully keyboard accessible.</p>
-            <div class="card-grid">
-                <div class="card" tabindex="0" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                    <img src="https://via.placeholder.com/300x180" alt="Placeholder image for card 1">
-                    <div class="card-content">
-                        <h3>Card Title 1</h3>
-                        <p>This card has a smooth elevation effect on hover and focus.</p>
-                    </div>
-                </div>
-                <div class="card" tabindex="0" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                    <img src="https://via.placeholder.com/300x180" alt="Placeholder image for card 2">
-                    <div class="card-content">
-                        <h3>Card Title 2</h3>
-                        <p>Interactive cards with accessible animations and transitions.</p>
-                    </div>
-                </div>
-                <div class="card" tabindex="0" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                    <img src="https://via.placeholder.com/300x180" alt="Placeholder image for card 3">
-                    <div class="card-content">
-                        <h3>Card Title 3</h3>
-                        <p>Each card is keyboard navigable and has proper focus indicators.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2>Contact Form</h2>
-            <p>Our form includes accessible input animations and validation.</p>
-            <form class="contact-form" novalidate>
-                <div class="form-group">
-                    <label for="name" class="required">Name</label>
-                    <input type="text" id="name" name="name" required aria-describedby="name-error">
-                    <div id="name-error" class="error-message">Please enter your name</div>
-                </div>
-                <div class="form-group">
-                    <label for="email" class="required">Email</label>
-                    <input type="email" id="email" name="email" required aria-describedby="email-error">
-                    <div id="email-error" class="error-message">Please enter a valid email address</div>
-                </div>
-                <div class="form-group">
-                    <label for="message" class="required">Message</label>
-                    <textarea id="message" name="message" rows="4" required aria-describedby="message-error"></textarea>
-                    <div id="message-error" class="error-message">Please enter your message</div>
-                </div>
-                <button type="submit" class="btn" id="submit-btn">Submit</button>
-                <div class="success-message" id="success-message" role="alert" aria-live="polite">
-                    Thank you! Your message has been sent successfully.
-                </div>
-            </form>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About Us</h3>
-                <p>We create accessible and interactive web experiences that work for everyone.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#interactive-boxes">Interactive Boxes</a></li>
-                    <li><a href="#cards">Cards</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: info@example.com</p>
-                <p>Phone: (123) 456-7890</p>
-            </div>
+        <div class="container">
+            <h1>Accessible Music Player</h1>
         </div>
-        <div class="copyright">
-            <p>&copy; 2023 Interactive Elements. All rights reserved.</p>
+    </header>
+    
+    <main id="main-content">
+        <div class="container">
+            <section class="player-container fade-in">
+                <div class="player-header">
+                    <h2>Now Playing</h2>
+                </div>
+                
+                <div class="now-playing">
+                    <img id="album-art" class="album-art" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%233498db'/%3E%3Ccircle cx='100' cy='100' r='50' fill='%232c3e50'/%3E%3Ccircle cx='100' cy='100' r='10' fill='%23ecf0f1'/%3E%3C/svg%3E" alt="Album artwork for the current song">
+                    
+                    <div class="song-info">
+                        <h3 id="song-title" class="song-title">Select a song to play</h3>
+                        <p id="song-artist" class="song-artist">-</p>
+                    </div>
+                    
+                    <div class="player-controls" role="group" aria-label="Playback controls">
+                        <button id="prev-button" class="control-button" aria-label="Previous song">
+                            <span class="icon" aria-hidden="true">⏮</span>
+                        </button>
+                        <button id="play-pause-button" class="control-button play-pause" aria-label="Play">
+                            <span class="icon" aria-hidden="true">▶</span>
+                        </button>
+                        <button id="next-button" class="control-button" aria-label="Next song">
+                            <span class="icon" aria-hidden="true">⏭</span>
+                        </button>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="time-display">
+                            <span id="current-time">0:00</span>
+                            <span id="duration">0:00</span>
+                        </div>
+                        <div id="progress-bar" class="progress-bar" role="progressbar" aria-label="Song progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+                            <div id="progress" class="progress"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="volume-container">
+                        <span class="volume-icon" aria-hidden="true">🔊</span>
+                        <label for="volume-slider" class="sr-only">Volume</label>
+                        <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="80" aria-label="Volume control">
+                    </div>
+                </div>
+                
+                <div class="playlist-container">
+                    <div class="playlist-header">
+                        <h3 class="playlist-title">Playlist</h3>
+                    </div>
+                    
+                    <ul id="playlist" class="playlist" aria-label="Song playlist">
+                        <!-- Playlist items will be added dynamically -->
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Accessible Music Player. All rights reserved.</p>
         </div>
     </footer>
-
+    
     <script>
-        // For any element with mouse events, add keyboard support
-        function handleInteraction(event) {
-            // Handle both mouse and keyboard events
-            if (event.type === 'mousedown' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample playlist data
+            const playlist = [
+                {
+                    id: 1,
+                    title: "Peaceful Piano",
+                    artist: "John Smith",
+                    duration: 180, // in seconds
+                    src: "piano.mp3" // This would be a real audio file in production
+                },
+                {
+                    id: 2,
+                    title: "Summer Breeze",
+                    artist: "Sarah Johnson",
+                    duration: 210,
+                    src: "breeze.mp3"
+                },
+                {
+                    id: 3,
+                    title: "Mountain Echo",
+                    artist: "Nature Sounds",
+                    duration: 240,
+                    src: "mountain.mp3"
+                },
+                {
+                    id: 4,
+                    title: "Jazz Cafe",
+                    artist: "The Quartet",
+                    duration: 195,
+                    src: "jazz.mp3"
+                },
+                {
+                    id: 5,
+                    title: "Ocean Waves",
+                    artist: "Relaxation Masters",
+                    duration: 300,
+                    src: "ocean.mp3"
+                }
+            ];
+            
+            // DOM Elements
+            const playlistElement = document.getElementById('playlist');
+            const audioElement = new Audio();
+            const playPauseButton = document.getElementById('play-pause-button');
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+            const progressBar = document.getElementById('progress-bar');
+            const progress = document.getElementById('progress');
+            const currentTimeElement = document.getElementById('current-time');
+            const durationElement = document.getElementById('duration');
+            const volumeSlider = document.getElementById('volume-slider');
+            const songTitleElement = document.getElementById('song-title');
+            const songArtistElement = document.getElementById('song-artist');
+            const albumArtElement = document.getElementById('album-art');
+            
+            // State variables
+            let currentSongIndex = -1;
+            let isPlaying = false;
+            
+            // Initialize the player
+            function initPlayer() {
+                // Populate the playlist
+                renderPlaylist();
                 
-                // Prevent default space bar scrolling
-                if (event.key === ' ') {
-                    event.preventDefault();
+                // Set initial volume
+                audioElement.volume = volumeSlider.value / 100;
+                
+                // Add event listeners
+                setupEventListeners();
+                
+                // Set up audio element event listeners
+                setupAudioEventListeners();
+            }
+            
+            // Render the playlist items
+            function renderPlaylist() {
+                playlistElement.innerHTML = '';
+                
+                playlist.forEach((song, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'playlist-item';
+                    listItem.setAttribute('tabindex', '0');
+                    listItem.setAttribute('role', 'button');
+                    listItem.setAttribute('aria-label', `Play ${song.title} by ${song.artist}`);
+                    
+                    if (index === currentSongIndex) {
+                        listItem.classList.add('active');
+                        listItem.setAttribute('aria-current', 'true');
+                    }
+                    
+                    listItem.innerHTML = `
+                        <span class="playlist-item-number">${index + 1}</span>
+                        <div class="playlist-item-info">
+                            <div class="playlist-item-title">${song.title}</div>
+                            <div class="playlist-item-artist">${song.artist}</div>
+                        </div>
+                        <span class="playlist-item-duration">${formatTime(song.duration)}</span>
+                    `;
+                    
+                    listItem.addEventListener('click', () => {
+                        playSong(index);
+                    });
+                    
+                    listItem.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault();
+                            playSong(index);
+                        }
+                    });
+                    
+                    playlistElement.appendChild(listItem);
+                });
+            }
+            
+            // Set up event listeners for player controls
+            function setupEventListeners() {
+                // Play/Pause button
+                playPauseButton.addEventListener('click', togglePlayPause);
+                playPauseButton.addEventListener('keydown', handleInteraction);
+                
+                // Previous button
+                prevButton.addEventListener('click', playPreviousSong);
+                prevButton.addEventListener('keydown', handleInteraction);
+                
+                // Next button
+                nextButton.addEventListener('click', playNextSong);
+                nextButton.addEventListener('keydown', handleInteraction);
+                
+                // Progress bar
+                progressBar.addEventListener('click', seekToPosition);
+                progressBar.addEventListener('keydown', handleProgressBarKeydown);
+                
+                // Volume slider
+                volumeSlider.addEventListener('input', adjustVolume);
+            }
+            
+            // Set up audio element event listeners
+            function setupAudioEventListeners() {
+                // Time update
+                audioElement.addEventListener('timeupdate', updateProgress);
+                
+                // Song ended
+                audioElement.addEventListener('ended', () => {
+                    playNextSong();
+                });
+                
+                // Error handling
+                audioElement.addEventListener('error', handleAudioError);
+                
+                // Loading events
+                audioElement.addEventListener('loadstart', () => {
+                    // In a real app, you might show a loading indicator here
+                });
+                
+                audioElement.addEventListener('canplay', () => {
+                    // In a real app, you might hide a loading indicator here
+                });
+            }
+            
+            // Play a specific song
+            function playSong(index) {
+                if (index < 0 || index >= playlist.length) {
+                    return;
                 }
                 
-                // Visual feedback for the interaction
-                const element = event.currentTarget;
-                element.style.transform = 'scale(0.95)';
+                const previousIndex = currentSongIndex;
+                currentSongIndex = index;
                 
-                // Reset after a short delay
-                setTimeout(() => {
-                    element.style.transform = '';
-                }, 200);
+                // Update the UI to reflect the new song
+                updateNowPlaying();
+                
+                // In a real app, this would load the actual audio file
+                // For this demo, we'll simulate loading the audio
+                audioElement.src = playlist[index].src;
+                
+                // Since we don't have real audio files, we'll fake the duration
+                audioElement.duration = playlist[index].duration;
+                
+                // Start playing
+                audioElement.play()
+                    .then(() => {
+                        isPlaying = true;
+                        updatePlayPauseButton();
+                    })
+                    .catch(error => {
+                        console.error('Error playing audio:', error);
+                        // In a real app, you would show an error message to the user
+                    });
+                
+                // Update the playlist UI
+                renderPlaylist();
                 
                 // Announce to screen readers
-                announceInteraction(element);
-            }
-        }
-        
-        // Function to announce interactions to screen readers
-        function announceInteraction(element) {
-            // Get the text content or aria-label to announce
-            let message = '';
-            if (element.getAttribute('aria-label')) {
-                message = element.getAttribute('aria-label') + ' activated';
-            } else if (element.textContent.trim()) {
-                message = element.textContent.trim() + ' activated';
-            } else {
-                message = 'Item activated';
+                announceToScreenReader(`Now playing ${playlist[index].title} by ${playlist[index].artist}`);
             }
             
-            // Create or use existing live region
-            let liveRegion = document.getElementById('a11y-announce');
-            if (!liveRegion) {
-                liveRegion = document.createElement('div');
-                liveRegion.id = 'a11y-announce';
-                liveRegion.setAttribute('aria-live', 'assertive');
-                liveRegion.setAttribute('aria-atomic', 'true');
-                liveRegion.style.position = 'absolute';
-                liveRegion.style.width = '1px';
-                liveRegion.style.height = '1px';
-                liveRegion.style.overflow = 'hidden';
-                liveRegion.style.clip = 'rect(0, 0, 0, 0)';
-                document.body.appendChild(liveRegion);
-            }
-            
-            // Set the message
-            liveRegion.textContent = message;
-            
-            // Clear after announcement
-            setTimeout(() => {
-                liveRegion.textContent = '';
-            }, 3000);
-        }
-
-        // Form validation with accessibility
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.querySelector('.contact-form');
-            const successMessage = document.getElementById('success-message');
-            
-            if (form) {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    
-                    // Reset previous errors
-                    const errorElements = form.querySelectorAll('.error-message');
-                    errorElements.forEach(el => {
-                        el.style.display = 'none';
-                    });
-                    
-                    const inputs = form.querySelectorAll('input, textarea');
-                    inputs.forEach(input => {
-                        input.classList.remove('error');
-                    });
-                    
-                    // Validate form
-                    let isValid = true;
-                    
-                    // Name validation
-                    const nameInput = document.getElementById('name');
-                    if (!nameInput.value.trim()) {
-                        document.getElementById('name-error').style.display = 'block';
-                        nameInput.classList.add('error');
-                        nameInput.setAttribute('aria-invalid', 'true');
-                        isValid = false;
-                    } else {
-                        nameInput.setAttribute('aria-invalid', 'false');
-                    }
-                    
-                    // Email validation
-                    const emailInput = document.getElementById('email');
-                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailPattern.test(emailInput.value.trim())) {
-                        document.getElementById('email-error').style.display = 'block';
-                        emailInput.classList.add('error');
-                        emailInput.setAttribute('aria-invalid', 'true');
-                        isValid = false;
-                    } else {
-                        emailInput.setAttribute('aria-invalid', 'false');
-                    }
-                    
-                    // Message validation
-                    const messageInput = document.getElementById('message');
-                    if (!messageInput.value.trim()) {
-                        document.getElementById('message-error').style.display = 'block';
-                        messageInput.classList.add('error');
-                        messageInput.setAttribute('aria-invalid', 'true');
-                        isValid = false;
-                    } else {
-                        messageInput.setAttribute('aria-invalid', 'false');
-                    }
-                    
-                    // If valid, show success message
-                    if (isValid) {
-                        // Focus the first invalid field
-                        const firstInvalid = form.querySelector('.error');
-                        if (firstInvalid) {
-                            firstInvalid.focus();
-                        }
-                        
-                        // Show success message
-                        successMessage.style.display = 'block';
-                        
-                        // Reset form
-                        form.reset();
-                        
-                        // Hide success message after 5 seconds
-                        setTimeout(() => {
-                            successMessage.style.display = 'none';
-                        }, 5000);
-                    }
-                });
+            // Toggle play/pause
+            function togglePlayPause() {
+                if (currentSongIndex === -1 && playlist.length > 0) {
+                    // If no song is selected, play the first one
+                    playSong(0);
+                    return;
+                }
                 
-                // Add input event listeners for real-time validation
-                const inputs = form.querySelectorAll('input, textarea');
-                inputs.forEach(input => {
-                    input.addEventListener('input', function() {
-                        // Remove error state when user starts typing
-                        const errorId = this.getAttribute('aria-describedby');
-                        if (errorId) {
-                            const errorElement = document.getElementById(errorId);
-                            if (errorElement && this.value.trim()) {
-                                errorElement.style.display = 'none';
-                                this.classList.remove('error');
-                                this.setAttribute('aria-invalid', 'false');
-                            }
-                        }
-                    });
-                });
+                if (isPlaying) {
+                    audioElement.pause();
+                    isPlaying = false;
+                } else {
+                    audioElement.play()
+                        .then(() => {
+                            isPlaying = true;
+                        })
+                        .catch(error => {
+                            console.error('Error playing audio:', error);
+                        });
+                }
+                
+                updatePlayPauseButton();
             }
+            
+            // Play the previous song
+            function playPreviousSong() {
+                if (currentSongIndex <= 0) {
+                    playSong(playlist.length - 1); // Wrap around to the last song
+                } else {
+                    playSong(currentSongIndex - 1);
+                }
+            }
+            
+            // Play the next song
+            function playNextSong() {
+                if (currentSongIndex >= playlist.length - 1) {
+                    playSong(0); // Wrap around to the first song
+                } else {
+                    playSong(currentSongIndex + 1);
+                }
+            }
+            
+            // Update the progress bar
+            function updateProgress() {
+                const currentTime = audioElement.currentTime;
+                const duration = audioElement.duration || playlist[currentSongIndex]?.duration || 0;
+                
+                if (duration > 0) {
+                    const progressPercent = (currentTime / duration) * 100;
+                    progress.style.width = `${progressPercent}%`;
+                    progressBar.setAttribute('aria-valuenow', Math.round(progressPercent));
+                }
+                
+                // Update time displays
+                currentTimeElement.textContent = formatTime(currentTime);
+                durationElement.textContent = formatTime(duration);
+            }
+            
+            // Seek to a position in the song
+            function seekToPosition(event) {
+                if (currentSongIndex === -1) return;
+                
+                const rect = progressBar.getBoundingClientRect();
+                const clickPosition = (event.clientX - rect.left) / rect.width;
+                const duration = audioElement.duration || playlist[currentSongIndex].duration;
+                
+                audioElement.currentTime = clickPosition * duration;
+            }
+            
+            // Handle keyboard navigation for the progress bar
+            function handleProgressBarKeydown(event) {
+                if (currentSongIndex === -1) return;
+                
+                const duration = audioElement.duration || playlist[currentSongIndex].duration;
+                const currentTime = audioElement.currentTime;
+                const step = 5; // 5 seconds
+                
+                switch (event.key) {
+                    case 'ArrowRight':
+                        event.preventDefault();
+                        audioElement.currentTime = Math.min(duration, currentTime + step);
+                        break;
+                    case 'ArrowLeft':
+                        event.preventDefault();
+                        audioElement.currentTime = Math.max(0, currentTime - step);
+                        break;
+                    case 'Home':
+                        event.preventDefault();
+                        audioElement.currentTime = 0;
+                        break;
+                    case 'End':
+                        event.preventDefault();
+                        audioElement.currentTime = duration;
+                        break;
+                }
+            }
+            
+            // Adjust volume
+            function adjustVolume() {
+                audioElement.volume = volumeSlider.value / 100;
+                
+                // Announce volume change to screen readers
+                const volumePercent = Math.round(volumeSlider.value);
+                announceToScreenReader(`Volume ${volumePercent} percent`);
+            }
+            
+            // Update the play/pause button appearance
+            function updatePlayPauseButton() {
+                const iconElement = playPauseButton.querySelector('.icon');
+                
+                if (isPlaying) {
+                    iconElement.textContent = '⏸';
+                    playPauseButton.setAttribute('aria-label', 'Pause');
+                } else {
+                    iconElement.textContent = '▶';
+                    playPauseButton.setAttribute('aria-label', 'Play');
+                }
+            }
+            
+            // Update the now playing section
+            function updateNowPlaying() {
+                if (currentSongIndex === -1) {
+                    songTitleElement.textContent = 'Select a song to play';
+                    songArtistElement.textContent = '-';
+                    return;
+                }
+                
+                const currentSong = playlist[currentSongIndex];
+                songTitleElement.textContent = currentSong.title;
+                songArtistElement.textContent = currentSong.artist;
+                
+                // Generate a unique color for the album art based on the song title
+                const hue = stringToHue(currentSong.title);
+                albumArtElement.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='hsl(${hue}, 70%%, 60%%)'/%3E%3Ccircle cx='100' cy='100' r='50' fill='%232c3e50'/%3E%3Ccircle cx='100' cy='100' r='10' fill='%23ecf0f1'/%3E%3C/svg%3E`;
+                albumArtElement.alt = `Album artwork for ${currentSong.title} by ${currentSong.artist}`;
+            }
+            
+            // Handle audio errors
+            function handleAudioError() {
+                console.error('Audio error occurred');
+                
+                // In a real app, you would show an error message to the user
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'error-message';
+                errorMessage.textContent = 'Error playing the audio file. Please try again later.';
+                
+                const nowPlaying = document.querySelector('.now-playing');
+                nowPlaying.insertBefore(errorMessage, nowPlaying.firstChild);
+                
+                // Remove the error message after 5 seconds
+                setTimeout(() => {
+                    errorMessage.remove();
+                }, 5000);
+            }
+            
+            // Helper function to format time in MM:SS format
+            function formatTime(seconds) {
+                seconds = Math.floor(seconds);
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Helper function to handle keyboard interactions
+            function handleInteraction(event) {
+                if (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    event.target.click();
+                }
+            }
+            
+            // Helper function to announce messages to screen readers
+            function announceToScreenReader(message) {
+                // Create a live region if it doesn't exist
+                let liveRegion = document.getElementById('sr-live-region');
+                
+                if (!liveRegion) {
+                    liveRegion = document.createElement('div');
+                    liveRegion.id = 'sr-live-region';
+                    liveRegion.className = 'sr-only';
+                    liveRegion.setAttribute('aria-live', 'polite');
+                    document.body.appendChild(liveRegion);
+                }
+                
+                // Set the message
+                liveRegion.textContent = message;
+                
+                // Clear the message after a short delay
+                setTimeout(() => {
+                    liveRegion.textContent = '';
+                }, 1000);
+            }
+            
+            // Helper function to convert a string to a hue value (0-360)
+            function stringToHue(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                }
+                return hash % 360;
+            }
+            
+            // Initialize the player
+            initPlayer();
         });
-
-        // Ensure animations respect user preferences
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-        if (prefersReducedMotion.matches) {
-            // Apply styles for reduced motion if needed
-            document.documentElement.style.setProperty('--transition-speed', '0.01ms');
-        }
     </script>
 </body>
 </html>
