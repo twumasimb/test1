@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Weather Dashboard</title>
+    <title>Accessible Interactive Quiz</title>
     <style>
         /* Base styles with accessibility in mind */
         :root {
-            --primary-color: #0066cc;
-            --secondary-color: #004080;
-            --background-color: #f5f7fa;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --light-text: #666666;
-            --border-color: #dddddd;
-            --error-color: #d32f2f;
-            --success-color: #388e3c;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --light-color: #f8f9fa;
             --focus-color: #0066cc;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
         }
 
         * {
@@ -29,7 +27,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: var(--background-color);
+            background-color: var(--light-color);
             padding: 0;
             margin: 0;
         }
@@ -45,71 +43,177 @@
             outline: 3px solid #ffffff;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
         header {
             background-color: var(--primary-color);
             color: white;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
+            padding: 1rem;
+            text-align: center;
         }
 
         main {
-            padding-bottom: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
 
-        .search-section {
+        h1 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .quiz-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
             margin-bottom: 2rem;
+            transition: transform 0.3s ease;
         }
 
-        .search-form {
+        .question {
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .question.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .options {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .option {
+            margin-bottom: 0.75rem;
+        }
+
+        .option label {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: flex-end;
-            max-width: 600px;
-        }
-
-        .form-group {
-            flex: 1 1 250px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        input[type="text"] {
-            width: 100%;
+            align-items: center;
+            cursor: pointer;
             padding: 0.75rem;
-            border: 1px solid var(--border-color);
+            border: 2px solid #e0e0e0;
             border-radius: 4px;
-            font-size: 1rem;
+            transition: all 0.2s ease;
         }
 
-        button {
-            background-color: var(--primary-color);
+        .option label:hover {
+            background-color: #f5f5f5;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .option input[type="radio"]:focus + label {
+            outline: 3px solid var(--focus-color);
+            outline-offset: 2px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary-color);
             color: white;
             border: none;
-            border-radius: 4px;
             padding: 0.75rem 1.5rem;
-            font-size: 1rem;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
-        button:hover {
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .btn-next {
+            float: right;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .feedback.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .feedback.correct {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+            border-left: 4px solid #27ae60;
+        }
+
+        .feedback.incorrect {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+            border-left: 4px solid #c0392b;
+        }
+
+        .results {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .results.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .score {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
             background-color: var(--secondary-color);
+            width: 0;
+            transition: width 0.5s ease;
         }
 
         .sr-only {
@@ -124,420 +228,341 @@
             border-width: 0;
         }
 
-        .error-message {
-            color: var(--error-color);
-            margin-top: 0.5rem;
-            font-weight: bold;
+        .restart-btn {
+            margin-top: 1rem;
         }
 
-        .weather-container {
-            display: none;
-        }
-
-        .weather-container.active {
-            display: block;
-        }
-
-        .current-weather {
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-
-        .current-weather-header {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-
-        .city-name {
-            font-size: 1.8rem;
-            margin: 0;
-        }
-
-        .current-date {
-            color: var(--light-text);
-            font-size: 1.1rem;
-        }
-
-        .weather-info {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .temperature {
-            font-size: 3rem;
-            font-weight: bold;
-        }
-
-        .weather-description {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .weather-icon {
-            width: 64px;
-            height: 64px;
-            margin-right: 1rem;
-        }
-
-        .weather-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-
-        .weather-detail {
-            flex: 1 1 120px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .detail-label {
-            font-size: 0.9rem;
-            color: var(--light-text);
-        }
-
-        .detail-value {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .forecast-section {
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem;
             margin-top: 2rem;
         }
 
-        .forecast-heading {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .forecast-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 1rem;
-            padding-bottom: 1rem;
-        }
-
-        .forecast-card {
-            flex: 0 0 150px;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            padding: 1rem;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .forecast-time {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .forecast-temp {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-        }
-
-        .loading-indicator {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .loading-indicator.active {
-            display: block;
-        }
-
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--primary-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .weather-info {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
+        /* Responsive design */
+        @media screen and (max-width: 600px) {
+            .quiz-container {
+                padding: 1.5rem;
             }
 
-            .forecast-card {
-                flex: 0 0 120px;
-            }
-        }
-
-        /* High contrast mode support */
-        @media (forced-colors: active) {
-            button {
-                border: 1px solid ButtonText;
+            .btn {
+                padding: 0.6rem 1.2rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>Weather Dashboard</h1>
-        </div>
+        <h1>Interactive Accessible Quiz</h1>
     </header>
 
-    <main class="container">
-        <section class="search-section" aria-labelledby="search-heading">
-            <h2 id="search-heading">Search for Weather</h2>
-            <form id="search-form" class="search-form" aria-describedby="form-instructions">
-                <p id="form-instructions" class="sr-only">Enter a city name to get current weather and forecast information.</p>
-                
-                <div class="form-group">
-                    <label for="city-input">City Name</label>
-                    <input 
-                        type="text" 
-                        id="city-input" 
-                        name="city" 
-                        placeholder="Enter city name" 
-                        required 
-                        aria-required="true"
-                        aria-describedby="city-error"
-                    >
-                    <div id="city-error" class="error-message" role="alert" aria-live="assertive"></div>
-                </div>
-                
-                <button type="submit" id="search-button">
-                    Get Weather
-                </button>
-            </form>
-        </section>
-
-        <div id="loading-indicator" class="loading-indicator" aria-live="polite">
-            <div class="spinner" role="status" aria-hidden="true"></div>
-            <p>Loading weather data...</p>
-        </div>
-
-        <div id="weather-container" class="weather-container" aria-live="polite">
-            <section class="current-weather" aria-labelledby="current-weather-heading">
-                <div class="current-weather-header">
-                    <h2 id="current-weather-heading" class="city-name"></h2>
-                    <p class="current-date"></p>
-                </div>
-                
-                <div class="weather-info">
-                    <div class="temperature-container">
-                        <span class="temperature"></span>
-                    </div>
-                    
-                    <div class="weather-description">
-                        <div aria-hidden="true">
-                            <img class="weather-icon" src="" alt="">
-                        </div>
-                        <p class="condition"></p>
-                    </div>
-                </div>
-                
-                <div class="weather-details">
-                    <div class="weather-detail">
-                        <span class="detail-label">Feels Like</span>
-                        <span class="detail-value" id="feels-like"></span>
-                    </div>
-                    <div class="weather-detail">
-                        <span class="detail-label">Humidity</span>
-                        <span class="detail-value" id="humidity"></span>
-                    </div>
-                    <div class="weather-detail">
-                        <span class="detail-label">Wind</span>
-                        <span class="detail-value" id="wind"></span>
-                    </div>
-                    <div class="weather-detail">
-                        <span class="detail-label">Pressure</span>
-                        <span class="detail-value" id="pressure"></span>
-                    </div>
-                </div>
-            </section>
+    <main>
+        <section class="quiz-container">
+            <h2 id="quiz-heading">Test Your Knowledge</h2>
             
-            <section class="forecast-section" aria-labelledby="forecast-heading">
-                <h2 id="forecast-heading" class="forecast-heading">24-Hour Forecast</h2>
-                <div class="forecast-container" id="forecast-container"></div>
-            </section>
-        </div>
+            <div aria-live="polite" class="quiz-content">
+                <div id="progress-container" class="progress-container">
+                    <div class="progress-text">
+                        <span id="progress-status">Question 1 of 5</span>
+                        <span id="progress-percentage">0% Complete</span>
+                    </div>
+                    <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <div id="questions-container">
+                    <!-- Questions will be dynamically inserted here -->
+                </div>
+
+                <div id="feedback" class="feedback" aria-live="assertive"></div>
+
+                <div class="button-container">
+                    <button id="next-btn" class="btn btn-next" disabled aria-disabled="true">
+                        Next Question
+                    </button>
+                </div>
+            </div>
+
+            <div id="results" class="results" aria-live="polite">
+                <h2>Quiz Results</h2>
+                <p id="score-display" class="score">You scored: <span id="score">0</span> out of <span id="total">5</span></p>
+                <p id="feedback-message"></p>
+                <button id="restart-btn" class="btn restart-btn">Restart Quiz</button>
+            </div>
+        </section>
     </main>
 
-    <footer class="container">
-        <p>Weather data provided by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a></p>
+    <footer>
+        <p>&copy; 2023 Accessible Interactive Quiz. All rights reserved.</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // API key for OpenWeatherMap (normally would be secured on server-side)
-            const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
-            
+            // Quiz questions data
+            const quizQuestions = [
+                {
+                    question: "What does HTML stand for?",
+                    options: [
+                        "Hyper Text Markup Language",
+                        "High Tech Modern Language",
+                        "Hyper Transfer Markup Language",
+                        "Hyperlink Text Management Language"
+                    ],
+                    correctAnswer: 0
+                },
+                {
+                    question: "Which attribute is used to provide alternative text for images?",
+                    options: [
+                        "title",
+                        "alt",
+                        "description",
+                        "caption"
+                    ],
+                    correctAnswer: 1
+                },
+                {
+                    question: "Which of these is a semantic HTML element?",
+                    options: [
+                        "<div>",
+                        "<span>",
+                        "<article>",
+                        "<container>"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    question: "What does CSS stand for?",
+                    options: [
+                        "Computer Style Sheets",
+                        "Creative Style System",
+                        "Cascading Style Sheets",
+                        "Colorful Style Sheets"
+                    ],
+                    correctAnswer: 2
+                },
+                {
+                    question: "Which property is used to change the text color in CSS?",
+                    options: [
+                        "text-color",
+                        "font-color",
+                        "color",
+                        "text-style"
+                    ],
+                    correctAnswer: 2
+                }
+            ];
+
+            // Quiz state
+            let currentQuestion = 0;
+            let score = 0;
+            let selectedOption = null;
+            let quizCompleted = false;
+
             // DOM elements
-            const searchForm = document.getElementById('search-form');
-            const cityInput = document.getElementById('city-input');
-            const cityError = document.getElementById('city-error');
-            const weatherContainer = document.getElementById('weather-container');
-            const loadingIndicator = document.getElementById('loading-indicator');
-            
-            // Current weather elements
-            const cityName = document.querySelector('.city-name');
-            const currentDate = document.querySelector('.current-date');
-            const temperature = document.querySelector('.temperature');
-            const weatherIcon = document.querySelector('.weather-icon');
-            const condition = document.querySelector('.condition');
-            const feelsLike = document.getElementById('feels-like');
-            const humidity = document.getElementById('humidity');
-            const wind = document.getElementById('wind');
-            const pressure = document.getElementById('pressure');
-            
-            // Forecast container
-            const forecastContainer = document.getElementById('forecast-container');
-            
-            // Add event listener for form submission
-            searchForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const city = cityInput.value.trim();
+            const questionsContainer = document.getElementById('questions-container');
+            const nextButton = document.getElementById('next-btn');
+            const feedbackElement = document.getElementById('feedback');
+            const resultsElement = document.getElementById('results');
+            const scoreDisplay = document.getElementById('score');
+            const totalDisplay = document.getElementById('total');
+            const feedbackMessage = document.getElementById('feedback-message');
+            const restartButton = document.getElementById('restart-btn');
+            const progressStatus = document.getElementById('progress-status');
+            const progressPercentage = document.getElementById('progress-percentage');
+            const progressFill = document.getElementById('progress-fill');
+            const progressBar = document.querySelector('.progress-bar');
+            const quizContent = document.querySelector('.quiz-content');
+
+            // Initialize the quiz
+            initializeQuiz();
+
+            // Function to initialize the quiz
+            function initializeQuiz() {
+                currentQuestion = 0;
+                score = 0;
+                quizCompleted = false;
                 
-                if (city) {
-                    cityError.textContent = '';
-                    getWeatherData(city);
-                } else {
-                    cityError.textContent = 'Please enter a city name';
+                // Hide results and show quiz content
+                resultsElement.classList.remove('show');
+                quizContent.style.display = 'block';
+                
+                // Reset progress bar
+                updateProgressBar();
+                
+                // Load the first question
+                loadQuestion();
+                
+                // Add event listeners
+                nextButton.addEventListener('click', handleNextButtonClick);
+                nextButton.addEventListener('keydown', handleInteraction);
+                restartButton.addEventListener('click', restartQuiz);
+                restartButton.addEventListener('keydown', handleInteraction);
+            }
+
+            // Function to load a question
+            function loadQuestion() {
+                // Clear previous question
+                questionsContainer.innerHTML = '';
+                feedbackElement.innerHTML = '';
+                feedbackElement.classList.remove('show', 'correct', 'incorrect');
+                
+                // Reset selected option
+                selectedOption = null;
+                
+                // Disable next button until an option is selected
+                nextButton.disabled = true;
+                nextButton.setAttribute('aria-disabled', 'true');
+                
+                // Update progress indicators
+                updateProgressBar();
+                
+                // If quiz is completed, show results
+                if (currentQuestion >= quizQuestions.length) {
+                    showResults();
+                    return;
                 }
-            });
-            
-            // Function to get weather data
-            function getWeatherData(city) {
-                // Show loading indicator
-                loadingIndicator.classList.add('active');
-                weatherContainer.classList.remove('active');
                 
-                // Fetch current weather data
-                fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('City not found');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Display current weather
-                        displayCurrentWeather(data);
-                        
-                        // Get coordinates for forecast
-                        const { lat, lon } = data.coord;
-                        return fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Display forecast
-                        displayForecast(data);
-                        
-                        // Hide loading, show weather
-                        loadingIndicator.classList.remove('active');
-                        weatherContainer.classList.add('active');
-                    })
-                    .catch(error => {
-                        loadingIndicator.classList.remove('active');
-                        cityError.textContent = error.message || 'Failed to fetch weather data. Please try again.';
-                        console.error('Error fetching weather data:', error);
-                    });
-            }
-            
-            // Function to display current weather
-            function displayCurrentWeather(data) {
-                // Format date
-                const date = new Date();
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const formattedDate = date.toLocaleDateString('en-US', options);
+                // Create question element
+                const questionData = quizQuestions[currentQuestion];
+                const questionElement = document.createElement('div');
+                questionElement.className = 'question';
+                questionElement.id = `question-${currentQuestion}`;
                 
-                // Update DOM elements
-                cityName.textContent = `${data.name}, ${data.sys.country}`;
-                currentDate.textContent = formattedDate;
-                temperature.textContent = `${Math.round(data.main.temp)}°C`;
+                // Create question heading
+                const questionHeading = document.createElement('h3');
+                questionHeading.textContent = `Question ${currentQuestion + 1}: ${questionData.question}`;
+                questionElement.appendChild(questionHeading);
                 
-                // Set weather icon with proper alt text
-                const iconCode = data.weather[0].icon;
-                const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-                weatherIcon.src = iconUrl;
-                weatherIcon.alt = `Weather icon: ${data.weather[0].description}`;
+                // Create options list
+                const optionsList = document.createElement('ul');
+                optionsList.className = 'options';
+                optionsList.setAttribute('role', 'radiogroup');
+                optionsList.setAttribute('aria-labelledby', `question-${currentQuestion}`);
                 
-                // Set condition and details
-                condition.textContent = data.weather[0].description;
-                feelsLike.textContent = `${Math.round(data.main.feels_like)}°C`;
-                humidity.textContent = `${data.main.humidity}%`;
-                wind.textContent = `${data.wind.speed} m/s`;
-                pressure.textContent = `${data.main.pressure} hPa`;
-            }
-            
-            // Function to display forecast
-            function displayForecast(data) {
-                // Clear previous forecast
-                forecastContainer.innerHTML = '';
-                
-                // Get 24-hour forecast (8 items for 3-hour intervals)
-                const forecast24h = data.list.slice(0, 8);
-                
-                // Create forecast cards
-                forecast24h.forEach(item => {
-                    const dateTime = new Date(item.dt * 1000);
-                    const hour = dateTime.getHours();
-                    const formattedHour = hour === 0 ? '12 AM' : hour === 12 ? '12 PM' : hour < 12 ? `${hour} AM` : `${hour - 12} PM`;
+                // Create each option
+                questionData.options.forEach((option, index) => {
+                    const optionItem = document.createElement('li');
+                    optionItem.className = 'option';
                     
-                    const iconCode = item.weather[0].icon;
-                    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-                    const description = item.weather[0].description;
+                    const optionId = `q${currentQuestion}-option${index}`;
                     
-                    const forecastCard = document.createElement('div');
-                    forecastCard.className = 'forecast-card';
-                    forecastCard.setAttribute('aria-label', `Forecast for ${formattedHour}: ${Math.round(item.main.temp)}°C, ${description}`);
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.name = `question-${currentQuestion}`;
+                    radioInput.id = optionId;
+                    radioInput.value = index;
                     
-                    forecastCard.innerHTML = `
-                        <div class="forecast-time">${formattedHour}</div>
-                        <div aria-hidden="true">
-                            <img src="${iconUrl}" alt="" width="50" height="50">
-                        </div>
-                        <div class="forecast-temp">${Math.round(item.main.temp)}°C</div>
-                        <div class="forecast-condition">${description}</div>
-                    `;
+                    const optionLabel = document.createElement('label');
+                    optionLabel.setAttribute('for', optionId);
+                    optionLabel.textContent = option;
                     
-                    forecastContainer.appendChild(forecastCard);
+                    // Add event listeners
+                    radioInput.addEventListener('change', () => selectOption(index));
+                    
+                    optionItem.appendChild(radioInput);
+                    optionItem.appendChild(optionLabel);
+                    optionsList.appendChild(optionItem);
                 });
+                
+                questionElement.appendChild(optionsList);
+                questionsContainer.appendChild(questionElement);
+                
+                // Animate question appearance
+                setTimeout(() => {
+                    questionElement.classList.add('active');
+                }, 50);
             }
-            
-            // Add keyboard support for interactive elements
-            function handleInteraction(event) {
-                if (event.type === 'click' || 
-                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                    // Prevent default space key scrolling
-                    if (event.key === ' ') {
-                        event.preventDefault();
-                    }
-                    
-                    // Trigger the action
-                    event.currentTarget.click();
+
+            // Function to handle option selection
+            function selectOption(index) {
+                selectedOption = index;
+                nextButton.disabled = false;
+                nextButton.setAttribute('aria-disabled', 'false');
+                
+                // Show immediate feedback
+                const questionData = quizQuestions[currentQuestion];
+                const isCorrect = index === questionData.correctAnswer;
+                
+                feedbackElement.innerHTML = '';
+                feedbackElement.classList.remove('show', 'correct', 'incorrect');
+                
+                const feedbackText = document.createElement('p');
+                
+                if (isCorrect) {
+                    feedbackElement.classList.add('correct');
+                    feedbackText.textContent = "Correct! Well done!";
+                } else {
+                    feedbackElement.classList.add('incorrect');
+                    feedbackText.textContent = `Incorrect. The correct answer is: ${questionData.options[questionData.correctAnswer]}`;
+                }
+                
+                feedbackElement.appendChild(feedbackText);
+                feedbackElement.classList.add('show');
+                
+                // Update score if correct
+                if (isCorrect) {
+                    score++;
                 }
             }
-            
-            // Initialize with a default city if needed
-            // Uncomment the line below to load a default city on page load
-            // getWeatherData('London');
+
+            // Function to handle next button click
+            function handleNextButtonClick() {
+                currentQuestion++;
+                loadQuestion();
+            }
+
+            // Function to update progress bar
+            function updateProgressBar() {
+                const totalQuestions = quizQuestions.length;
+                const progress = Math.round((currentQuestion / totalQuestions) * 100);
+                
+                progressStatus.textContent = `Question ${currentQuestion + 1} of ${totalQuestions}`;
+                progressPercentage.textContent = `${progress}% Complete`;
+                progressFill.style.width = `${progress}%`;
+                
+                // Update ARIA attributes
+                progressBar.setAttribute('aria-valuenow', progress);
+            }
+
+            // Function to show results
+            function showResults() {
+                quizContent.style.display = 'none';
+                resultsElement.classList.add('show');
+                
+                const totalQuestions = quizQuestions.length;
+                scoreDisplay.textContent = score;
+                totalDisplay.textContent = totalQuestions;
+                
+                // Provide feedback based on score
+                const percentage = (score / totalQuestions) * 100;
+                
+                if (percentage >= 80) {
+                    feedbackMessage.textContent = "Excellent! You've mastered this topic!";
+                } else if (percentage >= 60) {
+                    feedbackMessage.textContent = "Good job! You have a solid understanding.";
+                } else if (percentage >= 40) {
+                    feedbackMessage.textContent = "Not bad, but there's room for improvement.";
+                } else {
+                    feedbackMessage.textContent = "You might want to study more and try again.";
+                }
+                
+                quizCompleted = true;
+            }
+
+            // Function to restart the quiz
+            function restartQuiz() {
+                initializeQuiz();
+            }
+
+            // Function to handle keyboard interactions
+            function handleInteraction(event) {
+                if (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    event.target.click();
+                }
+            }
         });
     </script>
 </body>
