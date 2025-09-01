@@ -3,19 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Travel Map - Share Your Journeys</title>
+    <title>User Profile - Alex Johnson</title>
     <style>
-        /* Base styles with accessibility in mind */
-        :root {
-            --primary-color: #0066cc;
-            --secondary-color: #004080;
-            --text-color: #333333;
-            --light-bg: #f5f5f5;
-            --error-color: #d32f2f;
-            --success-color: #2e7d32;
-            --focus-color: #0066cc;
-        }
-
+        /* CSS Reset and Base Styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -23,210 +13,272 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: #ffffff;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 0;
+            margin: 0;
         }
 
-        /* Ensure all interactive elements have visible focus indicators */
+        /* Accessibility: Focus styles for all interactive elements */
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid var(--focus-color);
+            outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
 
-        /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
 
+        /* Layout */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         header {
-            padding: 20px 0;
-            border-bottom: 1px solid #ddd;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
         }
 
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            color: var(--secondary-color);
-            margin: 20px 0;
-            font-size: 1.8rem;
-        }
-
-        h3 {
-            margin: 15px 0;
-            font-size: 1.3rem;
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         main {
-            padding: 20px 0;
-            min-height: 70vh;
+            padding: 2rem 0;
         }
 
-        .map-container {
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+
+        /* Profile Components */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .profile-header {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+        }
+
+        .profile-avatar {
             position: relative;
-            width: 100%;
-            height: 500px;
-            border: 2px solid #ddd;
-            margin: 20px 0;
-            background-color: var(--light-bg);
-            overflow: hidden;
+            width: 200px;
+            height: 200px;
+            flex-shrink: 0;
+            margin: 0 auto;
         }
 
-        .map {
+        @media (min-width: 768px) {
+            .profile-avatar {
+                margin: 0;
+            }
+        }
+
+        .avatar-img {
             width: 100%;
             height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23e6f2ff"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23cce0ff" stroke-width="1"/></svg>');
-            position: relative;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .map-pin {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            transform: translate(-50%, -100%);
-            cursor: pointer;
-            z-index: 10;
+        .profile-info {
+            flex-grow: 1;
         }
 
-        .map-pin::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 24px;
-            height: 24px;
-            background-color: var(--primary-color);
-            border-radius: 50% 50% 0 50%;
-            transform: rotate(45deg);
+        .profile-name {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #333;
         }
 
-        .map-pin:focus {
-            outline: 3px solid var(--focus-color);
-            outline-offset: 2px;
-        }
-
-        .pin-info {
-            position: absolute;
-            background: white;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            width: 250px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 20;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .pin-info h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-
-        .pin-info p {
-            margin: 10px 0;
-        }
-
-        .pin-info .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: none;
-            border: none;
+        .profile-tagline {
             font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--text-color);
+            color: #666;
+            margin-bottom: 1rem;
         }
 
-        .form-container {
-            background-color: var(--light-bg);
-            padding: 20px;
-            border-radius: 5px;
-            margin: 20px 0;
+        .profile-bio {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
         }
 
-        .form-group {
-            margin-bottom: 15px;
+        .profile-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
             font-weight: bold;
+            font-size: 1.2rem;
         }
 
-        .required-field::after {
-            content: "*";
-            color: var(--error-color);
-            margin-left: 5px;
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
         }
 
-        input, textarea, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s ease;
             font-size: 1rem;
-            transition: background-color 0.3s;
+            border: none;
         }
 
-        button:hover {
-            background-color: var(--secondary-color);
+        .btn-primary {
+            background-color: #0066cc;
+            color: white;
         }
 
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #0055aa;
         }
 
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.9rem;
-            margin-top: 5px;
+        .btn-primary[aria-pressed="true"] {
+            background-color: #333;
         }
 
-        .success-message {
-            color: var(--success-color);
-            font-size: 0.9rem;
-            margin-top: 5px;
+        /* Avatar Gallery */
+        .avatar-gallery {
+            margin-top: 2rem;
         }
 
-        .experiences-list {
-            margin: 20px 0;
+        .gallery-heading {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
         }
 
-        .experience-card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 15px;
-            background-color: white;
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
         }
 
-        .experience-card h3 {
-            margin-top: 0;
-            color: var(--primary-color);
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
         }
 
+        .gallery-item:hover, .gallery-item:focus {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item.selected {
+            border: 3px solid #0066cc;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f1f1f1;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .social-link:hover, .social-link:focus {
+            background-color: #ddd;
+        }
+
+        /* Footer */
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover, .footer-links a:focus {
+            text-decoration: underline;
+        }
+
+        /* Accessibility: Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #0066cc;
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.2s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Visually hidden elements for screen readers */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -238,489 +290,199 @@
             white-space: nowrap;
             border-width: 0;
         }
-
-        .instructions {
-            background-color: #e6f2ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        footer {
-            margin-top: 40px;
-            padding: 20px 0;
-            border-top: 1px solid #ddd;
-            text-align: center;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .map-container {
-                height: 350px;
-            }
-
-            .pin-info {
-                width: 200px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .map-container {
-                height: 300px;
-            }
-
-            .pin-info {
-                width: 180px;
-            }
-        }
     </style>
 </head>
 <body>
+    <!-- Skip to main content link for keyboard users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <header>
-        <h1>Interactive Travel Map</h1>
-        <p>Share your travel experiences and discover new destinations!</p>
+        <div class="container header-content">
+            <div class="logo">
+                <h1>Profile Page</h1>
+            </div>
+            <nav role="navigation" aria-label="Main navigation">
+                <ul class="footer-links">
+                    <li><a href="#" aria-current="page">Home</a></li>
+                    <li><a href="#">Discover</a></li>
+                    <li><a href="#">Messages</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <section aria-labelledby="map-section-heading">
-            <h2 id="map-section-heading">Your Travel Map</h2>
-            
-            <div class="instructions" aria-labelledby="instructions-heading">
-                <h3 id="instructions-heading">How to Use This Map</h3>
-                <p>Click or tap anywhere on the map to add a new location pin. You can then enter details about your experience at that location.</p>
-                <p>Use the tab key to navigate through pins and press Enter to view details.</p>
-            </div>
-
-            <div class="map-container" id="map-container">
-                <div id="map" class="map" 
-                     role="application" 
-                     aria-label="Interactive travel map. Click anywhere to add a pin."
-                     tabindex="0">
-                    <!-- Map pins will be added here dynamically -->
+    <main id="main-content">
+        <div class="container">
+            <section class="profile-header">
+                <div class="profile-avatar">
+                    <img id="current-avatar" src="https://via.placeholder.com/200" alt="Alex Johnson's profile picture" class="avatar-img">
                 </div>
-            </div>
-        </section>
-
-        <section aria-labelledby="add-experience-heading">
-            <h2 id="add-experience-heading">Add Your Travel Experience</h2>
+                <div class="profile-info">
+                    <h2 class="profile-name">Alex Johnson</h2>
+                    <p class="profile-tagline">UX Designer & Accessibility Advocate</p>
+                    
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="stat-value">1,245</span>
+                            <span class="stat-label">Followers</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">347</span>
+                            <span class="stat-label">Following</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">42</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                    </div>
+                    
+                    <button id="follow-btn" class="btn btn-primary" aria-pressed="false" onclick="handleFollow(event)" onkeydown="handleInteraction(event)">
+                        Follow
+                    </button>
+                    
+                    <div class="social-links" aria-label="Social media links">
+                        <a href="https://twitter.com" class="social-link" aria-label="Twitter profile">
+                            <span aria-hidden="true">T</span>
+                        </a>
+                        <a href="https://linkedin.com" class="social-link" aria-label="LinkedIn profile">
+                            <span aria-hidden="true">L</span>
+                        </a>
+                        <a href="https://instagram.com" class="social-link" aria-label="Instagram profile">
+                            <span aria-hidden="true">I</span>
+                        </a>
+                        <a href="https://github.com" class="social-link" aria-label="GitHub profile">
+                            <span aria-hidden="true">G</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
             
-            <div class="form-container">
-                <form id="experience-form" novalidate>
-                    <div class="form-group">
-                        <label for="location-name" class="required-field">Location Name</label>
-                        <input type="text" id="location-name" name="location-name" required aria-required="true" aria-describedby="location-name-error">
-                        <div id="location-name-error" class="error-message" aria-live="polite"></div>
+            <section class="profile-bio">
+                <h3>About Me</h3>
+                <p>Hi there! I'm Alex, a UX designer with over 8 years of experience creating accessible digital experiences. I'm passionate about inclusive design and believe that technology should work for everyone, regardless of ability.</p>
+                <p>When I'm not designing, you can find me hiking with my dog, experimenting with new recipes, or volunteering at local accessibility workshops. I'm always looking to connect with like-minded professionals, so feel free to reach out!</p>
+            </section>
+            
+            <section class="avatar-gallery" aria-labelledby="gallery-heading">
+                <h3 id="gallery-heading" class="gallery-heading">Avatar Gallery</h3>
+                <p>Select an avatar to update your profile picture:</p>
+                
+                <div class="gallery-grid" role="radiogroup" aria-label="Choose profile avatar">
+                    <!-- Gallery items with keyboard accessibility -->
+                    <div class="gallery-item selected" tabindex="0" role="radio" aria-checked="true" data-img="https://via.placeholder.com/200/3498db/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
+                        <img src="https://via.placeholder.com/200/3498db/ffffff" alt="Blue avatar with abstract pattern">
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="country" class="required-field">Country</label>
-                        <input type="text" id="country" name="country" required aria-required="true" aria-describedby="country-error">
-                        <div id="country-error" class="error-message" aria-live="polite"></div>
+                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/e74c3c/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
+                        <img src="https://via.placeholder.com/200/e74c3c/ffffff" alt="Red avatar with geometric design">
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="visit-date" class="required-field">Date of Visit</label>
-                        <input type="date" id="visit-date" name="visit-date" required aria-required="true" aria-describedby="visit-date-error">
-                        <div id="visit-date-error" class="error-message" aria-live="polite"></div>
+                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/2ecc71/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
+                        <img src="https://via.placeholder.com/200/2ecc71/ffffff" alt="Green avatar with nature theme">
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="experience" class="required-field">Your Experience</label>
-                        <textarea id="experience" name="experience" rows="4" required aria-required="true" aria-describedby="experience-error"></textarea>
-                        <div id="experience-error" class="error-message" aria-live="polite"></div>
+                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/f39c12/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
+                        <img src="https://via.placeholder.com/200/f39c12/ffffff" alt="Orange avatar with sun pattern">
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="rating">Rating (1-5)</label>
-                        <select id="rating" name="rating">
-                            <option value="5">5 - Excellent</option>
-                            <option value="4">4 - Very Good</option>
-                            <option value="3" selected>3 - Good</option>
-                            <option value="2">2 - Fair</option>
-                            <option value="1">1 - Poor</option>
-                        </select>
+                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/9b59b6/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
+                        <img src="https://via.placeholder.com/200/9b59b6/ffffff" alt="Purple avatar with creative design">
                     </div>
-                    
-                    <input type="hidden" id="pin-x" name="pin-x" value="">
-                    <input type="hidden" id="pin-y" name="pin-y" value="">
-                    
-                    <button type="submit" id="submit-btn">Add Experience</button>
-                    <div id="form-status" class="success-message" aria-live="polite"></div>
-                </form>
-            </div>
-        </section>
-
-        <section aria-labelledby="experiences-heading">
-            <h2 id="experiences-heading">Shared Experiences</h2>
-            <div id="experiences-list" class="experiences-list" aria-live="polite">
-                <!-- Experiences will be added here dynamically -->
-                <p id="no-experiences">No experiences have been shared yet. Be the first to add your travel story!</p>
-            </div>
-        </section>
+                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/34495e/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
+                        <img src="https://via.placeholder.com/200/34495e/ffffff" alt="Dark blue avatar with professional look">
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2023 Interactive Travel Map. All rights reserved.</p>
+    <footer class="dark-bg">
+        <div class="container footer-content">
+            <p>&copy; 2023 Profile Page. All rights reserved.</p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Accessibility</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // State management
-            const state = {
-                pins: [],
-                experiences: [],
-                activePinInfo: null,
-                selectedPinCoords: null
-            };
+        // Handle follow button interaction
+        function handleFollow(event) {
+            const followBtn = document.getElementById('follow-btn');
+            const isFollowing = followBtn.getAttribute('aria-pressed') === 'true';
+            
+            // Toggle follow state
+            followBtn.setAttribute('aria-pressed', !isFollowing);
+            followBtn.textContent = isFollowing ? 'Follow' : 'Following';
+            
+            // Announce change to screen readers
+            announceToScreenReader(isFollowing ? 'Unfollowed' : 'Now following Alex Johnson');
+        }
 
-            // DOM elements
-            const map = document.getElementById('map');
-            const form = document.getElementById('experience-form');
-            const pinXInput = document.getElementById('pin-x');
-            const pinYInput = document.getElementById('pin-y');
-            const experiencesList = document.getElementById('experiences-list');
-            const noExperiencesMsg = document.getElementById('no-experiences');
-            const formStatus = document.getElementById('form-status');
-
-            // Form fields
-            const locationNameInput = document.getElementById('location-name');
-            const countryInput = document.getElementById('country');
-            const visitDateInput = document.getElementById('visit-date');
-            const experienceInput = document.getElementById('experience');
-            const ratingInput = document.getElementById('rating');
-
-            // Error message elements
-            const locationNameError = document.getElementById('location-name-error');
-            const countryError = document.getElementById('country-error');
-            const visitDateError = document.getElementById('visit-date-error');
-            const experienceError = document.getElementById('experience-error');
-
-            // Initialize map click handler
-            initializeMap();
-
-            // Initialize form submission
-            initializeForm();
-
-            // Load any saved experiences from localStorage
-            loadSavedExperiences();
-
-            // Map initialization
-            function initializeMap() {
-                // Add click event to map for adding pins
-                map.addEventListener('click', handleMapClick);
-                map.addEventListener('keydown', handleMapKeydown);
-            }
-
-            // Handle map keyboard navigation
-            function handleMapKeydown(event) {
-                // Allow users to add a pin with Enter key when map is focused
-                if (event.key === 'Enter') {
-                    // Since we can't determine coordinates from keyboard,
-                    // we'll place a pin in the center of the map
-                    const mapRect = map.getBoundingClientRect();
-                    const centerX = mapRect.width / 2;
-                    const centerY = mapRect.height / 2;
-                    
-                    addPin(centerX, centerY);
-                    setSelectedPinCoords(centerX, centerY);
-                    
-                    // Announce to screen readers
-                    announceToScreenReader('Pin added to center of map. You can now fill in the experience details.');
-                    
-                    // Focus the first form field
-                    locationNameInput.focus();
-                }
-            }
-
-            // Handle map click for adding pins
-            function handleMapClick(event) {
-                const mapRect = map.getBoundingClientRect();
-                const x = event.clientX - mapRect.left;
-                const y = event.clientY - mapRect.top;
-                
-                addPin(x, y);
-                setSelectedPinCoords(x, y);
-                
-                // Announce to screen readers
-                announceToScreenReader('Pin added to map. You can now fill in the experience details.');
-                
-                // Focus the first form field
-                locationNameInput.focus();
-            }
-
-            // Add a pin to the map
-            function addPin(x, y) {
-                // Create pin element
-                const pin = document.createElement('div');
-                pin.className = 'map-pin';
-                pin.style.left = `${x}px`;
-                pin.style.top = `${y}px`;
-                pin.setAttribute('tabindex', '0');
-                pin.setAttribute('role', 'button');
-                pin.setAttribute('aria-label', 'Map pin. Press Enter to add details.');
-                
-                // Add event listeners for pin interaction
-                pin.addEventListener('click', function() {
-                    setSelectedPinCoords(x, y);
-                    locationNameInput.focus();
-                });
-                
-                pin.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        setSelectedPinCoords(x, y);
-                        locationNameInput.focus();
-                    }
-                });
-                
-                // Add pin to map
-                map.appendChild(pin);
-                
-                // Store pin data
-                state.pins.push({
-                    element: pin,
-                    x: x,
-                    y: y
-                });
-            }
-
-            // Set the selected pin coordinates for the form
-            function setSelectedPinCoords(x, y) {
-                state.selectedPinCoords = { x, y };
-                pinXInput.value = x;
-                pinYInput.value = y;
-            }
-
-            // Initialize form submission
-            function initializeForm() {
-                form.addEventListener('submit', function(event) {
+        // Handle keyboard interactions for all interactive elements
+        function handleInteraction(event) {
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                // Prevent default space bar scrolling
+                if (event.key === ' ') {
                     event.preventDefault();
-                    
-                    // Validate form
-                    if (validateForm()) {
-                        // Create experience object
-                        const experience = {
-                            id: Date.now(), // Unique ID based on timestamp
-                            location: locationNameInput.value.trim(),
-                            country: countryInput.value.trim(),
-                            date: visitDateInput.value,
-                            experience: experienceInput.value.trim(),
-                            rating: parseInt(ratingInput.value),
-                            coordinates: {
-                                x: parseFloat(pinXInput.value),
-                                y: parseFloat(pinYInput.value)
-                            }
-                        };
-                        
-                        // Add experience to state
-                        state.experiences.push(experience);
-                        
-                        // Save to localStorage
-                        saveExperiences();
-                        
-                        // Update UI
-                        renderExperiences();
-                        
-                        // Reset form
-                        form.reset();
-                        pinXInput.value = '';
-                        pinYInput.value = '';
-                        state.selectedPinCoords = null;
-                        
-                        // Show success message
-                        formStatus.textContent = 'Experience added successfully!';
-                        setTimeout(() => {
-                            formStatus.textContent = '';
-                        }, 3000);
-                        
-                        // Announce to screen readers
-                        announceToScreenReader('Experience added successfully!');
-                    }
-                });
+                }
+                
+                // Trigger the follow action
+                handleFollow(event);
             }
+        }
 
-            // Validate form inputs
-            function validateForm() {
-                let isValid = true;
-                
-                // Reset error messages
-                locationNameError.textContent = '';
-                countryError.textContent = '';
-                visitDateError.textContent = '';
-                experienceError.textContent = '';
-                
-                // Validate location name
-                if (!locationNameInput.value.trim()) {
-                    locationNameError.textContent = 'Please enter a location name';
-                    isValid = false;
-                }
-                
-                // Validate country
-                if (!countryInput.value.trim()) {
-                    countryError.textContent = 'Please enter a country';
-                    isValid = false;
-                }
-                
-                // Validate visit date
-                if (!visitDateInput.value) {
-                    visitDateError.textContent = 'Please select a date of visit';
-                    isValid = false;
-                }
-                
-                // Validate experience
-                if (!experienceInput.value.trim()) {
-                    experienceError.textContent = 'Please share your experience';
-                    isValid = false;
-                }
-                
-                // Validate pin coordinates
-                if (!pinXInput.value || !pinYInput.value) {
-                    formStatus.textContent = 'Please select a location on the map first';
-                    formStatus.className = 'error-message';
-                    setTimeout(() => {
-                        formStatus.textContent = '';
-                        formStatus.className = 'success-message';
-                    }, 3000);
-                    isValid = false;
-                }
-                
-                return isValid;
-            }
+        // Change avatar when gallery item is selected
+        function changeAvatar(event, element) {
+            // Get all gallery items and remove selected class
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach(item => {
+                item.classList.remove('selected');
+                item.setAttribute('aria-checked', 'false');
+            });
+            
+            // Add selected class to clicked item
+            element.classList.add('selected');
+            element.setAttribute('aria-checked', 'true');
+            
+            // Update the profile avatar
+            const imgSrc = element.getAttribute('data-img');
+            const currentAvatar = document.getElementById('current-avatar');
+            currentAvatar.src = imgSrc;
+            
+            // Announce change to screen readers
+            const imgAlt = element.querySelector('img').alt;
+            announceToScreenReader(`Profile picture changed to ${imgAlt}`);
+        }
 
-            // Render experiences list
-            function renderExperiences() {
-                // Clear current list except for the "no experiences" message
-                const children = Array.from(experiencesList.children);
-                children.forEach(child => {
-                    if (child.id !== 'no-experiences') {
-                        experiencesList.removeChild(child);
-                    }
-                });
-                
-                // Show/hide "no experiences" message
-                if (state.experiences.length === 0) {
-                    noExperiencesMsg.style.display = 'block';
-                } else {
-                    noExperiencesMsg.style.display = 'none';
-                    
-                    // Add experiences to the list
-                    state.experiences.forEach(exp => {
-                        const card = document.createElement('article');
-                        card.className = 'experience-card';
-                        card.setAttribute('aria-labelledby', `exp-title-${exp.id}`);
-                        
-                        const title = document.createElement('h3');
-                        title.id = `exp-title-${exp.id}`;
-                        title.textContent = `${exp.location}, ${exp.country}`;
-                        
-                        const date = document.createElement('p');
-                        date.innerHTML = `<strong>Date:</strong> ${formatDate(exp.date)}`;
-                        
-                        const rating = document.createElement('p');
-                        rating.innerHTML = `<strong>Rating:</strong> ${getRatingStars(exp.rating)}`;
-                        
-                        const expText = document.createElement('p');
-                        expText.textContent = exp.experience;
-                        
-                        card.appendChild(title);
-                        card.appendChild(date);
-                        card.appendChild(rating);
-                        card.appendChild(expText);
-                        
-                        experiencesList.appendChild(card);
-                    });
-                }
+        // Handle keyboard navigation for gallery items
+        function handleGalleryKeydown(event, element) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                changeAvatar(event, element);
             }
+        }
 
-            // Format date for display
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
+        // Announce changes to screen readers using aria-live region
+        function announceToScreenReader(message) {
+            // Create or use existing live region
+            let liveRegion = document.getElementById('live-region');
+            if (!liveRegion) {
+                liveRegion = document.createElement('div');
+                liveRegion.id = 'live-region';
+                liveRegion.className = 'sr-only';
+                liveRegion.setAttribute('aria-live', 'polite');
+                document.body.appendChild(liveRegion);
             }
-
-            // Generate rating stars
-            function getRatingStars(rating) {
-                const fullStar = '★';
-                const emptyStar = '☆';
-                const stars = fullStar.repeat(rating) + emptyStar.repeat(5 - rating);
-                return `<span aria-label="${rating} out of 5 stars">${stars}</span>`;
-            }
-
-            // Save experiences to localStorage
-            function saveExperiences() {
-                try {
-                    localStorage.setItem('travelExperiences', JSON.stringify(state.experiences));
-                } catch (error) {
-                    console.error('Error saving to localStorage:', error);
-                }
-            }
-
-            // Load experiences from localStorage
-            function loadSavedExperiences() {
-                try {
-                    const savedExperiences = localStorage.getItem('travelExperiences');
-                    if (savedExperiences) {
-                        state.experiences = JSON.parse(savedExperiences);
-                        
-                        // Render experiences
-                        renderExperiences();
-                        
-                        // Recreate pins for saved experiences
-                        state.experiences.forEach(exp => {
-                            addPin(exp.coordinates.x, exp.coordinates.y);
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error loading from localStorage:', error);
-                }
-            }
-
-            // Utility function to announce messages to screen readers
-            function announceToScreenReader(message) {
-                const announcement = document.createElement('div');
-                announcement.setAttribute('aria-live', 'assertive');
-                announcement.classList.add('sr-only');
-                announcement.textContent = message;
-                document.body.appendChild(announcement);
-                
-                // Remove after announcement is read
-                setTimeout(() => {
-                    document.body.removeChild(announcement);
-                }, 3000);
-            }
-
-            // Handle interaction events for both mouse and keyboard
-            function handleInteraction(event) {
-                if (event.type === 'click' || 
-                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                    // Your action here
-                    if (event.type === 'keydown') {
-                        event.preventDefault(); // Prevent scrolling with space key
-                    }
-                }
-            }
-        });
+            
+            // Set the message
+            liveRegion.textContent = message;
+            
+            // Clear after announcement (optional)
+            setTimeout(() => {
+                liveRegion.textContent = '';
+            }, 3000);
+        }
     </script>
 </body>
 </html>
