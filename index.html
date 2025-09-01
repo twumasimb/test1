@@ -3,9 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event RSVP - Confirm Your Attendance</title>
+    <title>Interactive Elements with Accessible Animations</title>
     <style>
-        /* CSS Reset and Base Styles */
+        /* Base styles with accessibility considerations */
+        :root {
+            --primary-color: #2a6496;
+            --secondary-color: #4a90e2;
+            --accent-color: #f8f9fa;
+            --text-color: #333333;
+            --light-text: #ffffff;
+            --focus-color: #0066cc;
+            --error-color: #d32f2f;
+            --success-color: #388e3c;
+            --transition-speed: 0.3s;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -15,31 +27,65 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
+            color: var(--text-color);
+            background-color: #f5f5f5;
             padding: 0;
             margin: 0;
+            min-height: 100vh;
         }
 
-        /* Container styles */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* Ensure all interactive elements have visible focus indicators */
+        button:focus, 
+        input:focus, 
+        select:focus, 
+        textarea:focus, 
+        a:focus,
+        .card:focus,
+        .interactive-box:focus {
+            outline: 3px solid var(--focus-color);
+            outline-offset: 2px;
         }
 
-        /* Header styles */
-        header {
-            background-color: #3a0ca3;
+        /* High contrast focus for dark backgrounds */
+        .dark-bg button:focus, 
+        .dark-bg a:focus,
+        header button:focus,
+        header a:focus,
+        footer button:focus,
+        footer a:focus {
+            outline: 3px solid #ffffff;
+        }
+
+        /* Skip to main content link - hidden until focused */
+        .skip-link {
+            background: var(--primary-color);
             color: white;
-            padding: 1rem 0;
+            font-weight: bold;
+            left: 50%;
+            padding: 8px;
+            position: absolute;
+            transform: translateY(-100%);
+            transition: transform 0.3s;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            transform: translateY(0%);
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        header .container {
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .logo {
@@ -47,72 +93,210 @@
             font-weight: bold;
         }
 
-        /* Navigation styles */
-        nav ul {
+        .nav-links {
             display: flex;
             list-style: none;
         }
 
-        nav li {
+        .nav-links li {
             margin-left: 1.5rem;
         }
 
-        nav a {
-            color: white;
+        .nav-links a {
+            color: var(--light-text);
             text-decoration: none;
-            padding: 0.5rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color var(--transition-speed);
         }
 
-        nav a:hover, nav a:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            text-decoration: underline;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--light-text);
+            transition: width var(--transition-speed);
         }
 
-        /* Main content styles */
+        .nav-links a:hover::after,
+        .nav-links a:focus::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
         main {
-            padding: 2rem 0;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
-            color: #3a0ca3;
-            text-align: center;
+            color: var(--primary-color);
         }
 
         h2 {
             font-size: 1.8rem;
-            margin: 1.5rem 0 1rem;
-            color: #4361ee;
+            margin: 2rem 0 1rem;
+            color: var(--primary-color);
         }
 
         h3 {
             font-size: 1.3rem;
-            margin: 1rem 0 0.5rem;
-            color: #4361ee;
+            margin: 1.5rem 0 0.75rem;
         }
 
         p {
             margin-bottom: 1rem;
         }
 
-        /* Card styles */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        /* Button styles with accessible hover and focus states */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            text-decoration: none;
+        }
+
+        .btn:hover, 
+        .btn:focus {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus {
+            background-color: rgba(74, 144, 226, 0.1);
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        /* Card grid with hover effects */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
         .card {
             background-color: white;
             border-radius: 8px;
+            overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .card:hover,
+        .card:focus {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        /* Interactive boxes section */
+        .interactive-boxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .interactive-box {
+            flex: 1 1 300px;
+            height: 200px;
+            background-color: var(--primary-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            transition: all var(--transition-speed);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            transition: opacity var(--transition-speed);
+        }
+
+        .interactive-box:hover,
+        .interactive-box:focus {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        .interactive-box:hover::before,
+        .interactive-box:focus::before {
+            opacity: 1;
+        }
+
+        .box1 { background-color: #3498db; }
+        .box2 { background-color: #e74c3c; }
+        .box3 { background-color: #2ecc71; }
+
+        /* Form with accessible styles */
+        .contact-form {
+            max-width: 600px;
+            margin: 2rem 0;
             padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        /* Form styles */
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -120,184 +304,191 @@
         label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 600;
+            font-weight: bold;
         }
 
-        .required-field::after {
+        .required::after {
             content: " *";
-            color: #e63946;
+            color: var(--error-color);
         }
 
-        input, select, textarea {
+        input,
+        textarea {
             width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
         }
 
-        input:focus, select:focus, textarea:focus {
-            outline: 3px solid #4361ee;
-            outline-offset: 2px;
-            border-color: #4361ee;
+        input:hover,
+        textarea:hover {
+            border-color: var(--secondary-color);
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
         }
 
         .error-message {
-            color: #e63946;
+            color: var(--error-color);
             font-size: 0.875rem;
-            margin-top: 0.25rem;
+            margin-top: 0.5rem;
             display: none;
         }
 
-        .form-group.error input, 
-        .form-group.error select, 
-        .form-group.error textarea {
-            border-color: #e63946;
+        input.error,
+        textarea.error {
+            border-color: var(--error-color);
         }
 
-        .form-group.error .error-message {
-            display: block;
-        }
-
-        /* Button styles */
-        .btn {
-            display: inline-block;
-            background-color: #4361ee;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        .btn:hover {
-            background-color: #3a0ca3;
-        }
-
-        .btn:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Attendee list styles */
-        .attendees-list {
-            list-style: none;
-        }
-
-        .attendee-item {
-            background-color: #f8f9fa;
-            border-left: 4px solid #4361ee;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0 4px 4px 0;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        /* Two-column layout for larger screens */
-        .flex-container {
+        /* Animated icon section */
+        .icon-section {
             display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 3rem 0;
         }
 
-        @media (min-width: 768px) {
-            .flex-container {
-                flex-direction: row;
-            }
-
-            .flex-item {
-                flex: 1;
-            }
+        .icon-item {
+            text-align: center;
+            margin: 1rem;
+            transition: transform var(--transition-speed);
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+            color: var(--primary-color);
+            font-size: 2rem;
         }
 
-        /* Success message */
-        .success-message {
-            background-color: #d1fae5;
-            border-left: 4px solid #10b981;
-            color: #065f46;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 4px;
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
+        .icon-item:hover .icon,
+        .icon-item:focus-within .icon {
+            background-color: var(--primary-color);
+            color: white;
+            transform: rotate(360deg);
+        }
+
+        .icon-item:hover,
+        .icon-item:focus-within {
+            transform: translateY(-10px);
         }
 
         /* Footer styles */
         footer {
-            background-color: #3a0ca3;
+            background-color: var(--primary-color);
             color: white;
-            padding: 2rem 0;
-            margin-top: 2rem;
+            padding: 2rem 1rem;
+            margin-top: 3rem;
         }
 
-        footer a {
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-section {
+            flex: 1 1 300px;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h3 {
+            margin-top: 0;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color var(--transition-speed);
+        }
+
+        .footer-links a:hover,
+        .footer-links a:focus {
             color: white;
             text-decoration: underline;
         }
 
-        footer a:hover, footer a:focus {
-            text-decoration: none;
+        .copyright {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Skip link for keyboard users */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #4361ee;
+        /* Animation for success message */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-message {
+            background-color: var(--success-color);
             color: white;
-            padding: 8px;
-            z-index: 100;
-            transition: top 0.3s;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .skip-link:focus {
-            top: 0;
-            outline: 3px solid #0066cc;
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-links {
+                margin-top: 1rem;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            .nav-links li {
+                margin: 0.5rem 0;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .interactive-boxes {
+                flex-direction: column;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
         }
 
-        /* Ensure all interactive elements have visible focus indicators */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
-        }
-
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
-        }
-
-        /* Visually hidden elements (for screen readers) */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
+        /* Reduced motion preference support */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
@@ -305,284 +496,147 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <header>
-        <div class="container">
-            <div class="logo" role="banner">Event RSVP</div>
-            <nav role="navigation" aria-label="Main navigation">
-                <ul>
-                    <li><a href="#event-details">Event Details</a></li>
-                    <li><a href="#rsvp-form">RSVP Form</a></li>
-                    <li><a href="#attendees">Attendees</a></li>
-                </ul>
-            </nav>
-        </div>
+        <nav role="navigation" aria-label="Main navigation">
+            <div class="logo">Interactive Elements</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#interactive-boxes">Interactive Boxes</a></li>
+                <li><a href="#cards">Cards</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <main id="main-content" class="container">
-        <h1>Annual Community Gathering</h1>
-        
-        <section id="event-details" class="card" aria-labelledby="event-details-heading">
-            <h2 id="event-details-heading">Event Details</h2>
-            <p>Join us for our annual community gathering! This year's event will feature guest speakers, networking opportunities, and a catered lunch.</p>
-            
-            <div class="flex-container">
-                <div class="flex-item">
-                    <h3>When and Where</h3>
-                    <p><strong>Date:</strong> September 15, 2023</p>
-                    <p><strong>Time:</strong> 10:00 AM - 4:00 PM</p>
-                    <p><strong>Location:</strong> Community Center, 123 Main Street</p>
+    <main id="main-content">
+        <section>
+            <h1>Interactive Elements with Smooth Animations</h1>
+            <p>Explore our collection of accessible interactive elements with smooth hover effects, transitions, and animations. All elements are designed to be keyboard navigable and screen reader friendly.</p>
+            <div class="buttons">
+                <button class="btn" type="button">Primary Button</button>
+                <button class="btn btn-secondary" type="button">Secondary Button</button>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>Feature Icons</h2>
+            <p>Hover or focus on these icons to see smooth rotation and color transition effects.</p>
+            <div class="icon-section" aria-label="Feature icons with animations">
+                <div class="icon-item" tabindex="0">
+                    <div class="icon" aria-hidden="true">★</div>
+                    <h3>Feature One</h3>
+                    <p>Interactive elements with smooth transitions</p>
                 </div>
-                <div class="flex-item">
-                    <h3>What to Expect</h3>
-                    <ul>
-                        <li>Keynote presentations from industry leaders</li>
-                        <li>Interactive workshops</li>
-                        <li>Networking lunch</li>
-                        <li>Community awards ceremony</li>
-                    </ul>
+                <div class="icon-item" tabindex="0">
+                    <div class="icon" aria-hidden="true">♥</div>
+                    <h3>Feature Two</h3>
+                    <p>Accessible hover and focus states</p>
+                </div>
+                <div class="icon-item" tabindex="0">
+                    <div class="icon" aria-hidden="true">✓</div>
+                    <h3>Feature Three</h3>
+                    <p>Keyboard navigable interactive elements</p>
                 </div>
             </div>
         </section>
 
-        <section id="rsvp-form" class="card" aria-labelledby="rsvp-heading">
-            <h2 id="rsvp-heading">RSVP for the Event</h2>
-            <p>Please fill out the form below to confirm your attendance. Fields marked with an asterisk (*) are required.</p>
-            
-            <div id="success-message" class="success-message" role="alert" aria-live="polite">
-                Thank you for your RSVP! We look forward to seeing you at the event.
+        <section id="interactive-boxes">
+            <h2>Interactive Boxes</h2>
+            <p>These boxes transform on hover and focus. Try using keyboard navigation to see the focus effects.</p>
+            <div class="interactive-boxes">
+                <div class="interactive-box box1" tabindex="0" role="button" aria-label="Interactive box 1" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
+                    Box 1
+                </div>
+                <div class="interactive-box box2" tabindex="0" role="button" aria-label="Interactive box 2" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
+                    Box 2
+                </div>
+                <div class="interactive-box box3" tabindex="0" role="button" aria-label="Interactive box 3" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
+                    Box 3
+                </div>
             </div>
-            
-            <form id="rsvp-form-element" novalidate>
-                <div class="flex-container">
-                    <div class="flex-item">
-                        <div class="form-group">
-                            <label for="full-name" class="required-field">Full Name</label>
-                            <input 
-                                type="text" 
-                                id="full-name" 
-                                name="full-name" 
-                                required 
-                                aria-required="true"
-                                aria-describedby="full-name-error"
-                            >
-                            <div id="full-name-error" class="error-message">Please enter your full name</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email" class="required-field">Email Address</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                required 
-                                aria-required="true"
-                                aria-describedby="email-error"
-                            >
-                            <div id="email-error" class="error-message">Please enter a valid email address</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Phone Number (optional)</label>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                name="phone"
-                                aria-describedby="phone-error"
-                            >
-                            <div id="phone-error" class="error-message">Please enter a valid phone number</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-item">
-                        <div class="form-group">
-                            <label for="attendance" class="required-field">Will you be attending?</label>
-                            <select 
-                                id="attendance" 
-                                name="attendance" 
-                                required 
-                                aria-required="true"
-                                aria-describedby="attendance-error"
-                            >
-                                <option value="">Please select an option</option>
-                                <option value="yes">Yes, I will attend</option>
-                                <option value="no">No, I cannot attend</option>
-                                <option value="maybe">Maybe, I'm not sure yet</option>
-                            </select>
-                            <div id="attendance-error" class="error-message">Please select your attendance status</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="guests">Number of Additional Guests</label>
-                            <select id="guests" name="guests">
-                                <option value="0">0 - Just myself</option>
-                                <option value="1">1 guest</option>
-                                <option value="2">2 guests</option>
-                                <option value="3">3 guests</option>
-                                <option value="4">4 guests</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="dietary">Dietary Restrictions (optional)</label>
-                            <textarea 
-                                id="dietary" 
-                                name="dietary" 
-                                rows="3"
-                                placeholder="Please list any dietary restrictions or allergies"
-                            ></textarea>
-                        </div>
+        </section>
+
+        <section id="cards">
+            <h2>Interactive Cards</h2>
+            <p>These cards elevate and show a shadow effect when hovered or focused. Each card is fully keyboard accessible.</p>
+            <div class="card-grid">
+                <div class="card" tabindex="0" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
+                    <img src="https://via.placeholder.com/300x180" alt="Placeholder image for card 1">
+                    <div class="card-content">
+                        <h3>Card Title 1</h3>
+                        <p>This card has a smooth elevation effect on hover and focus.</p>
                     </div>
                 </div>
-                
-                <button 
-                    type="submit" 
-                    class="btn" 
-                    id="submit-rsvp"
-                    onmousedown="handleInteraction(event)" 
-                    onkeydown="handleInteraction(event)"
-                >
-                    Submit RSVP
-                </button>
-            </form>
+                <div class="card" tabindex="0" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
+                    <img src="https://via.placeholder.com/300x180" alt="Placeholder image for card 2">
+                    <div class="card-content">
+                        <h3>Card Title 2</h3>
+                        <p>Interactive cards with accessible animations and transitions.</p>
+                    </div>
+                </div>
+                <div class="card" tabindex="0" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">
+                    <img src="https://via.placeholder.com/300x180" alt="Placeholder image for card 3">
+                    <div class="card-content">
+                        <h3>Card Title 3</h3>
+                        <p>Each card is keyboard navigable and has proper focus indicators.</p>
+                    </div>
+                </div>
+            </div>
         </section>
-        
-        <section id="attendees" class="card" aria-labelledby="attendees-heading">
-            <h2 id="attendees-heading">Confirmed Attendees</h2>
-            <p>The following people have confirmed their attendance:</p>
-            
-            <ul id="attendees-list" class="attendees-list" aria-live="polite">
-                <li class="attendee-item">
-                    <strong>Jane Smith</strong> - Attending with 2 guests
-                </li>
-                <li class="attendee-item">
-                    <strong>John Doe</strong> - Attending alone
-                </li>
-                <li class="attendee-item">
-                    <strong>Alex Johnson</strong> - Attending with 1 guest
-                </li>
-            </ul>
+
+        <section id="contact">
+            <h2>Contact Form</h2>
+            <p>Our form includes accessible input animations and validation.</p>
+            <form class="contact-form" novalidate>
+                <div class="form-group">
+                    <label for="name" class="required">Name</label>
+                    <input type="text" id="name" name="name" required aria-describedby="name-error">
+                    <div id="name-error" class="error-message">Please enter your name</div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="required">Email</label>
+                    <input type="email" id="email" name="email" required aria-describedby="email-error">
+                    <div id="email-error" class="error-message">Please enter a valid email address</div>
+                </div>
+                <div class="form-group">
+                    <label for="message" class="required">Message</label>
+                    <textarea id="message" name="message" rows="4" required aria-describedby="message-error"></textarea>
+                    <div id="message-error" class="error-message">Please enter your message</div>
+                </div>
+                <button type="submit" class="btn" id="submit-btn">Submit</button>
+                <div class="success-message" id="success-message" role="alert" aria-live="polite">
+                    Thank you! Your message has been sent successfully.
+                </div>
+            </form>
         </section>
     </main>
 
-    <footer class="dark-bg">
-        <div class="container">
-            <p>© 2023 Community Event Organization. All rights reserved.</p>
-            <p>For questions about the event or accessibility needs, please contact us at <a href="mailto:events@example.com">events@example.com</a> or call <a href="tel:+15551234567">(555) 123-4567</a>.</p>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>We create accessible and interactive web experiences that work for everyone.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#interactive-boxes">Interactive Boxes</a></li>
+                    <li><a href="#cards">Cards</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: info@example.com</p>
+                <p>Phone: (123) 456-7890</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Interactive Elements. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('rsvp-form-element');
-            const attendeesList = document.getElementById('attendees-list');
-            const successMessage = document.getElementById('success-message');
-            
-            // Form validation and submission
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                // Reset previous error states
-                const formGroups = form.querySelectorAll('.form-group');
-                formGroups.forEach(group => group.classList.remove('error'));
-                
-                // Validate required fields
-                let isValid = true;
-                
-                // Validate name
-                const nameInput = document.getElementById('full-name');
-                if (!nameInput.value.trim()) {
-                    showError(nameInput, 'full-name-error');
-                    isValid = false;
-                }
-                
-                // Validate email
-                const emailInput = document.getElementById('email');
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailPattern.test(emailInput.value.trim())) {
-                    showError(emailInput, 'email-error');
-                    isValid = false;
-                }
-                
-                // Validate phone (if provided)
-                const phoneInput = document.getElementById('phone');
-                if (phoneInput.value.trim() !== '') {
-                    const phonePattern = /^[\d\s\-\(\)]+$/;
-                    if (!phonePattern.test(phoneInput.value.trim())) {
-                        showError(phoneInput, 'phone-error');
-                        isValid = false;
-                    }
-                }
-                
-                // Validate attendance selection
-                const attendanceSelect = document.getElementById('attendance');
-                if (!attendanceSelect.value) {
-                    showError(attendanceSelect, 'attendance-error');
-                    isValid = false;
-                }
-                
-                // If form is valid, process submission
-                if (isValid) {
-                    // Get form values
-                    const name = nameInput.value.trim();
-                    const attendance = attendanceSelect.value;
-                    const guests = document.getElementById('guests').value;
-                    
-                    // Only add to attendee list if attending
-                    if (attendance === 'yes') {
-                        // Create new attendee item
-                        const newAttendee = document.createElement('li');
-                        newAttendee.className = 'attendee-item';
-                        
-                        // Set attendee text based on number of guests
-                        const guestText = guests === '0' ? 
-                            'Attending alone' : 
-                            `Attending with ${guests} guest${guests > 1 ? 's' : ''}`;
-                        
-                        newAttendee.innerHTML = `<strong>${name}</strong> - ${guestText}`;
-                        
-                        // Add to list
-                        attendeesList.appendChild(newAttendee);
-                    }
-                    
-                    // Show success message
-                    successMessage.style.display = 'block';
-                    
-                    // Reset form
-                    form.reset();
-                    
-                    // Scroll to success message
-                    successMessage.scrollIntoView({ behavior: 'smooth' });
-                    
-                    // Set focus to success message for screen readers
-                    successMessage.setAttribute('tabindex', '-1');
-                    successMessage.focus();
-                    
-                    // Hide success message after 5 seconds
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 5000);
-                }
-            });
-            
-            // Function to show error for a field
-            function showError(inputElement, errorId) {
-                const formGroup = inputElement.closest('.form-group');
-                formGroup.classList.add('error');
-                inputElement.setAttribute('aria-invalid', 'true');
-                
-                // Set focus on first error field
-                if (document.querySelector('.form-group.error input, .form-group.error select, .form-group.error textarea') === inputElement) {
-                    inputElement.focus();
-                }
-            }
-            
-            // Add keyboard support for interactive elements
-            const interactiveElements = document.querySelectorAll('button, a');
-            interactiveElements.forEach(element => {
-                element.addEventListener('keydown', handleInteraction);
-                element.addEventListener('mousedown', handleInteraction);
-            });
-        });
-        
         // For any element with mouse events, add keyboard support
         function handleInteraction(event) {
             // Handle both mouse and keyboard events
@@ -594,15 +648,158 @@
                     event.preventDefault();
                 }
                 
-                // If it's a keydown event, simulate click
-                if (event.type === 'keydown') {
-                    // For buttons, the click event will fire automatically
-                    // For other elements, we might need to trigger it manually
-                    if (event.target.tagName !== 'BUTTON') {
-                        event.target.click();
-                    }
-                }
+                // Visual feedback for the interaction
+                const element = event.currentTarget;
+                element.style.transform = 'scale(0.95)';
+                
+                // Reset after a short delay
+                setTimeout(() => {
+                    element.style.transform = '';
+                }, 200);
+                
+                // Announce to screen readers
+                announceInteraction(element);
             }
+        }
+        
+        // Function to announce interactions to screen readers
+        function announceInteraction(element) {
+            // Get the text content or aria-label to announce
+            let message = '';
+            if (element.getAttribute('aria-label')) {
+                message = element.getAttribute('aria-label') + ' activated';
+            } else if (element.textContent.trim()) {
+                message = element.textContent.trim() + ' activated';
+            } else {
+                message = 'Item activated';
+            }
+            
+            // Create or use existing live region
+            let liveRegion = document.getElementById('a11y-announce');
+            if (!liveRegion) {
+                liveRegion = document.createElement('div');
+                liveRegion.id = 'a11y-announce';
+                liveRegion.setAttribute('aria-live', 'assertive');
+                liveRegion.setAttribute('aria-atomic', 'true');
+                liveRegion.style.position = 'absolute';
+                liveRegion.style.width = '1px';
+                liveRegion.style.height = '1px';
+                liveRegion.style.overflow = 'hidden';
+                liveRegion.style.clip = 'rect(0, 0, 0, 0)';
+                document.body.appendChild(liveRegion);
+            }
+            
+            // Set the message
+            liveRegion.textContent = message;
+            
+            // Clear after announcement
+            setTimeout(() => {
+                liveRegion.textContent = '';
+            }, 3000);
+        }
+
+        // Form validation with accessibility
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('.contact-form');
+            const successMessage = document.getElementById('success-message');
+            
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Reset previous errors
+                    const errorElements = form.querySelectorAll('.error-message');
+                    errorElements.forEach(el => {
+                        el.style.display = 'none';
+                    });
+                    
+                    const inputs = form.querySelectorAll('input, textarea');
+                    inputs.forEach(input => {
+                        input.classList.remove('error');
+                    });
+                    
+                    // Validate form
+                    let isValid = true;
+                    
+                    // Name validation
+                    const nameInput = document.getElementById('name');
+                    if (!nameInput.value.trim()) {
+                        document.getElementById('name-error').style.display = 'block';
+                        nameInput.classList.add('error');
+                        nameInput.setAttribute('aria-invalid', 'true');
+                        isValid = false;
+                    } else {
+                        nameInput.setAttribute('aria-invalid', 'false');
+                    }
+                    
+                    // Email validation
+                    const emailInput = document.getElementById('email');
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(emailInput.value.trim())) {
+                        document.getElementById('email-error').style.display = 'block';
+                        emailInput.classList.add('error');
+                        emailInput.setAttribute('aria-invalid', 'true');
+                        isValid = false;
+                    } else {
+                        emailInput.setAttribute('aria-invalid', 'false');
+                    }
+                    
+                    // Message validation
+                    const messageInput = document.getElementById('message');
+                    if (!messageInput.value.trim()) {
+                        document.getElementById('message-error').style.display = 'block';
+                        messageInput.classList.add('error');
+                        messageInput.setAttribute('aria-invalid', 'true');
+                        isValid = false;
+                    } else {
+                        messageInput.setAttribute('aria-invalid', 'false');
+                    }
+                    
+                    // If valid, show success message
+                    if (isValid) {
+                        // Focus the first invalid field
+                        const firstInvalid = form.querySelector('.error');
+                        if (firstInvalid) {
+                            firstInvalid.focus();
+                        }
+                        
+                        // Show success message
+                        successMessage.style.display = 'block';
+                        
+                        // Reset form
+                        form.reset();
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            successMessage.style.display = 'none';
+                        }, 5000);
+                    }
+                });
+                
+                // Add input event listeners for real-time validation
+                const inputs = form.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('input', function() {
+                        // Remove error state when user starts typing
+                        const errorId = this.getAttribute('aria-describedby');
+                        if (errorId) {
+                            const errorElement = document.getElementById(errorId);
+                            if (errorElement && this.value.trim()) {
+                                errorElement.style.display = 'none';
+                                this.classList.remove('error');
+                                this.setAttribute('aria-invalid', 'false');
+                            }
+                        }
+                    });
+                });
+            }
+        });
+
+        // Ensure animations respect user preferences
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (prefersReducedMotion.matches) {
+            // Apply styles for reduced motion if needed
+            document.documentElement.style.setProperty('--transition-speed', '0.01ms');
         }
     </script>
 </body>
