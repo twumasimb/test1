@@ -3,21 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Budget Calculator - Track Your Monthly Finances</title>
+    <title>My Accessible Personal Blog - Articles, Comments and Search</title>
     <style>
-        /* Base styles with accessibility in mind */
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --background-color: #f9f9f9;
-            --text-color: #333333;
-            --light-gray: #ecf0f1;
-            --border-color: #bdc3c7;
-            --success-color: #27ae60;
-            --focus-color: #0066cc;
-        }
-
+        /* CSS Reset and Base Styles */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -27,196 +15,312 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--background-color);
-            padding: 0;
-            margin: 0;
-        }
-
-        /* Ensure all interactive elements have visible focus indicators */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid var(--focus-color);
-            outline-offset: 2px;
-        }
-
-        .container {
+            color: #333;
+            background-color: #f9f9f9;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        header {
-            background-color: var(--primary-color);
+        /* Ensure all interactive elements have visible focus indicators */
+        button:focus, 
+        input:focus, 
+        select:focus, 
+        textarea:focus, 
+        a:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+
+        /* High contrast focus for dark backgrounds */
+        .dark-bg button:focus, 
+        .dark-bg a:focus {
+            outline: 3px solid #ffffff;
+        }
+
+        /* Skip to main content link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #0066cc;
             color: white;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.8rem;
+        .skip-link:focus {
+            top: 0;
         }
 
-        main {
-            padding-bottom: 2rem;
+        /* Header Styles */
+        header {
+            background-color: #ffffff;
+            padding: 20px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
 
-        .budget-calculator {
+        .site-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        nav {
             display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
         }
 
-        @media (min-width: 768px) {
-            .budget-calculator {
-                flex-direction: row;
-            }
+        nav a {
+            margin-right: 20px;
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 0;
         }
 
-        .input-section, .results-section {
-            flex: 1;
-            background-color: white;
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Search Form */
+        .search-form {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .search-form label {
+            font-weight: 500;
+            margin-right: 10px;
+        }
+
+        .search-form input {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex-grow: 1;
+            min-width: 200px;
+        }
+
+        .search-form button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .search-form button:hover {
+            background-color: #0052a3;
+        }
+
+        /* Main Content */
+        main {
+            background-color: #ffffff;
+            padding: 30px;
             border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
 
-        h2 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+        /* Blog Posts */
+        .blog-posts {
+            margin-bottom: 40px;
         }
 
-        h3 {
-            color: var(--primary-color);
-            margin: 1.5rem 0 1rem;
-            font-size: 1.2rem;
+        .post {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 30px;
+        }
+
+        .post:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .post-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .post-meta {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .post-content {
+            margin-bottom: 20px;
+        }
+
+        .post-image {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            margin-top: 30px;
+        }
+
+        .comments-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comment {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .comment-author {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .comment-date {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+
+        .comment-text {
+            margin-bottom: 0;
+        }
+
+        /* Comment Form */
+        .comment-form {
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 4px;
         }
 
         .form-group {
-            margin-bottom: 1.2rem;
+            margin-bottom: 15px;
         }
 
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
         }
 
         .required-field::after {
             content: " *";
-            color: var(--accent-color);
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .expense-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.8rem;
-            gap: 0.5rem;
-        }
-
-        .expense-item label {
-            flex: 1;
-            margin-bottom: 0;
-        }
-
-        .expense-item input {
-            width: 150px;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #2980b9;
+            color: #cc0000;
         }
 
         .error-message {
-            color: var(--accent-color);
-            font-size: 0.9rem;
-            margin-top: 0.3rem;
+            color: #cc0000;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
         }
 
-        .summary {
-            margin-bottom: 2rem;
+        .submit-button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
         }
 
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid var(--light-gray);
+        .submit-button:hover {
+            background-color: #0052a3;
         }
 
-        .summary-item.total {
-            font-weight: bold;
-            border-bottom: 2px solid var(--primary-color);
-            margin-top: 1rem;
-        }
-
-        .summary-item.positive {
-            color: var(--success-color);
-        }
-
-        .summary-item.negative {
-            color: var(--accent-color);
-        }
-
-        .chart-container {
-            margin-top: 2rem;
-            height: 300px;
-            position: relative;
-        }
-
-        .chart {
-            display: flex;
-            height: 100%;
-            align-items: flex-end;
-            gap: 1rem;
-        }
-
-        .chart-bar {
-            flex: 1;
-            background-color: var(--secondary-color);
-            position: relative;
-            min-width: 40px;
-            transition: height 0.5s;
-        }
-
-        .chart-bar-label {
-            position: absolute;
-            bottom: -25px;
-            left: 0;
-            right: 0;
+        /* No Results Message */
+        .no-results {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
             text-align: center;
-            font-size: 0.8rem;
+            display: none;
         }
 
-        .chart-bar-value {
-            position: absolute;
-            top: -25px;
-            left: 0;
-            right: 0;
+        /* Footer */
+        footer {
             text-align: center;
-            font-size: 0.8rem;
+            padding: 20px 0;
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            color: #666;
         }
 
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: 1.8rem;
+            }
+
+            nav {
+                flex-direction: column;
+            }
+
+            nav a {
+                margin-bottom: 10px;
+            }
+
+            main {
+                padding: 20px;
+            }
+
+            .post-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Accessibility: High contrast mode support */
+        @media (forced-colors: active) {
+            button, .submit-button {
+                border: 2px solid currentColor;
+            }
+        }
+
+        /* Loading indicator */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .loading::after {
+            content: "Loading...";
+            font-style: italic;
+        }
+
+        /* Visually hidden elements (for screen readers) */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -228,307 +332,485 @@
             white-space: nowrap;
             border-width: 0;
         }
-
-        footer {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 1rem 0;
-            margin-top: 2rem;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .expense-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .expense-item input {
-                width: 100%;
-            }
-            
-            .chart {
-                gap: 0.5rem;
-            }
-            
-            .chart-bar {
-                min-width: 30px;
-            }
-        }
     </style>
 </head>
 <body>
+    <!-- Skip to main content link for keyboard users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <header>
-        <div class="container">
-            <h1>Budget Calculator</h1>
+        <h1 class="site-title">My Personal Blog</h1>
+        <nav role="navigation" aria-label="Main navigation">
+            <a href="#" aria-current="page">Home</a>
+            <a href="#">About</a>
+            <a href="#">Categories</a>
+            <a href="#">Contact</a>
+        </nav>
+
+        <form class="search-form" role="search" aria-label="Search blog posts">
+            <label for="search-input">Search Posts:</label>
+            <input 
+                type="search" 
+                id="search-input" 
+                name="search" 
+                placeholder="Enter keywords..."
+                aria-describedby="search-instructions">
+            <button type="submit" id="search-button">Search</button>
+        </form>
+        <div id="search-instructions" class="sr-only">
+            Type keywords and press Enter or click the Search button to find posts
         </div>
     </header>
 
-    <main class="container">
-        <section class="budget-calculator">
-            <div class="input-section">
-                <h2>Enter Your Financial Information</h2>
-                <form id="budget-form">
-                    <div class="form-group">
-                        <label for="monthly-income" class="required-field">Monthly Income ($)</label>
-                        <input type="number" id="monthly-income" min="0" step="0.01" required aria-required="true">
-                        <div id="income-error" class="error-message" aria-live="polite"></div>
-                    </div>
+    <main id="main-content">
+        <h2>Recent Blog Posts</h2>
+        
+        <div class="loading" id="loading-indicator" aria-live="polite"></div>
+        
+        <div class="no-results" id="no-results" aria-live="polite">
+            <p>No posts found matching your search. Please try different keywords.</p>
+        </div>
 
-                    <h3>Monthly Expenses</h3>
-                    
-                    <div class="expense-item">
-                        <label for="expense-housing">Housing ($)</label>
-                        <input type="number" id="expense-housing" min="0" step="0.01" value="0">
-                    </div>
-                    
-                    <div class="expense-item">
-                        <label for="expense-utilities">Utilities ($)</label>
-                        <input type="number" id="expense-utilities" min="0" step="0.01" value="0">
-                    </div>
-                    
-                    <div class="expense-item">
-                        <label for="expense-food">Food ($)</label>
-                        <input type="number" id="expense-food" min="0" step="0.01" value="0">
-                    </div>
-                    
-                    <div class="expense-item">
-                        <label for="expense-transportation">Transportation ($)</label>
-                        <input type="number" id="expense-transportation" min="0" step="0.01" value="0">
-                    </div>
-                    
-                    <div class="expense-item">
-                        <label for="expense-healthcare">Healthcare ($)</label>
-                        <input type="number" id="expense-healthcare" min="0" step="0.01" value="0">
-                    </div>
-                    
-                    <div class="expense-item">
-                        <label for="expense-entertainment">Entertainment ($)</label>
-                        <input type="number" id="expense-entertainment" min="0" step="0.01" value="0">
-                    </div>
-                    
-                    <div class="expense-item">
-                        <label for="expense-other">Other Expenses ($)</label>
-                        <input type="number" id="expense-other" min="0" step="0.01" value="0">
-                    </div>
+        <section class="blog-posts" id="blog-posts">
+            <!-- Blog posts will be dynamically loaded here -->
+        </section>
 
-                    <button type="submit" id="calculate-btn">Calculate Budget</button>
-                </form>
+        <section class="comments-section" id="comments-section">
+            <h2 class="comments-title">Comments</h2>
+            <div id="comments-container">
+                <!-- Comments will be dynamically loaded here -->
             </div>
 
-            <div class="results-section">
-                <h2>Budget Summary</h2>
-                <div id="results" aria-live="polite">
-                    <p>Enter your income and expenses to see your budget breakdown.</p>
-                </div>
+            <div class="comment-form">
+                <h3>Leave a Comment</h3>
+                <form id="comment-form">
+                    <div class="form-group">
+                        <label for="name" class="required-field">Name</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            required 
+                            aria-describedby="name-error">
+                        <div id="name-error" class="error-message">Please enter your name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="required-field">Email</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required 
+                            aria-describedby="email-error">
+                        <div id="email-error" class="error-message">Please enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment" class="required-field">Comment</label>
+                        <textarea 
+                            id="comment" 
+                            name="comment" 
+                            required 
+                            aria-describedby="comment-error"></textarea>
+                        <div id="comment-error" class="error-message">Please enter your comment</div>
+                    </div>
+                    <button type="submit" class="submit-button">Submit Comment</button>
+                </form>
             </div>
         </section>
     </main>
 
     <footer>
-        <div class="container">
-            <p>Budget Calculator - A tool to help you manage your finances</p>
-        </div>
+        <p>&copy; 2023 My Personal Blog. All rights reserved.</p>
+        <nav aria-label="Footer navigation">
+            <a href="#">Privacy Policy</a> | 
+            <a href="#">Terms of Service</a> | 
+            <a href="#">Accessibility Statement</a>
+        </nav>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const budgetForm = document.getElementById('budget-form');
-            const resultsSection = document.getElementById('results');
-            
-            // Add event listeners for both mouse and keyboard events
-            const calculateBtn = document.getElementById('calculate-btn');
-            calculateBtn.addEventListener('click', handleCalculation);
-            calculateBtn.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    handleCalculation(event);
+        // Sample blog post data
+        const blogPosts = [
+            {
+                id: 1,
+                title: "Getting Started with Web Accessibility",
+                author: "Jane Smith",
+                date: "October 15, 2023",
+                content: `
+                    <p>Web accessibility is about making websites usable for everyone, including people with disabilities. This post explores the basics of creating accessible web content.</p>
+                    <p>The Web Content Accessibility Guidelines (WCAG) provide a framework for making web content more accessible. Following these guidelines helps ensure that your website can be used by people with various disabilities, including visual, auditory, physical, speech, cognitive, language, learning, and neurological disabilities.</p>
+                    <h3>Key Principles of Web Accessibility</h3>
+                    <p>WCAG is organized around four principles, often referred to as POUR:</p>
+                    <ul>
+                        <li><strong>Perceivable</strong>: Information and user interface components must be presentable to users in ways they can perceive.</li>
+                        <li><strong>Operable</strong>: User interface components and navigation must be operable.</li>
+                        <li><strong>Understandable</strong>: Information and the operation of user interface must be understandable.</li>
+                        <li><strong>Robust</strong>: Content must be robust enough that it can be interpreted reliably by a wide variety of user agents, including assistive technologies.</li>
+                    </ul>
+                `,
+                image: {
+                    src: "https://via.placeholder.com/800x400",
+                    alt: "A person using a screen reader to navigate a website, demonstrating web accessibility in action"
                 }
-            });
-
-            // Handle form submission
-            budgetForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                calculateBudget();
-            });
-
-            // Handle calculation button click
-            function handleCalculation(event) {
-                if (event.type === 'click' || 
-                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                    event.preventDefault();
-                    calculateBudget();
+            },
+            {
+                id: 2,
+                title: "The Importance of Semantic HTML",
+                author: "John Doe",
+                date: "October 10, 2023",
+                content: `
+                    <p>Semantic HTML is the foundation of an accessible website. Using the right HTML elements for their intended purpose is crucial for assistive technologies.</p>
+                    <p>When we use semantic HTML elements like <code>&lt;nav&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, and <code>&lt;button&gt;</code>, we provide important context about the content to browsers and assistive technologies. This helps users understand the structure and purpose of different parts of the page.</p>
+                    <h3>Benefits of Semantic HTML</h3>
+                    <ul>
+                        <li>Improved accessibility for screen reader users</li>
+                        <li>Better SEO performance</li>
+                        <li>Easier code maintenance</li>
+                        <li>More consistent rendering across browsers</li>
+                    </ul>
+                    <p>Remember, a <code>&lt;div&gt;</code> is just a container with no inherent meaning, while a <code>&lt;nav&gt;</code> explicitly tells users and browsers that the content inside is navigation.</p>
+                `,
+                image: {
+                    src: "https://via.placeholder.com/800x400",
+                    alt: "Code editor showing semantic HTML structure with properly nested heading elements and semantic tags"
+                }
+            },
+            {
+                id: 3,
+                title: "Creating Accessible Forms",
+                author: "Alex Johnson",
+                date: "October 5, 2023",
+                content: `
+                    <p>Forms are often the most challenging elements to make accessible. This post covers best practices for creating forms that everyone can use.</p>
+                    <p>Accessible forms start with proper labeling. Every input field should have an associated <code>&lt;label&gt;</code> element that clearly describes what information is expected. This helps screen reader users understand the purpose of each field.</p>
+                    <h3>Key Form Accessibility Tips</h3>
+                    <ul>
+                        <li>Use explicit labels for all form controls</li>
+                        <li>Group related fields with <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code></li>
+                        <li>Provide clear error messages that suggest how to fix issues</li>
+                        <li>Ensure forms can be completed using keyboard only</li>
+                        <li>Use appropriate input types (email, tel, date, etc.)</li>
+                    </ul>
+                    <p>Remember to test your forms with keyboard navigation and screen readers to ensure they're truly accessible to all users.</p>
+                `,
+                image: {
+                    src: "https://via.placeholder.com/800x400",
+                    alt: "A well-designed form with clearly labeled fields, showing proper form structure and validation messages"
                 }
             }
+        ];
 
-            function calculateBudget() {
-                // Get income value
-                const incomeInput = document.getElementById('monthly-income');
-                const incomeError = document.getElementById('income-error');
-                const income = parseFloat(incomeInput.value) || 0;
+        // Sample comments data
+        const comments = [
+            {
+                id: 1,
+                postId: 1,
+                author: "Michael Brown",
+                date: "October 16, 2023",
+                text: "Great introduction to web accessibility! I've been trying to improve my website's accessibility and this gives me a good starting point."
+            },
+            {
+                id: 2,
+                postId: 1,
+                author: "Sarah Lee",
+                date: "October 17, 2023",
+                text: "I appreciate the clear explanation of the POUR principles. It makes accessibility seem less intimidating for beginners."
+            },
+            {
+                id: 3,
+                postId: 2,
+                author: "David Wilson",
+                date: "October 11, 2023",
+                text: "I've been guilty of div-itis in the past. This article convinced me to pay more attention to semantic HTML."
+            }
+        ];
+
+        // DOM Elements
+        const blogPostsContainer = document.getElementById('blog-posts');
+        const commentsContainer = document.getElementById('comments-container');
+        const commentForm = document.getElementById('comment-form');
+        const searchForm = document.querySelector('.search-form');
+        const searchInput = document.getElementById('search-input');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const noResultsMessage = document.getElementById('no-results');
+
+        // Function to display blog posts
+        function displayBlogPosts(posts) {
+            blogPostsContainer.innerHTML = '';
+            
+            if (posts.length === 0) {
+                noResultsMessage.style.display = 'block';
+                return;
+            }
+            
+            noResultsMessage.style.display = 'none';
+            
+            posts.forEach(post => {
+                const postElement = document.createElement('article');
+                postElement.className = 'post';
+                postElement.setAttribute('aria-labelledby', `post-title-${post.id}`);
                 
-                // Validate income
-                if (income <= 0) {
-                    incomeError.textContent = 'Please enter a valid monthly income greater than zero.';
-                    incomeInput.setAttribute('aria-invalid', 'true');
-                    incomeInput.setAttribute('aria-describedby', 'income-error');
-                    incomeInput.focus();
-                    return;
-                } else {
-                    incomeError.textContent = '';
-                    incomeInput.removeAttribute('aria-invalid');
-                    incomeInput.removeAttribute('aria-describedby');
-                }
-                
-                // Get expense values
-                const expenses = {
-                    housing: parseFloat(document.getElementById('expense-housing').value) || 0,
-                    utilities: parseFloat(document.getElementById('expense-utilities').value) || 0,
-                    food: parseFloat(document.getElementById('expense-food').value) || 0,
-                    transportation: parseFloat(document.getElementById('expense-transportation').value) || 0,
-                    healthcare: parseFloat(document.getElementById('expense-healthcare').value) || 0,
-                    entertainment: parseFloat(document.getElementById('expense-entertainment').value) || 0,
-                    other: parseFloat(document.getElementById('expense-other').value) || 0
-                };
-                
-                // Calculate totals
-                const totalExpenses = Object.values(expenses).reduce((sum, expense) => sum + expense, 0);
-                const balance = income - totalExpenses;
-                
-                // Format currency
-                const formatCurrency = (amount) => {
-                    return new Intl.NumberFormat('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                        minimumFractionDigits: 2
-                    }).format(amount);
-                };
-                
-                // Create summary HTML
-                let summaryHTML = `
-                    <div class="summary">
-                        <div class="summary-item">
-                            <span>Monthly Income:</span>
-                            <span>${formatCurrency(income)}</span>
-                        </div>
-                        <div class="summary-item">
-                            <span>Total Expenses:</span>
-                            <span>${formatCurrency(totalExpenses)}</span>
-                        </div>
-                        <div class="summary-item total ${balance >= 0 ? 'positive' : 'negative'}">
-                            <span>Remaining Balance:</span>
-                            <span>${formatCurrency(balance)}</span>
-                        </div>
+                postElement.innerHTML = `
+                    <h3 class="post-title" id="post-title-${post.id}">${post.title}</h3>
+                    <div class="post-meta">
+                        <span>By ${post.author}</span> | 
+                        <time datetime="${formatDateForDateTime(post.date)}">${post.date}</time>
                     </div>
-                    
-                    <h3>Expense Breakdown</h3>
+                    <div class="post-content">
+                        ${post.content}
+                        ${post.image ? `<img src="${post.image.src}" alt="${post.image.alt}" class="post-image">` : ''}
+                    </div>
+                    <button class="view-comments-button" 
+                            aria-expanded="false" 
+                            aria-controls="comments-for-${post.id}" 
+                            data-post-id="${post.id}">
+                        View Comments
+                    </button>
+                    <div id="comments-for-${post.id}" class="post-comments" hidden></div>
                 `;
                 
-                // Create expense breakdown
-                if (totalExpenses > 0) {
-                    summaryHTML += `<div class="chart-container" aria-hidden="true">
-                        <div class="chart" role="presentation">`;
-                    
-                    // Create accessible table for screen readers
-                    summaryHTML += `
-                        <table class="sr-only">
-                            <caption>Expense Breakdown</caption>
-                            <thead>
-                                <tr>
-                                    <th scope="col">Category</th>
-                                    <th scope="col">Amount</th>
-                                    <th scope="col">Percentage</th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
-                    
-                    // Add each expense to the chart and table
-                    Object.entries(expenses).forEach(([category, amount]) => {
-                        if (amount > 0) {
-                            const percentage = (amount / totalExpenses * 100).toFixed(1);
-                            const height = `${Math.max(percentage, 5)}%`; // Minimum 5% height for visibility
-                            const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
-                            
-                            // Add to visual chart
-                            summaryHTML += `
-                                <div class="chart-bar" style="height: ${height};">
-                                    <span class="chart-bar-label">${categoryName}</span>
-                                    <span class="chart-bar-value">${formatCurrency(amount)}</span>
-                                </div>`;
-                            
-                            // Add to accessible table
-                            summaryHTML += `
-                                <tr>
-                                    <th scope="row">${categoryName}</th>
-                                    <td>${formatCurrency(amount)}</td>
-                                    <td>${percentage}%</td>
-                                </tr>`;
-                        }
-                    });
-                    
-                    summaryHTML += `
-                            </tbody>
-                        </table>
-                        </div>
-                    </div>`;
-                } else {
-                    summaryHTML += `<p>No expenses entered yet.</p>`;
-                }
+                blogPostsContainer.appendChild(postElement);
                 
-                // Add budget advice based on the balance
-                summaryHTML += `<h3>Budget Analysis</h3>`;
-                if (balance > 0) {
-                    summaryHTML += `<p>Great job! You have a positive balance of ${formatCurrency(balance)} remaining after expenses.</p>`;
-                    if (balance > income * 0.2) {
-                        summaryHTML += `<p>You're saving more than 20% of your income, which is excellent for building savings.</p>`;
-                    }
-                } else if (balance === 0) {
-                    summaryHTML += `<p>Your income exactly matches your expenses. Consider reducing some expenses to build savings.</p>`;
-                } else {
-                    summaryHTML += `<p>Warning: Your expenses exceed your income by ${formatCurrency(Math.abs(balance))}. Consider ways to reduce expenses or increase income.</p>`;
-                }
-                
-                // Update results section
-                resultsSection.innerHTML = summaryHTML;
-                
-                // Announce results to screen readers
-                const announcement = `Budget calculated. Monthly income: ${formatCurrency(income)}. Total expenses: ${formatCurrency(totalExpenses)}. Remaining balance: ${formatCurrency(balance)}.`;
-                announceToScreenReader(announcement);
+                // Add event listeners to the view comments button
+                const viewCommentsButton = postElement.querySelector('.view-comments-button');
+                viewCommentsButton.addEventListener('click', handleInteraction);
+                viewCommentsButton.addEventListener('keydown', handleInteraction);
+            });
+        }
+
+        // Function to display comments for a specific post
+        function displayComments(postId, commentsContainer) {
+            const postComments = comments.filter(comment => comment.postId === postId);
+            
+            if (postComments.length === 0) {
+                commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+                return;
             }
             
-            // Function to announce messages to screen readers
-            function announceToScreenReader(message) {
-                const announcer = document.createElement('div');
-                announcer.setAttribute('aria-live', 'assertive');
-                announcer.classList.add('sr-only');
-                document.body.appendChild(announcer);
+            commentsContainer.innerHTML = '';
+            
+            postComments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment';
+                commentElement.innerHTML = `
+                    <h4 class="comment-author">${comment.author}</h4>
+                    <div class="comment-date">
+                        <time datetime="${formatDateForDateTime(comment.date)}">${comment.date}</time>
+                    </div>
+                    <p class="comment-text">${comment.text}</p>
+                `;
+                commentsContainer.appendChild(commentElement);
+            });
+        }
+
+        // Helper function to format date for datetime attribute
+        function formatDateForDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
+        }
+
+        // Function to handle form submission
+        function handleCommentSubmission(event) {
+            event.preventDefault();
+            
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Get form values
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const commentText = document.getElementById('comment').value.trim();
+            
+            // Validate form
+            let isValid = true;
+            
+            if (!name) {
+                document.getElementById('name-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!email || !isValidEmail(email)) {
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!commentText) {
+                document.getElementById('comment-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Create new comment (in a real app, this would be sent to a server)
+            const newComment = {
+                id: comments.length + 1,
+                postId: 1, // Default to first post for this demo
+                author: name,
+                date: new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                text: commentText
+            };
+            
+            // Add to comments array
+            comments.push(newComment);
+            
+            // Update comments display
+            displayComments(1, commentsContainer);
+            
+            // Reset form
+            commentForm.reset();
+            
+            // Provide feedback to user
+            const successMessage = document.createElement('div');
+            successMessage.setAttribute('role', 'alert');
+            successMessage.className = 'success-message';
+            successMessage.textContent = 'Your comment has been added successfully!';
+            commentForm.appendChild(successMessage);
+            
+            // Remove success message after 3 seconds
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        }
+
+        // Helper function to validate email
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Function to handle search
+        function handleSearch(event) {
+            event.preventDefault();
+            
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            if (!searchTerm) {
+                displayBlogPosts(blogPosts);
+                return;
+            }
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            blogPostsContainer.style.display = 'none';
+            
+            // Simulate search delay
+            setTimeout(() => {
+                const filteredPosts = blogPosts.filter(post => {
+                    return post.title.toLowerCase().includes(searchTerm) || 
+                           post.content.toLowerCase().includes(searchTerm) ||
+                           post.author.toLowerCase().includes(searchTerm);
+                });
                 
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                blogPostsContainer.style.display = 'block';
+                
+                // Display filtered posts
+                displayBlogPosts(filteredPosts);
+                
+                // Announce search results to screen readers
+                const resultsCount = filteredPosts.length;
+                const resultsAnnouncement = document.createElement('div');
+                resultsAnnouncement.setAttribute('role', 'status');
+                resultsAnnouncement.setAttribute('aria-live', 'polite');
+                resultsAnnouncement.className = 'sr-only';
+                resultsAnnouncement.textContent = `${resultsCount} ${resultsCount === 1 ? 'post' : 'posts'} found for "${searchTerm}"`;
+                document.body.appendChild(resultsAnnouncement);
+                
+                // Remove announcement after it's been read
                 setTimeout(() => {
-                    announcer.textContent = message;
+                    resultsAnnouncement.remove();
+                }, 3000);
+            }, 500);
+        }
+
+        // Function to handle both mouse and keyboard interactions
+        function handleInteraction(event) {
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                
+                if (event.type === 'keydown') {
+                    event.preventDefault(); // Prevent scrolling on space key
+                }
+                
+                const button = event.currentTarget;
+                const postId = parseInt(button.getAttribute('data-post-id'));
+                const commentsSection = document.getElementById(`comments-for-${postId}`);
+                const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                
+                if (isExpanded) {
+                    // Hide comments
+                    commentsSection.hidden = true;
+                    button.setAttribute('aria-expanded', 'false');
+                    button.textContent = 'View Comments';
+                } else {
+                    // Show comments
+                    commentsSection.hidden = false;
+                    button.setAttribute('aria-expanded', 'true');
+                    button.textContent = 'Hide Comments';
                     
-                    // Remove after announcement
-                    setTimeout(() => {
-                        document.body.removeChild(announcer);
-                    }, 3000);
-                }, 100);
+                    // Load comments
+                    displayComments(postId, commentsSection);
+                }
             }
+        }
+
+        // Initialize the page
+        function init() {
+            // Display blog posts
+            displayBlogPosts(blogPosts);
             
-            // Add keyboard support for number inputs
-            const numberInputs = document.querySelectorAll('input[type="number"]');
-            numberInputs.forEach(input => {
-                input.addEventListener('keydown', function(event) {
-                    // Allow arrow keys to increment/decrement
-                    if (event.key === 'ArrowUp') {
-                        event.preventDefault();
-                        this.value = (parseFloat(this.value) || 0) + (event.shiftKey ? 10 : 1);
-                    } else if (event.key === 'ArrowDown') {
-                        event.preventDefault();
-                        this.value = Math.max(0, (parseFloat(this.value) || 0) - (event.shiftKey ? 10 : 1));
+            // Display comments for the first post
+            displayComments(1, commentsContainer);
+            
+            // Add event listeners
+            commentForm.addEventListener('submit', handleCommentSubmission);
+            searchForm.addEventListener('submit', handleSearch);
+            
+            // Add form validation
+            const formInputs = document.querySelectorAll('#comment-form input, #comment-form textarea');
+            formInputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    validateInput(this);
+                });
+                
+                input.addEventListener('input', function() {
+                    if (this.getAttribute('aria-invalid') === 'true') {
+                        validateInput(this);
                     }
                 });
             });
-        });
+        }
+
+        // Validate individual form inputs
+        function validateInput(input) {
+            const errorElement = document.getElementById(`${input.id}-error`);
+            let isValid = true;
+            
+            if (input.hasAttribute('required') && !input.value.trim()) {
+                errorElement.style.display = 'block';
+                isValid = false;
+            } else if (input.type === 'email' && !isValidEmail(input.value.trim())) {
+                errorElement.style.display = 'block';
+                isValid = false;
+            } else {
+                errorElement.style.display = 'none';
+            }
+            
+            input.setAttribute('aria-invalid', !isValid);
+            return isValid;
+        }
+
+        // Initialize the page when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
