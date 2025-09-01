@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile - Alex Johnson</title>
+    <title>Event Countdown Timer - Accessible Countdown to Your Special Date</title>
     <style>
-        /* CSS Reset and Base Styles */
+        /* Base styles with accessibility in mind */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333333;
+            --light-text: #ffffff;
+            --background-color: #f5f7fa;
+            --focus-color: #0066cc;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -15,270 +25,164 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
+            color: var(--text-color);
+            background-color: var(--background-color);
             padding: 0;
             margin: 0;
+            min-height: 100vh;
         }
 
-        /* Accessibility: Focus styles for all interactive elements */
+        /* Ensure all interactive elements have visible focus indicators */
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid #0066cc;
+            outline: 3px solid var(--focus-color);
             outline-offset: 2px;
         }
 
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
-        }
-
-        /* Layout */
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 1rem;
         }
 
         header {
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1rem 0;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1.5rem 0;
+            text-align: center;
         }
 
         main {
             padding: 2rem 0;
         }
 
-        footer {
-            background-color: #333;
-            color: #fff;
-            padding: 2rem 0;
-            margin-top: 2rem;
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
 
-        /* Profile Components */
-        .profile-header {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .countdown-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
             margin-bottom: 2rem;
         }
 
-        @media (min-width: 768px) {
-            .profile-header {
-                flex-direction: row;
-                align-items: flex-start;
-            }
+        .countdown-header {
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
-        .profile-avatar {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            flex-shrink: 0;
-            margin: 0 auto;
-        }
-
-        @media (min-width: 768px) {
-            .profile-avatar {
-                margin: 0;
-            }
-        }
-
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 4px solid #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-info {
-            flex-grow: 1;
-        }
-
-        .profile-name {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-
-        .profile-tagline {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-        .profile-bio {
-            margin-bottom: 1.5rem;
-            line-height: 1.7;
-        }
-
-        .profile-stats {
+        .countdown-display {
             display: flex;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .stat-value {
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: center;
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 1rem;
-            border: none;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .btn-primary {
-            background-color: #0066cc;
-            color: white;
-        }
-
-        .btn-primary:hover, .btn-primary:focus {
-            background-color: #0055aa;
-        }
-
-        .btn-primary[aria-pressed="true"] {
-            background-color: #333;
-        }
-
-        /* Avatar Gallery */
-        .avatar-gallery {
-            margin-top: 2rem;
-        }
-
-        .gallery-heading {
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-
-        .gallery-item {
-            position: relative;
-            cursor: pointer;
+        .countdown-item {
+            min-width: 120px;
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: var(--light-text);
             border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
         }
 
-        .gallery-item:hover, .gallery-item:focus {
-            transform: translateY(-5px);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
+        .countdown-value {
+            font-size: 2.5rem;
+            font-weight: bold;
             display: block;
+            margin-bottom: 0.5rem;
         }
 
-        .gallery-item.selected {
-            border: 3px solid #0066cc;
+        .countdown-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* Social Links */
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
+        .progress-container {
+            margin: 2rem 0;
         }
 
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #f1f1f1;
-            color: #333;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
+        .progress-bar-container {
+            width: 100%;
+            height: 24px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .social-link:hover, .social-link:focus {
-            background-color: #ddd;
+        .progress-bar {
+            height: 100%;
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            transition: width 0.5s ease-in-out;
         }
 
-        /* Footer */
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        .progress-text {
+            margin-top: 0.5rem;
+            text-align: center;
+            font-weight: bold;
         }
 
-        @media (min-width: 768px) {
-            .footer-content {
-                flex-direction: row;
-                justify-content: space-between;
-            }
+        .date-config {
+            margin-top: 3rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
         }
 
-        .footer-links {
-            list-style: none;
-            display: flex;
-            gap: 1.5rem;
+        .form-group {
+            margin-bottom: 1.5rem;
         }
 
-        .footer-links a {
-            color: #fff;
-            text-decoration: none;
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
         }
 
-        .footer-links a:hover, .footer-links a:focus {
-            text-decoration: underline;
+        input[type="date"], 
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
         }
 
-        /* Accessibility: Skip to main content link */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #0066cc;
+        input[type="date"]:focus, 
+        input[type="text"]:focus {
+            border-color: var(--secondary-color);
+        }
+
+        button {
+            background-color: var(--secondary-color);
             color: white;
-            padding: 8px;
-            z-index: 100;
-            transition: top 0.2s ease;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .skip-link:focus {
-            top: 0;
+        button:hover {
+            background-color: #2980b9;
         }
 
-        /* Visually hidden elements for screen readers */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -290,135 +194,270 @@
             white-space: nowrap;
             border-width: 0;
         }
+
+        .live-region {
+            margin-top: 1rem;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .countdown-display {
+                gap: 1rem;
+            }
+
+            .countdown-item {
+                min-width: 100px;
+                padding: 0.75rem;
+            }
+
+            .countdown-value {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .countdown-display {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .countdown-item {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Skip to main content link for keyboard users -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
     <header>
-        <div class="container header-content">
-            <div class="logo">
-                <h1>Profile Page</h1>
-            </div>
-            <nav role="navigation" aria-label="Main navigation">
-                <ul class="footer-links">
-                    <li><a href="#" aria-current="page">Home</a></li>
-                    <li><a href="#">Discover</a></li>
-                    <li><a href="#">Messages</a></li>
-                </ul>
-            </nav>
+        <div class="container">
+            <h1>Event Countdown Timer</h1>
         </div>
     </header>
 
-    <main id="main-content">
-        <div class="container">
-            <section class="profile-header">
-                <div class="profile-avatar">
-                    <img id="current-avatar" src="https://via.placeholder.com/200" alt="Alex Johnson's profile picture" class="avatar-img">
+    <main class="container">
+        <section class="countdown-container" aria-labelledby="countdown-heading">
+            <div class="countdown-header">
+                <h2 id="countdown-heading">Time Remaining Until Your Event</h2>
+                <p id="event-name">Your Special Event</p>
+            </div>
+
+            <div class="countdown-display" aria-live="polite">
+                <div class="countdown-item" aria-labelledby="days-label">
+                    <span class="countdown-value" id="days">0</span>
+                    <span class="countdown-label" id="days-label">Days</span>
                 </div>
-                <div class="profile-info">
-                    <h2 class="profile-name">Alex Johnson</h2>
-                    <p class="profile-tagline">UX Designer & Accessibility Advocate</p>
-                    
-                    <div class="profile-stats">
-                        <div class="stat">
-                            <span class="stat-value">1,245</span>
-                            <span class="stat-label">Followers</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">347</span>
-                            <span class="stat-label">Following</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-value">42</span>
-                            <span class="stat-label">Projects</span>
-                        </div>
-                    </div>
-                    
-                    <button id="follow-btn" class="btn btn-primary" aria-pressed="false" onclick="handleFollow(event)" onkeydown="handleInteraction(event)">
-                        Follow
-                    </button>
-                    
-                    <div class="social-links" aria-label="Social media links">
-                        <a href="https://twitter.com" class="social-link" aria-label="Twitter profile">
-                            <span aria-hidden="true">T</span>
-                        </a>
-                        <a href="https://linkedin.com" class="social-link" aria-label="LinkedIn profile">
-                            <span aria-hidden="true">L</span>
-                        </a>
-                        <a href="https://instagram.com" class="social-link" aria-label="Instagram profile">
-                            <span aria-hidden="true">I</span>
-                        </a>
-                        <a href="https://github.com" class="social-link" aria-label="GitHub profile">
-                            <span aria-hidden="true">G</span>
-                        </a>
-                    </div>
+                <div class="countdown-item" aria-labelledby="hours-label">
+                    <span class="countdown-value" id="hours">0</span>
+                    <span class="countdown-label" id="hours-label">Hours</span>
                 </div>
-            </section>
-            
-            <section class="profile-bio">
-                <h3>About Me</h3>
-                <p>Hi there! I'm Alex, a UX designer with over 8 years of experience creating accessible digital experiences. I'm passionate about inclusive design and believe that technology should work for everyone, regardless of ability.</p>
-                <p>When I'm not designing, you can find me hiking with my dog, experimenting with new recipes, or volunteering at local accessibility workshops. I'm always looking to connect with like-minded professionals, so feel free to reach out!</p>
-            </section>
-            
-            <section class="avatar-gallery" aria-labelledby="gallery-heading">
-                <h3 id="gallery-heading" class="gallery-heading">Avatar Gallery</h3>
-                <p>Select an avatar to update your profile picture:</p>
-                
-                <div class="gallery-grid" role="radiogroup" aria-label="Choose profile avatar">
-                    <!-- Gallery items with keyboard accessibility -->
-                    <div class="gallery-item selected" tabindex="0" role="radio" aria-checked="true" data-img="https://via.placeholder.com/200/3498db/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
-                        <img src="https://via.placeholder.com/200/3498db/ffffff" alt="Blue avatar with abstract pattern">
-                    </div>
-                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/e74c3c/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
-                        <img src="https://via.placeholder.com/200/e74c3c/ffffff" alt="Red avatar with geometric design">
-                    </div>
-                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/2ecc71/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
-                        <img src="https://via.placeholder.com/200/2ecc71/ffffff" alt="Green avatar with nature theme">
-                    </div>
-                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/f39c12/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
-                        <img src="https://via.placeholder.com/200/f39c12/ffffff" alt="Orange avatar with sun pattern">
-                    </div>
-                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/9b59b6/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
-                        <img src="https://via.placeholder.com/200/9b59b6/ffffff" alt="Purple avatar with creative design">
-                    </div>
-                    <div class="gallery-item" tabindex="0" role="radio" aria-checked="false" data-img="https://via.placeholder.com/200/34495e/ffffff" onclick="changeAvatar(event, this)" onkeydown="handleGalleryKeydown(event, this)">
-                        <img src="https://via.placeholder.com/200/34495e/ffffff" alt="Dark blue avatar with professional look">
-                    </div>
+                <div class="countdown-item" aria-labelledby="minutes-label">
+                    <span class="countdown-value" id="minutes">0</span>
+                    <span class="countdown-label" id="minutes-label">Minutes</span>
                 </div>
-            </section>
-        </div>
+                <div class="countdown-item" aria-labelledby="seconds-label">
+                    <span class="countdown-value" id="seconds">0</span>
+                    <span class="countdown-label" id="seconds-label">Seconds</span>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <h3 id="progress-heading">Event Progress</h3>
+                <div class="progress-bar-container" role="progressbar" aria-labelledby="progress-heading" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+                <p class="progress-text" id="progress-text">0% Complete</p>
+            </div>
+
+            <div class="live-region" aria-live="polite" id="time-announcement">
+                <span class="sr-only">Time will update automatically</span>
+            </div>
+        </section>
+
+        <section class="date-config" aria-labelledby="config-heading">
+            <h2 id="config-heading">Set Your Event</h2>
+            <form id="event-form">
+                <div class="form-group">
+                    <label for="event-title">Event Title:</label>
+                    <input type="text" id="event-title" name="event-title" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="event-date">Event Date:</label>
+                    <input type="date" id="event-date" name="event-date" required aria-required="true">
+                </div>
+                <button type="submit" id="set-event-btn" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Set Event</button>
+            </form>
+        </section>
     </main>
 
-    <footer class="dark-bg">
-        <div class="container footer-content">
-            <p>&copy; 2023 Profile Page. All rights reserved.</p>
-            <ul class="footer-links">
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Accessibility</a></li>
-                <li><a href="#">Contact Us</a></li>
-            </ul>
+    <footer>
+        <div class="container">
+            <p>&copy; <span id="current-year">2023</span> Accessible Countdown Timer</p>
         </div>
     </footer>
 
     <script>
-        // Handle follow button interaction
-        function handleFollow(event) {
-            const followBtn = document.getElementById('follow-btn');
-            const isFollowing = followBtn.getAttribute('aria-pressed') === 'true';
+        // Global variables
+        let targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 30); // Default to 30 days from now
+        let startDate = new Date();
+        let eventTitle = "Your Special Event";
+        let countdownInterval;
+
+        // DOM elements
+        const daysElement = document.getElementById('days');
+        const hoursElement = document.getElementById('hours');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+        const progressBarElement = document.querySelector('.progress-bar');
+        const progressTextElement = document.getElementById('progress-text');
+        const progressBarContainer = document.querySelector('.progress-bar-container');
+        const eventNameElement = document.getElementById('event-name');
+        const eventForm = document.getElementById('event-form');
+        const eventTitleInput = document.getElementById('event-title');
+        const eventDateInput = document.getElementById('event-date');
+        const timeAnnouncementElement = document.getElementById('time-announcement');
+        const currentYearElement = document.getElementById('current-year');
+
+        // Set current year in footer
+        currentYearElement.textContent = new Date().getFullYear();
+
+        // Initialize the countdown
+        function initCountdown() {
+            // Set min date for the date input to today
+            const today = new Date().toISOString().split('T')[0];
+            eventDateInput.setAttribute('min', today);
             
-            // Toggle follow state
-            followBtn.setAttribute('aria-pressed', !isFollowing);
-            followBtn.textContent = isFollowing ? 'Follow' : 'Following';
+            // Check if we have saved data in localStorage
+            loadSavedEventData();
             
-            // Announce change to screen readers
-            announceToScreenReader(isFollowing ? 'Unfollowed' : 'Now following Alex Johnson');
+            // Start the countdown
+            updateCountdown();
+            
+            // Update every second
+            countdownInterval = setInterval(updateCountdown, 1000);
         }
 
-        // Handle keyboard interactions for all interactive elements
+        // Load saved event data from localStorage if available
+        function loadSavedEventData() {
+            const savedEventTitle = localStorage.getItem('eventTitle');
+            const savedEventDate = localStorage.getItem('eventDate');
+            const savedStartDate = localStorage.getItem('startDate');
+            
+            if (savedEventTitle && savedEventDate) {
+                eventTitle = savedEventTitle;
+                targetDate = new Date(savedEventDate);
+                if (savedStartDate) {
+                    startDate = new Date(savedStartDate);
+                }
+                
+                eventTitleInput.value = eventTitle;
+                eventDateInput.value = targetDate.toISOString().split('T')[0];
+                eventNameElement.textContent = eventTitle;
+            }
+        }
+
+        // Save event data to localStorage
+        function saveEventData() {
+            localStorage.setItem('eventTitle', eventTitle);
+            localStorage.setItem('eventDate', targetDate.toISOString());
+            localStorage.setItem('startDate', startDate.toISOString());
+        }
+
+        // Update the countdown timer
+        function updateCountdown() {
+            const now = new Date();
+            const timeRemaining = targetDate - now;
+            
+            // If the target date has passed
+            if (timeRemaining <= 0) {
+                clearInterval(countdownInterval);
+                daysElement.textContent = '0';
+                hoursElement.textContent = '0';
+                minutesElement.textContent = '0';
+                secondsElement.textContent = '0';
+                progressBarElement.style.width = '100%';
+                progressTextElement.textContent = '100% Complete';
+                progressBarContainer.setAttribute('aria-valuenow', 100);
+                timeAnnouncementElement.innerHTML = `<span class="sr-only">Event has arrived! ${eventTitle} is happening now.</span>`;
+                return;
+            }
+            
+            // Calculate time units
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            
+            // Update DOM elements
+            daysElement.textContent = days;
+            hoursElement.textContent = hours;
+            minutesElement.textContent = minutes;
+            secondsElement.textContent = seconds;
+            
+            // Calculate and update progress
+            const totalDuration = targetDate - startDate;
+            const elapsed = now - startDate;
+            const progress = Math.min(100, Math.max(0, Math.floor((elapsed / totalDuration) * 100)));
+            
+            progressBarElement.style.width = `${progress}%`;
+            progressTextElement.textContent = `${progress}% Complete`;
+            progressBarContainer.setAttribute('aria-valuenow', progress);
+            
+            // Update screen reader announcement every minute
+            if (seconds === 0) {
+                const timeString = `${days} days, ${hours} hours, and ${minutes} minutes remaining until ${eventTitle}.`;
+                timeAnnouncementElement.innerHTML = `<span class="sr-only">${timeString}</span>`;
+            }
+        }
+
+        // Handle form submission
+        eventForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const newEventTitle = eventTitleInput.value.trim();
+            const newEventDate = new Date(eventDateInput.value);
+            
+            // Validate inputs
+            if (!newEventTitle) {
+                alert('Please enter an event title');
+                eventTitleInput.focus();
+                return;
+            }
+            
+            if (isNaN(newEventDate.getTime())) {
+                alert('Please enter a valid date');
+                eventDateInput.focus();
+                return;
+            }
+            
+            // Update event details
+            eventTitle = newEventTitle;
+            targetDate = newEventDate;
+            startDate = new Date(); // Reset start date to now
+            
+            // Update display
+            eventNameElement.textContent = eventTitle;
+            
+            // Save to localStorage
+            saveEventData();
+            
+            // Announce to screen readers
+            timeAnnouncementElement.innerHTML = `<span class="sr-only">Event updated. Counting down to ${eventTitle} on ${targetDate.toLocaleDateString()}.</span>`;
+            
+            // Update countdown immediately
+            updateCountdown();
+        });
+
+        // Handle keyboard and mouse interactions for buttons
         function handleInteraction(event) {
             if (event.type === 'click' || 
                 (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
@@ -427,62 +466,15 @@
                     event.preventDefault();
                 }
                 
-                // Trigger the follow action
-                handleFollow(event);
+                // The form submit handler will take care of the actual submission
+                if (event.type === 'keydown' && event.target.type === 'submit') {
+                    event.target.click();
+                }
             }
         }
 
-        // Change avatar when gallery item is selected
-        function changeAvatar(event, element) {
-            // Get all gallery items and remove selected class
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            galleryItems.forEach(item => {
-                item.classList.remove('selected');
-                item.setAttribute('aria-checked', 'false');
-            });
-            
-            // Add selected class to clicked item
-            element.classList.add('selected');
-            element.setAttribute('aria-checked', 'true');
-            
-            // Update the profile avatar
-            const imgSrc = element.getAttribute('data-img');
-            const currentAvatar = document.getElementById('current-avatar');
-            currentAvatar.src = imgSrc;
-            
-            // Announce change to screen readers
-            const imgAlt = element.querySelector('img').alt;
-            announceToScreenReader(`Profile picture changed to ${imgAlt}`);
-        }
-
-        // Handle keyboard navigation for gallery items
-        function handleGalleryKeydown(event, element) {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                changeAvatar(event, element);
-            }
-        }
-
-        // Announce changes to screen readers using aria-live region
-        function announceToScreenReader(message) {
-            // Create or use existing live region
-            let liveRegion = document.getElementById('live-region');
-            if (!liveRegion) {
-                liveRegion = document.createElement('div');
-                liveRegion.id = 'live-region';
-                liveRegion.className = 'sr-only';
-                liveRegion.setAttribute('aria-live', 'polite');
-                document.body.appendChild(liveRegion);
-            }
-            
-            // Set the message
-            liveRegion.textContent = message;
-            
-            // Clear after announcement (optional)
-            setTimeout(() => {
-                liveRegion.textContent = '';
-            }, 3000);
-        }
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initCountdown);
     </script>
 </body>
 </html>
