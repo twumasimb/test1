@@ -3,163 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco-Friendly Products Showcase</title>
+    <title>Accessible Interactive Form</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
             background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
         }
 
-        header {
-            background-color: #4CAF50; /* Green theme */
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #0066cc;
             color: white;
-            padding: 10px 20px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 15px;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 2em;
-        }
-
-        .filter-section {
-            margin-bottom: 20px;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-
-        .product-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            position: relative;
-            transition: transform 0.2s;
-        }
-
-        .product-card:hover {
-            transform: scale(1.05);
-        }
-
-        .quick-view {
-            display: none;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #4CAF50;
-            color: white;
-            padding: 5px 10px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
         }
 
-        .product-card:hover .quick-view {
-            display: block;
-        }
-
-        /* Accessibility-focused CSS with focus indicators */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+        button:focus, input:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
 
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
+        .error {
+            color: red;
+            font-size: 0.9em;
         }
 
-        .product-image {
-            width: 100%;
-            height: auto;
+        .success {
+            color: green;
+            font-size: 1em;
         }
 
-        .category-filter, .sort-options {
-            margin-right: 10px;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <header>
-        <nav role="navigation" aria-label="Main navigation">
-            <a href="#products">Products</a>
-            <a href="#about">About Us</a>
-            <a href="#contact">Contact</a>
-        </nav>
+        <h1>Interactive Form</h1>
     </header>
     <main>
-        <h1>Eco-Friendly Products Showcase</h1>
-        <section class="filter-section">
-            <label for="category" class="category-filter">Filter by Category:</label>
-            <select id="category" aria-label="Select product category">
-                <option value="all">All</option>
-                <option value="bamboo">Bamboo Products</option>
-                <option value="recycled">Recycled Materials</option>
-                <option value="organic">Organic Products</option>
-            </select>
+        <form id="userForm" aria-labelledby="formTitle">
+            <h2 id="formTitle">Please fill out the form below:</h2>
+            
+            <label for="name">Name (required):</label>
+            <input type="text" id="name" name="name" required aria-describedby="nameError" />
+            <div id="nameError" class="error hidden" role="alert"></div>
 
-            <label for="sort" class="sort-options">Sort by:</label>
-            <select id="sort" aria-label="Select sorting option">
-                <option value="popularity">Popularity</option>
-                <option value="price">Price</option>
-            </select>
-        </section>
-        <section id="products" aria-labelledby="products-heading">
-            <h2 id="products-heading">Available Products</h2>
-            <div class="product-grid" role="grid">
-                <article class="product-card" role="gridcell" tabindex="0">
-                    <img src="bamboo-toothbrush.jpg" alt="Bamboo Toothbrush" class="product-image">
-                    <h3>Bamboo Toothbrush</h3>
-                    <p>Price: $5.00</p>
-                    <button class="quick-view" aria-label="Quick view of Bamboo Toothbrush">Quick View</button>
-                </article>
-                <article class="product-card" role="gridcell" tabindex="0">
-                    <img src="recycled-bag.jpg" alt="Recycled Shopping Bag" class="product-image">
-                    <h3>Recycled Shopping Bag</h3>
-                    <p>Price: $15.00</p>
-                    <button class="quick-view" aria-label="Quick view of Recycled Shopping Bag">Quick View</button>
-                </article>
-                <article class="product-card" role="gridcell" tabindex="0">
-                    <img src="organic-soap.jpg" alt="Organic Soap" class="product-image">
-                    <h3>Organic Soap</h3>
-                    <p>Price: $8.00</p>
-                    <button class="quick-view" aria-label="Quick view of Organic Soap">Quick View</button>
-                </article>
-                <!-- Additional products can be added here -->
-            </div>
-        </section>
+            <label for="email">Email (required):</label>
+            <input type="email" id="email" name="email" required aria-describedby="emailError" />
+            <div id="emailError" class="error hidden" role="alert"></div>
+
+            <label for="password">Password (required):</label>
+            <input type="password" id="password" name="password" required aria-describedby="passwordError" />
+            <div id="passwordError" class="error hidden" role="alert"></div>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" aria-describedby="phoneError" />
+            <div id="phoneError" class="error hidden" role="alert"></div>
+
+            <button type="submit">Submit</button>
+            <div id="submissionMessage" class="success hidden"></div>
+        </form>
     </main>
     <footer>
-        <p>&copy; 2023 Eco-Friendly Products. All rights reserved.</p>
+        <p>&copy; 2023 Accessible Forms</p>
     </footer>
     <script>
-        // For any element with mouse events, add keyboard support
-        function handleInteraction(event) {
-            // Handle both mouse and keyboard events
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                alert('Quick view functionality is not implemented yet.');
-            }
-        }
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission for validation
+            
+            // Clear previous error messages
+            document.querySelectorAll('.error').forEach(function(el) {
+                el.classList.add('hidden');
+                el.textContent = '';
+            });
 
-        // Attach event listeners to all quick view buttons
-        const quickViewButtons = document.querySelectorAll('.quick-view');
-        quickViewButtons.forEach(button => {
-            button.addEventListener('click', handleInteraction);
-            button.addEventListener('keydown', handleInteraction);
+            let isValid = true;
+
+            // Validate Name
+            const nameInput = document.getElementById('name');
+            if (nameInput.value.trim() === '') {
+                isValid = false;
+                document.getElementById('nameError').textContent = 'Name is required.';
+                document.getElementById('nameError').classList.remove('hidden');
+            }
+
+            // Validate Email
+            const emailInput = document.getElementById('email');
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!emailPattern.test(emailInput.value)) {
+                isValid = false;
+                document.getElementById('emailError').textContent = 'Please enter a valid email address.';
+                document.getElementById('emailError').classList.remove('hidden');
+            }
+
+            // Validate Password
+            const passwordInput = document.getElementById('password');
+            if (passwordInput.value.length < 6) {
+                isValid = false;
+                document.getElementById('passwordError').textContent = 'Password must be at least 6 characters long.';
+                document.getElementById('passwordError').classList.remove('hidden');
+            }
+
+            // Validate Phone (optional)
+            const phoneInput = document.getElementById('phone');
+            if (phoneInput.value && !/^\d{10}$/.test(phoneInput.value)) {
+                isValid = false;
+                document.getElementById('phoneError').textContent = 'Please enter a valid 10-digit phone number.';
+                document.getElementById('phoneError').classList.remove('hidden');
+            }
+
+            // If valid, show success message
+            if (isValid) {
+                document.getElementById('submissionMessage').textContent = 'Form submitted successfully!';
+                document.getElementById('submissionMessage').classList.remove('hidden');
+            }
         });
     </script>
 </body>
