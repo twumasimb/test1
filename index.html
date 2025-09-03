@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Tracker with Rewards</title>
+    <title>Creative Work Sharing Platform</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
@@ -11,16 +11,24 @@
             line-height: 1.6;
             margin: 0;
             padding: 0 0 80px 0;
-            background-color: #f4f4f4;
             color: #333;
+            background-color: #f9f9f9;
         }
         header, main, footer {
             padding: 20px;
             text-align: center;
         }
         header {
-            background-color: #007BFF;
+            background-color: #0066cc;
             color: #fff;
+        }
+        nav {
+            margin-top: 10px;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
         }
         main {
             background-color: #fff;
@@ -29,14 +37,11 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         footer {
-            background-color: #333;
+            background-color: #0066cc;
             color: #fff;
             position: fixed;
             bottom: 0;
             width: 100%;
-        }
-        h1, h2 {
-            margin: 0;
         }
         form {
             display: flex;
@@ -44,24 +49,24 @@
             align-items: center;
         }
         label {
-            margin-bottom: 10px;
+            margin: 10px 0;
         }
         input, textarea, button {
             margin: 5px 0;
             padding: 10px;
             width: 100%;
-            max-width: 300px;
+            max-width: 400px;
             box-sizing: border-box;
         }
         button {
-            background-color: #007BFF;
+            background-color: #0066cc;
             color: #fff;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #0053a3;
         }
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
@@ -70,130 +75,127 @@
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
-        .task-list {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
+        .error {
+            color: #ff0000;
+            font-weight: bold;
         }
-        .task-list li {
-            background-color: #f9f9f9;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .task-list li button {
-            background-color: #dc3545;
-        }
-        .task-list li button:hover {
-            background-color: #c82333;
-        }
-        .task-list li.completed {
-            text-decoration: line-through;
-            color: #888;
-        }
-        .reward-section {
-            margin-top: 20px;
-        }
-        .reward-section h2 {
-            margin-bottom: 10px;
-        }
-        .reward-section p {
-            margin: 0;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <header>
+        <h1>Creative Work Sharing Platform</h1>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#main-content" tabindex="1">Skip to main content</a>
+            <a href="#upload">Upload Work</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#about">About</a>
         </nav>
-        <h1>Task Tracker with Rewards</h1>
     </header>
-    <main id="main-content">
-        <section>
-            <h2>Add a New Task</h2>
-            <form id="task-form">
-                <label for="task-title">Task Title:</label>
-                <input type="text" id="task-title" name="task-title" required>
-                <label for="task-description">Task Description:</label>
-                <textarea id="task-description" name="task-description" required></textarea>
-                <button type="submit">Add Task</button>
+    <main>
+        <section id="upload">
+            <h2>Upload Your Creative Work</h2>
+            <form id="uploadForm" onsubmit="return handleFormSubmit(event)">
+                <label for="fileInput">Select a file to upload:</label>
+                <input type="file" id="fileInput" name="file" required>
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+                <label for="tags">Tags (comma-separated):</label>
+                <input type="text" id="tags" name="tags" required>
+                <button type="submit">Upload</button>
+                <div id="error" class="error hidden" aria-live="assertive"></div>
             </form>
         </section>
-        <section>
-            <h2>Task List</h2>
-            <ul class="task-list" id="task-list">
-                <!-- Tasks will be dynamically added here -->
-            </ul>
+        <section id="gallery">
+            <h2>Gallery</h2>
+            <div id="galleryContent">
+                <!-- Gallery items will be dynamically added here -->
+            </div>
         </section>
-        <section class="reward-section">
-            <h2>Rewards</h2>
-            <p id="reward-message">Complete tasks to earn rewards!</p>
+        <section id="about">
+            <h2>About</h2>
+            <p>Welcome to the Creative Work Sharing Platform! Here, you can upload and share your creative work, such as photos and art. All users can add descriptions and tags to their work, making it easy to discover and enjoy.</p>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Task Tracker with Rewards. All rights reserved.</p>
+        <p>&copy; 2023 Creative Work Sharing Platform. All rights reserved.</p>
     </footer>
     <script>
         // Keyboard-accessible JavaScript functions
-        document.addEventListener('DOMContentLoaded', () => {
-            const taskForm = document.getElementById('task-form');
-            const taskList = document.getElementById('task-list');
-            const rewardMessage = document.getElementById('reward-message');
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('fileInput');
+            const description = document.getElementById('description');
+            const tags = document.getElementById('tags');
+            const error = document.getElementById('error');
 
-            let taskCount = 0;
+            // Clear previous errors
+            error.textContent = '';
+            error.classList.add('hidden');
 
-            taskForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                const taskTitle = document.getElementById('task-title').value;
-                const taskDescription = document.getElementById('task-description').value;
+            // Basic validation
+            if (!fileInput.files.length) {
+                error.textContent = 'Please select a file to upload.';
+                error.classList.remove('hidden');
+                return;
+            }
 
-                if (taskTitle && taskDescription) {
-                    addTask(taskTitle, taskDescription);
-                    taskForm.reset();
-                }
+            if (description.value.trim() === '') {
+                error.textContent = 'Please provide a description.';
+                error.classList.remove('hidden');
+                return;
+            }
+
+            if (tags.value.trim() === '') {
+                error.textContent = 'Please provide at least one tag.';
+                error.classList.remove('hidden');
+                return;
+            }
+
+            // Simulate file upload and display in gallery
+            const file = fileInput.files[0];
+            const galleryContent = document.getElementById('galleryContent');
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.alt = description.value;
+            img.loading = 'lazy';
+
+            const desc = document.createElement('p');
+            desc.textContent = description.value;
+
+            const tagList = document.createElement('ul');
+            tags.value.split(',').forEach(tag => {
+                const li = document.createElement('li');
+                li.textContent = tag.trim();
+                tagList.appendChild(li);
             });
 
-            function addTask(title, description) {
-                const taskItem = document.createElement('li');
-                taskItem.className = 'task-item';
-                taskItem.innerHTML = `
-                    <span>${title}</span>
-                    <button type="button" aria-label="Complete task: ${title}">Complete</button>
-                `;
+            galleryItem.appendChild(img);
+            galleryItem.appendChild(desc);
+            galleryItem.appendChild(tagList);
+            galleryContent.appendChild(galleryItem);
 
-                const taskDescriptionElement = document.createElement('p');
-                taskDescriptionElement.className = 'task-description';
-                taskDescriptionElement.textContent = description;
-                taskItem.appendChild(taskDescriptionElement);
+            // Clear form fields
+            fileInput.value = '';
+            description.value = '';
+            tags.value = '';
+        }
 
-                taskList.appendChild(taskItem);
-
-                const completeButton = taskItem.querySelector('button');
-                completeButton.addEventListener('click', () => {
-                    taskItem.classList.add('completed');
-                    taskCount++;
-                    updateRewardMessage();
-                });
-
-                completeButton.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        completeButton.click();
-                    }
-                });
-            }
-
-            function updateRewardMessage() {
-                if (taskCount > 0) {
-                    rewardMessage.textContent = `You have completed ${taskCount} task${taskCount > 1 ? 's' : ''}. Great job!`;
-                } else {
-                    rewardMessage.textContent = 'Complete tasks to earn rewards!';
-                }
-            }
+        // Ensure all interactive elements are keyboard accessible
+        document.querySelectorAll('button, input, select, textarea, a').forEach(element => {
+            element.addEventListener('keydown', handleInteraction);
         });
+
+        function handleInteraction(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                event.target.click();
+            }
+        }
     </script>
 </body>
 </html>
