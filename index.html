@@ -3,120 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Budget Calculator</title>
+    <title>Event Countdown Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
+            background-color: #f4f4f4;
             color: #333;
-        }
-
-        header {
-            background-color: #0066cc;
-            color: white;
-            padding: 10px 0;
             text-align: center;
+            padding: 20px;
         }
-
-        main {
+        .countdown {
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 30px;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 1s;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
             margin-top: 20px;
         }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #28a745;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
         button:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #e9ecef;
-            border-radius: 4px;
-        }
-
-        /* Ensure all interactive elements have visible focus indicators */
-        button:focus, input:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
+        @media (max-width: 600px) {
+            .countdown {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Budget Calculator</h1>
+        <h1>Countdown to Our Event!</h1>
     </header>
     <main>
-        <section>
-            <h2>Calculate Your Budget</h2>
-            <form id="budgetForm" aria-labelledby="budgetForm">
-                <label for="income">Monthly Income:</label>
-                <input type="number" id="income" name="income" required aria-required="true" placeholder="Enter your income">
-
-                <label for="expenses">Monthly Expenses:</label>
-                <input type="number" id="expenses" name="expenses" required aria-required="true" placeholder="Enter your expenses">
-
-                <button type="button" id="calculateButton">Calculate</button>
-            </form>
-            <div id="result" class="result" aria-live="polite" hidden>
-                <h3>Budget Breakdown</h3>
-                <p id="breakdown"></p>
+        <section aria-live="polite">
+            <div class="countdown" id="countdown"></div>
+            <div class="progress-container" aria-label="Countdown progress">
+                <div class="progress-bar" id="progress-bar"></div>
             </div>
+            <button id="reset-button" onclick="resetCountdown()">Reset Countdown</button>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Budget Calculator</p>
+        <p>&copy; 2023 Event Countdown</p>
     </footer>
     <script>
-        document.getElementById('calculateButton').addEventListener('click', handleInteraction);
-        
-        // For any element with mouse events, add keyboard support
-        document.getElementById('calculateButton').addEventListener('keydown', handleInteraction);
+        const eventDate = new Date("2023-12-31T23:59:59").getTime();
+        const countdownElement = document.getElementById("countdown");
+        const progressBar = document.getElementById("progress-bar");
 
-        function handleInteraction(event) {
-            // Handle both mouse and keyboard events
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                const income = parseFloat(document.getElementById('income').value);
-                const expenses = parseFloat(document.getElementById('expenses').value);
-                
-                if (!isNaN(income) && !isNaN(expenses)) {
-                    const remaining = income - expenses;
-                    const breakdownText = remaining >= 0 
-                        ? `You have $${remaining.toFixed(2)} left after expenses.`
-                        : `You are over budget by $${Math.abs(remaining).toFixed(2)}.`;
-                    
-                    document.getElementById('breakdown').textContent = breakdownText;
-                    const resultDiv = document.getElementById('result');
-                    resultDiv.hidden = false; // Show result
-                } else {
-                    alert('Please enter valid numbers for income and expenses.');
-                }
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            // Calculate time components
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the result
+            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            // Update the progress bar
+            const totalDuration = eventDate - new Date("2023-01-01T00:00:00").getTime(); // Total duration from the start of the year
+            const elapsed = now - new Date("2023-01-01T00:00:00").getTime(); // Time elapsed since the start of the year
+            const progressPercentage = Math.min((elapsed / totalDuration) * 100, 100); // Ensure it doesn't exceed 100%
+            progressBar.style.width = progressPercentage + "%";
+
+            // If the countdown is over, display a message
+            if (distance < 0) {
+                clearInterval(interval);
+                countdownElement.innerHTML = "Event has started!";
+                progressBar.style.width = "100%";
             }
         }
+
+        function resetCountdown() {
+            clearInterval(interval);
+            countdownElement.innerHTML = "";
+            progressBar.style.width = "0%";
+            // Optionally restart the countdown if needed
+            setTimeout(() => {
+                interval = setInterval(updateCountdown, 1000);
+            }, 1000);
+        }
+
+        let interval = setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
