@@ -3,134 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible To-Do List Application</title>
+    <title>Gardening Community</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
             background-color: #f9f9f9;
             color: #333;
-            margin: 0;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        main {
             padding: 20px;
         }
-        h1 {
-            color: #0066cc;
-        }
-        form {
+        section {
             margin-bottom: 20px;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, select, button {
-            padding: 10px;
-            margin: 5px 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover, button:focus {
-            background-color: #005bb5;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background-color: #fff;
-            margin: 5px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .completed {
-            text-decoration: line-through;
-            color: #999;
-        }
-        /* Ensure all interactive elements have visible focus indicators */
-        button:focus, input:focus, select:focus, textarea:focus {
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
+        }
+        .plant-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #fff;
+        }
+        .feedback {
+            margin-top: 10px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>To-Do List</h1>
+        <h1>Gardening Community</h1>
+        <nav role="navigation" aria-label="Main navigation">
+            <a href="#upload-form" style="color: white;">Upload Your Plant</a>
+        </nav>
     </header>
     <main>
-        <form id="taskForm" aria-label="Add a new task">
-            <label for="taskInput">Task:</label>
-            <input type="text" id="taskInput" required aria-required="true" placeholder="Enter a new task" />
-            
-            <label for="priorityInput">Priority:</label>
-            <select id="priorityInput" aria-label="Select priority level">
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-            </select>
-            
-            <label for="dueDateInput">Due Date:</label>
-            <input type="date" id="dueDateInput" aria-label="Select due date" />
-            
-            <button type="submit">Add Task</button>
-        </form>
-        
-        <ul id="taskList" role="list" aria-label="List of tasks">
-            <!-- Tasks will be dynamically added here -->
-        </ul>
+        <section id="upload-form">
+            <h2>Upload Your Plant Picture</h2>
+            <form id="plant-form" aria-labelledby="upload-form">
+                <label for="plant-image">Plant Image (required):</label>
+                <input type="file" id="plant-image" accept="image/*" required aria-describedby="image-error">
+                <span id="image-error" class="error" aria-live="assertive"></span>
+
+                <label for="plant-description">Description:</label>
+                <textarea id="plant-description" rows="4" aria-required="true"></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+        <section id="plant-gallery">
+            <h2>Plant Gallery</h2>
+            <div id="gallery"></div>
+        </section>
     </main>
     <footer>
-        <p>&copy; 2023 Accessible To-Do List</p>
+        <p>&copy; 2023 Gardening Community</p>
     </footer>
     <script>
-        document.getElementById('taskForm').addEventListener('submit', function(event) {
+        document.getElementById('plant-form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const taskInput = document.getElementById('taskInput');
-            const priorityInput = document.getElementById('priorityInput');
-            const dueDateInput = document.getElementById('dueDateInput');
 
-            const taskText = taskInput.value;
-            const priority = priorityInput.value;
-            const dueDate = dueDateInput.value;
+            const imageInput = document.getElementById('plant-image');
+            const descriptionInput = document.getElementById('plant-description');
+            const gallery = document.getElementById('gallery');
+            const imageError = document.getElementById('image-error');
 
-            if (taskText) {
-                addTask(taskText, priority, dueDate);
-                taskInput.value = '';
-                dueDateInput.value = '';
+            // Clear previous error message
+            imageError.textContent = '';
+
+            if (!imageInput.files.length) {
+                imageError.textContent = 'Please upload an image.';
+                return;
+            }
+
+            const file = imageInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const plantItem = document.createElement('div');
+                plantItem.classList.add('plant-item');
+                plantItem.innerHTML = `
+                    <img src="${e.target.result}" alt="Picture of a plant" style="max-width: 100%; height: auto;">
+                    <p>${descriptionInput.value}</p>
+                    <button class="like-button">Like</button>
+                    <div class="feedback"></div>
+                `;
+                gallery.prepend(plantItem);
+
+                // Reset the form
+                imageInput.value = '';
+                descriptionInput.value = '';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Handle likes with keyboard accessibility
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('like-button')) {
+                const feedbackDiv = event.target.nextElementSibling;
+                feedbackDiv.textContent = feedbackDiv.textContent ? '' : 'You liked this plant!';
             }
         });
 
-        function addTask(taskText, priority, dueDate) {
-            const taskList = document.getElementById('taskList');
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <span class="task-text">${taskText} (Priority: ${priority}, Due: ${dueDate})</span>
-                <div>
-                    <button onclick="toggleComplete(this)" aria-label="Mark as completed">✓</button>
-                    <button onclick="deleteTask(this)" aria-label="Delete task">✖</button>
-                </div>
-            `;
-            taskList.appendChild(li);
-        }
-
-        function toggleComplete(button) {
-            const taskItem = button.closest('li');
-            const taskText = taskItem.querySelector('.task-text');
-            taskText.classList.toggle('completed');
-        }
-
-        function deleteTask(button) {
-            const taskItem = button.closest('li');
-            taskItem.remove();
-        }
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                if (event.target.classList.contains('like-button')) {
+                    event.preventDefault();
+                    const feedbackDiv = event.target.nextElementSibling;
+                    feedbackDiv.textContent = feedbackDiv.textContent ? '' : 'You liked this plant!';
+                }
+            }
+        });
     </script>
 </body>
 </html>
