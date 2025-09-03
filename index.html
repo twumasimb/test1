@@ -3,189 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Digital Art Gallery</title>
+    <title>Interactive Recipe Sharing</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
             margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
         }
-
         header {
-            width: 100%;
-            padding: 1rem;
-            background-color: #1e1e1e;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
         }
-
-        nav a {
-            color: #ffffff;
-            text-decoration: none;
-            margin: 0 1rem;
+        main {
+            margin: 20px 0;
         }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-            width: 100%;
-            max-width: 1200px;
+        .recipe {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #fff;
         }
-
-        .thumbnail {
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            border: 2px solid #333;
-            border-radius: 8px;
-            transition: transform 0.3s;
-        }
-
-        .thumbnail:hover {
-            transform: scale(1.05);
-        }
-
-        .thumbnail img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
-            padding: 0.5rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .thumbnail:hover .info {
-            opacity: 1;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal img {
-            max-width: 90%;
-            max-height: 90%;
-        }
-
-        .close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #ffffff;
-            font-size: 2rem;
-            cursor: pointer;
-        }
-
-        .dark-mode {
-            background-color: #1e1e1e;
-            color: #ffffff;
-        }
-
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
+        .error {
+            color: red;
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Art Gallery</h1>
-        <button id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
+        <h1>Recipe Sharing Platform</h1>
     </header>
     <main>
-        <input type="text" id="search" placeholder="Search artworks..." aria-label="Search artworks" />
-        <section class="gallery" aria-label="Art Gallery">
-            <div class="thumbnail" tabindex="0" aria-labelledby="art1">
-                <img src="art1.jpg" alt="A beautiful sunset over the mountains" />
-                <div class="info" id="art1">Sunset Over Mountains</div>
-            </div>
-            <div class="thumbnail" tabindex="0" aria-labelledby="art2">
-                <img src="art2.jpg" alt="A colorful abstract painting" />
-                <div class="info" id="art2">Abstract Colors</div>
-            </div>
-            <!-- Add more artworks as needed -->
+        <section>
+            <h2>Submit Your Recipe</h2>
+            <form id="recipeForm" aria-labelledby="recipeFormLabel">
+                <label for="recipeName">Recipe Name <span aria-hidden="true">*</span></label>
+                <input type="text" id="recipeName" required aria-describedby="recipeNameError">
+                <div id="recipeNameError" class="error" aria-live="assertive"></div>
+
+                <label for="ingredients">Ingredients <span aria-hidden="true">*</span></label>
+                <textarea id="ingredients" required aria-describedby="ingredientsError"></textarea>
+                <div id="ingredientsError" class="error" aria-live="assertive"></div>
+
+                <label for="rating">Rating (1-5)</label>
+                <input type="number" id="rating" min="1" max="5" aria-describedby="ratingError">
+                <div id="ratingError" class="error" aria-live="assertive"></div>
+
+                <button type="submit">Submit Recipe</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Search Recipes by Ingredient</h2>
+            <input type="text" id="searchInput" placeholder="Enter ingredient...">
+            <button id="searchButton">Search</button>
+        </section>
+
+        <section id="recipeList">
+            <h2>Recipes</h2>
+            <div id="recipesContainer"></div>
         </section>
     </main>
-    <div class="modal" id="modal" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDesc">
-        <span class="close" aria-label="Close modal">&times;</span>
-        <img id="modalImage" src="" alt="" />
-    </div>
     <footer>
-        <p>&copy; 2023 Art Gallery</p>
+        <p>&copy; 2023 Recipe Sharing Platform</p>
     </footer>
     <script>
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        const modal = document.getElementById('modal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModal = document.querySelector('.close');
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const body = document.body;
+        const recipeForm = document.getElementById('recipeForm');
+        const recipesContainer = document.getElementById('recipesContainer');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
 
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                const img = thumbnail.querySelector('img');
-                modalImage.src = img.src;
-                modalImage.alt = img.alt;
-                modal.style.display = 'flex';
-            });
+        let recipes = [];
 
-            thumbnail.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    thumbnail.click();
-                }
-            });
-        });
+        recipeForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const recipeName = document.getElementById('recipeName').value;
+            const ingredients = document.getElementById('ingredients').value;
+            const rating = document.getElementById('rating').value;
 
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+            // Clear previous errors
+            document.getElementById('recipeNameError').textContent = '';
+            document.getElementById('ingredientsError').textContent = '';
+            document.getElementById('ratingError').textContent = '';
 
-        closeModal.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                closeModal.click();
+            // Validate inputs
+            if (!recipeName) {
+                document.getElementById('recipeNameError').textContent = 'Recipe name is required.';
+                return;
             }
-        });
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-bg');
-        });
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                modal.style.display = 'none';
+            if (!ingredients) {
+                document.getElementById('ingredientsError').textContent = 'Ingredients are required.';
+                return;
             }
+
+            // Create recipe object
+            const newRecipe = {
+                name: recipeName,
+                ingredients: ingredients.split(',').map(item => item.trim()),
+                rating: rating ? parseInt(rating) : null
+            };
+
+            // Add recipe to the list
+            recipes.push(newRecipe);
+            displayRecipes(recipes);
+            recipeForm.reset();
         });
+
+        searchButton.addEventListener('click', function() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredRecipes = recipes.filter(recipe => 
+                recipe.ingredients.some(ingredient => ingredient.toLowerCase().includes(searchTerm))
+            );
+            displayRecipes(filteredRecipes);
+        });
+
+        function displayRecipes(recipesToDisplay) {
+            recipesContainer.innerHTML = '';
+            recipesToDisplay.forEach(recipe => {
+                const recipeDiv = document.createElement('div');
+                recipeDiv.className = 'recipe';
+                recipeDiv.tabIndex = 0; // Make it keyboard navigable
+                recipeDiv.innerHTML = `
+                    <h3>${recipe.name}</h3>
+                    <p><strong>Ingredients:</strong> ${recipe.ingredients.join(', ')}</p>
+                    <p><strong>Rating:</strong> ${recipe.rating ? recipe.rating : 'Not rated'}</p>
+                `;
+                recipeDiv.addEventListener('keydown', handleInteraction);
+                recipesContainer.appendChild(recipeDiv);
+            });
+        }
+
+        function handleInteraction(event) {
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                // Perform action on recipe click (e.g., show details)
+                alert('Recipe selected: ' + event.currentTarget.querySelector('h3').innerText);
+            }
+        }
     </script>
 </body>
 </html>
