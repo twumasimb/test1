@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monthly Budget Calculator</title>
+    <title>Event Countdown Timer</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
@@ -14,175 +14,142 @@
             background-color: #f4f4f4;
             color: #333;
         }
+
         header, main, footer {
             padding: 20px;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
             text-align: center;
         }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+        }
+
         main {
             background-color: #fff;
             margin: 20px auto;
             max-width: 800px;
-            padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         footer {
             background-color: #333;
             color: #fff;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
+        }
+
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .countdown-item {
+            margin: 0 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
             width: 100%;
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
         }
-        h1, h2 {
-            margin: 0;
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #007bff;
+            width: 0;
+            transition: width 0.5s;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        button:focus, input:focus, select:focus {
+
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
+
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
-        }
-        .error {
-            color: #ff0000;
-            font-weight: bold;
-        }
-        .budget-breakdown {
-            margin-top: 20px;
-        }
-        .budget-breakdown table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .budget-breakdown th, .budget-breakdown td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        .budget-breakdown th {
-            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
     <header>
-        <nav role="navigation" aria-label="Main navigation">
-            <a href="#main-content" tabindex="1">Skip to main content</a>
-        </nav>
-        <h1>Monthly Budget Calculator</h1>
+        <h1>Event Countdown Timer</h1>
     </header>
-    <main id="main-content">
-        <section>
-            <h2>Enter Your Monthly Income and Expenses</h2>
-            <form id="budget-form">
-                <label for="income">Monthly Income:</label>
-                <input type="number" id="income" name="income" min="0" required aria-describedby="income-error">
-                <span id="income-error" class="error" aria-live="polite"></span>
-
-                <label for="expenses">Monthly Expenses:</label>
-                <input type="number" id="expenses" name="expenses" min="0" required aria-describedby="expenses-error">
-                <span id="expenses-error" class="error" aria-live="polite"></span>
-
-                <button type="submit" id="calculate-button">Calculate Budget</button>
-            </form>
-        </section>
-        <section class="budget-breakdown" aria-live="polite" aria-atomic="true">
-            <h2>Budget Breakdown</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Income</td>
-                        <td id="income-amount">$0.00</td>
-                    </tr>
-                    <tr>
-                        <td>Expenses</td>
-                        <td id="expenses-amount">$0.00</td>
-                    </tr>
-                    <tr>
-                        <td>Remaining</td>
-                        <td id="remaining-amount">$0.00</td>
-                    </tr>
-                </tbody>
-            </table>
+    <main>
+        <section aria-live="polite" aria-atomic="true">
+            <div class="countdown-container">
+                <div class="countdown-item" aria-label="Days remaining">
+                    <span id="days">00</span>
+                    <p>Days</p>
+                </div>
+                <div class="countdown-item" aria-label="Hours remaining">
+                    <span id="hours">00</span>
+                    <p>Hours</p>
+                </div>
+                <div class="countdown-item" aria-label="Minutes remaining">
+                    <span id="minutes">00</span>
+                    <p>Minutes</p>
+                </div>
+                <div class="countdown-item" aria-label="Seconds remaining">
+                    <span id="seconds">00</span>
+                    <p>Seconds</p>
+                </div>
+            </div>
+            <div class="progress-bar" aria-label="Progress towards the event">
+                <div id="progress-bar-fill" class="progress-bar-fill"></div>
+            </div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Monthly Budget Calculator. All rights reserved.</p>
+        <p>&copy; 2023 Event Countdown Timer. All rights reserved.</p>
     </footer>
     <script>
-        // Keyboard-accessible JavaScript functions
-        document.getElementById('budget-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            handleInteraction(event);
-        });
+        // Set the date we're counting down to
+        const countDownDate = new Date("Dec 31, 2023 23:59:59").getTime();
 
-        function handleInteraction(event) {
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                calculateBudget();
+        // Update the countdown every second
+        const x = setInterval(function() {
+            // Get today's date and time
+            const now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            const distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes, and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Output the result in elements with id="days", id="hours", id="minutes", id="seconds"
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+            // Calculate the progress bar width
+            const totalSeconds = Math.floor((countDownDate - new Date("Dec 31, 2022 23:59:59").getTime()) / 1000);
+            const currentSeconds = Math.floor((countDownDate - now) / 1000);
+            const progress = 100 - (currentSeconds / totalSeconds * 100);
+
+            // Update the progress bar
+            document.getElementById("progress-bar-fill").style.width = progress + "%";
+
+            // If the count down is finished, write some text
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                document.getElementById("progress-bar-fill").style.width = "100%";
             }
-        }
-
-        function calculateBudget() {
-            const incomeInput = document.getElementById('income');
-            const expensesInput = document.getElementById('expenses');
-            const incomeAmount = document.getElementById('income-amount');
-            const expensesAmount = document.getElementById('expenses-amount');
-            const remainingAmount = document.getElementById('remaining-amount');
-            const incomeError = document.getElementById('income-error');
-            const expensesError = document.getElementById('expenses-error');
-
-            incomeError.textContent = '';
-            expensesError.textContent = '';
-
-            let income = parseFloat(incomeInput.value);
-            let expenses = parseFloat(expensesInput.value);
-
-            if (isNaN(income) || income < 0) {
-                incomeError.textContent = 'Please enter a valid income amount.';
-                incomeInput.focus();
-                return;
-            }
-
-            if (isNaN(expenses) || expenses < 0) {
-                expensesError.textContent = 'Please enter a valid expenses amount.';
-                expensesInput.focus();
-                return;
-            }
-
-            incomeAmount.textContent = `$${income.toFixed(2)}`;
-            expensesAmount.textContent = `$${expenses.toFixed(2)}`;
-            remainingAmount.textContent = `$${(income - expenses).toFixed(2)}`;
-        }
+        }, 1000);
     </script>
 </body>
 </html>
