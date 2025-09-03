@@ -3,163 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - Task Management</title>
+    <title>Interactive Accessible Webpage</title>
     <style>
-        /* Accessibility-focused CSS with focus indicators */
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
             color: #333;
         }
-
         header {
-            background: #007bff;
+            background-color: #0066cc;
             color: white;
             padding: 1rem;
         }
-
         nav a {
             color: white;
             text-decoration: none;
-            padding: 0.5rem 1rem;
+            margin: 0 1rem;
+            transition: color 0.3s ease;
         }
-
-        nav a:focus {
-            outline: 3px solid #ffffff;
-            outline-offset: 2px;
+        nav a:hover, nav a:focus {
+            color: #ffcc00;
         }
-
         main {
-            padding: 1rem;
+            padding: 2rem;
         }
-
-        button, input[type="submit"] {
-            background: #28a745;
+        h1 {
+            font-size: 2rem;
+        }
+        .button {
+            background-color: #28a745;
             color: white;
-            border: none;
             padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
-
-        button:focus, input[type="submit"]:focus {
-            outline: 3px solid #0066cc;
+        .button:hover, .button:focus {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        /* Ensure all interactive elements have visible focus indicators */
+        button:focus, a:focus {
+            outline: 3px solid #ffcc00;
             outline-offset: 2px;
         }
-
-        label {
-            display: block;
-            margin: 0.5rem 0 0.2rem;
-        }
-
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .error {
-            color: red;
-            font-size: 0.9rem;
-        }
-
-        footer {
-            text-align: center;
+        .card {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             padding: 1rem;
-            background: #007bff;
-            color: white;
-            position: relative;
-            bottom: 0;
-            width: 100%;
+            margin: 1rem 0;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
         }
     </style>
 </head>
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#login" id="loginLink">Login</a>
-            <a href="#dashboard" id="dashboardLink" style="display:none;">Dashboard</a>
+            <a href="#home" tabindex="0">Home</a>
+            <a href="#about" tabindex="0">About</a>
+            <a href="#contact" tabindex="0">Contact</a>
         </nav>
     </header>
     <main>
-        <h1 id="pageTitle">User Login</h1>
-        <section id="loginSection">
-            <form id="loginForm" aria-labelledby="pageTitle">
-                <label for="email">Email:</label>
-                <input type="email" id="email" required aria-describedby="emailError">
-                <span id="emailError" class="error" aria-live="polite"></span>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" required aria-describedby="passwordError">
-                <span id="passwordError" class="error" aria-live="polite"></span>
-
-                <input type="submit" value="Login">
-            </form>
-        </section>
-        <section id="dashboardSection" style="display:none;">
-            <h2>Your Dashboard</h2>
-            <p>Welcome to your task management dashboard!</p>
-            <button id="logoutButton">Logout</button>
+        <h1>Welcome to Our Interactive Webpage</h1>
+        <section id="home">
+            <article class="card" tabindex="0">
+                <h2>Interactive Card 1</h2>
+                <p>This card has hover effects and is keyboard accessible.</p>
+                <button class="button" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Click Me</button>
+            </article>
+            <article class="card" tabindex="0">
+                <h2>Interactive Card 2</h2>
+                <p>This card also features similar interactions.</p>
+                <button class="button" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Click Me</button>
+            </article>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Task Management App</p>
+        <p>&copy; 2023 Interactive Webpage. All rights reserved.</p>
     </footer>
     <script>
-        // Function to handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            let valid = true;
-
-            // Simple validation
-            if (!email) {
-                document.getElementById('emailError').textContent = 'Email is required.';
-                valid = false;
-            } else {
-                document.getElementById('emailError').textContent = '';
-            }
-
-            if (!password) {
-                document.getElementById('passwordError').textContent = 'Password is required.';
-                valid = false;
-            } else {
-                document.getElementById('passwordError').textContent = '';
-            }
-
-            // If valid, switch to dashboard
-            if (valid) {
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('dashboardSection').style.display = 'block';
-                document.getElementById('loginLink').style.display = 'none';
-                document.getElementById('dashboardLink').style.display = 'inline';
-                document.getElementById('pageTitle').textContent = 'Your Dashboard';
-            }
-        });
-
-        // Function to handle logout
-        document.getElementById('logoutButton').addEventListener('click', function() {
-            document.getElementById('loginSection').style.display = 'block';
-            document.getElementById('dashboardSection').style.display = 'none';
-            document.getElementById('loginLink').style.display = 'inline';
-            document.getElementById('dashboardLink').style.display = 'none';
-            document.getElementById('pageTitle').textContent = 'User Login';
-        });
-
-        // Handle keyboard events for interactive elements
+        // For any element with mouse events, add keyboard support
         function handleInteraction(event) {
+            // Handle both mouse and keyboard events
             if (event.type === 'click' || 
                 (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.target.click();
+                alert('Button clicked or activated!');
             }
         }
-
-        // Apply keyboard support to buttons
-        document.getElementById('logoutButton').onmousedown = handleInteraction;
-        document.getElementById('logoutButton').onkeydown = handleInteraction;
     </script>
 </body>
 </html>
