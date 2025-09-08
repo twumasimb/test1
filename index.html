@@ -3,204 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco-Friendly Products</title>
+    <title>Interactive Form with Validation</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            color: #333;
+            line-height: 1.6;
             margin: 0;
-            padding: 0 0 80px 0;
-        }
-        header, main, footer {
             padding: 20px;
+            background-color: #f4f4f4;
         }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-        }
-        nav {
-            margin-top: 20px;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
-        nav ul li {
-            display: inline;
-            margin: 0 10px;
-        }
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-        }
-        main {
-            max-width: 1200px;
+
+        .container {
+            max-width: 600px;
             margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .filter-sort {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+
+        h1 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
             margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        .filter-sort select, .filter-sort button {
-            padding: 10px;
-            margin-right: 10px;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .product-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .product-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .product-card h2 {
-            font-size: 1.2em;
-            margin: 10px;
-        }
-        .product-card p {
-            margin: 10px;
-        }
-        .product-card button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-            margin: 0 10px 10px 10px;
-        }
-        .product-card button:hover {
-            background-color: #45a049;
-        }
-        .product-card button:focus {
+
+        input:focus, textarea:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-        footer {
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            margin-top: 20px;
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: -15px;
+            margin-bottom: 15px;
         }
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
+
+        button {
+            background: #0066cc;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+
+        .success {
+            color: green;
+            font-size: 1em;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Eco-Friendly Products</h1>
         <nav role="navigation" aria-label="Main navigation">
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+            <a href="#main-content" tabindex="1">Skip to main content</a>
         </nav>
     </header>
-    <main>
-        <section class="filter-sort">
-            <div>
-                <label for="category-filter">Filter by Category:</label>
-                <select id="category-filter" aria-label="Filter by Category">
-                    <option value="all">All</option>
-                    <option value="home">Home</option>
-                    <option value="garden">Garden</option>
-                    <option value="office">Office</option>
-                </select>
-            </div>
-            <div>
-                <label for="sort-by">Sort by:</label>
-                <select id="sort-by" aria-label="Sort by">
-                    <option value="popularity">Popularity</option>
-                    <option value="price-low-to-high">Price: Low to High</option>
-                    <option value="price-high-to-low">Price: High to Low</option>
-                </select>
-            </div>
-        </section>
-        <section class="product-grid" id="product-grid">
-            <!-- Product cards will be dynamically generated here -->
-        </section>
+    <main id="main-content">
+        <h1>Interactive Form with Validation</h1>
+        <form id="registrationForm" novalidate>
+            <section>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <span id="nameError" class="error" aria-live="polite" aria-atomic="true"></span>
+            </section>
+            <section>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <span id="emailError" class="error" aria-live="polite" aria-atomic="true"></span>
+            </section>
+            <section>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <span id="passwordError" class="error" aria-live="polite" aria-atomic="true"></span>
+            </section>
+            <section>
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+                <span id="phoneError" class="error" aria-live="polite" aria-atomic="true"></span>
+            </section>
+            <button type="submit">Submit</button>
+            <span id="successMessage" class="success" aria-live="polite" aria-atomic="true"></span>
+        </form>
     </main>
     <footer>
-        <p>&copy; 2023 Eco-Friendly Products. All rights reserved.</p>
+        <p>&copy; 2023 Your Company. All rights reserved.</p>
     </footer>
     <script>
-        // Sample product data
-        const products = [
-            { id: 1, name: 'Eco-Friendly Reusable Water Bottle', category: 'home', price: 15.99, image: 'https://via.placeholder.com/250x250?text=Water+Bottle', description: 'A reusable water bottle made from recycled materials.' },
-            { id: 2, name: 'Biodegradable Trash Bags', category: 'home', price: 9.99, image: 'https://via.placeholder.com/250x250?text=Trash+Bags', description: 'Eco-friendly trash bags that decompose naturally.' },
-            { id: 3, name: 'Solar-Powered Garden Lights', category: 'garden', price: 24.99, image: 'https://via.placeholder.com/250x250?text=Garden+Lights', description: 'Solar-powered garden lights that reduce energy consumption.' },
-            { id: 4, 'name': 'Eco-Friendly Office Chair', category: 'office', price: 129.99, image: 'https://via.placeholder.com/250x250?text=Office+Chair', description: 'An ergonomic office chair made from sustainable materials.' },
-            { id: 5, name: 'Recycled Paper Notebooks', category: 'office', price: 7.99, image: 'https://via.placeholder.com/250x250?text=Notebooks', description: 'Notebooks made from 100% recycled paper.' }
-        ];
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('registrationForm');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const phoneInput = document.getElementById('phone');
+            const nameError = document.getElementById('nameError');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const phoneError = document.getElementById('phoneError');
+            const successMessage = document.getElementById('successMessage');
 
-        // Function to generate product cards
-        function generateProductCards(products) {
-            const productGrid = document.getElementById('product-grid');
-            productGrid.innerHTML = ''; // Clear existing cards
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                card.innerHTML = `
-                    <img src="${product.image}" alt="${product.name}" />
-                    <h2>${product.name}</h2>
-                    <p>Price: $${product.price.toFixed(2)}</p>
-                    <button onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)" aria-label="Quick View ${product.name}">Quick View</button>
-                    <p class="description" style="display: none;">${product.description}</p>
-                `;
-                card.querySelector('button').addEventListener('click', () => {
-                    card.querySelector('.description').style.display = 'block';
-                });
-                productGrid.appendChild(card);
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                clearErrors();
+                let isValid = true;
+
+                if (nameInput.value.trim() === '') {
+                    nameError.textContent = 'Name is required.';
+                    nameInput.focus();
+                    isValid = false;
+                }
+
+                if (!emailInput.value.trim().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                    emailError.textContent = 'Please enter a valid email address.';
+                    emailInput.focus();
+                    isValid = false;
+                }
+
+                if (passwordInput.value.trim().length < 8) {
+                    passwordError.textContent = 'Password must be at least 8 characters long.';
+                    passwordInput.focus();
+                    isValid = false;
+                }
+
+                if (!phoneInput.value.trim().match(/^[0-9]{10}$/)) {
+                    phoneError.textContent = 'Please enter a valid 10-digit phone number.';
+                    phoneInput.focus();
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    successMessage.textContent = 'Form submitted successfully!';
+                    form.reset();
+                }
             });
-        }
 
-        // Function to handle both mouse and keyboard events
-        function handleInteraction(event) {
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.target.click();
+            function clearErrors() {
+                nameError.textContent = '';
+                emailError.textContent = '';
+                passwordError.textContent = '';
+                phoneError.textContent = '';
+                successMessage.textContent = '';
             }
-        }
 
-        // Initial product display
-        generateProductCards(products);
+            // Real-time validation
+            nameInput.addEventListener('input', function () {
+                if (nameInput.value.trim() !== '') {
+                    nameError.textContent = '';
+                }
+            });
 
-        // Filter and sort functionality
-        document.getElementById('category-filter').addEventListener('change', (event) => {
-            const selectedCategory = event.target.value;
-            const filteredProducts = selectedCategory === 'all' ? products : products.filter(product => product.category === selectedCategory);
-            generateProductCards(filteredProducts);
-        });
+            emailInput.addEventListener('input', function () {
+                if (emailInput.value.trim().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                    emailError.textContent = '';
+                }
+            });
 
-        document.getElementById('sort-by').addEventListener('change', (event) => {
-            const selectedSort = event.target.value;
-            let sortedProducts = [...products];
-            if (selectedSort === 'price-low-to-high') {
-                sortedProducts.sort((a, b) => a.price - b.price);
-            } else if (selectedSort === 'price-high-to-low') {
-                sortedProducts.sort((a, b) => b.price - a.price);
-            }
-            generateProductCards(sortedProducts);
+            passwordInput.addEventListener('input', function () {
+                if (passwordInput.value.trim().length >= 8) {
+                    passwordError.textContent = '';
+                }
+            });
+
+            phoneInput.addEventListener('input', function () {
+                if (phoneInput.value.trim().match(/^[0-9]{10}$/)) {
+                    phoneError.textContent = '';
+                }
+            });
         });
     </script>
 </body>
