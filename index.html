@@ -3,127 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gardening Community</title>
+    <title>Product Showcase</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
             color: #333;
-            background-color: #f9f9f9;
         }
+
         header, main, footer {
             padding: 20px;
         }
+
         header {
-            background-color: #4CAF50;
+            background-color: #007bff;
             color: #fff;
+            text-align: center;
         }
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
+
         main {
-            background-color: #fff;
-            margin: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
             padding: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            transition: transform 0.3s ease;
+            overflow: hidden;
         }
-        h1, h2, h3 {
-            color: #4CAF50;
+
+        .card:hover {
+            transform: scale(1.05);
         }
-        form {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, textarea, button {
+
+        .card img {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            height: auto;
+            border-radius: 8px 8px 0 0;
+            alt: "Product Image";
         }
-        button {
-            background-color: #4CAF50;
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card h2 {
+            font-size: 1.5em;
+            margin: 0 0 10px;
+        }
+
+        .card p {
+            margin: 0 0 15px;
+        }
+
+        .card button {
+            background-color: #007bff;
             color: #fff;
             border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease;
         }
-        button:hover {
-            background-color: #45a049;
+
+        .card button:hover {
+            background-color: #0056b3;
         }
+
+        /* Ensure all interactive elements have visible focus indicators */
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
+
+        /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
-        .error {
-            color: #ff0000;
-            font-weight: bold;
+
+        /* Ensure minimum 4.5:1 contrast ratio for normal text, 3:1 for large text */
+        :root {
+            --text-color: #333;
+            --background-color: #f4f4f4;
+            --link-color: #007bff;
+            --link-hover-color: #0056b3;
         }
-        .comment {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 4px;
+
+        body {
+            color: var(--text-color);
+            background-color: var(--background-color);
         }
-        .comment p {
-            margin: 0;
+
+        a {
+            color: var(--link-color);
+            text-decoration: none;
         }
-        .comment .username {
-            font-weight: bold;
+
+        a:hover {
+            color: var(--link-hover-color);
         }
-        .comment .actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-        }
-        .comment .actions button {
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-        .comment .actions button:hover {
-            background-color: #45a049;
-        }
-        .comment .actions button:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
-        }
-        .comment .actions button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-        .comment .actions .like-count {
-            margin-left: 10px;
-        }
-        .hidden {
-            display: none;
-        }
-        @media (max-width: 768px) {
-            main {
-                margin: 10px;
+
+        /* Ensure content works at 200% zoom */
+        @media (min-width: 768px) {
+            .card {
+                width: 300px;
             }
-            nav a {
-                margin: 0 5px;
+        }
+
+        @media (min-width: 1024px) {
+            .card {
+                width: 350px;
             }
         }
     </style>
@@ -131,113 +130,52 @@
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#home">Home</a>
-            <a href="#upload">Upload</a>
-            <a href="#community">Community</a>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
         </nav>
     </header>
     <main>
-        <h1>Gardening Community</h1>
-        <section id="upload">
-            <h2>Upload Your Plant or Garden</h2>
-            <form id="uploadForm" onsubmit="return handleUpload(event)">
-                <label for="image">Upload Image:</label>
-                <input type="file" id="image" name="image" accept="image/*" required>
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea>
-                <button type="submit">Upload</button>
-            </form>
-            <div id="uploadError" class="error hidden" aria-live="assertive"></div>
-        </section>
-        <section id="community">
-            <h2>Community Contributions</h2>
-            <div id="communityPosts">
-                <!-- Posts will be dynamically added here -->
+        <h1>Our Products</h1>
+        <div class="card">
+            <img src="product1.jpg" alt="Product 1 Image">
+            <div class="card-content">
+                <h2>Product 1</h2>
+                <p>Description of Product 1. This is a high-quality product that meets all your needs.</p>
+                <button onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Learn More</button>
             </div>
-        </section>
+        </div>
+        <div class="card">
+            <img src="product2.jpg" alt="Product 2 Image">
+            <div class="card-content">
+                <h2>Product 2</h2>
+                <p>Description of Product 2. This is a high-quality product that meets all your needs.</p>
+                <button onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Learn More</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="product3.jpg" alt="Product 3 Image">
+            <div class="card-content">
+                <h2>Product 3</h2>
+                <p>Description of Product 3. This is a high-quality product that meets all your needs.</p>
+                <button onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Learn More</button>
+            </div>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2023 Gardening Community. All rights reserved.</p>
+        <p>&copy; 2023 Your Company. All rights reserved.</p>
     </footer>
     <script>
-        // Keyboard-accessible JavaScript functions
-        function handleUpload(event) {
-            event.preventDefault();
-            const form = event.target;
-            const imageInput = form.querySelector('#image');
-            const descriptionInput = form.querySelector('#description');
-            const uploadError = document.getElementById('uploadError');
-
-            if (!imageInput.files.length) {
-                uploadError.textContent = 'Please select an image.';
-                uploadError.classList.remove('hidden');
-                imageInput.focus();
-                return;
-            }
-
-            if (descriptionInput.value.trim() === '') {
-                uploadError.textContent = 'Please provide a description.';
-                uploadError.classList.remove('hidden');
-                descriptionInput.focus();
-                return;
-            }
-
-            // Simulate image upload and post creation
-            const image = imageInput.files[0];
-            const description = descriptionInput.value.trim();
-            const post = createPost(image, description);
-            document.getElementById('communityPosts').prepend(post);
-
-            // Clear form
-            form.reset();
-            uploadError.classList.add('hidden');
-        }
-
-        function createPost(image, description) {
-            const post = document.createElement('div');
-            post.className = 'comment';
-
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(image);
-            img.alt = description;
-            img.loading = 'lazy';
-
-            const desc = document.createElement('p');
-            desc.textContent = description;
-
-            const actions = document.createElement('div');
-            actions.className = 'actions';
-
-            const likeButton = document.createElement('button');
-            likeButton.textContent = 'Like';
-            likeButton.onclick = () => toggleLike(likeButton);
-            likeButton.onkeydown = (event) => handleInteraction(event, () => toggleLike(likeButton));
-
-            const likeCount = document.createElement('span');
-            likeCount.className = 'like-count';
-            likeCount.textContent = '0';
-
-            actions.appendChild(likeButton);
-            actions.appendChild(likeCount);
-
-            post.appendChild(img);
-            post.appendChild(desc);
-            post.appendChild(actions);
-
-            return post;
-        }
-
-        function toggleLike(button) {
-            const likeCount = button.nextElementSibling;
-            const currentCount = parseInt(likeCount.textContent, 10);
-            likeCount.textContent = currentCount + 1;
-            button.disabled = true;
-        }
-
-        function handleInteraction(event, action) {
+        // For any element with mouse events, add keyboard support
+        function handleInteraction(event) {
+            // Handle both mouse and keyboard events
             if (event.type === 'click' || 
                 (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                action();
+                // Your action here
+                alert('Learn More button clicked');
             }
         }
     </script>
