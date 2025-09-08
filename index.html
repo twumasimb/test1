@@ -3,276 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Landing Page with Dark/Light Theme Toggle</title>
+    <title>Recipe Sharing Page</title>
     <style>
-        /* Base styles */
+        /* Accessibility-focused CSS with focus indicators */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0 0 80px 0;
             color: #333;
-            background-color: #f4f4f4;
-            transition: background-color 0.3s, color 0.3s;
+            background-color: #f9f9f9;
         }
-
-        /* Dark theme styles */
-        body.dark-theme {
-            background-color: #333;
-            color: #f4f4f4;
+        header, main, footer {
+            padding: 20px;
+            text-align: center;
         }
-
-        /* Focus indicators */
+        header {
+            background-color: #007BFF;
+            color: #fff;
+        }
+        main {
+            background-color: #fff;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #007BFF;
+            color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        h1, h2, h3 {
+            margin: 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            margin: 10px 0;
+        }
+        input, select, textarea, button {
+            margin: 5px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
-
-        /* Header styles */
-        header {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 1rem 0;
-            text-align: center;
+        .error {
+            color: #d00;
+            font-weight: bold;
         }
-
-        header h1 {
-            margin: 0;
-            font-size: 2rem;
-        }
-
-        /* Navigation styles */
-        nav {
-            background-color: #0056b3;
-            padding: 0.5rem 0;
-        }
-
-        nav ul {
+        .recipe-list {
             list-style: none;
             padding: 0;
             margin: 0;
-            display: flex;
-            justify-content: center;
         }
-
-        nav ul li {
-            margin: 0 1rem;
-        }
-
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            transition: background-color 0.3s;
-        }
-
-        nav ul li a:hover {
-            background-color: #004494;
-        }
-
-        /* Hero section styles */
-        .hero {
-            background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
-            color: #fff;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-
-        .hero button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .hero button:hover {
-            background-color: #0056b3;
-        }
-
-        /* Features section styles */
-        .features {
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .features h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .features ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .features ul li {
-            flex: 1 1 200px;
-            margin: 1rem;
-            padding: 1rem;
-            background-color: #fff;
+        .recipe-list li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
         }
-
-        .features ul li h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        .rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
-        .features ul li p {
-            font-size: 1rem;
+        .rating input[type="radio"] {
+            display: none;
         }
-
-        /* Call-to-action section styles */
-        .cta {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .cta h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .cta button {
-            background-color: #fff;
-            color: #007BFF;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1rem;
+        .rating label {
+            font-size: 24px;
+            color: #ccc;
+            margin: 0 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-
-        .cta button:hover {
-            background-color: #e0e0e0;
+        .rating input[type="radio"]:checked + label {
+            color: #ffcc00;
         }
-
-        /* Theme toggle styles */
-        .theme-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .search {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
         }
-
-        .theme-toggle:hover {
-            background-color: #0056b3;
-        }
-
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .hero h2 {
-                font-size: 2rem;
-            }
-
-            .features ul {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .features ul li {
-                width: 100%;
-                max-width: 300px;
-            }
+        .search input {
+            width: 70%;
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Welcome to Our Interactive Landing Page</h1>
         <nav role="navigation" aria-label="Main navigation">
-            <ul>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#cta">Sign Up</a></li>
-            </ul>
+            <a href="#recipes">Recipes</a>
+            <a href="#submit-recipe">Submit a Recipe</a>
         </nav>
     </header>
+    <main>
+        <section id="recipes">
+            <h1>Recipe Sharing Page</h1>
+            <div class="search">
+                <input type="text" id="search-ingredient" placeholder="Search by ingredient" aria-label="Search by ingredient">
+                <button onclick="searchRecipes()">Search</button>
+            </div>
+            <ul class="recipe-list" aria-live="polite" aria-atomic="true" id="recipe-list">
+                <!-- Recipes will be dynamically added here -->
+            </ul>
+        </section>
+        <section id="submit-recipe">
+            <h2>Submit a Recipe</h2>
+            <form id="recipe-form" onsubmit="submitRecipe(event)">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required aria-required="true">
 
-    <button class="theme-toggle" aria-label="Toggle dark/light theme" onclick="toggleTheme()">Toggle Theme</button>
+                <label for="ingredients">Ingredients:</label>
+                <textarea id="ingredients" name="ingredients" required aria-required="true"></textarea>
 
-    <section class="hero" aria-label="Hero section">
-        <h2>Discover the Power of Our Platform</h2>
-        <p>Experience seamless integration and unparalleled performance with our cutting-edge technology.</p>
-        <button onclick="alert('Sign up button clicked!')">Get Started</button>
-    </section>
+                <label for="instructions">Instructions:</label>
+                <textarea id="instructions" name="instructions" required aria-required="true"></textarea>
 
-    <section class="features" id="features" aria-label="Features section">
-        <h2>Key Benefits</h2>
-        <ul>
-            <li>
-                <h3>Feature 1</h3>
-                <p>Description of feature 1 and its benefits.</p>
-            </li>
-            <li>
-                <h3>Feature 2</h3>
-                <p>Description of feature 2 and its benefits.</p>
-            </li>
-            <li>
-                <h3>Feature 3</h3>
-                <p>Description of feature 3 and its benefits.</p>
-            </li>
-        </ul>
-    </section>
+                <label for="rating">Rating:</label>
+                <div class="rating">
+                    <input type="radio" id="star1" name="rating" value="1" required aria-required="true">
+                    <label for="star1">★</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">★</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">★</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">★</label>
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5">★</label>
+                </div>
 
-    <section class="cta" id="cta" aria-label="Call-to-action section">
-        <h2>Join Us Today</h2>
-        <button onclick="alert('Sign up button clicked!')">Sign Up Now</button>
-    </section>
-
+                <button type="submit">Submit Recipe</button>
+            </form>
+        </section>
+    </main>
     <footer>
-        <p>&copy; 2023 Your Company. All rights reserved.</p>
+        <p>&copy; 2023 Recipe Sharing Page. All rights reserved.</p>
     </footer>
-
     <script>
-        function toggleTheme() {
-            document.body.classList.toggle('dark-theme');
+        // Store recipes in local storage
+        const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+
+        // Function to display recipes
+        function displayRecipes() {
+            const recipeList = document.getElementById('recipe-list');
+            recipeList.innerHTML = '';
+
+            recipes.forEach((recipe, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <h3>${recipe.title}</h3>
+                    <p><strong>Ingredients:</strong> ${recipe.ingredients}</p>
+                    <p><strong>Instructions:</strong> ${recipe.instructions}</p>
+                    <p><strong>Rating:</strong> ${recipe.rating} <span class="rating">${'★'.repeat(recipe.rating)}</span></p>
+                    <button onclick="deleteRecipe(${index})">Delete</button>
+                `;
+                recipeList.appendChild(li);
+            });
         }
 
-        // Ensure all interactive elements have keyboard support
-        function handleInteraction(event) {
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                // Your action here
-                alert('Button clicked or activated via keyboard');
+        // Function to submit a recipe
+        function submitRecipe(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const ingredients = document.getElementById('ingredients').value;
+            const instructions = document.getElementById('instructions').value;
+            const rating = document.querySelector('input[name="rating"]:checked').value;
+
+            if (title && ingredients && instructions && rating) {
+                const newRecipe = {
+                    title,
+                    ingredients,
+                    instructions,
+                    rating: parseInt(rating, 10)
+                };
+
+                recipes.push(newRecipe);
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+                displayRecipes();
+                document.getElementById('recipe-form').reset();
+            } else {
+                alert('Please fill in all fields.');
             }
         }
 
-        // Apply to elements: onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)"
-        document.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', handleInteraction);
-            button.addEventListener('keydown', handleInteraction);
-        });
+        // Function to delete a recipe
+        function deleteRecipe(index) {
+            recipes.splice(index, 1);
+            localStorage.setItem('recipes', JSON.stringify(recipes));
+            displayRecipes();
+        }
+
+        // Function to search recipes by ingredient
+        function searchRecipes() {
+            const searchIngredient = document.getElementById('search-ingredient').value.toLowerCase();
+            const filteredRecipes = recipes.filter(recipe => recipe.ingredients.toLowerCase().includes(searchIngredient));
+            const recipeList = document.getElementById('recipe-list');
+            recipeList.innerHTML = '';
+
+            filteredRecipes.forEach((recipe, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <h3>${recipe.title}</h3>
+                    <p><strong>Ingredients:</strong> ${recipe.ingredients}</p>
+                    <p><strong>Instructions:</strong> ${recipe.instructions}</p>
+                    <p><strong>Rating:</strong> ${recipe.rating} <span class="rating">${'★'.repeat(recipe.rating)}</span></p>
+                    <button onclick="deleteRecipe(${index})">Delete</button>
+                `;
+                recipeList.appendChild(li);
+            });
+        }
+
+        // Load and display existing recipes on page load
+        displayRecipes();
     </script>
 </body>
 </html>
