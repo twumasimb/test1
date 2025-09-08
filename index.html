@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Recommendation Form</title>
+    <title>Event RSVP Form</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
@@ -11,8 +11,8 @@
             line-height: 1.6;
             margin: 0;
             padding: 0 0 80px 0;
+            background-color: #f4f4f4;
             color: #333;
-            background-color: #f9f9f9;
         }
         header, main, footer {
             padding: 20px;
@@ -20,11 +20,13 @@
         header {
             background-color: #0066cc;
             color: #fff;
+            text-align: center;
         }
         main {
-            max-width: 800px;
-            margin: 0 auto;
             background-color: #fff;
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         footer {
@@ -33,173 +35,150 @@
             color: #fff;
         }
         h1, h2, h3 {
-            color: #0066cc;
+            margin: 0 0 10px;
         }
         form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
         }
         label {
-            font-weight: bold;
+            margin-bottom: 5px;
         }
         input, select, textarea {
+            margin-bottom: 15px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
         button {
-            padding: 10px;
+            padding: 10px 20px;
             background-color: #0066cc;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #0053a3;
+            background-color: #0055aa;
         }
-        .book-recommendation {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .book-card {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 4px;
-        }
-        .book-card img {
-            max-width: 100px;
-            height: auto;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .book-card h3 {
-            margin: 0;
-        }
-        .book-card p {
-            margin: 5px 0;
-        }
-        /* Ensure all interactive elements have visible focus indicators */
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-        /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
+        }
+        .error {
+            color: #d9534f;
+            font-size: 0.9em;
+        }
+        .attendees {
+            margin-top: 20px;
+        }
+        .attendee {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .attendee:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
 <body>
     <header>
-        <nav role="navigation" aria-label="Main navigation">
-            <ul>
-                <li><a href="#form">Book Recommendation Form</a></li>
-                <li><a href="#recommendations">Book Recommendations</a></li>
-            </ul>
-        </nav>
+        <h1>Event RSVP Form</h1>
     </header>
     <main>
-        <h1>Book Recommendation Form</h1>
-        <form id="bookForm">
-            <label for="genre">Favorite Genre:</label>
-            <select id="genre" name="genre" required>
-                <option value="" disabled selected>Select a genre</option>
-                <option value="fiction">Fiction</option>
-                <option value="non-fiction">Non-Fiction</option>
-                <option value="mystery">Mystery</option>
-                <option value="fantasy">Fantasy</option>
-                <option value="science-fiction">Science Fiction</option>
-                <option value="romance">Romance</option>
-                <option value="biography">Biography</option>
-            </select>
+        <section>
+            <h2>Confirm Your Attendance</h2>
+            <form id="rsvpForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <span class="error" id="nameError" aria-live="polite" aria-atomic="true"></span>
 
-            <label for="author">Favorite Author:</label>
-            <input type="text" id="author" name="author" placeholder="Enter author name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <span class="error" id="emailError" aria-live="polite" aria-atomic="true"></span>
 
-            <button type="submit">Get Recommendations</button>
-        </form>
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+                <span class="error" id="phoneError" aria-live="polite" aria-atomic="true"></span>
 
-        <section id="recommendations" class="book-recommendation" aria-live="polite" aria-atomic="true">
-            <h2>Book Recommendations</h2>
-            <!-- Recommendations will be dynamically added here -->
+                <label for="attendance">Will you attend?</label>
+                <select id="attendance" name="attendance" required>
+                    <option value="">Select an option</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+                <span class="error" id="attendanceError" aria-live="polite" aria-atomic="true"></span>
+
+                <button type="submit" onmousedown="handleFormSubmit(event)" onkeydown="handleFormSubmit(event)">Submit</button>
+            </form>
+        </section>
+
+        <section class="attendees" aria-live="polite" aria-atomic="true">
+            <h2>Attendees</h2>
+            <ul id="attendeeList"></ul>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Book Recommendation Service. All rights reserved.</p>
+        <p>&copy; 2023 Event RSVP. All rights reserved.</p>
     </footer>
     <script>
         // Keyboard-accessible JavaScript functions
-        document.getElementById('bookForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        function handleFormSubmit(event) {
+            if (event.type === 'click' || (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                event.preventDefault();
+                const form = document.getElementById('rsvpForm');
+                const name = document.getElementById('name');
+                const email = document.getElementById('email');
+                const phone = document.getElementById('phone');
+                const attendance = document.getElementById('attendance');
+                const nameError = document.getElementById('nameError');
+                const emailError = document.getElementById('emailError');
+                const phoneError = document.getElementById('phoneError');
+                const attendanceError = document.getElementById('attendanceError');
+                const attendeeList = document.getElementById('attendeeList');
 
-            const genre = document.getElementById('genre').value;
-            const author = document.getElementById('author').value;
+                // Clear previous errors
+                nameError.textContent = '';
+                emailError.textContent = '';
+                phoneError.textContent = '';
+                attendanceError.textContent = '';
 
-            // Simulate fetching recommendations
-            const recommendations = getBookRecommendations(genre, author);
+                let isValid = true;
 
-            // Clear previous recommendations
-            const recommendationsSection = document.getElementById('recommendations');
-            recommendationsSection.innerHTML = '<h2>Book Recommendations</h2>';
-
-            // Display new recommendations
-            recommendations.forEach(book => {
-                const bookCard = document.createElement('div');
-                bookCard.className = 'book-card';
-
-                const bookImage = document.createElement('img');
-                bookImage.src = book.cover;
-                bookImage.alt = book.title + ' book cover';
-                bookCard.appendChild(bookImage);
-
-                const bookDetails = document.createElement('div');
-                const bookTitle = document.createElement('h3');
-                bookTitle.textContent = book.title;
-                bookDetails.appendChild(bookTitle);
-
-                const bookAuthor = document.createElement('p');
-                bookAuthor.textContent = 'Author: ' + book.author;
-                bookDetails.appendChild(bookAuthor);
-
-                const bookDescription = document.createElement('p');
-                bookDescription.textContent = book.description;
-                bookDetails.appendChild(bookDescription);
-
-                bookCard.appendChild(bookDetails);
-                recommendationsSection.appendChild(bookCard);
-            });
-        });
-
-        // Simulated function to fetch book recommendations
-        function getBookRecommendations(genre, author) {
-            // This is a placeholder function. In a real application, you would fetch data from an API.
-            return [
-                {
-                    title: 'The Great Gatsby',
-                    author: 'F. Scott Fitzgerald',
-                    cover: 'https://example.com/great-gatsby.jpg',
-                    description: 'A novel about the American Dream and the decline of the Jazz Age.'
-                },
-                {
-                    title: '1984',
-                    author: 'George Orwell',
-                    cover: 'https://example.com/1984.jpg',
-                    description: 'A dystopian novel about a totalitarian society and the struggle for individual freedom.'
-                },
-                {
-                    title: 'To Kill a Mockingbird',
-                    author: 'Harper Lee',
-                    cover: 'https://example.com/to-kill-a-mockingbird.jpg',
-                    description: 'A novel about racial injustice and moral growth in the American South.'
+                if (name.value.trim() === '') {
+                    nameError.textContent = 'Name is required.';
+                    isValid = false;
                 }
-            ].filter(book => book.author.toLowerCase().includes(author.toLowerCase()) || book.genre === genre);
+
+                if (email.value.trim() === '') {
+                    emailError.textContent = 'Email is required.';
+                    isValid = false;
+                }
+
+                if (phone.value.trim() === '') {
+                    phoneError.textContent = 'Phone number is required.';
+                    isValid = false;
+                }
+
+                if (attendance.value === '') {
+                    attendanceError.textContent = 'Attendance is required.';
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    const attendee = document.createElement('li');
+                    attendee.className = 'attendee';
+                    attendee.textContent = `${name.value} - ${email.value} - ${phone.value} - ${attendance.value === 'yes' ? 'Attending' : 'Not Attending'}`;
+                    attendeeList.appendChild(attendee);
+
+                    // Clear form fields
+                    form.reset();
+                }
+            }
         }
     </script>
 </body>
