@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible To-Do List</title>
+    <title>Gardening Community</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
@@ -11,73 +11,61 @@
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
             color: #333;
+            background-color: #f9f9f9;
+        }
+        header, main, footer {
+            padding: 20px;
         }
         header {
-            background: #007BFF;
+            background-color: #4CAF50;
             color: #fff;
-            padding: 1rem 0;
-            text-align: center;
         }
-        main {
-            padding: 2rem;
-        }
-        h1 {
-            margin: 0;
-        }
-        form {
-            margin-bottom: 1rem;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            box-sizing: border-box;
-        }
-        button {
-            background: #007BFF;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        .task-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .task-item {
-            background: #fff;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .task-item.completed {
-            background: #d4edda;
-            text-decoration: line-through;
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
         }
-        .task-item button {
-            background: none;
+        main {
+            background-color: #fff;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #4CAF50;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: #fff;
             border: none;
-            color: #007BFF;
             cursor: pointer;
-            font-size: 1rem;
+            transition: background-color 0.3s;
         }
-        .task-item button:hover {
-            text-decoration: underline;
+        button:hover {
+            background-color: #45a049;
         }
-        .task-item button:focus, input:focus, select:focus, button:focus {
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
@@ -85,121 +73,173 @@
             outline: 3px solid #ffffff;
         }
         .error {
-            color: #dc3545;
+            color: #ff0000;
             font-weight: bold;
+        }
+        .comment {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .comment p {
+            margin: 0;
+        }
+        .comment .username {
+            font-weight: bold;
+        }
+        .comment .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        .comment .actions button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .comment .actions button:hover {
+            background-color: #45a049;
+        }
+        .comment .actions button:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+        .comment .actions button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .comment .actions .like-count {
+            margin-left: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            main {
+                margin: 10px;
+            }
+            nav a {
+                margin: 0 5px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#main-content" class="skip-link">Skip to main content</a>
+            <a href="#home">Home</a>
+            <a href="#upload">Upload</a>
+            <a href="#community">Community</a>
         </nav>
-        <h1>Accessible To-Do List</h1>
     </header>
-    <main id="main-content">
-        <form id="task-form">
-            <label for="task-description">Task Description:</label>
-            <input type="text" id="task-description" name="task-description" required aria-describedby="description-error">
-            <span id="description-error" class="error" aria-live="assertive" style="display: none;">Task description is required.</span>
-
-            <label for="task-priority">Priority Level:</label>
-            <select id="task-priority" name="task-priority" required aria-describedby="priority-error">
-                <option value="">Select Priority</option>
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-            </select>
-            <span id="priority-error" class="error" aria-live="assertive" style="display: none;">Priority level is required.</span>
-
-            <label for="task-due-date">Due Date:</label>
-            <input type="date" id="task-due-date" name="task-due-date" required aria-describedby="date-error">
-            <span id="date-error" class="error" aria-live="assertive" style="display: none;">Due date is required.</span>
-
-            <button type="submit">Add Task</button>
-        </form>
-
-        <ul class="task-list" aria-live="polite" aria-atomic="true" aria-relevant="additions removals">
-            <!-- Task items will be dynamically added here -->
-        </ul>
+    <main>
+        <h1>Gardening Community</h1>
+        <section id="upload">
+            <h2>Upload Your Plant or Garden</h2>
+            <form id="uploadForm" onsubmit="return handleUpload(event)">
+                <label for="image">Upload Image:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" required></textarea>
+                <button type="submit">Upload</button>
+            </form>
+            <div id="uploadError" class="error hidden" aria-live="assertive"></div>
+        </section>
+        <section id="community">
+            <h2>Community Contributions</h2>
+            <div id="communityPosts">
+                <!-- Posts will be dynamically added here -->
+            </div>
+        </section>
     </main>
     <footer>
-        <p>&copy; 2023 Accessible To-Do List. All rights reserved.</p>
+        <p>&copy; 2023 Gardening Community. All rights reserved.</p>
     </footer>
     <script>
         // Keyboard-accessible JavaScript functions
-        document.addEventListener('DOMContentLoaded', function () {
-            const taskForm = document.getElementById('task-form');
-            const taskList = document.querySelector('.task-list');
-            const descriptionInput = document.getElementById('task-description');
-            const prioritySelect = document.getElementById('task-priority');
-            const dueDateInput = document.getElementById('task-due-date');
-            const descriptionError = document.getElementById('description-error');
-            const priorityError = document.getElementById('priority-error');
-            const dateError = document.getElementById('date-error');
+        function handleUpload(event) {
+            event.preventDefault();
+            const form = event.target;
+            const imageInput = form.querySelector('#image');
+            const descriptionInput = form.querySelector('#description');
+            const uploadError = document.getElementById('uploadError');
 
-            taskForm.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                // Reset error messages
-                descriptionError.style.display = 'none';
-                priorityError.style.display = 'none';
-                dateError.style.display = 'none';
-
-                const description = descriptionInput.value.trim();
-                const priority = prioritySelect.value;
-                const dueDate = dueDateInput.value;
-
-                if (!description) {
-                    descriptionError.style.display = 'block';
-                    descriptionInput.focus();
-                    return;
-                }
-
-                if (!priority) {
-                    priorityError.style.display = 'block';
-                    prioritySelect.focus();
-                    return;
-                }
-
-                if (!dueDate) {
-                    dateError.style.display = 'block';
-                    dueDateInput.focus();
-                    return;
-                }
-
-                const taskItem = document.createElement('li');
-                taskItem.classList.add('task-item');
-                taskItem.innerHTML = `
-                    <span class="task-description">${description}</span>
-                    <span class="task-priority">Priority: ${priority}</span>
-                    <span class="task-due-date">Due: ${dueDate}</span>
-                    <button aria-label="Mark task as completed" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Complete</button>
-                    <button aria-label="Delete task" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Delete</button>
-                `;
-
-                taskItem.querySelector('button[aria-label="Mark task as completed"]').addEventListener('click', function () {
-                    taskItem.classList.toggle('completed');
-                });
-
-                taskItem.querySelector('button[aria-label="Delete task"]').addEventListener('click', function () {
-                    taskList.removeChild(taskItem);
-                });
-
-                taskList.appendChild(taskItem);
-
-                // Clear form inputs
-                descriptionInput.value = '';
-                prioritySelect.value = '';
-                dueDateInput.value = '';
-            });
-
-            function handleInteraction(event) {
-                if (event.type === 'click' || (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                    event.target.click();
-                }
+            if (!imageInput.files.length) {
+                uploadError.textContent = 'Please select an image.';
+                uploadError.classList.remove('hidden');
+                imageInput.focus();
+                return;
             }
-        });
+
+            if (descriptionInput.value.trim() === '') {
+                uploadError.textContent = 'Please provide a description.';
+                uploadError.classList.remove('hidden');
+                descriptionInput.focus();
+                return;
+            }
+
+            // Simulate image upload and post creation
+            const image = imageInput.files[0];
+            const description = descriptionInput.value.trim();
+            const post = createPost(image, description);
+            document.getElementById('communityPosts').prepend(post);
+
+            // Clear form
+            form.reset();
+            uploadError.classList.add('hidden');
+        }
+
+        function createPost(image, description) {
+            const post = document.createElement('div');
+            post.className = 'comment';
+
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(image);
+            img.alt = description;
+            img.loading = 'lazy';
+
+            const desc = document.createElement('p');
+            desc.textContent = description;
+
+            const actions = document.createElement('div');
+            actions.className = 'actions';
+
+            const likeButton = document.createElement('button');
+            likeButton.textContent = 'Like';
+            likeButton.onclick = () => toggleLike(likeButton);
+            likeButton.onkeydown = (event) => handleInteraction(event, () => toggleLike(likeButton));
+
+            const likeCount = document.createElement('span');
+            likeCount.className = 'like-count';
+            likeCount.textContent = '0';
+
+            actions.appendChild(likeButton);
+            actions.appendChild(likeCount);
+
+            post.appendChild(img);
+            post.appendChild(desc);
+            post.appendChild(actions);
+
+            return post;
+        }
+
+        function toggleLike(button) {
+            const likeCount = button.nextElementSibling;
+            const currentCount = parseInt(likeCount.textContent, 10);
+            likeCount.textContent = currentCount + 1;
+            button.disabled = true;
+        }
+
+        function handleInteraction(event, action) {
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                action();
+            }
+        }
     </script>
 </body>
 </html>
