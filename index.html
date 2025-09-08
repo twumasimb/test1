@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Work Sharing Platform</title>
+    <title>Pet Showcase</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
@@ -22,14 +22,6 @@
             background-color: #0066cc;
             color: #fff;
         }
-        nav {
-            margin-top: 10px;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
         main {
             background-color: #fff;
             margin: 20px auto;
@@ -43,159 +35,100 @@
             bottom: 0;
             width: 100%;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .pet-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            background-color: #f9f9f9;
         }
-        label {
-            margin: 10px 0;
+        .pet-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
-        input, textarea, button {
+        .pet-card h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .pet-card p {
             margin: 5px 0;
-            padding: 10px;
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
         }
-        button {
+        button, a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
             background-color: #0066cc;
             color: #fff;
+            text-decoration: none;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #0053a3;
+        button:hover, a:hover {
+            background-color: #0055aa;
         }
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+        button:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
-        .error {
-            color: #ff0000;
-            font-weight: bold;
-        }
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Creative Work Sharing Platform</h1>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#upload">Upload Work</a>
-            <a href="#gallery">Gallery</a>
-            <a href="#about">About</a>
+            <a href="#pets" aria-label="Go to pet showcase">Pet Showcase</a>
         </nav>
     </header>
-    <main>
-        <section id="upload">
-            <h2>Upload Your Creative Work</h2>
-            <form id="uploadForm" onsubmit="return handleFormSubmit(event)">
-                <label for="fileInput">Select a file to upload:</label>
-                <input type="file" id="fileInput" name="file" required>
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea>
-                <label for="tags">Tags (comma-separated):</label>
-                <input type="text" id="tags" name="tags" required>
-                <button type="submit">Upload</button>
-                <div id="error" class="error hidden" aria-live="assertive"></div>
-            </form>
+    <main id="pets">
+        <h1>Pet Showcase</h1>
+        <section class="pet-card">
+            <img src="https://via.placeholder.com/600x400" alt="A cute golden retriever puppy playing with a ball" aria-label="Golden Retriever Puppy">
+            <h2>Max</h2>
+            <p><strong>Breed:</strong> Golden Retriever</p>
+            <p><strong>Age:</strong> 2 years</p>
+            <p><strong>Fun Fact:</strong> Max loves to play fetch and can catch a ball mid-air!</p>
         </section>
-        <section id="gallery">
-            <h2>Gallery</h2>
-            <div id="galleryContent">
-                <!-- Gallery items will be dynamically added here -->
-            </div>
+        <section class="pet-card">
+            <img src="https://via.placeholder.com/600x400" alt="A black and white cat sitting on a windowsill" aria-label="Black and White Cat">
+            <h2>Luna</h2>
+            <p><strong>Breed:</strong> Domestic Shorthair</p>
+            <p><strong>Age:</strong> 3 years</p>
+            <p><strong>Fun Fact:</strong> Luna is a master at opening doors and loves to explore new rooms.</p>
         </section>
-        <section id="about">
-            <h2>About</h2>
-            <p>Welcome to the Creative Work Sharing Platform! Here, you can upload and share your creative work, such as photos and art. All users can add descriptions and tags to their work, making it easy to discover and enjoy.</p>
+        <section class="pet-card">
+            <img src="https://via.placeholder.com/600x400" alt="A small white rabbit eating a carrot" aria-label="White Rabbit">
+            <h2>Bunny</h2>
+            <p><strong>Breed:</strong> Netherland Dwarf</p>
+            <p><strong>Age:</strong> 1 year</p>
+            <p><strong>Fun Fact:</strong> Bunny is very gentle and enjoys being petted, especially on the head.</p>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Creative Work Sharing Platform. All rights reserved.</p>
+        <p>&copy; 2023 Pet Showcase. All rights reserved.</p>
     </footer>
     <script>
         // Keyboard-accessible JavaScript functions
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            const fileInput = document.getElementById('fileInput');
-            const description = document.getElementById('description');
-            const tags = document.getElementById('tags');
-            const error = document.getElementById('error');
-
-            // Clear previous errors
-            error.textContent = '';
-            error.classList.add('hidden');
-
-            // Basic validation
-            if (!fileInput.files.length) {
-                error.textContent = 'Please select a file to upload.';
-                error.classList.remove('hidden');
-                return;
+        function handleInteraction(event) {
+            // Handle both mouse and keyboard events
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                // Your action here
+                alert('Interaction detected!');
             }
-
-            if (description.value.trim() === '') {
-                error.textContent = 'Please provide a description.';
-                error.classList.remove('hidden');
-                return;
-            }
-
-            if (tags.value.trim() === '') {
-                error.textContent = 'Please provide at least one tag.';
-                error.classList.remove('hidden');
-                return;
-            }
-
-            // Simulate file upload and display in gallery
-            const file = fileInput.files[0];
-            const galleryContent = document.getElementById('galleryContent');
-            const galleryItem = document.createElement('div');
-            galleryItem.className = 'gallery-item';
-
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.alt = description.value;
-            img.loading = 'lazy';
-
-            const desc = document.createElement('p');
-            desc.textContent = description.value;
-
-            const tagList = document.createElement('ul');
-            tags.value.split(',').forEach(tag => {
-                const li = document.createElement('li');
-                li.textContent = tag.trim();
-                tagList.appendChild(li);
-            });
-
-            galleryItem.appendChild(img);
-            galleryItem.appendChild(desc);
-            galleryItem.appendChild(tagList);
-            galleryContent.appendChild(galleryItem);
-
-            // Clear form fields
-            fileInput.value = '';
-            description.value = '';
-            tags.value = '';
         }
 
-        // Ensure all interactive elements are keyboard accessible
-        document.querySelectorAll('button, input, select, textarea, a').forEach(element => {
+        // Apply to elements: onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)"
+        document.querySelectorAll('button, a').forEach(element => {
+            element.addEventListener('mousedown', handleInteraction);
             element.addEventListener('keydown', handleInteraction);
         });
-
-        function handleInteraction(event) {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                event.target.click();
-            }
-        }
     </script>
 </body>
 </html>
