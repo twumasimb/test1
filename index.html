@@ -3,193 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Form with Validation</title>
+    <title>Personal Blog - Read, Comment, and Search</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 0 0 80px 0;
+            color: #333;
+            background-color: #f9f9f9;
         }
-
-        .container {
-            max-width: 600px;
+        header, main, footer {
+            padding: 20px;
+        }
+        header {
+            background-color: #0066cc;
+            color: #fff;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            max-width: 800px;
             margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        h1 {
-            margin-top: 0;
+        h1, h2, h3 {
+            color: #0066cc;
         }
-
+        article {
+            margin-bottom: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
         label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
+            margin-bottom: 5px;
         }
-
-        input, textarea {
+        input, textarea, button {
             width: 100%;
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
-        input:focus, textarea:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
-        }
-
-        .error {
-            color: red;
-            font-size: 0.9em;
-            margin-top: -15px;
-            margin-bottom: 15px;
-        }
-
         button {
-            background: #0066cc;
+            background-color: #0066cc;
             color: #fff;
-            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
         }
-
-        button:focus {
+        button:hover {
+            background-color: #0053a3;
+        }
+        .error {
+            color: #d00;
+            margin-top: 5px;
+        }
+        /* Focus indicators */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-
-        .success {
-            color: green;
-            font-size: 1em;
-            margin-top: 20px;
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: 3px solid #ffffff;
+        }
+        /* Responsive design */
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            nav a {
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#main-content" tabindex="1">Skip to main content</a>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
         </nav>
     </header>
-    <main id="main-content">
-        <h1>Interactive Form with Validation</h1>
-        <form id="registrationForm" novalidate>
-            <section>
+    <main>
+        <h1>Personal Blog</h1>
+        <section id="search">
+            <h2>Search Articles</h2>
+            <form id="search-form">
+                <label for="search-input">Search:</label>
+                <input type="text" id="search-input" name="search" placeholder="Search articles..." required>
+                <button type="submit">Search</button>
+            </form>
+        </section>
+        <section id="articles">
+            <h2>Latest Articles</h2>
+            <article>
+                <h3>Article Title 1</h3>
+                <p>Published on: <time datetime="2023-10-01">October 1, 2023</time></p>
+                <p>Summary of the article content. This is a placeholder text for the article summary.</p>
+                <a href="#comments" aria-label="Read comments for Article Title 1">Read Comments</a>
+            </article>
+            <article>
+                <h3>Article Title 2</h3>
+                <p>Published on: <time datetime="2023-09-25">September 25, 2023</time></p>
+                <p>Summary of the article content. This is a placeholder text for the article summary.</p>
+                <a href="#comments" aria-label="Read comments for Article Title 2">Read Comments</a>
+            </article>
+        </section>
+        <section id="comments">
+            <h2>Leave a Comment</h2>
+            <form id="comment-form">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" required>
-                <span id="nameError" class="error" aria-live="polite" aria-atomic="true"></span>
-            </section>
-            <section>
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
-                <span id="emailError" class="error" aria-live="polite" aria-atomic="true"></span>
-            </section>
-            <section>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <span id="passwordError" class="error" aria-live="polite" aria-atomic="true"></span>
-            </section>
-            <section>
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
-                <span id="phoneError" class="error" aria-live="polite" aria-atomic="true"></span>
-            </section>
-            <button type="submit">Submit</button>
-            <span id="successMessage" class="success" aria-live="polite" aria-atomic="true"></span>
-        </form>
+                <label for="comment">Comment:</label>
+                <textarea id="comment" name="comment" required></textarea>
+                <button type="submit">Submit Comment</button>
+                <div id="error-message" class="error" aria-live="assertive" aria-atomic="true" hidden></div>
+            </form>
+        </section>
     </main>
     <footer>
-        <p>&copy; 2023 Your Company. All rights reserved.</p>
+        <p>&copy; 2023 Personal Blog. All rights reserved.</p>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('registrationForm');
-            const nameInput = document.getElementById('name');
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            const phoneInput = document.getElementById('phone');
-            const nameError = document.getElementById('nameError');
-            const emailError = document.getElementById('emailError');
-            const passwordError = document.getElementById('passwordError');
-            const phoneError = document.getElementById('phoneError');
-            const successMessage = document.getElementById('successMessage');
-
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                clearErrors();
-                let isValid = true;
-
-                if (nameInput.value.trim() === '') {
-                    nameError.textContent = 'Name is required.';
-                    nameInput.focus();
-                    isValid = false;
+        // Keyboard-accessible JavaScript functions
+        function handleInteraction(event) {
+            // Handle both mouse and keyboard events
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                // Your action here
+                if (event.target.type === 'submit') {
+                    event.preventDefault();
+                    submitForm(event.target.closest('form'));
                 }
+            }
+        }
 
-                if (!emailInput.value.trim().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-                    emailError.textContent = 'Please enter a valid email address.';
-                    emailInput.focus();
-                    isValid = false;
-                }
+        function submitForm(form) {
+            const name = form.querySelector('#name').value;
+            const email = form.querySelector('#email').value;
+            const comment = form.querySelector('#comment').value;
+            const errorMessage = form.querySelector('#error-message');
 
-                if (passwordInput.value.trim().length < 8) {
-                    passwordError.textContent = 'Password must be at least 8 characters long.';
-                    passwordInput.focus();
-                    isValid = false;
-                }
-
-                if (!phoneInput.value.trim().match(/^[0-9]{10}$/)) {
-                    phoneError.textContent = 'Please enter a valid 10-digit phone number.';
-                    phoneInput.focus();
-                    isValid = false;
-                }
-
-                if (isValid) {
-                    successMessage.textContent = 'Form submitted successfully!';
-                    form.reset();
-                }
-            });
-
-            function clearErrors() {
-                nameError.textContent = '';
-                emailError.textContent = '';
-                passwordError.textContent = '';
-                phoneError.textContent = '';
-                successMessage.textContent = '';
+            if (!name || !email || !comment) {
+                errorMessage.textContent = 'All fields are required.';
+                errorMessage.hidden = false;
+                return;
             }
 
-            // Real-time validation
-            nameInput.addEventListener('input', function () {
-                if (nameInput.value.trim() !== '') {
-                    nameError.textContent = '';
-                }
-            });
+            // Simulate form submission
+            errorMessage.textContent = 'Comment submitted successfully!';
+            errorMessage.hidden = false;
+            form.reset();
+        }
 
-            emailInput.addEventListener('input', function () {
-                if (emailInput.value.trim().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-                    emailError.textContent = '';
-                }
-            });
-
-            passwordInput.addEventListener('input', function () {
-                if (passwordInput.value.trim().length >= 8) {
-                    passwordError.textContent = '';
-                }
-            });
-
-            phoneInput.addEventListener('input', function () {
-                if (phoneInput.value.trim().match(/^[0-9]{10}$/)) {
-                    phoneError.textContent = '';
-                }
-            });
+        // Apply to elements
+        document.querySelectorAll('button, input[type="submit"]').forEach(element => {
+            element.addEventListener('mousedown', handleInteraction);
+            element.addEventListener('keydown', handleInteraction);
         });
     </script>
 </body>
