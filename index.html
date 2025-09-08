@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Quiz</title>
+    <title>Interactive Weather Dashboard</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
@@ -11,171 +11,198 @@
             line-height: 1.6;
             margin: 0;
             padding: 0 0 80px 0;
-            background-color: #f4f4f4;
             color: #333;
+            background-color: #f4f4f4;
         }
         header, main, footer {
             padding: 20px;
+            text-align: center;
         }
         header {
-            background-color: #007bff;
+            background-color: #007BFF;
             color: #fff;
-            text-align: center;
         }
         main {
             background-color: #fff;
-            margin: 20px auto;
-            max-width: 800px;
+            margin: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         footer {
-            background-color: #333;
+            background-color: #007BFF;
             color: #fff;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        .search-container {
+            margin: 20px auto;
+            max-width: 600px;
             text-align: center;
         }
-        h1, h2 {
-            margin: 0;
+        .search-container input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        .quiz-container {
-            margin: 20px 0;
+        .search-container button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
         }
-        .question {
-            margin-bottom: 20px;
+        .search-container button:hover {
+            background-color: #0056b3;
         }
-        .question p {
-            margin: 0;
+        .weather-card {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .options {
+        .weather-card h2 {
+            margin-top: 0;
+        }
+        .forecast-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        .options li {
+        .forecast-list li {
             margin: 10px 0;
-        }
-        .options label {
-            cursor: pointer;
-        }
-        .options input[type="radio"] {
-            margin-right: 10px;
-        }
-        .submit-btn {
-            display: block;
-            width: 100%;
             padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+            background-color: #e9e9e9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-        .submit-btn:focus {
+        .forecast-list li h3 {
+            margin: 0;
+        }
+        .forecast-list li p {
+            margin: 5px 0 0;
+        }
+        /* Focus indicators */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-        .feedback {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 5px;
-        }
-        .feedback.error {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-        }
-        .quiz-results {
-            margin-top: 20px;
-        }
-        .quiz-results h2 {
-            margin-bottom: 10px;
-        }
-        .quiz-results p {
-            margin: 0;
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: 3px solid #ffffff;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Interactive Quiz</h1>
+        <h1>Interactive Weather Dashboard</h1>
     </header>
     <main>
-        <section class="quiz-container" aria-live="polite" aria-atomic="true">
-            <div class="question" id="question1" aria-hidden="true">
-                <p>What is the capital of France?</p>
-                <ul class="options">
-                    <li><label><input type="radio" name="q1" value="a" id="q1a"> A) Berlin</label></li>
-                    <li><label><input type="radio" name="q1" value="b" id="q1b"> B) Paris</label></li>
-                    <li><label><input type="radio" name="q1" value="c" id="q1c"> C) Madrid</label></li>
-                    <li><label><input type="radio" name="q1" value="d" id="q1d"> D) Rome</label></li>
-                </ul>
-                <button class="submit-btn" onclick="checkAnswer('q1', 'b')">Submit Answer</button>
-                <div class="feedback" aria-live="polite" aria-atomic="true" aria-hidden="true"></div>
-            </div>
-            <div class="question" id="question2" aria-hidden="true">
-                <p>What is the largest planet in our solar system?</p>
-                <ul class="options">
-                    <li><label><input type="radio" name="q2" value="a" id="q2a"> A) Earth</label></li>
-                    <li><label><input type="radio" name="q2" value="b" id="q2b"> B) Jupiter</label></li>
-                    <li><label><input type="radio" name="q2" value="c" id="q2c"> C) Mars</label></li>
-                    <li><label><input type="radio" name="q2" value="d" id="q2d"> D) Saturn</label></li>
-                </ul>
-                <button class="submit-btn" onclick="checkAnswer('q2', 'b')">Submit Answer</button>
-                <div class="feedback" aria-live="polite" aria-atomic="true" aria-hidden="true"></div>
-            </div>
-            <div class="quiz-results" aria-hidden="true">
-                <h2>Quiz Results</h2>
-                <p id="result-text"></p>
-            </div>
+        <section class="search-container">
+            <form id="weatherForm" role="search" aria-label="Search for weather by city">
+                <label for="cityInput" class="sr-only">Enter city name:</label>
+                <input type="text" id="cityInput" name="city" placeholder="Enter city name" required>
+                <button type="submit">Search</button>
+            </form>
+        </section>
+        <section id="weatherResults" aria-live="polite" aria-atomic="true" aria-relevant="additions" role="region" aria-label="Weather results">
+            <!-- Weather results will be dynamically inserted here -->
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Interactive Quiz. All rights reserved.</p>
+        <p>&copy; 2023 Interactive Weather Dashboard. All rights reserved.</p>
     </footer>
     <script>
-        // Function to check the answer and provide feedback
-        function checkAnswer(questionId, correctAnswer) {
-            const questionElement = document.getElementById(questionId);
-            const options = questionElement.querySelectorAll('input[type="radio"]');
-            const feedbackElement = questionElement.querySelector('.feedback');
-            let selectedAnswer = '';
-
-            options.forEach(option => {
-                if (option.checked) {
-                    selectedAnswer = option.value;
+        // Function to fetch weather data from an API
+        async function fetchWeatherData(city) {
+            const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            });
-
-            if (selectedAnswer === correctAnswer) {
-                feedbackElement.textContent = 'Correct! Well done.';
-                feedbackElement.classList.add('success');
-                feedbackElement.classList.remove('error');
-                feedbackElement.setAttribute('aria-hidden', 'false');
-            } else {
-                feedbackElement.textContent = 'Incorrect. Please try again.';
-                feedbackElement.classList.add('error');
-                feedbackElement.classList.remove('success');
-                feedbackElement.setAttribute('aria-hidden', 'false');
-            }
-
-            // Hide the question and show the next one
-            questionElement.setAttribute('aria-hidden', 'true');
-            const nextQuestion = document.querySelector(`#${questionId}:not([aria-hidden="true"]) + .question`);
-            if (nextQuestion) {
-                nextQuestion.setAttribute('aria-hidden', 'false');
-            } else {
-                showResults();
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                return null;
             }
         }
 
-        // Function to show quiz results
-        function showResults() {
-            const quizResults = document.querySelector('.quiz-results');
-            const resultText = quizResults.querySelector('#result-text');
-            resultText.textContent = 'You have completed the quiz. Thank you for participating!';
-            quizResults.setAttribute('aria-hidden', 'false');
+        // Function to fetch 24-hour forecast data
+        async function fetchForecastData(city) {
+            const apiKey = 'YOUR_API_KEY'; // Replace with your actual API key
+            const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apiKey}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching forecast data:', error);
+                return null;
+            }
         }
+
+        // Function to display weather data
+        function displayWeatherData(data) {
+            if (data) {
+                const weatherCard = document.createElement('div');
+                weatherCard.className = 'weather-card';
+                weatherCard.innerHTML = `
+                    <h2>Current Weather in ${data.name}</h2>
+                    <p>Temperature: ${data.main.temp}°C</p>
+                    <p>Conditions: ${data.weather[0].description}</p>
+                `;
+                document.getElementById('weatherResults').appendChild(weatherCard);
+            } else {
+                document.getElementById('weatherResults').innerHTML = '<p>Failed to fetch weather data. Please try again.</p>';
+            }
+        }
+
+        // Function to display forecast data
+        function displayForecastData(data) {
+            if (data) {
+                const forecastList = document.createElement('ul');
+                forecastList.className = 'forecast-list';
+                data.list.forEach((forecast, index) => {
+                    if (index % 8 === 0) { // Show every 3-hour forecast
+                        const forecastItem = document.createElement('li');
+                        forecastItem.innerHTML = `
+                            <h3>${new Date(forecast.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</h3>
+                            <p>Temperature: ${forecast.main.temp}°C</p>
+                            <p>Conditions: ${forecast.weather[0].description}</p>
+                        `;
+                        forecastList.appendChild(forecastItem);
+                    }
+                });
+                document.getElementById('weatherResults').appendChild(forecastList);
+            } else {
+                document.getElementById('weatherResults').innerHTML = '<p>Failed to fetch forecast data. Please try again.</p>';
+            }
+        }
+
+        // Event listener for form submission
+        document.getElementById('weatherForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const city = document.getElementById('cityInput').value.trim();
+            if (city) {
+                document.getElementById('weatherResults').innerHTML = '<p>Loading weather data...</p>';
+                const weatherData = await fetchWeatherData(city);
+                displayWeatherData(weatherData);
+                const forecastData = await fetchForecastData(city);
+                displayForecastData(forecastData);
+            } else {
+                document.getElementById('weatherResults').innerHTML = '<p>Please enter a valid city name.</p>';
+            }
+        });
     </script>
 </body>
 </html>
