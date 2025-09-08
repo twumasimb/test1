@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Countdown Timer</title>
+    <title>User Profile Page</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
@@ -11,66 +11,79 @@
             line-height: 1.6;
             margin: 0;
             padding: 0 0 80px 0;
-            background-color: #f4f4f4;
             color: #333;
+            background-color: #f9f9f9;
         }
-
         header, main, footer {
             padding: 20px;
-            text-align: center;
         }
-
         header {
-            background-color: #007bff;
+            background-color: #0066cc;
             color: #fff;
         }
-
         main {
             background-color: #fff;
-            margin: 20px auto;
-            max-width: 800px;
+            margin: 20px 0;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
         footer {
-            background-color: #333;
+            background-color: #0066cc;
             color: #fff;
+            text-align: center;
         }
-
-        .countdown-container {
+        h1, h2, h3 {
+            margin: 0 0 10px;
+        }
+        .profile-bio {
+            margin-bottom: 20px;
+        }
+        .avatar-gallery {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-
-        .countdown-item {
-            margin: 0 10px;
-            font-size: 24px;
-            font-weight: bold;
+        .avatar-gallery img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #0066cc;
         }
-
-        .progress-bar {
-            width: 100%;
-            height: 30px;
-            background-color: #e0e0e0;
+        .follow-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: #fff;
+            border: none;
             border-radius: 5px;
-            overflow: hidden;
-            margin: 20px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #007bff;
-            width: 0;
-            transition: width 0.5s;
+        .follow-button:hover {
+            background-color: #0055aa;
         }
-
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+        .follow-button:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-
+        .social-links {
+            margin-top: 20px;
+        }
+        .social-links a {
+            display: inline-block;
+            margin-right: 10px;
+            color: #0066cc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #0055aa;
+        }
+        .social-links a:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+        /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
@@ -78,78 +91,57 @@
 </head>
 <body>
     <header>
-        <h1>Event Countdown Timer</h1>
+        <nav role="navigation" aria-label="Main navigation">
+            <ul>
+                <li><a href="#profile">Profile</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#follow">Follow</a></li>
+                <li><a href="#social">Social</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
-        <section aria-live="polite" aria-atomic="true">
-            <div class="countdown-container">
-                <div class="countdown-item" aria-label="Days remaining">
-                    <span id="days">00</span>
-                    <p>Days</p>
-                </div>
-                <div class="countdown-item" aria-label="Hours remaining">
-                    <span id="hours">00</span>
-                    <p>Hours</p>
-                </div>
-                <div class="countdown-item" aria-label="Minutes remaining">
-                    <span id="minutes">00</span>
-                    <p>Minutes</p>
-                </div>
-                <div class="countdown-item" aria-label="Seconds remaining">
-                    <span id="seconds">00</span>
-                    <p>Seconds</p>
-                </div>
+        <section id="profile">
+            <h1>User Profile</h1>
+            <div class="profile-bio">
+                <p><strong>Name:</strong> John Doe</p>
+                <p><strong>Bio:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
             </div>
-            <div class="progress-bar" aria-label="Progress towards the event">
-                <div id="progress-bar-fill" class="progress-bar-fill"></div>
+        </section>
+        <section id="gallery">
+            <h2>Avatar Gallery</h2>
+            <div class="avatar-gallery">
+                <img src="avatar1.jpg" alt="Avatar 1" tabindex="0">
+                <img src="avatar2.jpg" alt="Avatar 2" tabindex="0">
+                <img src="avatar3.jpg" alt="Avatar 3" tabindex="0">
+            </div>
+        </section>
+        <section id="follow">
+            <h2>Follow Me</h2>
+            <button class="follow-button" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Follow</button>
+        </section>
+        <section id="social">
+            <h2>Social Media Links</h2>
+            <div class="social-links">
+                <a href="https://twitter.com/johndoe" target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="https://facebook.com/johndoe" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="https://linkedin.com/in/johndoe" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             </div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Event Countdown Timer. All rights reserved.</p>
+        <p>&copy; 2023 John Doe. All rights reserved.</p>
     </footer>
     <script>
-        // Set the date we're counting down to
-        const countDownDate = new Date("Dec 31, 2023 23:59:59").getTime();
-
-        // Update the countdown every second
-        const x = setInterval(function() {
-            // Get today's date and time
-            const now = new Date().getTime();
-
-            // Find the distance between now and the count down date
-            const distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes, and seconds
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Output the result in elements with id="days", id="hours", id="minutes", id="seconds"
-            document.getElementById("days").innerText = days.toString().padStart(2, '0');
-            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
-            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
-            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
-
-            // Calculate the progress bar width
-            const totalSeconds = Math.floor((countDownDate - new Date("Dec 31, 2022 23:59:59").getTime()) / 1000);
-            const currentSeconds = Math.floor((countDownDate - now) / 1000);
-            const progress = 100 - (currentSeconds / totalSeconds * 100);
-
-            // Update the progress bar
-            document.getElementById("progress-bar-fill").style.width = progress + "%";
-
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("days").innerText = "00";
-                document.getElementById("hours").innerText = "00";
-                document.getElementById("minutes").innerText = "00";
-                document.getElementById("seconds").innerText = "00";
-                document.getElementById("progress-bar-fill").style.width = "100%";
+        // Keyboard-accessible JavaScript functions
+        function handleInteraction(event) {
+            // Handle both mouse and keyboard events
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                // Your action here
+                alert('Follow button clicked');
             }
-        }, 1000);
+        }
     </script>
 </body>
 </html>
