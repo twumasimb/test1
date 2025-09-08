@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile Page</title>
+    <title>Interactive Travel Map</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
@@ -21,127 +21,197 @@
             background-color: #0066cc;
             color: #fff;
         }
-        main {
-            background-color: #fff;
-            margin: 20px 0;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        nav ul {
+            list-style: none;
+            padding: 0;
         }
-        footer {
-            background-color: #0066cc;
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        nav ul li a {
             color: #fff;
-            text-align: center;
+            text-decoration: none;
         }
-        h1, h2, h3 {
-            margin: 0 0 10px;
+        main {
+            max-width: 800px;
+            margin: 0 auto;
         }
-        .profile-bio {
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background-color: #ccc;
             margin-bottom: 20px;
         }
-        .avatar-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .avatar-gallery img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
+        .pin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #ff0000;
             border-radius: 50%;
-            border: 2px solid #0066cc;
+            cursor: pointer;
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
         }
-        .follow-button {
-            display: inline-block;
+        .pin:hover, .pin:focus {
+            outline: 3px solid #ff0000;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
             padding: 10px 20px;
             background-color: #0066cc;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
         }
-        .follow-button:hover {
+        button:hover, button:focus {
             background-color: #0055aa;
         }
-        .follow-button:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
+        .error {
+            color: #ff0000;
+            margin-top: 5px;
         }
-        .social-links {
-            margin-top: 20px;
+        .experience {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        .social-links a {
-            display: inline-block;
-            margin-right: 10px;
-            color: #0066cc;
-            text-decoration: none;
-            transition: color 0.3s;
+        .experience h2 {
+            margin-top: 0;
         }
-        .social-links a:hover {
-            color: #0055aa;
-        }
-        .social-links a:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
-        }
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
+        .experience p {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
     <header>
+        <h1>Interactive Travel Map</h1>
         <nav role="navigation" aria-label="Main navigation">
             <ul>
-                <li><a href="#profile">Profile</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#follow">Follow</a></li>
-                <li><a href="#social">Social</a></li>
+                <li><a href="#map">Map</a></li>
+                <li><a href="#add-pin">Add Pin</a></li>
+                <li><a href="#experiences">Experiences</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <section id="profile">
-            <h1>User Profile</h1>
-            <div class="profile-bio">
-                <p><strong>Name:</strong> John Doe</p>
-                <p><strong>Bio:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-            </div>
+        <section id="map" class="map-container" tabindex="0" aria-label="Interactive travel map">
+            <!-- Map will be dynamically populated with pins -->
         </section>
-        <section id="gallery">
-            <h2>Avatar Gallery</h2>
-            <div class="avatar-gallery">
-                <img src="avatar1.jpg" alt="Avatar 1" tabindex="0">
-                <img src="avatar2.jpg" alt="Avatar 2" tabindex="0">
-                <img src="avatar3.jpg" alt="Avatar 3" tabindex="0">
-            </div>
+        <section id="add-pin" class="form-container">
+            <h2>Add a Pin</h2>
+            <form id="pin-form">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required>
+                <span class="error" id="location-error" aria-live="polite"></span>
+
+                <label for="latitude">Latitude:</label>
+                <input type="number" id="latitude" name="latitude" step="0.000001" required>
+                <span class="error" id="latitude-error" aria-live="polite"></span>
+
+                <label for="longitude">Longitude:</label>
+                <input type="number" id="longitude" name="longitude" step="0.000001" required>
+                <span class="error" id="longitude-error" aria-live="polite"></span>
+
+                <label for="experience">Share Your Experience:</label>
+                <textarea id="experience" name="experience" required></textarea>
+                <span class="error" id="experience-error" aria-live="polite"></span>
+
+                <button type="submit">Add Pin</button>
+            </form>
         </section>
-        <section id="follow">
-            <h2>Follow Me</h2>
-            <button class="follow-button" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Follow</button>
-        </section>
-        <section id="social">
-            <h2>Social Media Links</h2>
-            <div class="social-links">
-                <a href="https://twitter.com/johndoe" target="_blank" rel="noopener noreferrer">Twitter</a>
-                <a href="https://facebook.com/johndoe" target="_blank" rel="noopener noreferrer">Facebook</a>
-                <a href="https://linkedin.com/in/johndoe" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <section id="experiences">
+            <h2>User Experiences</h2>
+            <div id="experiences-list">
+                <!-- Experiences will be dynamically populated here -->
             </div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 John Doe. All rights reserved.</p>
+        <p>&copy; 2023 Interactive Travel Map. All rights reserved.</p>
     </footer>
     <script>
         // Keyboard-accessible JavaScript functions
         function handleInteraction(event) {
-            // Handle both mouse and keyboard events
             if (event.type === 'click' || 
                 (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                // Your action here
-                alert('Follow button clicked');
+                addPin();
             }
         }
+
+        function addPin() {
+            const location = document.getElementById('location').value;
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+            const experience = document.getElementById('experience').value;
+
+            if (!location || !latitude || !longitude || !experience) {
+                showError('All fields are required.');
+                return;
+            }
+
+            const mapContainer = document.querySelector('.map-container');
+            const pin = document.createElement('div');
+            pin.classList.add('pin');
+            pin.style.left = `${(longitude + 180) * (mapContainer.clientWidth / 360)}px`;
+            pin.style.top = `${(90 - latitude) * (mapContainer.clientHeight / 180)}px`;
+            pin.setAttribute('tabindex', '0');
+            pin.setAttribute('aria-label', `Pin at ${location}`);
+            pin.onclick = pin.onclick = handleInteraction;
+            pin.onkeydown = handleInteraction;
+            mapContainer.appendChild(pin);
+
+            const experiencesList = document.getElementById('experiences-list');
+            const experienceItem = document.createElement('div');
+            experienceItem.classList.add('experience');
+            experienceItem.innerHTML = `
+                <h2>${location}</h2>
+                <p>${experience}</p>
+            `;
+            experiencesList.appendChild(experienceItem);
+
+            document.getElementById('pin-form').reset();
+            clearErrors();
+        }
+
+        function showError(message) {
+            const errorMessages = document.querySelectorAll('.error');
+            errorMessages.forEach(error => {
+                error.textContent = message;
+            });
+        }
+
+        function clearErrors() {
+            const errorMessages = document.querySelectorAll('.error');
+            errorMessages.forEach(error => {
+                error.textContent = '';
+            });
+        }
+
+        document.getElementById('pin-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            addPin();
+        });
     </script>
 </body>
 </html>
