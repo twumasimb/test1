@@ -3,248 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Sharing Page</title>
+    <title>Eco-Friendly Products</title>
     <style>
         /* Accessibility-focused CSS with focus indicators */
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
+            background-color: #f0f8ff;
+            color: #333;
             margin: 0;
             padding: 0 0 80px 0;
-            color: #333;
-            background-color: #f9f9f9;
         }
         header, main, footer {
             padding: 20px;
-            text-align: center;
         }
         header {
-            background-color: #007BFF;
-            color: #fff;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+        }
+        nav {
+            margin-top: 20px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
         }
         main {
-            background-color: #fff;
-            margin: 20px auto;
-            max-width: 800px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        footer {
-            background-color: #007BFF;
-            color: #fff;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        h1, h2, h3 {
-            margin: 0;
-        }
-        form {
+        .filter-sort {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
         }
-        label {
-            margin: 10px 0;
-        }
-        input, select, textarea, button {
-            margin: 5px 0;
+        .filter-sort select, .filter-sort button {
             padding: 10px;
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            margin-right: 10px;
         }
-        button {
-            background-color: #007BFF;
-            color: #fff;
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .product-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .product-card h2 {
+            font-size: 1.2em;
+            margin: 10px;
+        }
+        .product-card p {
+            margin: 10px;
+        }
+        .product-card button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            text-align: center;
+            margin: 0 10px 10px 10px;
         }
-        button:hover {
-            background-color: #0056b3;
+        .product-card button:hover {
+            background-color: #45a049;
         }
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+        .product-card button:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            margin-top: 20px;
+        }
+        /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
-        }
-        .error {
-            color: #d00;
-            font-weight: bold;
-        }
-        .recipe-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .recipe-list li {
-            background-color: #f9f9f9;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .rating {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .rating input[type="radio"] {
-            display: none;
-        }
-        .rating label {
-            font-size: 24px;
-            color: #ccc;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-        .rating input[type="radio"]:checked + label {
-            color: #ffcc00;
-        }
-        .search {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-        }
-        .search input {
-            width: 70%;
-            margin-right: 10px;
         }
     </style>
 </head>
 <body>
     <header>
+        <h1>Eco-Friendly Products</h1>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#recipes">Recipes</a>
-            <a href="#submit-recipe">Submit a Recipe</a>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
         </nav>
     </header>
     <main>
-        <section id="recipes">
-            <h1>Recipe Sharing Page</h1>
-            <div class="search">
-                <input type="text" id="search-ingredient" placeholder="Search by ingredient" aria-label="Search by ingredient">
-                <button onclick="searchRecipes()">Search</button>
+        <section class="filter-sort">
+            <div>
+                <label for="category-filter">Filter by Category:</label>
+                <select id="category-filter" aria-label="Filter by Category">
+                    <option value="all">All</option>
+                    <option value="home">Home</option>
+                    <option value="garden">Garden</option>
+                    <option value="office">Office</option>
+                </select>
             </div>
-            <ul class="recipe-list" aria-live="polite" aria-atomic="true" id="recipe-list">
-                <!-- Recipes will be dynamically added here -->
-            </ul>
+            <div>
+                <label for="sort-by">Sort by:</label>
+                <select id="sort-by" aria-label="Sort by">
+                    <option value="popularity">Popularity</option>
+                    <option value="price-low-to-high">Price: Low to High</option>
+                    <option value="price-high-to-low">Price: High to Low</option>
+                </select>
+            </div>
         </section>
-        <section id="submit-recipe">
-            <h2>Submit a Recipe</h2>
-            <form id="recipe-form" onsubmit="submitRecipe(event)">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required aria-required="true">
-
-                <label for="ingredients">Ingredients:</label>
-                <textarea id="ingredients" name="ingredients" required aria-required="true"></textarea>
-
-                <label for="instructions">Instructions:</label>
-                <textarea id="instructions" name="instructions" required aria-required="true"></textarea>
-
-                <label for="rating">Rating:</label>
-                <div class="rating">
-                    <input type="radio" id="star1" name="rating" value="1" required aria-required="true">
-                    <label for="star1">★</label>
-                    <input type="radio" id="star2" name="rating" value="2">
-                    <label for="star2">★</label>
-                    <input type="radio" id="star3" name="rating" value="3">
-                    <label for="star3">★</label>
-                    <input type="radio" id="star4" name="rating" value="4">
-                    <label for="star4">★</label>
-                    <input type="radio" id="star5" name="rating" value="5">
-                    <label for="star5">★</label>
-                </div>
-
-                <button type="submit">Submit Recipe</button>
-            </form>
+        <section class="product-grid" id="product-grid">
+            <!-- Product cards will be dynamically generated here -->
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Recipe Sharing Page. All rights reserved.</p>
+        <p>&copy; 2023 Eco-Friendly Products. All rights reserved.</p>
     </footer>
     <script>
-        // Store recipes in local storage
-        const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+        // Sample product data
+        const products = [
+            { id: 1, name: 'Eco-Friendly Reusable Water Bottle', category: 'home', price: 15.99, image: 'https://via.placeholder.com/250x250?text=Water+Bottle', description: 'A reusable water bottle made from recycled materials.' },
+            { id: 2, name: 'Biodegradable Trash Bags', category: 'home', price: 9.99, image: 'https://via.placeholder.com/250x250?text=Trash+Bags', description: 'Eco-friendly trash bags that decompose naturally.' },
+            { id: 3, name: 'Solar-Powered Garden Lights', category: 'garden', price: 24.99, image: 'https://via.placeholder.com/250x250?text=Garden+Lights', description: 'Solar-powered garden lights that reduce energy consumption.' },
+            { id: 4, 'name': 'Eco-Friendly Office Chair', category: 'office', price: 129.99, image: 'https://via.placeholder.com/250x250?text=Office+Chair', description: 'An ergonomic office chair made from sustainable materials.' },
+            { id: 5, name: 'Recycled Paper Notebooks', category: 'office', price: 7.99, image: 'https://via.placeholder.com/250x250?text=Notebooks', description: 'Notebooks made from 100% recycled paper.' }
+        ];
 
-        // Function to display recipes
-        function displayRecipes() {
-            const recipeList = document.getElementById('recipe-list');
-            recipeList.innerHTML = '';
-
-            recipes.forEach((recipe, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <h3>${recipe.title}</h3>
-                    <p><strong>Ingredients:</strong> ${recipe.ingredients}</p>
-                    <p><strong>Instructions:</strong> ${recipe.instructions}</p>
-                    <p><strong>Rating:</strong> ${recipe.rating} <span class="rating">${'★'.repeat(recipe.rating)}</span></p>
-                    <button onclick="deleteRecipe(${index})">Delete</button>
+        // Function to generate product cards
+        function generateProductCards(products) {
+            const productGrid = document.getElementById('product-grid');
+            productGrid.innerHTML = ''; // Clear existing cards
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" />
+                    <h2>${product.name}</h2>
+                    <p>Price: $${product.price.toFixed(2)}</p>
+                    <button onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)" aria-label="Quick View ${product.name}">Quick View</button>
+                    <p class="description" style="display: none;">${product.description}</p>
                 `;
-                recipeList.appendChild(li);
+                card.querySelector('button').addEventListener('click', () => {
+                    card.querySelector('.description').style.display = 'block';
+                });
+                productGrid.appendChild(card);
             });
         }
 
-        // Function to submit a recipe
-        function submitRecipe(event) {
-            event.preventDefault();
-
-            const title = document.getElementById('title').value;
-            const ingredients = document.getElementById('ingredients').value;
-            const instructions = document.getElementById('instructions').value;
-            const rating = document.querySelector('input[name="rating"]:checked').value;
-
-            if (title && ingredients && instructions && rating) {
-                const newRecipe = {
-                    title,
-                    ingredients,
-                    instructions,
-                    rating: parseInt(rating, 10)
-                };
-
-                recipes.push(newRecipe);
-                localStorage.setItem('recipes', JSON.stringify(recipes));
-                displayRecipes();
-                document.getElementById('recipe-form').reset();
-            } else {
-                alert('Please fill in all fields.');
+        // Function to handle both mouse and keyboard events
+        function handleInteraction(event) {
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                event.target.click();
             }
         }
 
-        // Function to delete a recipe
-        function deleteRecipe(index) {
-            recipes.splice(index, 1);
-            localStorage.setItem('recipes', JSON.stringify(recipes));
-            displayRecipes();
-        }
+        // Initial product display
+        generateProductCards(products);
 
-        // Function to search recipes by ingredient
-        function searchRecipes() {
-            const searchIngredient = document.getElementById('search-ingredient').value.toLowerCase();
-            const filteredRecipes = recipes.filter(recipe => recipe.ingredients.toLowerCase().includes(searchIngredient));
-            const recipeList = document.getElementById('recipe-list');
-            recipeList.innerHTML = '';
+        // Filter and sort functionality
+        document.getElementById('category-filter').addEventListener('change', (event) => {
+            const selectedCategory = event.target.value;
+            const filteredProducts = selectedCategory === 'all' ? products : products.filter(product => product.category === selectedCategory);
+            generateProductCards(filteredProducts);
+        });
 
-            filteredRecipes.forEach((recipe, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <h3>${recipe.title}</h3>
-                    <p><strong>Ingredients:</strong> ${recipe.ingredients}</p>
-                    <p><strong>Instructions:</strong> ${recipe.instructions}</p>
-                    <p><strong>Rating:</strong> ${recipe.rating} <span class="rating">${'★'.repeat(recipe.rating)}</span></p>
-                    <button onclick="deleteRecipe(${index})">Delete</button>
-                `;
-                recipeList.appendChild(li);
-            });
-        }
-
-        // Load and display existing recipes on page load
-        displayRecipes();
+        document.getElementById('sort-by').addEventListener('change', (event) => {
+            const selectedSort = event.target.value;
+            let sortedProducts = [...products];
+            if (selectedSort === 'price-low-to-high') {
+                sortedProducts.sort((a, b) => a.price - b.price);
+            } else if (selectedSort === 'price-high-to-low') {
+                sortedProducts.sort((a, b) => b.price - a.price);
+            }
+            generateProductCards(sortedProducts);
+        });
     </script>
 </body>
 </html>
