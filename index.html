@@ -3,163 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - Task Management</title>
+    <title>Book Recommendation Finder</title>
     <style>
-        /* Accessibility-focused CSS with focus indicators */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background-color: #f4f4f4;
             color: #333;
         }
-
         header {
-            background: #007bff;
+            background: #0077cc;
             color: white;
-            padding: 1rem;
+            padding: 10px 0;
+            text-align: center;
         }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-        }
-
-        nav a:focus {
-            outline: 3px solid #ffffff;
-            outline-offset: 2px;
-        }
-
         main {
-            padding: 1rem;
+            margin-top: 20px;
         }
-
-        button, input[type="submit"] {
-            background: #28a745;
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #0077cc;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
             cursor: pointer;
         }
-
-        button:focus, input[type="submit"]:focus {
+        button:hover {
+            background-color: #005fa3;
+        }
+        button:focus, input:focus, select:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-
-        label {
-            display: block;
-            margin: 0.5rem 0 0.2rem;
+        .recommendations {
+            margin-top: 20px;
         }
-
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
+        .book {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: white;
         }
-
-        .error {
-            color: red;
-            font-size: 0.9rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background: #007bff;
-            color: white;
-            position: relative;
-            bottom: 0;
-            width: 100%;
+        .book img {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
 <body>
     <header>
-        <nav role="navigation" aria-label="Main navigation">
-            <a href="#login" id="loginLink">Login</a>
-            <a href="#dashboard" id="dashboardLink" style="display:none;">Dashboard</a>
-        </nav>
+        <h1>Book Recommendation Finder</h1>
     </header>
     <main>
-        <h1 id="pageTitle">User Login</h1>
-        <section id="loginSection">
-            <form id="loginForm" aria-labelledby="pageTitle">
-                <label for="email">Email:</label>
-                <input type="email" id="email" required aria-describedby="emailError">
-                <span id="emailError" class="error" aria-live="polite"></span>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" required aria-describedby="passwordError">
-                <span id="passwordError" class="error" aria-live="polite"></span>
-
-                <input type="submit" value="Login">
-            </form>
-        </section>
-        <section id="dashboardSection" style="display:none;">
-            <h2>Your Dashboard</h2>
-            <p>Welcome to your task management dashboard!</p>
-            <button id="logoutButton">Logout</button>
+        <form id="book-form" aria-labelledby="form-title">
+            <h2 id="form-title">Tell us your favorite genres and authors</h2>
+            <label for="genres">Favorite Genres:</label>
+            <select id="genres" required>
+                <option value="">Select a genre</option>
+                <option value="fiction">Fiction</option>
+                <option value="non-fiction">Non-Fiction</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="mystery">Mystery</option>
+                <option value="science-fiction">Science Fiction</option>
+            </select>
+            <label for="author">Favorite Author:</label>
+            <input type="text" id="author" required aria-describedby="author-error" />
+            <span id="author-error" class="error-message" aria-live="assertive"></span>
+            <button type="submit">Get Recommendations</button>
+        </form>
+        <section class="recommendations" aria-labelledby="recommendations-title">
+            <h2 id="recommendations-title">Recommended Books</h2>
+            <div id="book-list"></div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Task Management App</p>
+        <p>&copy; 2023 Book Recommendations</p>
     </footer>
     <script>
-        // Function to handle login form submission
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            let valid = true;
+        document.getElementById('book-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
 
-            // Simple validation
-            if (!email) {
-                document.getElementById('emailError').textContent = 'Email is required.';
-                valid = false;
-            } else {
-                document.getElementById('emailError').textContent = '';
+            const genre = document.getElementById('genres').value;
+            const author = document.getElementById('author').value;
+            const bookList = document.getElementById('book-list');
+            bookList.innerHTML = ''; // Clear previous recommendations
+
+            // Simple book recommendations based on genre
+            const recommendations = {
+                'fiction': [
+                    { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', img: 'https://via.placeholder.com/150', description: 'A novel about the American dream.' },
+                    { title: 'To Kill a Mockingbird', author: 'Harper Lee', img: 'https://via.placeholder.com/150', description: 'A story of racial injustice in the Deep South.' }
+                ],
+                'non-fiction': [
+                    { title: 'Sapiens: A Brief History of Humankind', author: 'Yuval Noah Harari', img: 'https://via.placeholder.com/150', description: 'An exploration of human history.' },
+                    { title: 'Educated', author: 'Tara Westover', img: 'https://via.placeholder.com/150', description: 'A memoir about a woman who grows up in a strict and abusive household.' }
+                ],
+                // Add more genres and recommendations as needed
+            };
+
+            const selectedRecommendations = recommendations[genre] || [];
+            if (selectedRecommendations.length === 0) {
+                bookList.innerHTML = '<p>No recommendations available for this genre.</p>';
+                return;
             }
 
-            if (!password) {
-                document.getElementById('passwordError').textContent = 'Password is required.';
-                valid = false;
-            } else {
-                document.getElementById('passwordError').textContent = '';
-            }
-
-            // If valid, switch to dashboard
-            if (valid) {
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('dashboardSection').style.display = 'block';
-                document.getElementById('loginLink').style.display = 'none';
-                document.getElementById('dashboardLink').style.display = 'inline';
-                document.getElementById('pageTitle').textContent = 'Your Dashboard';
-            }
+            selectedRecommendations.forEach(book => {
+                const bookDiv = document.createElement('div');
+                bookDiv.className = 'book';
+                bookDiv.innerHTML = `
+                    <h3>${book.title}</h3>
+                    <p><strong>Author:</strong> ${book.author}</p>
+                    <img src="${book.img}" alt="Cover of ${book.title}" />
+                    <p>${book.description}</p>
+                `;
+                bookList.appendChild(bookDiv);
+            });
         });
 
-        // Function to handle logout
-        document.getElementById('logoutButton').addEventListener('click', function() {
-            document.getElementById('loginSection').style.display = 'block';
-            document.getElementById('dashboardSection').style.display = 'none';
-            document.getElementById('loginLink').style.display = 'inline';
-            document.getElementById('dashboardLink').style.display = 'none';
-            document.getElementById('pageTitle').textContent = 'User Login';
-        });
-
-        // Handle keyboard events for interactive elements
-        function handleInteraction(event) {
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.target.click();
+        // Add keyboard support for the button
+        document.querySelector('button').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                this.click();
             }
-        }
-
-        // Apply keyboard support to buttons
-        document.getElementById('logoutButton').onmousedown = handleInteraction;
-        document.getElementById('logoutButton').onkeydown = handleInteraction;
+        });
     </script>
 </body>
 </html>
