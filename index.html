@@ -3,887 +3,728 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Digital Art Gallery - Interactive & Inclusive</title>
-    <meta name="description" content="An accessible, interactive digital art gallery with filtering, search, dark mode, and full keyboard/screen reader support.">
+    <title>Accessible Budget Calculator - Monthly Income and Expenses Breakdown</title>
     <style>
-        :root {
-            --color-bg: #f8f9fa;
-            --color-bg-dark: #181a1b;
-            --color-text: #222;
-            --color-text-dark: #f5f6fa;
-            --color-primary: #0066cc;
-            --color-accent: #e63946;
-            --color-card: #fff;
-            --color-card-dark: #23272b;
-            --color-border: #e0e0e0;
-            --color-border-dark: #2c3035;
-            --focus-outline: #0066cc;
-            --focus-outline-dark: #ffffff;
-            --transition: 0.2s cubic-bezier(.4,0,.2,1);
-        }
+        /* Base styles and layout */
         html {
             box-sizing: border-box;
-            font-size: 100%;
+            font-size: 18px;
         }
-        *, *::before, *::after {
+        *, *:before, *:after {
             box-sizing: inherit;
         }
         body {
-            background: var(--color-bg);
-            color: var(--color-text);
             font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f8fafc;
+            color: #222;
             margin: 0;
             min-height: 100vh;
-            transition: background var(--transition), color var(--transition);
-            line-height: 1.6;
-        }
-        body.dark-mode {
-            background: var(--color-bg-dark);
-            color: var(--color-text-dark);
-        }
-        header {
-            background: var(--color-card);
-            border-bottom: 1px solid var(--color-border);
-            padding: 0.5rem 0;
-            transition: background var(--transition), border-color var(--transition);
-        }
-        body.dark-mode header {
-            background: var(--color-card-dark);
-            border-bottom: 1px solid var(--color-border-dark);
-        }
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            padding: 0 1rem;
+            flex-direction: column;
         }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-            color: var(--color-primary);
-            text-decoration: none;
-        }
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .dark-toggle-btn {
-            background: none;
-            border: 2px solid var(--color-primary);
-            color: var(--color-primary);
-            border-radius: 2rem;
-            padding: 0.4em 1.2em;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background var(--transition), color var(--transition), border-color var(--transition);
-        }
-        .dark-toggle-btn[aria-pressed="true"] {
-            background: var(--color-primary);
+        header, footer {
+            background: #005fa3;
             color: #fff;
+            padding: 1rem 0;
         }
-        body.dark-mode .dark-toggle-btn {
-            border-color: var(--color-text-dark);
-            color: var(--color-text-dark);
-        }
-        body.dark-mode .dark-toggle-btn[aria-pressed="true"] {
-            background: var(--color-text-dark);
-            color: var(--color-bg-dark);
-        }
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem 3rem 1rem;
-        }
-        h1 {
-            font-size: 2.25rem;
-            margin-bottom: 0.5em;
-            margin-top: 0;
-        }
-        .gallery-filters {
+        header nav {
             display: flex;
-            flex-wrap: wrap;
-            align-items: flex-end;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .filter-group label {
-            font-weight: 600;
-        }
-        .filter-select, .search-input {
-            padding: 0.5em 1em;
-            border: 1px solid var(--color-border);
-            border-radius: 0.25em;
-            font-size: 1rem;
-            background: var(--color-card);
-            color: var(--color-text);
-            transition: background var(--transition), color var(--transition), border-color var(--transition);
-        }
-        body.dark-mode .filter-select, 
-        body.dark-mode .search-input {
-            background: var(--color-card-dark);
-            color: var(--color-text-dark);
-            border-color: var(--color-border-dark);
-        }
-        .search-input {
-            width: 220px;
-        }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            justify-content: center;
             gap: 2rem;
         }
-        .art-card {
-            background: var(--color-card);
-            border: 1px solid var(--color-border);
-            border-radius: 0.5em;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-            display: flex;
-            flex-direction: column;
-            transition: box-shadow var(--transition), border-color var(--transition), background var(--transition);
-            position: relative;
-        }
-        body.dark-mode .art-card {
-            background: var(--color-card-dark);
-            border-color: var(--color-border-dark);
-        }
-        .art-thumb-btn {
-            background: none;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            display: block;
-            width: 100%;
-            aspect-ratio: 4/3;
-            position: relative;
-            overflow: hidden;
-        }
-        .art-thumb-btn:focus {
-            z-index: 2;
-        }
-        .art-thumb-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform var(--transition);
-        }
-        .art-card:hover .art-thumb-img,
-        .art-thumb-btn:focus .art-thumb-img {
-            transform: scale(1.04);
-        }
-        .art-info {
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .art-title {
-            font-size: 1.1rem;
+        header a {
+            color: #fff;
+            text-decoration: none;
             font-weight: 600;
-            margin: 0 0 0.25em 0;
+            padding: 0.25em 0.5em;
+            border-radius: 4px;
         }
-        .art-artist {
-            font-size: 0.95rem;
-            color: var(--color-primary);
+        header a:focus {
+            background: #003f6e;
+        }
+        main {
+            flex: 1 0 auto;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 2rem 1.5rem;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-top: 0;
             margin-bottom: 0.5em;
         }
-        .art-meta {
-            font-size: 0.9rem;
-            color: #555;
-        }
-        body.dark-mode .art-meta {
-            color: #aaa;
-        }
-        .art-card .hover-details {
-            position: absolute;
-            inset: 0;
-            background: rgba(24,26,27,0.92);
-            color: #fff;
-            opacity: 0;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 1.5rem;
-            font-size: 1.05rem;
-            transition: opacity var(--transition);
-            z-index: 3;
-        }
-        .art-card:hover .hover-details,
-        .art-thumb-btn:focus ~ .hover-details {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        /* For keyboard users, show hover details when focused */
-        .art-thumb-btn:focus ~ .hover-details {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity var(--transition);
-        }
-        .modal.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-content {
-            background: var(--color-card);
-            color: var(--color-text);
-            border-radius: 0.5em;
-            max-width: 96vw;
-            max-height: 96vh;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            outline: none;
-            transition: background var(--transition), color var(--transition);
-        }
-        body.dark-mode .modal-content {
-            background: var(--color-card-dark);
-            color: var(--color-text-dark);
-        }
-        .modal-img {
-            max-width: 80vw;
-            max-height: 60vh;
-            border-radius: 0.25em;
-            margin: 2rem 2rem 1rem 2rem;
-            object-fit: contain;
-            background: #111;
-        }
-        .modal-info {
-            padding: 0 2rem 2rem 2rem;
-            text-align: center;
-        }
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0.5em 0 0.25em 0;
-        }
-        .modal-artist {
-            font-size: 1.1rem;
-            color: var(--color-primary);
+        h2 {
+            font-size: 1.25rem;
             margin-bottom: 0.5em;
         }
-        .modal-meta {
+        form {
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.25em;
+        }
+        .required-indicator {
+            color: #d32f2f;
+            font-weight: bold;
+            margin-left: 0.2em;
+        }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 0.5em;
             font-size: 1rem;
-            color: #666;
+            border: 1.5px solid #b0bec5;
+            border-radius: 4px;
+            transition: border-color 0.2s;
+            background: #f9fbfc;
         }
-        body.dark-mode .modal-meta {
-            color: #bbb;
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: #0066cc;
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
         }
-        .modal-desc {
-            margin: 1em 0 0 0;
-            font-size: 1.1rem;
+        .expense-list {
+            margin-bottom: 1rem;
         }
-        .modal-close-btn {
-            position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
-            background: var(--color-accent);
+        .expense-item {
+            display: flex;
+            gap: 0.5em;
+            align-items: flex-end;
+            margin-bottom: 0.75em;
+        }
+        .expense-item input[type="text"] {
+            flex: 2 1 0;
+        }
+        .expense-item input[type="number"] {
+            flex: 1 1 0;
+        }
+        .expense-item button {
+            margin-left: 0.5em;
+        }
+        button, .button {
+            font-size: 1rem;
+            padding: 0.5em 1em;
+            background: #0066cc;
             color: #fff;
             border: none;
-            border-radius: 2em;
-            width: 2.5em;
-            height: 2.5em;
-            font-size: 1.25rem;
+            border-radius: 4px;
             cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        button:hover, .button:hover, button:focus-visible, .button:focus-visible {
+            background: #005fa3;
+        }
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+        /* Error message styling */
+        .error-message {
+            color: #d32f2f;
+            font-size: 1rem;
+            margin-top: 0.25em;
+            margin-bottom: 0.25em;
+        }
+        /* Results and chart */
+        .results-section {
+            margin-top: 2rem;
+        }
+        .breakdown-list {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+        .breakdown-list dt {
+            font-weight: 600;
+        }
+        .breakdown-list dd {
+            margin: 0 0 0.75em 0;
+        }
+        /* Pie chart styles */
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .pie-chart {
+            width: 220px;
+            height: 220px;
+            margin-bottom: 1em;
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5em 1.5em;
+            justify-content: center;
+        }
+        .legend-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: background var(--transition), color var(--transition);
-        }
-        .modal-close-btn:focus {
-            outline: 3px solid var(--focus-outline);
-            outline-offset: 2px;
-        }
-        body.dark-mode .modal-close-btn {
-            background: #fff;
-            color: var(--color-accent);
-        }
-        /* Focus indicators for all interactive elements */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid var(--focus-outline);
-            outline-offset: 2px;
-        }
-        body.dark-mode button:focus, 
-        body.dark-mode input:focus, 
-        body.dark-mode select:focus, 
-        body.dark-mode textarea:focus, 
-        body.dark-mode a:focus {
-            outline: 3px solid var(--focus-outline-dark);
-        }
-        /* Responsive Design */
-        @media (max-width: 800px) {
-            .gallery-grid {
-                gap: 1.25rem;
-            }
-            .modal-img {
-                max-width: 95vw;
-                max-height: 40vh;
-                margin: 1rem 0 1rem 0;
-            }
-            .modal-info {
-                padding: 0 1rem 1rem 1rem;
-            }
-        }
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 1.4rem;
-            }
-            .gallery-filters {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 1rem;
-            }
-            .search-input {
-                width: 100%;
-            }
-        }
-        footer {
-            background: var(--color-card);
-            color: #666;
-            text-align: center;
-            padding: 1.25rem 1rem 1.5rem 1rem;
+            gap: 0.5em;
             font-size: 1rem;
-            border-top: 1px solid var(--color-border);
-            margin-top: 2rem;
-            transition: background var(--transition), color var(--transition), border-color var(--transition);
         }
-        body.dark-mode footer {
-            background: var(--color-card-dark);
-            color: #bbb;
-            border-top: 1px solid var(--color-border-dark);
+        .legend-color {
+            display: inline-block;
+            width: 1.25em;
+            height: 1.25em;
+            border-radius: 3px;
+            border: 1px solid #b0bec5;
         }
-        /* Hide visually but keep accessible for screen readers */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
+        /* Responsive design */
+        @media (max-width: 600px) {
+            main {
+                padding: 1rem 0.5rem;
+            }
+            .pie-chart {
+                width: 160px;
+                height: 160px;
+            }
+        }
+        /* High contrast focus for dark backgrounds */
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: 3px solid #ffffff;
+        }
+        /* Visually hidden class for screen reader-only text */
+        .visually-hidden {
+            position: absolute !important;
+            height: 1px; width: 1px;
             overflow: hidden;
-            clip: rect(0,0,0,0);
+            clip: rect(1px, 1px, 1px, 1px);
             white-space: nowrap;
-            border: 0;
         }
     </style>
 </head>
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#main-content" class="sr-only" id="skip-link">Skip to main content</a>
-            <a href="#" class="logo" aria-label="Home - Digital Art Gallery">ArtGallery</a>
-            <div class="controls">
-                <button 
-                    id="darkModeToggle" 
-                    class="dark-toggle-btn" 
-                    type="button" 
-                    aria-pressed="false"
-                    aria-label="Toggle dark mode"
-                    onkeydown="handleInteraction(event)"
-                    onclick="handleInteraction(event)">
-                    <span aria-hidden="true" id="darkModeIcon">🌙</span>
-                    <span id="darkModeLabel">Dark Mode</span>
-                </button>
-            </div>
+            <a href="#calculator" aria-current="page">Budget Calculator</a>
+            <a href="#about">About</a>
         </nav>
     </header>
-    <main id="main-content" tabindex="-1">
-        <h1>Accessible Digital Art Gallery</h1>
-        <section aria-label="Gallery filters and search" class="gallery-filters">
-            <form id="filterForm" role="search" aria-label="Filter and search artworks" autocomplete="off" onsubmit="event.preventDefault();">
-                <div class="filter-group">
-                    <label for="categorySelect">Category:</label>
-                    <select id="categorySelect" class="filter-select" name="category" aria-label="Filter by category">
-                        <option value="all">All</option>
-                        <option value="painting">Painting</option>
-                        <option value="photography">Photography</option>
-                        <option value="digital">Digital Art</option>
-                        <option value="sculpture">Sculpture</option>
-                        <option value="illustration">Illustration</option>
-                    </select>
+    <main>
+        <h1 id="calculator">Monthly Budget Calculator</h1>
+        <section aria-labelledby="budget-form-heading">
+            <h2 id="budget-form-heading">Enter Your Income and Expenses</h2>
+            <form id="budget-form" autocomplete="off" novalidate>
+                <div class="form-group">
+                    <label for="income">
+                        Monthly Income
+                        <span class="required-indicator" aria-hidden="true">*</span>
+                    </label>
+                    <input type="number" id="income" name="income" min="0" step="0.01" required aria-required="true" aria-describedby="income-desc income-error" inputmode="decimal" />
+                    <div id="income-desc" class="visually-hidden">Enter your total monthly income in dollars.</div>
+                    <div id="income-error" class="error-message" role="alert" aria-live="assertive"></div>
                 </div>
-                <div class="filter-group">
-                    <label for="searchInput">Search:</label>
-                    <input 
-                        type="search" 
-                        id="searchInput" 
-                        class="search-input" 
-                        name="search" 
-                        placeholder="Search by title or artist"
-                        aria-label="Search artworks by title or artist"
-                        autocomplete="off"
-                    >
-                </div>
+                <fieldset class="form-group" aria-describedby="expenses-desc expenses-error">
+                    <legend>
+                        Expenses
+                        <span class="required-indicator" aria-hidden="true">*</span>
+                    </legend>
+                    <div id="expenses-desc" class="visually-hidden">List your monthly expenses. You can add or remove categories as needed.</div>
+                    <div class="expense-list" id="expense-list">
+                        <!-- Expense items will be injected here -->
+                    </div>
+                    <button type="button" id="add-expense-btn" class="button" aria-label="Add new expense category">
+                        Add Expense
+                    </button>
+                    <div id="expenses-error" class="error-message" role="alert" aria-live="assertive"></div>
+                </fieldset>
+                <button type="submit" class="button" id="calculate-btn">
+                    Calculate Budget
+                </button>
             </form>
         </section>
-        <section aria-label="Artworks gallery" id="gallerySection">
-            <ul class="gallery-grid" id="galleryGrid" role="list">
-                <!-- Gallery items rendered by JavaScript -->
-            </ul>
-            <div id="noResults" style="display:none; margin-top:2rem; text-align:center; font-size:1.2rem;">
-                <span role="status" aria-live="polite">No artworks found. Try adjusting your filters or search.</span>
+        <section aria-labelledby="results-heading" class="results-section" id="results-section" hidden>
+            <h2 id="results-heading">Budget Breakdown</h2>
+            <div id="results-summary" aria-live="polite">
+                <!-- Results summary will be injected here -->
             </div>
+            <div class="chart-container">
+                <svg class="pie-chart" id="pie-chart" viewBox="0 0 220 220" role="img" aria-labelledby="chart-title chart-desc" tabindex="0">
+                    <title id="chart-title">Pie chart showing budget breakdown</title>
+                    <desc id="chart-desc">Visual representation of expenses and remaining income.</desc>
+                    <!-- Pie chart slices will be injected here -->
+                </svg>
+                <div class="legend" id="chart-legend" aria-label="Chart legend">
+                    <!-- Legend items will be injected here -->
+                </div>
+            </div>
+            <dl class="breakdown-list" id="breakdown-list">
+                <!-- Breakdown list will be injected here -->
+            </dl>
+        </section>
+        <section id="about" aria-labelledby="about-heading">
+            <h2 id="about-heading">About This Calculator</h2>
+            <p>
+                This accessible budget calculator helps you visualize your monthly income and expenses.
+                All features are fully keyboard accessible and screen reader friendly. Colors are used alongside text and patterns to ensure clarity for all users.
+            </p>
         </section>
     </main>
-    <!-- Modal for artwork details -->
-    <div 
-        id="artModal" 
-        class="modal" 
-        role="dialog" 
-        aria-modal="true" 
-        aria-labelledby="modalTitle" 
-        aria-describedby="modalDesc"
-        tabindex="-1"
-        style="display:none;"
-    >
-        <div class="modal-content" id="modalContent" tabindex="0">
-            <button 
-                class="modal-close-btn" 
-                id="modalCloseBtn" 
-                type="button" 
-                aria-label="Close artwork details"
-                onkeydown="handleInteraction(event)"
-                onclick="handleInteraction(event)">
-                &times;
-            </button>
-            <img src="" alt="" id="modalImg" class="modal-img" />
-            <div class="modal-info">
-                <h2 class="modal-title" id="modalTitle"></h2>
-                <div class="modal-artist" id="modalArtist"></div>
-                <div class="modal-meta" id="modalMeta"></div>
-                <div class="modal-desc" id="modalDesc"></div>
-            </div>
-        </div>
-    </div>
     <footer>
         <p>
-            &copy; 2024 ArtGallery. All rights reserved. | 
-            <a href="#main-content">Back to top</a>
-        </p>
-        <p>
-            <strong>Accessibility:</strong> This digital art gallery is designed to meet <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.1 AA standards for all users.
+            &copy; 2024 Accessible Budget Calculator. Created for inclusive financial planning.
         </p>
     </footer>
     <script>
-    // --- ARTWORK DATA (Sample Data for Demo) ---
-    const artworks = [
-        {
-            id: 1,
-            title: "Reflections",
-            artist: "Ava Martinez",
-            year: 2021,
-            category: "photography",
-            img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80",
-            alt: "A tranquil lake reflecting the mountains and sky at sunset",
-            description: "A serene landscape photograph capturing the stillness of a mountain lake at dusk, with vivid reflections and calming tones."
-        },
-        {
-            id: 2,
-            title: "Vivid Dreams",
-            artist: "Liam Chen",
-            year: 2023,
-            category: "digital",
-            img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-            alt: "Colorful abstract digital artwork with swirling shapes",
-            description: "A vibrant digital composition exploring the intersection of color, form, and emotion, inspired by dreams and imagination."
-        },
-        {
-            id: 3,
-            title: "The Thinker",
-            artist: "Sofia Rossi",
-            year: 2019,
-            category: "sculpture",
-            img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80",
-            alt: "Bronze sculpture of a person sitting in a thoughtful pose",
-            description: "A modern interpretation of the classic 'Thinker' sculpture, emphasizing introspection and the human condition."
-        },
-        {
-            id: 4,
-            title: "Blooming City",
-            artist: "Noah Kim",
-            year: 2022,
-            category: "painting",
-            img: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80",
-            alt: "Colorful painting of a city skyline with blooming flowers",
-            description: "A whimsical painting blending urban architecture with natural elements, symbolizing hope and renewal."
-        },
-        {
-            id: 5,
-            title: "Night Owl",
-            artist: "Emily Carter",
-            year: 2020,
-            category: "illustration",
-            img: "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=600&q=80",
-            alt: "Illustration of an owl perched on a branch under a starry night sky",
-            description: "A detailed digital illustration celebrating nocturnal wildlife, with a focus on textures and the quiet of the night."
-        },
-        {
-            id: 6,
-            title: "Urban Geometry",
-            artist: "Mateo García",
-            year: 2021,
-            category: "photography",
-            img: "https://images.unsplash.com/photo-1465101178521-c1a9136a3a8b?auto=format&fit=crop&w=600&q=80",
-            alt: "Black and white photograph of geometric patterns in city architecture",
-            description: "A striking black and white photo exploring the shapes and patterns found in urban environments."
-        },
-        {
-            id: 7,
-            title: "Dancing Colors",
-            artist: "Chloe Dubois",
-            year: 2023,
-            category: "painting",
-            img: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=80",
-            alt: "Abstract painting with dynamic brushstrokes and bright colors",
-            description: "An energetic abstract painting that evokes movement and rhythm through bold color choices and expressive brushwork."
-        },
-        {
-            id: 8,
-            title: "Digital Forest",
-            artist: "Lucas Müller",
-            year: 2022,
-            category: "digital",
-            img: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80",
-            alt: "Digital artwork of a surreal forest with glowing trees",
-            description: "A digital landscape blending reality and fantasy, with illuminated trees creating an ethereal forest scene."
-        },
-        {
-            id: 9,
-            title: "Hands of Time",
-            artist: "Olivia Smith",
-            year: 2018,
-            category: "sculpture",
-            img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80",
-            alt: "Stone sculpture of interlocking hands forming a clock face",
-            description: "A symbolic sculpture representing the passage of time and human connection."
-        },
-        {
-            id: 10,
-            title: "Starlit Stories",
-            artist: "Isabella Lee",
-            year: 2021,
-            category: "illustration",
-            img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-            alt: "Illustration of a child reading under a starlit sky",
-            description: "A heartwarming illustration capturing the magic of storytelling beneath the stars."
+        // --- Accessibility-first JavaScript for the budget calculator ---
+
+        // Expense colors (ensure high contrast and colorblind-friendly)
+        const PIE_COLORS = [
+            "#1976d2", // Blue
+            "#388e3c", // Green
+            "#fbc02d", // Yellow
+            "#d32f2f", // Red
+            "#7b1fa2", // Purple
+            "#0288d1", // Cyan
+            "#f57c00", // Orange
+            "#455a64", // Gray
+            "#c2185b", // Pink
+            "#00897b"  // Teal
+        ];
+        const REMAINING_COLOR = "#90a4ae"; // For remaining income
+
+        // Default expense categories
+        const DEFAULT_EXPENSES = [
+            { name: "Rent or Mortgage", amount: "" },
+            { name: "Utilities", amount: "" },
+            { name: "Groceries", amount: "" },
+            { name: "Transportation", amount: "" }
+        ];
+
+        // Utility for creating unique IDs for expense fields
+        let expenseIdCounter = 0;
+        function getNextExpenseId() {
+            return `expense-${++expenseIdCounter}`;
         }
-    ];
 
-    // --- CATEGORY MAPPING FOR DISPLAY ---
-    const categoryLabels = {
-        painting: "Painting",
-        photography: "Photography",
-        digital: "Digital Art",
-        sculpture: "Sculpture",
-        illustration: "Illustration"
-    };
+        // Initialize expense list with default categories
+        const expenseListElem = document.getElementById('expense-list');
+        let expenses = [];
 
-    // --- STATE ---
-    let currentCategory = 'all';
-    let currentSearch = '';
-    let filteredArtworks = artworks;
-    let lastFocusedElement = null;
-    let darkMode = false;
+        function createExpenseItem(name = "", amount = "") {
+            const id = getNextExpenseId();
+            const nameId = `${id}-name`;
+            const amountId = `${id}-amount`;
+            const errorId = `${id}-error`;
 
-    // --- DOM ELEMENTS ---
-    const galleryGrid = document.getElementById('galleryGrid');
-    const categorySelect = document.getElementById('categorySelect');
-    const searchInput = document.getElementById('searchInput');
-    const noResults = document.getElementById('noResults');
-    const artModal = document.getElementById('artModal');
-    const modalContent = document.getElementById('modalContent');
-    const modalImg = document.getElementById('modalImg');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalArtist = document.getElementById('modalArtist');
-    const modalMeta = document.getElementById('modalMeta');
-    const modalDesc = document.getElementById('modalDesc');
-    const modalCloseBtn = document.getElementById('modalCloseBtn');
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const darkModeIcon = document.getElementById('darkModeIcon');
-    const darkModeLabel = document.getElementById('darkModeLabel');
+            // Create expense item container
+            const container = document.createElement('div');
+            container.className = 'expense-item';
+            container.setAttribute('data-expense-id', id);
 
-    // --- ACCESSIBLE KEYBOARD/MOUSE HANDLER ---
-    function handleInteraction(event) {
-        // Ensures all interactive elements are accessible via keyboard and mouse
-        if (
-            event.type === 'click' ||
-            (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))
-        ) {
-            // Identify the triggering element
-            const target = event.currentTarget;
-            // Dark mode toggle
-            if (target === darkModeToggle) {
-                event.preventDefault();
-                toggleDarkMode();
+            // Expense name input
+            const nameLabel = document.createElement('label');
+            nameLabel.setAttribute('for', nameId);
+            nameLabel.textContent = "Category";
+            nameLabel.className = "visually-hidden";
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.id = nameId;
+            nameInput.name = 'expense-name';
+            nameInput.setAttribute('autocomplete', 'off');
+            nameInput.setAttribute('required', 'required');
+            nameInput.setAttribute('aria-required', 'true');
+            nameInput.setAttribute('placeholder', 'e.g., Rent');
+            nameInput.setAttribute('aria-describedby', errorId);
+            nameInput.value = name;
+
+            // Expense amount input
+            const amountLabel = document.createElement('label');
+            amountLabel.setAttribute('for', amountId);
+            amountLabel.textContent = "Amount";
+            amountLabel.className = "visually-hidden";
+
+            const amountInput = document.createElement('input');
+            amountInput.type = 'number';
+            amountInput.id = amountId;
+            amountInput.name = 'expense-amount';
+            amountInput.min = "0";
+            amountInput.step = "0.01";
+            amountInput.setAttribute('inputmode', 'decimal');
+            amountInput.setAttribute('required', 'required');
+            amountInput.setAttribute('aria-required', 'true');
+            amountInput.setAttribute('placeholder', 'Amount');
+            amountInput.setAttribute('aria-describedby', errorId);
+            amountInput.value = amount;
+
+            // Remove button
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'button';
+            removeBtn.setAttribute('aria-label', `Remove expense category`);
+            removeBtn.textContent = 'Remove';
+            removeBtn.addEventListener('click', handleRemoveExpense);
+            removeBtn.addEventListener('keydown', handleInteraction);
+
+            // Error message for this expense item
+            const errorDiv = document.createElement('div');
+            errorDiv.id = errorId;
+            errorDiv.className = 'error-message';
+            errorDiv.setAttribute('role', 'alert');
+            errorDiv.setAttribute('aria-live', 'assertive');
+
+            // Append elements
+            container.appendChild(nameLabel);
+            container.appendChild(nameInput);
+            container.appendChild(amountLabel);
+            container.appendChild(amountInput);
+            container.appendChild(removeBtn);
+            container.appendChild(errorDiv);
+
+            return container;
+        }
+
+        // Add initial expense fields
+        function renderExpenseList() {
+            expenseListElem.innerHTML = '';
+            if (expenses.length === 0) {
+                expenses = DEFAULT_EXPENSES.map(exp => ({
+                    id: getNextExpenseId(),
+                    name: exp.name,
+                    amount: exp.amount
+                }));
             }
-            // Modal close button
-            if (target === modalCloseBtn) {
-                event.preventDefault();
-                closeModal();
-            }
+            expenses.forEach((exp, idx) => {
+                const itemElem = createExpenseItem(exp.name, exp.amount);
+                // Update data-expense-id for tracking
+                itemElem.setAttribute('data-expense-id', exp.id);
+                expenseListElem.appendChild(itemElem);
+            });
         }
-    }
 
-    // --- FILTER AND SEARCH LOGIC ---
-    function filterArtworks() {
-        let results = artworks;
-        if (currentCategory !== 'all') {
-            results = results.filter(a => a.category === currentCategory);
-        }
-        if (currentSearch.trim() !== '') {
-            const query = currentSearch.trim().toLowerCase();
-            results = results.filter(a =>
-                a.title.toLowerCase().includes(query) ||
-                a.artist.toLowerCase().includes(query)
-            );
-        }
-        filteredArtworks = results;
-        renderGallery();
-    }
-
-    // --- RENDER GALLERY GRID ---
-    function renderGallery() {
-        galleryGrid.innerHTML = '';
-        if (filteredArtworks.length === 0) {
-            noResults.style.display = 'block';
-            return;
-        } else {
-            noResults.style.display = 'none';
-        }
-        filteredArtworks.forEach((art, idx) => {
-            // Each art card is an <li> with a button for full-screen modal
-            const li = document.createElement('li');
-            li.setAttribute('role', 'listitem');
-            li.className = 'art-card';
-            // Main thumbnail button (keyboard and mouse accessible)
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'art-thumb-btn';
-            btn.setAttribute('aria-label', `View details of "${art.title}" by ${art.artist}`);
-            btn.setAttribute('tabindex', '0');
-            btn.onkeydown = btn.onclick = function(e) {
-                if (
-                    e.type === 'click' ||
-                    (e.type === 'keydown' && (e.key === 'Enter' || e.key === ' '))
-                ) {
-                    e.preventDefault();
-                    openModal(art, btn);
+        // Add new expense category
+        function handleAddExpense(event) {
+            event.preventDefault();
+            expenses.push({
+                id: getNextExpenseId(),
+                name: "",
+                amount: ""
+            });
+            renderExpenseList();
+            // Focus the new expense name input
+            setTimeout(() => {
+                const lastExpense = expenseListElem.lastElementChild;
+                if (lastExpense) {
+                    const input = lastExpense.querySelector('input[type="text"]');
+                    if (input) input.focus();
                 }
-            };
-            // Thumbnail image
-            const img = document.createElement('img');
-            img.src = art.img;
-            img.alt = art.alt;
-            img.className = 'art-thumb-img';
-            img.width = 600;
-            img.height = 450;
-            btn.appendChild(img);
+            }, 0);
+        }
 
-            // Art info below thumbnail
-            const infoDiv = document.createElement('div');
-            infoDiv.className = 'art-info';
-            // Title
-            const title = document.createElement('h3');
-            title.className = 'art-title';
-            title.textContent = art.title;
-            infoDiv.appendChild(title);
-            // Artist
-            const artist = document.createElement('div');
-            artist.className = 'art-artist';
-            artist.textContent = art.artist;
-            infoDiv.appendChild(artist);
-            // Meta (year and category)
-            const meta = document.createElement('div');
-            meta.className = 'art-meta';
-            meta.textContent = `${art.year} • ${categoryLabels[art.category] || art.category}`;
-            infoDiv.appendChild(meta);
+        // Remove expense category
+        function handleRemoveExpense(event) {
+            // Keyboard accessibility handled below
+            const itemElem = event.target.closest('.expense-item');
+            if (!itemElem) return;
+            const id = itemElem.getAttribute('data-expense-id');
+            if (expenses.length <= 1) {
+                // Always keep at least one expense row
+                return;
+            }
+            expenses = expenses.filter(exp => exp.id !== id);
+            renderExpenseList();
+        }
 
-            // Hover/focus details (visually shown on hover/focus, but not read by screen readers)
-            const hoverDetails = document.createElement('div');
-            hoverDetails.className = 'hover-details';
-            hoverDetails.setAttribute('aria-hidden', 'true');
-            hoverDetails.innerHTML = `
-                <strong>${art.title}</strong><br>
-                <em>${art.artist}</em><br>
-                <span>${art.year} • ${categoryLabels[art.category] || art.category}</span><br>
-                <span>${art.description}</span>
+        // Keyboard event handler for custom buttons
+        function handleInteraction(event) {
+            if (event.type === 'click' ||
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                event.preventDefault();
+                event.target.click();
+            }
+        }
+
+        // Validate form fields and display error messages
+        function validateForm() {
+            let isValid = true;
+            // Income validation
+            const incomeInput = document.getElementById('income');
+            const incomeError = document.getElementById('income-error');
+            incomeError.textContent = '';
+            if (!incomeInput.value || Number(incomeInput.value) < 0) {
+                incomeError.textContent = 'Please enter a valid monthly income.';
+                isValid = false;
+            }
+            // Expense validation
+            const expenseItems = expenseListElem.querySelectorAll('.expense-item');
+            let hasExpense = false;
+            let expenseErrors = [];
+            expenseItems.forEach((item, idx) => {
+                const nameInput = item.querySelector('input[type="text"]');
+                const amountInput = item.querySelector('input[type="number"]');
+                const errorDiv = item.querySelector('.error-message');
+                errorDiv.textContent = '';
+                let hasError = false;
+                if (!nameInput.value.trim()) {
+                    errorDiv.textContent = 'Enter a category name.';
+                    hasError = true;
+                    isValid = false;
+                }
+                if (!amountInput.value || Number(amountInput.value) < 0) {
+                    errorDiv.textContent = (hasError ? errorDiv.textContent + ' ' : '') + 'Enter a valid amount.';
+                    hasError = true;
+                    isValid = false;
+                }
+                if (!hasError) {
+                    hasExpense = true;
+                }
+            });
+            // At least one expense required
+            const expensesError = document.getElementById('expenses-error');
+            expensesError.textContent = '';
+            if (!hasExpense) {
+                expensesError.textContent = 'Please enter at least one valid expense.';
+                isValid = false;
+            }
+            return isValid;
+        }
+
+        // Handle form submission and calculate budget
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            // Sync expense values from DOM to expenses array
+            const expenseItems = expenseListElem.querySelectorAll('.expense-item');
+            expenses = Array.from(expenseItems).map(item => {
+                const id = item.getAttribute('data-expense-id');
+                const name = item.querySelector('input[type="text"]').value.trim();
+                const amount = item.querySelector('input[type="number"]').value;
+                return { id, name, amount };
+            });
+            if (!validateForm()) {
+                document.getElementById('results-section').hidden = true;
+                return;
+            }
+            // Calculate and display results
+            displayResults();
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return Number(amount).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        }
+
+        // Generate breakdown and pie chart
+        function displayResults() {
+            const income = Number(document.getElementById('income').value);
+            const validExpenses = expenses
+                .filter(exp => exp.name && exp.amount && Number(exp.amount) >= 0)
+                .map((exp, idx) => ({
+                    name: exp.name,
+                    amount: Number(exp.amount),
+                    color: PIE_COLORS[idx % PIE_COLORS.length]
+                }));
+            const totalExpenses = validExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+            const remaining = Math.max(0, income - totalExpenses);
+
+            // Results summary
+            const summaryElem = document.getElementById('results-summary');
+            summaryElem.innerHTML = `
+                <p><strong>Total Income:</strong> ${formatCurrency(income)}</p>
+                <p><strong>Total Expenses:</strong> ${formatCurrency(totalExpenses)}</p>
+                <p><strong>Remaining Income:</strong> ${formatCurrency(remaining)}</p>
             `;
 
-            li.appendChild(btn);
-            li.appendChild(infoDiv);
-            li.appendChild(hoverDetails);
+            // Breakdown list (definition list)
+            const breakdownList = document.getElementById('breakdown-list');
+            breakdownList.innerHTML = '';
+            validExpenses.forEach(exp => {
+                const dt = document.createElement('dt');
+                dt.textContent = exp.name;
+                const dd = document.createElement('dd');
+                dd.textContent = formatCurrency(exp.amount);
+                breakdownList.appendChild(dt);
+                breakdownList.appendChild(dd);
+            });
+            // Remaining income as last item
+            const dt = document.createElement('dt');
+            dt.textContent = "Remaining Income";
+            const dd = document.createElement('dd');
+            dd.textContent = formatCurrency(remaining);
+            breakdownList.appendChild(dt);
+            breakdownList.appendChild(dd);
 
-            galleryGrid.appendChild(li);
-        });
-    }
+            // Draw pie chart
+            drawPieChart(validExpenses, remaining, income);
 
-    // --- MODAL LOGIC ---
-    function openModal(art, triggerEl) {
-        // Save last focused element to restore focus later
-        lastFocusedElement = triggerEl || document.activeElement;
-        // Fill modal content
-        modalImg.src = art.img;
-        modalImg.alt = art.alt;
-        modalTitle.textContent = art.title;
-        modalArtist.textContent = art.artist;
-        modalMeta.textContent = `${art.year} • ${categoryLabels[art.category] || art.category}`;
-        modalDesc.textContent = art.description;
-        // Show modal
-        artModal.style.display = 'flex';
-        setTimeout(() => {
-            artModal.classList.add('active');
-            modalContent.focus();
-        }, 10);
-        // Trap focus inside modal
-        document.addEventListener('keydown', trapModalFocus);
-        // Close modal on Escape
-        document.addEventListener('keydown', handleModalEscape);
-    }
+            // Show results section
+            document.getElementById('results-section').hidden = false;
+        }
 
-    function closeModal() {
-        artModal.classList.remove('active');
-        setTimeout(() => {
-            artModal.style.display = 'none';
-            // Restore focus to last element
-            if (lastFocusedElement) lastFocusedElement.focus();
-        }, 180);
-        document.removeEventListener('keydown', trapModalFocus);
-        document.removeEventListener('keydown', handleModalEscape);
-    }
+        // Pie chart rendering using SVG
+        function drawPieChart(expenses, remaining, totalIncome) {
+            const svg = document.getElementById('pie-chart');
+            svg.innerHTML = ''; // Clear previous chart
 
-    // Trap focus within modal for accessibility
-    function trapModalFocus(e) {
-        if (!artModal.classList.contains('active')) return;
-        const focusable = artModal.querySelectorAll('button, [tabindex]:not([tabindex="-1"])');
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-        if (e.key === 'Tab') {
-            if (e.shiftKey) {
-                if (document.activeElement === first) {
-                    e.preventDefault();
-                    last.focus();
+            // Accessibility: add title/desc for screen readers (already in markup)
+            // Prepare data
+            const chartData = expenses.slice();
+            if (remaining > 0) {
+                chartData.push({
+                    name: "Remaining Income",
+                    amount: remaining,
+                    color: REMAINING_COLOR
+                });
+            }
+            const total = chartData.reduce((sum, item) => sum + item.amount, 0);
+            let startAngle = 0;
+            const centerX = 110, centerY = 110, radius = 90;
+
+            // For colorblind accessibility, add patterns to slices
+            const patterns = [
+                // Stripes, dots, diagonal lines, etc.
+                { id: 'pattern-stripes', pattern: `<pattern id="pattern-stripes" patternUnits="userSpaceOnUse" width="8" height="8"><rect width="8" height="8" fill="white"/><path d="M0,0 l8,8 M-2,2 l4,-4 M6,10 l4,-4" stroke="#b0bec5" stroke-width="2"/></pattern>` },
+                { id: 'pattern-dots', pattern: `<pattern id="pattern-dots" patternUnits="userSpaceOnUse" width="8" height="8"><rect width="8" height="8" fill="white"/><circle cx="4" cy="4" r="2" fill="#b0bec5"/></pattern>` },
+                { id: 'pattern-diag', pattern: `<pattern id="pattern-diag" patternUnits="userSpaceOnUse" width="8" height="8"><rect width="8" height="8" fill="white"/><path d="M0,8 l8,-8" stroke="#b0bec5" stroke-width="2"/></pattern>` }
+            ];
+            // Insert patterns into SVG defs
+            let defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+            patterns.forEach(pat => {
+                const temp = document.createElement('div');
+                temp.innerHTML = pat.pattern;
+                defs.appendChild(temp.firstChild);
+            });
+            svg.appendChild(defs);
+
+            // Draw slices
+            chartData.forEach((item, idx) => {
+                const value = item.amount;
+                const angle = (value / total) * 360;
+                const endAngle = startAngle + angle;
+                const largeArc = angle > 180 ? 1 : 0;
+                // Convert angles to radians
+                const startRad = (Math.PI / 180) * (startAngle - 90);
+                const endRad = (Math.PI / 180) * (endAngle - 90);
+
+                // Start and end points
+                const x1 = centerX + radius * Math.cos(startRad);
+                const y1 = centerY + radius * Math.sin(startRad);
+                const x2 = centerX + radius * Math.cos(endRad);
+                const y2 = centerY + radius * Math.sin(endRad);
+
+                // Path for slice
+                const pathData = [
+                    `M ${centerX} ${centerY}`,
+                    `L ${x1} ${y1}`,
+                    `A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`,
+                    'Z'
+                ].join(' ');
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute('d', pathData);
+                path.setAttribute('fill', item.color);
+
+                // Add pattern fill for accessibility on certain slices (e.g., every 3rd)
+                if (idx % 3 === 1) {
+                    path.setAttribute('fill', `url(#pattern-stripes)`);
+                    path.setAttribute('stroke', item.color);
+                    path.setAttribute('stroke-width', 2);
+                } else if (idx % 3 === 2) {
+                    path.setAttribute('fill', `url(#pattern-dots)`);
+                    path.setAttribute('stroke', item.color);
+                    path.setAttribute('stroke-width', 2);
+                } else if (idx % 3 === 0 && idx !== 0) {
+                    path.setAttribute('fill', `url(#pattern-diag)`);
+                    path.setAttribute('stroke', item.color);
+                    path.setAttribute('stroke-width', 2);
                 }
-            } else {
-                if (document.activeElement === last) {
-                    e.preventDefault();
-                    first.focus();
+
+                // ARIA: Each slice gets a <title> for screen readers
+                const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                const percent = total > 0 ? Math.round((value / total) * 100) : 0;
+                title.textContent = `${item.name}: ${formatCurrency(value)} (${percent}%)`;
+                path.appendChild(title);
+
+                svg.appendChild(path);
+                startAngle += angle;
+            });
+
+            // Update legend
+            const legendElem = document.getElementById('chart-legend');
+            legendElem.innerHTML = '';
+            chartData.forEach((item, idx) => {
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+
+                const colorBox = document.createElement('span');
+                colorBox.className = 'legend-color';
+                colorBox.style.background = item.color;
+                // Add pattern for colorblind users
+                if (idx % 3 === 1) {
+                    colorBox.style.backgroundImage = "repeating-linear-gradient(135deg, #b0bec5 0, #b0bec5 2px, transparent 2px, transparent 8px)";
+                } else if (idx % 3 === 2) {
+                    colorBox.style.backgroundImage = "radial-gradient(circle, #b0bec5 20%, transparent 20%)";
+                } else if (idx % 3 === 0 && idx !== 0) {
+                    colorBox.style.backgroundImage = "repeating-linear-gradient(45deg, #b0bec5 0, #b0bec5 2px, transparent 2px, transparent 8px)";
                 }
-            }
-        }
-    }
+                colorBox.setAttribute('aria-hidden', 'true');
+                legendItem.appendChild(colorBox);
 
-    // Close modal on Escape key
-    function handleModalEscape(e) {
-        if (e.key === 'Escape' && artModal.classList.contains('active')) {
-            e.preventDefault();
-            closeModal();
-        }
-    }
+                const label = document.createElement('span');
+                const percent = total > 0 ? Math.round((item.amount / total) * 100) : 0;
+                label.textContent = `${item.name} (${percent}%)`;
+                legendItem.appendChild(label);
 
-    // Close modal when clicking outside modal content
-    artModal.addEventListener('mousedown', function(e) {
-        if (e.target === artModal) {
-            closeModal();
+                legendElem.appendChild(legendItem);
+            });
         }
-    });
 
-    // --- FILTERS EVENT HANDLERS ---
-    categorySelect.addEventListener('change', function() {
-        currentCategory = this.value;
-        filterArtworks();
-    });
-    searchInput.addEventListener('input', function() {
-        currentSearch = this.value;
-        filterArtworks();
-    });
+        // --- Initialization ---
+        // Add initial expense items
+        renderExpenseList();
 
-    // --- DARK MODE ---
-    function toggleDarkMode() {
-        darkMode = !darkMode;
-        document.body.classList.toggle('dark-mode', darkMode);
-        darkModeToggle.setAttribute('aria-pressed', darkMode ? 'true' : 'false');
-        darkModeIcon.textContent = darkMode ? '☀️' : '🌙';
-        darkModeLabel.textContent = darkMode ? 'Light Mode' : 'Dark Mode';
-        // Save preference
-        if (window.localStorage) {
-            localStorage.setItem('artGalleryDarkMode', darkMode ? '1' : '0');
-        }
-    }
-    // Load dark mode preference on page load
-    function loadDarkModePref() {
-        if (window.localStorage) {
-            const pref = localStorage.getItem('artGalleryDarkMode');
-            if (pref === '1') {
-                darkMode = false; // will be toggled to true
-                toggleDarkMode();
-            }
-        }
-    }
+        // Add event listeners
+        document.getElementById('add-expense-btn').addEventListener('click', handleAddExpense);
+        document.getElementById('add-expense-btn').addEventListener('keydown', handleInteraction);
+        document.getElementById('budget-form').addEventListener('submit', handleFormSubmit);
 
-    // --- INITIALIZE ---
-    function init() {
-        loadDarkModePref();
-        filterArtworks();
-        // Accessibility: Move focus to main content when skip link is used
-        document.getElementById('skip-link').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('main-content').focus();
+        // Accessibility: Allow pressing Enter/Space on Remove buttons
+        // (Already handled in createExpenseItem via addEventListener)
+
+        // Allow pressing Enter/Space on Add Expense button (already handled above)
+
+        // Allow pressing Enter/Space on Calculate button (native button)
+
+        // Reset results section when editing fields
+        document.getElementById('budget-form').addEventListener('input', function() {
+            document.getElementById('results-section').hidden = true;
         });
-        // Accessibility: Close modal with close button (already handled by handleInteraction)
-        modalCloseBtn.addEventListener('click', handleInteraction);
-        modalCloseBtn.addEventListener('keydown', handleInteraction);
-        // Accessibility: Focus modal content on open
-        artModal.addEventListener('transitionend', function() {
-            if (artModal.classList.contains('active')) {
-                modalContent.focus();
+
+        // Accessibility: Move focus to results heading after calculation
+        document.getElementById('budget-form').addEventListener('submit', function(event) {
+            setTimeout(() => {
+                if (!document.getElementById('results-section').hidden) {
+                    document.getElementById('results-heading').focus();
+                }
+            }, 0);
+        });
+
+        // Make results heading focusable for accessibility
+        document.getElementById('results-heading').setAttribute('tabindex', '-1');
+
+        // Accessibility: Allow navigation to About section via keyboard
+        document.querySelector('a[href="#about"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('about-heading').focus();
+        });
+        document.getElementById('about-heading').setAttribute('tabindex', '-1');
+
+        // Ensure tab order is logical: form fields, then results, then about/footer
+
+        // Accessibility: Prevent form submission on Enter in expense amount fields (to avoid accidental submits)
+        expenseListElem.addEventListener('keydown', function(e) {
+            if (e.target.name === 'expense-amount' && e.key === 'Enter') {
+                e.preventDefault();
             }
         });
-    }
-
-    // --- RUN ---
-    window.addEventListener('DOMContentLoaded', init);
-
-    // --- END OF SCRIPT ---
     </script>
-    <!-- 
-        KEY ACCESSIBILITY FEATURES EXPLAINED:
-        - Semantic HTML5 structure (header, nav, main, section, article, footer)
-        - All images have descriptive alt text
-        - All interactive elements (buttons, inputs) are keyboard accessible and have visible focus indicators
-        - Modal traps focus and is accessible to screen readers (role="dialog", aria-modal, labelled/describedby)
-        - Filtering/search inputs have associated <label>s
-        - No color is used as the only means of conveying information
-        - Sufficient color contrast for text and focus indicators
-        - Skip link for keyboard users
-        - All dynamic content updates are reflected for assistive tech (aria-live on no results)
-        - Responsive, mobile-friendly design
-    -->
 </body>
 </html>
