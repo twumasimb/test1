@@ -3,202 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event RSVP – Confirm Your Attendance</title>
-    <meta name="description" content="Accessible RSVP page for confirming attendance to the event, submitting details, and viewing attendees. Fully WCAG 2.1 AA compliant.">
+    <title>Accessible Meditation Timer – Calming & Inclusive</title>
+    <meta name="description" content="Accessible, WCAG 2.1 AA-compliant meditation timer with custom session lengths, soothing sounds, and progress tracking.">
     <style>
         :root {
-            --primary: #0066cc;
-            --primary-dark: #004999;
-            --accent: #18a058;
-            --danger: #c82333;
-            --bg: #f7f9fa;
-            --text: #1a1a1a;
-            --border: #e1e4e8;
+            --calm-blue: #6bb7c7;
+            --calm-blue-dark: #295b63;
+            --calm-green: #c9e4ca;
+            --calm-green-dark: #588157;
+            --white: #fff;
+            --gray: #222;
+            --focus-outline: #0066cc;
+            --error: #b00020;
             --radius: 8px;
-            --focus-outline: 3px solid var(--primary);
-            --focus-outline-dark: 3px solid #fff;
-            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         html {
-            box-sizing: border-box;
-            font-size: 100%;
+            font-size: 18px;
+            background: var(--calm-green);
+            color: var(--gray);
         }
-        *, *::before, *::after {
-            box-sizing: inherit;
-        }
+
         body {
             margin: 0;
             font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
-        header, footer {
-            background: #fff;
-            border-bottom: 1px solid var(--border);
-        }
+
         header {
+            background: var(--calm-blue);
+            color: var(--white);
             padding: 1rem 0;
+            box-shadow: var(--shadow);
         }
+
         nav {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            align-items: center;
         }
+
         nav a {
-            color: var(--primary);
+            color: var(--white);
             text-decoration: none;
             font-weight: 600;
-            font-size: 1rem;
+            margin: 0 1rem;
             position: relative;
         }
+
         nav a:focus {
-            outline: var(--focus-outline);
+            outline: 3px solid var(--focus-outline);
             outline-offset: 2px;
-            background: #e6f0fa;
-            border-radius: 4px;
+            background: rgba(255,255,255,0.15);
+            border-radius: var(--radius);
         }
+
         main {
             flex: 1 0 auto;
-            max-width: 600px;
-            margin: 2rem auto;
-            background: #fff;
-            border-radius: var(--radius);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2rem 1rem 1rem 1rem;
+            max-width: 480px;
+            margin: 0 auto;
         }
+
         h1 {
-            margin-top: 0;
+            margin-bottom: 0.5rem;
             font-size: 2rem;
-            color: var(--primary-dark);
+            font-weight: 700;
+            color: var(--calm-blue-dark);
         }
-        section {
+
+        .timer-section {
+            width: 100%;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
             margin-bottom: 2rem;
         }
-        form {
+
+        .timer-display {
             display: flex;
             flex-direction: column;
-            gap: 1.25rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
         }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-        label {
-            font-weight: 600;
-            margin-bottom: 0.15rem;
-        }
-        .required {
-            color: var(--danger);
-            margin-left: 0.25em;
-            font-size: 1.1em;
-        }
-        input, select {
-            padding: 0.5em 0.75em;
-            font-size: 1rem;
-            border: 1.5px solid var(--border);
-            border-radius: 4px;
-            transition: border-color var(--transition);
-            background: #f9fbfc;
-            color: var(--text);
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: var(--focus-outline);
-            border-color: var(--primary);
-            background: #e6f0fa;
-        }
-        .error {
-            color: var(--danger);
-            font-size: 0.97em;
-            margin-top: 0.15em;
-            min-height: 1.3em;
-        }
-        button[type="submit"] {
-            background: var(--primary);
-            color: #fff;
+
+        .timer-time {
+            font-size: 3rem;
             font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--calm-blue-dark);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        button {
+            background: var(--calm-blue);
+            color: var(--white);
             border: none;
-            border-radius: 4px;
-            padding: 0.75em 1.5em;
-            font-size: 1.1rem;
+            border-radius: var(--radius);
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: background var(--transition), transform var(--transition);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-            margin-top: 0.5em;
+            box-shadow: var(--shadow);
+            transition: background 0.2s;
         }
-        button[type="submit"]:hover, button[type="submit"]:focus-visible {
-            background: var(--primary-dark);
-            transform: translateY(-2px) scale(1.03);
+
+        button[aria-pressed="true"] {
+            background: var(--calm-green-dark);
         }
-        button[type="submit"]:focus {
-            outline: var(--focus-outline);
-            outline-offset: 2px;
+
+        button:disabled {
+            background: #d1d1d1;
+            color: #777;
+            cursor: not-allowed;
         }
-        .confirmation {
-            background: #e6f7ea;
-            border-left: 5px solid var(--accent);
-            color: #22543d;
-            padding: 1em 1.5em;
-            border-radius: 4px;
-            margin-bottom: 1.5em;
-            font-size: 1.05em;
-            animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(16px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        .attendees-list {
-            margin-top: 1.5em;
-        }
-        .attendees-list h2 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75em;
-        }
-        ul.attendees {
-            list-style: disc inside;
-            padding: 0;
-            margin: 0;
-        }
-        ul.attendees li {
-            padding: 0.5em 0.25em;
-            border-bottom: 1px solid #f0f0f0;
-            animation: fadeIn 0.5s;
-        }
-        .no-attendees {
-            color: #888;
-            font-style: italic;
-            margin-top: 0.5em;
-        }
-        /* Responsive design */
-        @media (max-width: 700px) {
-            main {
-                padding: 1rem 0.5rem;
-            }
-        }
-        @media (max-width: 480px) {
-            main {
-                margin: 0.5rem;
-            }
-            h1 {
-                font-size: 1.25rem;
-            }
-        }
-        /* Required focus indicators for accessibility */
+
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: var(--focus-outline);
+            outline: 3px solid var(--focus-outline);
             outline-offset: 2px;
         }
+
         /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, .dark-bg a:focus {
-            outline: var(--focus-outline-dark);
+            outline: 3px solid #ffffff;
         }
-        /* Hide visually but keep accessible for screen readers */
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: var(--radius);
+            border: 1px solid #bbb;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        input[type="number"]:invalid {
+            border-color: var(--error);
+        }
+
+        .required {
+            color: var(--error);
+            margin-left: 0.2em;
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.95em;
+            margin-top: 0.2em;
+        }
+
+        /* Sound selector */
+        .sound-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .sound-option-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            font-weight: 500;
+        }
+
+        /* Progress section */
+        .progress-section {
+            width: 100%;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 1.5rem 1.5rem 1rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            font-weight: 600;
+            color: var(--calm-blue-dark);
+        }
+
+        .progress-list {
+            margin: 1rem 0 0 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .progress-list li {
+            padding: 0.5em 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1rem;
+        }
+
+        .progress-list li:last-child {
+            border-bottom: none;
+        }
+
         .sr-only {
             position: absolute;
             width: 1px;
@@ -209,257 +233,439 @@
             clip: rect(0,0,0,0);
             border: 0;
         }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            main {
+                padding: 1rem 0.2rem;
+            }
+            .timer-section, .progress-section {
+                padding: 1rem 0.5rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#rsvp-section">RSVP</a>
-            <a href="#attendees-section">View Attendees</a>
+            <a href="#main-content">Skip to main content</a>
+            <a href="#timer" aria-current="page">Meditation Timer</a>
+            <a href="#progress">Progress</a>
         </nav>
     </header>
-    <main>
-        <h1>Event RSVP – Confirm Your Attendance</h1>
-        <section id="rsvp-section" aria-labelledby="rsvp-heading">
-            <h2 id="rsvp-heading">RSVP Form</h2>
-            <p>Please fill in your details to confirm your attendance. Fields marked with <span class="required" aria-hidden="true">*</span> are required.</p>
-            <form id="rsvpForm" novalidate autocomplete="off" aria-describedby="rsvp-instructions">
-                <div id="rsvp-instructions" class="sr-only">
-                    Fill in your name and email. Phone number is optional. Use the submit button to confirm attendance.
-                </div>
-                <div class="form-group">
-                    <label for="name">
-                        Full Name <span class="required" aria-hidden="true">*</span>
-                    </label>
-                    <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" aria-describedby="name-error" maxlength="80" />
-                    <span id="name-error" class="error" aria-live="polite"></span>
-                </div>
-                <div class="form-group">
-                    <label for="email">
-                        Email Address <span class="required" aria-hidden="true">*</span>
-                    </label>
-                    <input type="email" id="email" name="email" required aria-required="true" autocomplete="email" aria-describedby="email-error" maxlength="80" />
-                    <span id="email-error" class="error" aria-live="polite"></span>
-                </div>
-                <div class="form-group">
-                    <label for="phone">
-                        Phone Number (optional)
-                    </label>
-                    <input type="tel" id="phone" name="phone" autocomplete="tel" aria-describedby="phone-error" maxlength="20" pattern="^[\d\s\-\+\(\)]*$" />
-                    <span id="phone-error" class="error" aria-live="polite"></span>
-                </div>
-                <button type="submit" id="submitBtn">Confirm Attendance</button>
+    <main id="main-content">
+        <h1 id="timer">Meditation Timer</h1>
+        <section class="timer-section" aria-labelledby="timer">
+            <form id="timer-form" autocomplete="off" novalidate>
+                <fieldset>
+                    <legend class="sr-only">Set your meditation session</legend>
+                    <div class="form-group">
+                        <label for="minutes">
+                            Session Length (minutes)
+                            <span class="required" aria-hidden="true">*</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            id="minutes" 
+                            name="minutes" 
+                            min="1" 
+                            max="120" 
+                            required 
+                            aria-required="true"
+                            aria-describedby="minutes-desc minutes-error"
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                        >
+                        <div id="minutes-desc" class="sr-only">Enter a value between 1 and 120 minutes.</div>
+                        <div id="minutes-error" class="error-message" aria-live="polite"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sound">
+                            Soothing Sound
+                            <span class="required" aria-hidden="true">*</span>
+                        </label>
+                        <select id="sound" name="sound" required aria-required="true" aria-describedby="sound-desc sound-error">
+                            <option value="">Select a sound</option>
+                            <option value="rain">Gentle Rain</option>
+                            <option value="waves">Ocean Waves</option>
+                            <option value="forest">Forest Birds</option>
+                            <option value="none">No Sound</option>
+                        </select>
+                        <div id="sound-desc" class="sr-only">Choose a background sound for your meditation session.</div>
+                        <div id="sound-error" class="error-message" aria-live="polite"></div>
+                    </div>
+                    <button type="submit" id="start-btn">Start Session</button>
+                </fieldset>
             </form>
-            <div id="confirmation" class="confirmation" role="status" aria-live="polite" style="display:none;"></div>
+            <div class="timer-display" aria-live="polite" aria-atomic="true">
+                <span id="timer-time" class="timer-time" aria-label="Time remaining" role="timer">00:00</span>
+                <div class="timer-controls" aria-label="Timer controls">
+                    <button type="button" id="pause-btn" aria-pressed="false" disabled>Pause</button>
+                    <button type="button" id="resume-btn" aria-pressed="false" disabled>Resume</button>
+                    <button type="button" id="reset-btn" disabled>Reset</button>
+                </div>
+            </div>
         </section>
-        <section id="attendees-section" class="attendees-list" aria-labelledby="attendees-heading">
-            <h2 id="attendees-heading">List of Attendees</h2>
-            <ul id="attendees" class="attendees" aria-live="polite" aria-relevant="additions removals">
-                <!-- Attendees dynamically inserted here -->
+        <section class="progress-section" aria-labelledby="progress-header">
+            <div class="progress-header" id="progress-header">
+                <span aria-hidden="true" role="img">🧘</span>
+                <span id="progress">Session Progress</span>
+            </div>
+            <ul class="progress-list" id="progress-list" aria-live="polite" aria-atomic="false">
+                <!-- Progress entries will be dynamically added here -->
             </ul>
-            <div id="no-attendees" class="no-attendees">No attendees yet.</div>
         </section>
     </main>
     <footer>
-        <div style="text-align:center; padding:1em 0; font-size:0.98em; color:#555;">
-            &copy; <span id="year"></span> Accessible Event RSVP. All rights reserved.
-        </div>
+        <section aria-label="About this meditation timer" style="text-align:center; padding: 1rem 0;">
+            <small>
+                &copy; 2024 Calming Meditation Timer. Accessible and inclusive for all.<br>
+                <a href="#main-content">Back to top</a>
+            </small>
+        </section>
     </footer>
+    <!-- Audio elements (hidden, controlled via JS) -->
+    <audio id="audio-rain" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9e2e6b.mp3" preload="auto" loop aria-label="Gentle Rain Sound"></audio>
+    <audio id="audio-waves" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124b2e7a6c.mp3" preload="auto" loop aria-label="Ocean Waves Sound"></audio>
+    <audio id="audio-forest" src="https://cdn.pixabay.com/audio/2022/02/23/audio_116b3a4f8b.mp3" preload="auto" loop aria-label="Forest Birds Sound"></audio>
+    <!-- End of audio elements -->
     <script>
-        // Utility: Set current year in footer
-        document.getElementById('year').textContent = new Date().getFullYear();
+        // --- Accessibility: Focus management for skip link ---
+        document.querySelector('a[href="#main-content"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            const main = document.getElementById('main-content');
+            main.setAttribute('tabindex', '-1');
+            main.focus();
+            setTimeout(() => main.removeAttribute('tabindex'), 1000);
+        });
 
-        // Attendees storage (localStorage for persistence)
-        const ATTENDEES_KEY = 'accessible_event_attendees';
+        // --- Timer logic ---
+        const timerForm = document.getElementById('timer-form');
+        const minutesInput = document.getElementById('minutes');
+        const soundSelect = document.getElementById('sound');
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resumeBtn = document.getElementById('resume-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const timerTime = document.getElementById('timer-time');
+        const progressList = document.getElementById('progress-list');
 
-        // Get DOM elements
-        const form = document.getElementById('rsvpForm');
-        const confirmation = document.getElementById('confirmation');
-        const attendeesList = document.getElementById('attendees');
-        const noAttendees = document.getElementById('no-attendees');
-        const submitBtn = document.getElementById('submitBtn');
+        // Error message elements
+        const minutesError = document.getElementById('minutes-error');
+        const soundError = document.getElementById('sound-error');
 
-        // Error spans
-        const nameError = document.getElementById('name-error');
-        const emailError = document.getElementById('email-error');
-        const phoneError = document.getElementById('phone-error');
+        // Audio elements
+        const audioRain = document.getElementById('audio-rain');
+        const audioWaves = document.getElementById('audio-waves');
+        const audioForest = document.getElementById('audio-forest');
 
-        // Helper: Validate email format
-        function isValidEmail(email) {
-            // Basic RFC 5322 compliant regex
-            return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
+        let timer = null;
+        let totalSeconds = 0;
+        let remainingSeconds = 0;
+        let isPaused = false;
+        let currentSound = null;
+
+        // Accessibility: Announce when timer completes
+        function announceCompletion() {
+            const liveRegion = document.createElement('div');
+            liveRegion.setAttribute('role', 'status');
+            liveRegion.setAttribute('aria-live', 'polite');
+            liveRegion.className = 'sr-only';
+            liveRegion.textContent = 'Meditation session complete.';
+            document.body.appendChild(liveRegion);
+            setTimeout(() => document.body.removeChild(liveRegion), 3000);
         }
 
-        // Helper: Validate phone (optional, only digits, spaces, dashes, plus, parens)
-        function isValidPhone(phone) {
-            return phone === '' || /^[\d\s\-\+\(\)]*$/.test(phone);
-        }
-
-        // Accessibility: Keyboard support for submit button (redundant for native button, but pattern included)
-        function handleInteraction(event) {
-            if (event.type === 'click' ||
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.preventDefault();
-                submitBtn.click();
-            }
-        }
-        submitBtn.onkeydown = handleInteraction;
-
-        // Form Validation
+        // --- Form Validation ---
         function validateForm() {
             let valid = true;
-            // Reset errors
-            nameError.textContent = '';
-            emailError.textContent = '';
-            phoneError.textContent = '';
-
-            // Name validation
-            const name = form.name.value.trim();
-            if (!name) {
-                nameError.textContent = 'Full name is required.';
+            // Validate minutes
+            const minutesValue = parseInt(minutesInput.value, 10);
+            if (!minutesInput.value || isNaN(minutesValue) || minutesValue < 1 || minutesValue > 120) {
+                minutesError.textContent = 'Please enter a number between 1 and 120.';
+                minutesInput.setAttribute('aria-invalid', 'true');
                 valid = false;
-            } else if (name.length > 80) {
-                nameError.textContent = 'Name is too long.';
-                valid = false;
+            } else {
+                minutesError.textContent = '';
+                minutesInput.removeAttribute('aria-invalid');
             }
-
-            // Email validation
-            const email = form.email.value.trim();
-            if (!email) {
-                emailError.textContent = 'Email address is required.';
+            // Validate sound
+            if (!soundSelect.value) {
+                soundError.textContent = 'Please select a sound.';
+                soundSelect.setAttribute('aria-invalid', 'true');
                 valid = false;
-            } else if (!isValidEmail(email)) {
-                emailError.textContent = 'Please enter a valid email address.';
-                valid = false;
-            } else if (email.length > 80) {
-                emailError.textContent = 'Email is too long.';
-                valid = false;
+            } else {
+                soundError.textContent = '';
+                soundSelect.removeAttribute('aria-invalid');
             }
-
-            // Phone validation (optional)
-            const phone = form.phone.value.trim();
-            if (phone && !isValidPhone(phone)) {
-                phoneError.textContent = 'Please enter a valid phone number.';
-                valid = false;
-            } else if (phone.length > 20) {
-                phoneError.textContent = 'Phone number is too long.';
-                valid = false;
-            }
-
             return valid;
         }
 
-        // Save attendee to localStorage
-        function saveAttendee(attendee) {
-            let attendees = JSON.parse(localStorage.getItem(ATTENDEES_KEY)) || [];
-            // Prevent duplicate emails (case-insensitive)
-            if (!attendees.some(a => a.email.toLowerCase() === attendee.email.toLowerCase())) {
-                attendees.push(attendee);
-                localStorage.setItem(ATTENDEES_KEY, JSON.stringify(attendees));
-                return true;
-            }
-            return false;
+        // --- Timer Display ---
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
         }
 
-        // Render attendees list
-        function renderAttendees() {
-            const attendees = JSON.parse(localStorage.getItem(ATTENDEES_KEY)) || [];
-            attendeesList.innerHTML = '';
-            if (attendees.length === 0) {
-                noAttendees.style.display = 'block';
-                attendeesList.setAttribute('aria-hidden', 'true');
+        function updateTimerDisplay() {
+            timerTime.textContent = formatTime(remainingSeconds);
+        }
+
+        // --- Sound Control ---
+        function playSound(name) {
+            stopAllSounds();
+            switch(name) {
+                case 'rain':
+                    audioRain.currentTime = 0;
+                    audioRain.volume = 0.4;
+                    audioRain.play();
+                    currentSound = audioRain;
+                    break;
+                case 'waves':
+                    audioWaves.currentTime = 0;
+                    audioWaves.volume = 0.4;
+                    audioWaves.play();
+                    currentSound = audioWaves;
+                    break;
+                case 'forest':
+                    audioForest.currentTime = 0;
+                    audioForest.volume = 0.4;
+                    audioForest.play();
+                    currentSound = audioForest;
+                    break;
+                default:
+                    currentSound = null;
+            }
+        }
+
+        function stopAllSounds() {
+            [audioRain, audioWaves, audioForest].forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+            currentSound = null;
+        }
+
+        // --- Timer Functions ---
+        function startTimer(minutes, sound) {
+            totalSeconds = minutes * 60;
+            remainingSeconds = totalSeconds;
+            updateTimerDisplay();
+            playSound(sound);
+
+            timerTime.setAttribute('aria-label', `Time remaining: ${formatTime(remainingSeconds)}`);
+            timerTime.setAttribute('role', 'timer');
+
+            timer = setInterval(() => {
+                if (!isPaused) {
+                    remainingSeconds--;
+                    updateTimerDisplay();
+                    timerTime.setAttribute('aria-label', `Time remaining: ${formatTime(remainingSeconds)}`);
+                    if (remainingSeconds <= 0) {
+                        clearInterval(timer);
+                        timer = null;
+                        updateTimerDisplay();
+                        stopAllSounds();
+                        timerTime.setAttribute('aria-label', 'Session complete');
+                        announceCompletion();
+                        addProgressEntry(totalSeconds / 60, sound);
+                        setTimerControls('complete');
+                    }
+                }
+            }, 1000);
+
+            setTimerControls('running');
+        }
+
+        function pauseTimer() {
+            isPaused = true;
+            setTimerControls('paused');
+            if (currentSound) currentSound.pause();
+        }
+
+        function resumeTimer() {
+            isPaused = false;
+            setTimerControls('running');
+            if (currentSound) currentSound.play();
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timer = null;
+            isPaused = false;
+            remainingSeconds = 0;
+            updateTimerDisplay();
+            stopAllSounds();
+            setTimerControls('reset');
+        }
+
+        // --- Timer Controls State ---
+        function setTimerControls(state) {
+            switch(state) {
+                case 'running':
+                    pauseBtn.disabled = false;
+                    resumeBtn.disabled = true;
+                    resetBtn.disabled = false;
+                    startBtn.disabled = true;
+                    pauseBtn.setAttribute('aria-pressed', 'false');
+                    resumeBtn.setAttribute('aria-pressed', 'false');
+                    break;
+                case 'paused':
+                    pauseBtn.disabled = true;
+                    resumeBtn.disabled = false;
+                    resetBtn.disabled = false;
+                    pauseBtn.setAttribute('aria-pressed', 'true');
+                    resumeBtn.setAttribute('aria-pressed', 'false');
+                    break;
+                case 'reset':
+                    pauseBtn.disabled = true;
+                    resumeBtn.disabled = true;
+                    resetBtn.disabled = true;
+                    startBtn.disabled = false;
+                    pauseBtn.setAttribute('aria-pressed', 'false');
+                    resumeBtn.setAttribute('aria-pressed', 'false');
+                    break;
+                case 'complete':
+                    pauseBtn.disabled = true;
+                    resumeBtn.disabled = true;
+                    resetBtn.disabled = false;
+                    startBtn.disabled = false;
+                    pauseBtn.setAttribute('aria-pressed', 'false');
+                    resumeBtn.setAttribute('aria-pressed', 'false');
+                    break;
+                default:
+                    pauseBtn.disabled = true;
+                    resumeBtn.disabled = true;
+                    resetBtn.disabled = true;
+                    startBtn.disabled = false;
+            }
+        }
+
+        // --- Progress Tracking ---
+        function addProgressEntry(minutes, sound) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString(undefined, {year: 'numeric', month: 'short', day: 'numeric'});
+            const timeStr = now.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'});
+            const soundName = {
+                'rain': 'Gentle Rain',
+                'waves': 'Ocean Waves',
+                'forest': 'Forest Birds',
+                'none': 'No Sound'
+            }[sound] || 'Unknown';
+
+            const entry = document.createElement('li');
+            entry.innerHTML = `<strong>${minutes} min</strong> &mdash; ${soundName} <span aria-hidden="true">|</span> <span>${dateStr}, ${timeStr}</span>`;
+            progressList.insertBefore(entry, progressList.firstChild);
+
+            // Save to localStorage for persistence
+            let history = JSON.parse(localStorage.getItem('meditationProgress')) || [];
+            history.unshift({
+                minutes,
+                sound: soundName,
+                date: dateStr,
+                time: timeStr
+            });
+            if (history.length > 10) history = history.slice(0, 10);
+            localStorage.setItem('meditationProgress', JSON.stringify(history));
+        }
+
+        function loadProgress() {
+            const history = JSON.parse(localStorage.getItem('meditationProgress')) || [];
+            progressList.innerHTML = '';
+            if (history.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'No sessions yet. Your completed sessions will appear here.';
+                progressList.appendChild(li);
             } else {
-                noAttendees.style.display = 'none';
-                attendeesList.setAttribute('aria-hidden', 'false');
-                attendees.forEach(att => {
-                    // Only display name and optionally phone (never email for privacy)
+                history.forEach(entry => {
                     const li = document.createElement('li');
-                    li.tabIndex = 0; // Allow keyboard focus for screen reader context
-                    li.innerHTML = `<strong>${att.name}</strong>` +
-                        (att.phone ? ` <span aria-label="Phone number">(${att.phone})</span>` : '');
-                    attendeesList.appendChild(li);
+                    li.innerHTML = `<strong>${entry.minutes} min</strong> &mdash; ${entry.sound} <span aria-hidden="true">|</span> <span>${entry.date}, ${entry.time}</span>`;
+                    progressList.appendChild(li);
                 });
             }
         }
 
-        // Show confirmation message with animation
-        function showConfirmation(name) {
-            confirmation.textContent = `Thank you, ${name}! Your attendance has been confirmed.`;
-            confirmation.style.display = 'block';
-            confirmation.setAttribute('tabindex', '-1');
-            confirmation.focus();
-            setTimeout(() => {
-                confirmation.style.display = 'none';
-            }, 4500);
-        }
-
-        // On form submit
-        form.addEventListener('submit', function(e) {
+        // --- Form Submission ---
+        timerForm.addEventListener('submit', function(e) {
             e.preventDefault();
             if (!validateForm()) {
-                // Focus first error field for accessibility
-                if (nameError.textContent) {
-                    form.name.focus();
-                } else if (emailError.textContent) {
-                    form.email.focus();
-                } else if (phoneError.textContent) {
-                    form.phone.focus();
+                // Move focus to first error
+                if (minutesError.textContent) {
+                    minutesInput.focus();
+                } else if (soundError.textContent) {
+                    soundSelect.focus();
                 }
                 return;
             }
-            const attendee = {
-                name: form.name.value.trim(),
-                email: form.email.value.trim(),
-                phone: form.phone.value.trim()
-            };
-            // Save attendee and check for duplicates
-            if (saveAttendee(attendee)) {
-                renderAttendees();
-                showConfirmation(attendee.name);
-                form.reset();
-                form.name.focus();
-            } else {
-                emailError.textContent = 'This email has already been used to RSVP.';
-                form.email.focus();
+            // Start timer
+            const minutes = parseInt(minutesInput.value, 10);
+            const sound = soundSelect.value;
+            resetTimer();
+            startTimer(minutes, sound);
+        });
+
+        // --- Timer Controls: Keyboard Accessible ---
+        function handleInteraction(event, action) {
+            // Keyboard/mouse event handler for accessible controls
+            if (
+                event.type === 'click' ||
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))
+            ) {
+                event.preventDefault();
+                switch(action) {
+                    case 'pause':
+                        if (!pauseBtn.disabled) pauseTimer();
+                        break;
+                    case 'resume':
+                        if (!resumeBtn.disabled) resumeTimer();
+                        break;
+                    case 'reset':
+                        if (!resetBtn.disabled) resetTimer();
+                        break;
+                }
+            }
+        }
+
+        pauseBtn.addEventListener('click', e => handleInteraction(e, 'pause'));
+        pauseBtn.addEventListener('keydown', e => handleInteraction(e, 'pause'));
+        resumeBtn.addEventListener('click', e => handleInteraction(e, 'resume'));
+        resumeBtn.addEventListener('keydown', e => handleInteraction(e, 'resume'));
+        resetBtn.addEventListener('click', e => handleInteraction(e, 'reset'));
+        resetBtn.addEventListener('keydown', e => handleInteraction(e, 'reset'));
+
+        // --- Initialize ---
+        function init() {
+            setTimerControls();
+            updateTimerDisplay();
+            loadProgress();
+        }
+
+        // --- On page load ---
+        window.addEventListener('DOMContentLoaded', init);
+
+        // --- Accessibility: Reset form errors on input ---
+        minutesInput.addEventListener('input', validateForm);
+        soundSelect.addEventListener('change', validateForm);
+
+        // --- Responsive: Pause sound on page hide, resume on show ---
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && currentSound && !isPaused) {
+                currentSound.pause();
+            } else if (!document.hidden && currentSound && !isPaused) {
+                currentSound.play();
             }
         });
 
-        // Accessibility: clear error on input
-        ['name', 'email', 'phone'].forEach(field => {
-            form[field].addEventListener('input', function() {
-                document.getElementById(field + '-error').textContent = '';
-            });
+        // --- Keyboard accessibility: ensure tab order is logical (all form controls/buttons/links are naturally tabbable) ---
+
+        // --- Prevent screen readers from reading audio elements ---
+        [audioRain, audioWaves, audioForest].forEach(audio => {
+            audio.setAttribute('tabindex', '-1');
+            audio.setAttribute('aria-hidden', 'true');
         });
 
-        // On page load, render attendees
-        window.addEventListener('DOMContentLoaded', function() {
-            renderAttendees();
-        });
-
-        // Accessibility: Ensure focus indicator visible for keyboard users
-        // (CSS already covers this, but for browsers that suppress outline on mouse)
-        document.body.addEventListener('mousedown', function(e) {
-            if (e.target.matches('button, input, select, textarea, a')) {
-                e.target.style.outline = 'none';
-            }
-        });
-        document.body.addEventListener('keydown', function(e) {
-            if (e.target.matches('button, input, select, textarea, a')) {
-                e.target.style.outline = '';
-            }
-        });
+        // --- End of script ---
     </script>
-    <!--
-        Accessibility Notes:
-        - All form fields have <label> with "for" matching input "id".
-        - Required fields use both visual (red asterisk) and programmatic (aria-required) indicators.
-        - Error messages are associated with fields using aria-describedby and aria-live.
-        - Focus indicators are visible and high contrast.
-        - Attendees list uses <ul> and <li> with semantic structure.
-        - Confirmation uses role="status" and aria-live for assistive tech.
-        - Keyboard navigation is fully supported.
-        - No information is conveyed by color alone.
-        - Responsive design and sufficient color contrast throughout.
-    -->
 </body>
 </html>
