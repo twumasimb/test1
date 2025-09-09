@@ -3,189 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Local Events Showcase</title>
-    <meta name="description" content="Discover and filter local events with accessible details and interactive venue maps.">
+    <title>Accessible Interactive Quiz - Test Your Knowledge</title>
     <style>
-        /* Base styles */
+        :root {
+            --primary: #0057b8;
+            --primary-dark: #003a75;
+            --accent: #f9a825;
+            --background: #f5f7fa;
+            --text: #222;
+            --error: #c62828;
+            --success: #2e7d32;
+            --focus: #0066cc;
+            --border-radius: 1rem;
+            --transition: 0.3s cubic-bezier(.4,0,.2,1);
+        }
+
         html {
             box-sizing: border-box;
             font-size: 100%;
         }
-        *, *:before, *:after {
+        *, *::before, *::after {
             box-sizing: inherit;
         }
+
         body {
+            background: var(--background);
+            color: var(--text);
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            background: #f9fafb;
-            color: #222;
-            line-height: 1.6;
-        }
-        header, nav, main, footer {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        header {
-            background: #00509e;
-            color: #fff;
-            padding: 1.5rem 1rem 1rem 1rem;
-        }
-        .site-title {
-            margin: 0 0 0.5rem 0;
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        nav[role="navigation"] {
+            min-height: 100vh;
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--primary);
+            color: #fff;
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
         }
         nav a {
             color: #fff;
             text-decoration: none;
             font-weight: 600;
-            padding: 0.5em 1em;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-        nav a:focus, nav a:hover {
-            background: #003f7f;
-        }
-        main {
-            padding: 1.5rem 1rem 2rem 1rem;
-        }
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        .filters {
-            margin-bottom: 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            align-items: flex-end;
-        }
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .filter-group label {
-            font-weight: 600;
-            margin-bottom: 0.3em;
-        }
-        select {
-            font-size: 1rem;
-            padding: 0.5em;
-            border-radius: 4px;
-            border: 1px solid #bbb;
-            background: #fff;
-            color: #222;
-        }
-        /* Event List */
-        .events-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
-            gap: 2rem;
-        }
-        article.event {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-            padding: 1.2rem;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-        .event-image-wrapper {
+            margin-left: 2rem;
             position: relative;
-            width: 100%;
-            height: 180px;
-            overflow: hidden;
-            border-radius: 6px;
+            transition: color var(--transition);
+        }
+        nav a:focus,
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        main {
+            flex: 1 0 auto;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 2rem 1.5rem;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2rem;
+            color: var(--primary-dark);
+        }
+        h2 {
+            font-size: 1.3rem;
             margin-bottom: 1rem;
-            background: #e6e6e6;
+            color: var(--primary);
         }
-        .event-image-wrapper img {
+
+        /* Quiz Card Animation */
+        .quiz-card {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            animation: fadeInUp 0.7s var(--transition) forwards;
+        }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Option Buttons */
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+        }
+        .options-list li {
+            margin-bottom: 0.75rem;
+        }
+        .option-btn {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .event-details {
-            flex: 1;
-        }
-        .event-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin: 0 0 0.5rem 0;
-        }
-        .event-meta {
+            background: #f0f4fa;
+            color: var(--text);
+            border: 2px solid #b0bec5;
+            border-radius: 0.6rem;
+            padding: 0.9rem 1.2rem;
             font-size: 1rem;
-            margin-bottom: 0.6rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
+            text-align: left;
+            cursor: pointer;
+            transition: 
+                background var(--transition),
+                border-color var(--transition),
+                color var(--transition),
+                box-shadow var(--transition);
+            position: relative;
         }
-        .event-meta span {
-            display: flex;
-            align-items: center;
-            gap: 0.3em;
+        .option-btn[aria-pressed="true"] {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary-dark);
         }
-        .event-description {
-            margin-bottom: 1rem;
+        .option-btn.correct {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+            animation: pulseCorrect 0.4s;
         }
-        .event-map {
+        .option-btn.incorrect {
+            background: var(--error);
+            color: #fff;
+            border-color: var(--error);
+            animation: shakeIncorrect 0.4s;
+        }
+        @keyframes pulseCorrect {
+            0% { box-shadow: 0 0 0 0 var(--success); }
+            70% { box-shadow: 0 0 0 8px rgba(46,125,50,0.3); }
+            100% { box-shadow: 0 0 0 0 var(--success); }
+        }
+        @keyframes shakeIncorrect {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+
+        /* Focus Indicators (WCAG) */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: 3px solid var(--focus);
+            outline-offset: 2px;
+            z-index: 1;
+        }
+
+        /* Feedback */
+        .feedback {
+            min-height: 2.5em;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: color var(--transition);
+        }
+        .feedback[aria-live="polite"] {
+            /* visually distinguish live region */
+        }
+        .feedback.correct {
+            color: var(--success);
+        }
+        .feedback.incorrect {
+            color: var(--error);
+        }
+
+        /* Next/Restart Button */
+        .quiz-action-btn {
+            background: var(--accent);
+            color: #222;
+            border: none;
+            border-radius: 0.6rem;
+            padding: 0.8rem 1.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background var(--transition), color var(--transition);
+        }
+        .quiz-action-btn:focus, .quiz-action-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
             width: 100%;
-            height: 200px;
-            border: 0;
-            border-radius: 6px;
+            background: #e3e8ee;
+            border-radius: 0.5rem;
+            height: 1.1rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.4s cubic-bezier(.4,0,.2,1);
+        }
+        .progress-label {
+            font-size: 1rem;
+            color: #444;
             margin-bottom: 0.5rem;
         }
-        .event-category {
-            display: inline-block;
-            background: #e3f1ff;
-            color: #00509e;
-            font-size: 0.95rem;
-            font-weight: 600;
-            padding: 0.2em 0.7em;
-            border-radius: 12px;
-            margin-bottom: 0.8rem;
+
+        /* Results Section */
+        .results {
+            text-align: center;
+            animation: fadeInUp 0.7s var(--transition) forwards;
         }
-        /* Focus indicators (required) */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
+        .results-score {
+            font-size: 2.3rem;
+            color: var(--primary-dark);
+            margin: 1rem 0 0.5rem 0;
         }
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
+        .results-summary {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
         }
+
         /* Responsive Design */
         @media (max-width: 600px) {
-            .filters {
-                flex-direction: column;
-                gap: 1rem;
+            main {
+                padding: 1rem 0.5rem;
             }
-            .events-list {
-                grid-template-columns: 1fr;
-            }
-            header, nav, main, footer {
-                max-width: 100%;
+            .option-btn {
+                font-size: 0.98rem;
+                padding: 0.8rem 0.8rem;
             }
         }
-        /* Footer */
-        footer {
-            background: #222;
-            color: #fff;
-            text-align: center;
-            padding: 1.2rem 1rem;
-            font-size: 1rem;
-            margin-top: 2rem;
-        }
-        /* Visually hidden utility class for screen readers */
+
+        /* Hide visually but keep accessible to screen readers */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -196,326 +250,332 @@
             clip: rect(0,0,0,0);
             border: 0;
         }
-        /* Category color dots for visual users, but not only color for info */
-        .category-dot {
-            display: inline-block;
-            width: 0.8em;
-            height: 0.8em;
-            border-radius: 50%;
-            margin-right: 0.4em;
-            vertical-align: middle;
-        }
-        .dot-music { background: #ea4c89; }
-        .dot-sports { background: #1abc9c; }
-        .dot-art { background: #f39c12; }
-        .dot-education { background: #6c63ff; }
-        .dot-food { background: #e67e22; }
-        .dot-other { background: #888; }
     </style>
 </head>
 <body>
     <header>
-        <h1 class="site-title">Local Events Showcase</h1>
         <nav role="navigation" aria-label="Main navigation">
             <a href="#main-content">Skip to main content</a>
-            <a href="#events-section">Events</a>
-            <a href="#footer">Contact & Info</a>
+            <a href="#" aria-current="page">Quiz Home</a>
         </nav>
     </header>
     <main id="main-content" tabindex="-1">
-        <h1>Discover Local Events</h1>
-        <section class="filters" aria-labelledby="filter-heading">
-            <h2 id="filter-heading" class="sr-only">Filter Events</h2>
-            <form id="filter-form" aria-describedby="filter-desc">
-                <span id="filter-desc" class="sr-only">Use these filters to refine events by category.</span>
-                <div class="filter-group">
-                    <label for="category-select">Event Category</label>
-                    <select id="category-select" name="category" aria-label="Filter by event category">
-                        <option value="all">All Categories</option>
-                        <option value="music">Music</option>
-                        <option value="sports">Sports</option>
-                        <option value="art">Art</option>
-                        <option value="education">Education</option>
-                        <option value="food">Food & Drink</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-            </form>
-        </section>
-        <section id="events-section" aria-labelledby="events-heading">
-            <h2 id="events-heading" class="sr-only">Event Listings</h2>
-            <div id="events-list" class="events-list" aria-live="polite">
-                <!-- Events rendered here by JS -->
+        <h1>Accessible Interactive Quiz</h1>
+        <section aria-label="Quiz Progress" class="quiz-card">
+            <div class="progress-label" id="progress-label">Question 1 of 3</div>
+            <div class="progress-bar-container" aria-hidden="true">
+                <div class="progress-bar" id="progress-bar" style="width: 0%;"></div>
             </div>
-            <div id="no-events-message" class="sr-only" aria-live="assertive"></div>
+        </section>
+        <section aria-label="Quiz Questions" id="quiz-section" class="quiz-card">
+            <!-- Quiz question and options will be injected here by JS -->
+        </section>
+        <section aria-label="Quiz Results" id="results-section" class="results" hidden>
+            <!-- Results summary will be injected here by JS -->
         </section>
     </main>
-    <footer id="footer">
-        <p>
-            &copy; <span id="year"></span> Local Events Showcase. All rights reserved.<br>
-            <a href="mailto:info@localevents.com">Contact us via email</a>
-        </p>
+    <footer>
+        <div style="text-align:center; padding:1rem 0; font-size:0.97rem; color:#666;">
+            &copy; 2024 Accessible Quiz Demo | Designed with <span aria-label="love" role="img">❤️</span> for everyone
+        </div>
     </footer>
     <script>
-        // Event data (could be fetched from API in production)
-        const events = [
+        // Quiz Data: Array of questions with options and correct answer
+        const quizData = [
             {
-                id: 1,
-                title: "Summer Jazz Festival",
-                image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
-                alt: "Musicians performing on stage at a jazz festival outdoors",
-                date: "2024-07-15",
-                location: "Riverside Park, Downtown",
-                lat: 40.712776,
-                lng: -74.005974,
-                category: "music",
-                description: "Enjoy a day of live jazz performances by renowned artists in the scenic Riverside Park. Food trucks and family activities available.",
+                question: "Which HTML element is used to define the most important heading?",
+                options: [
+                    { text: "<h1>", isCorrect: true },
+                    { text: "<heading>", isCorrect: false },
+                    { text: "<h6>", isCorrect: false },
+                    { text: "<header>", isCorrect: false }
+                ]
             },
             {
-                id: 2,
-                title: "Art in the Square",
-                image: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80",
-                alt: "Colorful art displays at an outdoor art fair",
-                date: "2024-08-02",
-                location: "City Square",
-                lat: 40.714352,
-                lng: -74.008583,
-                category: "art",
-                description: "Browse local artists' work, join workshops, and create your own masterpiece. Open to all ages and free entry.",
+                question: "What is the correct way to associate a label with an input in HTML?",
+                options: [
+                    { text: "Wrap the input inside the label", isCorrect: false },
+                    { text: "Use <label for='id'> and <input id='id'>", isCorrect: true },
+                    { text: "Use a placeholder attribute", isCorrect: false },
+                    { text: "Use aria-label only", isCorrect: false }
+                ]
             },
             {
-                id: 3,
-                title: "Community Soccer Match",
-                image: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=600&q=80",
-                alt: "People playing soccer on a grassy field",
-                date: "2024-07-20",
-                location: "Central Sports Complex",
-                lat: 40.718267,
-                lng: -74.002379,
-                category: "sports",
-                description: "Join us for a friendly soccer match between local teams. Spectators welcome. Snacks and drinks available.",
-            },
-            {
-                id: 4,
-                title: "Gourmet Food Truck Rally",
-                image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
-                alt: "Food trucks lined up at an outdoor food festival",
-                date: "2024-07-22",
-                location: "Market Street",
-                lat: 40.710002,
-                lng: -74.009000,
-                category: "food",
-                description: "Sample delicious dishes from the city's best food trucks. Vegan and gluten-free options available.",
-            },
-            {
-                id: 5,
-                title: "Photography Workshop",
-                image: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80",
-                alt: "Person holding a camera at a photography workshop",
-                date: "2024-08-10",
-                location: "Library Conference Room",
-                lat: 40.713800,
-                lng: -74.006000,
-                category: "education",
-                description: "Learn photography basics from a professional instructor. Bring your own camera or use one of ours.",
-            },
-            {
-                id: 6,
-                title: "Outdoor Movie Night",
-                image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80",
-                alt: "People watching a movie projected outdoors at night",
-                date: "2024-07-28",
-                location: "Greenwood Park",
-                lat: 40.715000,
-                lng: -74.003000,
-                category: "other",
-                description: "Bring a blanket and enjoy a family-friendly movie under the stars. Free popcorn for all attendees.",
+                question: "Which CSS property ensures visible focus indicators for keyboard users?",
+                options: [
+                    { text: "outline", isCorrect: true },
+                    { text: "border-radius", isCorrect: false },
+                    { text: "z-index", isCorrect: false },
+                    { text: "opacity", isCorrect: false }
+                ]
             }
         ];
 
-        // Categories for mapping and color
-        const categoryLabels = {
-            music: "Music",
-            sports: "Sports",
-            art: "Art",
-            education: "Education",
-            food: "Food & Drink",
-            other: "Other"
-        };
-        const categoryDotClass = {
-            music: "dot-music",
-            sports: "dot-sports",
-            art: "dot-art",
-            education: "dot-education",
-            food: "dot-food",
-            other: "dot-other"
-        };
+        // State
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let quizCompleted = false;
 
-        // Utility: Format date for screen reader and visual users
-        function formatDate(iso) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const date = new Date(iso);
-            return date.toLocaleDateString(undefined, options);
+        // Elements
+        const quizSection = document.getElementById('quiz-section');
+        const resultsSection = document.getElementById('results-section');
+        const progressBar = document.getElementById('progress-bar');
+        const progressLabel = document.getElementById('progress-label');
+
+        // Utility: Shuffle options (for variety)
+        function shuffle(array) {
+            return array
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value);
         }
 
-        // Render events to the DOM
-        function renderEvents(filteredEvents) {
-            const eventsList = document.getElementById('events-list');
-            const noEventsMsg = document.getElementById('no-events-message');
-            eventsList.innerHTML = '';
-            noEventsMsg.textContent = '';
-            if (filteredEvents.length === 0) {
-                noEventsMsg.textContent = "No events found for the selected category.";
-                noEventsMsg.classList.remove('sr-only');
-                return;
+        // Render Progress Bar and Label
+        function renderProgress() {
+            const total = quizData.length;
+            const current = Math.min(currentQuestion + 1, total);
+            const percent = (current / total) * 100;
+            progressBar.style.width = percent + "%";
+            progressLabel.textContent = `Question ${current} of ${total}`;
+        }
+
+        // Render a single quiz question
+        function renderQuestion(index) {
+            quizSection.innerHTML = ''; // Clear previous
+            resultsSection.hidden = true;
+            quizSection.hidden = false;
+            renderProgress();
+
+            const q = quizData[index];
+            // Shuffle options for fairness
+            const options = shuffle([...q.options]);
+
+            // Question heading
+            const qHeading = document.createElement('h2');
+            qHeading.id = "question-label";
+            qHeading.textContent = q.question;
+            quizSection.appendChild(qHeading);
+
+            // Feedback region (aria-live for screen readers)
+            const feedback = document.createElement('div');
+            feedback.className = 'feedback';
+            feedback.id = 'feedback';
+            feedback.setAttribute('aria-live', 'polite');
+            feedback.setAttribute('aria-atomic', 'true');
+            quizSection.appendChild(feedback);
+
+            // Options list
+            const list = document.createElement('ul');
+            list.className = 'options-list';
+            list.setAttribute('role', 'list');
+            quizSection.appendChild(list);
+
+            options.forEach((opt, i) => {
+                const li = document.createElement('li');
+
+                // Each option is a button for accessibility
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'option-btn';
+                btn.setAttribute('aria-pressed', 'false');
+                btn.setAttribute('aria-describedby', 'feedback');
+                btn.setAttribute('data-correct', opt.isCorrect ? "true" : "false");
+                btn.id = `option-${i}`;
+                btn.innerHTML = `<span aria-hidden="true">${String.fromCharCode(65 + i)}.</span> ${opt.text}`;
+
+                // Keyboard & Mouse Accessible
+                btn.addEventListener('click', handleOptionSelect);
+                btn.addEventListener('keydown', function(event) {
+                    // Support Enter/Space as click
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        btn.click();
+                    }
+                });
+
+                li.appendChild(btn);
+                list.appendChild(li);
+            });
+
+            // Set focus to the question heading for screen readers
+            setTimeout(() => {
+                qHeading.focus && qHeading.focus();
+            }, 100);
+
+            // Hide next button if present
+            removeNextButton();
+        }
+
+        // Handle option selection (mouse or keyboard)
+        function handleOptionSelect(event) {
+            const btn = event.currentTarget;
+            // Prevent multiple answers
+            if (quizSection.querySelector('.option-btn[aria-pressed="true"]')) return;
+
+            // Mark as pressed
+            btn.setAttribute('aria-pressed', 'true');
+
+            // Mark all buttons as disabled (but keep focusable for review)
+            quizSection.querySelectorAll('.option-btn').forEach(b => {
+                b.disabled = true;
+            });
+
+            // Feedback and styling
+            const isCorrect = btn.getAttribute('data-correct') === "true";
+            const feedback = document.getElementById('feedback');
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.textContent = "Correct! Well done.";
+                feedback.className = 'feedback correct';
             } else {
-                noEventsMsg.classList.add('sr-only');
+                btn.classList.add('incorrect');
+                feedback.textContent = "Incorrect. Try to review the correct answer next time.";
+                feedback.className = 'feedback incorrect';
+                // Also highlight the correct answer for clarity (not color alone)
+                quizSection.querySelectorAll('.option-btn').forEach(b => {
+                    if (b.getAttribute('data-correct') === "true") {
+                        b.classList.add('correct');
+                        b.setAttribute('aria-label', b.textContent.trim() + " (Correct answer)");
+                    }
+                });
             }
-            filteredEvents.forEach(event => {
-                // Compose event article
-                const article = document.createElement('article');
-                article.className = 'event';
-                article.setAttribute('tabindex', '0');
-                article.setAttribute('aria-labelledby', `event-title-${event.id}`);
-                article.setAttribute('aria-describedby', `event-meta-${event.id} event-desc-${event.id}`);
+            // Store user answer
+            userAnswers[currentQuestion] = isCorrect;
 
-                // Category badge with color dot and text (not color alone)
-                const categoryBadge = document.createElement('span');
-                categoryBadge.className = 'event-category';
-                const dot = document.createElement('span');
-                dot.className = `category-dot ${categoryDotClass[event.category] || 'dot-other'}`;
-                dot.setAttribute('aria-hidden', 'true');
-                categoryBadge.appendChild(dot);
-                categoryBadge.appendChild(document.createTextNode(categoryLabels[event.category] || "Other"));
+            // Announce feedback for screen readers
+            feedback.setAttribute('tabindex', '-1');
+            feedback.focus();
 
-                // Event image
-                const imgWrapper = document.createElement('div');
-                imgWrapper.className = 'event-image-wrapper';
-                const img = document.createElement('img');
-                img.src = event.image;
-                img.alt = event.alt;
-                img.width = 600;
-                img.height = 180;
-                imgWrapper.appendChild(img);
-
-                // Event details
-                const details = document.createElement('div');
-                details.className = 'event-details';
-
-                // Title
-                const title = document.createElement('h3');
-                title.className = 'event-title';
-                title.id = `event-title-${event.id}`;
-                title.textContent = event.title;
-
-                // Meta (date, location)
-                const meta = document.createElement('div');
-                meta.className = 'event-meta';
-                meta.id = `event-meta-${event.id}`;
-
-                // Date
-                const dateSpan = document.createElement('span');
-                dateSpan.innerHTML = `<strong>Date:</strong> <time datetime="${event.date}">${formatDate(event.date)}</time>`;
-
-                // Location
-                const locSpan = document.createElement('span');
-                locSpan.innerHTML = `<strong>Location:</strong> ${event.location}`;
-
-                meta.appendChild(dateSpan);
-                meta.appendChild(locSpan);
-
-                // Description
-                const desc = document.createElement('p');
-                desc.className = 'event-description';
-                desc.id = `event-desc-${event.id}`;
-                desc.textContent = event.description;
-
-                // Map integration (iframe, accessible)
-                const map = document.createElement('iframe');
-                map.className = 'event-map';
-                map.width = "100%";
-                map.height = "200";
-                map.setAttribute('loading', 'lazy');
-                map.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
-                // Using OpenStreetMap for privacy and accessibility
-                map.src = `https://www.openstreetmap.org/export/embed.html?bbox=${event.lng-0.002},${event.lat-0.001},${event.lng+0.002},${event.lat+0.001}&layer=mapnik&marker=${event.lat},${event.lng}`;
-                map.title = `Map showing location of ${event.title} at ${event.location}`;
-                map.setAttribute('aria-label', `Map showing location of ${event.title} at ${event.location}`);
-
-                // Compose article
-                article.appendChild(categoryBadge);
-                article.appendChild(imgWrapper);
-                details.appendChild(title);
-                details.appendChild(meta);
-                details.appendChild(desc);
-                article.appendChild(details);
-                article.appendChild(map);
-
-                eventsList.appendChild(article);
-            });
+            // Add Next button after short delay for animation
+            setTimeout(() => {
+                addNextButton();
+            }, 500);
         }
 
-        // Filtering logic
-        function filterEvents() {
-            const category = document.getElementById('category-select').value;
-            let filtered = events;
-            if (category !== 'all') {
-                filtered = events.filter(e => e.category === category);
-            }
-            renderEvents(filtered);
+        // Add the Next/Finish/Restart button after answering
+        function addNextButton() {
+            removeNextButton();
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'quiz-action-btn';
+            btn.id = 'next-btn';
+            btn.setAttribute('aria-label', 
+                currentQuestion < quizData.length - 1 ? 
+                'Next question' : 
+                'Show results'
+            );
+            btn.textContent = currentQuestion < quizData.length - 1 ? 'Next Question' : 'Show Results';
+            btn.addEventListener('click', handleNext);
+            btn.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    btn.click();
+                }
+            });
+            quizSection.appendChild(btn);
+            btn.focus();
         }
 
-        // Set up filter form
-        document.addEventListener('DOMContentLoaded', function () {
-            // Render all events initially
-            renderEvents(events);
+        // Remove Next/Restart button if present
+        function removeNextButton() {
+            const btn = document.getElementById('next-btn');
+            if (btn) btn.remove();
+        }
 
-            // Filter change handler (change and keyboard accessible)
-            const categorySelect = document.getElementById('category-select');
-            categorySelect.addEventListener('change', filterEvents);
+        // Handle Next/Finish button
+        function handleNext(event) {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                renderQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
 
-            // Keyboard accessibility for select (handled by browser), but ensure visible focus
-            categorySelect.addEventListener('focus', function (e) {
-                e.target.style.outline = '3px solid #0066cc';
+        // Show Results Summary
+        function showResults() {
+            quizCompleted = true;
+            quizSection.hidden = true;
+            resultsSection.hidden = false;
+
+            const correctCount = userAnswers.filter(Boolean).length;
+            const total = quizData.length;
+
+            resultsSection.innerHTML = `
+                <h2 id="results-heading">Quiz Results</h2>
+                <div class="results-score" aria-live="polite" aria-atomic="true">
+                    ${correctCount} / ${total}
+                </div>
+                <div class="results-summary">
+                    <p>
+                        <strong>
+                            ${correctCount === total ? "Outstanding! You got all answers correct." : 
+                            correctCount >= total / 2 ? "Great job! Review the explanations below to improve further." :
+                            "Keep practicing! Review the correct answers below."}
+                        </strong>
+                    </p>
+                </div>
+                <ol aria-label="Review of correct answers" style="text-align:left;max-width:420px;margin:0 auto 1.5rem auto;">
+                    ${quizData.map((q, i) => `
+                        <li>
+                            <strong>Q${i+1}:</strong> ${q.question}<br>
+                            <span>
+                                <span class="sr-only">Correct answer:</span>
+                                <span style="color:var(--success);font-weight:600;">
+                                    ${q.options.find(opt => opt.isCorrect).text}
+                                </span>
+                                ${userAnswers[i] ? 
+                                    '<span aria-label="You answered correctly" style="color:var(--success);margin-left:0.5em;">✓</span>' :
+                                    '<span aria-label="You answered incorrectly" style="color:var(--error);margin-left:0.5em;">✗</span>'
+                                }
+                            </span>
+                        </li>
+                    `).join('')}
+                </ol>
+                <button type="button" class="quiz-action-btn" id="restart-btn" aria-label="Restart quiz">Restart Quiz</button>
+            `;
+            // Keyboard support for restart
+            document.getElementById('restart-btn').addEventListener('click', restartQuiz);
+            document.getElementById('restart-btn').addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    restartQuiz();
+                }
             });
-            categorySelect.addEventListener('blur', function (e) {
-                e.target.style.outline = '';
-            });
+            // Focus results heading for screen readers
+            setTimeout(() => {
+                const resHead = document.getElementById('results-heading');
+                resHead && resHead.focus && resHead.focus();
+            }, 100);
+        }
 
-            // Set current year in footer
-            document.getElementById('year').textContent = new Date().getFullYear();
-        });
+        // Restart the quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            quizCompleted = false;
+            resultsSection.hidden = true;
+            renderQuestion(currentQuestion);
+        }
 
-        // Skip to main content link: move focus for accessibility
-        document.querySelector('a[href="#main-content"]').addEventListener('click', function (e) {
+        // "Skip to main content" link support
+        document.querySelector('a[href="#main-content"]').addEventListener('click', function(e) {
             e.preventDefault();
             const main = document.getElementById('main-content');
             main.setAttribute('tabindex', '-1');
             main.focus();
         });
 
-        // Ensure all event articles are keyboard focusable and provide ARIA labelling for screen readers
-        // Already handled during renderEvents()
+        // Initial render
+        renderQuestion(currentQuestion);
 
-        // If any custom clickable elements are added, use this accessible pattern:
-        function handleInteraction(event) {
-            // For demonstration, but no custom mouse events needed here
-            if (event.type === 'click' ||
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                // Your action here
-            }
-        }
-        // No custom interactive elements outside standard controls in this implementation
-
-        // Accessibility notes:
-        // - All images have descriptive alt text
-        // - All iframes (maps) have descriptive titles and aria-labels
-        // - All form controls have labels
-        // - Keyboard navigation is fully supported (tab order, focus indicators)
-        // - Color is not used as the only means of conveying category; text is always present
-        // - Event updates (filtering) use aria-live="polite" for announcements
-        // - All interactive elements are accessible and have visible focus
-        // - Proper heading hierarchy and semantic HTML5 structure throughout
+        // Accessibility Notes:
+        // - All option buttons are keyboard and screen reader accessible, with feedback via aria-live region.
+        // - Correct/incorrect feedback is provided with both color and text/symbols (not color alone).
+        // - Progress bar is decorative (aria-hidden) but progress label is visible.
+        // - Results summary uses semantic <ol> for review.
+        // - All interactive elements have visible, high-contrast focus indicators.
+        // - "Skip to main content" link is provided for quick navigation.
     </script>
 </body>
 </html>
