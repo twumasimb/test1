@@ -3,51 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Music Player – Play, Pause, Volume, and Playlist</title>
+    <title>Accessible Space Exploration: Constellations & Planet Gallery</title>
+    <meta name="description" content="Explore the stars with an accessible, interactive space-themed website featuring constellations and a planet gallery with fun facts.">
     <style>
         :root {
-            --primary: #0066cc;
-            --primary-dark: #004a99;
-            --background: #f9fafb;
-            --surface: #ffffff;
-            --text: #222222;
-            --text-secondary: #555555;
-            --accent: #f5b700;
-            --focus: #0066cc;
-            --focus-light: #ffffff;
-            --border-radius: 1rem;
-            --transition: 0.3s cubic-bezier(.4,0,.2,1);
+            --bg-color: #111827;
+            --primary: #38bdf8;
+            --secondary: #fbbf24;
+            --white: #fff;
+            --focus: #fff;
+            --focus-dark: #0066cc;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --gallery-bg: #0f172a;
+            --gallery-arrow: #38bdf8;
+            --gallery-arrow-bg: #1e293b;
+            --gallery-arrow-focus: #fbbf24;
         }
 
         html {
-            font-size: 100%;
-            box-sizing: border-box;
-        }
-        *, *::before, *::after {
-            box-sizing: inherit;
+            background: var(--bg-color);
+            color: var(--white);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 1rem;
+            line-height: 1.6;
         }
 
         body {
             margin: 0;
-            background: var(--background);
-            color: var(--text);
-            font-family: 'Segoe UI', Arial, sans-serif;
-            line-height: 1.5;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            background: var(--bg-color);
+            color: var(--white);
         }
 
         header {
-            background: var(--primary);
-            color: #fff;
+            background: #0f172a;
             padding: 1rem 0;
         }
 
         nav {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
+            padding: 0 1rem;
         }
 
         nav ul {
@@ -55,619 +55,750 @@
             margin: 0;
             padding: 0;
             display: flex;
-        }
-
-        nav li {
-            margin: 0 1rem;
+            gap: 2rem;
         }
 
         nav a {
-            color: #fff;
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
-            letter-spacing: 0.05em;
-            transition: color var(--transition);
+            font-size: 1.1rem;
+            padding: 0.25em 0.5em;
+            border-radius: 0.25em;
+            transition: background 0.2s;
         }
 
-        nav a:focus, nav a:hover {
-            color: var(--accent);
+        nav a:focus,
+        nav a:hover {
+            background: var(--card-bg);
+            outline: 3px solid var(--focus);
+            outline-offset: 2px;
         }
 
         main {
-            flex: 1 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 2rem 1rem 3rem 1rem;
-        }
-
-        .player-container {
-            background: var(--surface);
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            max-width: 410px;
-            width: 100%;
-            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: box-shadow var(--transition);
+            padding: 2rem 1rem 4rem 1rem;
         }
 
-        .player-artwork {
-            width: 180px;
-            height: 180px;
+        h1 {
+            font-size: 2.25rem;
+            margin-bottom: 0.5em;
+            color: var(--primary);
+            text-shadow: 0 2px 8px #000a;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Starfield and constellations */
+        .starfield-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            height: 420px;
+            background: radial-gradient(ellipse at 50% 60%, #1e293b 60%, #111827 100%);
             border-radius: 1rem;
-            object-fit: cover;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.09);
-            transition: box-shadow 0.4s cubic-bezier(.4,0,.2,1);
+            overflow: hidden;
+            margin-bottom: 2.5rem;
         }
 
-        .player-song-info {
-            text-align: center;
-            margin-bottom: 1.5rem;
+        canvas#starfield {
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 1;
         }
 
-        .player-song-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            margin: 0 0 0.25rem 0;
-            color: var(--primary-dark);
+        /* Constellation SVG overlay */
+        .constellation-svg {
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none; /* except for interactive elements */
         }
 
-        .player-song-artist {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin: 0;
+        .constellation-group {
+            cursor: pointer;
+            pointer-events: auto;
+            outline: none;
+            transition: filter 0.2s;
         }
 
-        .player-controls {
-            display: flex;
+        .constellation-group:focus,
+        .constellation-group:hover {
+            filter: drop-shadow(0 0 8px var(--secondary));
+            outline: 3px solid var(--focus);
+            outline-offset: 2px;
+        }
+
+        .constellation-line {
+            stroke: var(--primary);
+            stroke-width: 2.5;
+        }
+
+        .constellation-star {
+            fill: var(--secondary);
+            stroke: #fff;
+            stroke-width: 1;
+        }
+
+        /* Modal dialog for constellation info */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(17, 24, 39, 0.85);
             align-items: center;
             justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
         }
-
-        .player-controls button {
-            background: var(--primary);
-            color: #fff;
+        .modal[aria-hidden="false"] {
+            display: flex;
+        }
+        .modal-dialog {
+            background: var(--card-bg);
+            color: var(--white);
+            border-radius: 1rem;
+            box-shadow: 0 6px 32px #000a;
+            max-width: 90vw;
+            width: 420px;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            position: relative;
+            outline: none;
+        }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--gallery-arrow-bg);
+            color: var(--white);
             border: none;
             border-radius: 50%;
-            width: 48px;
-            height: 48px;
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1.25rem;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: background var(--transition), transform var(--transition);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-
-        .player-controls button:active {
-            transform: scale(0.96);
-        }
-
-        .player-controls button:focus {
-            outline: 3px solid var(--focus-light);
+        .modal-close:focus {
+            outline: 3px solid var(--focus);
             outline-offset: 2px;
-            background: var(--primary-dark);
+            background: var(--gallery-arrow-focus);
+            color: #222;
+        }
+        .modal h3 {
+            margin-top: 0;
+            margin-bottom: 0.75em;
+            color: var(--primary);
+        }
+        .modal p {
+            margin-bottom: 0.5em;
         }
 
-        /* Volume slider and label */
-        .player-volume {
+        /* Planet gallery */
+        .planet-gallery-section {
+            margin-top: 2.5rem;
+        }
+        .gallery-wrapper {
+            position: relative;
+            background: var(--gallery-bg);
+            border-radius: 1rem;
+            padding: 2.5rem 0 2rem 0;
+            overflow: hidden;
+        }
+        .gallery-title {
+            margin-bottom: 1.25rem;
+        }
+        .gallery {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            width: 100%;
-            margin-bottom: 1.5rem;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 1rem 2.5rem;
+            outline: none;
         }
-
-        .player-volume label {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            font-weight: 600;
+        .gallery:focus {
+            outline: 3px solid var(--focus);
+            outline-offset: 2px;
         }
-
-        .player-volume input[type="range"] {
-            flex: 1;
-            accent-color: var(--primary);
-            height: 2px;
+        .gallery::-webkit-scrollbar {
+            height: 12px;
+            background: #222;
         }
-
-        /* Playlist styles */
-        .player-playlist-section {
-            width: 100%;
-        }
-
-        .playlist-heading {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .player-playlist {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .player-playlist li {
-            margin-bottom: 0.25rem;
-        }
-
-        .playlist-song-btn {
-            width: 100%;
-            background: none;
-            border: none;
-            text-align: left;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            color: var(--text);
-            cursor: pointer;
-            transition: background var(--transition), color var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .playlist-song-btn[aria-current="true"] {
+        .gallery::-webkit-scrollbar-thumb {
             background: var(--primary);
-            color: #fff;
-            font-weight: 700;
+            border-radius: 6px;
         }
-
-        .playlist-song-btn:focus {
-            outline: 3px solid var(--focus);
-            outline-offset: 2px;
-            background: var(--primary-dark);
-            color: #fff;
+        .planet-card {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 1rem;
+            min-width: 260px;
+            max-width: 260px;
+            flex: 0 0 260px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.25rem 1rem 1rem 1rem;
+            box-shadow: 0 2px 12px #0005;
+            margin-bottom: 1rem;
         }
-
-        .playlist-song-btn:hover:not([aria-current="true"]) {
-            background: #e6f0fa;
+        .planet-card img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: #fff1;
+            margin-bottom: 1rem;
+            border: 2px solid var(--primary);
         }
-
-        /* Responsive design */
-        @media (max-width: 600px) {
-            .player-container {
-                max-width: 100%;
-                padding: 1rem 0.5rem;
-            }
-            .player-artwork {
-                width: 120px;
-                height: 120px;
-            }
+        .planet-card h4 {
+            margin: 0.5em 0 0.5em 0;
+            color: var(--secondary);
+            font-size: 1.2rem;
         }
-
-        /* Focus indicators for all interactive elements */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid var(--focus);
-            outline-offset: 2px;
-        }
-
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid var(--focus-light);
-        }
-
-        /* Footer styles */
-        footer {
-            background: var(--primary-dark);
-            color: #fff;
-            text-align: center;
-            padding: 1rem 0;
+        .planet-card p {
             font-size: 1rem;
-            letter-spacing: 0.03em;
+            margin: 0.25em 0 0.25em 0;
         }
 
-        /* Smooth fade-in for artwork and transitions */
-        .fade-in {
-            animation: fadeIn 0.6s cubic-bezier(.4,0,.2,1);
+        /* Gallery arrows */
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--gallery-arrow-bg);
+            color: var(--gallery-arrow);
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.2s, color 0.2s;
+        }
+        .gallery-arrow:focus {
+            outline: 3px solid var(--focus);
+            outline-offset: 2px;
+            background: var(--gallery-arrow-focus);
+            color: #222;
+        }
+        .gallery-arrow[disabled] {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .gallery-arrow.left {
+            left: 0.5rem;
+        }
+        .gallery-arrow.right {
+            right: 0.5rem;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.97);}
-            to { opacity: 1; transform: scale(1);}
+        /* Focus indicators (per accessibility requirements) */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: 3px solid var(--focus-dark);
+            outline-offset: 2px;
+        }
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: 3px solid var(--focus);
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .starfield-container {
+                height: 260px;
+            }
+            .planet-card {
+                min-width: 180px;
+                max-width: 180px;
+                padding: 1rem 0.5rem 0.5rem 0.5rem;
+            }
+            .planet-card img {
+                width: 80px;
+                height: 80px;
+            }
+            .gallery {
+                gap: 1rem;
+                padding: 1rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.4rem; }
+            h2 { font-size: 1.1rem; }
+            .starfield-container { height: 170px; }
+            .gallery-wrapper { padding: 1.5rem 0 1rem 0; }
+        }
+
+        footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            text-align: center;
+            font-size: 0.95rem;
+            padding: 1.25rem 0 1rem 0;
+            margin-top: 3rem;
         }
     </style>
 </head>
-<body>
+<body class="dark-bg">
     <header>
         <nav role="navigation" aria-label="Main navigation">
             <ul>
-                <li><a href="#main-content">Skip to main content</a></li>
-                <li><a href="#" aria-current="page">Music Player Home</a></li>
+                <li><a href="#constellations">Constellations</a></li>
+                <li><a href="#planets">Planet Gallery</a></li>
             </ul>
         </nav>
     </header>
-    <main id="main-content">
-        <h1>Accessible Music Player</h1>
-        <section class="player-container" aria-label="Music player">
-            <img
-                src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80"
-                alt="Album cover: Abstract blue and yellow artwork"
-                class="player-artwork fade-in"
-                id="player-artwork"
-                width="180"
-                height="180"
-            >
-            <div class="player-song-info" aria-live="polite" aria-atomic="true">
-                <p class="player-song-title" id="song-title">Loading...</p>
-                <p class="player-song-artist" id="song-artist"></p>
+    <main>
+        <h1>Space Exploration: Constellations & Planet Gallery</h1>
+        <section id="constellations" aria-labelledby="constellations-heading">
+            <h2 id="constellations-heading">Explore Interactive Constellations</h2>
+            <p>Discover famous constellations in the night sky. Select a constellation to learn more about its history and stars.</p>
+            <div class="starfield-container" aria-label="Starfield with interactive constellations">
+                <canvas id="starfield" aria-hidden="true"></canvas>
+                <!-- SVG overlay for constellations; interactive groups for keyboard/mouse -->
+                <svg class="constellation-svg" width="100%" height="100%" viewBox="0 0 800 400" aria-label="Constellations">
+                    <!-- Orion -->
+                    <g class="constellation-group" tabindex="0" role="button" aria-label="Orion constellation" data-constellation="orion">
+                        <!-- Lines -->
+                        <polyline class="constellation-line" points="170,120 200,180 260,200 320,180 350,120 320,70 260,70 200,120 170,120" />
+                        <!-- Stars -->
+                        <circle class="constellation-star" cx="170" cy="120" r="7" />
+                        <circle class="constellation-star" cx="200" cy="180" r="6" />
+                        <circle class="constellation-star" cx="260" cy="200" r="8" />
+                        <circle class="constellation-star" cx="320" cy="180" r="6" />
+                        <circle class="constellation-star" cx="350" cy="120" r="7" />
+                        <circle class="constellation-star" cx="320" cy="70" r="5" />
+                        <circle class="constellation-star" cx="260" cy="70" r="5" />
+                        <circle class="constellation-star" cx="200" cy="120" r="6" />
+                    </g>
+                    <!-- Ursa Major (Big Dipper) -->
+                    <g class="constellation-group" tabindex="0" role="button" aria-label="Ursa Major constellation" data-constellation="ursa-major">
+                        <polyline class="constellation-line" points="600,70 670,90 700,140 690,210 640,230 610,180 590,120" />
+                        <circle class="constellation-star" cx="600" cy="70" r="7" />
+                        <circle class="constellation-star" cx="670" cy="90" r="7" />
+                        <circle class="constellation-star" cx="700" cy="140" r="8" />
+                        <circle class="constellation-star" cx="690" cy="210" r="7" />
+                        <circle class="constellation-star" cx="640" cy="230" r="6" />
+                        <circle class="constellation-star" cx="610" cy="180" r="6" />
+                        <circle class="constellation-star" cx="590" cy="120" r="6" />
+                    </g>
+                    <!-- Cassiopeia -->
+                    <g class="constellation-group" tabindex="0" role="button" aria-label="Cassiopeia constellation" data-constellation="cassiopeia">
+                        <polyline class="constellation-line" points="420,80 460,120 500,70 540,120 580,80" />
+                        <circle class="constellation-star" cx="420" cy="80" r="6" />
+                        <circle class="constellation-star" cx="460" cy="120" r="6" />
+                        <circle class="constellation-star" cx="500" cy="70" r="7" />
+                        <circle class="constellation-star" cx="540" cy="120" r="6" />
+                        <circle class="constellation-star" cx="580" cy="80" r="6" />
+                    </g>
+                </svg>
             </div>
-            <div class="player-controls" role="group" aria-label="Playback controls">
-                <button
-                    type="button"
-                    id="prev-btn"
-                    aria-label="Previous song"
-                    title="Previous song"
-                >
-                    <!-- SVG icon: previous -->
-                    <svg width="24" height="24" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M6 18V6h2v5.14l7.07-5.77A1 1 0 0 1 17 6.86v10.28a1 1 0 0 1-1.93.49L8 13.86V19a1 1 0 0 1-2 0z"/>
-                    </svg>
-                </button>
-                <button
-                    type="button"
-                    id="play-pause-btn"
-                    aria-label="Play"
-                    title="Play"
-                >
-                    <!-- SVG icon: play/pause, dynamic -->
-                    <svg id="play-icon" width="32" height="32" aria-hidden="true" focusable="false" viewBox="0 0 32 32">
-                        <polygon fill="currentColor" points="8,6 26,16 8,26"/>
-                    </svg>
-                    <svg id="pause-icon" width="32" height="32" aria-hidden="true" focusable="false" viewBox="0 0 32 32" style="display:none;">
-                        <rect x="8" y="6" width="6" height="20" fill="currentColor"/>
-                        <rect x="18" y="6" width="6" height="20" fill="currentColor"/>
-                    </svg>
-                </button>
-                <button
-                    type="button"
-                    id="next-btn"
-                    aria-label="Next song"
-                    title="Next song"
-                >
-                    <!-- SVG icon: next -->
-                    <svg width="24" height="24" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M18 6v12h-2v-5.14l-7.07 5.77A1 1 0 0 1 7 17.14V6.86a1 1 0 0 1 1.93-.49L16 10.14V5a1 1 0 0 1 2 0z"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="player-volume">
-                <label for="volume-slider" id="volume-label">Volume</label>
-                <input
-                    type="range"
-                    id="volume-slider"
-                    min="0"
-                    max="100"
-                    value="70"
-                    aria-valuenow="70"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    aria-labelledby="volume-label"
-                >
-            </div>
-            <section class="player-playlist-section" aria-label="Playlist">
-                <h2 class="playlist-heading" id="playlist-heading">Playlist</h2>
-                <ul class="player-playlist" id="playlist" aria-labelledby="playlist-heading">
-                    <!-- Playlist items inserted by JS -->
-                </ul>
-            </section>
-            <!-- Audio element is visually hidden but accessible for screen readers -->
-            <audio id="audio" preload="metadata" aria-label="Audio player"></audio>
         </section>
+        <section id="planets" class="planet-gallery-section" aria-labelledby="planets-heading">
+            <h2 id="planets-heading" class="gallery-title">Planet Gallery: Discover the Solar System</h2>
+            <div class="gallery-wrapper" aria-label="Scrollable planet gallery">
+                <button type="button" class="gallery-arrow left" aria-label="Scroll left" tabindex="0">
+                    <span aria-hidden="true">&#8592;</span>
+                </button>
+                <div class="gallery" tabindex="0" role="region" aria-label="Planets in our solar system">
+                    <!-- Planet cards inserted here by JavaScript -->
+                </div>
+                <button type="button" class="gallery-arrow right" aria-label="Scroll right" tabindex="0">
+                    <span aria-hidden="true">&#8594;</span>
+                </button>
+            </div>
+        </section>
+        <!-- Modal dialog for constellation info -->
+        <div class="modal" id="constellation-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+            <div class="modal-dialog" tabindex="-1">
+                <button type="button" class="modal-close" aria-label="Close constellation information" tabindex="0">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 id="modal-title"></h3>
+                <div id="modal-content"></div>
+            </div>
+        </div>
     </main>
     <footer>
-        <span>&copy; 2024 Accessible Music Player. All rights reserved.</span>
+        <p>
+            &copy; 2024 Accessible Space Exploration. All images and content are for educational purposes.<br>
+            Designed for inclusivity and accessibility. <span aria-hidden="true" role="img" title="sparkles">&#10024;</span>
+        </p>
     </footer>
     <script>
-        // Music playlist data
-        const playlist = [
+        // --- Starfield background ---
+        (function drawStarfield() {
+            const canvas = document.getElementById('starfield');
+            const ctx = canvas.getContext('2d');
+            let width, height, dpr = window.devicePixelRatio || 1;
+
+            function resize() {
+                width = canvas.offsetWidth;
+                height = canvas.offsetHeight;
+                canvas.width = width * dpr;
+                canvas.height = height * dpr;
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                ctx.scale(dpr, dpr);
+            }
+
+            function randomBetween(a, b) {
+                return Math.random() * (b - a) + a;
+            }
+
+            function drawStars() {
+                ctx.clearRect(0, 0, width, height);
+                // Draw random stars
+                for (let i = 0; i < 130; i++) {
+                    let x = randomBetween(0, width);
+                    let y = randomBetween(0, height);
+                    let r = randomBetween(0.4, 1.7);
+                    ctx.beginPath();
+                    ctx.arc(x, y, r, 0, 2 * Math.PI);
+                    ctx.fillStyle = (i % 7 === 0) ? '#fbbf24' : '#fff';
+                    ctx.globalAlpha = randomBetween(0.5, 1);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            function render() {
+                resize();
+                drawStars();
+            }
+
+            window.addEventListener('resize', render);
+            render();
+        })();
+
+        // --- Constellation modal info ---
+        const CONSTELLATION_DATA = {
+            'orion': {
+                name: 'Orion',
+                description: `<p><strong>Orion</strong> is one of the most recognizable constellations, often called "The Hunter." It features two of the brightest stars in the sky: <em>Betelgeuse</em> (red supergiant) and <em>Rigel</em> (blue supergiant). Orion's Belt is formed by three aligned stars in the center.</p>
+                <ul>
+                    <li>Visible in both hemispheres during winter.</li>
+                    <li>Mythologically, represents a hunter in Greek legends.</li>
+                    <li>Contains the Orion Nebula, a stellar nursery.</li>
+                </ul>`
+            },
+            'ursa-major': {
+                name: 'Ursa Major (Big Dipper)',
+                description: `<p><strong>Ursa Major</strong>, known as the "Great Bear," contains the famous <em>Big Dipper</em> asterism. Its "pointer" stars help locate Polaris, the North Star.</p>
+                <ul>
+                    <li>Visible year-round in the Northern Hemisphere.</li>
+                    <li>Key in navigation for centuries.</li>
+                    <li>Part of many world mythologies.</li>
+                </ul>`
+            },
+            'cassiopeia': {
+                name: 'Cassiopeia',
+                description: `<p><strong>Cassiopeia</strong> forms a distinctive "W" shape in the sky. Named after the vain queen in Greek mythology, it sits opposite the Big Dipper across Polaris.</p>
+                <ul>
+                    <li>Easy to spot due to its unique shape.</li>
+                    <li>Home to several star clusters and nebulae.</li>
+                    <li>Visible year-round in the Northern Hemisphere.</li>
+                </ul>`
+            }
+        };
+
+        // --- Modal dialog logic (accessible) ---
+        (function() {
+            const modal = document.getElementById('constellation-modal');
+            const modalDialog = modal.querySelector('.modal-dialog');
+            const modalClose = modal.querySelector('.modal-close');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            let lastFocusedElement = null;
+
+            function openModal(constellationKey) {
+                const data = CONSTELLATION_DATA[constellationKey];
+                if (!data) return;
+                modalTitle.textContent = data.name;
+                modalContent.innerHTML = data.description;
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                lastFocusedElement = document.activeElement;
+                // Focus the dialog for screen readers and keyboard users
+                setTimeout(() => { modalDialog.focus(); }, 50);
+            }
+
+            function closeModal() {
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                // Restore focus to the last element
+                if (lastFocusedElement && lastFocusedElement.focus) {
+                    lastFocusedElement.focus();
+                }
+            }
+
+            // Trap focus inside modal
+            modal.addEventListener('keydown', function(e) {
+                if (modal.getAttribute('aria-hidden') === 'true') return;
+                const focusable = modal.querySelectorAll('button, [tabindex]:not([tabindex="-1"])');
+                const first = focusable[0], last = focusable[focusable.length - 1];
+                if (e.key === 'Tab') {
+                    if (e.shiftKey) {
+                        if (document.activeElement === first) {
+                            e.preventDefault();
+                            last.focus();
+                        }
+                    } else {
+                        if (document.activeElement === last) {
+                            e.preventDefault();
+                            first.focus();
+                        }
+                    }
+                } else if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+
+            // Close button
+            modalClose.addEventListener('click', closeModal);
+            modalClose.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    closeModal();
+                }
+            });
+
+            // Clicking outside the dialog closes modal
+            modal.addEventListener('mousedown', function(e) {
+                if (e.target === modal) closeModal();
+            });
+
+            // Expose openModal globally for constellation click
+            window.openConstellationModal = openModal;
+        })();
+
+        // --- Constellation click & keyboard interaction ---
+        document.querySelectorAll('.constellation-group').forEach(function(group) {
+            // Mouse click
+            group.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.openConstellationModal(group.dataset.constellation);
+            });
+            // Keyboard: Enter/Space
+            group.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    window.openConstellationModal(group.dataset.constellation);
+                }
+            });
+        });
+
+        // --- Planet gallery data ---
+        const PLANETS = [
             {
-                title: "Dreams in Blue",
-                artist: "Emilia Woods",
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-                artwork: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80",
-                artworkAlt: "Album cover: Abstract blue and yellow artwork"
+                name: 'Mercury',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg',
+                alt: 'Mercury: small gray rocky planet',
+                facts: [
+                    'Closest planet to the Sun.',
+                    'A year on Mercury is just 88 Earth days.',
+                    'Temperature swings are extreme: -173°C to 427°C.'
+                ]
             },
             {
-                title: "Golden Hour",
-                artist: "Lucas Fields",
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-                artwork: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
-                artworkAlt: "Album cover: Golden hour landscape"
+                name: 'Venus',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg',
+                alt: 'Venus: yellowish planet with thick clouds',
+                facts: [
+                    'Hottest planet in the Solar System.',
+                    'Rotates in the opposite direction to most planets.',
+                    'Known as Earth’s “sister planet”.'
+                ]
             },
             {
-                title: "Urban Night",
-                artist: "Jade Rivers",
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-                artwork: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80",
-                artworkAlt: "Album cover: City at night with lights"
+                name: 'Earth',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg',
+                alt: 'Earth: blue planet with white clouds and continents',
+                facts: [
+                    'Our home planet, the only known planet with life.',
+                    '70% of the surface is covered by water.',
+                    'Has one natural satellite: the Moon.'
+                ]
             },
             {
-                title: "Morning Dew",
-                artist: "Milo Hart",
-                src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
-                artwork: "https://images.unsplash.com/photo-1465101178521-c1a9136a3a8b?auto=format&fit=crop&w=400&q=80",
-                artworkAlt: "Album cover: Dew on grass in the morning"
+                name: 'Mars',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg',
+                alt: 'Mars: reddish planet with dark markings',
+                facts: [
+                    'Known as the Red Planet.',
+                    'Home to the tallest volcano in the Solar System: Olympus Mons.',
+                    'Evidence suggests it once had liquid water.'
+                ]
+            },
+            {
+                name: 'Jupiter',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg',
+                alt: 'Jupiter: large striped planet with Great Red Spot',
+                facts: [
+                    'Largest planet in the Solar System.',
+                    'Has a giant storm called the Great Red Spot.',
+                    'At least 79 moons, including Ganymede (largest moon).'
+                ]
+            },
+            {
+                name: 'Saturn',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg',
+                alt: 'Saturn: planet with prominent rings',
+                facts: [
+                    'Famous for its beautiful ring system.',
+                    'Lowest density of all planets; could float in water!',
+                    'At least 83 moons, including Titan.'
+                ]
+            },
+            {
+                name: 'Uranus',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg',
+                alt: 'Uranus: pale blue planet',
+                facts: [
+                    'Rotates on its side (axial tilt of 98°).',
+                    'Coldest planet in the Solar System.',
+                    'Has faint rings and at least 27 moons.'
+                ]
+            },
+            {
+                name: 'Neptune',
+                img: 'https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg',
+                alt: 'Neptune: deep blue planet',
+                facts: [
+                    'Furthest planet from the Sun.',
+                    'Strongest winds in the Solar System.',
+                    'Has a dark storm called the Great Dark Spot.'
+                ]
             }
         ];
 
-        // Element references
-        const audio = document.getElementById('audio');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const playIcon = document.getElementById('play-icon');
-        const pauseIcon = document.getElementById('pause-icon');
-        const songTitle = document.getElementById('song-title');
-        const songArtist = document.getElementById('song-artist');
-        const artwork = document.getElementById('player-artwork');
-        const volumeSlider = document.getElementById('volume-slider');
-        const playlistEl = document.getElementById('playlist');
+        // --- Render planet cards in gallery ---
+        (function() {
+            const gallery = document.querySelector('.gallery');
+            PLANETS.forEach(function(planet, idx) {
+                const card = document.createElement('article');
+                card.className = 'planet-card';
+                card.tabIndex = 0;
+                card.setAttribute('role', 'group');
+                card.setAttribute('aria-label', planet.name + ' planet card');
+                // Planet image
+                const img = document.createElement('img');
+                img.src = planet.img;
+                img.alt = planet.alt;
+                img.width = 120;
+                img.height = 120;
+                card.appendChild(img);
+                // Planet name
+                const h4 = document.createElement('h4');
+                h4.textContent = planet.name;
+                card.appendChild(h4);
+                // Fun facts
+                const ul = document.createElement('ul');
+                planet.facts.forEach(function(fact) {
+                    const li = document.createElement('li');
+                    li.textContent = fact;
+                    ul.appendChild(li);
+                });
+                card.appendChild(ul);
+                gallery.appendChild(card);
+            });
+        })();
 
-        let currentSong = 0;
-        let isPlaying = false;
-        let playlistButtons = [];
+        // --- Gallery scrolling & keyboard accessibility ---
+        (function() {
+            const gallery = document.querySelector('.gallery');
+            const leftArrow = document.querySelector('.gallery-arrow.left');
+            const rightArrow = document.querySelector('.gallery-arrow.right');
+            const SCROLL_AMOUNT = 280;
 
-        // Utility: update play/pause button icon and aria-label
-        function updatePlayPauseButton() {
-            if (isPlaying) {
-                playIcon.style.display = 'none';
-                pauseIcon.style.display = '';
-                playPauseBtn.setAttribute('aria-label', 'Pause');
-                playPauseBtn.setAttribute('title', 'Pause');
-            } else {
-                playIcon.style.display = '';
-                pauseIcon.style.display = 'none';
-                playPauseBtn.setAttribute('aria-label', 'Play');
-                playPauseBtn.setAttribute('title', 'Play');
+            function updateArrows() {
+                // Disable arrows if at ends
+                leftArrow.disabled = gallery.scrollLeft <= 5;
+                rightArrow.disabled = gallery.scrollLeft + gallery.offsetWidth >= gallery.scrollWidth - 5;
             }
-        }
 
-        // Load song at index
-        function loadSong(index, play = false) {
-            const song = playlist[index];
-            audio.src = song.src;
-            songTitle.textContent = song.title;
-            songArtist.textContent = song.artist;
-            artwork.src = song.artwork;
-            artwork.alt = song.artworkAlt;
-            artwork.classList.remove('fade-in');
-            // For animation: trigger reflow
-            void artwork.offsetWidth;
-            artwork.classList.add('fade-in');
-            // Update playlist aria-current
-            playlistButtons.forEach((btn, i) => {
-                if (i === index) {
-                    btn.setAttribute('aria-current', 'true');
-                    btn.setAttribute('tabindex', '0');
-                } else {
-                    btn.removeAttribute('aria-current');
-                    btn.setAttribute('tabindex', '-1');
+            function scrollGallery(direction) {
+                const amount = direction === 'left' ? -SCROLL_AMOUNT : SCROLL_AMOUNT;
+                gallery.scrollBy({ left: amount, behavior: 'smooth' });
+                setTimeout(updateArrows, 350);
+            }
+
+            // Click events
+            leftArrow.addEventListener('click', function(e) {
+                scrollGallery('left');
+            });
+            rightArrow.addEventListener('click', function(e) {
+                scrollGallery('right');
+            });
+
+            // Keyboard support for arrows
+            leftArrow.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    scrollGallery('left');
                 }
             });
-            currentSong = index;
-            if (play) {
-                playSong();
-            } else {
-                pauseSong();
-            }
-        }
-
-        // Play the current song
-        function playSong() {
-            audio.play();
-            isPlaying = true;
-            updatePlayPauseButton();
-        }
-
-        // Pause the current song
-        function pauseSong() {
-            audio.pause();
-            isPlaying = false;
-            updatePlayPauseButton();
-        }
-
-        // Play next song (with wrap-around)
-        function nextSong() {
-            let next = (currentSong + 1) % playlist.length;
-            loadSong(next, true);
-        }
-
-        // Play previous song (with wrap-around)
-        function prevSong() {
-            let prev = (currentSong - 1 + playlist.length) % playlist.length;
-            loadSong(prev, true);
-        }
-
-        // Handle play/pause button interaction (keyboard and mouse)
-        function handlePlayPauseInteraction(event) {
-            // Keyboard support
-            if (event.type === 'click' ||
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.preventDefault();
-                if (isPlaying) {
-                    pauseSong();
-                } else {
-                    playSong();
+            rightArrow.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    scrollGallery('right');
                 }
-            }
-        }
-
-        // Handle next/prev button interaction (keyboard and mouse)
-        function handleNextInteraction(event) {
-            if (event.type === 'click' ||
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.preventDefault();
-                nextSong();
-            }
-        }
-        function handlePrevInteraction(event) {
-            if (event.type === 'click' ||
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.preventDefault();
-                prevSong();
-            }
-        }
-
-        // Handle playlist song button interaction
-        function handlePlaylistSongInteraction(event) {
-            if (event.type === 'click' ||
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.preventDefault();
-                const index = parseInt(event.currentTarget.getAttribute('data-index'), 10);
-                loadSong(index, true);
-                event.currentTarget.focus();
-            }
-        }
-
-        // Keyboard navigation for playlist (arrow up/down)
-        function handlePlaylistKeydown(event) {
-            if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-                event.preventDefault();
-                const focusedIndex = playlistButtons.findIndex(btn => btn === document.activeElement);
-                let nextIndex;
-                if (event.key === 'ArrowDown') {
-                    nextIndex = (focusedIndex + 1) % playlistButtons.length;
-                } else {
-                    nextIndex = (focusedIndex - 1 + playlistButtons.length) % playlistButtons.length;
-                }
-                playlistButtons[nextIndex].focus();
-            }
-        }
-
-        // Handle volume slider change
-        function handleVolumeChange(event) {
-            const value = parseInt(event.target.value, 10);
-            audio.volume = value / 100;
-            volumeSlider.setAttribute('aria-valuenow', value);
-        }
-
-        // Handle space/enter on volume slider (for accessibility)
-        function handleVolumeKeydown(event) {
-            // Left/Right arrows for adjusting volume
-            let value = parseInt(volumeSlider.value, 10);
-            if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
-                event.preventDefault();
-                value = Math.max(0, value - 5);
-                volumeSlider.value = value;
-                audio.volume = value / 100;
-                volumeSlider.setAttribute('aria-valuenow', value);
-            } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
-                event.preventDefault();
-                value = Math.min(100, value + 5);
-                volumeSlider.value = value;
-                audio.volume = value / 100;
-                volumeSlider.setAttribute('aria-valuenow', value);
-            }
-        }
-
-        // Build playlist in DOM
-        function renderPlaylist() {
-            playlistEl.innerHTML = '';
-            playlistButtons = [];
-            playlist.forEach((song, i) => {
-                const li = document.createElement('li');
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'playlist-song-btn';
-                btn.setAttribute('data-index', i);
-                btn.setAttribute('aria-label', `Play ${song.title} by ${song.artist}`);
-                btn.setAttribute('tabindex', i === currentSong ? '0' : '-1');
-                if (i === currentSong) {
-                    btn.setAttribute('aria-current', 'true');
-                }
-                // Song title and artist for screen readers and visual users
-                btn.innerHTML = `<span><strong>${song.title}</strong> <span style="color: #555;">by</span> <span>${song.artist}</span></span>`;
-                // Add keyboard/mouse event listeners
-                btn.addEventListener('click', handlePlaylistSongInteraction);
-                btn.addEventListener('keydown', handlePlaylistSongInteraction);
-                btn.addEventListener('keydown', handlePlaylistKeydown);
-                li.appendChild(btn);
-                playlistEl.appendChild(li);
-                playlistButtons.push(btn);
             });
-        }
 
-        // Initialize player
-        function initPlayer() {
-            renderPlaylist();
-            loadSong(currentSong, false);
+            // Keyboard support for gallery itself (arrow keys)
+            gallery.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') {
+                    scrollGallery('right');
+                } else if (e.key === 'ArrowLeft') {
+                    scrollGallery('left');
+                }
+            });
 
-            // Set default volume
-            audio.volume = volumeSlider.value / 100;
+            // Update arrows on scroll
+            gallery.addEventListener('scroll', updateArrows);
+            // On load
+            updateArrows();
 
-            // Playback controls
-            playPauseBtn.addEventListener('click', handlePlayPauseInteraction);
-            playPauseBtn.addEventListener('keydown', handlePlayPauseInteraction);
-
-            nextBtn.addEventListener('click', handleNextInteraction);
-            nextBtn.addEventListener('keydown', handleNextInteraction);
-
-            prevBtn.addEventListener('click', handlePrevInteraction);
-            prevBtn.addEventListener('keydown', handlePrevInteraction);
-
-            // Keyboard shortcuts: space/enter for play/pause, left/right for prev/next
-            document.addEventListener('keydown', function(event) {
-                // Avoid if focus is on input/textarea
+            // Accessibility: allow tabbing into gallery and planet cards
+            // Focus first card when gallery receives focus (if not already inside)
+            gallery.addEventListener('focus', function(e) {
                 const active = document.activeElement;
-                if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
-                if (event.key === ' ' || event.key === 'Spacebar') {
-                    event.preventDefault();
-                    handlePlayPauseInteraction({type: 'keydown', key: ' '});
-                } else if (event.key === 'ArrowRight') {
-                    handleNextInteraction({type: 'keydown', key: 'ArrowRight'});
-                } else if (event.key === 'ArrowLeft') {
-                    handlePrevInteraction({type: 'keydown', key: 'ArrowLeft'});
+                if (!gallery.contains(active)) {
+                    const firstCard = gallery.querySelector('.planet-card');
+                    if (firstCard) firstCard.focus();
                 }
             });
 
-            // Audio events
-            audio.addEventListener('ended', nextSong);
-
-            // Volume control
-            volumeSlider.addEventListener('input', handleVolumeChange);
-            volumeSlider.addEventListener('keydown', handleVolumeKeydown);
-
-            // On page load, focus the play/pause button for quick keyboard access
-            setTimeout(() => {
-                playPauseBtn.focus();
-            }, 300);
-        }
-
-        // Ensure all images have alt text (accessibility check)
-        function verifyImageAlts() {
-            document.querySelectorAll('img').forEach(img => {
-                if (!img.hasAttribute('alt')) {
-                    img.setAttribute('alt', '');
-                }
+            // Allow left/right tabbing between cards
+            gallery.querySelectorAll('.planet-card').forEach(function(card, idx, cards) {
+                card.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowRight') {
+                        e.preventDefault();
+                        if (cards[idx + 1]) cards[idx + 1].focus();
+                    } else if (e.key === 'ArrowLeft') {
+                        e.preventDefault();
+                        if (cards[idx - 1]) cards[idx - 1].focus();
+                    }
+                });
             });
-        }
-
-        // Initialize after DOM content loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            initPlayer();
-            verifyImageAlts();
-        });
-
-        // Accessibility note:
-        // - All interactive elements are keyboard accessible and have visible focus indicators.
-        // - Playlist supports arrow key navigation.
-        // - All images have descriptive alt text.
-        // - All buttons have aria-labels and visible text or icons.
-        // - Live region is used for song info updates.
-        // - Color contrast and focus styles meet WCAG 2.1 AA.
-        // - Responsive layout adapts for mobile and zoom.
-
+        })();
     </script>
 </body>
 </html>
