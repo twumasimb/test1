@@ -3,655 +3,463 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Book Recommendation Page</title>
+    <title>Event RSVP – Confirm Your Attendance</title>
+    <meta name="description" content="Accessible RSVP page for confirming attendance to the event, submitting details, and viewing attendees. Fully WCAG 2.1 AA compliant.">
     <style>
         :root {
             --primary: #0066cc;
-            --secondary: #e5f1fb;
-            --danger: #b00020;
-            --background: #ffffff;
-            --text: #222222;
-            --focus-outline: #0066cc;
-            --focus-outline-dark: #ffffff;
-            --border-radius: 6px;
+            --primary-dark: #004999;
+            --accent: #18a058;
+            --danger: #c82333;
+            --bg: #f7f9fa;
+            --text: #1a1a1a;
+            --border: #e1e4e8;
+            --radius: 8px;
+            --focus-outline: 3px solid var(--primary);
+            --focus-outline-dark: 3px solid #fff;
+            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
         }
 
         html {
             box-sizing: border-box;
+            font-size: 100%;
         }
-        *, *:before, *:after {
+        *, *::before, *::after {
             box-sizing: inherit;
         }
-
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--background);
-            color: var(--text);
             margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-
+        header, footer {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+        }
         header {
-            background: var(--primary);
-            color: #fff;
             padding: 1rem 0;
         }
-
         nav {
-            max-width: 960px;
-            margin: 0 auto;
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
+            justify-content: center;
+            gap: 2rem;
         }
-
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        nav li {
-            margin: 0;
-        }
-
         nav a {
-            color: #fff;
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
-            padding: 0.5em 1em;
-            border-radius: var(--border-radius);
-            transition: background 0.2s;
+            font-size: 1rem;
+            position: relative;
         }
-
-        nav a:focus,
-        nav a:hover {
-            background: #004a99;
-            outline: 3px solid var(--focus-outline-dark);
+        nav a:focus {
+            outline: var(--focus-outline);
             outline-offset: 2px;
+            background: #e6f0fa;
+            border-radius: 4px;
         }
-
         main {
-            max-width: 960px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
-        }
-
-        section {
-            margin-bottom: 2.5rem;
-        }
-
-        form {
-            background: var(--secondary);
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            flex: 1 0 auto;
             max-width: 600px;
+            margin: 2rem auto;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 2rem 1.5rem;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 2rem;
+            color: var(--primary-dark);
+        }
+        section {
             margin-bottom: 2rem;
         }
-
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
         .form-group {
-            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
         }
-
         label {
-            display: block;
             font-weight: 600;
-            margin-bottom: 0.4em;
+            margin-bottom: 0.15rem;
         }
-
-        .required-indicator {
+        .required {
             color: var(--danger);
-            font-size: 1em;
-            margin-left: 0.2em;
+            margin-left: 0.25em;
+            font-size: 1.1em;
         }
-
-        input[type="text"],
-        select {
-            width: 100%;
-            padding: 0.5em;
-            border: 1.5px solid #b3c6d6;
-            border-radius: var(--border-radius);
-            font-size: 1em;
-            background: #fff;
+        input, select {
+            padding: 0.5em 0.75em;
+            font-size: 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 4px;
+            transition: border-color var(--transition);
+            background: #f9fbfc;
             color: var(--text);
         }
-
-        input[type="text"]:focus,
-        select:focus {
-            outline: 3px solid var(--focus-outline);
-            outline-offset: 2px;
-            border-color: var(--focus-outline);
+        input:focus, select:focus, textarea:focus {
+            outline: var(--focus-outline);
+            border-color: var(--primary);
+            background: #e6f0fa;
         }
-
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
+        .error {
+            color: var(--danger);
+            font-size: 0.97em;
+            margin-top: 0.15em;
+            min-height: 1.3em;
         }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            margin-right: 0.5em;
-        }
-
         button[type="submit"] {
             background: var(--primary);
             color: #fff;
-            border: none;
-            padding: 0.7em 1.6em;
-            border-radius: var(--border-radius);
-            font-size: 1.1em;
             font-weight: 700;
+            border: none;
+            border-radius: 4px;
+            padding: 0.75em 1.5em;
+            font-size: 1.1rem;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background var(--transition), transform var(--transition);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
             margin-top: 0.5em;
         }
-
-        button[type="submit"]:hover,
+        button[type="submit"]:hover, button[type="submit"]:focus-visible {
+            background: var(--primary-dark);
+            transform: translateY(-2px) scale(1.03);
+        }
         button[type="submit"]:focus {
-            background: #004a99;
-            outline: 3px solid var(--focus-outline);
+            outline: var(--focus-outline);
             outline-offset: 2px;
         }
-
-        .error-message {
-            color: var(--danger);
-            font-size: 1em;
-            margin-top: 0.3em;
-        }
-
-        .sr-only {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0,0,0,0) !important;
-            border: 0 !important;
-        }
-
-        /* Book recommendations grid */
-        #recommendations[aria-live] {
-            margin-top: 2rem;
-        }
-
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2rem;
-        }
-
-        article.book {
-            background: #f9fafb;
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            min-height: 360px;
-        }
-
-        .book img {
-            width: 100%;
-            max-width: 160px;
-            height: auto;
+        .confirmation {
+            background: #e6f7ea;
+            border-left: 5px solid var(--accent);
+            color: #22543d;
+            padding: 1em 1.5em;
             border-radius: 4px;
-            margin-bottom: 1em;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 1.5em;
+            font-size: 1.05em;
+            animation: fadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
         }
-
-        .book-title {
-            font-size: 1.15em;
-            font-weight: 700;
-            margin: 0.2em 0 0.4em 0;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px);}
+            to { opacity: 1; transform: translateY(0);}
         }
-
-        .book-author {
-            font-size: 1em;
-            color: #333;
-            margin-bottom: 0.7em;
+        .attendees-list {
+            margin-top: 1.5em;
         }
-
-        .book-desc {
-            font-size: 0.98em;
-            color: #222;
-            margin-bottom: 0.5em;
+        .attendees-list h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75em;
         }
-
-        .book-genre {
-            display: inline-block;
-            background: var(--primary);
-            color: #fff;
-            font-size: 0.95em;
-            border-radius: 3px;
-            padding: 0.18em 0.7em;
-            margin-top: auto;
-            margin-bottom: 0.5em;
-            letter-spacing: 0.01em;
+        ul.attendees {
+            list-style: disc inside;
+            padding: 0;
+            margin: 0;
         }
-
-        /* Focus indicators for all interactive elements */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid var(--focus-outline);
-            outline-offset: 2px;
+        ul.attendees li {
+            padding: 0.5em 0.25em;
+            border-bottom: 1px solid #f0f0f0;
+            animation: fadeIn 0.5s;
         }
-
-        /* Responsive adjustments */
+        .no-attendees {
+            color: #888;
+            font-style: italic;
+            margin-top: 0.5em;
+        }
+        /* Responsive design */
         @media (max-width: 700px) {
             main {
-                padding: 0 0.5rem;
-            }
-            form {
-                padding: 1rem;
-            }
-            .book-grid {
-                gap: 1.2rem;
+                padding: 1rem 0.5rem;
             }
         }
-
-        @media (max-width: 500px) {
+        @media (max-width: 480px) {
+            main {
+                margin: 0.5rem;
+            }
             h1 {
-                font-size: 1.4rem;
+                font-size: 1.25rem;
             }
-            .book-title {
-                font-size: 1em;
-            }
-            .book {
-                min-height: 260px;
-            }
+        }
+        /* Required focus indicators for accessibility */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+        /* High contrast focus for dark backgrounds */
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: var(--focus-outline-dark);
+        }
+        /* Hide visually but keep accessible for screen readers */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
         }
     </style>
 </head>
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <ul>
-                <li><a href="#form-section">Book Finder Form</a></li>
-                <li><a href="#recommendations">Recommendations</a></li>
-            </ul>
+            <a href="#rsvp-section">RSVP</a>
+            <a href="#attendees-section">View Attendees</a>
         </nav>
     </header>
     <main>
-        <h1>Find Your Next Favorite Book</h1>
-        <section id="form-section" aria-labelledby="form-heading">
-            <h2 id="form-heading">Tell Us Your Preferences</h2>
-            <form id="book-form" novalidate aria-describedby="form-desc">
-                <p id="form-desc" class="sr-only">
-                    Select your favorite genres and optionally enter a favorite author. Required fields are marked.
-                </p>
-                <div class="form-group">
-                    <label for="genres">
-                        Favorite Genres
-                        <span class="required-indicator" aria-hidden="true">*</span>
-                    </label>
-                    <div id="genres" class="checkbox-group" role="group" aria-labelledby="genres-label">
-                        <!-- Genres will be rendered here by JS for flexibility and labeling -->
-                    </div>
-                    <div id="genres-error" class="error-message" aria-live="polite"></div>
+        <h1>Event RSVP – Confirm Your Attendance</h1>
+        <section id="rsvp-section" aria-labelledby="rsvp-heading">
+            <h2 id="rsvp-heading">RSVP Form</h2>
+            <p>Please fill in your details to confirm your attendance. Fields marked with <span class="required" aria-hidden="true">*</span> are required.</p>
+            <form id="rsvpForm" novalidate autocomplete="off" aria-describedby="rsvp-instructions">
+                <div id="rsvp-instructions" class="sr-only">
+                    Fill in your name and email. Phone number is optional. Use the submit button to confirm attendance.
                 </div>
                 <div class="form-group">
-                    <label for="author">
-                        Favorite Author
-                        <span class="sr-only">(optional)</span>
+                    <label for="name">
+                        Full Name <span class="required" aria-hidden="true">*</span>
                     </label>
-                    <input type="text" id="author" name="author" autocomplete="off" placeholder="e.g., Agatha Christie" aria-describedby="author-desc">
-                    <span id="author-desc" class="sr-only">Enter your favorite author. This field is optional.</span>
+                    <input type="text" id="name" name="name" required aria-required="true" autocomplete="name" aria-describedby="name-error" maxlength="80" />
+                    <span id="name-error" class="error" aria-live="polite"></span>
                 </div>
-                <button type="submit" id="submit-btn">Get Book Recommendations</button>
+                <div class="form-group">
+                    <label for="email">
+                        Email Address <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <input type="email" id="email" name="email" required aria-required="true" autocomplete="email" aria-describedby="email-error" maxlength="80" />
+                    <span id="email-error" class="error" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                    <label for="phone">
+                        Phone Number (optional)
+                    </label>
+                    <input type="tel" id="phone" name="phone" autocomplete="tel" aria-describedby="phone-error" maxlength="20" pattern="^[\d\s\-\+\(\)]*$" />
+                    <span id="phone-error" class="error" aria-live="polite"></span>
+                </div>
+                <button type="submit" id="submitBtn">Confirm Attendance</button>
             </form>
+            <div id="confirmation" class="confirmation" role="status" aria-live="polite" style="display:none;"></div>
         </section>
-        <section id="recommendations" aria-labelledby="rec-heading" aria-live="polite">
-            <h2 id="rec-heading">Book Recommendations</h2>
-            <!-- Recommendations will be rendered here -->
-            <div id="rec-content">
-                <p>Fill in your preferences above and click "Get Book Recommendations" to see suggestions!</p>
-            </div>
+        <section id="attendees-section" class="attendees-list" aria-labelledby="attendees-heading">
+            <h2 id="attendees-heading">List of Attendees</h2>
+            <ul id="attendees" class="attendees" aria-live="polite" aria-relevant="additions removals">
+                <!-- Attendees dynamically inserted here -->
+            </ul>
+            <div id="no-attendees" class="no-attendees">No attendees yet.</div>
         </section>
     </main>
     <footer>
-        <p style="text-align:center; font-size:0.98em; color:#555; margin:2rem 0 1rem 0;">
-            &copy; 2024 Accessible Book Finder. All rights reserved.
-        </p>
+        <div style="text-align:center; padding:1em 0; font-size:0.98em; color:#555;">
+            &copy; <span id="year"></span> Accessible Event RSVP. All rights reserved.
+        </div>
     </footer>
     <script>
-        // Data: Genres and Sample Books
-        const GENRES = [
-            { id: 'mystery', label: 'Mystery' },
-            { id: 'fantasy', label: 'Fantasy' },
-            { id: 'scifi', label: 'Science Fiction' },
-            { id: 'romance', label: 'Romance' },
-            { id: 'nonfiction', label: 'Non-Fiction' },
-            { id: 'historical', label: 'Historical' },
-            { id: 'thriller', label: 'Thriller' },
-            { id: 'youngadult', label: 'Young Adult' }
-        ];
+        // Utility: Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Book data: Each book has a title, author, genre, cover, and description
-        const BOOKS = [
-            {
-                title: "The Hound of the Baskervilles",
-                author: "Arthur Conan Doyle",
-                genre: "mystery",
-                cover: "https://covers.openlibrary.org/b/id/8231856-L.jpg",
-                alt: "Cover of The Hound of the Baskervilles by Arthur Conan Doyle",
-                desc: "Sherlock Holmes investigates the legend of a supernatural hound terrorizing the Baskerville family on the moors of Devonshire."
-            },
-            {
-                title: "Murder on the Orient Express",
-                author: "Agatha Christie",
-                genre: "mystery",
-                cover: "https://covers.openlibrary.org/b/id/8231991-L.jpg",
-                alt: "Cover of Murder on the Orient Express by Agatha Christie",
-                desc: "Detective Hercule Poirot must solve a murder aboard the luxurious Orient Express train."
-            },
-            {
-                title: "The Hobbit",
-                author: "J.R.R. Tolkien",
-                genre: "fantasy",
-                cover: "https://covers.openlibrary.org/b/id/6979861-L.jpg",
-                alt: "Cover of The Hobbit by J.R.R. Tolkien",
-                desc: "Bilbo Baggins embarks on an epic quest to reclaim a lost dwarf kingdom from the dragon Smaug."
-            },
-            {
-                title: "Harry Potter and the Sorcerer's Stone",
-                author: "J.K. Rowling",
-                genre: "fantasy",
-                cover: "https://covers.openlibrary.org/b/id/7984916-L.jpg",
-                alt: "Cover of Harry Potter and the Sorcerer's Stone by J.K. Rowling",
-                desc: "A young boy discovers he is a wizard and attends Hogwarts School of Witchcraft and Wizardry."
-            },
-            {
-                title: "Dune",
-                author: "Frank Herbert",
-                genre: "scifi",
-                cover: "https://covers.openlibrary.org/b/id/8101351-L.jpg",
-                alt: "Cover of Dune by Frank Herbert",
-                desc: "Paul Atreides navigates political intrigue and ecological dangers on the desert planet Arrakis."
-            },
-            {
-                title: "The Martian",
-                author: "Andy Weir",
-                genre: "scifi",
-                cover: "https://covers.openlibrary.org/b/id/8370221-L.jpg",
-                alt: "Cover of The Martian by Andy Weir",
-                desc: "Stranded on Mars, astronaut Mark Watney must use his ingenuity to survive until rescue."
-            },
-            {
-                title: "Pride and Prejudice",
-                author: "Jane Austen",
-                genre: "romance",
-                cover: "https://covers.openlibrary.org/b/id/8225260-L.jpg",
-                alt: "Cover of Pride and Prejudice by Jane Austen",
-                desc: "Elizabeth Bennet navigates issues of manners, upbringing, and marriage in 19th-century England."
-            },
-            {
-                title: "The Fault in Our Stars",
-                author: "John Green",
-                genre: "youngadult",
-                cover: "https://covers.openlibrary.org/b/id/7269091-L.jpg",
-                alt: "Cover of The Fault in Our Stars by John Green",
-                desc: "Two teenagers with cancer fall in love and embark on a journey of hope and heartbreak."
-            },
-            {
-                title: "Educated",
-                author: "Tara Westover",
-                genre: "nonfiction",
-                cover: "https://covers.openlibrary.org/b/id/8936861-L.jpg",
-                alt: "Cover of Educated by Tara Westover",
-                desc: "A memoir of a woman who grows up in a survivalist family and eventually escapes to learn about the wider world through education."
-            },
-            {
-                title: "Sapiens: A Brief History of Humankind",
-                author: "Yuval Noah Harari",
-                genre: "nonfiction",
-                cover: "https://covers.openlibrary.org/b/id/8231992-L.jpg",
-                alt: "Cover of Sapiens by Yuval Noah Harari",
-                desc: "A thought-provoking exploration of the history and impact of Homo sapiens."
-            },
-            {
-                title: "The Girl with the Dragon Tattoo",
-                author: "Stieg Larsson",
-                genre: "thriller",
-                cover: "https://covers.openlibrary.org/b/id/8231857-L.jpg",
-                alt: "Cover of The Girl with the Dragon Tattoo by Stieg Larsson",
-                desc: "A journalist and a hacker investigate a decades-old disappearance in Sweden."
-            },
-            {
-                title: "Gone Girl",
-                author: "Gillian Flynn",
-                genre: "thriller",
-                cover: "https://covers.openlibrary.org/b/id/8231858-L.jpg",
-                alt: "Cover of Gone Girl by Gillian Flynn",
-                desc: "A psychological thriller about a marriage gone terribly wrong."
-            },
-            {
-                title: "The Book Thief",
-                author: "Markus Zusak",
-                genre: "historical",
-                cover: "https://covers.openlibrary.org/b/id/8228781-L.jpg",
-                alt: "Cover of The Book Thief by Markus Zusak",
-                desc: "A young girl in Nazi Germany finds solace by stealing books and sharing them with others."
-            },
-            {
-                title: "All the Light We Cannot See",
-                author: "Anthony Doerr",
-                genre: "historical",
-                cover: "https://covers.openlibrary.org/b/id/8231859-L.jpg",
-                alt: "Cover of All the Light We Cannot See by Anthony Doerr",
-                desc: "The story of a blind French girl and a German boy whose paths collide in occupied France during World War II."
-            },
-            {
-                title: "To All the Boys I've Loved Before",
-                author: "Jenny Han",
-                genre: "youngadult",
-                cover: "https://covers.openlibrary.org/b/id/8231860-L.jpg",
-                alt: "Cover of To All the Boys I've Loved Before by Jenny Han",
-                desc: "Lara Jean's secret love letters are exposed, turning her high school life upside down."
-            }
-        ];
+        // Attendees storage (localStorage for persistence)
+        const ATTENDEES_KEY = 'accessible_event_attendees';
 
-        // Render genre checkboxes dynamically for proper labeling and easy updates
-        function renderGenres() {
-            const genresDiv = document.getElementById('genres');
-            genresDiv.innerHTML = '';
-            GENRES.forEach((genre, idx) => {
-                const checkboxId = `genre-${genre.id}`;
-                const wrapper = document.createElement('div');
-                wrapper.className = 'checkbox-item';
+        // Get DOM elements
+        const form = document.getElementById('rsvpForm');
+        const confirmation = document.getElementById('confirmation');
+        const attendeesList = document.getElementById('attendees');
+        const noAttendees = document.getElementById('no-attendees');
+        const submitBtn = document.getElementById('submitBtn');
 
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.id = checkboxId;
-                checkbox.name = 'genres';
-                checkbox.value = genre.id;
-                checkbox.tabIndex = 0;
-                // Keyboard accessibility: native checkbox is fully accessible
+        // Error spans
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const phoneError = document.getElementById('phone-error');
 
-                const label = document.createElement('label');
-                label.setAttribute('for', checkboxId);
-                label.textContent = genre.label;
-
-                wrapper.appendChild(checkbox);
-                wrapper.appendChild(label);
-                genresDiv.appendChild(wrapper);
-            });
+        // Helper: Validate email format
+        function isValidEmail(email) {
+            // Basic RFC 5322 compliant regex
+            return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email);
         }
 
-        // Form validation and error handling
-        function validateForm(selectedGenres) {
-            let valid = true;
-            // Genres must have at least one selected
-            if (selectedGenres.length === 0) {
-                const genresError = document.getElementById('genres-error');
-                genresError.textContent = 'Please select at least one genre.';
-                valid = false;
-            } else {
-                document.getElementById('genres-error').textContent = '';
+        // Helper: Validate phone (optional, only digits, spaces, dashes, plus, parens)
+        function isValidPhone(phone) {
+            return phone === '' || /^[\d\s\-\+\(\)]*$/.test(phone);
+        }
+
+        // Accessibility: Keyboard support for submit button (redundant for native button, but pattern included)
+        function handleInteraction(event) {
+            if (event.type === 'click' ||
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                event.preventDefault();
+                submitBtn.click();
             }
+        }
+        submitBtn.onkeydown = handleInteraction;
+
+        // Form Validation
+        function validateForm() {
+            let valid = true;
+            // Reset errors
+            nameError.textContent = '';
+            emailError.textContent = '';
+            phoneError.textContent = '';
+
+            // Name validation
+            const name = form.name.value.trim();
+            if (!name) {
+                nameError.textContent = 'Full name is required.';
+                valid = false;
+            } else if (name.length > 80) {
+                nameError.textContent = 'Name is too long.';
+                valid = false;
+            }
+
+            // Email validation
+            const email = form.email.value.trim();
+            if (!email) {
+                emailError.textContent = 'Email address is required.';
+                valid = false;
+            } else if (!isValidEmail(email)) {
+                emailError.textContent = 'Please enter a valid email address.';
+                valid = false;
+            } else if (email.length > 80) {
+                emailError.textContent = 'Email is too long.';
+                valid = false;
+            }
+
+            // Phone validation (optional)
+            const phone = form.phone.value.trim();
+            if (phone && !isValidPhone(phone)) {
+                phoneError.textContent = 'Please enter a valid phone number.';
+                valid = false;
+            } else if (phone.length > 20) {
+                phoneError.textContent = 'Phone number is too long.';
+                valid = false;
+            }
+
             return valid;
         }
 
-        // Filter books based on genres and author
-        function getRecommendations(selectedGenres, authorInput) {
-            // Case-insensitive author matching (partial match allowed)
-            const author = authorInput.trim().toLowerCase();
-            let results = BOOKS.filter(book => selectedGenres.includes(book.genre));
-            if (author.length > 0) {
-                results = results.filter(book =>
-                    book.author.toLowerCase().includes(author)
-                );
+        // Save attendee to localStorage
+        function saveAttendee(attendee) {
+            let attendees = JSON.parse(localStorage.getItem(ATTENDEES_KEY)) || [];
+            // Prevent duplicate emails (case-insensitive)
+            if (!attendees.some(a => a.email.toLowerCase() === attendee.email.toLowerCase())) {
+                attendees.push(attendee);
+                localStorage.setItem(ATTENDEES_KEY, JSON.stringify(attendees));
+                return true;
             }
-            return results;
+            return false;
         }
 
-        // Render recommendations to the page
-        function renderRecommendations(books, selectedGenres, authorInput) {
-            const recContent = document.getElementById('rec-content');
-            recContent.innerHTML = '';
-            if (books.length === 0) {
-                // No matches
-                const p = document.createElement('p');
-                p.textContent = "Sorry, we couldn't find any books matching your preferences. Try selecting different genres or leaving the author blank.";
-                recContent.appendChild(p);
+        // Render attendees list
+        function renderAttendees() {
+            const attendees = JSON.parse(localStorage.getItem(ATTENDEES_KEY)) || [];
+            attendeesList.innerHTML = '';
+            if (attendees.length === 0) {
+                noAttendees.style.display = 'block';
+                attendeesList.setAttribute('aria-hidden', 'true');
+            } else {
+                noAttendees.style.display = 'none';
+                attendeesList.setAttribute('aria-hidden', 'false');
+                attendees.forEach(att => {
+                    // Only display name and optionally phone (never email for privacy)
+                    const li = document.createElement('li');
+                    li.tabIndex = 0; // Allow keyboard focus for screen reader context
+                    li.innerHTML = `<strong>${att.name}</strong>` +
+                        (att.phone ? ` <span aria-label="Phone number">(${att.phone})</span>` : '');
+                    attendeesList.appendChild(li);
+                });
+            }
+        }
+
+        // Show confirmation message with animation
+        function showConfirmation(name) {
+            confirmation.textContent = `Thank you, ${name}! Your attendance has been confirmed.`;
+            confirmation.style.display = 'block';
+            confirmation.setAttribute('tabindex', '-1');
+            confirmation.focus();
+            setTimeout(() => {
+                confirmation.style.display = 'none';
+            }, 4500);
+        }
+
+        // On form submit
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!validateForm()) {
+                // Focus first error field for accessibility
+                if (nameError.textContent) {
+                    form.name.focus();
+                } else if (emailError.textContent) {
+                    form.email.focus();
+                } else if (phoneError.textContent) {
+                    form.phone.focus();
+                }
                 return;
             }
-
-            // Accessible description of filters used
-            let filterDesc = '';
-            if (selectedGenres.length > 0) {
-                const genreLabels = GENRES.filter(g => selectedGenres.includes(g.id)).map(g => g.label);
-                filterDesc += `Genres: ${genreLabels.join(', ')}. `;
+            const attendee = {
+                name: form.name.value.trim(),
+                email: form.email.value.trim(),
+                phone: form.phone.value.trim()
+            };
+            // Save attendee and check for duplicates
+            if (saveAttendee(attendee)) {
+                renderAttendees();
+                showConfirmation(attendee.name);
+                form.reset();
+                form.name.focus();
+            } else {
+                emailError.textContent = 'This email has already been used to RSVP.';
+                form.email.focus();
             }
-            if (authorInput.trim().length > 0) {
-                filterDesc += `Author contains: "${authorInput.trim()}".`;
-            }
-            const descP = document.createElement('p');
-            descP.textContent = `Showing results for: ${filterDesc}`;
-            recContent.appendChild(descP);
-
-            // Books grid
-            const grid = document.createElement('div');
-            grid.className = 'book-grid';
-            books.forEach(book => {
-                const article = document.createElement('article');
-                article.className = 'book';
-                article.setAttribute('tabindex', '0'); // Allow keyboard users to focus on book cards
-
-                // Book cover image with descriptive alt
-                const img = document.createElement('img');
-                img.src = book.cover;
-                img.alt = book.alt;
-
-                // Book title
-                const title = document.createElement('h3');
-                title.className = 'book-title';
-                title.textContent = book.title;
-
-                // Book author
-                const author = document.createElement('div');
-                author.className = 'book-author';
-                author.textContent = `by ${book.author}`;
-
-                // Book description
-                const desc = document.createElement('div');
-                desc.className = 'book-desc';
-                desc.textContent = book.desc;
-
-                // Genre badge
-                const genreObj = GENRES.find(g => g.id === book.genre);
-                const genre = document.createElement('span');
-                genre.className = 'book-genre';
-                genre.textContent = genreObj ? genreObj.label : book.genre;
-
-                article.appendChild(img);
-                article.appendChild(title);
-                article.appendChild(author);
-                article.appendChild(desc);
-                article.appendChild(genre);
-
-                grid.appendChild(article);
-            });
-            recContent.appendChild(grid);
-        }
-
-        // Handle form submission
-        document.addEventListener('DOMContentLoaded', function () {
-            renderGenres();
-
-            const form = document.getElementById('book-form');
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                // Get selected genres
-                const genreCheckboxes = document.querySelectorAll('input[name="genres"]:checked');
-                const selectedGenres = Array.from(genreCheckboxes).map(cb => cb.value);
-
-                // Get author input
-                const authorInput = document.getElementById('author').value;
-
-                // Validate
-                const valid = validateForm(selectedGenres);
-
-                if (!valid) {
-                    // Focus the first error for accessibility
-                    const genresError = document.getElementById('genres-error');
-                    genresError.focus && genresError.focus();
-                    return;
-                }
-
-                // Get and render recommendations
-                const books = getRecommendations(selectedGenres, authorInput);
-                renderRecommendations(books, selectedGenres, authorInput);
-
-                // Move focus to recommendations for screen reader users
-                const recSection = document.getElementById('recommendations');
-                recSection.setAttribute('tabindex', '-1');
-                recSection.focus();
-                setTimeout(() => recSection.removeAttribute('tabindex'), 100); // Remove tabindex after focus
-            });
-
-            // Keyboard accessibility for genre checkboxes group (arrow navigation)
-            const genresDiv = document.getElementById('genres');
-            genresDiv.addEventListener('keydown', function (event) {
-                const checkboxes = Array.from(genresDiv.querySelectorAll('input[type="checkbox"]'));
-                const current = document.activeElement;
-                const idx = checkboxes.indexOf(current);
-                if (idx === -1) return;
-
-                if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-                    event.preventDefault();
-                    const next = checkboxes[(idx + 1) % checkboxes.length];
-                    next.focus();
-                } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
-                    event.preventDefault();
-                    const prev = checkboxes[(idx - 1 + checkboxes.length) % checkboxes.length];
-                    prev.focus();
-                }
-            });
-
-            // Ensure recommendations section is focusable for accessibility
-            const recSection = document.getElementById('recommendations');
-            recSection.setAttribute('tabindex', '-1');
         });
 
-        // Required for focus indicators on dark backgrounds (if used in nav)
-        document.querySelectorAll('nav').forEach(nav => {
-            nav.classList.add('dark-bg');
+        // Accessibility: clear error on input
+        ['name', 'email', 'phone'].forEach(field => {
+            form[field].addEventListener('input', function() {
+                document.getElementById(field + '-error').textContent = '';
+            });
+        });
+
+        // On page load, render attendees
+        window.addEventListener('DOMContentLoaded', function() {
+            renderAttendees();
+        });
+
+        // Accessibility: Ensure focus indicator visible for keyboard users
+        // (CSS already covers this, but for browsers that suppress outline on mouse)
+        document.body.addEventListener('mousedown', function(e) {
+            if (e.target.matches('button, input, select, textarea, a')) {
+                e.target.style.outline = 'none';
+            }
+        });
+        document.body.addEventListener('keydown', function(e) {
+            if (e.target.matches('button, input, select, textarea, a')) {
+                e.target.style.outline = '';
+            }
         });
     </script>
+    <!--
+        Accessibility Notes:
+        - All form fields have <label> with "for" matching input "id".
+        - Required fields use both visual (red asterisk) and programmatic (aria-required) indicators.
+        - Error messages are associated with fields using aria-describedby and aria-live.
+        - Focus indicators are visible and high contrast.
+        - Attendees list uses <ul> and <li> with semantic structure.
+        - Confirmation uses role="status" and aria-live for assistive tech.
+        - Keyboard navigation is fully supported.
+        - No information is conveyed by color alone.
+        - Responsive design and sufficient color contrast throughout.
+    -->
 </body>
 </html>
