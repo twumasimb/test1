@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Countdown Timer - Countdown to Your Special Date</title>
+    <title>Interactive Travel Map - Share Your Journeys</title>
     <style>
         /* Base styles with accessibility in mind */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --text-color: #333333; 
-            --light-text: #ffffff;
-            --background-color: #f5f7fa;
+            --primary-color: #0066cc;
+            --secondary-color: #004080;
+            --text-color: #333333;
+            --light-bg: #f5f5f5;
+            --error-color: #d32f2f;
+            --success-color: #2e7d32;
             --focus-color: #0066cc;
         }
 
@@ -23,13 +23,13 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: var(--background-color);
-            padding: 0;
-            margin: 0;
-            min-height: 100vh;
+            background-color: #ffffff;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         /* Ensure all interactive elements have visible focus indicators */
@@ -38,149 +38,193 @@
             outline-offset: 2px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
+        /* High contrast focus for dark backgrounds */
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: 3px solid #ffffff;
         }
 
         header {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            padding: 1.5rem 0;
-            text-align: center;
-        }
-
-        main {
-            padding: 2rem 0;
+            padding: 20px 0;
+            border-bottom: 1px solid #ddd;
         }
 
         h1 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
             font-size: 2.5rem;
-            margin-bottom: 1rem;
         }
 
         h2 {
+            color: var(--secondary-color);
+            margin: 20px 0;
             font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
         }
 
-        .countdown-container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
+        h3 {
+            margin: 15px 0;
+            font-size: 1.3rem;
         }
 
-        .countdown-header {
-            text-align: center;
-            margin-bottom: 2rem;
+        main {
+            padding: 20px 0;
+            min-height: 70vh;
         }
 
-        .countdown-display {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .countdown-item {
-            min-width: 120px;
-            text-align: center;
-            padding: 1rem;
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            border-radius: 8px;
-        }
-
-        .countdown-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .countdown-label {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .progress-container {
-            margin: 2rem 0;
-        }
-
-        .progress-bar-container {
+        .map-container {
+            position: relative;
             width: 100%;
-            height: 24px;
-            background-color: #e0e0e0;
-            border-radius: 12px;
+            height: 500px;
+            border: 2px solid #ddd;
+            margin: 20px 0;
+            background-color: var(--light-bg);
             overflow: hidden;
+        }
+
+        .map {
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23e6f2ff"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23cce0ff" stroke-width="1"/></svg>');
             position: relative;
         }
 
-        .progress-bar {
-            height: 100%;
-            background-color: var(--secondary-color);
-            border-radius: 12px;
-            transition: width 0.5s ease-in-out;
+        .map-pin {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            transform: translate(-50%, -100%);
+            cursor: pointer;
+            z-index: 10;
         }
 
-        .progress-text {
-            margin-top: 0.5rem;
-            text-align: center;
-            font-weight: bold;
+        .map-pin::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background-color: var(--primary-color);
+            border-radius: 50% 50% 0 50%;
+            transform: rotate(45deg);
         }
 
-        .date-config {
-            margin-top: 3rem;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
+        .map-pin:focus {
+            outline: 3px solid var(--focus-color);
+            outline-offset: 2px;
+        }
+
+        .pin-info {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            width: 250px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 20;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .pin-info h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .pin-info p {
+            margin: 10px 0;
+        }
+
+        .pin-info .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .form-container {
+            background-color: var(--light-bg);
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 15px;
         }
 
         label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 5px;
             font-weight: bold;
-            color: var(--primary-color);
         }
 
-        input[type="date"], 
-        input[type="text"] {
+        .required-field::after {
+            content: "*";
+            color: var(--error-color);
+            margin-left: 5px;
+        }
+
+        input, textarea, select {
             width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #ddd;
+            padding: 10px;
+            border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1rem;
-        }
-
-        input[type="date"]:focus, 
-        input[type="text"]:focus {
-            border-color: var(--secondary-color);
         }
 
         button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 10px 15px;
             border-radius: 4px;
-            font-size: 1rem;
             cursor: pointer;
+            font-size: 1rem;
             transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #2980b9;
+            background-color: var(--secondary-color);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            color: var(--success-color);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .experiences-list {
+            margin: 20px 0;
+        }
+
+        .experience-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+        }
+
+        .experience-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
         }
 
         .sr-only {
@@ -195,286 +239,488 @@
             border-width: 0;
         }
 
-        .live-region {
-            margin-top: 1rem;
+        .instructions {
+            background-color: #e6f2ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         footer {
-            background-color: var(--primary-color);
-            color: var(--light-text);
+            margin-top: 40px;
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
             text-align: center;
-            padding: 1.5rem 0;
-            margin-top: 2rem;
         }
 
         /* Responsive design */
         @media (max-width: 768px) {
-            .countdown-display {
-                gap: 1rem;
+            .map-container {
+                height: 350px;
             }
 
-            .countdown-item {
-                min-width: 100px;
-                padding: 0.75rem;
-            }
-
-            .countdown-value {
-                font-size: 2rem;
+            .pin-info {
+                width: 200px;
             }
         }
 
         @media (max-width: 480px) {
-            .countdown-display {
-                flex-direction: column;
-                align-items: center;
+            h1 {
+                font-size: 2rem;
             }
 
-            .countdown-item {
-                width: 100%;
-                max-width: 200px;
+            .map-container {
+                height: 300px;
+            }
+
+            .pin-info {
+                width: 180px;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>Event Countdown Timer</h1>
-        </div>
+        <h1>Interactive Travel Map</h1>
+        <p>Share your travel experiences and discover new destinations!</p>
     </header>
 
-    <main class="container">
-        <section class="countdown-container" aria-labelledby="countdown-heading">
-            <div class="countdown-header">
-                <h2 id="countdown-heading">Time Remaining Until Your Event</h2>
-                <p id="event-name">Your Special Event</p>
+    <main>
+        <section aria-labelledby="map-section-heading">
+            <h2 id="map-section-heading">Your Travel Map</h2>
+            
+            <div class="instructions" aria-labelledby="instructions-heading">
+                <h3 id="instructions-heading">How to Use This Map</h3>
+                <p>Click or tap anywhere on the map to add a new location pin. You can then enter details about your experience at that location.</p>
+                <p>Use the tab key to navigate through pins and press Enter to view details.</p>
             </div>
 
-            <div class="countdown-display" aria-live="polite">
-                <div class="countdown-item" aria-labelledby="days-label">
-                    <span class="countdown-value" id="days">0</span>
-                    <span class="countdown-label" id="days-label">Days</span>
+            <div class="map-container" id="map-container">
+                <div id="map" class="map" 
+                     role="application" 
+                     aria-label="Interactive travel map. Click anywhere to add a pin."
+                     tabindex="0">
+                    <!-- Map pins will be added here dynamically -->
                 </div>
-                <div class="countdown-item" aria-labelledby="hours-label">
-                    <span class="countdown-value" id="hours">0</span>
-                    <span class="countdown-label" id="hours-label">Hours</span>
-                </div>
-                <div class="countdown-item" aria-labelledby="minutes-label">
-                    <span class="countdown-value" id="minutes">0</span>
-                    <span class="countdown-label" id="minutes-label">Minutes</span>
-                </div>
-                <div class="countdown-item" aria-labelledby="seconds-label">
-                    <span class="countdown-value" id="seconds">0</span>
-                    <span class="countdown-label" id="seconds-label">Seconds</span>
-                </div>
-            </div>
-
-            <div class="progress-container">
-                <h3 id="progress-heading">Event Progress</h3>
-                <div class="progress-bar-container" role="progressbar" aria-labelledby="progress-heading" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar" style="width: 0%"></div>
-                </div>
-                <p class="progress-text" id="progress-text">0% Complete</p>
-            </div>
-
-            <div class="live-region" aria-live="polite" id="time-announcement">
-                <span class="sr-only">Time will update automatically</span>
             </div>
         </section>
 
-        <section class="date-config" aria-labelledby="config-heading">
-            <h2 id="config-heading">Set Your Event</h2>
-            <form id="event-form">
-                <div class="form-group">
-                    <label for="event-title">Event Title:</label>
-                    <input type="text" id="event-title" name="event-title" required aria-required="true">
-                </div>
-                <div class="form-group">
-                    <label for="event-date">Event Date:</label>
-                    <input type="date" id="event-date" name="event-date" required aria-required="true">
-                </div>
-                <button type="submit" id="set-event-btn" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Set Event</button>
-            </form>
+        <section aria-labelledby="add-experience-heading">
+            <h2 id="add-experience-heading">Add Your Travel Experience</h2>
+            
+            <div class="form-container">
+                <form id="experience-form" novalidate>
+                    <div class="form-group">
+                        <label for="location-name" class="required-field">Location Name</label>
+                        <input type="text" id="location-name" name="location-name" required aria-required="true" aria-describedby="location-name-error">
+                        <div id="location-name-error" class="error-message" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country" class="required-field">Country</label>
+                        <input type="text" id="country" name="country" required aria-required="true" aria-describedby="country-error">
+                        <div id="country-error" class="error-message" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="visit-date" class="required-field">Date of Visit</label>
+                        <input type="date" id="visit-date" name="visit-date" required aria-required="true" aria-describedby="visit-date-error">
+                        <div id="visit-date-error" class="error-message" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience" class="required-field">Your Experience</label>
+                        <textarea id="experience" name="experience" rows="4" required aria-required="true" aria-describedby="experience-error"></textarea>
+                        <div id="experience-error" class="error-message" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rating">Rating (1-5)</label>
+                        <select id="rating" name="rating">
+                            <option value="5">5 - Excellent</option>
+                            <option value="4">4 - Very Good</option>
+                            <option value="3" selected>3 - Good</option>
+                            <option value="2">2 - Fair</option>
+                            <option value="1">1 - Poor</option>
+                        </select>
+                    </div>
+                    
+                    <input type="hidden" id="pin-x" name="pin-x" value="">
+                    <input type="hidden" id="pin-y" name="pin-y" value="">
+                    
+                    <button type="submit" id="submit-btn">Add Experience</button>
+                    <div id="form-status" class="success-message" aria-live="polite"></div>
+                </form>
+            </div>
+        </section>
+
+        <section aria-labelledby="experiences-heading">
+            <h2 id="experiences-heading">Shared Experiences</h2>
+            <div id="experiences-list" class="experiences-list" aria-live="polite">
+                <!-- Experiences will be added here dynamically -->
+                <p id="no-experiences">No experiences have been shared yet. Be the first to add your travel story!</p>
+            </div>
         </section>
     </main>
 
     <footer>
-        <div class="container">
-            <p>&copy; <span id="current-year">2025</span>Countdown Timer</p>
-        </div>
+        <p>&copy; 2023 Interactive Travel Map. All rights reserved.</p>
     </footer>
 
     <script>
-        // Global variables
-        let targetDate = new Date();
-        targetDate.setDate(targetDate.getDate() + 30); // Default to 30 days from now
-        let startDate = new Date();
-        let eventTitle = "Your Special Event";
-        let countdownInterval;
+        document.addEventListener('DOMContentLoaded', function() {
+            // State management
+            const state = {
+                pins: [],
+                experiences: [],
+                activePinInfo: null,
+                selectedPinCoords: null
+            };
 
-        // DOM elements
-        const daysElement = document.getElementById('days');
-        const hoursElement = document.getElementById('hours');
-        const minutesElement = document.getElementById('minutes');
-        const secondsElement = document.getElementById('seconds');
-        const progressBarElement = document.querySelector('.progress-bar');
-        const progressTextElement = document.getElementById('progress-text');
-        const progressBarContainer = document.querySelector('.progress-bar-container');
-        const eventNameElement = document.getElementById('event-name');
-        const eventForm = document.getElementById('event-form');
-        const eventTitleInput = document.getElementById('event-title');
-        const eventDateInput = document.getElementById('event-date');
-        const timeAnnouncementElement = document.getElementById('time-announcement');
-        const currentYearElement = document.getElementById('current-year');
+            // DOM elements
+            const map = document.getElementById('map');
+            const form = document.getElementById('experience-form');
+            const pinXInput = document.getElementById('pin-x');
+            const pinYInput = document.getElementById('pin-y');
+            const experiencesList = document.getElementById('experiences-list');
+            const noExperiencesMsg = document.getElementById('no-experiences');
+            const formStatus = document.getElementById('form-status');
 
-        // Set current year in footer
-        currentYearElement.textContent = new Date().getFullYear();
+            // Form fields
+            const locationNameInput = document.getElementById('location-name');
+            const countryInput = document.getElementById('country');
+            const visitDateInput = document.getElementById('visit-date');
+            const experienceInput = document.getElementById('experience');
+            const ratingInput = document.getElementById('rating');
 
-        // Initialize the countdown
-        function initCountdown() {
-            // Set min date for the date input to today
-            const today = new Date().toISOString().split('T')[0];
-            eventDateInput.setAttribute('min', today);
-            
-            // Check if we have saved data in localStorage
-            loadSavedEventData();
-            
-            // Start the countdown
-            updateCountdown();
-            
-            // Update every second
-            countdownInterval = setInterval(updateCountdown, 1000);
-        }
+            // Error message elements
+            const locationNameError = document.getElementById('location-name-error');
+            const countryError = document.getElementById('country-error');
+            const visitDateError = document.getElementById('visit-date-error');
+            const experienceError = document.getElementById('experience-error');
 
-        // Load saved event data from localStorage if available
-        function loadSavedEventData() {
-            const savedEventTitle = localStorage.getItem('eventTitle');
-            const savedEventDate = localStorage.getItem('eventDate');
-            const savedStartDate = localStorage.getItem('startDate');
-            
-            if (savedEventTitle && savedEventDate) {
-                eventTitle = savedEventTitle;
-                targetDate = new Date(savedEventDate);
-                if (savedStartDate) {
-                    startDate = new Date(savedStartDate);
+            // Initialize map click handler
+            initializeMap();
+
+            // Initialize form submission
+            initializeForm();
+
+            // Load any saved experiences from localStorage
+            loadSavedExperiences();
+
+            // Map initialization
+            function initializeMap() {
+                // Add click event to map for adding pins
+                map.addEventListener('click', handleMapClick);
+                map.addEventListener('keydown', handleMapKeydown);
+            }
+
+            // Handle map keyboard navigation
+            function handleMapKeydown(event) {
+                // Allow users to add a pin with Enter key when map is focused
+                if (event.key === 'Enter') {
+                    // Since we can't determine coordinates from keyboard,
+                    // we'll place a pin in the center of the map
+                    const mapRect = map.getBoundingClientRect();
+                    const centerX = mapRect.width / 2;
+                    const centerY = mapRect.height / 2;
+                    
+                    addPin(centerX, centerY);
+                    setSelectedPinCoords(centerX, centerY);
+                    
+                    // Announce to screen readers
+                    announceToScreenReader('Pin added to center of map. You can now fill in the experience details.');
+                    
+                    // Focus the first form field
+                    locationNameInput.focus();
                 }
+            }
+
+            // Handle map click for adding pins
+            function handleMapClick(event) {
+                const mapRect = map.getBoundingClientRect();
+                const x = event.clientX - mapRect.left;
+                const y = event.clientY - mapRect.top;
                 
-                eventTitleInput.value = eventTitle;
-                eventDateInput.value = targetDate.toISOString().split('T')[0];
-                eventNameElement.textContent = eventTitle;
+                addPin(x, y);
+                setSelectedPinCoords(x, y);
+                
+                // Announce to screen readers
+                announceToScreenReader('Pin added to map. You can now fill in the experience details.');
+                
+                // Focus the first form field
+                locationNameInput.focus();
             }
-        }
 
-        // Save event data to localStorage
-        function saveEventData() {
-            localStorage.setItem('eventTitle', eventTitle);
-            localStorage.setItem('eventDate', targetDate.toISOString());
-            localStorage.setItem('startDate', startDate.toISOString());
-        }
+            // Add a pin to the map
+            function addPin(x, y) {
+                // Create pin element
+                const pin = document.createElement('div');
+                pin.className = 'map-pin';
+                pin.style.left = `${x}px`;
+                pin.style.top = `${y}px`;
+                pin.setAttribute('tabindex', '0');
+                pin.setAttribute('role', 'button');
+                pin.setAttribute('aria-label', 'Map pin. Press Enter to add details.');
+                
+                // Add event listeners for pin interaction
+                pin.addEventListener('click', function() {
+                    setSelectedPinCoords(x, y);
+                    locationNameInput.focus();
+                });
+                
+                pin.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        setSelectedPinCoords(x, y);
+                        locationNameInput.focus();
+                    }
+                });
+                
+                // Add pin to map
+                map.appendChild(pin);
+                
+                // Store pin data
+                state.pins.push({
+                    element: pin,
+                    x: x,
+                    y: y
+                });
+            }
 
-        // Update the countdown timer
-        function updateCountdown() {
-            const now = new Date();
-            const timeRemaining = targetDate - now;
-            
-            // If the target date has passed
-            if (timeRemaining <= 0) {
-                clearInterval(countdownInterval);
-                daysElement.textContent = '0';
-                hoursElement.textContent = '0';
-                minutesElement.textContent = '0';
-                secondsElement.textContent = '0';
-                progressBarElement.style.width = '100%';
-                progressTextElement.textContent = '100% Complete';
-                progressBarContainer.setAttribute('aria-valuenow', 100);
-                timeAnnouncementElement.innerHTML = `<span class="sr-only">Event has arrived! ${eventTitle} is happening now.</span>`;
-                return;
+            // Set the selected pin coordinates for the form
+            function setSelectedPinCoords(x, y) {
+                state.selectedPinCoords = { x, y };
+                pinXInput.value = x;
+                pinYInput.value = y;
             }
-            
-            // Calculate time units
-            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-            
-            // Update DOM elements
-            daysElement.textContent = days;
-            hoursElement.textContent = hours;
-            minutesElement.textContent = minutes;
-            secondsElement.textContent = seconds;
-            
-            // Calculate and update progress
-            const totalDuration = targetDate - startDate;
-            const elapsed = now - startDate;
-            const progress = Math.min(100, Math.max(0, Math.floor((elapsed / totalDuration) * 100)));
-            
-            progressBarElement.style.width = `${progress}%`;
-            progressTextElement.textContent = `${progress}% Complete`;
-            progressBarContainer.setAttribute('aria-valuenow', progress);
-            
-            // Update screen reader announcement every minute
-            if (seconds === 0) {
-                const timeString = `${days} days, ${hours} hours, and ${minutes} minutes remaining until ${eventTitle}.`;
-                timeAnnouncementElement.innerHTML = `<span class="sr-only">${timeString}</span>`;
-            }
-        }
 
-        // Handle form submission
-        eventForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const newEventTitle = eventTitleInput.value.trim();
-            const newEventDate = new Date(eventDateInput.value);
-            
-            // Validate inputs
-            if (!newEventTitle) {
-                alert('Please enter an event title');
-                eventTitleInput.focus();
-                return;
-            }
-            
-            if (isNaN(newEventDate.getTime())) {
-                alert('Please enter a valid date');
-                eventDateInput.focus();
-                return;
-            }
-            
-            // Update event details
-            eventTitle = newEventTitle;
-            targetDate = newEventDate;
-            startDate = new Date(); // Reset start date to now
-            
-            // Update display
-            eventNameElement.textContent = eventTitle;
-            
-            // Save to localStorage
-            saveEventData();
-            
-            // Announce to screen readers
-            timeAnnouncementElement.innerHTML = `<span class="sr-only">Event updated. Counting down to ${eventTitle} on ${targetDate.toLocaleDateString()}.</span>`;
-            
-            // Update countdown immediately
-            updateCountdown();
-        });
-
-        // Handle keyboard and mouse interactions for buttons
-        function handleInteraction(event) {
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                // Prevent default space bar scrolling
-                if (event.key === ' ') {
+            // Initialize form submission
+            function initializeForm() {
+                form.addEventListener('submit', function(event) {
                     event.preventDefault();
+                    
+                    // Validate form
+                    if (validateForm()) {
+                        // Create experience object
+                        const experience = {
+                            id: Date.now(), // Unique ID based on timestamp
+                            location: locationNameInput.value.trim(),
+                            country: countryInput.value.trim(),
+                            date: visitDateInput.value,
+                            experience: experienceInput.value.trim(),
+                            rating: parseInt(ratingInput.value),
+                            coordinates: {
+                                x: parseFloat(pinXInput.value),
+                                y: parseFloat(pinYInput.value)
+                            }
+                        };
+                        
+                        // Add experience to state
+                        state.experiences.push(experience);
+                        
+                        // Save to localStorage
+                        saveExperiences();
+                        
+                        // Update UI
+                        renderExperiences();
+                        
+                        // Reset form
+                        form.reset();
+                        pinXInput.value = '';
+                        pinYInput.value = '';
+                        state.selectedPinCoords = null;
+                        
+                        // Show success message
+                        formStatus.textContent = 'Experience added successfully!';
+                        setTimeout(() => {
+                            formStatus.textContent = '';
+                        }, 3000);
+                        
+                        // Announce to screen readers
+                        announceToScreenReader('Experience added successfully!');
+                    }
+                });
+            }
+
+            // Validate form inputs
+            function validateForm() {
+                let isValid = true;
+                
+                // Reset error messages
+                locationNameError.textContent = '';
+                countryError.textContent = '';
+                visitDateError.textContent = '';
+                experienceError.textContent = '';
+                
+                // Validate location name
+                if (!locationNameInput.value.trim()) {
+                    locationNameError.textContent = 'Please enter a location name';
+                    isValid = false;
                 }
                 
-                // The form submit handler will take care of the actual submission
-                if (event.type === 'keydown' && event.target.type === 'submit') {
-                    event.target.click();
+                // Validate country
+                if (!countryInput.value.trim()) {
+                    countryError.textContent = 'Please enter a country';
+                    isValid = false;
+                }
+                
+                // Validate visit date
+                if (!visitDateInput.value) {
+                    visitDateError.textContent = 'Please select a date of visit';
+                    isValid = false;
+                }
+                
+                // Validate experience
+                if (!experienceInput.value.trim()) {
+                    experienceError.textContent = 'Please share your experience';
+                    isValid = false;
+                }
+                
+                // Validate pin coordinates
+                if (!pinXInput.value || !pinYInput.value) {
+                    formStatus.textContent = 'Please select a location on the map first';
+                    formStatus.className = 'error-message';
+                    setTimeout(() => {
+                        formStatus.textContent = '';
+                        formStatus.className = 'success-message';
+                    }, 3000);
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+
+            // Render experiences list
+            function renderExperiences() {
+                // Clear current list except for the "no experiences" message
+                const children = Array.from(experiencesList.children);
+                children.forEach(child => {
+                    if (child.id !== 'no-experiences') {
+                        experiencesList.removeChild(child);
+                    }
+                });
+                
+                // Show/hide "no experiences" message
+                if (state.experiences.length === 0) {
+                    noExperiencesMsg.style.display = 'block';
+                } else {
+                    noExperiencesMsg.style.display = 'none';
+                    
+                    // Add experiences to the list
+                    state.experiences.forEach(exp => {
+                        const card = document.createElement('article');
+                        card.className = 'experience-card';
+                        card.setAttribute('aria-labelledby', `exp-title-${exp.id}`);
+                        
+                        const title = document.createElement('h3');
+                        title.id = `exp-title-${exp.id}`;
+                        title.textContent = `${exp.location}, ${exp.country}`;
+                        
+                        const date = document.createElement('p');
+                        date.innerHTML = `<strong>Date:</strong> ${formatDate(exp.date)}`;
+                        
+                        const rating = document.createElement('p');
+                        rating.innerHTML = `<strong>Rating:</strong> ${getRatingStars(exp.rating)}`;
+                        
+                        const expText = document.createElement('p');
+                        expText.textContent = exp.experience;
+                        
+                        card.appendChild(title);
+                        card.appendChild(date);
+                        card.appendChild(rating);
+                        card.appendChild(expText);
+                        
+                        experiencesList.appendChild(card);
+                    });
                 }
             }
-        }
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', initCountdown);
+            // Format date for display
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+
+            // Generate rating stars
+            function getRatingStars(rating) {
+                const fullStar = '★';
+                const emptyStar = '☆';
+                const stars = fullStar.repeat(rating) + emptyStar.repeat(5 - rating);
+                return `<span aria-label="${rating} out of 5 stars">${stars}</span>`;
+            }
+
+            // Save experiences to localStorage
+            function saveExperiences() {
+                try {
+                    localStorage.setItem('travelExperiences', JSON.stringify(state.experiences));
+                } catch (error) {
+                    console.error('Error saving to localStorage:', error);
+                }
+            }
+
+            // Load experiences from localStorage
+            function loadSavedExperiences() {
+                try {
+                    const savedExperiences = localStorage.getItem('travelExperiences');
+                    if (savedExperiences) {
+                        state.experiences = JSON.parse(savedExperiences);
+                        
+                        // Render experiences
+                        renderExperiences();
+                        
+                        // Recreate pins for saved experiences
+                        state.experiences.forEach(exp => {
+                            addPin(exp.coordinates.x, exp.coordinates.y);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading from localStorage:', error);
+                }
+            }
+
+            // Utility function to announce messages to screen readers
+            function announceToScreenReader(message) {
+                const announcement = document.createElement('div');
+                announcement.setAttribute('aria-live', 'assertive');
+                announcement.classList.add('sr-only');
+                announcement.textContent = message;
+                document.body.appendChild(announcement);
+                
+                // Remove after announcement is read
+                setTimeout(() => {
+                    document.body.removeChild(announcement);
+                }, 3000);
+            }
+
+            // Handle interaction events for both mouse and keyboard
+            function handleInteraction(event) {
+                if (event.type === 'click' || 
+                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                    // Your action here
+                    if (event.type === 'keydown') {
+                        event.preventDefault(); // Prevent scrolling with space key
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
