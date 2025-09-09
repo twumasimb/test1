@@ -3,40 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco-Friendly Products Showcase | Sustainable Living</title>
+    <title>Accessible Color Palette Mixer - Create Custom Design Themes</title>
     <style>
-        /* CSS Reset and Base Styles */
-        *, *::before, *::after {
+        /* Base styles with accessibility considerations */
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #6c757d;
+            --accent-color: #fd7e14;
+            --text-color: #212529;
+            --background-color: #f8f9fa;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+            --focus-color: #0066cc;
+        }
+
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        /* Global Variables */
-        :root {
-            --primary-color: #2e7d32;
-            --primary-light: #60ad5e;
-            --primary-dark: #005005;
-            --secondary-color: #81c784;
-            --text-color: #333333;
-            --text-light: #666666;
-            --background-color: #f5f5f5;
-            --card-color: #ffffff;
-            --focus-color: #0066cc;
-            --error-color: #d32f2f;
-            --success-color: #388e3c;
-            --border-radius: 4px;
-            --spacing-xs: 0.25rem;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        /* Base Styles */
         body {
-            font-family: var(--font-family);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--background-color);
@@ -44,7 +32,7 @@
             margin: 0;
         }
 
-        /* Accessibility Focus Styles */
+        /* Ensure all interactive elements have visible focus indicators */
         button:focus, 
         input:focus, 
         select:focus, 
@@ -55,348 +43,249 @@
             outline-offset: 2px;
         }
 
+        /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, 
-        .dark-bg a:focus, 
+        .dark-bg a:focus,
         .dark-bg [tabindex]:focus {
             outline: 3px solid #ffffff;
         }
 
-        /* Skip Link */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--primary-color);
-            color: white;
-            padding: 8px;
-            z-index: 100;
-            transition: top 0.3s;
-        }
-
-        .skip-link:focus {
-            top: 0;
-        }
-
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: var(--spacing-md);
-            line-height: 1.2;
-            color: var(--primary-dark);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        h2 {
-            font-size: 2rem;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-        }
-
-        p {
-            margin-bottom: var(--spacing-md);
-        }
-
-        /* Layout */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: var(--spacing-lg);
+            padding: 1rem;
         }
 
         header {
             background-color: var(--primary-color);
             color: white;
-            padding: var(--spacing-lg) 0;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
         }
 
-        .header-content {
+        header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+        header h1 {
+            margin: 0;
+            font-size: 1.8rem;
         }
 
         main {
-            padding: var(--spacing-xl) 0;
+            padding-bottom: 2rem;
         }
 
         footer {
-            background-color: var(--primary-dark);
+            background-color: #333;
             color: white;
-            padding: var(--spacing-xl) 0;
-            margin-top: var(--spacing-xl);
+            padding: 1.5rem 0;
+            margin-top: 2rem;
         }
 
-        /* Filter and Sort Controls */
-        .controls {
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        /* Grid layout for app sections */
+        .app-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .app-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Color mixer section */
+        .color-mixer {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-controls {
+            margin-bottom: 1.5rem;
+        }
+
+        .color-control {
+            margin-bottom: 1rem;
+        }
+
+        .color-control label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .color-input-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .color-input-group input[type="color"] {
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .color-input-group input[type="text"] {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        /* Palette section */
+        .palette {
             display: flex;
             flex-wrap: wrap;
-            gap: var(--spacing-md);
-            margin-bottom: var(--spacing-xl);
-            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
         }
 
-        .filter-group, .sort-group {
-            display: flex;
-            flex-direction: column;
-            min-width: 200px;
-        }
-
-        .filter-group label, .sort-group label {
-            margin-bottom: var(--spacing-xs);
-            font-weight: bold;
-        }
-
-        select {
-            padding: var(--spacing-sm);
-            border: 1px solid #ccc;
-            border-radius: var(--border-radius);
-            background-color: white;
-            font-size: 1rem;
-            height: 40px;
-        }
-
-        /* Product Grid */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: var(--spacing-lg);
-        }
-
-        .product-card {
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .palette-color {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
             position: relative;
-        }
-
-        .product-card:hover, 
-        .product-card:focus-within {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-image-container {
-            position: relative;
-            padding-top: 75%; /* 4:3 Aspect Ratio */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
-        .product-image {
+        .palette-color-info {
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.25rem;
+            font-size: 0.75rem;
+            text-align: center;
         }
 
-        .product-content {
-            padding: var(--spacing-md);
+        /* Theme preview section */
+        .theme-preview {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .product-category {
-            display: inline-block;
-            background-color: var(--secondary-color);
-            color: var(--primary-dark);
-            padding: 0.25rem 0.5rem;
-            border-radius: var(--border-radius);
-            font-size: 0.8rem;
-            margin-bottom: var(--spacing-sm);
+        .preview-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .product-name {
-            font-size: 1.2rem;
-            margin-bottom: var(--spacing-sm);
+        .preview-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
         }
 
-        .product-price {
+        .preview-content {
+            margin-bottom: 1rem;
+        }
+
+        .preview-button {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
             font-weight: bold;
-            color: var(--primary-dark);
-            margin-bottom: var(--spacing-sm);
         }
 
-        .product-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .preview-link {
+            color: var(--primary-color);
+            text-decoration: underline;
+            margin-left: 1rem;
         }
 
-        .quick-view-btn {
+        /* Buttons and controls */
+        .btn {
+            display: inline-block;
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--border-radius);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.3s;
+            text-align: center;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .quick-view-btn:hover, 
-        .quick-view-btn:focus {
-            background-color: var(--primary-dark);
+        .btn:hover {
+            background-color: #0056b3;
         }
 
-        /* Product Details Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            overflow-y: auto;
+        .btn-secondary {
+            background-color: var(--secondary-color);
         }
 
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: var(--spacing-lg);
-            border-radius: var(--border-radius);
-            max-width: 800px;
-            position: relative;
+        .btn-secondary:hover {
+            background-color: #5a6268;
         }
 
-        .close-modal {
-            position: absolute;
-            top: var(--spacing-md);
-            right: var(--spacing-md);
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-color);
-            width: 40px;
-            height: 40px;
+        .btn-group {
+            margin: 1rem 0;
+        }
+
+        /* Saved palettes section */
+        .saved-palettes {
+            margin-top: 2rem;
+        }
+
+        .saved-palette-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            border-radius: 50%;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
-        .close-modal:hover, 
-        .close-modal:focus {
-            background-color: #f1f1f1;
-        }
-
-        .modal-product-details {
+        .saved-palette-colors {
             display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-lg);
+            margin-right: 1rem;
         }
 
-        .modal-product-image {
+        .saved-palette-color {
+            width: 30px;
+            height: 30px;
+            margin-right: 2px;
+        }
+
+        .saved-palette-name {
             flex: 1;
-            min-width: 250px;
+            margin-right: 1rem;
         }
 
-        .modal-product-image img {
-            width: 100%;
-            border-radius: var(--border-radius);
-        }
-
-        .modal-product-info {
-            flex: 2;
-            min-width: 250px;
-        }
-
-        .modal-product-description {
-            margin-bottom: var(--spacing-md);
-        }
-
-        .eco-benefits {
-            margin-top: var(--spacing-md);
-        }
-
-        .eco-benefits h4 {
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .eco-benefits ul {
-            padding-left: var(--spacing-lg);
-        }
-
-        /* No Results Message */
-        .no-results {
-            text-align: center;
-            padding: var(--spacing-xl);
-            grid-column: 1 / -1;
-        }
-
-        /* Loading Indicator */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: var(--spacing-xl);
-            grid-column: 1 / -1;
-        }
-
-        .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-left: 4px solid var(--primary-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto var(--spacing-md);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter-group, .sort-group {
-                width: 100%;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-
-            .modal-content {
-                margin: 5% auto;
-                width: 90%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .logo {
-                margin-bottom: var(--spacing-md);
-            }
-        }
-
-        /* Utility Classes */
+        /* Accessibility helpers */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -409,508 +298,710 @@
             border-width: 0;
         }
 
-        .visually-hidden:not(:focus):not(:active) {
-            clip: rect(0 0 0 0);
-            clip-path: inset(50%);
-            height: 1px;
-            overflow: hidden;
-            position: absolute;
-            white-space: nowrap;
-            width: 1px;
+        .contrast-warning {
+            color: var(--error-color);
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 767px) {
+            .color-input-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .palette-color {
+                width: 60px;
+                height: 60px;
+            }
         }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
     <header>
-        <div class="container header-content">
-            <div class="logo" role="banner">
-                <h1>EcoShop</h1>
-            </div>
+        <div class="container">
+            <h1>Color Palette Mixer</h1>
             <nav role="navigation" aria-label="Main navigation">
-                <!-- Navigation content would go here in a real application -->
+                <button class="btn" id="helpButton" aria-expanded="false" aria-controls="helpContent">
+                    Help
+                </button>
             </nav>
         </div>
     </header>
 
-    <main id="main-content">
+    <main>
         <div class="container">
-            <h2>Eco-Friendly Products</h2>
-            <p>Browse our selection of sustainable products that help reduce environmental impact while enhancing your lifestyle.</p>
+            <div id="helpContent" class="sr-only" aria-live="polite">
+                <h2>How to Use the Color Palette Mixer</h2>
+                <p>This tool helps you create custom color palettes and preview them in different design contexts.</p>
+                <ol>
+                    <li>Use the color pickers to select your primary, secondary, and accent colors</li>
+                    <li>See your colors in the palette section</li>
+                    <li>View a live preview of your colors in a sample design</li>
+                    <li>Save palettes you like for future reference</li>
+                </ol>
+                <button class="btn" id="closeHelpButton">Close Help</button>
+            </div>
 
-            <section aria-labelledby="filter-heading">
-                <h3 id="filter-heading" class="sr-only">Filter and Sort Products</h3>
-                <div class="controls">
-                    <div class="filter-group">
-                        <label for="category-filter">Filter by Category</label>
-                        <select id="category-filter" aria-label="Filter products by category">
-                            <option value="all">All Categories</option>
-                            <option value="kitchen">Kitchen</option>
-                            <option value="bathroom">Bathroom</option>
-                            <option value="cleaning">Cleaning</option>
-                            <option value="personal-care">Personal Care</option>
-                            <option value="garden">Garden</option>
-                        </select>
-                    </div>
-                    <div class="sort-group">
-                        <label for="sort-by">Sort by</label>
-                        <select id="sort-by" aria-label="Sort products">
-                            <option value="popularity">Popularity</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="newest">Newest</option>
-                        </select>
-                    </div>
-                </div>
-            </section>
+            <div class="app-grid">
+                <section class="color-mixer">
+                    <h2>Mix Your Colors</h2>
+                    <p>Select colors to create your custom palette. The preview will update in real-time.</p>
+                    
+                    <div class="color-controls">
+                        <div class="color-control">
+                            <label for="primaryColor">Primary Color</label>
+                            <div class="color-input-group">
+                                <input type="color" id="primaryColor" value="#0066cc" aria-describedby="primaryColorHex">
+                                <input type="text" id="primaryColorHex" value="#0066cc" aria-label="Primary color hex code">
+                            </div>
+                            <div id="primaryColorContrast" aria-live="polite"></div>
+                        </div>
 
-            <section aria-labelledby="products-heading">
-                <h3 id="products-heading" class="sr-only">Products</h3>
-                <div class="loading" id="loading" aria-live="polite">
-                    <div class="loading-spinner" aria-hidden="true"></div>
-                    <p>Loading products...</p>
-                </div>
-                <div class="products-grid" id="products-grid" aria-live="polite">
-                    <!-- Product cards will be dynamically inserted here -->
-                </div>
-            </section>
+                        <div class="color-control">
+                            <label for="secondaryColor">Secondary Color</label>
+                            <div class="color-input-group">
+                                <input type="color" id="secondaryColor" value="#6c757d" aria-describedby="secondaryColorHex">
+                                <input type="text" id="secondaryColorHex" value="#6c757d" aria-label="Secondary color hex code">
+                            </div>
+                            <div id="secondaryColorContrast" aria-live="polite"></div>
+                        </div>
+
+                        <div class="color-control">
+                            <label for="accentColor">Accent Color</label>
+                            <div class="color-input-group">
+                                <input type="color" id="accentColor" value="#fd7e14" aria-describedby="accentColorHex">
+                                <input type="text" id="accentColorHex" value="#fd7e14" aria-label="Accent color hex code">
+                            </div>
+                            <div id="accentColorContrast" aria-live="polite"></div>
+                        </div>
+
+                        <div class="color-control">
+                            <label for="textColor">Text Color</label>
+                            <div class="color-input-group">
+                                <input type="color" id="textColor" value="#212529" aria-describedby="textColorHex">
+                                <input type="text" id="textColorHex" value="#212529" aria-label="Text color hex code">
+                            </div>
+                        </div>
+
+                        <div class="color-control">
+                            <label for="backgroundColor">Background Color</label>
+                            <div class="color-input-group">
+                                <input type="color" id="backgroundColor" value="#f8f9fa" aria-describedby="backgroundColorHex">
+                                <input type="text" id="backgroundColorHex" value="#f8f9fa" aria-label="Background color hex code">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Your Palette</h3>
+                    <div class="palette" id="currentPalette" aria-live="polite">
+                        <!-- Palette colors will be generated here -->
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn" id="randomizeButton">Randomize Colors</button>
+                        <button class="btn" id="savePaletteButton">Save Palette</button>
+                    </div>
+
+                    <div aria-live="polite" id="saveMessage"></div>
+
+                    <div class="saved-palettes">
+                        <h3>Saved Palettes</h3>
+                        <div id="savedPalettesList" aria-live="polite">
+                            <p id="noPalettesMessage">No saved palettes yet. Create and save a palette to see it here.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="theme-preview">
+                    <h2>Theme Preview</h2>
+                    <p>See how your colors look in a real design. This preview updates as you change your colors.</p>
+
+                    <div class="preview-container" id="themePreview">
+                        <div class="preview-header">
+                            <h3>Sample Header</h3>
+                        </div>
+                        <div class="preview-content">
+                            <p>This is sample text that shows how your text color looks against the background. Good color contrast is essential for readability and accessibility.</p>
+                            <button class="preview-button">Sample Button</button>
+                            <a href="#" class="preview-link">Sample Link</a>
+                        </div>
+                    </div>
+
+                    <div class="contrast-info">
+                        <h3>Accessibility Information</h3>
+                        <p>WCAG 2.1 requires a minimum contrast ratio of 4.5:1 for normal text and 3:1 for large text.</p>
+                        <div id="contrastResults" aria-live="polite">
+                            <!-- Contrast results will be displayed here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     </main>
 
-    <div id="product-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" hidden>
-        <div class="modal-content">
-            <button id="close-modal" class="close-modal" aria-label="Close product details">
-                ×
-            </button>
-            <div class="modal-product-details" id="modal-product-details">
-                <!-- Modal content will be dynamically inserted here -->
-            </div>
-        </div>
-    </div>
-
     <footer>
         <div class="container">
-            <p>&copy; 2023 EcoShop. All sustainable products for a greener future.</p>
-            <!-- Additional footer content would go here in a real application -->
+            <p>Color Palette Mixer - An accessible tool for creating custom color schemes</p>
+            <p>All features are keyboard accessible and screen reader friendly</p>
         </div>
     </footer>
 
     <script>
-        // Sample product data
-        const products = [
-            {
-                id: 1,
-                name: "Bamboo Cutlery Set",
-                category: "kitchen",
-                price: 12.99,
-                image: "bamboo-cutlery.jpg",
-                popularity: 95,
-                description: "Reusable bamboo cutlery set including fork, knife, spoon, and chopsticks in a convenient cotton pouch.",
-                benefits: [
-                    "Biodegradable material",
-                    "Reduces plastic waste",
-                    "Lightweight and portable",
-                    "Durable and long-lasting"
-                ]
-            },
-            {
-                id: 2,
-                name: "Organic Cotton Produce Bags",
-                category: "kitchen",
-                price: 15.99,
-                image: "produce-bags.jpg",
-                popularity: 87,
-                description: "Set of 5 reusable organic cotton mesh bags for grocery shopping and produce storage.",
-                benefits: [
-                    "Eliminates single-use plastic bags",
-                    "Machine washable",
-                    "Breathable material keeps produce fresh",
-                    "Transparent mesh allows for easy identification"
-                ]
-            },
-            {
-                id: 3,
-                name: "Bamboo Toothbrush Set",
-                category: "bathroom",
-                price: 9.99,
-                image: "bamboo-toothbrush.jpg",
-                popularity: 92,
-                description: "Pack of 4 biodegradable bamboo toothbrushes with charcoal-infused bristles.",
-                benefits: [
-                    "Biodegradable handle",
-                    "Reduces plastic waste",
-                    "Charcoal bristles for natural whitening",
-                    "BPA-free materials"
-                ]
-            },
-            {
-                id: 4,
-                name: "Natural Loofah Sponges",
-                category: "bathroom",
-                price: 7.99,
-                image: "loofah-sponges.jpg",
-                popularity: 78,
-                description: "Set of 3 natural loofah sponges for gentle exfoliation and cleansing.",
-                benefits: [
-                    "100% biodegradable",
-                    "Plastic-free alternative to synthetic sponges",
-                    "Naturally exfoliating",
-                    "Compostable after use"
-                ]
-            },
-            {
-                id: 5,
-                name: "Reusable Silicone Food Wraps",
-                category: "kitchen",
-                price: 18.99,
-                image: "silicone-wraps.jpg",
-                popularity: 89,
-                description: "Set of various sized silicone food wraps to replace plastic wrap and aluminum foil.",
-                benefits: [
-                    "Reduces single-use plastic waste",
-                    "Dishwasher safe",
-                    "Heat resistant",
-                    "Air-tight seal for food freshness"
-                ]
-            },
-            {
-                id: 6,
-                name: "Concentrated All-Purpose Cleaner",
-                category: "cleaning",
-                price: 14.99,
-                image: "eco-cleaner.jpg",
-                popularity: 85,
-                description: "Plant-based concentrated cleaner in a recyclable glass bottle. Makes up to 16 bottles when diluted.",
-                benefits: [
-                    "Non-toxic formula",
-                    "Biodegradable ingredients",
-                    "Reduces plastic packaging waste",
-                    "Cruelty-free and vegan"
-                ]
-            },
-            {
-                id: 7,
-                name: "Wool Dryer Balls",
-                category: "cleaning",
-                price: 16.99,
-                image: "dryer-balls.jpg",
-                popularity: 82,
-                description: "Set of 6 wool dryer balls that naturally soften laundry and reduce drying time.",
-                benefits: [
-                    "Replaces disposable dryer sheets",
-                    "Reduces drying time by up to 25%",
-                    "100% natural wool",
-                    "Lasts for over 1,000 loads"
-                ]
-            },
-            {
-                id: 8,
-                name: "Biodegradable Phone Case",
-                category: "personal-care",
-                price: 24.99,
-                image: "phone-case.jpg",
-                popularity: 76,
-                description: "Protective phone case made from biodegradable plant-based materials.",
-                benefits: [
-                    "Compostable materials",
-                    "Reduces plastic waste",
-                    "Durable protection",
-                    "Available for multiple phone models"
-                ]
-            },
-            {
-                id: 9,
-                name: "Compostable Plant Pots",
-                category: "garden",
-                price: 11.99,
-                image: "plant-pots.jpg",
-                popularity: 79,
-                description: "Set of 12 biodegradable plant pots made from coconut coir.",
-                benefits: [
-                    "100% biodegradable",
-                    "Plant directly in soil - no transplant shock",
-                    "Improves soil quality as it breaks down",
-                    "Perfect for seedlings and small plants"
-                ]
-            },
-            {
-                id: 10,
-                name: "Reusable Coffee Cup",
-                category: "kitchen",
-                price: 19.99,
-                image: "coffee-cup.jpg",
-                popularity: 94,
-                description: "Insulated reusable coffee cup made from bamboo fiber with a silicone lid and sleeve.",
-                benefits: [
-                    "Reduces single-use cup waste",
-                    "Keeps drinks hot for up to 1 hour",
-                    "BPA-free materials",
-                    "Dishwasher safe"
-                ]
-            },
-            {
-                id: 11,
-                name: "Organic Shampoo Bar",
-                category: "bathroom",
-                price: 8.99,
-                image: "shampoo-bar.jpg",
-                popularity: 88,
-                description: "Zero-waste solid shampoo bar with organic ingredients in plastic-free packaging.",
-                benefits: [
-                    "Eliminates plastic bottles",
-                    "Natural ingredients",
-                    "Lasts longer than liquid shampoo",
-                    "Travel-friendly"
-                ]
-            },
-            {
-                id: 12,
-                name: "Rainwater Collection System",
-                category: "garden",
-                price: 89.99,
-                image: "rainwater-system.jpg",
-                popularity: 72,
-                description: "Compact rainwater harvesting system with 50-gallon capacity and filtration.",
-                benefits: [
-                    "Conserves water",
-                    "Reduces water bills",
-                    "Easy installation",
-                    "Includes overflow protection"
-                ]
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all color input elements
+            const primaryColorInput = document.getElementById('primaryColor');
+            const primaryColorHex = document.getElementById('primaryColorHex');
+            const secondaryColorInput = document.getElementById('secondaryColor');
+            const secondaryColorHex = document.getElementById('secondaryColorHex');
+            const accentColorInput = document.getElementById('accentColor');
+            const accentColorHex = document.getElementById('accentColorHex');
+            const textColorInput = document.getElementById('textColor');
+            const textColorHex = document.getElementById('textColorHex');
+            const backgroundColorInput = document.getElementById('backgroundColor');
+            const backgroundColorHex = document.getElementById('backgroundColorHex');
+
+            // Get UI elements
+            const currentPalette = document.getElementById('currentPalette');
+            const themePreview = document.getElementById('themePreview');
+            const randomizeButton = document.getElementById('randomizeButton');
+            const savePaletteButton = document.getElementById('savePaletteButton');
+            const savedPalettesList = document.getElementById('savedPalettesList');
+            const noPalettesMessage = document.getElementById('noPalettesMessage');
+            const saveMessage = document.getElementById('saveMessage');
+            const contrastResults = document.getElementById('contrastResults');
+            const helpButton = document.getElementById('helpButton');
+            const closeHelpButton = document.getElementById('closeHelpButton');
+            const helpContent = document.getElementById('helpContent');
+
+            // Help panel functionality
+            function handleHelpInteraction(event) {
+                if (event.type === 'click' || 
+                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                    
+                    if (event.type === 'keydown') {
+                        event.preventDefault(); // Prevent scrolling on space key
+                    }
+                    
+                    const isExpanded = helpButton.getAttribute('aria-expanded') === 'true';
+                    
+                    if (!isExpanded) {
+                        helpContent.classList.remove('sr-only');
+                        helpButton.setAttribute('aria-expanded', 'true');
+                        closeHelpButton.focus();
+                    } else {
+                        helpContent.classList.add('sr-only');
+                        helpButton.setAttribute('aria-expanded', 'false');
+                        helpButton.focus();
+                    }
+                }
             }
-        ];
 
-        // DOM Elements
-        const productsGrid = document.getElementById('products-grid');
-        const categoryFilter = document.getElementById('category-filter');
-        const sortBy = document.getElementById('sort-by');
-        const loadingIndicator = document.getElementById('loading');
-        const modal = document.getElementById('product-modal');
-        const modalDetails = document.getElementById('modal-product-details');
-        const closeModalButton = document.getElementById('close-modal');
-
-        // Filter and sort products
-        function filterAndSortProducts() {
-            // Show loading indicator
-            loadingIndicator.style.display = 'block';
-            productsGrid.innerHTML = '';
+            helpButton.addEventListener('click', handleHelpInteraction);
+            helpButton.addEventListener('keydown', handleHelpInteraction);
             
-            // Simulate loading delay
-            setTimeout(() => {
-                const selectedCategory = categoryFilter.value;
-                const selectedSort = sortBy.value;
-                
-                // Filter products
-                let filteredProducts = [...products];
-                if (selectedCategory !== 'all') {
-                    filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
-                }
-                
-                // Sort products
-                switch (selectedSort) {
-                    case 'price-low':
-                        filteredProducts.sort((a, b) => a.price - b.price);
-                        break;
-                    case 'price-high':
-                        filteredProducts.sort((a, b) => b.price - a.price);
-                        break;
-                    case 'popularity':
-                        filteredProducts.sort((a, b) => b.popularity - a.popularity);
-                        break;
-                    case 'newest':
-                        // In a real app, we would sort by date
-                        // Here we'll just reverse the array as a simple simulation
-                        filteredProducts.reverse();
-                        break;
-                }
-                
-                // Display products
-                displayProducts(filteredProducts);
-                
-                // Hide loading indicator
-                loadingIndicator.style.display = 'none';
-            }, 500); // Simulated delay
-        }
+            closeHelpButton.addEventListener('click', function() {
+                helpContent.classList.add('sr-only');
+                helpButton.setAttribute('aria-expanded', 'false');
+                helpButton.focus();
+            });
 
-        // Display products in the grid
-        function displayProducts(productsToDisplay) {
-            productsGrid.innerHTML = '';
-            
-            if (productsToDisplay.length === 0) {
-                const noResults = document.createElement('div');
-                noResults.className = 'no-results';
-                noResults.innerHTML = '<h3>No products found</h3><p>Try adjusting your filters to see more products.</p>';
-                productsGrid.appendChild(noResults);
-                return;
+            // Function to update color hex input when color picker changes
+            function updateHexInput(colorInput, hexInput) {
+                hexInput.value = colorInput.value;
             }
-            
-            productsToDisplay.forEach(product => {
-                // Create product card
-                const productCard = document.createElement('article');
-                productCard.className = 'product-card';
-                productCard.setAttribute('tabindex', '0');
+
+            // Function to update color picker when hex input changes
+            function updateColorInput(hexInput, colorInput) {
+                // Validate hex code format
+                const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+                if (hexRegex.test(hexInput.value)) {
+                    colorInput.value = hexInput.value;
+                    return true;
+                } else {
+                    // If invalid, revert to the color picker's value
+                    hexInput.value = colorInput.value;
+                    return false;
+                }
+            }
+
+            // Add event listeners for color inputs
+            primaryColorInput.addEventListener('input', function() {
+                updateHexInput(primaryColorInput, primaryColorHex);
+                updateTheme();
+            });
+
+            primaryColorHex.addEventListener('blur', function() {
+                if (updateColorInput(primaryColorHex, primaryColorInput)) {
+                    updateTheme();
+                }
+            });
+            primaryColorHex.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    if (updateColorInput(primaryColorHex, primaryColorInput)) {
+                        updateTheme();
+                    }
+                }
+            });
+
+            secondaryColorInput.addEventListener('input', function() {
+                updateHexInput(secondaryColorInput, secondaryColorHex);
+                updateTheme();
+            });
+
+            secondaryColorHex.addEventListener('blur', function() {
+                if (updateColorInput(secondaryColorHex, secondaryColorInput)) {
+                    updateTheme();
+                }
+            });
+            secondaryColorHex.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    if (updateColorInput(secondaryColorHex, secondaryColorInput)) {
+                        updateTheme();
+                    }
+                }
+            });
+
+            accentColorInput.addEventListener('input', function() {
+                updateHexInput(accentColorInput, accentColorHex);
+                updateTheme();
+            });
+
+            accentColorHex.addEventListener('blur', function() {
+                if (updateColorInput(accentColorHex, accentColorInput)) {
+                    updateTheme();
+                }
+            });
+            accentColorHex.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    if (updateColorInput(accentColorHex, accentColorInput)) {
+                        updateTheme();
+                    }
+                }
+            });
+
+            textColorInput.addEventListener('input', function() {
+                updateHexInput(textColorInput, textColorHex);
+                updateTheme();
+            });
+
+            textColorHex.addEventListener('blur', function() {
+                if (updateColorInput(textColorHex, textColorInput)) {
+                    updateTheme();
+                }
+            });
+            textColorHex.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    if (updateColorInput(textColorHex, textColorInput)) {
+                        updateTheme();
+                    }
+                }
+            });
+
+            backgroundColorInput.addEventListener('input', function() {
+                updateHexInput(backgroundColorInput, backgroundColorHex);
+                updateTheme();
+            });
+
+            backgroundColorHex.addEventListener('blur', function() {
+                if (updateColorInput(backgroundColorHex, backgroundColorInput)) {
+                    updateTheme();
+                }
+            });
+            backgroundColorHex.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    if (updateColorInput(backgroundColorHex, backgroundColorInput)) {
+                        updateTheme();
+                    }
+                }
+            });
+
+            // Function to calculate contrast ratio between two colors
+            function getContrastRatio(color1, color2) {
+                // Convert hex to RGB
+                const rgb1 = hexToRgb(color1);
+                const rgb2 = hexToRgb(color2);
                 
-                // Use a placeholder image with appropriate alt text
-                const imagePlaceholder = `https://via.placeholder.com/300x225/e0f2e0/2e7d32?text=${encodeURIComponent(product.name)}`;
+                // Calculate relative luminance
+                const luminance1 = calculateLuminance(rgb1);
+                const luminance2 = calculateLuminance(rgb2);
                 
-                productCard.innerHTML = `
-                    <div class="product-image-container">
-                        <img src="${imagePlaceholder}" alt="${product.name}" class="product-image">
-                    </div>
-                    <div class="product-content">
-                        <span class="product-category">${getCategoryName(product.category)}</span>
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-price">$${product.price.toFixed(2)}</p>
-                        <div class="product-actions">
-                            <button class="quick-view-btn" data-product-id="${product.id}" aria-label="Quick view of ${product.name}">
-                                Quick View
-                            </button>
-                        </div>
-                    </div>
-                `;
+                // Calculate contrast ratio
+                const ratio = luminance1 > luminance2 
+                    ? (luminance1 + 0.05) / (luminance2 + 0.05)
+                    : (luminance2 + 0.05) / (luminance1 + 0.05);
                 
-                productsGrid.appendChild(productCard);
+                return ratio.toFixed(2);
+            }
+
+            // Helper function to convert hex to RGB
+            function hexToRgb(hex) {
+                // Remove # if present
+                hex = hex.replace('#', '');
                 
-                // Add event listener to the quick view button
-                const quickViewBtn = productCard.querySelector('.quick-view-btn');
-                quickViewBtn.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    openProductModal(product.id);
+                // Convert 3-digit hex to 6-digit
+                if (hex.length === 3) {
+                    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+                }
+                
+                // Parse the hex values
+                const r = parseInt(hex.substring(0, 2), 16);
+                const g = parseInt(hex.substring(2, 4), 16);
+                const b = parseInt(hex.substring(4, 6), 16);
+                
+                return { r, g, b };
+            }
+
+            // Calculate luminance for contrast ratio
+            function calculateLuminance(rgb) {
+                // Convert RGB to relative luminance
+                let { r, g, b } = rgb;
+                
+                r = r / 255;
+                g = g / 255;
+                b = b / 255;
+                
+                r = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+                g = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+                b = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+                
+                return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            }
+
+            // Function to check if contrast meets WCAG standards
+            function checkContrast(ratio, isLargeText = false) {
+                const minRatio = isLargeText ? 3 : 4.5;
+                return ratio >= minRatio;
+            }
+
+            // Function to update the palette display
+            function updatePalette() {
+                currentPalette.innerHTML = '';
+                
+                // Create color swatches for the palette
+                const colors = [
+                    { color: primaryColorInput.value, name: 'Primary' },
+                    { color: secondaryColorInput.value, name: 'Secondary' },
+                    { color: accentColorInput.value, name: 'Accent' },
+                    { color: textColorInput.value, name: 'Text' },
+                    { color: backgroundColorInput.value, name: 'Background' }
+                ];
+                
+                colors.forEach(colorObj => {
+                    const colorSwatch = document.createElement('div');
+                    colorSwatch.className = 'palette-color';
+                    colorSwatch.style.backgroundColor = colorObj.color;
+                    
+                    const colorInfo = document.createElement('div');
+                    colorInfo.className = 'palette-color-info';
+                    colorInfo.textContent = colorObj.name;
+                    
+                    colorSwatch.appendChild(colorInfo);
+                    currentPalette.appendChild(colorSwatch);
+                    
+                    // Make color swatch focusable for keyboard users
+                    colorSwatch.setAttribute('tabindex', '0');
+                    colorSwatch.setAttribute('role', 'img');
+                    colorSwatch.setAttribute('aria-label', `${colorObj.name} color: ${colorObj.color}`);
                 });
+            }
+
+            // Function to update the theme preview
+            function updateThemePreview() {
+                // Update CSS variables
+                document.documentElement.style.setProperty('--primary-color', primaryColorInput.value);
+                document.documentElement.style.setProperty('--secondary-color', secondaryColorInput.value);
+                document.documentElement.style.setProperty('--accent-color', accentColorInput.value);
+                document.documentElement.style.setProperty('--text-color', textColorInput.value);
+                document.documentElement.style.setProperty('--background-color', backgroundColorInput.value);
                 
-                // Add keyboard event for the entire card
-                productCard.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter') {
-                        openProductModal(product.id);
+                // Update preview elements
+                const previewHeader = themePreview.querySelector('.preview-header');
+                previewHeader.style.backgroundColor = primaryColorInput.value;
+                
+                const previewButton = themePreview.querySelector('.preview-button');
+                previewButton.style.backgroundColor = accentColorInput.value;
+                
+                const previewLink = themePreview.querySelector('.preview-link');
+                previewLink.style.color = primaryColorInput.value;
+                
+                themePreview.style.backgroundColor = backgroundColorInput.value;
+                themePreview.style.color = textColorInput.value;
+            }
+
+            // Function to check and display contrast information
+            function updateContrastInfo() {
+                // Calculate contrast ratios
+                const primaryOnWhite = getContrastRatio(primaryColorInput.value, '#ffffff');
+                const primaryOnBackground = getContrastRatio(primaryColorInput.value, backgroundColorInput.value);
+                const textOnBackground = getContrastRatio(textColorInput.value, backgroundColorInput.value);
+                const accentOnWhite = getContrastRatio(accentColorInput.value, '#ffffff');
+                const accentOnBackground = getContrastRatio(accentColorInput.value, backgroundColorInput.value);
+                
+                // Clear previous results
+                contrastResults.innerHTML = '';
+                
+                // Create and append contrast result elements
+                const createContrastResult = (label, ratio, isLargeText = false) => {
+                    const resultDiv = document.createElement('div');
+                    const passes = checkContrast(ratio, isLargeText);
+                    
+                    resultDiv.innerHTML = `
+                        <p>${label}: <strong>${ratio}</strong> 
+                            <span class="${passes ? 'success' : 'contrast-warning'}">
+                                ${passes ? '✓ Passes' : '⚠️ Fails'} WCAG AA
+                            </span>
+                        </p>
+                    `;
+                    
+                    contrastResults.appendChild(resultDiv);
+                    return passes;
+                };
+                
+                // Check all relevant contrast combinations
+                createContrastResult('Text on Background', textOnBackground);
+                createContrastResult('Primary on Background', primaryOnBackground);
+                createContrastResult('Primary on White', primaryOnWhite);
+                createContrastResult('Accent on Background', accentOnBackground);
+                createContrastResult('Accent on White (Button)', accentOnWhite, true);
+                
+                // Update contrast warnings for specific color inputs
+                const primaryContrast = document.getElementById('primaryColorContrast');
+                if (!checkContrast(primaryOnBackground) && !checkContrast(primaryOnWhite)) {
+                    primaryContrast.innerHTML = '<div class="contrast-warning">⚠️ Low contrast may cause readability issues</div>';
+                } else {
+                    primaryContrast.innerHTML = '';
+                }
+                
+                const secondaryContrast = document.getElementById('secondaryColorContrast');
+                const secondaryOnBackground = getContrastRatio(secondaryColorInput.value, backgroundColorInput.value);
+                if (!checkContrast(secondaryOnBackground)) {
+                    secondaryContrast.innerHTML = '<div class="contrast-warning">⚠️ Low contrast may cause readability issues</div>';
+                } else {
+                    secondaryContrast.innerHTML = '';
+                }
+                
+                const accentContrast = document.getElementById('accentColorContrast');
+                if (!checkContrast(accentOnBackground, true) && !checkContrast(accentOnWhite, true)) {
+                    accentContrast.innerHTML = '<div class="contrast-warning">⚠️ Low contrast may cause readability issues for buttons</div>';
+                } else {
+                    accentContrast.innerHTML = '';
+                }
+            }
+
+            // Function to update all theme elements
+            function updateTheme() {
+                updatePalette();
+                updateThemePreview();
+                updateContrastInfo();
+            }
+
+            // Function to generate random color
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+
+            // Function to handle randomize button interaction
+            function handleRandomizeInteraction(event) {
+                if (event.type === 'click' || 
+                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                    
+                    if (event.type === 'keydown') {
+                        event.preventDefault(); // Prevent scrolling on space key
                     }
+                    
+                    // Generate random colors
+                    primaryColorInput.value = getRandomColor();
+                    primaryColorHex.value = primaryColorInput.value;
+                    
+                    secondaryColorInput.value = getRandomColor();
+                    secondaryColorHex.value = secondaryColorInput.value;
+                    
+                    accentColorInput.value = getRandomColor();
+                    accentColorHex.value = accentColorInput.value;
+                    
+                    // Keep text and background with good contrast
+                    textColorInput.value = '#212529'; // Dark gray
+                    textColorHex.value = textColorInput.value;
+                    
+                    backgroundColorInput.value = '#f8f9fa'; // Light gray
+                    backgroundColorHex.value = backgroundColorInput.value;
+                    
+                    updateTheme();
+                    
+                    // Announce to screen readers
+                    saveMessage.textContent = 'Colors randomized. Preview updated.';
+                    setTimeout(() => { saveMessage.textContent = ''; }, 3000);
+                }
+            }
+
+            // Add event listeners for randomize button
+            randomizeButton.addEventListener('click', handleRandomizeInteraction);
+            randomizeButton.addEventListener('keydown', handleRandomizeInteraction);
+
+            // Function to save the current palette
+            function handleSavePaletteInteraction(event) {
+                if (event.type === 'click' || 
+                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                    
+                    if (event.type === 'keydown') {
+                        event.preventDefault(); // Prevent scrolling on space key
+                    }
+                    
+                    // Prompt for palette name
+                    const paletteName = prompt('Enter a name for this palette:', 'My Palette');
+                    
+                    if (paletteName) {
+                        // Get saved palettes from localStorage
+                        let savedPalettes = JSON.parse(localStorage.getItem('colorPalettes')) || [];
+                        
+                        // Create new palette object
+                        const newPalette = {
+                            id: Date.now(),
+                            name: paletteName,
+                            colors: {
+                                primary: primaryColorInput.value,
+                                secondary: secondaryColorInput.value,
+                                accent: accentColorInput.value,
+                                text: textColorInput.value,
+                                background: backgroundColorInput.value
+                            }
+                        };
+                        
+                        // Add to saved palettes
+                        savedPalettes.push(newPalette);
+                        localStorage.setItem('colorPalettes', JSON.stringify(savedPalettes));
+                        
+                        // Update the UI
+                        updateSavedPalettesList();
+                        
+                        // Announce to screen readers
+                        saveMessage.textContent = `Palette "${paletteName}" saved successfully.`;
+                        setTimeout(() => { saveMessage.textContent = ''; }, 3000);
+                    }
+                }
+            }
+
+            // Add event listeners for save palette button
+            savePaletteButton.addEventListener('click', handleSavePaletteInteraction);
+            savePaletteButton.addEventListener('keydown', handleSavePaletteInteraction);
+
+            // Function to update the saved palettes list
+            function updateSavedPalettesList() {
+                // Get saved palettes from localStorage
+                const savedPalettes = JSON.parse(localStorage.getItem('colorPalettes')) || [];
+                
+                // Clear the list
+                savedPalettesList.innerHTML = '';
+                
+                if (savedPalettes.length === 0) {
+                    savedPalettesList.appendChild(noPalettesMessage);
+                    return;
+                }
+                
+                // Create list items for each saved palette
+                savedPalettes.forEach(palette => {
+                    const paletteItem = document.createElement('div');
+                    paletteItem.className = 'saved-palette-item';
+                    paletteItem.setAttribute('tabindex', '0');
+                    paletteItem.setAttribute('role', 'button');
+                    paletteItem.setAttribute('aria-label', `Load palette: ${palette.name}`);
+                    
+                    const paletteColors = document.createElement('div');
+                    paletteColors.className = 'saved-palette-colors';
+                    
+                    // Create color swatches
+                    Object.values(palette.colors).forEach(color => {
+                        const colorSwatch = document.createElement('div');
+                        colorSwatch.className = 'saved-palette-color';
+                        colorSwatch.style.backgroundColor = color;
+                        paletteColors.appendChild(colorSwatch);
+                    });
+                    
+                    const paletteName = document.createElement('div');
+                    paletteName.className = 'saved-palette-name';
+                    paletteName.textContent = palette.name;
+                    
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'btn btn-secondary';
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.setAttribute('aria-label', `Delete palette: ${palette.name}`);
+                    
+                    paletteItem.appendChild(paletteColors);
+                    paletteItem.appendChild(paletteName);
+                    paletteItem.appendChild(deleteButton);
+                    
+                    savedPalettesList.appendChild(paletteItem);
+                    
+                    // Add event listener to load palette
+                    function handlePaletteItemInteraction(event) {
+                        // Only handle if the click was on the item itself, not on the delete button
+                        if (event.target !== deleteButton && 
+                            !deleteButton.contains(event.target) &&
+                            (event.type === 'click' || 
+                            (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' ')))) {
+                            
+                            if (event.type === 'keydown') {
+                                event.preventDefault(); // Prevent scrolling on space key
+                            }
+                            
+                            // Load the palette
+                            primaryColorInput.value = palette.colors.primary;
+                            primaryColorHex.value = palette.colors.primary;
+                            
+                            secondaryColorInput.value = palette.colors.secondary;
+                            secondaryColorHex.value = palette.colors.secondary;
+                            
+                            accentColorInput.value = palette.colors.accent;
+                            accentColorHex.value = palette.colors.accent;
+                            
+                            textColorInput.value = palette.colors.text;
+                            textColorHex.value = palette.colors.text;
+                            
+                            backgroundColorInput.value = palette.colors.background;
+                            backgroundColorHex.value = palette.colors.background;
+                            
+                            updateTheme();
+                            
+                            // Announce to screen readers
+                            saveMessage.textContent = `Palette "${palette.name}" loaded.`;
+                            setTimeout(() => { saveMessage.textContent = ''; }, 3000);
+                        }
+                    }
+                    
+                    paletteItem.addEventListener('click', handlePaletteItemInteraction);
+                    paletteItem.addEventListener('keydown', handlePaletteItemInteraction);
+                    
+                    // Add event listener to delete palette
+                    deleteButton.addEventListener('click', function(e) {
+                        e.stopPropagation(); // Prevent triggering the parent's click event
+                        
+                        if (confirm(`Are you sure you want to delete the palette "${palette.name}"?`)) {
+                            // Remove from saved palettes
+                            const updatedPalettes = savedPalettes.filter(p => p.id !== palette.id);
+                            localStorage.setItem('colorPalettes', JSON.stringify(updatedPalettes));
+                            
+                            // Update the UI
+                            updateSavedPalettesList();
+                            
+                            // Announce to screen readers
+                            saveMessage.textContent = `Palette "${palette.name}" deleted.`;
+                            setTimeout(() => { saveMessage.textContent = ''; }, 3000);
+                        }
+                    });
                 });
-            });
-        }
+            }
 
-        // Get readable category name
-        function getCategoryName(categorySlug) {
-            const categoryMap = {
-                'kitchen': 'Kitchen',
-                'bathroom': 'Bathroom',
-                'cleaning': 'Cleaning',
-                'personal-care': 'Personal Care',
-                'garden': 'Garden'
-            };
-            return categoryMap[categorySlug] || categorySlug;
-        }
-
-        // Open product modal
-        function openProductModal(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            
-            const imagePlaceholder = `https://via.placeholder.com/500x375/e0f2e0/2e7d32?text=${encodeURIComponent(product.name)}`;
-            
-            modalDetails.innerHTML = `
-                <div class="modal-product-image">
-                    <img src="${imagePlaceholder}" alt="${product.name}">
-                </div>
-                <div class="modal-product-info">
-                    <h3 id="modal-title">${product.name}</h3>
-                    <p class="product-price">$${product.price.toFixed(2)}</p>
-                    <p class="product-category"><strong>Category:</strong> ${getCategoryName(product.category)}</p>
-                    <div class="modal-product-description">
-                        <p>${product.description}</p>
-                    </div>
-                    <div class="eco-benefits">
-                        <h4>Environmental Benefits</h4>
-                        <ul>
-                            ${product.benefits.map(benefit => `<li>${benefit}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-            `;
-            
-            modal.removeAttribute('hidden');
-            modal.style.display = 'block';
-            
-            // Focus on the close button when modal opens
-            closeModalButton.focus();
-            
-            // Trap focus within modal
-            trapFocus(modal);
-        }
-
-        // Close product modal
-        function closeProductModal() {
-            modal.style.display = 'none';
-            modal.setAttribute('hidden', 'true');
-            
-            // Return focus to the element that opened the modal
-            // In a real app, we would track this element
-            document.querySelector('.quick-view-btn:focus') || document.querySelector('.product-card:focus') || document.body.focus();
-        }
-
-        // Trap focus within modal
-        function trapFocus(element) {
-            const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            const firstFocusableElement = focusableElements[0];
-            const lastFocusableElement = focusableElements[focusableElements.length - 1];
-            
-            element.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeProductModal();
-                }
-                
-                if (e.key === 'Tab') {
-                    // If shift + tab and focus is on first element, move to last element
-                    if (e.shiftKey && document.activeElement === firstFocusableElement) {
-                        e.preventDefault();
-                        lastFocusableElement.focus();
-                    }
-                    // If tab and focus is on last element, move to first element
-                    else if (!e.shiftKey && document.activeElement === lastFocusableElement) {
-                        e.preventDefault();
-                        firstFocusableElement.focus();
-                    }
-                }
-            });
-        }
-
-        // Event Listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initial display of products
-            filterAndSortProducts();
-            
-            // Filter and sort change events
-            categoryFilter.addEventListener('change', filterAndSortProducts);
-            sortBy.addEventListener('change', filterAndSortProducts);
-            
-            // Close modal events
-            closeModalButton.addEventListener('click', closeProductModal);
-            modal.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    closeProductModal();
-                }
-            });
-            
-            // Keyboard event handling for interactive elements
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape' && modal.style.display === 'block') {
-                    closeProductModal();
-                }
-            });
+            // Initialize the app
+            updateTheme();
+            updateSavedPalettesList();
         });
-
-        // Handle keyboard interactions for all interactive elements
-        function handleInteraction(event) {
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                // Prevent default space key behavior (scrolling)
-                if (event.key === ' ') {
-                    event.preventDefault();
-                }
-                
-                // Execute the action
-                event.currentTarget.click();
-            }
-        }
     </script>
 </body>
 </html>
