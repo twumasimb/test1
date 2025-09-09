@@ -3,696 +3,432 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Recipe Sharing – Submit, Search, and Rate Recipes</title>
+    <title>Accessible Registration Form with Real-Time Validation</title>
     <style>
-        /* Base styles and layout */
-        html {
-            box-sizing: border-box;
-            font-size: 100%;
-        }
-        *, *:before, *:after {
-            box-sizing: inherit;
-        }
+        /* Base styles for readability and contrast */
         body {
+            font-family: system-ui, Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #1a1a1a;
             margin: 0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f8f9fa;
-            color: #222;
-            line-height: 1.6;
-            min-height: 100vh;
+            padding: 0;
+            line-height: 1.5;
         }
         header, footer {
-            background: #0066cc;
+            background-color: #003366;
             color: #fff;
-        }
-        header {
             padding: 1rem 0;
         }
-        nav {
-            max-width: 960px;
+        header nav {
+            max-width: 700px;
             margin: 0 auto;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1rem;
+            justify-content: flex-start;
+            gap: 1.5rem;
         }
-        nav a {
+        header nav a {
             color: #fff;
             text-decoration: none;
             font-weight: 600;
-            margin-right: 1.5rem;
-            transition: text-decoration 0.2s;
+            padding: 0.25em 0.5em;
+            border-radius: 3px;
         }
-        nav a:last-child {
-            margin-right: 0;
-        }
-        nav a:focus, nav a:hover {
-            text-decoration: underline;
+        header nav a:focus {
+            background: #0066cc;
+            color: #fff;
         }
         main {
-            max-width: 960px;
+            max-width: 700px;
             margin: 2rem auto;
-            padding: 1rem;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-        h1, h2, h3 {
-            color: #0066cc;
-            margin-top: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 2rem 1.5rem;
         }
         h1 {
             font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        h2 {
-            font-size: 1.5rem;
-            margin-top: 2rem;
-        }
-        h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
-        }
-        /* Form styles */
-        form {
-            margin-bottom: 2rem;
-        }
-        .form-section {
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background: #f0f4fa;
-            border-radius: 6px;
-        }
-        .form-group {
+            margin-top: 0;
             margin-bottom: 1rem;
         }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+        }
         label {
-            display: block;
             font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-        input[type="text"],
-        input[type="number"],
-        textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #bbb;
-            border-radius: 4px;
-            font-size: 1rem;
-            background: #fff;
-            color: #222;
-        }
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        textarea:focus {
-            border-color: #0066cc;
-        }
-        textarea {
-            min-height: 70px;
-            resize: vertical;
         }
         .required-indicator {
-            color: #d8000c;
-            font-weight: bold;
-            margin-left: 0.2em;
+            color: #b30000;
+            margin-left: 0.25em;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            font-size: 1rem;
+            padding: 0.5em;
+            border: 1.5px solid #bbb;
+            border-radius: 4px;
+            transition: border-color 0.2s;
+            background: #fff;
+            color: #1a1a1a;
+        }
+        input:focus {
+            border-color: #0066cc;
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+        /* Error state */
+        .input-error {
+            border-color: #b30000 !important;
+            background: #fff0f0;
         }
         .error-message {
-            color: #d8000c;
-            font-size: 0.98em;
-            margin-top: 0.2em;
+            color: #b30000;
+            font-size: 0.95em;
+            margin-top: 0.1em;
+            min-height: 1.3em;
         }
-        button, .star-rating button {
+        .success-message {
+            color: #007a33;
+            font-weight: 600;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        button[type="submit"] {
             background: #0066cc;
             color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 0.75em 1.5em;
             border: none;
             border-radius: 4px;
-            padding: 0.6em 1.2em;
-            font-size: 1rem;
             cursor: pointer;
+            transition: background 0.15s;
+        }
+        button[type="submit"]:hover,
+        button[type="submit"]:focus {
+            background: #004b99;
+        }
+        button[type="submit"]:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+        /* Submission indicator */
+        .submitting-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.75em;
+            color: #0066cc;
             font-weight: 600;
-            margin-top: 0.3em;
-            transition: background 0.2s;
+            margin-top: 1em;
         }
-        button:disabled {
-            background: #bbb;
-            cursor: not-allowed;
+        .spinner {
+            width: 1.2em;
+            height: 1.2em;
+            border: 2.5px solid #cce1fa;
+            border-top: 2.5px solid #0066cc;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Responsive design */
+        @media (max-width: 600px) {
+            main {
+                padding: 1rem 0.5rem;
+            }
+        }
+        /* Focus indicators as required */
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-        /* Recipe list styles */
-        .recipe-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        article.recipe {
-            border: 1px solid #e2e6ea;
-            border-radius: 6px;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: #f9fbfd;
-            transition: box-shadow 0.2s;
-        }
-        article.recipe:focus-within {
-            box-shadow: 0 0 0 3px #0066cc55;
-        }
-        .recipe-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-        }
-        .recipe-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 0 0 0.3rem 0;
-        }
-        .recipe-meta {
-            font-size: 0.98rem;
-            color: #444;
-        }
-        .recipe-ingredients, .recipe-steps {
-            margin: 0.5rem 0 0.5rem 1.5rem;
-        }
-        .recipe-ingredients li, .recipe-steps li {
-            margin-bottom: 0.2rem;
-        }
-        /* Star rating styles */
-        .star-rating {
-            display: inline-flex;
-            align-items: center;
-        }
-        .star-rating button {
-            background: none;
-            border: none;
-            padding: 0 0.1em;
-            color: #ccc;
-            font-size: 1.4em;
-            cursor: pointer;
-            line-height: 1;
-            margin: 0;
-            transition: color 0.15s;
-        }
-        .star-rating button[aria-checked="true"],
-        .star-rating button:hover,
-        .star-rating button:focus,
-        .star-rating button:focus-visible {
-            color: #ffb400;
-        }
-        .star-rating button:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
-        }
-        .star-rating[aria-disabled="true"] button {
-            cursor: not-allowed;
-        }
-        .star-rating .sr-only {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-        .recipe-rating-label {
-            font-size: 0.95em;
-            color: #444;
-            margin-left: 0.5em;
-        }
-        /* Search bar */
-        .search-section {
-            margin-bottom: 2rem;
-        }
-        .search-bar {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0.5em;
-        }
-        .search-bar label {
-            margin-bottom: 0;
-        }
-        .search-bar input[type="text"] {
-            width: 220px;
-            max-width: 100%;
-        }
-        /* Responsive design */
-        @media (max-width: 700px) {
-            main, nav {
-                padding: 0.5rem;
-            }
-            .recipe-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-        @media (max-width: 500px) {
-            .search-bar input[type="text"] {
-                width: 100%;
-            }
-            .form-section {
-                padding: 0.5rem;
-            }
-        }
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 1rem 0;
-            font-size: 0.95em;
-            margin-top: 2rem;
-        }
-        /* Visually hidden (for accessibility) */
-        .sr-only {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-        /* Live region */
-        #live-region {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
+        /* High contrast focus for dark backgrounds */
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: 3px solid #ffffff;
         }
     </style>
 </head>
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <div>
-                <a href="#main-content" class="sr-only" id="skip-link">Skip to main content</a>
-                <a href="#main-content">Home</a>
-            </div>
-            <div>
-                <a href="#submit-recipe-section">Submit Recipe</a>
-                <a href="#recipes-section">View Recipes</a>
-            </div>
+            <a href="#main-content">Skip to main content</a>
+            <a href="/" aria-current="page">Home</a>
+            <a href="#contact">Contact</a>
         </nav>
     </header>
     <main id="main-content" tabindex="-1">
-        <h1>Recipe Sharing – Submit, Search, and Rate Recipes</h1>
-        <!-- Search Recipes Section -->
-        <section class="search-section" aria-labelledby="search-heading">
-            <h2 id="search-heading">Search Recipes by Ingredient</h2>
-            <form id="search-form" class="search-bar" autocomplete="off">
-                <label for="search-input">Ingredient</label>
-                <input type="text" id="search-input" name="ingredient" placeholder="e.g., tomato" aria-label="Search by ingredient" />
-                <button type="submit" id="search-btn">Search</button>
-                <button type="button" id="clear-search-btn">Clear</button>
+        <h1>Register for Your Account</h1>
+        <section aria-labelledby="form-section-heading">
+            <h2 id="form-section-heading" class="sr-only" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Registration Form</h2>
+            <form id="registration-form" novalidate aria-describedby="form-instructions">
+                <p id="form-instructions">
+                    <strong>All fields marked with <span class="required-indicator" aria-hidden="true">*</span> are required.</strong>
+                </p>
+                <!-- Name Field -->
+                <div class="form-group">
+                    <label for="name">
+                        Name
+                        <span class="required-indicator" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        autocomplete="name"
+                        required 
+                        aria-required="true"
+                        aria-describedby="name-error"
+                        maxlength="50"
+                        inputmode="text"
+                    >
+                    <span id="name-error" class="error-message" role="alert" aria-live="polite"></span>
+                </div>
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email">
+                        Email
+                        <span class="required-indicator" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        autocomplete="email"
+                        required 
+                        aria-required="true"
+                        aria-describedby="email-error"
+                        maxlength="100"
+                        inputmode="email"
+                    >
+                    <span id="email-error" class="error-message" role="alert" aria-live="polite"></span>
+                </div>
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label for="password">
+                        Password
+                        <span class="required-indicator" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="password-error password-hint"
+                        minlength="8"
+                        maxlength="32"
+                        autocomplete="new-password"
+                    >
+                    <span id="password-hint" style="font-size:0.95em;color:#444;">
+                        Minimum 8 characters, including at least one letter and one number.
+                    </span>
+                    <span id="password-error" class="error-message" role="alert" aria-live="polite"></span>
+                </div>
+                <!-- Phone Number Field -->
+                <div class="form-group">
+                    <label for="phone">
+                        Phone Number
+                        <span class="required-indicator" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="phone" 
+                        autocomplete="tel"
+                        required 
+                        aria-required="true"
+                        aria-describedby="phone-error phone-hint"
+                        maxlength="20"
+                        inputmode="tel"
+                        pattern="^[\d\-\+\(\) ]+$"
+                    >
+                    <span id="phone-hint" style="font-size:0.95em;color:#444;">
+                        Enter a valid phone number (e.g., (555) 123-4567).
+                    </span>
+                    <span id="phone-error" class="error-message" role="alert" aria-live="polite"></span>
+                </div>
+                <button type="submit" id="submit-btn">
+                    Register
+                </button>
+                <div id="submitting-indicator" class="submitting-indicator" style="display:none;" aria-live="assertive">
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span>Submitting, please wait...</span>
+                </div>
+                <div id="success-message" class="success-message" role="status" aria-live="polite" style="display:none;"></div>
             </form>
         </section>
-        <!-- Submit Recipe Section -->
-        <section class="form-section" id="submit-recipe-section" aria-labelledby="submit-recipe-heading">
-            <h2 id="submit-recipe-heading">Submit a New Recipe</h2>
-            <form id="recipe-form" novalidate>
-                <div class="form-group">
-                    <label for="recipe-title">
-                        Recipe Title
-                        <span class="required-indicator" aria-hidden="true">*</span>
-                    </label>
-                    <input type="text" id="recipe-title" name="title" required aria-required="true" maxlength="60" aria-describedby="title-error" />
-                    <span class="error-message" id="title-error" role="alert"></span>
-                </div>
-                <div class="form-group">
-                    <label for="recipe-ingredients">
-                        Ingredients (one per line)
-                        <span class="required-indicator" aria-hidden="true">*</span>
-                    </label>
-                    <textarea id="recipe-ingredients" name="ingredients" required aria-required="true" rows="4" maxlength="400" aria-describedby="ingredients-error"></textarea>
-                    <span class="error-message" id="ingredients-error" role="alert"></span>
-                </div>
-                <div class="form-group">
-                    <label for="recipe-steps">
-                        Preparation Steps (one per line)
-                        <span class="required-indicator" aria-hidden="true">*</span>
-                    </label>
-                    <textarea id="recipe-steps" name="steps" required aria-required="true" rows="4" maxlength="800" aria-describedby="steps-error"></textarea>
-                    <span class="error-message" id="steps-error" role="alert"></span>
-                </div>
-                <div class="form-group">
-                    <label for="recipe-image">
-                        Recipe Image URL
-                        <span class="required-indicator" aria-hidden="true">*</span>
-                    </label>
-                    <input type="text" id="recipe-image" name="image" required aria-required="true" maxlength="200" aria-describedby="image-error" placeholder="https://example.com/image.jpg" />
-                    <span class="error-message" id="image-error" role="alert"></span>
-                </div>
-                <button type="submit" id="submit-recipe-btn">Submit Recipe</button>
-            </form>
-        </section>
-        <!-- Recipes List Section -->
-        <section id="recipes-section" aria-labelledby="recipes-heading">
-            <h2 id="recipes-heading">All Recipes</h2>
-            <ul id="recipe-list" class="recipe-list" aria-live="polite" aria-relevant="additions removals">
-                <!-- Recipes will be dynamically inserted here -->
-            </ul>
-            <div id="no-results-message" role="status" aria-live="polite" style="display:none; color: #d8000c; font-weight: 600; margin-top:1rem;">No recipes found for the given ingredient.</div>
-        </section>
-        <!-- Live region for dynamic updates (screen readers) -->
-        <div id="live-region" aria-live="polite" aria-atomic="true"></div>
     </main>
     <footer>
-        <p>&copy; 2024 Accessible Recipe Sharing. All rights reserved.</p>
+        <p id="contact">Questions? Email us at <a href="mailto:support@example.com">support@example.com</a>.</p>
+        <p>&copy; 2024 Accessible Web Forms</p>
     </footer>
     <script>
-        // Utility: Focus skip link on load for accessibility
-        document.getElementById('skip-link').addEventListener('focus', function() {
-            this.style.position = 'static';
-            this.style.left = 'auto';
-            this.style.width = 'auto';
-            this.style.height = 'auto';
-            this.style.overflow = 'visible';
-            this.style.background = '#fff';
-            this.style.color = '#0066cc';
-            this.style.padding = '0.5em 1em';
-            this.style.zIndex = '1000';
-        });
-        document.getElementById('skip-link').addEventListener('blur', function() {
-            this.removeAttribute('style');
-        });
-
-        // Data storage (in-memory for demo; could be extended to localStorage)
-        let recipes = [
-            {
-                id: 1,
-                title: "Classic Tomato Pasta",
-                ingredients: ["Pasta", "Tomato", "Garlic", "Olive Oil", "Basil"],
-                steps: ["Boil pasta", "Prepare sauce with tomato and garlic", "Mix pasta and sauce", "Garnish with basil"],
-                image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80",
-                ratings: [4, 5, 5],
-            },
-            {
-                id: 2,
-                title: "Avocado Toast",
-                ingredients: ["Bread", "Avocado", "Salt", "Pepper", "Lemon Juice"],
-                steps: ["Toast bread", "Mash avocado with salt, pepper, and lemon juice", "Spread on toast"],
-                image: "https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80",
-                ratings: [5, 4],
-            }
-        ];
-        let nextRecipeId = 3;
-
-        // Helper: Calculate average rating
-        function getAverageRating(ratings) {
-            if (!ratings || ratings.length === 0) return 0;
-            return ratings.reduce((a, b) => a + b, 0) / ratings.length;
-        }
-
-        // Helper: Escape HTML for safe rendering
-        function escapeHTML(str) {
-            return str.replace(/[&<>"']/g, function(m) {
-                return ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#39;'
-                })[m];
-            });
-        }
-
-        // Render all recipes (with optional filtering)
-        function renderRecipes(filterIngredient = '') {
-            const recipeList = document.getElementById('recipe-list');
-            recipeList.innerHTML = '';
-            let filteredRecipes = recipes;
-            if (filterIngredient.trim()) {
-                const term = filterIngredient.trim().toLowerCase();
-                filteredRecipes = recipes.filter(recipe =>
-                    recipe.ingredients.some(ing => ing.toLowerCase().includes(term))
-                );
-            }
-            if (filteredRecipes.length === 0) {
-                document.getElementById('no-results-message').style.display = 'block';
-            } else {
-                document.getElementById('no-results-message').style.display = 'none';
-            }
-            filteredRecipes.forEach(recipe => {
-                recipeList.appendChild(renderRecipeItem(recipe));
-            });
-        }
-
-        // Render a single recipe <article>
-        function renderRecipeItem(recipe) {
-            const article = document.createElement('article');
-            article.className = 'recipe';
-            article.tabIndex = 0; // Allows focus for screen readers/keyboard users
-            article.setAttribute('aria-labelledby', `recipe-title-${recipe.id}`);
-
-            // Recipe header (title + rating)
-            const headerDiv = document.createElement('div');
-            headerDiv.className = 'recipe-header';
-
-            const title = document.createElement('h3');
-            title.className = 'recipe-title';
-            title.id = `recipe-title-${recipe.id}`;
-            title.textContent = recipe.title;
-
-            // Recipe image
-            const img = document.createElement('img');
-            img.src = recipe.image;
-            img.alt = `Photo of ${recipe.title}`;
-            img.style.maxWidth = '140px';
-            img.style.width = '100%';
-            img.style.height = 'auto';
-            img.style.borderRadius = '6px';
-            img.style.marginRight = '1.2rem';
-            img.style.marginBottom = '0.5rem';
-            img.loading = 'lazy';
-
-            // Star rating (read and interactive)
-            const ratingDiv = document.createElement('div');
-            ratingDiv.className = 'star-rating';
-            ratingDiv.setAttribute('role', 'radiogroup');
-            ratingDiv.setAttribute('aria-label', `Rate ${recipe.title}`);
-
-            // Average rating
-            const avgRating = getAverageRating(recipe.ratings);
-            // Star buttons
-            for (let i = 1; i <= 5; i++) {
-                const starBtn = document.createElement('button');
-                starBtn.type = 'button';
-                starBtn.className = 'star-btn';
-                starBtn.setAttribute('aria-label', `${i} star${i > 1 ? 's' : ''}`);
-                starBtn.setAttribute('aria-checked', Math.round(avgRating) === i ? 'true' : 'false');
-                starBtn.setAttribute('data-recipe-id', recipe.id);
-                starBtn.setAttribute('data-star', i);
-                starBtn.tabIndex = 0;
-                starBtn.innerHTML = i <= Math.round(avgRating) ? '★' : '☆';
-                // Keyboard and mouse events
-                starBtn.addEventListener('click', handleStarRating);
-                starBtn.addEventListener('keydown', handleStarRating);
-                ratingDiv.appendChild(starBtn);
-            }
-            // For screen readers: announce average rating
-            const srAvg = document.createElement('span');
-            srAvg.className = 'sr-only';
-            srAvg.textContent = `Average rating: ${avgRating > 0 ? avgRating.toFixed(1) : 'No ratings yet'} out of 5`;
-            ratingDiv.appendChild(srAvg);
-
-            // Visible average rating
-            const avgLabel = document.createElement('span');
-            avgLabel.className = 'recipe-rating-label';
-            avgLabel.textContent = recipe.ratings.length > 0
-                ? `(${avgRating.toFixed(1)} / 5 from ${recipe.ratings.length} rating${recipe.ratings.length > 1 ? 's' : ''})`
-                : '(No ratings yet)';
-            ratingDiv.appendChild(avgLabel);
-
-            // Compose header
-            headerDiv.appendChild(title);
-            headerDiv.appendChild(ratingDiv);
-
-            // Recipe meta (ingredients, steps)
-            const metaDiv = document.createElement('div');
-            metaDiv.className = 'recipe-meta';
-
-            // Ingredients
-            const ingLabel = document.createElement('strong');
-            ingLabel.textContent = 'Ingredients:';
-            const ingList = document.createElement('ul');
-            ingList.className = 'recipe-ingredients';
-            recipe.ingredients.forEach(ing => {
-                const li = document.createElement('li');
-                li.textContent = ing;
-                ingList.appendChild(li);
-            });
-
-            // Steps
-            const stepLabel = document.createElement('strong');
-            stepLabel.textContent = 'Preparation Steps:';
-            const stepList = document.createElement('ol');
-            stepList.className = 'recipe-steps';
-            recipe.steps.forEach(step => {
-                const li = document.createElement('li');
-                li.textContent = step;
-                stepList.appendChild(li);
-            });
-
-            // Assemble meta
-            metaDiv.appendChild(ingLabel);
-            metaDiv.appendChild(ingList);
-            metaDiv.appendChild(stepLabel);
-            metaDiv.appendChild(stepList);
-
-            // Compose article
-            article.appendChild(img);
-            article.appendChild(headerDiv);
-            article.appendChild(metaDiv);
-
-            return article;
-        }
-
-        // Handle star rating (keyboard and mouse)
-        function handleStarRating(event) {
-            // Mouse click or keyboard activation
-            if (
-                event.type === 'click' ||
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))
-            ) {
-                event.preventDefault();
-                const btn = event.currentTarget;
-                const recipeId = parseInt(btn.getAttribute('data-recipe-id'), 10);
-                const starValue = parseInt(btn.getAttribute('data-star'), 10);
-                // Add rating
-                const recipe = recipes.find(r => r.id === recipeId);
-                if (recipe) {
-                    recipe.ratings.push(starValue);
-                    // Announce to screen reader
-                    announceLiveRegion(`You rated "${recipe.title}" ${starValue} out of 5 stars.`);
-                    renderRecipes(document.getElementById('search-input').value);
-                }
-            }
-        }
-
-        // Announce dynamic updates for screen readers
-        function announceLiveRegion(message) {
-            const region = document.getElementById('live-region');
-            region.textContent = '';
-            setTimeout(() => {
-                region.textContent = message;
-            }, 50);
-        }
-
-        // Handle recipe submission
-        document.getElementById('recipe-form').addEventListener('submit', function(e) {
+        // Accessibility: Move focus to main content on skip link click
+        document.querySelector('a[href="#main-content"]').addEventListener('click', function(e) {
             e.preventDefault();
-            // Validate form fields
-            let valid = true;
-            // Clear previous errors
-            ['title', 'ingredients', 'steps', 'image'].forEach(field => {
-                document.getElementById(field + '-error').textContent = '';
-            });
+            document.getElementById('main-content').focus();
+        });
 
-            const title = document.getElementById('recipe-title').value.trim();
-            const ingredientsRaw = document.getElementById('recipe-ingredients').value.trim();
-            const stepsRaw = document.getElementById('recipe-steps').value.trim();
-            const image = document.getElementById('recipe-image').value.trim();
+        // Utility functions for validation
+        function validateName(name) {
+            if (!name.trim()) return 'Name is required.';
+            if (name.trim().length < 2) return 'Name must be at least 2 characters.';
+            if (!/^[A-Za-z\s\-']+$/.test(name.trim())) return 'Name may only contain letters, spaces, hyphens, and apostrophes.';
+            return '';
+        }
+        function validateEmail(email) {
+            if (!email.trim()) return 'Email is required.';
+            // Simple email regex for demonstration
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email.trim())) return 'Please enter a valid email address.';
+            return '';
+        }
+        function validatePassword(password) {
+            if (!password) return 'Password is required.';
+            if (password.length < 8) return 'Password must be at least 8 characters.';
+            if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) {
+                return 'Password must include at least one letter and one number.';
+            }
+            return '';
+        }
+        function validatePhone(phone) {
+            if (!phone.trim()) return 'Phone number is required.';
+            // Accepts digits, spaces, dashes, parentheses, plus sign
+            const phonePattern = /^[\d\-\+\(\) ]{7,20}$/;
+            if (!phonePattern.test(phone.trim())) return 'Please enter a valid phone number.';
+            return '';
+        }
 
-            if (!title) {
-                valid = false;
-                document.getElementById('title-error').textContent = 'Recipe title is required.';
-            } else if (title.length > 60) {
-                valid = false;
-                document.getElementById('title-error').textContent = 'Title must be 60 characters or less.';
-            }
-            if (!ingredientsRaw) {
-                valid = false;
-                document.getElementById('ingredients-error').textContent = 'Ingredients are required.';
-            }
-            if (!stepsRaw) {
-                valid = false;
-                document.getElementById('steps-error').textContent = 'Preparation steps are required.';
-            }
-            if (!image) {
-                valid = false;
-                document.getElementById('image-error').textContent = 'Image URL is required.';
-            } else if (!/^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i.test(image)) {
-                valid = false;
-                document.getElementById('image-error').textContent = 'Please enter a valid image URL (jpg, png, gif, webp).';
-            }
-
-            // Associate error messages with inputs (aria-describedby is already set in HTML)
-            if (!valid) {
-                // Focus first invalid field
-                const firstError = ['title', 'ingredients', 'steps', 'image'].find(field => document.getElementById(field + '-error').textContent);
-                if (firstError) {
-                    document.getElementById('recipe-' + firstError).focus();
+        // Accessibility: focus first error field
+        function focusFirstErrorField(fields) {
+            for (const field of fields) {
+                if (field.classList.contains('input-error')) {
+                    field.focus();
+                    break;
                 }
-                return;
             }
+        }
 
-            // Parse ingredients and steps
-            const ingredients = ingredientsRaw.split('\n').map(s => s.trim()).filter(Boolean);
-            const steps = stepsRaw.split('\n').map(s => s.trim()).filter(Boolean);
-
-            // Add new recipe
-            const newRecipe = {
-                id: nextRecipeId++,
-                title: escapeHTML(title),
-                ingredients: ingredients.map(escapeHTML),
-                steps: steps.map(escapeHTML),
-                image: escapeHTML(image),
-                ratings: []
+        // Real-time validation and form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registration-form');
+            const fields = {
+                name: document.getElementById('name'),
+                email: document.getElementById('email'),
+                password: document.getElementById('password'),
+                phone: document.getElementById('phone')
             };
-            recipes.unshift(newRecipe);
+            const errors = {
+                name: document.getElementById('name-error'),
+                email: document.getElementById('email-error'),
+                password: document.getElementById('password-error'),
+                phone: document.getElementById('phone-error')
+            };
+            const submitBtn = document.getElementById('submit-btn');
+            const submittingIndicator = document.getElementById('submitting-indicator');
+            const successMessage = document.getElementById('success-message');
 
-            // Announce to screen reader
-            announceLiveRegion(`Recipe "${title}" submitted successfully.`);
-
-            // Reset form
-            e.target.reset();
-
-            // Re-render recipes (clear search filter)
-            document.getElementById('search-input').value = '';
-            renderRecipes();
-        });
-
-        // Search recipes by ingredient
-        document.getElementById('search-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const ingredient = document.getElementById('search-input').value;
-            renderRecipes(ingredient);
-        });
-
-        // Clear search
-        document.getElementById('clear-search-btn').addEventListener('click', function() {
-            document.getElementById('search-input').value = '';
-            renderRecipes();
-            document.getElementById('search-input').focus();
-        });
-
-        // Keyboard support for clear button
-        document.getElementById('clear-search-btn').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.click();
+            // Helper: validate and show error for a field
+            function validateField(fieldName) {
+                let value = fields[fieldName].value;
+                let errorMsg = '';
+                switch(fieldName) {
+                    case 'name':
+                        errorMsg = validateName(value);
+                        break;
+                    case 'email':
+                        errorMsg = validateEmail(value);
+                        break;
+                    case 'password':
+                        errorMsg = validatePassword(value);
+                        break;
+                    case 'phone':
+                        errorMsg = validatePhone(value);
+                        break;
+                }
+                if (errorMsg) {
+                    fields[fieldName].classList.add('input-error');
+                    errors[fieldName].textContent = errorMsg;
+                    fields[fieldName].setAttribute('aria-invalid', 'true');
+                } else {
+                    fields[fieldName].classList.remove('input-error');
+                    errors[fieldName].textContent = '';
+                    fields[fieldName].removeAttribute('aria-invalid');
+                }
+                return !errorMsg;
             }
+
+            // Attach real-time validation (input and blur)
+            Object.keys(fields).forEach(fieldName => {
+                fields[fieldName].addEventListener('input', function() {
+                    validateField(fieldName);
+                });
+                fields[fieldName].addEventListener('blur', function() {
+                    validateField(fieldName);
+                });
+            });
+
+            // Form submission handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let allValid = true;
+                // Validate all fields
+                Object.keys(fields).forEach(fieldName => {
+                    const valid = validateField(fieldName);
+                    if (!valid) allValid = false;
+                });
+                if (!allValid) {
+                    // Focus the first invalid field for accessibility
+                    focusFirstErrorField(Object.values(fields));
+                    return;
+                }
+                // Show submission indicator
+                submittingIndicator.style.display = 'flex';
+                submitBtn.disabled = true;
+                // Hide previous success message
+                successMessage.style.display = 'none';
+                // Simulate async submission
+                setTimeout(function() {
+                    submittingIndicator.style.display = 'none';
+                    successMessage.textContent = 'Registration successful! Welcome, ' + fields.name.value.trim() + '.';
+                    successMessage.style.display = 'block';
+                    // Reset form and errors
+                    form.reset();
+                    Object.values(fields).forEach(field => {
+                        field.classList.remove('input-error');
+                        field.removeAttribute('aria-invalid');
+                    });
+                    Object.values(errors).forEach(span => span.textContent = '');
+                    submitBtn.disabled = false;
+                    // Move focus to success message for screen reader announcement
+                    successMessage.setAttribute('tabindex', '-1');
+                    successMessage.focus();
+                    setTimeout(() => successMessage.removeAttribute('tabindex'), 1000);
+                }, 1400);
+            });
+
+            // Keyboard accessibility for the submission button (handled natively)
+            // But for any custom mouse event, ensure keyboard support
+            function handleInteraction(event) {
+                if (event.type === 'click' ||
+                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                    event.preventDefault();
+                    submitBtn.click();
+                }
+            }
+            // (Not needed for submit button, but shown for pattern completeness)
+            // submitBtn.onkeydown = handleInteraction;
         });
-
-        // Initial render
-        renderRecipes();
-
-        // Accessibility: When recipes are dynamically added, focus the heading for context
-        function focusRecipesHeading() {
-            const heading = document.getElementById('recipes-heading');
-            heading.setAttribute('tabindex', '-1');
-            heading.focus();
-            setTimeout(() => heading.removeAttribute('tabindex'), 200);
-        }
-
-        // Responsive zoom support (200%)
-        window.addEventListener('resize', function() {
-            // Could add further logic if needed for dynamic scaling
-        });
-
-        // Ensure logical tab order: search → submit → recipes
-        // (Handled by source order and tabindex)
-
-        // End of script
     </script>
 </body>
 </html>
