@@ -3,265 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible To-Do List Application</title>
+    <title>GardenShare Community – Share Your Plants and Gardens</title>
     <style>
-        :root {
-            --primary-color: #0066cc;
-            --secondary-color: #ffffff;
-            --background-color: #f8f9fa;
-            --task-bg: #ffffff;
-            --task-border: #e0e0e0;
-            --high-priority: #d32f2f;
-            --medium-priority: #fbc02d;
-            --low-priority: #388e3c;
-            --completed-bg: #e8f5e9;
-            --focus-outline: 3px solid var(--primary-color);
-            --focus-outline-dark: 3px solid #ffffff;
-        }
-
+        /* Reset and base styles */
         html {
             box-sizing: border-box;
+            font-size: 100%;
         }
         *, *:before, *:after {
             box-sizing: inherit;
         }
-
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--background-color);
-            color: #222;
             margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f5faf5;
+            color: #222;
+            line-height: 1.6;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
-
         header {
-            background: var(--primary-color);
-            color: var(--secondary-color);
+            background: #338a4e;
+            color: #fff;
             padding: 1rem 0;
         }
         nav {
-            max-width: 700px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
             display: flex;
-            justify-content: flex-end;
+            align-items: center;
+            justify-content: space-between;
         }
-        nav a {
-            color: var(--secondary-color);
+        .site-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .nav-links {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1.2rem;
+        }
+        .nav-links li {
+            display: inline;
+        }
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: text-decoration 0.2s;
+        }
+        .nav-links a:focus, .nav-links a:hover {
             text-decoration: underline;
-            font-weight: 600;
-            margin-left: 1.5rem;
-        }
-        nav a:focus {
-            outline: var(--focus-outline-dark);
-            outline-offset: 2px;
-            background: #004b99;
         }
 
         main {
-            flex: 1 0 auto;
-            max-width: 700px;
-            margin: 2rem auto;
-            padding: 1rem;
-            background: var(--secondary-color);
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem 3rem 1rem;
         }
 
         h1 {
-            font-size: 2rem;
-            margin-bottom: 1.2rem;
-            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            color: #22663a;
+        }
+        h2 {
+            font-size: 1.4rem;
+            color: #22663a;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
 
-        /* To-Do Form Styles */
-        section[aria-labelledby="add-task-heading"] {
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #d1d5db;
+        /* Upload Form */
+        .upload-section {
+            background: #e8f6ea;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 2px 8px rgba(34,102,58,0.07);
         }
-
-        #todo-form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-        #todo-form label {
+        .upload-section label {
             font-weight: 600;
             display: block;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.3rem;
         }
-        #todo-form .form-group {
-            flex: 1 1 180px;
-            min-width: 140px;
+        .required {
+            color: #b1001c;
+            font-size: 1rem;
+            margin-left: 0.2rem;
         }
-        #todo-form input[type="text"],
-        #todo-form input[type="date"],
-        #todo-form select {
+        .form-row {
+            margin-bottom: 1.1rem;
+        }
+        .upload-section input[type="file"] {
+            display: block;
+            margin-top: 0.2rem;
+        }
+        .upload-section input[type="text"], 
+        .upload-section textarea {
             width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #bdbdbd;
-            border-radius: 5px;
+            padding: 0.6rem;
+            border: 1.5px solid #a2c6b6;
+            border-radius: 4px;
             font-size: 1rem;
-            background: #fafafa;
-            color: #222;
+            background: #fff;
         }
-        #todo-form input[type="text"]:focus,
-        #todo-form input[type="date"]:focus,
-        #todo-form select:focus {
-            outline: var(--focus-outline);
-            border-color: var(--primary-color);
+        .upload-section textarea {
+            min-height: 70px;
+            resize: vertical;
         }
-        #todo-form button[type="submit"] {
-            background: var(--primary-color);
-            color: var(--secondary-color);
+        .upload-section button[type="submit"] {
+            background: #338a4e;
+            color: #fff;
             border: none;
+            border-radius: 4px;
             padding: 0.7rem 1.5rem;
-            border-radius: 5px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.15s;
         }
-        #todo-form button[type="submit"]:hover,
-        #todo-form button[type="submit"]:focus {
-            background: #004b99;
-            outline: var(--focus-outline);
+        .upload-section button[type="submit"]:hover,
+        .upload-section button[type="submit"]:focus {
+            background: #22663a;
         }
-        .required-indicator {
-            color: var(--high-priority);
-            margin-left: 0.2em;
-            font-size: 1.1em;
+        .error-message {
+            color: #b1001c;
+            font-size: 1rem;
+            margin-top: 0.2rem;
         }
-        .form-error {
-            color: var(--high-priority);
-            font-size: 0.98em;
-            margin-top: 0.2em;
+        .visually-hidden {
+            position: absolute;
+            left: -10000px;
+            width: 1px;
+            height: 1px;
+            top: auto;
+            overflow: hidden;
         }
 
-        /* Task List Styles */
-        section[aria-labelledby="task-list-heading"] {
-            margin-top: 2rem;
+        /* Posts Feed */
+        .feed-section {
+            margin-bottom: 2rem;
         }
-        #tasks-list {
+        .feed-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        .task-item {
-            display: flex;
-            align-items: flex-start;
-            background: var(--task-bg);
-            border: 1px solid var(--task-border);
-            border-radius: 7px;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.02);
-            transition: background 0.2s;
-            position: relative;
+        .feed-list li {
+            margin-bottom: 2rem;
         }
-        .task-item.completed {
-            background: var(--completed-bg);
-            opacity: 0.75;
-            text-decoration: line-through;
-        }
-        .task-checkbox {
-            margin-right: 1rem;
-            margin-top: 0.2em;
-            flex-shrink: 0;
-        }
-        .task-content {
-            flex: 1 1 auto;
-        }
-        .task-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            margin: 0 0 0.2rem 0;
-            word-break: break-word;
-        }
-        .task-meta {
-            font-size: 0.98rem;
-            margin-bottom: 0.2rem;
-        }
-        .priority-indicator {
-            display: inline-block;
-            padding: 0.15em 0.7em;
-            border-radius: 1em;
-            font-size: 0.92em;
-            font-weight: 600;
-            margin-right: 0.6em;
-            color: #fff;
-            vertical-align: middle;
-        }
-        .priority-high {
-            background: var(--high-priority);
-        }
-        .priority-medium {
-            background: var(--medium-priority);
-            color: #333;
-        }
-        .priority-low {
-            background: var(--low-priority);
-        }
-        .task-due-date {
-            margin-left: 0.4em;
-            font-style: normal;
-        }
-        .task-actions {
+        article.post {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(34,102,58,0.07);
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
-            gap: 0.3em;
-            margin-left: 1.2em;
+            gap: 1rem;
+        }
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .post-img {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: #e8f6ea;
+            border: 1.5px solid #a2c6b6;
             flex-shrink: 0;
         }
-        .task-actions button {
-            background: none;
-            border: none;
-            color: var(--primary-color);
-            font-size: 1.2em;
-            cursor: pointer;
-            padding: 0.2em 0.3em;
+        .post-content {
+            flex: 1;
+        }
+        .post-desc {
+            margin: 0.7rem 0 0.5rem 0;
+        }
+        .post-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .like-btn {
+            background: #e8f6ea;
+            color: #22663a;
+            border: 1.5px solid #a2c6b6;
             border-radius: 4px;
-            transition: background 0.15s;
+            padding: 0.4rem 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.15s, border-color 0.15s;
         }
-        .task-actions button:focus {
-            outline: var(--focus-outline);
-            background: #e3f0fc;
+        .like-btn[aria-pressed="true"] {
+            background: #338a4e;
+            color: #fff;
+            border-color: #22663a;
         }
-        .task-actions button:hover {
-            background: #e3f0fc;
-        }
-        .sr-only {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0,0,0,0) !important;
-            border: 0 !important;
-        }
-        /* Focus indicators for all interactive elements */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: var(--focus-outline);
+        .like-btn:focus {
+            outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            main {
-                padding: 0.5rem;
-            }
-            #todo-form {
+        .like-count {
+            font-weight: 600;
+        }
+
+        /* Comments */
+        .comments-section {
+            margin-top: 1.2rem;
+        }
+        .comments-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
+        }
+        .comment {
+            background: #f5faf5;
+            border-radius: 4px;
+            padding: 0.7rem 1rem;
+            margin-bottom: 0.7rem;
+            font-size: 1rem;
+        }
+        .comment-meta {
+            font-size: 0.95rem;
+            color: #22663a;
+            font-weight: 600;
+        }
+        .add-comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .add-comment-form label {
+            font-weight: 500;
+        }
+        .add-comment-form input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1.5px solid #a2c6b6;
+            border-radius: 4px;
+            font-size: 1rem;
+            background: #fff;
+        }
+        .add-comment-form button[type="submit"] {
+            align-self: flex-start;
+            background: #338a4e;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .add-comment-form button[type="submit"]:hover,
+        .add-comment-form button[type="submit"]:focus {
+            background: #22663a;
+        }
+
+        /* Footer */
+        footer {
+            background: #338a4e;
+            color: #fff;
+            text-align: center;
+            padding: 1.2rem 0 1rem 0;
+            font-size: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Focus indicators (WCAG required) */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: 3px solid #ffffff;
+        }
+
+        /* Responsive design */
+        @media (max-width: 700px) {
+            nav {
                 flex-direction: column;
-                gap: 0.5rem;
+                align-items: flex-start;
+                gap: 0.7rem;
             }
-            .task-actions {
-                flex-direction: row;
-                gap: 0.7em;
-                margin-left: 0.5em;
+            .post-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .post-img {
+                width: 100%;
+                height: 170px;
+            }
+        }
+        @media (max-width: 500px) {
+            main {
+                padding: 1rem 0.2rem 2rem 0.2rem;
+            }
+            .upload-section, article.post {
+                padding: 1rem;
             }
         }
     </style>
@@ -269,320 +324,485 @@
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <a href="#main-content">Skip to main content</a>
-            <!-- Additional navigation links could go here -->
+            <span class="site-title">GardenShare Community</span>
+            <ul class="nav-links">
+                <li><a href="#upload" id="nav-upload">Upload Plant/Garden</a></li>
+                <li><a href="#feed" id="nav-feed">Community Feed</a></li>
+            </ul>
         </nav>
     </header>
-    <main id="main-content" tabindex="-1">
-        <h1>Accessible To-Do List</h1>
-        <section aria-labelledby="add-task-heading">
-            <h2 id="add-task-heading">Add a New Task</h2>
-            <form id="todo-form" autocomplete="off" novalidate>
-                <div class="form-group">
-                    <label for="task-title">
-                        Task Title
-                        <span class="required-indicator" aria-hidden="true">*</span>
+    <main>
+        <h1>Share Your Plants and Gardens</h1>
+        <section id="upload" class="upload-section" aria-labelledby="upload-heading">
+            <h2 id="upload-heading">Upload a New Plant or Garden Photo</h2>
+            <form id="postForm" autocomplete="off" novalidate>
+                <div class="form-row">
+                    <label for="plantImage">
+                        Photo
+                        <span class="required" aria-hidden="true">*</span>
                     </label>
-                    <input type="text" id="task-title" name="task-title" required aria-required="true" aria-describedby="title-desc title-error" maxlength="80" />
-                    <span id="title-desc" class="sr-only">Enter a short description of the task.</span>
-                    <span id="title-error" class="form-error" aria-live="assertive"></span>
+                    <input type="file" id="plantImage" name="plantImage" accept="image/*" required aria-required="true" aria-describedby="plantImageError plantImageHelp">
+                    <div id="plantImageHelp" class="visually-hidden">Choose a photo of your plant or garden. Only image files are allowed.</div>
+                    <div id="plantImageError" class="error-message" aria-live="polite"></div>
                 </div>
-                <div class="form-group">
-                    <label for="task-priority">
-                        Priority
-                        <span class="required-indicator" aria-hidden="true">*</span>
+                <div class="form-row">
+                    <label for="plantTitle">
+                        Title
+                        <span class="required" aria-hidden="true">*</span>
                     </label>
-                    <select id="task-priority" name="task-priority" required aria-required="true" aria-describedby="priority-desc priority-error">
-                        <option value="">Select priority</option>
-                        <option value="high">High</option>
-                        <option value="medium">Medium</option>
-                        <option value="low">Low</option>
-                    </select>
-                    <span id="priority-desc" class="sr-only">Choose the priority level: high, medium, or low.</span>
-                    <span id="priority-error" class="form-error" aria-live="assertive"></span>
+                    <input type="text" id="plantTitle" name="plantTitle" maxlength="60" required aria-required="true" aria-describedby="plantTitleError plantTitleHelp">
+                    <div id="plantTitleHelp" class="visually-hidden">Enter a short, descriptive title for your post.</div>
+                    <div id="plantTitleError" class="error-message" aria-live="polite"></div>
                 </div>
-                <div class="form-group">
-                    <label for="task-due-date">
-                        Due Date
-                        <span class="required-indicator" aria-hidden="true">*</span>
+                <div class="form-row">
+                    <label for="plantDesc">
+                        Description
+                        <span class="required" aria-hidden="true">*</span>
                     </label>
-                    <input type="date" id="task-due-date" name="task-due-date" required aria-required="true" aria-describedby="due-date-desc due-date-error" />
-                    <span id="due-date-desc" class="sr-only">Enter the due date for the task.</span>
-                    <span id="due-date-error" class="form-error" aria-live="assertive"></span>
+                    <textarea id="plantDesc" name="plantDesc" maxlength="300" required aria-required="true" aria-describedby="plantDescError plantDescHelp"></textarea>
+                    <div id="plantDescHelp" class="visually-hidden">Describe your plant or garden, care tips, or story.</div>
+                    <div id="plantDescError" class="error-message" aria-live="polite"></div>
                 </div>
-                <div class="form-group" style="flex:0 0 auto;">
-                    <button type="submit" id="add-task-btn">
-                        Add Task
-                    </button>
-                </div>
+                <button type="submit" id="submitPost">Post to Community</button>
             </form>
         </section>
-        <section aria-labelledby="task-list-heading">
-            <h2 id="task-list-heading">Task List</h2>
-            <ul id="tasks-list" aria-live="polite" aria-relevant="additions removals">
-                <!-- Tasks will be dynamically inserted here -->
+        <section id="feed" class="feed-section" aria-labelledby="feed-heading">
+            <h2 id="feed-heading">Community Feed</h2>
+            <ul id="feedList" class="feed-list" aria-live="polite" aria-relevant="additions">
+                <!-- Posts will be dynamically inserted here -->
             </ul>
-            <p id="no-tasks-msg">No tasks added yet.</p>
         </section>
     </main>
     <footer>
-        <div style="text-align:center; font-size:0.95em; color:#666; padding:1.2em 0;">
-            &copy; 2024 Accessible To-Do List. Built for everyone.
-        </div>
+        <span>© 2024 GardenShare Community. All gardeners welcome!</span>
     </footer>
     <script>
-        // Helper: Set focus to main content when "Skip to main content" is used
-        document.querySelector('a[href="#main-content"]').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('main-content').focus();
-        });
-
-        // Accessibility: Live region for task list updates
-        const tasksList = document.getElementById('tasks-list');
-        const noTasksMsg = document.getElementById('no-tasks-msg');
-        let tasks = [];
-
-        // Utility to generate unique IDs for tasks
-        function generateTaskId() {
-            return 'task-' + Math.random().toString(36).substr(2, 9);
+        // Utility for generating unique IDs for posts/comments
+        function uniqueId(prefix) {
+            return prefix + '_' + Math.random().toString(36).substr(2, 9);
         }
 
-        // Helper: Format date to readable string
-        function formatDate(dateStr) {
-            if (!dateStr) return '';
-            const date = new Date(dateStr);
-            if (isNaN(date)) return '';
-            return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
-        }
-
-        // Render all tasks
-        function renderTasks() {
-            tasksList.innerHTML = '';
-            if (tasks.length === 0) {
-                noTasksMsg.style.display = 'block';
-                return;
-            } else {
-                noTasksMsg.style.display = 'none';
-            }
-            tasks.forEach((task, idx) => {
-                const li = document.createElement('li');
-                li.className = 'task-item' + (task.completed ? ' completed' : '');
-                li.setAttribute('data-id', task.id);
-                li.setAttribute('role', 'article');
-                li.setAttribute('aria-label', `${task.title}, ${task.priority} priority, due ${formatDate(task.dueDate)}${task.completed ? ', completed' : ''}`);
-                li.tabIndex = -1;
-
-                // Checkbox for completed
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'task-checkbox';
-                checkbox.id = `complete-${task.id}`;
-                checkbox.checked = task.completed;
-                checkbox.setAttribute('aria-checked', task.completed ? 'true' : 'false');
-                checkbox.setAttribute('aria-label', task.completed ? `Mark ${task.title} as incomplete` : `Mark ${task.title} as completed`);
-                checkbox.tabIndex = 0;
-
-                // Keyboard support for checkbox (handled natively, but reinforce for robustness)
-                checkbox.addEventListener('keydown', function(event) {
-                    if (event.key === ' ' || event.key === 'Enter') {
-                        event.preventDefault();
-                        checkbox.checked = !checkbox.checked;
-                        handleTaskCompletion(task.id, checkbox.checked);
-                    }
-                });
-                checkbox.addEventListener('change', function() {
-                    handleTaskCompletion(task.id, checkbox.checked);
-                });
-
-                // Task content
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'task-content';
-
-                // Task title
-                const title = document.createElement('div');
-                title.className = 'task-title';
-                title.textContent = task.title;
-
-                // Priority indicator
-                const meta = document.createElement('div');
-                meta.className = 'task-meta';
-
-                const prioritySpan = document.createElement('span');
-                prioritySpan.className = 'priority-indicator priority-' + task.priority;
-                prioritySpan.textContent = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
-                prioritySpan.setAttribute('aria-label', `Priority: ${task.priority}`);
-
-                // Color is not the only indicator: text label is always visible
-
-                // Due date
-                const dueDate = document.createElement('time');
-                dueDate.className = 'task-due-date';
-                dueDate.setAttribute('datetime', task.dueDate);
-                dueDate.textContent = 'Due: ' + formatDate(task.dueDate);
-
-                meta.appendChild(prioritySpan);
-                meta.appendChild(dueDate);
-
-                contentDiv.appendChild(title);
-                contentDiv.appendChild(meta);
-
-                // Actions: Delete
-                const actionsDiv = document.createElement('div');
-                actionsDiv.className = 'task-actions';
-
-                const deleteBtn = document.createElement('button');
-                deleteBtn.type = 'button';
-                deleteBtn.setAttribute('aria-label', `Delete task: ${task.title}`);
-                deleteBtn.title = `Delete task: ${task.title}`;
-                deleteBtn.innerHTML = '<span aria-hidden="true">&#128465;</span> <span class="sr-only">Delete</span>';
-                deleteBtn.tabIndex = 0;
-
-                // Keyboard & mouse support for delete
-                deleteBtn.addEventListener('click', function(event) {
-                    handleDeleteTask(task.id);
-                });
-                deleteBtn.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        handleDeleteTask(task.id);
-                    }
-                });
-
-                actionsDiv.appendChild(deleteBtn);
-
-                // Compose
-                li.appendChild(checkbox);
-                li.appendChild(contentDiv);
-                li.appendChild(actionsDiv);
-
-                tasksList.appendChild(li);
+        // Helper: Escape HTML to prevent XSS
+        function escapeHTML(str) {
+            return str.replace(/[&<>"']/g, function (m) {
+                return ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                })[m];
             });
         }
 
-        // Handle marking task as completed/incomplete
-        function handleTaskCompletion(taskId, completed) {
-            const idx = tasks.findIndex(t => t.id === taskId);
-            if (idx !== -1) {
-                tasks[idx].completed = completed;
-                renderTasks();
+        // Focus management for navigation links (skip to section)
+        document.getElementById('nav-upload').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('upload-heading').focus();
+        });
+        document.getElementById('nav-feed').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('feed-heading').focus();
+        });
+
+        // Initial focusable headings for skip links
+        document.getElementById('upload-heading').setAttribute('tabindex', '-1');
+        document.getElementById('feed-heading').setAttribute('tabindex', '-1');
+
+        // Accessible form handling
+        const postForm = document.getElementById('postForm');
+        const feedList = document.getElementById('feedList');
+        let posts = []; // In-memory post storage
+
+        // Error message elements
+        const plantImageError = document.getElementById('plantImageError');
+        const plantTitleError = document.getElementById('plantTitleError');
+        const plantDescError = document.getElementById('plantDescError');
+
+        // Live region for dynamic feedback
+        function announce(message) {
+            let region = document.getElementById('aria-live-region');
+            if (!region) {
+                region = document.createElement('div');
+                region.id = 'aria-live-region';
+                region.setAttribute('aria-live', 'polite');
+                region.className = 'visually-hidden';
+                document.body.appendChild(region);
             }
+            region.textContent = message;
         }
 
-        // Handle deleting a task
-        function handleDeleteTask(taskId) {
-            tasks = tasks.filter(t => t.id !== taskId);
-            renderTasks();
-            // Set focus to task list heading for context after deletion
-            document.getElementById('task-list-heading').focus();
-        }
-
-        // Form validation and submission
-        const todoForm = document.getElementById('todo-form');
-        todoForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            // Clear errors
-            clearFormErrors();
-
-            const titleInput = document.getElementById('task-title');
-            const priorityInput = document.getElementById('task-priority');
-            const dueDateInput = document.getElementById('task-due-date');
-
+        // Validate upload form
+        function validatePostForm(form) {
             let valid = true;
+            // Reset errors
+            plantImageError.textContent = '';
+            plantTitleError.textContent = '';
+            plantDescError.textContent = '';
 
-            // Title validation
+            // Validate image
+            const imageInput = form.plantImage;
+            if (!imageInput.files || !imageInput.files[0]) {
+                plantImageError.textContent = 'Please select a photo to upload.';
+                valid = false;
+            } else if (!imageInput.files[0].type.startsWith('image/')) {
+                plantImageError.textContent = 'The selected file must be an image.';
+                valid = false;
+            }
+
+            // Validate title
+            const titleInput = form.plantTitle;
             if (!titleInput.value.trim()) {
-                showFormError('title', 'Task title is required.');
+                plantTitleError.textContent = 'Please enter a title for your post.';
                 valid = false;
-            } else if (titleInput.value.length > 80) {
-                showFormError('title', 'Task title must be 80 characters or less.');
-                valid = false;
-            }
-
-            // Priority validation
-            if (!priorityInput.value) {
-                showFormError('priority', 'Please select a priority.');
+            } else if (titleInput.value.trim().length > 60) {
+                plantTitleError.textContent = 'Title must be 60 characters or fewer.';
                 valid = false;
             }
 
-            // Due date validation
-            if (!dueDateInput.value) {
-                showFormError('due-date', 'Please select a due date.');
+            // Validate description
+            const descInput = form.plantDesc;
+            if (!descInput.value.trim()) {
+                plantDescError.textContent = 'Please enter a description.';
                 valid = false;
+            } else if (descInput.value.trim().length > 300) {
+                plantDescError.textContent = 'Description must be 300 characters or fewer.';
+                valid = false;
+            }
+            return valid;
+        }
+
+        // Handle post form submission
+        postForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (!validatePostForm(postForm)) {
+                return;
+            }
+            const file = postForm.plantImage.files[0];
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                // Create post object
+                const post = {
+                    id: uniqueId('post'),
+                    imageSrc: ev.target.result,
+                    imageAlt: `Photo of ${escapeHTML(postForm.plantTitle.value.trim())}`,
+                    title: escapeHTML(postForm.plantTitle.value.trim()),
+                    desc: escapeHTML(postForm.plantDesc.value.trim()),
+                    likes: 0,
+                    liked: false,
+                    comments: []
+                };
+                posts.unshift(post); // Add to top
+                renderFeed();
+                announce('Post added to community feed.');
+                postForm.reset();
+                // Set focus to feed heading for context
+                document.getElementById('feed-heading').focus();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Render all posts in the feed
+        function renderFeed() {
+            feedList.innerHTML = '';
+            if (posts.length === 0) {
+                const li = document.createElement('li');
+                li.textContent = 'No posts yet. Be the first to share your plant or garden!';
+                feedList.appendChild(li);
+                return;
+            }
+            posts.forEach(post => {
+                feedList.appendChild(renderPost(post));
+            });
+        }
+
+        // Render a single post (returns <li>)
+        function renderPost(post) {
+            const li = document.createElement('li');
+            const article = document.createElement('article');
+            article.className = 'post';
+            article.setAttribute('aria-labelledby', `${post.id}-title`);
+
+            // Post header: image + content
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'post-header';
+
+            // Image
+            const img = document.createElement('img');
+            img.className = 'post-img';
+            img.src = post.imageSrc;
+            img.alt = post.imageAlt;
+            img.width = 120;
+            img.height = 90;
+            img.setAttribute('loading', 'lazy');
+
+            // Content
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'post-content';
+
+            const h3 = document.createElement('h3');
+            h3.id = `${post.id}-title`;
+            h3.textContent = post.title;
+
+            const descP = document.createElement('p');
+            descP.className = 'post-desc';
+            descP.textContent = post.desc;
+
+            contentDiv.appendChild(h3);
+            contentDiv.appendChild(descP);
+
+            headerDiv.appendChild(img);
+            headerDiv.appendChild(contentDiv);
+
+            // Actions: Like button and count
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'post-actions';
+
+            const likeBtn = document.createElement('button');
+            likeBtn.type = 'button';
+            likeBtn.className = 'like-btn';
+            likeBtn.setAttribute('aria-pressed', post.liked ? 'true' : 'false');
+            likeBtn.setAttribute('aria-label', post.liked ? 'Unlike this post' : 'Like this post');
+            likeBtn.innerHTML = `<span aria-hidden="true">👍</span> <span class="like-count">${post.likes}</span> <span class="like-text">${post.liked ? 'Liked' : 'Like'}</span>`;
+            likeBtn.id = `${post.id}-like`;
+
+            // Keyboard and mouse event handler for like
+            likeBtn.addEventListener('click', function(event) {
+                handleLike(event, post.id);
+            });
+            likeBtn.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleLike(event, post.id);
+                }
+            });
+
+            actionsDiv.appendChild(likeBtn);
+
+            // Comments section
+            const commentsSection = document.createElement('section');
+            commentsSection.className = 'comments-section';
+            commentsSection.setAttribute('aria-labelledby', `${post.id}-comments-heading`);
+
+            const commentsHeading = document.createElement('h4');
+            commentsHeading.id = `${post.id}-comments-heading`;
+            commentsHeading.style.fontSize = '1.05rem';
+            commentsHeading.style.margin = '0 0 0.5rem 0';
+            commentsHeading.textContent = 'Comments';
+
+            // Comments list
+            const commentsList = document.createElement('ul');
+            commentsList.className = 'comments-list';
+            commentsList.id = `${post.id}-comments-list`;
+
+            if (post.comments.length === 0) {
+                const emptyLi = document.createElement('li');
+                emptyLi.textContent = 'No comments yet. Be the first to comment!';
+                commentsList.appendChild(emptyLi);
             } else {
-                const today = new Date();
-                const due = new Date(dueDateInput.value);
-                today.setHours(0,0,0,0);
-                due.setHours(0,0,0,0);
-                if (due < today) {
-                    showFormError('due-date', 'Due date cannot be in the past.');
+                post.comments.forEach(comment => {
+                    commentsList.appendChild(renderComment(comment));
+                });
+            }
+
+            // Add comment form
+            const addCommentForm = document.createElement('form');
+            addCommentForm.className = 'add-comment-form';
+            addCommentForm.setAttribute('aria-label', 'Add a comment');
+            addCommentForm.setAttribute('autocomplete', 'off');
+            addCommentForm.noValidate = true;
+
+            // Name field
+            const nameLabel = document.createElement('label');
+            nameLabel.setAttribute('for', `${post.id}-commenter`);
+            nameLabel.innerHTML = 'Name <span class="required" aria-hidden="true">*</span>';
+
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.id = `${post.id}-commenter`;
+            nameInput.name = 'commenter';
+            nameInput.maxLength = 40;
+            nameInput.required = true;
+            nameInput.setAttribute('aria-required', 'true');
+            nameInput.setAttribute('aria-describedby', `${post.id}-commenter-error`);
+            nameInput.autocomplete = 'off';
+
+            const nameError = document.createElement('div');
+            nameError.id = `${post.id}-commenter-error`;
+            nameError.className = 'error-message';
+            nameError.setAttribute('aria-live', 'polite');
+
+            // Comment field
+            const commentLabel = document.createElement('label');
+            commentLabel.setAttribute('for', `${post.id}-comment-text`);
+            commentLabel.innerHTML = 'Comment <span class="required" aria-hidden="true">*</span>';
+
+            const commentInput = document.createElement('input');
+            commentInput.type = 'text';
+            commentInput.id = `${post.id}-comment-text`;
+            commentInput.name = 'comment';
+            commentInput.maxLength = 160;
+            commentInput.required = true;
+            commentInput.setAttribute('aria-required', 'true');
+            commentInput.setAttribute('aria-describedby', `${post.id}-comment-error`);
+            commentInput.autocomplete = 'off';
+
+            const commentError = document.createElement('div');
+            commentError.id = `${post.id}-comment-error`;
+            commentError.className = 'error-message';
+            commentError.setAttribute('aria-live', 'polite');
+
+            // Submit button
+            const submitBtn = document.createElement('button');
+            submitBtn.type = 'submit';
+            submitBtn.textContent = 'Add Comment';
+
+            // Accessible form submission
+            addCommentForm.appendChild(nameLabel);
+            addCommentForm.appendChild(nameInput);
+            addCommentForm.appendChild(nameError);
+            addCommentForm.appendChild(commentLabel);
+            addCommentForm.appendChild(commentInput);
+            addCommentForm.appendChild(commentError);
+            addCommentForm.appendChild(submitBtn);
+
+            addCommentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Validate comment form
+                nameError.textContent = '';
+                commentError.textContent = '';
+                let valid = true;
+                if (!nameInput.value.trim()) {
+                    nameError.textContent = 'Please enter your name.';
+                    valid = false;
+                } else if (nameInput.value.trim().length > 40) {
+                    nameError.textContent = 'Name must be 40 characters or fewer.';
                     valid = false;
                 }
-            }
-
-            if (!valid) {
-                // Focus the first invalid field
-                const firstError = todoForm.querySelector('.form-error:not(:empty)');
-                if (firstError) {
-                    const fieldId = firstError.id.replace('-error', '');
-                    document.getElementById('task-' + fieldId).focus();
+                if (!commentInput.value.trim()) {
+                    commentError.textContent = 'Please enter your comment.';
+                    valid = false;
+                } else if (commentInput.value.trim().length > 160) {
+                    commentError.textContent = 'Comment must be 160 characters or fewer.';
+                    valid = false;
                 }
-                return;
-            }
-
-            // Add task
-            const newTask = {
-                id: generateTaskId(),
-                title: titleInput.value.trim(),
-                priority: priorityInput.value,
-                dueDate: dueDateInput.value,
-                completed: false
-            };
-            tasks.push(newTask);
-
-            // Reset form
-            todoForm.reset();
-            renderTasks();
-
-            // Focus the newly added task for screen reader users
-            setTimeout(() => {
-                const newTaskElem = tasksList.lastElementChild;
-                if (newTaskElem) {
-                    newTaskElem.focus();
+                if (!valid) return;
+                // Add comment
+                const commentObj = {
+                    id: uniqueId('comment'),
+                    name: escapeHTML(nameInput.value.trim()),
+                    text: escapeHTML(commentInput.value.trim())
+                };
+                const idx = posts.findIndex(p => p.id === post.id);
+                if (idx > -1) {
+                    posts[idx].comments.push(commentObj);
+                    renderFeed();
+                    announce('Comment added.');
+                    // Set focus to new comment for screen reader
+                    setTimeout(() => {
+                        const newComment = document.getElementById(`${commentObj.id}-li`);
+                        if (newComment) newComment.focus();
+                    }, 100);
                 }
-            }, 50);
-        });
-
-        function showFormError(field, message) {
-            const errorSpan = document.getElementById(field + '-error');
-            errorSpan.textContent = message;
-        }
-        function clearFormErrors() {
-            ['title', 'priority', 'due-date'].forEach(field => {
-                document.getElementById(field + '-error').textContent = '';
             });
+
+            // Compose post article
+            article.appendChild(headerDiv);
+            article.appendChild(actionsDiv);
+
+            commentsSection.appendChild(commentsHeading);
+            commentsSection.appendChild(commentsList);
+            commentsSection.appendChild(addCommentForm);
+
+            article.appendChild(commentsSection);
+            li.appendChild(article);
+            return li;
         }
 
-        // Initialize: Render empty state
-        renderTasks();
+        // Render a single comment (returns <li>)
+        function renderComment(comment) {
+            const li = document.createElement('li');
+            li.className = 'comment';
+            li.id = `${comment.id}-li`;
+            li.setAttribute('tabindex', '-1');
+            // Accessible structure: name, then comment
+            const meta = document.createElement('span');
+            meta.className = 'comment-meta';
+            meta.textContent = comment.name + ': ';
+            li.appendChild(meta);
+            li.appendChild(document.createTextNode(comment.text));
+            return li;
+        }
 
-        // Accessibility: Allow task list heading to be focused for context
-        document.getElementById('task-list-heading').tabIndex = -1;
+        // Handle like button interaction (keyboard and mouse)
+        function handleLike(event, postId) {
+            // Find the post
+            const idx = posts.findIndex(p => p.id === postId);
+            if (idx === -1) return;
+            const post = posts[idx];
+            post.liked = !post.liked;
+            post.likes += post.liked ? 1 : -1;
+            if (post.likes < 0) post.likes = 0;
+            renderFeed();
+            announce(post.liked ? 'You liked this post.' : 'You unliked this post.');
+            // Set focus back to like button for accessibility
+            setTimeout(() => {
+                const likeBtn = document.getElementById(`${postId}-like`);
+                if (likeBtn) likeBtn.focus();
+            }, 100);
+        }
 
-        // Ensure tab order: After deleting a task, focus returns to heading for orientation
+        // Initial render (with no posts)
+        renderFeed();
 
-        // Responsive: Adjust aria-live for dynamic updates
-        // Already set via aria-live="polite" on #tasks-list
-
-        // Prevent form submission on Enter in select or date fields (only submit when Add Task is pressed or Enter in title)
-        todoForm.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                const active = document.activeElement;
-                if (active && (active.id === 'task-priority' || active.id === 'task-due-date')) {
+        // Accessibility: Allow "Enter" and "Space" on all buttons
+        document.addEventListener('keydown', function(event) {
+            if (event.target.tagName === 'BUTTON' && !event.target.disabled) {
+                if (event.key === ' ' || event.key === 'Enter') {
                     event.preventDefault();
+                    event.target.click();
                 }
             }
         });
+
+        // Accessibility: Prevent form submission on Enter in text inputs except on submit
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type === 'text') {
+                    // Only submit if the input is the last in the form
+                    const inputs = Array.from(form.querySelectorAll('input[type="text"]'));
+                    if (inputs[inputs.length - 1] !== e.target) {
+                        e.preventDefault();
+                        // Move focus to next input
+                        const idx = inputs.indexOf(e.target);
+                        if (idx !== -1 && idx < inputs.length - 1) {
+                            inputs[idx + 1].focus();
+                        }
+                    }
+                }
+            });
+        });
+
+        // Accessibility: Ensure all error messages are associated with their fields via aria-describedby
+        // Already handled in form construction above
+
+        // Accessibility: Announce dynamic updates for screen readers
+        // Already handled via announce() function and aria-live region
+
+        // Accessibility: Prevent color-only information
+        // All status, errors, and actions are textually described
+
+        // Accessibility: Focus indicators and keyboard navigation
+        // CSS focus indicators included above
+
+        // Accessibility: All images have descriptive alt text
+        // Alt text generated as "Photo of [title]" for user uploads
+
+        // Accessibility: Responsive at 200% zoom
+        // Layout uses relative units and flex, text is not clipped
+
+        // Accessibility: All interactive elements are keyboard accessible
+        // All buttons are <button>, links are <a>, and custom handlers support keyboard
     </script>
 </body>
 </html>
