@@ -3,324 +3,461 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Accessible Personal Blog - Articles, Comments and Search</title>
+    <title>Accessible Digital Art Gallery</title>
     <style>
         /* CSS Reset and Base Styles */
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        /* Color Variables for Light/Dark Mode */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --accent-color: #0066cc;
+            --border-color: #dddddd;
+            --card-bg: #ffffff;
+            --modal-overlay: rgba(0, 0, 0, 0.7);
+            --focus-color: #0066cc;
+            --error-color: #d32f2f;
+        }
+
+        /* Dark Mode Variables */
+        .dark-mode {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-primary: #f5f5f7;
+            --text-secondary: #bbbbbb;
+            --accent-color: #4d9fff;
+            --border-color: #444444;
+            --card-bg: #2a2a2a;
+            --modal-overlay: rgba(0, 0, 0, 0.85);
+            --focus-color: #ffffff;
+        }
+
+        /* Typography */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Ensure all interactive elements have visible focus indicators */
-        button:focus, 
-        input:focus, 
-        select:focus, 
-        textarea:focus, 
-        a:focus {
-            outline: 3px solid #0066cc;
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 0.5em;
+            line-height: 1.2;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 180px);
+        }
+
+        footer {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        nav a:hover, nav a:focus {
+            color: var(--accent-color);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after, nav a:focus::after {
+            width: 100%;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-container {
+            flex-grow: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-container label {
+            font-weight: 500;
+        }
+
+        .filter-container select {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            min-width: 150px;
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent-color);
+        }
+
+        input:focus + .toggle-slider {
+            box-shadow: 0 0 3px var(--accent-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover, .gallery-item:focus-within {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item-info {
+            padding: 1rem;
+        }
+
+        .gallery-item-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-item-artist {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-item-category {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--modal-overlay);
+            z-index: 100;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 0 auto;
+            max-width: 900px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .modal-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .modal-detail {
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-detail-label {
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-button:hover, .close-button:focus {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Accessibility Focus Styles */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus, .gallery-item:focus-within {
+            outline: 3px solid var(--focus-color);
             outline-offset: 2px;
         }
 
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, 
-        .dark-bg a:focus {
+        .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
 
-        /* Skip to main content link */
+        /* Skip Link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background: #0066cc;
+            background: var(--accent-color);
             color: white;
             padding: 8px;
             z-index: 100;
-            transition: top 0.3s;
+            transition: top 0.3s ease;
         }
 
         .skip-link:focus {
             top: 0;
         }
 
-        /* Header Styles */
-        header {
-            background-color: #ffffff;
-            padding: 20px 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .site-title {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        nav {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
-        }
-
-        nav a {
-            margin-right: 20px;
-            color: #0066cc;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 5px 0;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        /* Search Form */
-        .search-form {
-            margin: 20px 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .search-form label {
-            font-weight: 500;
-            margin-right: 10px;
-        }
-
-        .search-form input {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            flex-grow: 1;
-            min-width: 200px;
-        }
-
-        .search-form button {
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .search-form button:hover {
-            background-color: #0052a3;
-        }
-
-        /* Main Content */
-        main {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        /* Blog Posts */
-        .blog-posts {
-            margin-bottom: 40px;
-        }
-
-        .post {
-            margin-bottom: 40px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 30px;
-        }
-
-        .post:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-
-        .post-title {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: #222;
-        }
-
-        .post-meta {
-            color: #666;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-
-        .post-content {
-            margin-bottom: 20px;
-        }
-
-        .post-image {
-            max-width: 100%;
-            height: auto;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-
-        /* Comments Section */
-        .comments-section {
-            margin-top: 30px;
-        }
-
-        .comments-title {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .comment {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-        }
-
-        .comment-author {
-            font-weight: 500;
-            margin-bottom: 5px;
-        }
-
-        .comment-date {
-            color: #666;
-            font-size: 0.85rem;
-            margin-bottom: 10px;
-        }
-
-        .comment-text {
-            margin-bottom: 0;
-        }
-
-        /* Comment Form */
-        .comment-form {
-            margin-top: 30px;
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 4px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .required-field::after {
-            content: " *";
-            color: #cc0000;
-        }
-
-        .error-message {
-            color: #cc0000;
-            font-size: 0.85rem;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .submit-button {
-            background-color: #0066cc;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .submit-button:hover {
-            background-color: #0052a3;
-        }
-
-        /* No Results Message */
-        .no-results {
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
-            text-align: center;
-            display: none;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 30px;
-            border-top: 1px solid #eee;
-            color: #666;
-        }
-
-        /* Responsive Design */
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .site-title {
-                font-size: 1.8rem;
-            }
-
-            nav {
+            .header-content {
                 flex-direction: column;
+                align-items: flex-start;
             }
 
-            nav a {
-                margin-bottom: 10px;
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
             }
 
-            main {
-                padding: 20px;
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
             }
 
-            .post-title {
-                font-size: 1.5rem;
+            .search-container {
+                max-width: 100%;
+            }
+
+            .modal {
+                padding: 1rem;
             }
         }
 
-        /* Accessibility: High contrast mode support */
-        @media (forced-colors: active) {
-            button, .submit-button {
-                border: 2px solid currentColor;
-            }
-        }
-
-        /* Loading indicator */
-        .loading {
-            text-align: center;
-            padding: 20px;
-            display: none;
-        }
-
-        .loading::after {
-            content: "Loading...";
-            font-style: italic;
-        }
-
-        /* Visually hidden elements (for screen readers) */
+        /* Visually Hidden (for screen readers) */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -335,482 +472,383 @@
     </style>
 </head>
 <body>
-    <!-- Skip to main content link for keyboard users -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
-
+    
     <header>
-        <h1 class="site-title">My Personal Blog</h1>
-        <nav role="navigation" aria-label="Main navigation">
-            <a href="#" aria-current="page">Home</a>
-            <a href="#">About</a>
-            <a href="#">Categories</a>
-            <a href="#">Contact</a>
-        </nav>
-
-        <form class="search-form" role="search" aria-label="Search blog posts">
-            <label for="search-input">Search Posts:</label>
-            <input 
-                type="search" 
-                id="search-input" 
-                name="search" 
-                placeholder="Enter keywords..."
-                aria-describedby="search-instructions">
-            <button type="submit" id="search-button">Search</button>
-        </form>
-        <div id="search-instructions" class="sr-only">
-            Type keywords and press Enter or click the Search button to find posts
+        <div class="container header-content">
+            <h1>Digital Art Gallery</h1>
+            <nav role="navigation" aria-label="Main navigation">
+                <ul>
+                    <li><a href="#" aria-current="page">Gallery</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Artists</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
     <main id="main-content">
-        <h2>Recent Blog Posts</h2>
-        
-        <div class="loading" id="loading-indicator" aria-live="polite"></div>
-        
-        <div class="no-results" id="no-results" aria-live="polite">
-            <p>No posts found matching your search. Please try different keywords.</p>
+        <div class="container">
+            <section aria-labelledby="gallery-heading">
+                <h2 id="gallery-heading" class="sr-only">Art Gallery</h2>
+                
+                <div class="controls">
+                    <div class="search-container">
+                        <label for="search" class="sr-only">Search artworks</label>
+                        <span class="search-icon" aria-hidden="true">🔍</span>
+                        <input 
+                            type="search" 
+                            id="search" 
+                            placeholder="Search artworks by title or artist" 
+                            aria-label="Search artworks by title or artist"
+                        >
+                    </div>
+                    
+                    <div class="filter-container">
+                        <label for="category-filter">Filter by:</label>
+                        <select id="category-filter" aria-label="Filter artworks by category">
+                            <option value="all">All Categories</option>
+                            <option value="digital-painting">Digital Painting</option>
+                            <option value="3d-art">3D Art</option>
+                            <option value="pixel-art">Pixel Art</option>
+                            <option value="photography">Photography</option>
+                            <option value="abstract">Abstract</option>
+                        </select>
+                    </div>
+                    
+                    <div class="dark-mode-toggle">
+                        <span id="dark-mode-label">Dark Mode</span>
+                        <label class="toggle-switch" for="dark-mode-toggle">
+                            <input 
+                                type="checkbox" 
+                                id="dark-mode-toggle" 
+                                aria-labelledby="dark-mode-label"
+                                role="switch"
+                                aria-checked="false"
+                            >
+                            <span class="toggle-slider" aria-hidden="true"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="gallery-status" aria-live="polite" class="sr-only"></div>
+                
+                <div class="gallery-grid" id="gallery-grid" role="list">
+                    <!-- Gallery items will be populated here by JavaScript -->
+                    <div class="loading" aria-live="polite">
+                        <div class="loading-spinner" aria-hidden="true"></div>
+                        <p>Loading artworks...</p>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <section class="blog-posts" id="blog-posts">
-            <!-- Blog posts will be dynamically loaded here -->
-        </section>
-
-        <section class="comments-section" id="comments-section">
-            <h2 class="comments-title">Comments</h2>
-            <div id="comments-container">
-                <!-- Comments will be dynamically loaded here -->
-            </div>
-
-            <div class="comment-form">
-                <h3>Leave a Comment</h3>
-                <form id="comment-form">
-                    <div class="form-group">
-                        <label for="name" class="required-field">Name</label>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            name="name" 
-                            required 
-                            aria-describedby="name-error">
-                        <div id="name-error" class="error-message">Please enter your name</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="required-field">Email</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            required 
-                            aria-describedby="email-error">
-                        <div id="email-error" class="error-message">Please enter a valid email address</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="comment" class="required-field">Comment</label>
-                        <textarea 
-                            id="comment" 
-                            name="comment" 
-                            required 
-                            aria-describedby="comment-error"></textarea>
-                        <div id="comment-error" class="error-message">Please enter your comment</div>
-                    </div>
-                    <button type="submit" class="submit-button">Submit Comment</button>
-                </form>
-            </div>
-        </section>
     </main>
 
+    <div id="artwork-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" hidden>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Artwork Title</h2>
+                <button 
+                    id="close-modal" 
+                    class="close-button" 
+                    aria-label="Close modal"
+                >×</button>
+            </div>
+            <div class="modal-body">
+                <img id="modal-image" class="modal-image" src="" alt="">
+                <div id="modal-description"></div>
+                <div class="modal-details">
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Artist:</span>
+                        <span id="modal-artist"></span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Category:</span>
+                        <span id="modal-category"></span>
+                    </div>
+                    <div class="modal-detail">
+                        <span class="modal-detail-label">Year:</span>
+                        <span id="modal-year"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer>
-        <p>&copy; 2023 My Personal Blog. All rights reserved.</p>
-        <nav aria-label="Footer navigation">
-            <a href="#">Privacy Policy</a> | 
-            <a href="#">Terms of Service</a> | 
-            <a href="#">Accessibility Statement</a>
-        </nav>
+        <div class="container">
+            <p>&copy; 2023 Digital Art Gallery. All rights reserved.</p>
+            <p>This gallery is committed to accessibility for all users.</p>
+        </div>
     </footer>
 
     <script>
-        // Sample blog post data
-        const blogPosts = [
+        // Sample artwork data
+        const artworks = [
             {
                 id: 1,
-                title: "Getting Started with Web Accessibility",
-                author: "Jane Smith",
-                date: "October 15, 2023",
-                content: `
-                    <p>Web accessibility is about making websites usable for everyone, including people with disabilities. This post explores the basics of creating accessible web content.</p>
-                    <p>The Web Content Accessibility Guidelines (WCAG) provide a framework for making web content more accessible. Following these guidelines helps ensure that your website can be used by people with various disabilities, including visual, auditory, physical, speech, cognitive, language, learning, and neurological disabilities.</p>
-                    <h3>Key Principles of Web Accessibility</h3>
-                    <p>WCAG is organized around four principles, often referred to as POUR:</p>
-                    <ul>
-                        <li><strong>Perceivable</strong>: Information and user interface components must be presentable to users in ways they can perceive.</li>
-                        <li><strong>Operable</strong>: User interface components and navigation must be operable.</li>
-                        <li><strong>Understandable</strong>: Information and the operation of user interface must be understandable.</li>
-                        <li><strong>Robust</strong>: Content must be robust enough that it can be interpreted reliably by a wide variety of user agents, including assistive technologies.</li>
-                    </ul>
-                `,
-                image: {
-                    src: "https://via.placeholder.com/800x400",
-                    alt: "A person using a screen reader to navigate a website, demonstrating web accessibility in action"
-                }
+                title: "Neon Cityscape",
+                artist: "Alex Chen",
+                category: "digital-painting",
+                year: 2022,
+                description: "A vibrant cyberpunk cityscape with neon lights reflecting off rain-soaked streets. The piece explores themes of technology and urban life.",
+                imageUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Futuristic cityscape with tall skyscrapers illuminated by purple and blue neon lights at night"
             },
             {
                 id: 2,
-                title: "The Importance of Semantic HTML",
-                author: "John Doe",
-                date: "October 10, 2023",
-                content: `
-                    <p>Semantic HTML is the foundation of an accessible website. Using the right HTML elements for their intended purpose is crucial for assistive technologies.</p>
-                    <p>When we use semantic HTML elements like <code>&lt;nav&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, and <code>&lt;button&gt;</code>, we provide important context about the content to browsers and assistive technologies. This helps users understand the structure and purpose of different parts of the page.</p>
-                    <h3>Benefits of Semantic HTML</h3>
-                    <ul>
-                        <li>Improved accessibility for screen reader users</li>
-                        <li>Better SEO performance</li>
-                        <li>Easier code maintenance</li>
-                        <li>More consistent rendering across browsers</li>
-                    </ul>
-                    <p>Remember, a <code>&lt;div&gt;</code> is just a container with no inherent meaning, while a <code>&lt;nav&gt;</code> explicitly tells users and browsers that the content inside is navigation.</p>
-                `,
-                image: {
-                    src: "https://via.placeholder.com/800x400",
-                    alt: "Code editor showing semantic HTML structure with properly nested heading elements and semantic tags"
-                }
+                title: "Sacred Geometry",
+                artist: "Maya Johnson",
+                category: "abstract",
+                year: 2021,
+                description: "An exploration of geometric patterns found in nature and sacred architecture. The mandala-like structure represents unity and harmony.",
+                imageUrl: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Abstract geometric pattern with intricate colorful shapes forming a mandala-like structure"
             },
             {
                 id: 3,
-                title: "Creating Accessible Forms",
-                author: "Alex Johnson",
-                date: "October 5, 2023",
-                content: `
-                    <p>Forms are often the most challenging elements to make accessible. This post covers best practices for creating forms that everyone can use.</p>
-                    <p>Accessible forms start with proper labeling. Every input field should have an associated <code>&lt;label&gt;</code> element that clearly describes what information is expected. This helps screen reader users understand the purpose of each field.</p>
-                    <h3>Key Form Accessibility Tips</h3>
-                    <ul>
-                        <li>Use explicit labels for all form controls</li>
-                        <li>Group related fields with <code>&lt;fieldset&gt;</code> and <code>&lt;legend&gt;</code></li>
-                        <li>Provide clear error messages that suggest how to fix issues</li>
-                        <li>Ensure forms can be completed using keyboard only</li>
-                        <li>Use appropriate input types (email, tel, date, etc.)</li>
-                    </ul>
-                    <p>Remember to test your forms with keyboard navigation and screen readers to ensure they're truly accessible to all users.</p>
-                `,
-                image: {
-                    src: "https://via.placeholder.com/800x400",
-                    alt: "A well-designed form with clearly labeled fields, showing proper form structure and validation messages"
-                }
-            }
-        ];
-
-        // Sample comments data
-        const comments = [
-            {
-                id: 1,
-                postId: 1,
-                author: "Michael Brown",
-                date: "October 16, 2023",
-                text: "Great introduction to web accessibility! I've been trying to improve my website's accessibility and this gives me a good starting point."
+                title: "Digital Dreams",
+                artist: "Sanjay Patel",
+                category: "3d-art",
+                year: 2023,
+                description: "A surreal 3D landscape that blends organic and mechanical elements. The piece invites viewers to question the boundaries between natural and artificial.",
+                imageUrl: "https://images.unsplash.com/photo-1633412802994-5c058f151b66?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "3D rendered surreal landscape with floating geometric objects and glowing particles"
             },
             {
-                id: 2,
-                postId: 1,
-                author: "Sarah Lee",
-                date: "October 17, 2023",
-                text: "I appreciate the clear explanation of the POUR principles. It makes accessibility seem less intimidating for beginners."
+                id: 4,
+                title: "8-Bit Nostalgia",
+                artist: "Lena Kim",
+                category: "pixel-art",
+                year: 2020,
+                description: "A pixel art homage to classic video games of the 1980s. Each pixel is carefully placed to evoke nostalgia while creating a contemporary composition.",
+                imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Colorful pixel art scene showing a retro game-inspired landscape with 8-bit style characters"
             },
             {
-                id: 3,
-                postId: 2,
-                author: "David Wilson",
-                date: "October 11, 2023",
-                text: "I've been guilty of div-itis in the past. This article convinced me to pay more attention to semantic HTML."
+                id: 5,
+                title: "Urban Solitude",
+                artist: "Marcus Williams",
+                category: "photography",
+                year: 2021,
+                description: "A digitally enhanced photograph capturing the isolation often felt in crowded urban environments. The selective color highlights the emotional focus.",
+                imageUrl: "https://images.unsplash.com/photo-1519608487953-e999c86e7455?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Black and white photograph of a solitary person walking through a busy city street, with slight color highlighting"
+            },
+            {
+                id: 6,
+                title: "Fractured Reality",
+                artist: "Olivia Martinez",
+                category: "abstract",
+                year: 2022,
+                description: "An abstract digital painting exploring the concept of multiple realities. The fragmented composition represents different perspectives existing simultaneously.",
+                imageUrl: "https://images.unsplash.com/photo-1573096108468-702f6014ef28?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Abstract digital artwork with fragmented shapes in vibrant colors creating a sense of multiple overlapping realities"
+            },
+            {
+                id: 7,
+                title: "Quantum Realm",
+                artist: "David Wong",
+                category: "3d-art",
+                year: 2023,
+                description: "A 3D visualization inspired by quantum physics and the hidden structures of the universe. The piece aims to make the invisible visible.",
+                imageUrl: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "3D rendered visualization of quantum particles with glowing energy fields in deep blue and purple colors"
+            },
+            {
+                id: 8,
+                title: "Retro Adventure",
+                artist: "Lena Kim",
+                category: "pixel-art",
+                year: 2021,
+                description: "A pixel art scene depicting an adventure in a fantasy world. The limited color palette and distinctive style are reminiscent of early computer games.",
+                imageUrl: "https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Pixel art landscape showing a fantasy adventure scene with a character exploring a colorful forest"
+            },
+            {
+                id: 9,
+                title: "Digital Brushstrokes",
+                artist: "Alex Chen",
+                category: "digital-painting",
+                year: 2020,
+                description: "A digital painting that mimics traditional brushwork while embracing the unique possibilities of digital media. The piece blurs the line between traditional and digital art.",
+                imageUrl: "https://images.unsplash.com/photo-1549490349-8643362247b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Digital painting with visible brushstrokes creating an abstract landscape with warm sunset colors"
+            },
+            {
+                id: 10,
+                title: "Ethereal Light",
+                artist: "Marcus Williams",
+                category: "photography",
+                year: 2022,
+                description: "A digitally enhanced photograph capturing light in a mystical forest. The post-processing enhances the natural beauty while adding a dreamlike quality.",
+                imageUrl: "https://images.unsplash.com/photo-1551524559-8af4e6624178?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Ethereal forest scene with sunlight streaming through trees creating beams of light in misty atmosphere"
+            },
+            {
+                id: 11,
+                title: "Voxel World",
+                artist: "Sanjay Patel",
+                category: "3d-art",
+                year: 2021,
+                description: "A 3D artwork created using voxels (3D pixels) to build a whimsical landscape. The piece celebrates the beauty of simplified forms and bold colors.",
+                imageUrl: "https://images.unsplash.com/photo-1623150502742-6a849aa94be4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "3D voxel art showing a colorful cubic landscape with blocky trees, mountains, and buildings"
+            },
+            {
+                id: 12,
+                title: "Geometric Harmony",
+                artist: "Maya Johnson",
+                category: "abstract",
+                year: 2023,
+                description: "An abstract composition exploring the harmony of geometric shapes and color relationships. The balanced arrangement creates a sense of order within complexity.",
+                imageUrl: "https://images.unsplash.com/photo-1614850715649-1d0106293bd1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                altText: "Abstract digital artwork with balanced geometric shapes in harmonious color arrangements"
             }
         ];
 
         // DOM Elements
-        const blogPostsContainer = document.getElementById('blog-posts');
-        const commentsContainer = document.getElementById('comments-container');
-        const commentForm = document.getElementById('comment-form');
-        const searchForm = document.querySelector('.search-form');
-        const searchInput = document.getElementById('search-input');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const noResultsMessage = document.getElementById('no-results');
+        const galleryGrid = document.getElementById('gallery-grid');
+        const searchInput = document.getElementById('search');
+        const categoryFilter = document.getElementById('category-filter');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const modal = document.getElementById('artwork-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalImage = document.getElementById('modal-image');
+        const modalDescription = document.getElementById('modal-description');
+        const modalArtist = document.getElementById('modal-artist');
+        const modalCategory = document.getElementById('modal-category');
+        const modalYear = document.getElementById('modal-year');
+        const galleryStatus = document.getElementById('gallery-status');
 
-        // Function to display blog posts
-        function displayBlogPosts(posts) {
-            blogPostsContainer.innerHTML = '';
+        // Initialize the gallery
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate loading delay
+            setTimeout(() => {
+                renderGallery(artworks);
+                updateStatusMessage(`Showing ${artworks.length} artworks`);
+            }, 1000);
+
+            // Check for saved dark mode preference
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (savedDarkMode) {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+                darkModeToggle.setAttribute('aria-checked', 'true');
+            }
+
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Search functionality
+            searchInput.addEventListener('input', filterArtworks);
             
-            if (posts.length === 0) {
-                noResultsMessage.style.display = 'block';
+            // Category filter
+            categoryFilter.addEventListener('change', filterArtworks);
+            
+            // Dark mode toggle
+            darkModeToggle.addEventListener('change', toggleDarkMode);
+            
+            // Close modal with button
+            closeModalButton.addEventListener('click', closeModal);
+            closeModalButton.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    closeModal();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    closeModal();
+                }
+            });
+            
+            // Close modal when clicking outside content
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Render gallery items
+        function renderGallery(items) {
+            galleryGrid.innerHTML = '';
+            
+            if (items.length === 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = '<p>No artworks found matching your search criteria.</p>';
+                galleryGrid.appendChild(noResults);
                 return;
             }
             
-            noResultsMessage.style.display = 'none';
-            
-            posts.forEach(post => {
-                const postElement = document.createElement('article');
-                postElement.className = 'post';
-                postElement.setAttribute('aria-labelledby', `post-title-${post.id}`);
+            items.forEach(artwork => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.setAttribute('role', 'listitem');
+                galleryItem.setAttribute('tabindex', '0');
+                galleryItem.setAttribute('aria-label', `${artwork.title} by ${artwork.artist}, ${artwork.category} from ${artwork.year}`);
                 
-                postElement.innerHTML = `
-                    <h3 class="post-title" id="post-title-${post.id}">${post.title}</h3>
-                    <div class="post-meta">
-                        <span>By ${post.author}</span> | 
-                        <time datetime="${formatDateForDateTime(post.date)}">${post.date}</time>
+                galleryItem.innerHTML = `
+                    <img src="${artwork.imageUrl}" alt="${artwork.altText}">
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">${artwork.title}</h3>
+                        <p class="gallery-item-artist">by ${artwork.artist}</p>
+                        <span class="gallery-item-category">${formatCategory(artwork.category)}</span>
                     </div>
-                    <div class="post-content">
-                        ${post.content}
-                        ${post.image ? `<img src="${post.image.src}" alt="${post.image.alt}" class="post-image">` : ''}
-                    </div>
-                    <button class="view-comments-button" 
-                            aria-expanded="false" 
-                            aria-controls="comments-for-${post.id}" 
-                            data-post-id="${post.id}">
-                        View Comments
-                    </button>
-                    <div id="comments-for-${post.id}" class="post-comments" hidden></div>
                 `;
                 
-                blogPostsContainer.appendChild(postElement);
-                
-                // Add event listeners to the view comments button
-                const viewCommentsButton = postElement.querySelector('.view-comments-button');
-                viewCommentsButton.addEventListener('click', handleInteraction);
-                viewCommentsButton.addEventListener('keydown', handleInteraction);
-            });
-        }
-
-        // Function to display comments for a specific post
-        function displayComments(postId, commentsContainer) {
-            const postComments = comments.filter(comment => comment.postId === postId);
-            
-            if (postComments.length === 0) {
-                commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
-                return;
-            }
-            
-            commentsContainer.innerHTML = '';
-            
-            postComments.forEach(comment => {
-                const commentElement = document.createElement('div');
-                commentElement.className = 'comment';
-                commentElement.innerHTML = `
-                    <h4 class="comment-author">${comment.author}</h4>
-                    <div class="comment-date">
-                        <time datetime="${formatDateForDateTime(comment.date)}">${comment.date}</time>
-                    </div>
-                    <p class="comment-text">${comment.text}</p>
-                `;
-                commentsContainer.appendChild(commentElement);
-            });
-        }
-
-        // Helper function to format date for datetime attribute
-        function formatDateForDateTime(dateString) {
-            const date = new Date(dateString);
-            return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
-        }
-
-        // Function to handle form submission
-        function handleCommentSubmission(event) {
-            event.preventDefault();
-            
-            // Reset error messages
-            document.querySelectorAll('.error-message').forEach(el => {
-                el.style.display = 'none';
-            });
-            
-            // Get form values
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const commentText = document.getElementById('comment').value.trim();
-            
-            // Validate form
-            let isValid = true;
-            
-            if (!name) {
-                document.getElementById('name-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!email || !isValidEmail(email)) {
-                document.getElementById('email-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!commentText) {
-                document.getElementById('comment-error').style.display = 'block';
-                isValid = false;
-            }
-            
-            if (!isValid) {
-                return;
-            }
-            
-            // Create new comment (in a real app, this would be sent to a server)
-            const newComment = {
-                id: comments.length + 1,
-                postId: 1, // Default to first post for this demo
-                author: name,
-                date: new Date().toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                }),
-                text: commentText
-            };
-            
-            // Add to comments array
-            comments.push(newComment);
-            
-            // Update comments display
-            displayComments(1, commentsContainer);
-            
-            // Reset form
-            commentForm.reset();
-            
-            // Provide feedback to user
-            const successMessage = document.createElement('div');
-            successMessage.setAttribute('role', 'alert');
-            successMessage.className = 'success-message';
-            successMessage.textContent = 'Your comment has been added successfully!';
-            commentForm.appendChild(successMessage);
-            
-            // Remove success message after 3 seconds
-            setTimeout(() => {
-                successMessage.remove();
-            }, 3000);
-        }
-
-        // Helper function to validate email
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        // Function to handle search
-        function handleSearch(event) {
-            event.preventDefault();
-            
-            const searchTerm = searchInput.value.trim().toLowerCase();
-            
-            if (!searchTerm) {
-                displayBlogPosts(blogPosts);
-                return;
-            }
-            
-            // Show loading indicator
-            loadingIndicator.style.display = 'block';
-            blogPostsContainer.style.display = 'none';
-            
-            // Simulate search delay
-            setTimeout(() => {
-                const filteredPosts = blogPosts.filter(post => {
-                    return post.title.toLowerCase().includes(searchTerm) || 
-                           post.content.toLowerCase().includes(searchTerm) ||
-                           post.author.toLowerCase().includes(searchTerm);
-                });
-                
-                // Hide loading indicator
-                loadingIndicator.style.display = 'none';
-                blogPostsContainer.style.display = 'block';
-                
-                // Display filtered posts
-                displayBlogPosts(filteredPosts);
-                
-                // Announce search results to screen readers
-                const resultsCount = filteredPosts.length;
-                const resultsAnnouncement = document.createElement('div');
-                resultsAnnouncement.setAttribute('role', 'status');
-                resultsAnnouncement.setAttribute('aria-live', 'polite');
-                resultsAnnouncement.className = 'sr-only';
-                resultsAnnouncement.textContent = `${resultsCount} ${resultsCount === 1 ? 'post' : 'posts'} found for "${searchTerm}"`;
-                document.body.appendChild(resultsAnnouncement);
-                
-                // Remove announcement after it's been read
-                setTimeout(() => {
-                    resultsAnnouncement.remove();
-                }, 3000);
-            }, 500);
-        }
-
-        // Function to handle both mouse and keyboard interactions
-        function handleInteraction(event) {
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                
-                if (event.type === 'keydown') {
-                    event.preventDefault(); // Prevent scrolling on space key
-                }
-                
-                const button = event.currentTarget;
-                const postId = parseInt(button.getAttribute('data-post-id'));
-                const commentsSection = document.getElementById(`comments-for-${postId}`);
-                const isExpanded = button.getAttribute('aria-expanded') === 'true';
-                
-                if (isExpanded) {
-                    // Hide comments
-                    commentsSection.hidden = true;
-                    button.setAttribute('aria-expanded', 'false');
-                    button.textContent = 'View Comments';
-                } else {
-                    // Show comments
-                    commentsSection.hidden = false;
-                    button.setAttribute('aria-expanded', 'true');
-                    button.textContent = 'Hide Comments';
-                    
-                    // Load comments
-                    displayComments(postId, commentsSection);
-                }
-            }
-        }
-
-        // Initialize the page
-        function init() {
-            // Display blog posts
-            displayBlogPosts(blogPosts);
-            
-            // Display comments for the first post
-            displayComments(1, commentsContainer);
-            
-            // Add event listeners
-            commentForm.addEventListener('submit', handleCommentSubmission);
-            searchForm.addEventListener('submit', handleSearch);
-            
-            // Add form validation
-            const formInputs = document.querySelectorAll('#comment-form input, #comment-form textarea');
-            formInputs.forEach(input => {
-                input.addEventListener('blur', function() {
-                    validateInput(this);
-                });
-                
-                input.addEventListener('input', function() {
-                    if (this.getAttribute('aria-invalid') === 'true') {
-                        validateInput(this);
+                // Add event listeners for opening the modal
+                galleryItem.addEventListener('click', () => openModal(artwork));
+                galleryItem.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openModal(artwork);
                     }
                 });
+                
+                galleryGrid.appendChild(galleryItem);
             });
         }
 
-        // Validate individual form inputs
-        function validateInput(input) {
-            const errorElement = document.getElementById(`${input.id}-error`);
-            let isValid = true;
+        // Filter artworks based on search and category
+        function filterArtworks() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedCategory = categoryFilter.value;
             
-            if (input.hasAttribute('required') && !input.value.trim()) {
-                errorElement.style.display = 'block';
-                isValid = false;
-            } else if (input.type === 'email' && !isValidEmail(input.value.trim())) {
-                errorElement.style.display = 'block';
-                isValid = false;
-            } else {
-                errorElement.style.display = 'none';
-            }
+            updateStatusMessage('Filtering artworks...');
             
-            input.setAttribute('aria-invalid', !isValid);
-            return isValid;
+            const filteredArtworks = artworks.filter(artwork => {
+                const matchesSearch = artwork.title.toLowerCase().includes(searchTerm) || 
+                                     artwork.artist.toLowerCase().includes(searchTerm);
+                const matchesCategory = selectedCategory === 'all' || artwork.category === selectedCategory;
+                
+                return matchesSearch && matchesCategory;
+            });
+            
+            renderGallery(filteredArtworks);
+            updateStatusMessage(`Showing ${filteredArtworks.length} of ${artworks.length} artworks`);
         }
 
-        // Initialize the page when DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
-</html>
+        // Open modal with artwork details
+        function openModal(artwork) {
+            modalTitle.textContent = artwork.title;
+            modalImage.src = artwork.imageUrl;
+            modalImage.alt = artwork.altText;
+            modalDescription.innerHTML = `<p>${artwork.description}</p>`;
+            modalArtist.textContent = artwork.artist;
+            modalCategory.textContent = formatCategory(artwork.category);
+            modalYear.textContent = artwork.year;
+            
+            modal.style.display = 'block';
+            modal.removeAttribute('hidden');
+            
+            // Focus the
