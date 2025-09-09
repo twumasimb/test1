@@ -3,365 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mindful Moments - Accessible Meditation Timer</title>
+    <title>GardenShare - Community Gardening Platform</title>
     <style>
         /* CSS Reset and Base Styles */
-        *, *::before, *::after {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        /* Global Variables */
-        :root {
-            --primary-color: #5c7d99;
-            --secondary-color: #a3c2d5;
-            --accent-color: #3a5a78;
-            --text-color: #333333;
-            --light-text: #ffffff;
-            --background-color: #f5f7fa;
-            --error-color: #d32f2f;
-            --success-color: #388e3c;
-            --focus-color: #0066cc;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
         }
 
-        /* Accessibility: Focus Indicators */
+        /* Accessibility Focus Styles */
         button:focus, input:focus, select:focus, textarea:focus, a:focus, [tabindex]:focus {
-            outline: 3px solid var(--focus-color);
+            outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
 
-        .dark-bg button:focus, .dark-bg a:focus, .dark-bg [tabindex]:focus {
+        .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
 
-        /* Typography */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--background-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 0.5em;
-            line-height: 1.2;
-            color: var(--primary-color);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-top: 0.5em;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            margin-top: 1em;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        /* Layout */
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        header {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            padding: 1rem 0;
-            box-shadow: var(--box-shadow);
-        }
-
-        main {
-            flex: 1;
-            padding: 2rem 0;
-        }
-
-        footer {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            padding: 1.5rem 0;
-            margin-top: auto;
-            text-align: center;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 1.5rem;
-        }
-
-        .nav-links a {
-            color: var(--light-text);
-            text-decoration: none;
-            padding: 0.5rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover, .nav-links a:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Timer Section */
-        .timer-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 2rem 0;
-        }
-
-        .timer-display {
-            font-size: 5rem;
-            font-weight: bold;
-            margin: 1rem 0;
-            color: var(--primary-color);
-            background-color: white;
-            padding: 1rem 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            min-width: 300px;
-            text-align: center;
-        }
-
-        .timer-controls {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        /* Settings Section */
-        .settings-section {
-            background-color: white;
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            margin: 2rem 0;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        input[type="number"], select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: var(--transition);
-            background-color: var(--primary-color);
-            color: var(--light-text);
-        }
-
-        .btn:hover, .btn:focus {
-            background-color: var(--accent-color);
-        }
-
-        .btn-large {
-            font-size: 1.2rem;
-            padding: 1rem 2rem;
-        }
-
-        .btn-start {
-            background-color: var(--success-color);
-        }
-
-        .btn-pause {
-            background-color: var(--accent-color);
-        }
-
-        .btn-reset {
-            background-color: var(--error-color);
-        }
-
-        /* Progress Tracker */
-        .progress-section {
-            margin: 2rem 0;
-        }
-
-        .session-history {
-            list-style: none;
-            margin-top: 1rem;
-        }
-
-        .session-history li {
-            background-color: white;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* Sound Controls */
-        .sound-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .sound-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: white;
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            cursor: pointer;
-            transition: var(--transition);
-            border: 2px solid transparent;
-        }
-
-        .sound-btn:hover, .sound-btn:focus {
-            border-color: var(--primary-color);
-        }
-
-        .sound-btn.active {
-            border-color: var(--primary-color);
-            background-color: var(--secondary-color);
-        }
-
-        .sound-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Volume Control */
-        .volume-control {
-            width: 100%;
-            max-width: 300px;
-            margin: 1rem auto;
-            display: flex;
-            align-items: center;
-        }
-
-        .volume-control label {
-            margin-right: 1rem;
-            margin-bottom: 0;
-        }
-
-        .volume-slider {
-            flex: 1;
-        }
-
-        /* Alerts and Notifications */
-        .alert {
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 1rem;
-            font-weight: bold;
-        }
-
-        .alert-error {
-            background-color: #ffebee;
-            color: var(--error-color);
-            border: 1px solid var(--error-color);
-        }
-
-        .alert-success {
-            background-color: #e8f5e9;
-            color: var(--success-color);
-            border: 1px solid var(--success-color);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .timer-display {
-                font-size: 3.5rem;
-                min-width: 250px;
-            }
-
-            .timer-controls {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .sound-controls {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .timer-display {
-                font-size: 3rem;
-                min-width: 200px;
-            }
-
-            .settings-section {
-                padding: 1.5rem;
-            }
-        }
-
-        /* Skip to content link */
+        /* Skip Link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background: var(--primary-color);
+            background: #0066cc;
             color: white;
             padding: 8px;
             z-index: 100;
@@ -372,7 +48,369 @@
             top: 0;
         }
 
-        /* Visually hidden but accessible to screen readers */
+        /* Header Styles */
+        header {
+            padding: 1rem 0;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e1e4e8;
+            margin-bottom: 2rem;
+        }
+
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            color: #2e7d32;
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: #2e7d32;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        nav a:hover, nav a:focus {
+            border-bottom-color: #2e7d32;
+        }
+
+        /* Main Content Styles */
+        main {
+            padding: 1rem 0;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: #2e7d32;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 1.5rem 0 1rem;
+            color: #2e7d32;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 1rem 0 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        /* Button Styles */
+        button, .button {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover, .button:hover, 
+        button:focus, .button:focus {
+            background-color: #1b5e20;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .required-field::after {
+            content: " *";
+            color: #d32f2f;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .file-input-label:hover, .file-input-label:focus {
+            background-color: #388e3c;
+        }
+
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .file-name {
+            margin-left: 10px;
+            font-style: italic;
+        }
+
+        .error-message {
+            color: #d32f2f;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-footer {
+            padding: 1rem;
+            border-top: 1px solid #e1e4e8;
+            background-color: #f8f9fa;
+        }
+
+        /* Post Styles */
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .post-image-container {
+            position: relative;
+            padding-top: 75%; /* 4:3 Aspect Ratio */
+            overflow: hidden;
+        }
+
+        .post-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            padding: 0.3rem;
+        }
+
+        .post-action:hover, .post-action:focus {
+            color: #2e7d32;
+            background: none;
+        }
+
+        .post-action[aria-pressed="true"] {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        /* Comments Styles */
+        .comments-section {
+            margin-top: 1.5rem;
+        }
+
+        .comment {
+            padding: 1rem 0;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .comment:last-child {
+            border-bottom: none;
+        }
+
+        .comment-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s linear 0.25s, opacity 0.25s;
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+            transition-delay: 0s;
+        }
+
+        .modal {
+            background-color: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .modal-footer {
+            padding: 1rem;
+            border-top: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-button:hover, .close-button:focus {
+            color: #333;
+            background: none;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e1e4e8;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-bottom: 3px solid transparent;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .tab-button:hover, .tab-button:focus {
+            color: #2e7d32;
+            background: none;
+        }
+
+        .tab-button[aria-selected="true"] {
+            color: #2e7d32;
+            border-bottom-color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel[aria-hidden="false"] {
+            display: block;
+        }
+
+        /* Utility Classes */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -384,800 +422,800 @@
             white-space: nowrap;
             border-width: 0;
         }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-2 {
+            margin-top: 2rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .site-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .post-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Indicator */
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #2e7d32;
+            animation: spin 1s ease-in-out infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-container {
+            text-align: center;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-message.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+
+        .status-message.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+
+        .status-message.info {
+            background-color: #e3f2fd;
+            color: #0277bd;
+            border-left: 4px solid #0277bd;
+        }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
     <header>
-        <div class="container">
+        <div class="site-header">
+            <a href="#" class="site-title">GardenShare</a>
             <nav role="navigation" aria-label="Main navigation">
-                <div class="logo">Mindful Moments</div>
-                <ul class="nav-links">
-                    <li><a href="#timer">Timer</a></li>
-                    <li><a href="#settings">Settings</a></li>
-                    <li><a href="#progress">Progress</a></li>
+                <ul>
+                    <li><a href="#" aria-current="page">Home</a></li>
+                    <li><a href="#">My Garden</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Resources</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main id="main-content">
-        <div class="container">
-            <h1>Mindful Meditation Timer</h1>
-            <p>Set your meditation duration, choose calming sounds, and track your mindfulness journey.</p>
-
-            <section id="timer" class="timer-section" aria-labelledby="timer-heading">
-                <h2 id="timer-heading">Meditation Timer</h2>
-                
-                <div class="timer-display" id="timer-display" role="timer" aria-live="polite">
-                    20:00
+        <h1>Garden Community</h1>
+        
+        <div id="status-container" aria-live="polite"></div>
+        
+        <div class="tabs" role="tablist" aria-label="Garden content">
+            <button id="tab-feed" class="tab-button" role="tab" aria-selected="true" aria-controls="panel-feed" tabindex="0">Community Feed</button>
+            <button id="tab-upload" class="tab-button" role="tab" aria-selected="false" aria-controls="panel-upload" tabindex="-1">Share Your Garden</button>
+        </div>
+        
+        <div id="panel-feed" class="tab-panel" role="tabpanel" aria-labelledby="tab-feed" aria-hidden="false">
+            <div id="posts-container" class="post-grid">
+                <!-- Posts will be loaded here -->
+                <div class="loading-container">
+                    <div class="loading-spinner" aria-hidden="true"></div>
+                    <p>Loading garden posts...</p>
                 </div>
+            </div>
+        </div>
+        
+        <div id="panel-upload" class="tab-panel" role="tabpanel" aria-labelledby="tab-upload" aria-hidden="true">
+            <section>
+                <h2>Share Your Garden</h2>
+                <p>Upload photos of your plants or garden and share them with the community.</p>
                 
-                <div class="timer-controls">
-                    <button id="start-btn" class="btn btn-large btn-start" aria-label="Start meditation timer">
-                        Start
-                    </button>
-                    <button id="pause-btn" class="btn btn-large btn-pause" aria-label="Pause meditation timer" disabled>
-                        Pause
-                    </button>
-                    <button id="reset-btn" class="btn btn-large btn-reset" aria-label="Reset meditation timer">
-                        Reset
-                    </button>
-                </div>
-
-                <div class="sound-section" aria-labelledby="sound-heading">
-                    <h3 id="sound-heading">Meditation Sounds</h3>
-                    <div class="sound-controls" role="radiogroup" aria-label="Select meditation sound">
-                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="false" data-sound="none">
-                            <span class="sound-icon" aria-hidden="true">🔇</span>
-                            <span>None</span>
+                <form id="upload-form" class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="post-title" class="required-field">Title</label>
+                            <input type="text" id="post-title" name="title" required aria-required="true" aria-describedby="title-error">
+                            <div id="title-error" class="error-message" aria-live="polite"></div>
                         </div>
-                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="true" data-sound="rain">
-                            <span class="sound-icon" aria-hidden="true">🌧️</span>
-                            <span>Rain</span>
+                        
+                        <div class="form-group">
+                            <label for="post-description">Description</label>
+                            <textarea id="post-description" name="description" rows="4" aria-describedby="description-error"></textarea>
+                            <div id="description-error" class="error-message" aria-live="polite"></div>
                         </div>
-                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="false" data-sound="forest">
-                            <span class="sound-icon" aria-hidden="true">🌲</span>
-                            <span>Forest</span>
+                        
+                        <div class="form-group">
+                            <label for="post-category">Category</label>
+                            <select id="post-category" name="category">
+                                <option value="flowers">Flowers</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="herbs">Herbs</option>
+                                <option value="trees">Trees</option>
+                                <option value="landscape">Landscape</option>
+                                <option value="other">Other</option>
+                            </select>
                         </div>
-                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="false" data-sound="waves">
-                            <span class="sound-icon" aria-hidden="true">🌊</span>
-                            <span>Ocean Waves</span>
+                        
+                        <div class="form-group">
+                            <label for="post-image" class="required-field">Garden Image</label>
+                            <div class="file-input-wrapper">
+                                <label for="post-image" class="file-input-label">Choose File</label>
+                                <input type="file" id="post-image" name="image" class="file-input" accept="image/*" required aria-required="true" aria-describedby="image-name image-error">
+                            </div>
+                            <span id="image-name" class="file-name">No file chosen</span>
+                            <div id="image-error" class="error-message" aria-live="polite"></div>
                         </div>
-                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="false" data-sound="bells">
-                            <span class="sound-icon" aria-hidden="true">🔔</span>
-                            <span>Singing Bowls</span>
+                        
+                        <div class="form-group">
+                            <fieldset>
+                                <legend>Growing Conditions</legend>
+                                <div>
+                                    <input type="checkbox" id="condition-sun" name="conditions" value="sun">
+                                    <label for="condition-sun">Full Sun</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="condition-shade" name="conditions" value="shade">
+                                    <label for="condition-shade">Partial Shade</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" id="condition-indoor" name="conditions" value="indoor">
+                                    <label for="condition-indoor">Indoor</label>
+                                </div>
+                            </fieldset>
                         </div>
                     </div>
-
-                    <div class="volume-control">
-                        <label for="volume-slider">Volume:</label>
-                        <input 
-                            type="range" 
-                            id="volume-slider" 
-                            class="volume-slider" 
-                            min="0" 
-                            max="100" 
-                            value="50"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                            aria-valuenow="50"
-                            aria-valuetext="50 percent volume"
-                        >
+                    
+                    <div class="card-footer">
+                        <button type="submit" id="submit-post">Share with Community</button>
                     </div>
-                </div>
-            </section>
-
-            <section id="settings" class="settings-section" aria-labelledby="settings-heading">
-                <h2 id="settings-heading">Timer Settings</h2>
-                
-                <form id="timer-settings-form">
-                    <div class="form-group">
-                        <label for="meditation-duration">Meditation Duration (minutes):</label>
-                        <input 
-                            type="number" 
-                            id="meditation-duration" 
-                            name="meditation-duration" 
-                            min="1" 
-                            max="120" 
-                            value="20" 
-                            required
-                            aria-describedby="duration-hint"
-                        >
-                        <p id="duration-hint" class="form-hint">Enter a value between 1 and 120 minutes</p>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="interval-bells">Interval Bell Sound:</label>
-                        <select id="interval-bells" name="interval-bells">
-                            <option value="none">None</option>
-                            <option value="5min">Every 5 minutes</option>
-                            <option value="10min">Every 10 minutes</option>
-                            <option value="15min">Every 15 minutes</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="ending-sound">Ending Sound:</label>
-                        <select id="ending-sound" name="ending-sound">
-                            <option value="gentle-bell">Gentle Bell</option>
-                            <option value="singing-bowl">Singing Bowl</option>
-                            <option value="gong">Gong</option>
-                            <option value="none">None</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn" aria-label="Apply timer settings">
-                        Apply Settings
-                    </button>
                 </form>
-            </section>
-
-            <section id="progress" class="progress-section" aria-labelledby="progress-heading">
-                <h2 id="progress-heading">Your Meditation Progress</h2>
-                <p>Track your meditation sessions to build a consistent practice.</p>
-                
-                <div id="progress-stats">
-                    <p>Total sessions: <span id="total-sessions">0</span></p>
-                    <p>Total minutes: <span id="total-minutes">0</span></p>
-                    <p>Current streak: <span id="current-streak">0</span> days</p>
-                </div>
-
-                <h3 id="history-heading">Recent Sessions</h3>
-                <ul id="session-history" class="session-history" aria-labelledby="history-heading">
-                    <!-- Session history will be populated by JavaScript -->
-                    <li>No meditation sessions recorded yet. Start your first session!</li>
-                </ul>
             </section>
         </div>
     </main>
+    
+    <!-- Post Detail Modal -->
+    <div id="post-modal" class="modal-overlay" aria-hidden="true">
+        <div class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+            <div class="modal-header">
+                <h2 id="modal-title">Post Title</h2>
+                <button class="close-button" aria-label="Close dialog">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-content">
+                    <!-- Post details will be loaded here -->
+                </div>
+                
+                <div class="comments-section">
+                    <h3>Comments</h3>
+                    <div id="comments-container">
+                        <!-- Comments will be loaded here -->
+                    </div>
+                    
+                    <form id="comment-form" class="mt-2">
+                        <div class="form-group">
+                            <label for="comment-text">Add a comment</label>
+                            <textarea id="comment-text" name="comment" rows="3" required aria-required="true" aria-describedby="comment-error"></textarea>
+                            <div id="comment-error" class="error-message" aria-live="polite"></div>
+                        </div>
+                        <button type="submit" id="submit-comment">Post Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2023 Mindful Moments - Accessible Meditation Timer</p>
-            <p>Created to help everyone practice mindfulness, regardless of ability.</p>
-        </div>
+        <p class="text-center">&copy; 2023 GardenShare Community. All rights reserved.</p>
     </footer>
 
     <script>
-        // DOM Elements
-        const timerDisplay = document.getElementById('timer-display');
-        const startBtn = document.getElementById('start-btn');
-        const pauseBtn = document.getElementById('pause-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const durationInput = document.getElementById('meditation-duration');
-        const intervalBellsSelect = document.getElementById('interval-bells');
-        const endingSoundSelect = document.getElementById('ending-sound');
-        const timerSettingsForm = document.getElementById('timer-settings-form');
-        const soundButtons = document.querySelectorAll('.sound-btn');
-        const volumeSlider = document.getElementById('volume-slider');
-        const totalSessionsElement = document.getElementById('total-sessions');
-        const totalMinutesElement = document.getElementById('total-minutes');
-        const currentStreakElement = document.getElementById('current-streak');
-        const sessionHistoryList = document.getElementById('session-history');
+        // Sample data for demonstration purposes
+        const samplePosts = [
+            {
+                id: 1,
+                title: "My Tomato Garden",
+                description: "First harvest of the season! These organic tomatoes are thriving in my raised beds.",
+                image: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                category: "vegetables",
+                author: "GardenLover",
+                date: "2023-07-15",
+                likes: 24,
+                comments: [
+                    { id: 1, author: "PlantFriend", text: "Those look amazing! What variety are they?", date: "2023-07-15" },
+                    { id: 2, author: "GreenThumb", text: "Great job! How often do you water them?", date: "2023-07-16" }
+                ]
+            },
+            {
+                id: 2,
+                title: "Rose Garden in Bloom",
+                description: "My rose garden is finally in full bloom. The fragrance is incredible!",
+                image: "https://images.unsplash.com/photo-1559563362-c667ba5f5480?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                category: "flowers",
+                author: "RoseLover",
+                date: "2023-07-10",
+                likes: 42,
+                comments: [
+                    { id: 3, author: "FlowerFan", text: "Absolutely stunning! What variety is the pink one?", date: "2023-07-11" }
+                ]
+            },
+            {
+                id: 3,
+                title: "Herb Garden Update",
+                description: "My kitchen herb garden is thriving! Fresh basil, mint, and rosemary ready for cooking.",
+                image: "https://images.unsplash.com/photo-1599934548725-c456b9813b01?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                category: "herbs",
+                author: "CookAndGarden",
+                date: "2023-07-05",
+                likes: 18,
+                comments: []
+            },
+            {
+                id: 4,
+                title: "Japanese Maple Progress",
+                description: "Three years of growth on my Japanese Maple. The fall colors are starting to show!",
+                image: "https://images.unsplash.com/photo-1440342359743-84fcb8c21f21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+                category: "trees",
+                author: "TreeEnthusiast",
+                date: "2023-06-28",
+                likes: 31,
+                comments: [
+                    { id: 4, author: "GardenDesigner", text: "Beautiful specimen! They're such a great focal point.", date: "2023-06-29" },
+                    { id: 5, author: "NatureLover", text: "The colors are amazing. How old is it?", date: "2023-06-30" }
+                ]
+            }
+        ];
 
-        // Timer state
-        let timerInterval;
-        let timeRemaining = 20 * 60; // Default 20 minutes in seconds
-        let originalTime = timeRemaining;
-        let isRunning = false;
-        let selectedSound = 'rain';
-        let volume = 0.5; // Default volume (0-1)
-        let audioContext;
-        let audioBuffers = {};
-        let currentAudio = null;
-        let sessionHistory = [];
-        let stats = {
-            totalSessions: 0,
-            totalMinutes: 0,
-            currentStreak: 0,
-            lastSessionDate: null
-        };
+        // DOM Elements
+        const tabFeed = document.getElementById('tab-feed');
+        const tabUpload = document.getElementById('tab-upload');
+        const panelFeed = document.getElementById('panel-feed');
+        const panelUpload = document.getElementById('panel-upload');
+        const postsContainer = document.getElementById('posts-container');
+        const uploadForm = document.getElementById('upload-form');
+        const postImageInput = document.getElementById('post-image');
+        const imageNameSpan = document.getElementById('image-name');
+        const postModal = document.getElementById('post-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const commentsContainer = document.getElementById('comments-container');
+        const commentForm = document.getElementById('comment-form');
+        const statusContainer = document.getElementById('status-container');
+        const closeModalButton = document.querySelector('.close-button');
+
+        // Current state
+        let currentPostId = null;
+        let userPosts = [...samplePosts]; // Clone the sample posts for demonstration
 
         // Initialize the application
-        function init() {
-            updateTimerDisplay();
-            loadUserData();
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTabs();
+            loadPosts();
             setupEventListeners();
-            setupAudioContext();
-            preloadSounds();
-        }
+        });
 
-        // Format time for display (MM:SS)
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
+        // Initialize tab functionality
+        function initializeTabs() {
+            tabFeed.addEventListener('click', (event) => {
+                switchTab(tabFeed, panelFeed, tabUpload, panelUpload);
+            });
 
-        // Update the timer display
-        function updateTimerDisplay() {
-            timerDisplay.textContent = formatTime(timeRemaining);
-            // Announce time changes to screen readers when timer is running
-            if (isRunning && timeRemaining % 60 === 0) {
-                const minutes = timeRemaining / 60;
-                timerDisplay.setAttribute('aria-label', `${minutes} minute${minutes !== 1 ? 's' : ''} remaining`);
-            }
-        }
-
-        // Start the timer
-        function startTimer() {
-            if (!isRunning) {
-                isRunning = true;
-                startBtn.disabled = true;
-                pauseBtn.disabled = false;
-                
-                // Announce timer started to screen readers
-                announceToScreenReader('Meditation timer started');
-                
-                // Play the selected ambient sound
-                playSelectedSound();
-                
-                timerInterval = setInterval(() => {
-                    timeRemaining--;
-                    updateTimerDisplay();
-                    
-                    // Check for interval bells
-                    const intervalSetting = intervalBellsSelect.value;
-                    if (intervalSetting !== 'none') {
-                        const intervalMinutes = parseInt(intervalSetting);
-                        if (timeRemaining % (intervalMinutes * 60) === 0 && timeRemaining > 0) {
-                            playSound('bell', 0.7);
-                        }
-                    }
-                    
-                    // Check if timer is complete
-                    if (timeRemaining <= 0) {
-                        completeSession();
-                    }
-                }, 1000);
-            }
-        }
-
-        // Pause the timer
-        function pauseTimer() {
-            if (isRunning) {
-                isRunning = false;
-                clearInterval(timerInterval);
-                startBtn.disabled = false;
-                pauseBtn.disabled = true;
-                
-                // Stop the ambient sound
-                stopSound();
-                
-                // Announce timer paused to screen readers
-                announceToScreenReader('Meditation timer paused');
-            }
-        }
-
-        // Reset the timer
-        function resetTimer() {
-            pauseTimer();
-            timeRemaining = originalTime;
-            updateTimerDisplay();
-            
-            // Announce timer reset to screen readers
-            announceToScreenReader('Meditation timer reset');
-        }
-
-        // Complete a meditation session
-        function completeSession() {
-            pauseTimer();
-            
-            // Play ending sound
-            const endingSound = endingSoundSelect.value;
-            if (endingSound !== 'none') {
-                playSound(endingSound, 1.0);
-            }
-            
-            // Record session in history
-            const sessionDuration = Math.round(originalTime / 60);
-            const today = new Date();
-            const sessionDate = today.toLocaleDateString();
-            const sessionTime = today.toLocaleTimeString();
-            
-            const newSession = {
-                date: sessionDate,
-                time: sessionTime,
-                duration: sessionDuration
-            };
-            
-            sessionHistory.unshift(newSession);
-            if (sessionHistory.length > 10) {
-                sessionHistory.pop(); // Keep only the 10 most recent sessions
-            }
-            
-            // Update stats
-            stats.totalSessions++;
-            stats.totalMinutes += sessionDuration;
-            
-            // Update streak
-            const lastDate = stats.lastSessionDate ? new Date(stats.lastSessionDate) : null;
-            const todayDate = new Date(today.setHours(0, 0, 0, 0));
-            
-            if (!lastDate) {
-                stats.currentStreak = 1;
-            } else {
-                const lastDateValue = lastDate.setHours(0, 0, 0, 0);
-                const yesterday = new Date(todayDate);
-                yesterday.setDate(yesterday.getDate() - 1);
-                
-                if (lastDateValue.toString() === todayDate.toString()) {
-                    // Already meditated today, streak doesn't change
-                } else if (lastDateValue.toString() === yesterday.setHours(0, 0, 0, 0).toString()) {
-                    // Meditated yesterday, streak increases
-                    stats.currentStreak++;
-                } else {
-                    // Missed a day, reset streak
-                    stats.currentStreak = 1;
+            tabFeed.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    switchTab(tabFeed, panelFeed, tabUpload, panelUpload);
                 }
-            }
-            
-            stats.lastSessionDate = todayDate;
-            
-            // Save data and update UI
-            saveUserData();
-            updateStatsDisplay();
-            updateSessionHistory();
-            
-            // Announce session completion to screen readers
-            announceToScreenReader(`Meditation session complete. You meditated for ${sessionDuration} minutes.`);
+            });
+
+            tabUpload.addEventListener('click', (event) => {
+                switchTab(tabUpload, panelUpload, tabFeed, panelFeed);
+            });
+
+            tabUpload.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    switchTab(tabUpload, panelUpload, tabFeed, panelFeed);
+                }
+            });
         }
 
-        // Apply timer settings
-        function applySettings(event) {
+        // Switch between tabs
+        function switchTab(activeTab, activePanel, inactiveTab, inactivePanel) {
+            // Update tab attributes
+            activeTab.setAttribute('aria-selected', 'true');
+            activeTab.removeAttribute('tabindex');
+            inactiveTab.setAttribute('aria-selected', 'false');
+            inactiveTab.setAttribute('tabindex', '-1');
+            
+            // Update panel attributes
+            activePanel.setAttribute('aria-hidden', 'false');
+            inactivePanel.setAttribute('aria-hidden', 'true');
+            
+            // Focus the active tab
+            activeTab.focus();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // File input change event
+            postImageInput.addEventListener('change', () => {
+                if (postImageInput.files.length > 0) {
+                    imageNameSpan.textContent = postImageInput.files[0].name;
+                } else {
+                    imageNameSpan.textContent = 'No file chosen';
+                }
+            });
+
+            // Form submission
+            uploadForm.addEventListener('submit', handlePostSubmit);
+            
+            // Comment form submission
+            commentForm.addEventListener('submit', handleCommentSubmit);
+            
+            // Close modal button
+            closeModalButton.addEventListener('click', closeModal);
+            closeModalButton.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    closeModal();
+                }
+            });
+            
+            // Close modal when clicking outside
+            postModal.addEventListener('click', (event) => {
+                if (event.target === postModal) {
+                    closeModal();
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !postModal.getAttribute('aria-hidden')) {
+                    closeModal();
+                }
+            });
+        }
+
+        // Load posts into the feed
+        function loadPosts() {
+            // Clear loading indicator
+            postsContainer.innerHTML = '';
+            
+            if (userPosts.length === 0) {
+                postsContainer.innerHTML = '<p class="text-center">No garden posts yet. Be the first to share your garden!</p>';
+                return;
+            }
+            
+            // Sort posts by date (newest first)
+            userPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Create post cards
+            userPosts.forEach(post => {
+                const postCard = createPostCard(post);
+                postsContainer.appendChild(postCard);
+            });
+        }
+
+        // Create a post card element
+        function createPostCard(post) {
+            const card = document.createElement('article');
+            card.className = 'card';
+            card.setAttribute('aria-labelledby', `post-title-${post.id}`);
+            
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'post-image-container';
+            
+            const image = document.createElement('img');
+            image.src = post.image;
+            image.alt = `Garden photo: ${post.title}`;
+            image.className = 'post-image';
+            imageContainer.appendChild(image);
+            
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            
+            const title = document.createElement('h3');
+            title.id = `post-title-${post.id}`;
+            title.textContent = post.title;
+            
+            const meta = document.createElement('div');
+            meta.className = 'post-meta';
+            meta.innerHTML = `
+                <span>By ${post.author}</span>
+                <time datetime="${post.date}">${formatDate(post.date)}</time>
+            `;
+            
+            const description = document.createElement('p');
+            description.textContent = truncateText(post.description, 100);
+            
+            const actions = document.createElement('div');
+            actions.className = 'post-actions';
+            
+            const likeButton = document.createElement('button');
+            likeButton.className = 'post-action';
+            likeButton.setAttribute('aria-label', `Like this post. Currently ${post.likes} likes`);
+            likeButton.setAttribute('aria-pressed', 'false');
+            likeButton.innerHTML = `
+                <span aria-hidden="true">❤</span> ${post.likes}
+            `;
+            likeButton.addEventListener('click', () => handleLike(post.id, likeButton));
+            likeButton.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    handleLike(post.id, likeButton);
+                }
+            });
+            
+            const commentButton = document.createElement('button');
+            commentButton.className = 'post-action';
+            commentButton.setAttribute('aria-label', `View and add comments. Currently ${post.comments.length} comments`);
+            commentButton.innerHTML = `
+                <span aria-hidden="true">💬</span> ${post.comments.length}
+            `;
+            commentButton.addEventListener('click', () => openPostModal(post.id));
+            commentButton.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openPostModal(post.id);
+                }
+            });
+            
+            actions.appendChild(likeButton);
+            actions.appendChild(commentButton);
+            
+            cardBody.appendChild(title);
+            cardBody.appendChild(meta);
+            cardBody.appendChild(description);
+            cardBody.appendChild(actions);
+            
+            card.appendChild(imageContainer);
+            card.appendChild(cardBody);
+            
+            // Make the entire card clickable for accessibility
+            card.addEventListener('click', (event) => {
+                // Only trigger if the click wasn't on a button
+                if (!event.target.closest('button')) {
+                    openPostModal(post.id);
+                }
+            });
+            
+            card.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    if (!event.target.closest('button')) {
+                        event.preventDefault();
+                        openPostModal(post.id);
+                    }
+                }
+            });
+            
+            card.setAttribute('tabindex', '0');
+            
+            return card;
+        }
+
+        // Handle post submission
+        function handlePostSubmit(event) {
             event.preventDefault();
             
-            const newDuration = parseInt(durationInput.value);
-            if (newDuration >= 1 && newDuration <= 120) {
-                originalTime = newDuration * 60;
-                timeRemaining = originalTime;
-                updateTimerDisplay();
-                
-                // Announce settings applied to screen readers
-                announceToScreenReader(`Timer set to ${newDuration} minutes`);
-            } else {
-                // Show error for invalid duration
-                announceToScreenReader('Please enter a valid duration between 1 and 120 minutes');
-            }
-        }
-
-        // Set up the Web Audio API context
-        function setupAudioContext() {
-            // Create audio context with fallback for older browsers
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                audioContext = new AudioContext();
-            } catch (e) {
-                console.error('Web Audio API is not supported in this browser');
-                announceToScreenReader('Audio features are not supported in your browser');
-            }
-        }
-
-        // Preload sound files
-        function preloadSounds() {
-            // In a real application, these would be actual sound files
-            // For this example, we'll simulate the sounds with oscillators
+            // Clear previous error messages
+            clearErrors();
             
-            // This is a placeholder - in a real app, you would load actual audio files
-            audioBuffers = {
-                rain: true,
-                forest: true,
-                waves: true,
-                bells: true,
-                'gentle-bell': true,
-                'singing-bowl': true,
-                gong: true,
-                bell: true
-            };
-        }
-
-        // Play a sound effect (bell, gong, etc.)
-        function playSound(soundName, soundVolume) {
-            if (!audioContext) return;
+            // Get form values
+            const title = document.getElementById('post-title').value.trim();
+            const description = document.getElementById('post-description').value.trim();
+            const category = document.getElementById('post-category').value;
+            const imageFile = document.getElementById('post-image').files[0];
             
-            // Create oscillator for sound effect
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+            // Validate form
+            let isValid = true;
             
-            // Configure sound based on name
-            switch(soundName) {
-                case 'bell':
-                case 'gentle-bell':
-                    oscillator.type = 'sine';
-                    oscillator.frequency.value = 440;
-                    gainNode.gain.value = soundVolume * volume;
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.start();
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 2);
-                    setTimeout(() => oscillator.stop(), 2000);
-                    break;
-                    
-                case 'singing-bowl':
-                    oscillator.type = 'sine';
-                    oscillator.frequency.value = 294;
-                    gainNode.gain.value = soundVolume * volume;
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.start();
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 4);
-                    setTimeout(() => oscillator.stop(), 4000);
-                    break;
-                    
-                case 'gong':
-                    oscillator.type = 'triangle';
-                    oscillator.frequency.value = 100;
-                    gainNode.gain.value = soundVolume * volume;
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.start();
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 3);
-                    setTimeout(() => oscillator.stop(), 3000);
-                    break;
-            }
-        }
-
-        // Play the selected ambient sound
-        function playSelectedSound() {
-            if (!audioContext || selectedSound === 'none') return;
-            
-            // Stop any currently playing sound
-            stopSound();
-            
-            // Create oscillator for ambient sound
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            // Configure sound based on selection
-            switch(selectedSound) {
-                case 'rain':
-                    // White noise for rain sound
-                    const bufferSize = 2 * audioContext.sampleRate;
-                    const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
-                    const output = noiseBuffer.getChannelData(0);
-                    
-                    for (let i = 0; i < bufferSize; i++) {
-                        output[i] = Math.random() * 2 - 1;
-                    }
-                    
-                    const noise = audioContext.createBufferSource();
-                    noise.buffer = noiseBuffer;
-                    noise.loop = true;
-                    
-                    const filter = audioContext.createBiquadFilter();
-                    filter.type = 'lowpass';
-                    filter.frequency.value = 500;
-                    
-                    gainNode.gain.value = 0.1 * volume;
-                    
-                    noise.connect(filter);
-                    filter.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    noise.start();
-                    currentAudio = noise;
-                    break;
-                    
-                case 'forest':
-                    // Bird chirps simulation
-                    oscillator.type = 'sine';
-                    oscillator.frequency.value = 1500;
-                    
-                    gainNode.gain.value = 0.05 * volume;
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    // Random chirps
-                    function chirp() {
-                        if (!isRunning) return;
-                        
-                        gainNode.gain.value = 0.05 * volume;
-                        oscillator.frequency.value = 1500 + Math.random() * 500;
-                        
-                        setTimeout(() => {
-                            gainNode.gain.linearRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
-                        }, 100);
-                        
-                        setTimeout(chirp, 2000 + Math.random() * 3000);
-                    }
-                    
-                    oscillator.start();
-                    chirp();
-                    currentAudio = oscillator;
-                    break;
-                    
-                case 'waves':
-                    // Ocean waves simulation
-                    oscillator.type = 'sine';
-                    oscillator.frequency.value = 100;
-                    
-                    gainNode.gain.value = 0.1 * volume;
-                    
-                    const lfo = audioContext.createOscillator();
-                    lfo.type = 'sine';
-                    lfo.frequency.value = 0.1; // One cycle every 10 seconds
-                    
-                    const lfoGain = audioContext.createGain();
-                    lfoGain.gain.value = 0.1 * volume;
-                    
-                    lfo.connect(lfoGain);
-                    lfoGain.connect(gainNode.gain);
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.start();
-                    lfo.start();
-                    
-                    currentAudio = {
-                        stop: function() {
-                            oscillator.stop();
-                            lfo.stop();
-                        }
-                    };
-                    break;
-                    
-                case 'bells':
-                    // Singing bowls simulation
-                    function playBowl() {
-                        if (!isRunning) return;
-                        
-                        const bowl = audioContext.createOscillator();
-                        bowl.type = 'sine';
-                        bowl.frequency.value = 294 + Math.random() * 100;
-                        
-                        const bowlGain = audioContext.createGain();
-                        bowlGain.gain.value = 0.2 * volume;
-                        
-                        bowl.connect(bowlGain);
-                        bowlGain.connect(audioContext.destination);
-                        
-                        bowl.start();
-                        bowlGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 4);
-                        
-                        setTimeout(() => {
-                            bowl.stop();
-                            if (isRunning) {
-                                setTimeout(playBowl, 10000 + Math.random() * 5000);
-                            }
-                        }, 4000);
-                    }
-                    
-                    playBowl();
-                    currentAudio = {
-                        stop: function() {
-                            // This is a placeholder - the actual stopping happens in the playBowl function
-                        }
-                    };
-                    break;
-            }
-        }
-
-        // Stop the currently playing sound
-        function stopSound() {
-            if (currentAudio) {
-                try {
-                    currentAudio.stop();
-                } catch (e) {
-                    // Handle any errors when stopping audio
-                    console.log('Error stopping audio:', e);
-                }
-                currentAudio = null;
-            }
-        }
-
-        // Select a sound for meditation
-        function selectSound(soundName) {
-            selectedSound = soundName;
-            
-            // Update UI to show selected sound
-            soundButtons.forEach(btn => {
-                const isSelected = btn.dataset.sound === soundName;
-                btn.classList.toggle('active', isSelected);
-                btn.setAttribute('aria-checked', isSelected);
-            });
-            
-            // If timer is running, change the sound
-            if (isRunning) {
-                playSelectedSound();
+            if (!title) {
+                showError('title-error', 'Please enter a title for your post');
+                isValid = false;
             }
             
-            // Announce selected sound to screen readers
-            announceToScreenReader(`Selected ${soundName} sound`);
-        }
-
-        // Update volume
-        function updateVolume() {
-            volume = volumeSlider.value / 100;
-            
-            // Update aria attributes for accessibility
-            volumeSlider.setAttribute('aria-valuenow', volumeSlider.value);
-            volumeSlider.setAttribute('aria-valuetext', `${volumeSlider.value} percent volume`);
-            
-            // If sound is playing, update its volume
-            if (currentAudio && isRunning) {
-                stopSound();
-                playSelectedSound();
+            if (!imageFile) {
+                showError('image-error', 'Please select an image to upload');
+                isValid = false;
+            } else if (!imageFile.type.startsWith('image/')) {
+                showError('image-error', 'Please select a valid image file');
+                isValid = false;
             }
-        }
-
-        // Save user data to localStorage
-        function saveUserData() {
-            const userData = {
-                sessionHistory,
-                stats,
-                settings: {
-                    duration: Math.round(originalTime / 60),
-                    intervalBells: intervalBellsSelect.value,
-                    endingSound: endingSoundSelect.value,
-                    selectedSound
-                }
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // In a real application, you would upload the image to a server
+            // For this demo, we'll create a local URL for the image
+            const imageUrl = URL.createObjectURL(imageFile);
+            
+            // Create new post object
+            const newPost = {
+                id: Date.now(), // Use timestamp as ID
+                title,
+                description,
+                image: imageUrl,
+                category,
+                author: "You", // In a real app, this would be the logged-in user
+                date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+                likes: 0,
+                comments: []
             };
             
-            try {
-                localStorage.setItem('meditationAppData', JSON.stringify(userData));
-            } catch (e) {
-                console.error('Could not save data to localStorage:', e);
-            }
-        }
-
-        // Load user data from localStorage
-        function loadUserData() {
-            try {
-                const savedData = localStorage.getItem('meditationAppData');
-                if (savedData) {
-                    const userData = JSON.parse(savedData);
-                    
-                    // Restore session history and stats
-                    sessionHistory = userData.sessionHistory || [];
-                    stats = userData.stats || {
-                        totalSessions: 0,
-                        totalMinutes: 0,
-                        currentStreak: 0,
-                        lastSessionDate: null
-                    };
-                    
-                    // Restore settings
-                    if (userData.settings) {
-                        durationInput.value = userData.settings.duration || 20;
-                        originalTime = (userData.settings.duration || 20) * 60;
-                        timeRemaining = originalTime;
-                        
-                        intervalBellsSelect.value = userData.settings.intervalBells || 'none';
-                        endingSoundSelect.value = userData.settings.endingSound || 'gentle-bell';
-                        
-                        selectSound(userData.settings.selectedSound || 'rain');
-                    }
-                    
-                    // Update UI
-                    updateTimerDisplay();
-                    updateStatsDisplay();
-                    updateSessionHistory();
-                }
-            } catch (e) {
-                console.error('Could not load data from localStorage:', e);
-            }
-        }
-
-        // Update stats display
-        function updateStatsDisplay() {
-            totalSessionsElement.textContent = stats.totalSessions;
-            totalMinutesElement.textContent = stats.totalMinutes;
-            currentStreakElement.textContent = stats.currentStreak;
-        }
-
-        // Update session history display
-        function updateSessionHistory() {
-            // Clear current list
-            sessionHistoryList.innerHTML = '';
+            // Add to posts array
+            userPosts.unshift(newPost);
             
-            if (sessionHistory.length === 0) {
-                const emptyItem = document.createElement('li');
-                emptyItem.textContent = 'No meditation sessions recorded yet. Start your first session!';
-                sessionHistoryList.appendChild(emptyItem);
+            // Reset form
+            uploadForm.reset();
+            imageNameSpan.textContent = 'No file chosen';
+            
+            // Show success message
+            showStatus('Your garden post has been shared successfully!', 'success');
+            
+            // Switch to feed tab to show the new post
+            switchTab(tabFeed, panelFeed, tabUpload, panelUpload);
+            
+            // Reload posts
+            loadPosts();
+        }
+
+        // Handle comment submission
+        function handleCommentSubmit(event) {
+            event.preventDefault();
+            
+            // Get comment text
+            const commentText = document.getElementById('comment-text').value.trim();
+            
+            // Validate
+            if (!commentText) {
+                showError('comment-error', 'Please enter a comment');
+                return;
+            }
+            
+            // Find the current post
+            const post = userPosts.find(p => p.id === currentPostId);
+            if (!post) return;
+            
+            // Create new comment
+            const newComment = {
+                id: Date.now(),
+                author: "You", // In a real app, this would be the logged-in user
+                text: commentText,
+                date: new Date().toISOString().split('T')[0] // Current date
+            };
+            
+            // Add comment to post
+            post.comments.push(newComment);
+            
+            // Reset form
+            commentForm.reset();
+            
+            // Update comments display
+            loadComments(post);
+            
+            // Update comment count in the feed
+            loadPosts();
+            
+            // Show success message
+            showStatus('Your comment has been added!', 'success');
+        }
+
+        // Handle like button click
+        function handleLike(postId, button) {
+            // Find the post
+            const post = userPosts.find(p => p.id === postId);
+            if (!post) return;
+            
+            // Toggle like state
+            const isLiked = button.getAttribute('aria-pressed') === 'true';
+            
+            if (isLiked) {
+                post.likes--;
+                button.setAttribute('aria-pressed', 'false');
             } else {
-                sessionHistory.forEach(session => {
-                    const listItem = document.createElement('li');
-                    
-                    const dateSpan = document.createElement('span');
-                    dateSpan.textContent = `${session.date} at ${session.time}`;
-                    
-                    const durationSpan = document.createElement('span');
-                    durationSpan.textContent = `${session.duration} minute${session.duration !== 1 ? 's' : ''}`;
-                    
-                    listItem.appendChild(dateSpan);
-                    listItem.appendChild(durationSpan);
-                    
-                    sessionHistoryList.appendChild(listItem);
-                });
-            }
-        }
-
-        // Announce message to screen readers using aria-live
-        function announceToScreenReader(message) {
-            // Create a visually hidden element for screen reader announcements
-            let announcer = document.getElementById('screen-reader-announcer');
-            
-            if (!announcer) {
-                announcer = document.createElement('div');
-                announcer.id = 'screen-reader-announcer';
-                announcer.className = 'sr-only';
-                announcer.setAttribute('aria-live', 'polite');
-                document.body.appendChild(announcer);
+                post.likes++;
+                button.setAttribute('aria-pressed', 'true');
             }
             
-            // Set the message
-            announcer.textContent = message;
+            // Update button text
+            button.innerHTML = `
+                <span aria-hidden="true">❤</span> ${post.likes}
+            `;
+            button.setAttribute('aria-label', `Like this post. Currently ${post.likes} likes`);
             
-            // Clear after a short delay to ensure it's read
-            setTimeout(() => {
-                announcer.textContent = '';
-            }, 3000);
+            // In a real app, you would send this update to the server
         }
 
-        // Set up event listeners
-        function setupEventListeners() {
-            // Timer control buttons
-            startBtn.addEventListener('click', startTimer);
-            pauseBtn.addEventListener('click', pauseTimer);
-            resetBtn.addEventListener('click', resetTimer);
+        // Open post modal
+        function openPostModal(postId) {
+            // Find the post
+            const post = userPosts.find(p => p.id === postId);
+            if (!post) return;
             
-            // Keyboard support for timer controls
-            startBtn.addEventListener('keydown', handleInteraction);
-            pauseBtn.addEventListener('keydown', handleInteraction);
-            resetBtn.addEventListener('keydown', handleInteraction);
+            // Store current post ID
+            currentPostId = postId;
             
-            // Settings form
-            timerSettingsForm.addEventListener('submit', applySettings);
+            // Set modal title
+            modalTitle.textContent = post.title;
             
-            // Sound buttons
-            soundButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    selectSound(btn.dataset.sound);
-                });
-                
-                // Keyboard support for sound buttons
-                btn.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        selectSound(btn.dataset.sound);
-                    }
-                });
+            // Create modal content
+            modalContent.innerHTML = `
+                <div class="post-image-container">
+                    <img src="${post.image}" alt="Garden photo: ${post.title}" class="post-image">
+                </div>
+                <div class="post-meta">
+                    <span>By ${post.author}</span>
+                    <time datetime="${post.date}">${formatDate(post.date)}</time>
+                </div>
+                <p>${post.description}</p>
+                <div class="post-actions">
+                    <button class="post-action" id="modal-like-button" aria-label="Like this post. Currently ${post.likes} likes" aria-pressed="false">
+                        <span aria-hidden="true">❤</span> ${post.likes}
+                    </button>
+                </div>
+            `;
+            
+            // Load comments
+            loadComments(post);
+            
+            // Show modal
+            postModal.classList.add('active');
+            postModal.setAttribute('aria-hidden', 'false');
+            
+            // Set focus to the modal
+            modalTitle.focus();
+            
+            // Add event listener to like button
+            const modalLikeButton = document.getElementById('modal-like-button');
+            modalLikeButton.addEventListener('click', () => {
+                handleLike(post.id, modalLikeButton);
             });
-            
-            // Volume slider
-            volumeSlider.addEventListener('input', updateVolume);
-            volumeSlider.addEventListener('change', updateVolume);
-        }
-
-        // Handle both mouse and keyboard interactions
-        function handleInteraction(event) {
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                
-                if (event.type === 'keydown') {
+            modalLikeButton.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
+                    handleLike(post.id, modalLikeButton);
                 }
-                
-                // Determine which button was interacted with
-                if (event.currentTarget === startBtn) {
-                    startTimer();
-                } else if (event.currentTarget === pauseBtn) {
-                    pauseTimer();
-                } else if (event.currentTarget === resetBtn) {
-                    resetTimer();
-                }
-            }
+            });
+            
+            // Trap focus in modal
+            trapFocus(postModal);
         }
 
-        // Initialize the application when the DOM is fully loaded
-        document.addEventListener('DOMContentLoaded', init);
+        // Close post modal
+        function closeModal() {
+            postModal.classList.remove('active');
+            postModal.setAttribute('aria-hidden', 'true');
+            
+            // Reset current post ID
+            currentPostId = null;
+        }
+
+        // Load comments for a post
+        function loadComments(post) {
+            commentsContainer.innerHTML = '';
+            
+            if (post.comments.length === 0) {
+                commentsContainer.innerHTML = '<p>No comments yet. Be the first to comment!</p>';
+                return;
+            }
+            
+            // Sort comments by date (newest first)
+            const sortedComments = [...post.comments].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Create comment elements
+            sortedComments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.className = 'comment';
+                commentElement.innerHTML = `
+                    <div class="comment-meta">
+                        <span>${comment.author}</span>
+                        <time datetime="${comment.date}">${formatDate(comment.date)}</time>
+                    </div>
+                    <p>${comment.text}</p>
+                `;
+                commentsContainer.appendChild(commentElement);
+            });
+        }
+
+        // Utility Functions
+        
+        // Format date to readable format
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+        
+        // Truncate text with ellipsis
+        function truncateText(text, maxLength) {
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+        
+        // Show error message
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            
+            // Set focus to the error message
+            errorElement.focus();
+        }
+        
+        // Clear all error messages
+        function clearErrors() {
+            const errorElements = document.querySelectorAll('.error-message');
+            errorElements.forEach(element => {
+                element.textContent = '';
+            });
+        }
+        
+        // Show status message
+        function showStatus(message, type = 'info') {
+            const statusElement = document.createElement('div');
+            statusElement.className = `status-message ${type}`;
+            statusElement.textContent = message;
+            
+            // Clear previous status messages
+            statusContainer.innerHTML = '';
+            statusContainer.appendChild(statusElement);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                statusElement.remove();
+            }, 5000);
+        }
+        
+        // Trap focus within an element (for modal accessibility)
+        function trapFocus(element) {
+            const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            element.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    if (e.shiftKey) {
+                        if (document.activeElement === firstElement) {
+                            e.preventDefault();
+                            lastElement.focus();
+                        }
+                    } else {
+                        if (document.activeElement === lastElement) {
+                            e.preventDefault();
+                            firstElement.focus();
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
