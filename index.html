@@ -3,53 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Meditation Timer</title>
+    <title>Accessible To-Do List Application</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
+            background-color: #f9f9f9;
             color: #333;
             margin: 0;
             padding: 20px;
         }
-        header {
-            text-align: center;
+        h1 {
+            color: #0066cc;
+        }
+        form {
             margin-bottom: 20px;
         }
-        h1 {
-            color: #4a4a4a;
-        }
-        .timer-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
         label {
-            margin: 10px 0;
+            display: block;
+            margin-bottom: 5px;
         }
-        input[type="number"] {
-            width: 80px;
-            padding: 5px;
-            font-size: 16px;
+        input, select, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
         }
         button {
             background-color: #0066cc;
             color: white;
             border: none;
-            padding: 10px 20px;
-            font-size: 16px;
             cursor: pointer;
         }
-        button:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
+        button:hover, button:focus {
+            background-color: #005bb5;
         }
-        .progress {
-            margin-top: 20px;
-            font-size: 18px;
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #999;
         }
         /* Ensure all interactive elements have visible focus indicators */
-        button:focus, input:focus {
+        button:focus, input:focus, select:focus, textarea:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
@@ -57,73 +63,73 @@
 </head>
 <body>
     <header>
-        <h1>Meditation Timer</h1>
-        <nav role="navigation" aria-label="Main navigation">
-            <ul>
-                <li><a href="#timer" accesskey="t">Timer</a></li>
-                <li><a href="#progress" accesskey="p">Progress</a></li>
-            </ul>
-        </nav>
+        <h1>To-Do List</h1>
     </header>
     <main>
-        <section id="timer" aria-labelledby="timer-heading">
-            <h2 id="timer-heading">Set Your Meditation Session</h2>
-            <div class="timer-controls">
-                <label for="sessionLength">Session Length (minutes):</label>
-                <input type="number" id="sessionLength" name="sessionLength" min="1" required aria-describedby="length-description">
-                <span id="length-description" class="visually-hidden">Enter the desired session length in minutes.</span>
-                <button id="startButton" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Start Timer</button>
-            </div>
-        </section>
-        <section id="progress" aria-labelledby="progress-heading">
-            <h2 id="progress-heading">Progress Tracker</h2>
-            <div class="progress" id="progressDisplay">You have completed: 0 minutes</div>
-        </section>
+        <form id="taskForm" aria-label="Add a new task">
+            <label for="taskInput">Task:</label>
+            <input type="text" id="taskInput" required aria-required="true" placeholder="Enter a new task" />
+            
+            <label for="priorityInput">Priority:</label>
+            <select id="priorityInput" aria-label="Select priority level">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+            
+            <label for="dueDateInput">Due Date:</label>
+            <input type="date" id="dueDateInput" aria-label="Select due date" />
+            
+            <button type="submit">Add Task</button>
+        </form>
+        
+        <ul id="taskList" role="list" aria-label="List of tasks">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
     </main>
     <footer>
-        <p>&copy; 2023 Meditation Timer. All rights reserved.</p>
+        <p>&copy; 2023 Accessible To-Do List</p>
     </footer>
     <script>
-        let timer;
-        let totalMinutes = 0;
+        document.getElementById('taskForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const taskInput = document.getElementById('taskInput');
+            const priorityInput = document.getElementById('priorityInput');
+            const dueDateInput = document.getElementById('dueDateInput');
 
-        document.getElementById('startButton').addEventListener('click', startTimer);
-        document.getElementById('sessionLength').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                startTimer();
+            const taskText = taskInput.value;
+            const priority = priorityInput.value;
+            const dueDate = dueDateInput.value;
+
+            if (taskText) {
+                addTask(taskText, priority, dueDate);
+                taskInput.value = '';
+                dueDateInput.value = '';
             }
         });
 
-        function handleInteraction(event) {
-            // Handle both mouse and keyboard events
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                startTimer();
-            }
+        function addTask(taskText, priority, dueDate) {
+            const taskList = document.getElementById('taskList');
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span class="task-text">${taskText} (Priority: ${priority}, Due: ${dueDate})</span>
+                <div>
+                    <button onclick="toggleComplete(this)" aria-label="Mark as completed">✓</button>
+                    <button onclick="deleteTask(this)" aria-label="Delete task">✖</button>
+                </div>
+            `;
+            taskList.appendChild(li);
         }
 
-        function startTimer() {
-            const sessionLength = document.getElementById('sessionLength').value;
-            if (sessionLength < 1) {
-                alert("Please enter a valid session length.");
-                return;
-            }
-            totalMinutes = sessionLength;
-            let secondsRemaining = sessionLength * 60;
-            updateProgress();
-
-            timer = setInterval(() => {
-                secondsRemaining--;
-                if (secondsRemaining <= 0) {
-                    clearInterval(timer);
-                    alert("Session complete! Well done.");
-                }
-                updateProgress();
-            }, 1000);
+        function toggleComplete(button) {
+            const taskItem = button.closest('li');
+            const taskText = taskItem.querySelector('.task-text');
+            taskText.classList.toggle('completed');
         }
 
-        function updateProgress() {
-            document.getElementById('progressDisplay').innerText = `You have completed: ${totalMinutes - Math.floor((totalMinutes * 60 - (totalMinutes * 60 - (totalMinutes * 60 - (totalMinutes * 60)))) / 60)} minutes`;
+        function deleteTask(button) {
+            const taskItem = button.closest('li');
+            taskItem.remove();
         }
     </script>
 </body>
