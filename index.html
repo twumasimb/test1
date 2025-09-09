@@ -3,124 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Music Player</title>
+    <title>Interactive Space-Themed Website</title>
     <style>
         body {
+            background-color: #000;
+            color: #fff;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
-
         header {
+            padding: 20px;
             text-align: center;
+        }
+        nav {
             margin-bottom: 20px;
         }
-
-        .player {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        h1 {
+            font-size: 2.5em;
+        }
+        .constellations {
+            display: flex;
+            justify-content: space-around;
             padding: 20px;
         }
-
-        button, select {
-            padding: 10px;
-            margin: 5px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: white;
+        .constellation {
             cursor: pointer;
+            position: relative;
+            outline: none;
         }
-
-        button:focus, input:focus, select:focus {
+        .constellation:focus {
+            outline: 3px solid #ffffff;
+        }
+        .gallery {
+            display: flex;
+            overflow-x: auto;
+            padding: 20px;
+        }
+        .planet {
+            margin-right: 20px;
+            text-align: center;
+        }
+        .planet img {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .planet p {
+            margin: 5px 0;
+        }
+        /* Ensure all interactive elements have visible focus indicators */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
-
-        .playlist {
-            list-style: none;
-            padding: 0;
-        }
-
-        .playlist-item {
-            margin: 5px 0;
-        }
-
-        .playlist-item button {
-            background-color: #28a745;
-        }
-
-        .playlist-item button:focus {
+        /* High contrast focus for dark backgrounds */
+        .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
-        }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-
-            button, select {
-                width: 100%;
-                margin: 5px 0;
-            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Accessible Music Player</h1>
+        <nav role="navigation" aria-label="Main navigation">
+            <h1>Explore the Universe</h1>
+        </nav>
     </header>
     <main>
-        <section class="player">
-            <h2>Now Playing</h2>
-            <audio id="audioPlayer" controls aria-label="Audio player">
-                <source id="audioSource" src="" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-            <h2>Playlist</h2>
-            <ul class="playlist" id="playlist">
-                <li class="playlist-item">
-                    <span>Song 1 - Artist 1</span>
-                    <button onclick="playSong('song1.mp3')" onkeydown="handleInteraction(event)">Play</button>
-                </li>
-                <li class="playlist-item">
-                    <span>Song 2 - Artist 2</span>
-                    <button onclick="playSong('song2.mp3')" onkeydown="handleInteraction(event)">Play</button>
-                </li>
-                <li class="playlist-item">
-                    <span>Song 3 - Artist 3</span>
-                    <button onclick="playSong('song3.mp3')" onkeydown="handleInteraction(event)">Play</button>
-                </li>
-            </ul>
-            <label for="volumeControl">Volume:</label>
-            <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5" aria-labelledby="volumeLabel" oninput="setVolume(this.value)">
+        <section aria-labelledby="constellations-title">
+            <h2 id="constellations-title">Constellations</h2>
+            <div class="constellations">
+                <div class="constellation" tabindex="0" aria-label="Orion" onclick="showInfo('Orion')" onkeydown="handleInteraction(event)">
+                    <span>Orion</span>
+                </div>
+                <div class="constellation" tabindex="0" aria-label="Ursa Major" onclick="showInfo('Ursa Major')" onkeydown="handleInteraction(event)">
+                    <span>Ursa Major</span>
+                </div>
+                <div class="constellation" tabindex="0" aria-label="Cassiopeia" onclick="showInfo('Cassiopeia')" onkeydown="handleInteraction(event)">
+                    <span>Cassiopeia</span>
+                </div>
+            </div>
+        </section>
+        <section aria-labelledby="planets-title">
+            <h2 id="planets-title">Planets Gallery</h2>
+            <div class="gallery">
+                <div class="planet" tabindex="0" aria-label="Mars: The Red Planet">
+                    <img src="https://via.placeholder.com/150?text=Mars" alt="Mars">
+                    <p>Mars</p>
+                    <p>Fun Fact: Mars is known as the Red Planet.</p>
+                </div>
+                <div class="planet" tabindex="0" aria-label="Jupiter: The Giant Planet">
+                    <img src="https://via.placeholder.com/150?text=Jupiter" alt="Jupiter">
+                    <p>Jupiter</p>
+                    <p>Fun Fact: Jupiter is the largest planet in our solar system.</p>
+                </div>
+                <div class="planet" tabindex="0" aria-label="Saturn: The Ringed Planet">
+                    <img src="https://via.placeholder.com/150?text=Saturn" alt="Saturn">
+                    <p>Saturn</p>
+                    <p>Fun Fact: Saturn is famous for its stunning rings.</p>
+                </div>
+            </div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Accessible Music Player</p>
+        <p>&copy; 2023 Explore the Universe. All rights reserved.</p>
     </footer>
     <script>
-        const audioPlayer = document.getElementById('audioPlayer');
-        const audioSource = document.getElementById('audioSource');
-
-        function playSong(song) {
-            audioSource.src = song;
-            audioPlayer.load();
-            audioPlayer.play();
-        }
-
-        function setVolume(volume) {
-            audioPlayer.volume = volume;
+        function showInfo(constellation) {
+            alert("You clicked on " + constellation + ". More information will be added soon!");
         }
 
         function handleInteraction(event) {
             // Handle both mouse and keyboard events
             if (event.type === 'click' || 
                 (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                event.target.click();
+                showInfo(event.currentTarget.getAttribute('aria-label'));
             }
         }
     </script>
