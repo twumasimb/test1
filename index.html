@@ -3,802 +3,586 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Space Exploration: Constellations & Planet Gallery</title>
-    <meta name="description" content="Explore the stars with an accessible, interactive space-themed website featuring constellations and a planet gallery with fun facts.">
+    <title>Accessible Task Manager - Login & Dashboard</title>
     <style>
         :root {
-            --bg-color: #111827;
-            --primary: #38bdf8;
-            --secondary: #fbbf24;
-            --white: #fff;
-            --focus: #fff;
-            --focus-dark: #0066cc;
-            --card-bg: #1e293b;
-            --card-border: #334155;
-            --gallery-bg: #0f172a;
-            --gallery-arrow: #38bdf8;
-            --gallery-arrow-bg: #1e293b;
-            --gallery-arrow-focus: #fbbf24;
+            --primary: #0066cc;
+            --primary-dark: #004c99;
+            --accent: #e6f0fa;
+            --danger: #b00020;
+            --success: #007e33;
+            --background: #ffffff;
+            --foreground: #222222;
+            --border: #cccccc;
+            --focus-outline: var(--primary);
         }
-
         html {
-            background: var(--bg-color);
-            color: var(--white);
-            font-family: 'Segoe UI', Arial, sans-serif;
-            font-size: 1rem;
-            line-height: 1.6;
+            font-size: 100%;
+            background: var(--background);
+            color: var(--foreground);
         }
-
         body {
             margin: 0;
+            font-family: system-ui, Arial, sans-serif;
             min-height: 100vh;
-            background: var(--bg-color);
-            color: var(--white);
-        }
-
-        header {
-            background: #0f172a;
-            padding: 1rem 0;
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 0 1rem;
-        }
-
-        nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            padding: 0.25em 0.5em;
-            border-radius: 0.25em;
-            transition: background 0.2s;
-        }
-
-        nav a:focus,
-        nav a:hover {
-            background: var(--card-bg);
-            outline: 3px solid var(--focus);
-            outline-offset: 2px;
-        }
-
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem 4rem 1rem;
-        }
-
-        h1 {
-            font-size: 2.25rem;
-            margin-bottom: 0.5em;
-            color: var(--primary);
-            text-shadow: 0 2px 8px #000a;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            color: var(--secondary);
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Starfield and constellations */
-        .starfield-container {
-            position: relative;
-            width: 100%;
-            max-width: 100%;
-            height: 420px;
-            background: radial-gradient(ellipse at 50% 60%, #1e293b 60%, #111827 100%);
-            border-radius: 1rem;
-            overflow: hidden;
-            margin-bottom: 2.5rem;
-        }
-
-        canvas#starfield {
-            position: absolute;
-            left: 0; top: 0;
-            width: 100%;
-            height: 100%;
-            display: block;
-            z-index: 1;
-        }
-
-        /* Constellation SVG overlay */
-        .constellation-svg {
-            position: absolute;
-            left: 0; top: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none; /* except for interactive elements */
-        }
-
-        .constellation-group {
-            cursor: pointer;
-            pointer-events: auto;
-            outline: none;
-            transition: filter 0.2s;
-        }
-
-        .constellation-group:focus,
-        .constellation-group:hover {
-            filter: drop-shadow(0 0 8px var(--secondary));
-            outline: 3px solid var(--focus);
-            outline-offset: 2px;
-        }
-
-        .constellation-line {
-            stroke: var(--primary);
-            stroke-width: 2.5;
-        }
-
-        .constellation-star {
-            fill: var(--secondary);
-            stroke: #fff;
-            stroke-width: 1;
-        }
-
-        /* Modal dialog for constellation info */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0; top: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(17, 24, 39, 0.85);
-            align-items: center;
-            justify-content: center;
-        }
-        .modal[aria-hidden="false"] {
-            display: flex;
-        }
-        .modal-dialog {
-            background: var(--card-bg);
-            color: var(--white);
-            border-radius: 1rem;
-            box-shadow: 0 6px 32px #000a;
-            max-width: 90vw;
-            width: 420px;
-            padding: 2rem 1.5rem 1.5rem 1.5rem;
-            position: relative;
-            outline: none;
-        }
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--gallery-arrow-bg);
-            color: var(--white);
-            border: none;
-            border-radius: 50%;
-            width: 2.5rem;
-            height: 2.5rem;
-            font-size: 1.25rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-close:focus {
-            outline: 3px solid var(--focus);
-            outline-offset: 2px;
-            background: var(--gallery-arrow-focus);
-            color: #222;
-        }
-        .modal h3 {
-            margin-top: 0;
-            margin-bottom: 0.75em;
-            color: var(--primary);
-        }
-        .modal p {
-            margin-bottom: 0.5em;
-        }
-
-        /* Planet gallery */
-        .planet-gallery-section {
-            margin-top: 2.5rem;
-        }
-        .gallery-wrapper {
-            position: relative;
-            background: var(--gallery-bg);
-            border-radius: 1rem;
-            padding: 2.5rem 0 2rem 0;
-            overflow: hidden;
-        }
-        .gallery-title {
-            margin-bottom: 1.25rem;
-        }
-        .gallery {
-            display: flex;
-            gap: 2rem;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding: 1rem 2.5rem;
-            outline: none;
-        }
-        .gallery:focus {
-            outline: 3px solid var(--focus);
-            outline-offset: 2px;
-        }
-        .gallery::-webkit-scrollbar {
-            height: 12px;
-            background: #222;
-        }
-        .gallery::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 6px;
-        }
-        .planet-card {
-            background: var(--card-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 1rem;
-            min-width: 260px;
-            max-width: 260px;
-            flex: 0 0 260px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 1.25rem 1rem 1rem 1rem;
-            box-shadow: 0 2px 12px #0005;
-            margin-bottom: 1rem;
+            background: var(--background);
         }
-        .planet-card img {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            border-radius: 50%;
-            background: #fff1;
-            margin-bottom: 1rem;
-            border: 2px solid var(--primary);
+        header, footer {
+            background: var(--accent);
+            padding: 1rem 0;
         }
-        .planet-card h4 {
-            margin: 0.5em 0 0.5em 0;
-            color: var(--secondary);
-            font-size: 1.2rem;
+        header {
+            border-bottom: 2px solid var(--primary);
         }
-        .planet-card p {
-            font-size: 1rem;
-            margin: 0.25em 0 0.25em 0;
-        }
-
-        /* Gallery arrows */
-        .gallery-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--gallery-arrow-bg);
-            color: var(--gallery-arrow);
-            border: none;
-            border-radius: 50%;
-            width: 2.5rem;
-            height: 2.5rem;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: background 0.2s, color 0.2s;
-        }
-        .gallery-arrow:focus {
-            outline: 3px solid var(--focus);
-            outline-offset: 2px;
-            background: var(--gallery-arrow-focus);
-            color: #222;
-        }
-        .gallery-arrow[disabled] {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-        .gallery-arrow.left {
-            left: 0.5rem;
-        }
-        .gallery-arrow.right {
-            right: 0.5rem;
-        }
-
-        /* Focus indicators (per accessibility requirements) */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid var(--focus-dark);
-            outline-offset: 2px;
-        }
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid var(--focus);
-        }
-
-        /* Responsive */
-        @media (max-width: 700px) {
-            .starfield-container {
-                height: 260px;
-            }
-            .planet-card {
-                min-width: 180px;
-                max-width: 180px;
-                padding: 1rem 0.5rem 0.5rem 0.5rem;
-            }
-            .planet-card img {
-                width: 80px;
-                height: 80px;
-            }
-            .gallery {
-                gap: 1rem;
-                padding: 1rem 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            h1 { font-size: 1.4rem; }
-            h2 { font-size: 1.1rem; }
-            .starfield-container { height: 170px; }
-            .gallery-wrapper { padding: 1.5rem 0 1rem 0; }
-        }
-
         footer {
-            background: #0f172a;
-            color: #cbd5e1;
+            border-top: 1px solid var(--border);
             text-align: center;
             font-size: 0.95rem;
-            padding: 1.25rem 0 1rem 0;
-            margin-top: 3rem;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+        nav a, nav button {
+            color: var(--primary-dark);
+            text-decoration: none;
+            background: none;
+            border: none;
+            font: inherit;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        nav a:focus, nav button:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+            background: #ddefff;
+        }
+        nav a:hover, nav button:hover {
+            background: #ddefff;
+        }
+        main {
+            flex: 1 1 auto;
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+        h1, h2, h3 {
+            color: var(--primary-dark);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            background: #f9fafd;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem 1.5rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .required-indicator {
+            color: var(--danger);
+            margin-left: 0.2em;
+            font-size: 1em;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 100%;
+        }
+        input:focus, textarea:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+            border-color: var(--primary);
+        }
+        button, .btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        button:focus, .btn:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+            background: var(--primary-dark);
+        }
+        button:hover, .btn:hover {
+            background: var(--primary-dark);
+        }
+        .error-message {
+            color: var(--danger);
+            font-size: 1rem;
+            margin-top: 0.25rem;
+        }
+        .success-message {
+            color: var(--success);
+            font-size: 1rem;
+            margin-top: 0.25rem;
+        }
+        .dashboard-section {
+            margin-bottom: 2rem;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0 0 0;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f2f6fa;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .task-item[aria-checked="true"] .task-title {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .task-title {
+            flex: 1 1 auto;
+            font-size: 1rem;
+        }
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .sr-only {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        @media (max-width: 600px) {
+            main {
+                padding: 0.5rem;
+            }
+            form {
+                padding: 1rem 0.5rem;
+            }
+        }
+        /* Focus indicators for all interactive elements */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
+        }
+        /* High contrast focus for dark backgrounds */
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: 3px solid #ffffff;
         }
     </style>
 </head>
-<body class="dark-bg">
+<body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <ul>
-                <li><a href="#constellations">Constellations</a></li>
-                <li><a href="#planets">Planet Gallery</a></li>
-            </ul>
+            <a href="#main-content" class="sr-only" id="skip-link">Skip to main content</a>
+            <span id="app-nav"></span>
         </nav>
     </header>
-    <main>
-        <h1>Space Exploration: Constellations & Planet Gallery</h1>
-        <section id="constellations" aria-labelledby="constellations-heading">
-            <h2 id="constellations-heading">Explore Interactive Constellations</h2>
-            <p>Discover famous constellations in the night sky. Select a constellation to learn more about its history and stars.</p>
-            <div class="starfield-container" aria-label="Starfield with interactive constellations">
-                <canvas id="starfield" aria-hidden="true"></canvas>
-                <!-- SVG overlay for constellations; interactive groups for keyboard/mouse -->
-                <svg class="constellation-svg" width="100%" height="100%" viewBox="0 0 800 400" aria-label="Constellations">
-                    <!-- Orion -->
-                    <g class="constellation-group" tabindex="0" role="button" aria-label="Orion constellation" data-constellation="orion">
-                        <!-- Lines -->
-                        <polyline class="constellation-line" points="170,120 200,180 260,200 320,180 350,120 320,70 260,70 200,120 170,120" />
-                        <!-- Stars -->
-                        <circle class="constellation-star" cx="170" cy="120" r="7" />
-                        <circle class="constellation-star" cx="200" cy="180" r="6" />
-                        <circle class="constellation-star" cx="260" cy="200" r="8" />
-                        <circle class="constellation-star" cx="320" cy="180" r="6" />
-                        <circle class="constellation-star" cx="350" cy="120" r="7" />
-                        <circle class="constellation-star" cx="320" cy="70" r="5" />
-                        <circle class="constellation-star" cx="260" cy="70" r="5" />
-                        <circle class="constellation-star" cx="200" cy="120" r="6" />
-                    </g>
-                    <!-- Ursa Major (Big Dipper) -->
-                    <g class="constellation-group" tabindex="0" role="button" aria-label="Ursa Major constellation" data-constellation="ursa-major">
-                        <polyline class="constellation-line" points="600,70 670,90 700,140 690,210 640,230 610,180 590,120" />
-                        <circle class="constellation-star" cx="600" cy="70" r="7" />
-                        <circle class="constellation-star" cx="670" cy="90" r="7" />
-                        <circle class="constellation-star" cx="700" cy="140" r="8" />
-                        <circle class="constellation-star" cx="690" cy="210" r="7" />
-                        <circle class="constellation-star" cx="640" cy="230" r="6" />
-                        <circle class="constellation-star" cx="610" cy="180" r="6" />
-                        <circle class="constellation-star" cx="590" cy="120" r="6" />
-                    </g>
-                    <!-- Cassiopeia -->
-                    <g class="constellation-group" tabindex="0" role="button" aria-label="Cassiopeia constellation" data-constellation="cassiopeia">
-                        <polyline class="constellation-line" points="420,80 460,120 500,70 540,120 580,80" />
-                        <circle class="constellation-star" cx="420" cy="80" r="6" />
-                        <circle class="constellation-star" cx="460" cy="120" r="6" />
-                        <circle class="constellation-star" cx="500" cy="70" r="7" />
-                        <circle class="constellation-star" cx="540" cy="120" r="6" />
-                        <circle class="constellation-star" cx="580" cy="80" r="6" />
-                    </g>
-                </svg>
-            </div>
-        </section>
-        <section id="planets" class="planet-gallery-section" aria-labelledby="planets-heading">
-            <h2 id="planets-heading" class="gallery-title">Planet Gallery: Discover the Solar System</h2>
-            <div class="gallery-wrapper" aria-label="Scrollable planet gallery">
-                <button type="button" class="gallery-arrow left" aria-label="Scroll left" tabindex="0">
-                    <span aria-hidden="true">&#8592;</span>
-                </button>
-                <div class="gallery" tabindex="0" role="region" aria-label="Planets in our solar system">
-                    <!-- Planet cards inserted here by JavaScript -->
-                </div>
-                <button type="button" class="gallery-arrow right" aria-label="Scroll right" tabindex="0">
-                    <span aria-hidden="true">&#8594;</span>
-                </button>
-            </div>
-        </section>
-        <!-- Modal dialog for constellation info -->
-        <div class="modal" id="constellation-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
-            <div class="modal-dialog" tabindex="-1">
-                <button type="button" class="modal-close" aria-label="Close constellation information" tabindex="0">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h3 id="modal-title"></h3>
-                <div id="modal-content"></div>
-            </div>
-        </div>
+    <main id="main-content" tabindex="-1">
+        <div id="root" aria-live="polite"></div>
     </main>
     <footer>
-        <p>
-            &copy; 2024 Accessible Space Exploration. All images and content are for educational purposes.<br>
-            Designed for inclusivity and accessibility. <span aria-hidden="true" role="img" title="sparkles">&#10024;</span>
-        </p>
+        <p>&copy; 2024 Accessible Task Manager. All rights reserved.</p>
     </footer>
-    <script>
-        // --- Starfield background ---
-        (function drawStarfield() {
-            const canvas = document.getElementById('starfield');
-            const ctx = canvas.getContext('2d');
-            let width, height, dpr = window.devicePixelRatio || 1;
+    <!-- React and Babel for JSX support (for demo only; would be omitted in a production SPA) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel">
+    // --- Accessibility Utility Functions ---
+    function setDocumentTitle(title) {
+        document.title = title;
+    }
 
-            function resize() {
-                width = canvas.offsetWidth;
-                height = canvas.offsetHeight;
-                canvas.width = width * dpr;
-                canvas.height = height * dpr;
-                ctx.setTransform(1, 0, 0, 1, 0, 0);
-                ctx.scale(dpr, dpr);
+    // --- Accessible Focus Management ---
+    function focusMain() {
+        const main = document.getElementById('main-content');
+        if (main) {
+            main.focus();
+        }
+    }
+
+    // --- Mock Authentication (for demo) ---
+    const mockUser = {
+        email: "user@example.com",
+        password: "password123",
+        name: "Jane Doe"
+    };
+
+    // --- Main App Component ---
+    function App() {
+        const [user, setUser] = React.useState(null);
+        const [route, setRoute] = React.useState('login'); // 'login' or 'dashboard'
+        const [tasks, setTasks] = React.useState([]);
+        const [dashboardMsg, setDashboardMsg] = React.useState('');
+
+        // Focus main on route change
+        React.useEffect(() => {
+            focusMain();
+        }, [route]);
+
+        // Update document title
+        React.useEffect(() => {
+            if (user) {
+                setDocumentTitle("Dashboard - Accessible Task Manager");
+            } else {
+                setDocumentTitle("Login - Accessible Task Manager");
             }
+        }, [user]);
 
-            function randomBetween(a, b) {
-                return Math.random() * (b - a) + a;
+        // Navigation rendering
+        React.useEffect(() => {
+            const nav = (
+                <>
+                    {user ? (
+                        <>
+                            <span aria-current={route === 'dashboard' ? "page" : undefined} style={{fontWeight: 'bold'}}>Dashboard</span>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setUser(null);
+                                    setRoute('login');
+                                    setDashboardMsg('');
+                                }}
+                                onKeyDown={handleInteraction(() => {
+                                    setUser(null);
+                                    setRoute('login');
+                                    setDashboardMsg('');
+                                })}
+                                aria-label="Log out"
+                            >
+                                Log out
+                            </button>
+                        </>
+                    ) : (
+                        <span aria-current="page" style={{fontWeight: 'bold'}}>Login</span>
+                    )}
+                </>
+            );
+            ReactDOM.render(nav, document.getElementById('app-nav'));
+        }, [user, route]);
+
+        // Handle login
+        function handleLogin(credentials, setError) {
+            if (
+                credentials.email === mockUser.email &&
+                credentials.password === mockUser.password
+            ) {
+                setUser({name: mockUser.name, email: mockUser.email});
+                setRoute('dashboard');
+                setTasks([
+                    {id: 1, title: "Read accessibility guidelines", completed: false},
+                    {id: 2, title: "Review project tasks", completed: true},
+                ]);
+                setDashboardMsg('');
+            } else {
+                setError("Invalid email or password.");
             }
+        }
 
-            function drawStars() {
-                ctx.clearRect(0, 0, width, height);
-                // Draw random stars
-                for (let i = 0; i < 130; i++) {
-                    let x = randomBetween(0, width);
-                    let y = randomBetween(0, height);
-                    let r = randomBetween(0.4, 1.7);
-                    ctx.beginPath();
-                    ctx.arc(x, y, r, 0, 2 * Math.PI);
-                    ctx.fillStyle = (i % 7 === 0) ? '#fbbf24' : '#fff';
-                    ctx.globalAlpha = randomBetween(0.5, 1);
-                    ctx.fill();
-                }
-                ctx.globalAlpha = 1;
+        // Handle task add
+        function handleAddTask(title, setError, setSuccess) {
+            if (!title.trim()) {
+                setError("Task title is required.");
+                setSuccess('');
+                return;
             }
+            setTasks(prev => [
+                ...prev,
+                {id: Date.now(), title: title.trim(), completed: false}
+            ]);
+            setError('');
+            setSuccess('Task added successfully.');
+        }
 
-            function render() {
-                resize();
-                drawStars();
+        // Handle task toggle
+        function handleToggleTask(id) {
+            setTasks(prev =>
+                prev.map(task =>
+                    task.id === id ? {...task, completed: !task.completed} : task
+                )
+            );
+        }
+
+        // Handle task delete
+        function handleDeleteTask(id) {
+            setTasks(prev => prev.filter(task => task.id !== id));
+        }
+
+        // Render
+        return (
+            <>
+                {route === 'login' && (
+                    <LoginForm onLogin={handleLogin} />
+                )}
+                {route === 'dashboard' && user && (
+                    <Dashboard
+                        user={user}
+                        tasks={tasks}
+                        onAddTask={handleAddTask}
+                        onToggleTask={handleToggleTask}
+                        onDeleteTask={handleDeleteTask}
+                        dashboardMsg={dashboardMsg}
+                        setDashboardMsg={setDashboardMsg}
+                    />
+                )}
+            </>
+        );
+    }
+
+    // --- Login Form Component ---
+    function LoginForm({onLogin}) {
+        const [email, setEmail] = React.useState('');
+        const [password, setPassword] = React.useState('');
+        const [error, setError] = React.useState('');
+
+        // For accessibility, focus email on mount
+        const emailRef = React.useRef(null);
+        React.useEffect(() => {
+            if (emailRef.current) emailRef.current.focus();
+        }, []);
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            setError('');
+            if (!email.trim() || !password.trim()) {
+                setError("Email and password are required.");
+                return;
             }
+            onLogin({email, password}, setError);
+        }
 
-            window.addEventListener('resize', render);
-            render();
-        })();
+        return (
+            <section aria-labelledby="login-heading">
+                <h1 id="login-heading">Sign in to your account</h1>
+                <form onSubmit={handleSubmit} noValidate aria-describedby={error ? "login-error" : undefined}>
+                    <div>
+                        <label htmlFor="email">
+                            Email address
+                            <span className="required-indicator" aria-hidden="true">*</span>
+                        </label>
+                        <input
+                            ref={emailRef}
+                            id="email"
+                            name="email"
+                            type="email"
+                            autoComplete="username"
+                            required
+                            aria-required="true"
+                            aria-invalid={!!error}
+                            aria-describedby={error ? "login-error" : undefined}
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">
+                            Password
+                            <span className="required-indicator" aria-hidden="true">*</span>
+                        </label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            autoComplete="current-password"
+                            required
+                            aria-required="true"
+                            aria-invalid={!!error}
+                            aria-describedby={error ? "login-error" : undefined}
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                    </div>
+                    {error && (
+                        <div className="error-message" id="login-error" role="alert">
+                            {error}
+                        </div>
+                    )}
+                    <button type="submit">Sign in</button>
+                </form>
+            </section>
+        );
+    }
 
-        // --- Constellation modal info ---
-        const CONSTELLATION_DATA = {
-            'orion': {
-                name: 'Orion',
-                description: `<p><strong>Orion</strong> is one of the most recognizable constellations, often called "The Hunter." It features two of the brightest stars in the sky: <em>Betelgeuse</em> (red supergiant) and <em>Rigel</em> (blue supergiant). Orion's Belt is formed by three aligned stars in the center.</p>
-                <ul>
-                    <li>Visible in both hemispheres during winter.</li>
-                    <li>Mythologically, represents a hunter in Greek legends.</li>
-                    <li>Contains the Orion Nebula, a stellar nursery.</li>
-                </ul>`
-            },
-            'ursa-major': {
-                name: 'Ursa Major (Big Dipper)',
-                description: `<p><strong>Ursa Major</strong>, known as the "Great Bear," contains the famous <em>Big Dipper</em> asterism. Its "pointer" stars help locate Polaris, the North Star.</p>
-                <ul>
-                    <li>Visible year-round in the Northern Hemisphere.</li>
-                    <li>Key in navigation for centuries.</li>
-                    <li>Part of many world mythologies.</li>
-                </ul>`
-            },
-            'cassiopeia': {
-                name: 'Cassiopeia',
-                description: `<p><strong>Cassiopeia</strong> forms a distinctive "W" shape in the sky. Named after the vain queen in Greek mythology, it sits opposite the Big Dipper across Polaris.</p>
-                <ul>
-                    <li>Easy to spot due to its unique shape.</li>
-                    <li>Home to several star clusters and nebulae.</li>
-                    <li>Visible year-round in the Northern Hemisphere.</li>
-                </ul>`
+    // --- Dashboard Component ---
+    function Dashboard({user, tasks, onAddTask, onToggleTask, onDeleteTask, dashboardMsg, setDashboardMsg}) {
+        return (
+            <section aria-labelledby="dashboard-heading">
+                <h1 id="dashboard-heading">Welcome, {user.name}</h1>
+                <section className="dashboard-section" aria-labelledby="your-tasks-heading">
+                    <h2 id="your-tasks-heading">Your Tasks</h2>
+                    <AddTaskForm onAddTask={onAddTask} setDashboardMsg={setDashboardMsg} />
+                    <TaskList
+                        tasks={tasks}
+                        onToggleTask={onToggleTask}
+                        onDeleteTask={onDeleteTask}
+                    />
+                </section>
+            </section>
+        );
+    }
+
+    // --- Add Task Form Component ---
+    function AddTaskForm({onAddTask, setDashboardMsg}) {
+        const [title, setTitle] = React.useState('');
+        const [error, setError] = React.useState('');
+        const [success, setSuccess] = React.useState('');
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            onAddTask(title, setError, setSuccess);
+            if (!error) {
+                setTitle('');
+                setTimeout(() => setSuccess(''), 1500);
+            }
+        }
+
+        return (
+            <form
+                onSubmit={handleSubmit}
+                aria-labelledby="add-task-heading"
+                style={{marginBottom: '1.5rem'}}
+                noValidate
+            >
+                <div>
+                    <label htmlFor="new-task">
+                        Add a new task
+                        <span className="required-indicator" aria-hidden="true">*</span>
+                    </label>
+                    <input
+                        id="new-task"
+                        name="new-task"
+                        type="text"
+                        required
+                        aria-required="true"
+                        aria-invalid={!!error}
+                        aria-describedby={error ? "add-task-error" : success ? "add-task-success" : undefined}
+                        value={title}
+                        onChange={e => {
+                            setTitle(e.target.value);
+                            setError('');
+                            setSuccess('');
+                            setDashboardMsg('');
+                        }}
+                        placeholder="e.g. Complete accessibility review"
+                    />
+                </div>
+                {error && (
+                    <div className="error-message" id="add-task-error" role="alert">
+                        {error}
+                    </div>
+                )}
+                {success && (
+                    <div className="success-message" id="add-task-success" role="status">
+                        {success}
+                    </div>
+                )}
+                <button type="submit">Add Task</button>
+            </form>
+        );
+    }
+
+    // --- Task List Component ---
+    function TaskList({tasks, onToggleTask, onDeleteTask}) {
+        if (!tasks.length) {
+            return <p>No tasks yet. Add your first task above.</p>;
+        }
+        return (
+            <ul className="task-list" aria-label="Task list">
+                {tasks.map(task => (
+                    <TaskItem
+                        key={task.id}
+                        task={task}
+                        onToggle={() => onToggleTask(task.id)}
+                        onDelete={() => onDeleteTask(task.id)}
+                    />
+                ))}
+            </ul>
+        );
+    }
+
+    // --- Task Item Component ---
+    function TaskItem({task, onToggle, onDelete}) {
+        // Keyboard accessible interaction for custom toggle and delete buttons
+        const handleToggleInteraction = handleInteraction(onToggle);
+        const handleDeleteInteraction = handleInteraction(onDelete);
+
+        return (
+            <li
+                className="task-item"
+                role="checkbox"
+                aria-checked={task.completed}
+                tabIndex={-1}
+            >
+                <span className="task-title">{task.title}</span>
+                <div className="task-actions">
+                    <button
+                        type="button"
+                        aria-pressed={task.completed}
+                        aria-label={task.completed ? "Mark as incomplete" : "Mark as complete"}
+                        onClick={onToggle}
+                        onKeyDown={handleToggleInteraction}
+                        tabIndex={0}
+                    >
+                        {task.completed ? "Undo" : "Complete"}
+                    </button>
+                    <button
+                        type="button"
+                        className="btn"
+                        aria-label={`Delete task: ${task.title}`}
+                        onClick={onDelete}
+                        onKeyDown={handleDeleteInteraction}
+                        tabIndex={0}
+                    >
+                        Delete
+                    </button>
+                </div>
+            </li>
+        );
+    }
+
+    // --- Accessibility: Keyboard/Mouse Handler ---
+    function handleInteraction(action) {
+        return function(event) {
+            if (
+                event.type === 'click' ||
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))
+            ) {
+                event.preventDefault();
+                action();
             }
         };
+    }
 
-        // --- Modal dialog logic (accessible) ---
-        (function() {
-            const modal = document.getElementById('constellation-modal');
-            const modalDialog = modal.querySelector('.modal-dialog');
-            const modalClose = modal.querySelector('.modal-close');
-            const modalTitle = document.getElementById('modal-title');
-            const modalContent = document.getElementById('modal-content');
-            let lastFocusedElement = null;
+    // --- Render App ---
+    ReactDOM.render(<App />, document.getElementById('root'));
 
-            function openModal(constellationKey) {
-                const data = CONSTELLATION_DATA[constellationKey];
-                if (!data) return;
-                modalTitle.textContent = data.name;
-                modalContent.innerHTML = data.description;
-                modal.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-                lastFocusedElement = document.activeElement;
-                // Focus the dialog for screen readers and keyboard users
-                setTimeout(() => { modalDialog.focus(); }, 50);
-            }
-
-            function closeModal() {
-                modal.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-                // Restore focus to the last element
-                if (lastFocusedElement && lastFocusedElement.focus) {
-                    lastFocusedElement.focus();
-                }
-            }
-
-            // Trap focus inside modal
-            modal.addEventListener('keydown', function(e) {
-                if (modal.getAttribute('aria-hidden') === 'true') return;
-                const focusable = modal.querySelectorAll('button, [tabindex]:not([tabindex="-1"])');
-                const first = focusable[0], last = focusable[focusable.length - 1];
-                if (e.key === 'Tab') {
-                    if (e.shiftKey) {
-                        if (document.activeElement === first) {
-                            e.preventDefault();
-                            last.focus();
-                        }
-                    } else {
-                        if (document.activeElement === last) {
-                            e.preventDefault();
-                            first.focus();
-                        }
-                    }
-                } else if (e.key === 'Escape') {
-                    closeModal();
-                }
-            });
-
-            // Close button
-            modalClose.addEventListener('click', closeModal);
-            modalClose.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    closeModal();
-                }
-            });
-
-            // Clicking outside the dialog closes modal
-            modal.addEventListener('mousedown', function(e) {
-                if (e.target === modal) closeModal();
-            });
-
-            // Expose openModal globally for constellation click
-            window.openConstellationModal = openModal;
-        })();
-
-        // --- Constellation click & keyboard interaction ---
-        document.querySelectorAll('.constellation-group').forEach(function(group) {
-            // Mouse click
-            group.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.openConstellationModal(group.dataset.constellation);
-            });
-            // Keyboard: Enter/Space
-            group.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    window.openConstellationModal(group.dataset.constellation);
-                }
-            });
-        });
-
-        // --- Planet gallery data ---
-        const PLANETS = [
-            {
-                name: 'Mercury',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg',
-                alt: 'Mercury: small gray rocky planet',
-                facts: [
-                    'Closest planet to the Sun.',
-                    'A year on Mercury is just 88 Earth days.',
-                    'Temperature swings are extreme: -173°C to 427°C.'
-                ]
-            },
-            {
-                name: 'Venus',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg',
-                alt: 'Venus: yellowish planet with thick clouds',
-                facts: [
-                    'Hottest planet in the Solar System.',
-                    'Rotates in the opposite direction to most planets.',
-                    'Known as Earth’s “sister planet”.'
-                ]
-            },
-            {
-                name: 'Earth',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg',
-                alt: 'Earth: blue planet with white clouds and continents',
-                facts: [
-                    'Our home planet, the only known planet with life.',
-                    '70% of the surface is covered by water.',
-                    'Has one natural satellite: the Moon.'
-                ]
-            },
-            {
-                name: 'Mars',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg',
-                alt: 'Mars: reddish planet with dark markings',
-                facts: [
-                    'Known as the Red Planet.',
-                    'Home to the tallest volcano in the Solar System: Olympus Mons.',
-                    'Evidence suggests it once had liquid water.'
-                ]
-            },
-            {
-                name: 'Jupiter',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg',
-                alt: 'Jupiter: large striped planet with Great Red Spot',
-                facts: [
-                    'Largest planet in the Solar System.',
-                    'Has a giant storm called the Great Red Spot.',
-                    'At least 79 moons, including Ganymede (largest moon).'
-                ]
-            },
-            {
-                name: 'Saturn',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg',
-                alt: 'Saturn: planet with prominent rings',
-                facts: [
-                    'Famous for its beautiful ring system.',
-                    'Lowest density of all planets; could float in water!',
-                    'At least 83 moons, including Titan.'
-                ]
-            },
-            {
-                name: 'Uranus',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg',
-                alt: 'Uranus: pale blue planet',
-                facts: [
-                    'Rotates on its side (axial tilt of 98°).',
-                    'Coldest planet in the Solar System.',
-                    'Has faint rings and at least 27 moons.'
-                ]
-            },
-            {
-                name: 'Neptune',
-                img: 'https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg',
-                alt: 'Neptune: deep blue planet',
-                facts: [
-                    'Furthest planet from the Sun.',
-                    'Strongest winds in the Solar System.',
-                    'Has a dark storm called the Great Dark Spot.'
-                ]
-            }
-        ];
-
-        // --- Render planet cards in gallery ---
-        (function() {
-            const gallery = document.querySelector('.gallery');
-            PLANETS.forEach(function(planet, idx) {
-                const card = document.createElement('article');
-                card.className = 'planet-card';
-                card.tabIndex = 0;
-                card.setAttribute('role', 'group');
-                card.setAttribute('aria-label', planet.name + ' planet card');
-                // Planet image
-                const img = document.createElement('img');
-                img.src = planet.img;
-                img.alt = planet.alt;
-                img.width = 120;
-                img.height = 120;
-                card.appendChild(img);
-                // Planet name
-                const h4 = document.createElement('h4');
-                h4.textContent = planet.name;
-                card.appendChild(h4);
-                // Fun facts
-                const ul = document.createElement('ul');
-                planet.facts.forEach(function(fact) {
-                    const li = document.createElement('li');
-                    li.textContent = fact;
-                    ul.appendChild(li);
-                });
-                card.appendChild(ul);
-                gallery.appendChild(card);
-            });
-        })();
-
-        // --- Gallery scrolling & keyboard accessibility ---
-        (function() {
-            const gallery = document.querySelector('.gallery');
-            const leftArrow = document.querySelector('.gallery-arrow.left');
-            const rightArrow = document.querySelector('.gallery-arrow.right');
-            const SCROLL_AMOUNT = 280;
-
-            function updateArrows() {
-                // Disable arrows if at ends
-                leftArrow.disabled = gallery.scrollLeft <= 5;
-                rightArrow.disabled = gallery.scrollLeft + gallery.offsetWidth >= gallery.scrollWidth - 5;
-            }
-
-            function scrollGallery(direction) {
-                const amount = direction === 'left' ? -SCROLL_AMOUNT : SCROLL_AMOUNT;
-                gallery.scrollBy({ left: amount, behavior: 'smooth' });
-                setTimeout(updateArrows, 350);
-            }
-
-            // Click events
-            leftArrow.addEventListener('click', function(e) {
-                scrollGallery('left');
-            });
-            rightArrow.addEventListener('click', function(e) {
-                scrollGallery('right');
-            });
-
-            // Keyboard support for arrows
-            leftArrow.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    scrollGallery('left');
-                }
-            });
-            rightArrow.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    scrollGallery('right');
-                }
-            });
-
-            // Keyboard support for gallery itself (arrow keys)
-            gallery.addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowRight') {
-                    scrollGallery('right');
-                } else if (e.key === 'ArrowLeft') {
-                    scrollGallery('left');
-                }
-            });
-
-            // Update arrows on scroll
-            gallery.addEventListener('scroll', updateArrows);
-            // On load
-            updateArrows();
-
-            // Accessibility: allow tabbing into gallery and planet cards
-            // Focus first card when gallery receives focus (if not already inside)
-            gallery.addEventListener('focus', function(e) {
-                const active = document.activeElement;
-                if (!gallery.contains(active)) {
-                    const firstCard = gallery.querySelector('.planet-card');
-                    if (firstCard) firstCard.focus();
-                }
-            });
-
-            // Allow left/right tabbing between cards
-            gallery.querySelectorAll('.planet-card').forEach(function(card, idx, cards) {
-                card.addEventListener('keydown', function(e) {
-                    if (e.key === 'ArrowRight') {
-                        e.preventDefault();
-                        if (cards[idx + 1]) cards[idx + 1].focus();
-                    } else if (e.key === 'ArrowLeft') {
-                        e.preventDefault();
-                        if (cards[idx - 1]) cards[idx - 1].focus();
-                    }
-                });
-            });
-        })();
+    // --- Accessibility: Skip Link Focus ---
+    document.getElementById('skip-link').addEventListener('click', function(e) {
+        e.preventDefault();
+        focusMain();
+    });
     </script>
 </body>
 </html>
