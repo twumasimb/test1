@@ -3,89 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalized Book Recommendations</title>
+    <title>Mindful Moments - Accessible Meditation Timer</title>
     <style>
-        /* Base styles with accessibility in mind */
-        :root {
-            --primary-color: #0066cc;
-            --secondary-color: #004080;
-            --text-color: #333333;
-            --background-color: #ffffff;
-            --error-color: #d32f2f;
-            --success-color: #388e3c;
-            --focus-color: #0066cc;
-            --light-gray: #f5f5f5;
-            --border-color: #cccccc;
-        }
-
-        * {
+        /* CSS Reset and Base Styles */
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--background-color);
-            padding: 0;
-            margin: 0;
-            min-height: 100vh;
+        /* Global Variables */
+        :root {
+            --primary-color: #5c7d99;
+            --secondary-color: #a3c2d5;
+            --accent-color: #3a5a78;
+            --text-color: #333333;
+            --light-text: #ffffff;
+            --background-color: #f5f7fa;
+            --error-color: #d32f2f;
+            --success-color: #388e3c;
+            --focus-color: #0066cc;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
         }
 
-        /* Ensure all interactive elements have visible focus indicators */
-        button:focus, 
-        input:focus, 
-        select:focus, 
-        textarea:focus, 
-        a:focus {
+        /* Accessibility: Focus Indicators */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus, [tabindex]:focus {
             outline: 3px solid var(--focus-color);
             outline-offset: 2px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .dark-bg button:focus, .dark-bg a:focus, .dark-bg [tabindex]:focus {
+            outline: 3px solid #ffffff;
         }
 
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem 0;
-            margin-bottom: 2rem;
-        }
-
-        header .container {
+        /* Typography */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
         }
 
-        header h1 {
-            margin: 0;
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 0.5em;
+            line-height: 1.2;
+            color: var(--primary-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-top: 0.5em;
+        }
+
+        h2 {
             font-size: 1.8rem;
+            margin-top: 1em;
         }
 
-        main {
-            padding: 1rem 0 3rem;
-        }
-
-        section {
-            margin-bottom: 2rem;
-        }
-
-        h1, h2, h3 {
-            color: var(--secondary-color);
-            margin-bottom: 1rem;
+        h3 {
+            font-size: 1.5rem;
         }
 
         p {
             margin-bottom: 1rem;
         }
 
-        /* Form styles */
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1rem 0;
+            box-shadow: var(--box-shadow);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 1.5rem 0;
+            margin-top: auto;
+            text-align: center;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Timer Section */
+        .timer-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .timer-display {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: var(--primary-color);
+            background-color: white;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .timer-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        /* Settings Section */
+        .settings-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin: 2rem 0;
+        }
+
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -94,209 +181,182 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: bold;
+            color: var(--primary-color);
         }
 
-        .required-indicator {
-            color: var(--error-color);
-            margin-left: 0.25rem;
-        }
-
-        input[type="text"],
-        select,
-        textarea {
+        input[type="number"], select {
             width: 100%;
             padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
             font-size: 1rem;
         }
 
-        .checkbox-group {
-            margin-top: 0.5rem;
-        }
-
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            font-weight: normal;
-        }
-
-        .checkbox-label input[type="checkbox"] {
-            margin-right: 0.5rem;
-            min-width: 18px;
-            min-height: 18px;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
+        /* Buttons */
+        .btn {
             padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
             font-size: 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: var(--secondary-color);
-        }
-
-        button:disabled {
-            background-color: var(--border-color);
-            cursor: not-allowed;
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            min-height: 1.25rem;
-        }
-
-        /* Results section */
-        .results-section {
-            display: none;
-        }
-
-        .results-section.active {
-            display: block;
-        }
-
-        .book-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .book-card {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .book-card:hover,
-        .book-card:focus-within {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .book-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .book-info {
-            padding: 1rem;
-        }
-
-        .book-title {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .book-author {
-            color: #666;
-            margin-bottom: 0.5rem;
-            font-style: italic;
-        }
-
-        .book-description {
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .book-link {
-            display: inline-block;
-            color: var(--primary-color);
-            text-decoration: none;
             font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--primary-color);
+            color: var(--light-text);
         }
 
-        .book-link:hover,
-        .book-link:focus {
-            text-decoration: underline;
+        .btn:hover, .btn:focus {
+            background-color: var(--accent-color);
         }
 
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 2rem;
+        .btn-large {
+            font-size: 1.2rem;
+            padding: 1rem 2rem;
         }
 
-        .loading.active {
-            display: block;
+        .btn-start {
+            background-color: var(--success-color);
         }
 
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            border-top: 4px solid var(--primary-color);
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+        .btn-pause {
+            background-color: var(--accent-color);
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .btn-reset {
+            background-color: var(--error-color);
         }
 
-        .no-results {
-            text-align: center;
-            padding: 2rem;
-            background-color: var(--light-gray);
-            border-radius: 8px;
-            display: none;
+        /* Progress Tracker */
+        .progress-section {
+            margin: 2rem 0;
         }
 
-        .no-results.active {
-            display: block;
-        }
-
-        .reset-button {
-            background-color: #666;
+        .session-history {
+            list-style: none;
             margin-top: 1rem;
         }
 
-        footer {
-            background-color: var(--light-gray);
-            padding: 1.5rem 0;
-            text-align: center;
-            margin-top: 2rem;
-            border-top: 1px solid var(--border-color);
+        .session-history li {
+            background-color: white;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
         }
 
-        /* Responsive design */
+        /* Sound Controls */
+        .sound-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .sound-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .sound-btn:hover, .sound-btn:focus {
+            border-color: var(--primary-color);
+        }
+
+        .sound-btn.active {
+            border-color: var(--primary-color);
+            background-color: var(--secondary-color);
+        }
+
+        .sound-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Volume Control */
+        .volume-control {
+            width: 100%;
+            max-width: 300px;
+            margin: 1rem auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .volume-control label {
+            margin-right: 1rem;
+            margin-bottom: 0;
+        }
+
+        .volume-slider {
+            flex: 1;
+        }
+
+        /* Alerts and Notifications */
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .book-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 1.5rem;
+            .timer-display {
+                font-size: 3.5rem;
+                min-width: 250px;
+            }
+
+            .timer-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .sound-controls {
+                justify-content: center;
             }
         }
 
         @media (max-width: 480px) {
-            .book-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+            h1 {
+                font-size: 2rem;
             }
 
-            header h1 {
-                font-size: 1.5rem;
+            .timer-display {
+                font-size: 3rem;
+                min-width: 200px;
             }
 
-            button {
-                width: 100%;
+            .settings-section {
+                padding: 1.5rem;
             }
         }
 
-        /* Skip link for keyboard users */
+        /* Skip to content link */
         .skip-link {
             position: absolute;
             top: -40px;
@@ -312,8 +372,8 @@
             top: 0;
         }
 
-        /* Announcement for screen readers */
-        .sr-announcement {
+        /* Visually hidden but accessible to screen readers */
+        .sr-only {
             position: absolute;
             width: 1px;
             height: 1px;
@@ -322,7 +382,7 @@
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
             white-space: nowrap;
-            border: 0;
+            border-width: 0;
         }
     </style>
 </head>
@@ -331,410 +391,793 @@
     
     <header>
         <div class="container">
-            <h1>Personalized Book Recommendations</h1>
+            <nav role="navigation" aria-label="Main navigation">
+                <div class="logo">Mindful Moments</div>
+                <ul class="nav-links">
+                    <li><a href="#timer">Timer</a></li>
+                    <li><a href="#settings">Settings</a></li>
+                    <li><a href="#progress">Progress</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
-    <main id="main-content" class="container">
-        <section class="intro-section">
-            <h2>Find Your Next Great Read</h2>
-            <p>Tell us about your reading preferences, and we'll suggest books you might enjoy. Fill out the form below to get personalized recommendations based on your favorite genres and authors.</p>
-        </section>
+    <main id="main-content">
+        <div class="container">
+            <h1>Mindful Meditation Timer</h1>
+            <p>Set your meditation duration, choose calming sounds, and track your mindfulness journey.</p>
 
-        <section class="form-section">
-            <h2>Your Reading Preferences</h2>
-            <form id="preferences-form">
-                <div class="form-group">
-                    <label for="name">Your Name<span class="required-indicator">*</span></label>
-                    <input type="text" id="name" name="name" required aria-required="true" aria-describedby="name-error">
-                    <div id="name-error" class="error-message" aria-live="polite"></div>
+            <section id="timer" class="timer-section" aria-labelledby="timer-heading">
+                <h2 id="timer-heading">Meditation Timer</h2>
+                
+                <div class="timer-display" id="timer-display" role="timer" aria-live="polite">
+                    20:00
+                </div>
+                
+                <div class="timer-controls">
+                    <button id="start-btn" class="btn btn-large btn-start" aria-label="Start meditation timer">
+                        Start
+                    </button>
+                    <button id="pause-btn" class="btn btn-large btn-pause" aria-label="Pause meditation timer" disabled>
+                        Pause
+                    </button>
+                    <button id="reset-btn" class="btn btn-large btn-reset" aria-label="Reset meditation timer">
+                        Reset
+                    </button>
                 </div>
 
-                <div class="form-group">
-                    <label for="favorite-author">Favorite Author (Optional)</label>
-                    <input type="text" id="favorite-author" name="favorite-author">
-                </div>
-
-                <div class="form-group">
-                    <fieldset>
-                        <legend>Preferred Genres<span class="required-indicator">*</span></legend>
-                        <div id="genres-error" class="error-message" aria-live="polite"></div>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="genre" value="fiction"> Fiction
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="genre" value="mystery"> Mystery & Thriller
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="genre" value="scifi"> Science Fiction
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="genre" value="fantasy"> Fantasy
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="genre" value="romance"> Romance
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="genre" value="nonfiction"> Non-Fiction
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="genre" value="biography"> Biography
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="genre" value="history"> History
-                            </label>
+                <div class="sound-section" aria-labelledby="sound-heading">
+                    <h3 id="sound-heading">Meditation Sounds</h3>
+                    <div class="sound-controls" role="radiogroup" aria-label="Select meditation sound">
+                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="false" data-sound="none">
+                            <span class="sound-icon" aria-hidden="true">🔇</span>
+                            <span>None</span>
                         </div>
-                    </fieldset>
+                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="true" data-sound="rain">
+                            <span class="sound-icon" aria-hidden="true">🌧️</span>
+                            <span>Rain</span>
+                        </div>
+                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="false" data-sound="forest">
+                            <span class="sound-icon" aria-hidden="true">🌲</span>
+                            <span>Forest</span>
+                        </div>
+                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="false" data-sound="waves">
+                            <span class="sound-icon" aria-hidden="true">🌊</span>
+                            <span>Ocean Waves</span>
+                        </div>
+                        <div class="sound-btn" tabindex="0" role="radio" aria-checked="false" data-sound="bells">
+                            <span class="sound-icon" aria-hidden="true">🔔</span>
+                            <span>Singing Bowls</span>
+                        </div>
+                    </div>
+
+                    <div class="volume-control">
+                        <label for="volume-slider">Volume:</label>
+                        <input 
+                            type="range" 
+                            id="volume-slider" 
+                            class="volume-slider" 
+                            min="0" 
+                            max="100" 
+                            value="50"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow="50"
+                            aria-valuetext="50 percent volume"
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <section id="settings" class="settings-section" aria-labelledby="settings-heading">
+                <h2 id="settings-heading">Timer Settings</h2>
+                
+                <form id="timer-settings-form">
+                    <div class="form-group">
+                        <label for="meditation-duration">Meditation Duration (minutes):</label>
+                        <input 
+                            type="number" 
+                            id="meditation-duration" 
+                            name="meditation-duration" 
+                            min="1" 
+                            max="120" 
+                            value="20" 
+                            required
+                            aria-describedby="duration-hint"
+                        >
+                        <p id="duration-hint" class="form-hint">Enter a value between 1 and 120 minutes</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interval-bells">Interval Bell Sound:</label>
+                        <select id="interval-bells" name="interval-bells">
+                            <option value="none">None</option>
+                            <option value="5min">Every 5 minutes</option>
+                            <option value="10min">Every 10 minutes</option>
+                            <option value="15min">Every 15 minutes</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ending-sound">Ending Sound:</label>
+                        <select id="ending-sound" name="ending-sound">
+                            <option value="gentle-bell">Gentle Bell</option>
+                            <option value="singing-bowl">Singing Bowl</option>
+                            <option value="gong">Gong</option>
+                            <option value="none">None</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn" aria-label="Apply timer settings">
+                        Apply Settings
+                    </button>
+                </form>
+            </section>
+
+            <section id="progress" class="progress-section" aria-labelledby="progress-heading">
+                <h2 id="progress-heading">Your Meditation Progress</h2>
+                <p>Track your meditation sessions to build a consistent practice.</p>
+                
+                <div id="progress-stats">
+                    <p>Total sessions: <span id="total-sessions">0</span></p>
+                    <p>Total minutes: <span id="total-minutes">0</span></p>
+                    <p>Current streak: <span id="current-streak">0</span> days</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="reading-level">Reading Level Preference</label>
-                    <select id="reading-level" name="reading-level">
-                        <option value="any">Any Reading Level</option>
-                        <option value="easy">Light & Easy Reading</option>
-                        <option value="medium">Moderate Complexity</option>
-                        <option value="challenging">Challenging & Complex</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="additional-info">Additional Information (Optional)</label>
-                    <textarea id="additional-info" name="additional-info" rows="3" placeholder="Tell us more about what you like to read..."></textarea>
-                </div>
-
-                <button type="submit" id="submit-button">Get Recommendations</button>
-            </form>
-        </section>
-
-        <div id="loading" class="loading" aria-live="polite">
-            <div class="spinner" aria-hidden="true"></div>
-            <p>Finding the perfect books for you...</p>
+                <h3 id="history-heading">Recent Sessions</h3>
+                <ul id="session-history" class="session-history" aria-labelledby="history-heading">
+                    <!-- Session history will be populated by JavaScript -->
+                    <li>No meditation sessions recorded yet. Start your first session!</li>
+                </ul>
+            </section>
         </div>
-
-        <section id="results-section" class="results-section" aria-live="polite">
-            <h2>Your Personalized Recommendations</h2>
-            <p>Based on your preferences, we think you'll enjoy these books:</p>
-            <div id="book-grid" class="book-grid">
-                <!-- Book recommendations will be populated here -->
-            </div>
-            <button type="button" id="reset-button" class="reset-button">Start Over</button>
-        </section>
-
-        <div id="no-results" class="no-results">
-            <h2>No Recommendations Found</h2>
-            <p>We couldn't find any books matching your specific preferences. Please try again with different selections.</p>
-            <button type="button" class="reset-button" onclick="resetForm()">Try Again</button>
-        </div>
-
-        <div id="sr-announcement" class="sr-announcement" aria-live="assertive"></div>
     </main>
 
     <footer>
         <div class="container">
-            <p>© 2023 Book Recommendation Service. All book information is for demonstration purposes only.</p>
+            <p>&copy; 2023 Mindful Moments - Accessible Meditation Timer</p>
+            <p>Created to help everyone practice mindfulness, regardless of ability.</p>
         </div>
     </footer>
 
     <script>
-        // Book database for demonstration purposes
-        const bookDatabase = [
-            {
-                id: 1,
-                title: "The Midnight Library",
-                author: "Matt Haig",
-                genres: ["fiction", "fantasy"],
-                readingLevel: "medium",
-                description: "Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?book,library",
-                altText: "Book cover of The Midnight Library by Matt Haig showing a library at night"
-            },
-            {
-                id: 2,
-                title: "Project Hail Mary",
-                author: "Andy Weir",
-                genres: ["scifi", "fiction"],
-                readingLevel: "medium",
-                description: "A lone astronaut must save the earth from disaster in this incredible new science-based thriller from the #1 New York Times bestselling author of The Martian.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?space,astronaut",
-                altText: "Book cover of Project Hail Mary by Andy Weir featuring a spacecraft in deep space"
-            },
-            {
-                id: 3,
-                title: "The Silent Patient",
-                author: "Alex Michaelides",
-                genres: ["mystery", "fiction"],
-                readingLevel: "medium",
-                description: "A woman shoots her husband five times and then never speaks another word. A criminal psychotherapist is determined to get her to talk and unravel the mystery.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?silhouette,mystery",
-                altText: "Book cover of The Silent Patient by Alex Michaelides showing a silhouette of a person's face"
-            },
-            {
-                id: 4,
-                title: "Educated",
-                author: "Tara Westover",
-                genres: ["nonfiction", "biography"],
-                readingLevel: "medium",
-                description: "A memoir about a young girl who, kept out of school, leaves her survivalist family and goes on to earn a PhD from Cambridge University.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?education,books",
-                altText: "Book cover of Educated by Tara Westover showing a pencil and notebook"
-            },
-            {
-                id: 5,
-                title: "The Four Winds",
-                author: "Kristin Hannah",
-                genres: ["fiction", "history"],
-                readingLevel: "medium",
-                description: "An epic novel of love and heroism and hope, set against the backdrop of one of America's most defining eras—the Great Depression.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?wind,field",
-                altText: "Book cover of The Four Winds by Kristin Hannah showing a dusty field during the Great Depression"
-            },
-            {
-                id: 6,
-                title: "Klara and the Sun",
-                author: "Kazuo Ishiguro",
-                genres: ["fiction", "scifi"],
-                readingLevel: "challenging",
-                description: "From the Nobel Prize-winning author, a novel about an Artificial Friend with outstanding observational qualities, who watches carefully the behavior of those who come to the store to browse.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?robot,sun",
-                altText: "Book cover of Klara and the Sun by Kazuo Ishiguro showing a robot silhouette against a sunset"
-            },
-            {
-                id: 7,
-                title: "The Vanishing Half",
-                author: "Brit Bennett",
-                genres: ["fiction"],
-                readingLevel: "medium",
-                description: "The Vignes twin sisters will always be identical. But after growing up together in a small, southern black community and running away at age sixteen, one sister lives with her black daughter in the same southern town, while the other secretly passes for white.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?mirror,reflection",
-                altText: "Book cover of The Vanishing Half by Brit Bennett showing a mirror with a reflection"
-            },
-            {
-                id: 8,
-                title: "Sapiens: A Brief History of Humankind",
-                author: "Yuval Noah Harari",
-                genres: ["nonfiction", "history"],
-                readingLevel: "challenging",
-                description: "A groundbreaking narrative of humanity's creation and evolution that explores the ways in which biology and history have defined us.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?evolution,human",
-                altText: "Book cover of Sapiens by Yuval Noah Harari showing human evolution timeline"
-            },
-            {
-                id: 9,
-                title: "Beach Read",
-                author: "Emily Henry",
-                genres: ["romance", "fiction"],
-                readingLevel: "easy",
-                description: "A romance writer who no longer believes in love and a literary writer stuck in a rut engage in a summer-long challenge that may just upend everything they believe about happily ever afters.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?beach,sunset",
-                altText: "Book cover of Beach Read by Emily Henry showing a sunset at the beach"
-            },
-            {
-                id: 10,
-                title: "The Night Watchman",
-                author: "Louise Erdrich",
-                genres: ["fiction", "history"],
-                readingLevel: "medium",
-                description: "Based on the extraordinary life of the author's grandfather who worked as a night watchman and carried the fight against Native dispossession from rural North Dakota all the way to Washington, D.C.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?night,moon",
-                altText: "Book cover of The Night Watchman by Louise Erdrich showing a night sky with moon"
-            },
-            {
-                id: 11,
-                title: "A Promised Land",
-                author: "Barack Obama",
-                genres: ["nonfiction", "biography"],
-                readingLevel: "challenging",
-                description: "A riveting, deeply personal account of history in the making—from the president who inspired us to believe in the power of democracy.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?president,flag",
-                altText: "Book cover of A Promised Land by Barack Obama showing the American flag"
-            },
-            {
-                id: 12,
-                title: "The House in the Cerulean Sea",
-                author: "TJ Klune",
-                genres: ["fantasy", "fiction"],
-                readingLevel: "easy",
-                description: "A magical island. A dangerous task. A burning secret. An enchanting love story, masterfully told, The House in the Cerulean Sea is about the profound experience of discovering an unlikely family in an unexpected place.",
-                imageUrl: "https://source.unsplash.com/random/300x450/?island,sea",
-                altText: "Book cover of The House in the Cerulean Sea by TJ Klune showing a house by a blue sea"
-            }
-        ];
-
         // DOM Elements
-        const form = document.getElementById('preferences-form');
-        const nameInput = document.getElementById('name');
-        const nameError = document.getElementById('name-error');
-        const genresError = document.getElementById('genres-error');
-        const loadingSection = document.getElementById('loading');
-        const resultsSection = document.getElementById('results-section');
-        const bookGrid = document.getElementById('book-grid');
-        const noResults = document.getElementById('no-results');
-        const resetButton = document.getElementById('reset-button');
-        const srAnnouncement = document.getElementById('sr-announcement');
+        const timerDisplay = document.getElementById('timer-display');
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const durationInput = document.getElementById('meditation-duration');
+        const intervalBellsSelect = document.getElementById('interval-bells');
+        const endingSoundSelect = document.getElementById('ending-sound');
+        const timerSettingsForm = document.getElementById('timer-settings-form');
+        const soundButtons = document.querySelectorAll('.sound-btn');
+        const volumeSlider = document.getElementById('volume-slider');
+        const totalSessionsElement = document.getElementById('total-sessions');
+        const totalMinutesElement = document.getElementById('total-minutes');
+        const currentStreakElement = document.getElementById('current-streak');
+        const sessionHistoryList = document.getElementById('session-history');
 
-        // Form validation and submission
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
+        // Timer state
+        let timerInterval;
+        let timeRemaining = 20 * 60; // Default 20 minutes in seconds
+        let originalTime = timeRemaining;
+        let isRunning = false;
+        let selectedSound = 'rain';
+        let volume = 0.5; // Default volume (0-1)
+        let audioContext;
+        let audioBuffers = {};
+        let currentAudio = null;
+        let sessionHistory = [];
+        let stats = {
+            totalSessions: 0,
+            totalMinutes: 0,
+            currentStreak: 0,
+            lastSessionDate: null
+        };
+
+        // Initialize the application
+        function init() {
+            updateTimerDisplay();
+            loadUserData();
+            setupEventListeners();
+            setupAudioContext();
+            preloadSounds();
+        }
+
+        // Format time for display (MM:SS)
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // Update the timer display
+        function updateTimerDisplay() {
+            timerDisplay.textContent = formatTime(timeRemaining);
+            // Announce time changes to screen readers when timer is running
+            if (isRunning && timeRemaining % 60 === 0) {
+                const minutes = timeRemaining / 60;
+                timerDisplay.setAttribute('aria-label', `${minutes} minute${minutes !== 1 ? 's' : ''} remaining`);
+            }
+        }
+
+        // Start the timer
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                startBtn.disabled = true;
+                pauseBtn.disabled = false;
+                
+                // Announce timer started to screen readers
+                announceToScreenReader('Meditation timer started');
+                
+                // Play the selected ambient sound
+                playSelectedSound();
+                
+                timerInterval = setInterval(() => {
+                    timeRemaining--;
+                    updateTimerDisplay();
+                    
+                    // Check for interval bells
+                    const intervalSetting = intervalBellsSelect.value;
+                    if (intervalSetting !== 'none') {
+                        const intervalMinutes = parseInt(intervalSetting);
+                        if (timeRemaining % (intervalMinutes * 60) === 0 && timeRemaining > 0) {
+                            playSound('bell', 0.7);
+                        }
+                    }
+                    
+                    // Check if timer is complete
+                    if (timeRemaining <= 0) {
+                        completeSession();
+                    }
+                }, 1000);
+            }
+        }
+
+        // Pause the timer
+        function pauseTimer() {
+            if (isRunning) {
+                isRunning = false;
+                clearInterval(timerInterval);
+                startBtn.disabled = false;
+                pauseBtn.disabled = true;
+                
+                // Stop the ambient sound
+                stopSound();
+                
+                // Announce timer paused to screen readers
+                announceToScreenReader('Meditation timer paused');
+            }
+        }
+
+        // Reset the timer
+        function resetTimer() {
+            pauseTimer();
+            timeRemaining = originalTime;
+            updateTimerDisplay();
             
-            // Reset error messages
-            nameError.textContent = '';
-            genresError.textContent = '';
+            // Announce timer reset to screen readers
+            announceToScreenReader('Meditation timer reset');
+        }
+
+        // Complete a meditation session
+        function completeSession() {
+            pauseTimer();
             
-            let isValid = true;
-            
-            // Validate name
-            if (!nameInput.value.trim()) {
-                nameError.textContent = 'Please enter your name';
-                isValid = false;
-                nameInput.focus();
+            // Play ending sound
+            const endingSound = endingSoundSelect.value;
+            if (endingSound !== 'none') {
+                playSound(endingSound, 1.0);
             }
             
-            // Validate genres (at least one must be selected)
-            const genreCheckboxes = document.querySelectorAll('input[name="genre"]:checked');
-            if (genreCheckboxes.length === 0) {
-                genresError.textContent = 'Please select at least one genre';
-                isValid = false;
-                if (nameInput.value.trim()) {
-                    document.querySelector('input[name="genre"]').focus();
+            // Record session in history
+            const sessionDuration = Math.round(originalTime / 60);
+            const today = new Date();
+            const sessionDate = today.toLocaleDateString();
+            const sessionTime = today.toLocaleTimeString();
+            
+            const newSession = {
+                date: sessionDate,
+                time: sessionTime,
+                duration: sessionDuration
+            };
+            
+            sessionHistory.unshift(newSession);
+            if (sessionHistory.length > 10) {
+                sessionHistory.pop(); // Keep only the 10 most recent sessions
+            }
+            
+            // Update stats
+            stats.totalSessions++;
+            stats.totalMinutes += sessionDuration;
+            
+            // Update streak
+            const lastDate = stats.lastSessionDate ? new Date(stats.lastSessionDate) : null;
+            const todayDate = new Date(today.setHours(0, 0, 0, 0));
+            
+            if (!lastDate) {
+                stats.currentStreak = 1;
+            } else {
+                const lastDateValue = lastDate.setHours(0, 0, 0, 0);
+                const yesterday = new Date(todayDate);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (lastDateValue.toString() === todayDate.toString()) {
+                    // Already meditated today, streak doesn't change
+                } else if (lastDateValue.toString() === yesterday.setHours(0, 0, 0, 0).toString()) {
+                    // Meditated yesterday, streak increases
+                    stats.currentStreak++;
+                } else {
+                    // Missed a day, reset streak
+                    stats.currentStreak = 1;
                 }
             }
             
-            if (isValid) {
-                // Show loading indicator
-                loadingSection.classList.add('active');
-                resultsSection.classList.remove('active');
-                noResults.classList.remove('active');
-                
-                // Announce to screen readers that we're loading
-                announceToScreenReader('Finding book recommendations. Please wait.');
-                
-                // Simulate API call with setTimeout
-                setTimeout(function() {
-                    getRecommendations();
-                }, 1500);
-            }
-        });
-
-        // Reset form and results
-        resetButton.addEventListener('click', resetForm);
-
-        function resetForm() {
-            form.reset();
-            resultsSection.classList.remove('active');
-            noResults.classList.remove('active');
-            loadingSection.classList.remove('active');
-            nameError.textContent = '';
-            genresError.textContent = '';
-            announceToScreenReader('Form has been reset. You can enter new preferences.');
+            stats.lastSessionDate = todayDate;
+            
+            // Save data and update UI
+            saveUserData();
+            updateStatsDisplay();
+            updateSessionHistory();
+            
+            // Announce session completion to screen readers
+            announceToScreenReader(`Meditation session complete. You meditated for ${sessionDuration} minutes.`);
         }
 
-        // Function to get book recommendations based on form data
-        function getRecommendations() {
-            // Get form values
-            const name = nameInput.value.trim();
-            const favoriteAuthor = document.getElementById('favorite-author').value.trim();
-            const selectedGenres = Array.from(document.querySelectorAll('input[name="genre"]:checked')).map(cb => cb.value);
-            const readingLevel = document.getElementById('reading-level').value;
+        // Apply timer settings
+        function applySettings(event) {
+            event.preventDefault();
             
-            // Filter books based on selected genres and reading level
-            let recommendations = bookDatabase.filter(book => {
-                // Check if any of the book's genres match the selected genres
-                const genreMatch = book.genres.some(genre => selectedGenres.includes(genre));
+            const newDuration = parseInt(durationInput.value);
+            if (newDuration >= 1 && newDuration <= 120) {
+                originalTime = newDuration * 60;
+                timeRemaining = originalTime;
+                updateTimerDisplay();
                 
-                // Check reading level match (if "any" is selected, all books match)
-                const levelMatch = readingLevel === 'any' || book.readingLevel === readingLevel;
-                
-                return genreMatch && levelMatch;
+                // Announce settings applied to screen readers
+                announceToScreenReader(`Timer set to ${newDuration} minutes`);
+            } else {
+                // Show error for invalid duration
+                announceToScreenReader('Please enter a valid duration between 1 and 120 minutes');
+            }
+        }
+
+        // Set up the Web Audio API context
+        function setupAudioContext() {
+            // Create audio context with fallback for older browsers
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioContext = new AudioContext();
+            } catch (e) {
+                console.error('Web Audio API is not supported in this browser');
+                announceToScreenReader('Audio features are not supported in your browser');
+            }
+        }
+
+        // Preload sound files
+        function preloadSounds() {
+            // In a real application, these would be actual sound files
+            // For this example, we'll simulate the sounds with oscillators
+            
+            // This is a placeholder - in a real app, you would load actual audio files
+            audioBuffers = {
+                rain: true,
+                forest: true,
+                waves: true,
+                bells: true,
+                'gentle-bell': true,
+                'singing-bowl': true,
+                gong: true,
+                bell: true
+            };
+        }
+
+        // Play a sound effect (bell, gong, etc.)
+        function playSound(soundName, soundVolume) {
+            if (!audioContext) return;
+            
+            // Create oscillator for sound effect
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            // Configure sound based on name
+            switch(soundName) {
+                case 'bell':
+                case 'gentle-bell':
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 440;
+                    gainNode.gain.value = soundVolume * volume;
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.start();
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 2);
+                    setTimeout(() => oscillator.stop(), 2000);
+                    break;
+                    
+                case 'singing-bowl':
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 294;
+                    gainNode.gain.value = soundVolume * volume;
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.start();
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 4);
+                    setTimeout(() => oscillator.stop(), 4000);
+                    break;
+                    
+                case 'gong':
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.value = 100;
+                    gainNode.gain.value = soundVolume * volume;
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.start();
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 3);
+                    setTimeout(() => oscillator.stop(), 3000);
+                    break;
+            }
+        }
+
+        // Play the selected ambient sound
+        function playSelectedSound() {
+            if (!audioContext || selectedSound === 'none') return;
+            
+            // Stop any currently playing sound
+            stopSound();
+            
+            // Create oscillator for ambient sound
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            // Configure sound based on selection
+            switch(selectedSound) {
+                case 'rain':
+                    // White noise for rain sound
+                    const bufferSize = 2 * audioContext.sampleRate;
+                    const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                    const output = noiseBuffer.getChannelData(0);
+                    
+                    for (let i = 0; i < bufferSize; i++) {
+                        output[i] = Math.random() * 2 - 1;
+                    }
+                    
+                    const noise = audioContext.createBufferSource();
+                    noise.buffer = noiseBuffer;
+                    noise.loop = true;
+                    
+                    const filter = audioContext.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 500;
+                    
+                    gainNode.gain.value = 0.1 * volume;
+                    
+                    noise.connect(filter);
+                    filter.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    noise.start();
+                    currentAudio = noise;
+                    break;
+                    
+                case 'forest':
+                    // Bird chirps simulation
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 1500;
+                    
+                    gainNode.gain.value = 0.05 * volume;
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    // Random chirps
+                    function chirp() {
+                        if (!isRunning) return;
+                        
+                        gainNode.gain.value = 0.05 * volume;
+                        oscillator.frequency.value = 1500 + Math.random() * 500;
+                        
+                        setTimeout(() => {
+                            gainNode.gain.linearRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+                        }, 100);
+                        
+                        setTimeout(chirp, 2000 + Math.random() * 3000);
+                    }
+                    
+                    oscillator.start();
+                    chirp();
+                    currentAudio = oscillator;
+                    break;
+                    
+                case 'waves':
+                    // Ocean waves simulation
+                    oscillator.type = 'sine';
+                    oscillator.frequency.value = 100;
+                    
+                    gainNode.gain.value = 0.1 * volume;
+                    
+                    const lfo = audioContext.createOscillator();
+                    lfo.type = 'sine';
+                    lfo.frequency.value = 0.1; // One cycle every 10 seconds
+                    
+                    const lfoGain = audioContext.createGain();
+                    lfoGain.gain.value = 0.1 * volume;
+                    
+                    lfo.connect(lfoGain);
+                    lfoGain.connect(gainNode.gain);
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.start();
+                    lfo.start();
+                    
+                    currentAudio = {
+                        stop: function() {
+                            oscillator.stop();
+                            lfo.stop();
+                        }
+                    };
+                    break;
+                    
+                case 'bells':
+                    // Singing bowls simulation
+                    function playBowl() {
+                        if (!isRunning) return;
+                        
+                        const bowl = audioContext.createOscillator();
+                        bowl.type = 'sine';
+                        bowl.frequency.value = 294 + Math.random() * 100;
+                        
+                        const bowlGain = audioContext.createGain();
+                        bowlGain.gain.value = 0.2 * volume;
+                        
+                        bowl.connect(bowlGain);
+                        bowlGain.connect(audioContext.destination);
+                        
+                        bowl.start();
+                        bowlGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 4);
+                        
+                        setTimeout(() => {
+                            bowl.stop();
+                            if (isRunning) {
+                                setTimeout(playBowl, 10000 + Math.random() * 5000);
+                            }
+                        }, 4000);
+                    }
+                    
+                    playBowl();
+                    currentAudio = {
+                        stop: function() {
+                            // This is a placeholder - the actual stopping happens in the playBowl function
+                        }
+                    };
+                    break;
+            }
+        }
+
+        // Stop the currently playing sound
+        function stopSound() {
+            if (currentAudio) {
+                try {
+                    currentAudio.stop();
+                } catch (e) {
+                    // Handle any errors when stopping audio
+                    console.log('Error stopping audio:', e);
+                }
+                currentAudio = null;
+            }
+        }
+
+        // Select a sound for meditation
+        function selectSound(soundName) {
+            selectedSound = soundName;
+            
+            // Update UI to show selected sound
+            soundButtons.forEach(btn => {
+                const isSelected = btn.dataset.sound === soundName;
+                btn.classList.toggle('active', isSelected);
+                btn.setAttribute('aria-checked', isSelected);
             });
             
-            // If favorite author is provided, prioritize books by that author
-            if (favoriteAuthor) {
-                recommendations.sort((a, b) => {
-                    const aAuthorMatch = a.author.toLowerCase().includes(favoriteAuthor.toLowerCase());
-                    const bAuthorMatch = b.author.toLowerCase().includes(favoriteAuthor.toLowerCase());
+            // If timer is running, change the sound
+            if (isRunning) {
+                playSelectedSound();
+            }
+            
+            // Announce selected sound to screen readers
+            announceToScreenReader(`Selected ${soundName} sound`);
+        }
+
+        // Update volume
+        function updateVolume() {
+            volume = volumeSlider.value / 100;
+            
+            // Update aria attributes for accessibility
+            volumeSlider.setAttribute('aria-valuenow', volumeSlider.value);
+            volumeSlider.setAttribute('aria-valuetext', `${volumeSlider.value} percent volume`);
+            
+            // If sound is playing, update its volume
+            if (currentAudio && isRunning) {
+                stopSound();
+                playSelectedSound();
+            }
+        }
+
+        // Save user data to localStorage
+        function saveUserData() {
+            const userData = {
+                sessionHistory,
+                stats,
+                settings: {
+                    duration: Math.round(originalTime / 60),
+                    intervalBells: intervalBellsSelect.value,
+                    endingSound: endingSoundSelect.value,
+                    selectedSound
+                }
+            };
+            
+            try {
+                localStorage.setItem('meditationAppData', JSON.stringify(userData));
+            } catch (e) {
+                console.error('Could not save data to localStorage:', e);
+            }
+        }
+
+        // Load user data from localStorage
+        function loadUserData() {
+            try {
+                const savedData = localStorage.getItem('meditationAppData');
+                if (savedData) {
+                    const userData = JSON.parse(savedData);
                     
-                    if (aAuthorMatch && !bAuthorMatch) return -1;
-                    if (!aAuthorMatch && bAuthorMatch) return 1;
-                    return 0;
+                    // Restore session history and stats
+                    sessionHistory = userData.sessionHistory || [];
+                    stats = userData.stats || {
+                        totalSessions: 0,
+                        totalMinutes: 0,
+                        currentStreak: 0,
+                        lastSessionDate: null
+                    };
+                    
+                    // Restore settings
+                    if (userData.settings) {
+                        durationInput.value = userData.settings.duration || 20;
+                        originalTime = (userData.settings.duration || 20) * 60;
+                        timeRemaining = originalTime;
+                        
+                        intervalBellsSelect.value = userData.settings.intervalBells || 'none';
+                        endingSoundSelect.value = userData.settings.endingSound || 'gentle-bell';
+                        
+                        selectSound(userData.settings.selectedSound || 'rain');
+                    }
+                    
+                    // Update UI
+                    updateTimerDisplay();
+                    updateStatsDisplay();
+                    updateSessionHistory();
+                }
+            } catch (e) {
+                console.error('Could not load data from localStorage:', e);
+            }
+        }
+
+        // Update stats display
+        function updateStatsDisplay() {
+            totalSessionsElement.textContent = stats.totalSessions;
+            totalMinutesElement.textContent = stats.totalMinutes;
+            currentStreakElement.textContent = stats.currentStreak;
+        }
+
+        // Update session history display
+        function updateSessionHistory() {
+            // Clear current list
+            sessionHistoryList.innerHTML = '';
+            
+            if (sessionHistory.length === 0) {
+                const emptyItem = document.createElement('li');
+                emptyItem.textContent = 'No meditation sessions recorded yet. Start your first session!';
+                sessionHistoryList.appendChild(emptyItem);
+            } else {
+                sessionHistory.forEach(session => {
+                    const listItem = document.createElement('li');
+                    
+                    const dateSpan = document.createElement('span');
+                    dateSpan.textContent = `${session.date} at ${session.time}`;
+                    
+                    const durationSpan = document.createElement('span');
+                    durationSpan.textContent = `${session.duration} minute${session.duration !== 1 ? 's' : ''}`;
+                    
+                    listItem.appendChild(dateSpan);
+                    listItem.appendChild(durationSpan);
+                    
+                    sessionHistoryList.appendChild(listItem);
                 });
             }
-            
-            // Hide loading indicator
-            loadingSection.classList.remove('active');
-            
-            // Display results or no results message
-            if (recommendations.length > 0) {
-                displayRecommendations(recommendations, name);
-                resultsSection.classList.add('active');
-                announceToScreenReader(`${recommendations.length} book recommendations found. Results are now displayed.`);
-            } else {
-                noResults.classList.add('active');
-                announceToScreenReader('No book recommendations found matching your criteria. Please try different selections.');
-            }
         }
 
-        // Function to display book recommendations
-        function displayRecommendations(books, userName) {
-            // Clear previous results
-            bookGrid.innerHTML = '';
+        // Announce message to screen readers using aria-live
+        function announceToScreenReader(message) {
+            // Create a visually hidden element for screen reader announcements
+            let announcer = document.getElementById('screen-reader-announcer');
             
-            // Create and append book cards
-            books.forEach(book => {
-                const bookCard = document.createElement('article');
-                bookCard.className = 'book-card';
+            if (!announcer) {
+                announcer = document.createElement('div');
+                announcer.id = 'screen-reader-announcer';
+                announcer.className = 'sr-only';
+                announcer.setAttribute('aria-live', 'polite');
+                document.body.appendChild(announcer);
+            }
+            
+            // Set the message
+            announcer.textContent = message;
+            
+            // Clear after a short delay to ensure it's read
+            setTimeout(() => {
+                announcer.textContent = '';
+            }, 3000);
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Timer control buttons
+            startBtn.addEventListener('click', startTimer);
+            pauseBtn.addEventListener('click', pauseTimer);
+            resetBtn.addEventListener('click', resetTimer);
+            
+            // Keyboard support for timer controls
+            startBtn.addEventListener('keydown', handleInteraction);
+            pauseBtn.addEventListener('keydown', handleInteraction);
+            resetBtn.addEventListener('keydown', handleInteraction);
+            
+            // Settings form
+            timerSettingsForm.addEventListener('submit', applySettings);
+            
+            // Sound buttons
+            soundButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    selectSound(btn.dataset.sound);
+                });
                 
-                bookCard.innerHTML = `
-                    <img 
-                        src="${book.imageUrl}" 
-                        alt="${book.altText}" 
-                        class="book-image"
-                    >
-                    <div class="book-info">
-                        <h3 class="book-title">${book.title}</h3>
-                        <p class="book-author">by ${book.author}</p>
-                        <p class="book-description">${book.description}</p>
-                        <a href="#" class="book-link" 
-                           onclick="handleInteraction(event)" 
-                           onkeydown="handleInteraction(event)"
-                           aria-label="Learn more about ${book.title} by ${book.author}">
-                            Learn More
-                        </a>
-                    </div>
-                `;
-                
-                bookGrid.appendChild(bookCard);
+                // Keyboard support for sound buttons
+                btn.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        selectSound(btn.dataset.sound);
+                    }
+                });
             });
             
-            // Update heading to personalize
-            const resultsHeading = resultsSection.querySelector('h2');
-            resultsHeading.textContent = `${userName}'s Personalized Recommendations`;
+            // Volume slider
+            volumeSlider.addEventListener('input', updateVolume);
+            volumeSlider.addEventListener('change', updateVolume);
         }
 
-        // Function to handle both click and keyboard interactions
+        // Handle both mouse and keyboard interactions
         function handleInteraction(event) {
-            // Handle both mouse and keyboard events
             if (event.type === 'click' || 
                 (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
                 
-                event.preventDefault();
+                if (event.type === 'keydown') {
+                    event.preventDefault();
+                }
                 
-                // Get the book title and author from the aria-label
-                const linkText = event.currentTarget.getAttribute('aria-label');
-                alert(`This would take you to more details about ${linkText}. This feature is not implemented in this demo.`);
+                // Determine which button was interacted with
+                if (event.currentTarget === startBtn) {
+                    startTimer();
+                } else if (event.currentTarget === pauseBtn) {
+                    pauseTimer();
+                } else if (event.currentTarget === resetBtn) {
+                    resetTimer();
+                }
             }
         }
 
-        // Function to announce messages to screen readers
-        function announceToScreenReader(message) {
-            srAnnouncement.textContent = message;
-            
-            // Clear the announcement after 5 seconds to prevent it from being read again
-            // when the user navigates back to that part of the page
-            setTimeout(() => {
-                srAnnouncement.textContent = '';
-            }, 5000);
-        }
+        // Initialize the application when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
