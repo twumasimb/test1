@@ -3,189 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Digital Art Gallery</title>
+    <title>Interactive Budget Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
             margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
         }
 
         header {
-            width: 100%;
-            padding: 1rem;
-            background-color: #1e1e1e;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background-color: #0066cc;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
         }
 
-        nav a {
-            color: #ffffff;
-            text-decoration: none;
-            margin: 0 1rem;
+        main {
+            margin-top: 20px;
         }
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-            width: 100%;
-            max-width: 1200px;
-        }
-
-        .thumbnail {
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            border: 2px solid #333;
-            border-radius: 8px;
-            transition: transform 0.3s;
-        }
-
-        .thumbnail:hover {
-            transform: scale(1.05);
-        }
-
-        .thumbnail img {
-            width: 100%;
-            height: auto;
+        label {
             display: block;
+            margin-bottom: 5px;
         }
 
-        .info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
-            padding: 0.5rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .thumbnail:hover .info {
-            opacity: 1;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        input[type="number"] {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
-        .modal img {
-            max-width: 90%;
-            max-height: 90%;
-        }
-
-        .close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #ffffff;
-            font-size: 2rem;
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
         }
 
-        .dark-mode {
-            background-color: #1e1e1e;
-            color: #ffffff;
-        }
-
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+        button:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
 
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+
+        /* Ensure all interactive elements have visible focus indicators */
+        button:focus, input:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Art Gallery</h1>
-        <button id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
+        <h1>Budget Calculator</h1>
     </header>
     <main>
-        <input type="text" id="search" placeholder="Search artworks..." aria-label="Search artworks" />
-        <section class="gallery" aria-label="Art Gallery">
-            <div class="thumbnail" tabindex="0" aria-labelledby="art1">
-                <img src="art1.jpg" alt="A beautiful sunset over the mountains" />
-                <div class="info" id="art1">Sunset Over Mountains</div>
+        <section>
+            <h2>Calculate Your Budget</h2>
+            <form id="budgetForm" aria-labelledby="budgetForm">
+                <label for="income">Monthly Income:</label>
+                <input type="number" id="income" name="income" required aria-required="true" placeholder="Enter your income">
+
+                <label for="expenses">Monthly Expenses:</label>
+                <input type="number" id="expenses" name="expenses" required aria-required="true" placeholder="Enter your expenses">
+
+                <button type="button" id="calculateButton">Calculate</button>
+            </form>
+            <div id="result" class="result" aria-live="polite" hidden>
+                <h3>Budget Breakdown</h3>
+                <p id="breakdown"></p>
             </div>
-            <div class="thumbnail" tabindex="0" aria-labelledby="art2">
-                <img src="art2.jpg" alt="A colorful abstract painting" />
-                <div class="info" id="art2">Abstract Colors</div>
-            </div>
-            <!-- Add more artworks as needed -->
         </section>
     </main>
-    <div class="modal" id="modal" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDesc">
-        <span class="close" aria-label="Close modal">&times;</span>
-        <img id="modalImage" src="" alt="" />
-    </div>
     <footer>
-        <p>&copy; 2023 Art Gallery</p>
+        <p>&copy; 2023 Budget Calculator</p>
     </footer>
     <script>
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        const modal = document.getElementById('modal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModal = document.querySelector('.close');
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const body = document.body;
+        document.getElementById('calculateButton').addEventListener('click', handleInteraction);
+        
+        // For any element with mouse events, add keyboard support
+        document.getElementById('calculateButton').addEventListener('keydown', handleInteraction);
 
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                const img = thumbnail.querySelector('img');
-                modalImage.src = img.src;
-                modalImage.alt = img.alt;
-                modal.style.display = 'flex';
-            });
-
-            thumbnail.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    thumbnail.click();
+        function handleInteraction(event) {
+            // Handle both mouse and keyboard events
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                const income = parseFloat(document.getElementById('income').value);
+                const expenses = parseFloat(document.getElementById('expenses').value);
+                
+                if (!isNaN(income) && !isNaN(expenses)) {
+                    const remaining = income - expenses;
+                    const breakdownText = remaining >= 0 
+                        ? `You have $${remaining.toFixed(2)} left after expenses.`
+                        : `You are over budget by $${Math.abs(remaining).toFixed(2)}.`;
+                    
+                    document.getElementById('breakdown').textContent = breakdownText;
+                    const resultDiv = document.getElementById('result');
+                    resultDiv.hidden = false; // Show result
+                } else {
+                    alert('Please enter valid numbers for income and expenses.');
                 }
-            });
-        });
-
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        closeModal.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                closeModal.click();
             }
-        });
-
-        darkModeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-bg');
-        });
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                modal.style.display = 'none';
-            }
-        });
+        }
     </script>
 </body>
 </html>
