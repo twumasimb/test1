@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskReward - Task Management Application</title>
+    <title>Pet Showcase - Share Your Beloved Pets</title>
     <style>
-        /* CSS Reset and Base Styles */
+        /* Base styles with accessibility in mind */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --text-color: #333333;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --light-text: #ffffff;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-        }
-
-        :root {
-            --primary-color: #4a6fa5;
-            --primary-dark: #345382;
-            --secondary-color: #f9a826;
-            --secondary-dark: #e09416;
-            --text-color: #333333;
-            --light-text: #ffffff;
-            --light-bg: #f5f7fa;
-            --error-color: #d32f2f;
-            --success-color: #388e3c;
-            --border-color: #dddddd;
-            --focus-color: #0066cc;
         }
 
         body {
@@ -31,305 +29,215 @@
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--light-bg);
-            min-height: 100vh;
+            padding: 0;
+            margin: 0;
         }
 
         /* Ensure all interactive elements have visible focus indicators */
-        button:focus, 
-        input:focus, 
-        select:focus, 
-        textarea:focus, 
-        a:focus,
-        [tabindex]:focus {
-            outline: 3px solid var(--focus-color);
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
 
         /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, 
-        .dark-bg a:focus,
-        .dark-bg [tabindex]:focus {
+        .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
 
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 0.5em;
-            line-height: 1.2;
-            color: var(--text-color);
-        }
-
-        h1 {
-            font-size: 2rem;
-            color: white;
-        }
-
-        h2 {
-            font-size: 1.75rem;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        /* Layout */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            padding: 0 20px;
         }
 
         header {
             background-color: var(--primary-color);
             color: var(--light-text);
             padding: 1rem 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--box-shadow);
         }
 
-        main {
-            flex: 1;
-            padding: 2rem 0;
-        }
-
-        footer {
-            background-color: var(--primary-dark);
-            color: var(--light-text);
-            padding: 1rem 0;
-            margin-top: auto;
-        }
-
-        /* Components */
-        .header-content {
+        header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .app-title {
+        h1 {
+            margin: 1rem 0;
+            color: var(--primary-color);
+        }
+
+        header h1 {
+            color: var(--light-text);
             margin: 0;
         }
 
-        .rewards-display {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        main {
+            padding: 2rem 0;
         }
 
-        .rewards-count {
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .task-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
+        section {
             margin-bottom: 2rem;
         }
 
-        @media (min-width: 768px) {
-            .task-container {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .task-section {
+        /* Form styles */
+        .pet-form {
             background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .task-form {
-            margin-bottom: 1.5rem;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .form-group label {
+        label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-
-        .form-control.error {
-            border-color: var(--error-color);
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
+            font-weight: bold;
         }
 
         .required-field::after {
-            content: "*";
-            color: var(--error-color);
-            margin-left: 0.25rem;
+            content: " *";
+            color: var(--accent-color);
         }
 
-        .btn {
-            display: inline-block;
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .error-message {
+            color: var(--accent-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
             padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Pet cards display */
+        .pets-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .pet-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pet-image-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pet-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pet-info {
+            padding: 1.5rem;
+        }
+
+        .pet-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .pet-details {
+            margin-bottom: 1rem;
+        }
+
+        .pet-details p {
+            margin-bottom: 0.5rem;
+        }
+
+        .pet-fun-fact {
+            font-style: italic;
+            color: var(--secondary-color);
+        }
+
+        .remove-pet {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .remove-pet:hover {
+            background-color: #c0392b;
+        }
+
+        footer {
             background-color: var(--primary-color);
             color: var(--light-text);
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
+            padding: 2rem 0;
+            margin-top: 2rem;
         }
 
-        .btn:hover {
-            background-color: var(--primary-dark);
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .pets-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
         }
 
-        .btn:active {
-            transform: translateY(1px);
+        @media (max-width: 480px) {
+            .pets-container {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .btn-secondary {
-            background-color: var(--secondary-color);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--secondary-dark);
-        }
-
-        .btn-small {
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-        }
-
-        .task-list {
-            list-style: none;
-        }
-
-        .task-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .task-item:last-child {
-            border-bottom: none;
-        }
-
-        .task-checkbox {
-            margin-right: 1rem;
-            min-width: 20px;
-            height: 20px;
-        }
-
-        .task-content {
-            flex: 1;
-        }
-
-        .task-title {
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .task-category {
-            font-size: 0.875rem;
-            color: #666;
-            margin-bottom: 0.25rem;
-        }
-
-        .task-due-date {
-            font-size: 0.875rem;
-            color: #666;
-        }
-
-        .task-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .task-completed .task-title {
-            text-decoration: line-through;
-            color: #888;
-        }
-
-        .task-filters {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
-
-        .reward-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--success-color);
-            color: white;
-            padding: 1rem;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transform: translateY(100px);
-            opacity: 0;
-            transition: transform 0.3s, opacity 0.3s;
-            z-index: 1000;
-        }
-
-        .reward-notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .empty-state {
+        /* No pets message */
+        .no-pets-message {
             text-align: center;
             padding: 2rem;
-            color: #666;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
         }
 
-        /* Skip link for keyboard users */
+        /* Skip to main content link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background: var(--primary-color);
+            background: var(--secondary-color);
             color: white;
             padding: 8px;
             z-index: 100;
@@ -339,461 +247,334 @@
         .skip-link:focus {
             top: 0;
         }
-
-        /* Responsive adjustments */
-        @media (max-width: 576px) {
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            
-            .task-filters {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <div class="app-container">
-        <header>
-            <div class="container">
-                <div class="header-content">
-                    <h1 class="app-title">TaskReward</h1>
-                    <div class="rewards-display" aria-live="polite">
-                        <span id="rewards-label">Rewards:</span>
-                        <span class="rewards-count" aria-labelledby="rewards-label">0</span>
+   
+    <header>
+        <div class="container">
+            <h1>Pet Showcase</h1>
+            <nav role="navigation" aria-label="Main navigation">
+                <!-- Navigation placeholder for future expansion -->
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <div class="container">
+            <section aria-labelledby="add-pet-heading">
+                <h2 id="add-pet-heading">Add Your Pet</h2>
+                <form id="pet-form" class="pet-form" novalidate>
+                    <div class="form-group">
+                        <label for="pet-name" class="required-field">Pet Name</label>
+                        <input type="text" id="pet-name" name="pet-name" required aria-required="true" aria-describedby="pet-name-error">
+                        <div id="pet-name-error" class="error-message">Please enter your pet's name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pet-breed" class="required-field">Pet Breed</label>
+                        <input type="text" id="pet-breed" name="pet-breed" required aria-required="true" aria-describedby="pet-breed-error">
+                        <div id="pet-breed-error" class="error-message">Please enter your pet's breed</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pet-age" class="required-field">Pet Age</label>
+                        <input type="number" id="pet-age" name="pet-age" min="0" max="100" required aria-required="true" aria-describedby="pet-age-error">
+                        <div id="pet-age-error" class="error-message">Please enter a valid age (0-100)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pet-fun-fact">Fun Fact About Your Pet</label>
+                        <textarea id="pet-fun-fact" name="pet-fun-fact" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pet-image" class="required-field">Pet Photo</label>
+                        <input type="file" id="pet-image" name="pet-image" accept="image/*" required aria-required="true" aria-describedby="pet-image-error">
+                        <div id="pet-image-error" class="error-message">Please select a photo of your pet</div>
+                    </div>
+
+                    <button type="submit" id="submit-pet">Add Pet</button>
+                </form>
+            </section>
+
+            <section aria-labelledby="showcase-heading">
+                <h2 id="showcase-heading">Pet Showcase</h2>
+                <div id="pets-container" class="pets-container" aria-live="polite">
+                    <!-- Pet cards will be added here dynamically -->
+                    <div class="no-pets-message" id="no-pets-message">
+                        <p>No pets added yet. Add your first pet using the form above!</p>
                     </div>
                 </div>
-            </div>
-        </header>
+            </section>
+        </div>
+    </main>
 
-        <main id="main-content">
-            <div class="container">
-                <div class="task-container">
-                    <section class="task-section">
-                        <h2>Create New Task</h2>
-                        <form id="task-form" class="task-form" novalidate>
-                            <div class="form-group">
-                                <label for="task-title" class="required-field">Task Title</label>
-                                <input 
-                                    type="text" 
-                                    id="task-title" 
-                                    class="form-control" 
-                                    required 
-                                    aria-describedby="title-error"
-                                >
-                                <div id="title-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="task-category">Category</label>
-                                <select id="task-category" class="form-control">
-                                    <option value="work">Work</option>
-                                    <option value="personal">Personal</option>
-                                    <option value="health">Health</option>
-                                    <option value="education">Education</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="task-due-date">Due Date</label>
-                                <input 
-                                    type="date" 
-                                    id="task-due-date" 
-                                    class="form-control"
-                                    min=""
-                                >
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="task-description">Description</label>
-                                <textarea 
-                                    id="task-description" 
-                                    class="form-control" 
-                                    rows="3"
-                                ></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn">Add Task</button>
-                        </form>
-                    </section>
-
-                    <section class="task-section">
-                        <h2>Your Tasks</h2>
-                        
-                        <div class="task-filters">
-                            <div class="filter-group">
-                                <label for="filter-status">Status:</label>
-                                <select id="filter-status" class="form-control">
-                                    <option value="all">All</option>
-                                    <option value="active">Active</option>
-                                    <option value="completed">Completed</option>
-                                </select>
-                            </div>
-                            
-                            <div class="filter-group">
-                                <label for="filter-category">Category:</label>
-                                <select id="filter-category" class="form-control">
-                                    <option value="all">All</option>
-                                    <option value="work">Work</option>
-                                    <option value="personal">Personal</option>
-                                    <option value="health">Health</option>
-                                    <option value="education">Education</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <ul id="task-list" class="task-list" aria-live="polite">
-                            <!-- Tasks will be added here dynamically -->
-                            <li class="empty-state">
-                                <p>No tasks yet. Add a task to get started!</p>
-                            </li>
-                        </ul>
-                    </section>
-                </div>
-            </div>
-        </main>
-
-        <footer>
-            <div class="container">
-                <p>&copy; 2023 TaskReward - A Task Management Application</p>
-            </div>
-        </footer>
-    </div>
-
-    <div id="reward-notification" class="reward-notification" aria-live="assertive" role="alert"></div>
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Pet Showcase. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize variables
-            let tasks = [];
-            let rewards = 0;
-            const rewardsDisplay = document.querySelector('.rewards-count');
-            const taskForm = document.getElementById('task-form');
-            const taskList = document.getElementById('task-list');
-            const filterStatus = document.getElementById('filter-status');
-            const filterCategory = document.getElementById('filter-category');
-            const rewardNotification = document.getElementById('reward-notification');
+            // Initialize pet data array from localStorage or empty array if none exists
+            let pets = JSON.parse(localStorage.getItem('pets')) || [];
             
-            // Set minimum date for due date input to today
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('task-due-date').min = today;
-
-            // Load tasks from localStorage if available
-            loadTasks();
-            updateRewardsDisplay();
-            renderTasks();
-
-            // Event listeners
-            taskForm.addEventListener('submit', handleFormSubmit);
-            filterStatus.addEventListener('change', renderTasks);
-            filterCategory.addEventListener('change', renderTasks);
-
-            // Handle form submission
-            function handleFormSubmit(event) {
+            // DOM elements
+            const petForm = document.getElementById('pet-form');
+            const petsContainer = document.getElementById('pets-container');
+            const noPetsMessage = document.getElementById('no-pets-message');
+            
+            // Form fields
+            const petNameInput = document.getElementById('pet-name');
+            const petBreedInput = document.getElementById('pet-breed');
+            const petAgeInput = document.getElementById('pet-age');
+            const petFunFactInput = document.getElementById('pet-fun-fact');
+            const petImageInput = document.getElementById('pet-image');
+            
+            // Error message elements
+            const petNameError = document.getElementById('pet-name-error');
+            const petBreedError = document.getElementById('pet-breed-error');
+            const petAgeError = document.getElementById('pet-age-error');
+            const petImageError = document.getElementById('pet-image-error');
+            
+            // Display pets on page load
+            displayPets();
+            
+            // Form submission handler
+            petForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 
-                // Get form values
-                const titleInput = document.getElementById('task-title');
-                const categoryInput = document.getElementById('task-category');
-                const dueDateInput = document.getElementById('task-due-date');
-                const descriptionInput = document.getElementById('task-description');
+                // Reset error messages
+                resetErrorMessages();
                 
                 // Validate form
+                if (validateForm()) {
+                    addPet();
+                }
+            });
+            
+            // Function to validate the form
+            function validateForm() {
                 let isValid = true;
-                const titleError = document.getElementById('title-error');
-                titleError.textContent = '';
-                titleInput.classList.remove('error');
                 
-                if (!titleInput.value.trim()) {
-                    titleError.textContent = 'Task title is required';
-                    titleInput.classList.add('error');
+                // Validate pet name
+                if (!petNameInput.value.trim()) {
+                    showError(petNameInput, petNameError, 'Please enter your pet\'s name');
                     isValid = false;
                 }
                 
-                if (!isValid) {
-                    return;
+                // Validate pet breed
+                if (!petBreedInput.value.trim()) {
+                    showError(petBreedInput, petBreedError, 'Please enter your pet\'s breed');
+                    isValid = false;
                 }
                 
-                // Create new task object
-                const newTask = {
-                    id: Date.now().toString(),
-                    title: titleInput.value.trim(),
-                    category: categoryInput.value,
-                    dueDate: dueDateInput.value,
-                    description: descriptionInput.value.trim(),
-                    completed: false,
-                    createdAt: new Date().toISOString()
+                // Validate pet age
+                const age = parseInt(petAgeInput.value);
+                if (isNaN(age) || age < 0 || age > 100) {
+                    showError(petAgeInput, petAgeError, 'Please enter a valid age (0-100)');
+                    isValid = false;
+                }
+                
+                // Validate pet image
+                if (!petImageInput.files || petImageInput.files.length === 0) {
+                    showError(petImageInput, petImageError, 'Please select a photo of your pet');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+            
+            // Function to show error message
+            function showError(inputElement, errorElement, message) {
+                inputElement.setAttribute('aria-invalid', 'true');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            // Function to reset error messages
+            function resetErrorMessages() {
+                const errorElements = document.querySelectorAll('.error-message');
+                const inputElements = document.querySelectorAll('input, textarea');
+                
+                errorElements.forEach(element => {
+                    element.style.display = 'none';
+                });
+                
+                inputElements.forEach(element => {
+                    element.setAttribute('aria-invalid', 'false');
+                });
+            }
+            
+            // Function to add a new pet
+            function addPet() {
+                const file = petImageInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    const newPet = {
+                        id: Date.now(), // Unique ID based on timestamp
+                        name: petNameInput.value.trim(),
+                        breed: petBreedInput.value.trim(),
+                        age: parseInt(petAgeInput.value),
+                        funFact: petFunFactInput.value.trim(),
+                        image: event.target.result
+                    };
+                    
+                    // Add to pets array
+                    pets.push(newPet);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('pets', JSON.stringify(pets));
+                    
+                    // Display updated pets
+                    displayPets();
+                    
+                    // Reset form
+                    petForm.reset();
+                    
+                    // Announce to screen readers that pet was added
+                    const announcement = document.createElement('div');
+                    announcement.setAttribute('aria-live', 'assertive');
+                    announcement.setAttribute('role', 'status');
+                    announcement.style.position = 'absolute';
+                    announcement.style.width = '1px';
+                    announcement.style.height = '1px';
+                    announcement.style.overflow = 'hidden';
+                    announcement.textContent = `${newPet.name} has been added to your pet showcase.`;
+                    document.body.appendChild(announcement);
+                    
+                    // Remove announcement after it's been read
+                    setTimeout(() => {
+                        document.body.removeChild(announcement);
+                    }, 3000);
                 };
                 
-                // Add task to array
-                tasks.unshift(newTask);
+                reader.readAsDataURL(file);
+            }
+            
+            // Function to display pets
+            function displayPets() {
+                // Clear the container except for the no pets message
+                const petCards = document.querySelectorAll('.pet-card');
+                petCards.forEach(card => card.remove());
                 
-                // Save tasks to localStorage
-                saveTasks();
+                // Show or hide no pets message
+                if (pets.length === 0) {
+                    noPetsMessage.style.display = 'block';
+                } else {
+                    noPetsMessage.style.display = 'none';
+                    
+                    // Add pet cards
+                    pets.forEach(pet => {
+                        const petCard = createPetCard(pet);
+                        petsContainer.appendChild(petCard);
+                    });
+                }
+            }
+            
+            // Function to create a pet card
+            function createPetCard(pet) {
+                const petCard = document.createElement('article');
+                petCard.className = 'pet-card';
+                petCard.setAttribute('aria-labelledby', `pet-name-${pet.id}`);
                 
-                // Reset form
-                taskForm.reset();
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'pet-image-container';
                 
-                // Render tasks
-                renderTasks();
+                const image = document.createElement('img');
+                image.className = 'pet-image';
+                image.src = pet.image;
+                image.alt = `Photo of ${pet.name}, a ${pet.breed}`;
+                imageContainer.appendChild(image);
                 
-                // Focus back to title input for adding another task
-                titleInput.focus();
+                const petInfo = document.createElement('div');
+                petInfo.className = 'pet-info';
+                
+                const petName = document.createElement('h3');
+                petName.className = 'pet-name';
+                petName.id = `pet-name-${pet.id}`;
+                petName.textContent = pet.name;
+                
+                const petDetails = document.createElement('div');
+                petDetails.className = 'pet-details';
+                
+                const breedInfo = document.createElement('p');
+                breedInfo.innerHTML = `<strong>Breed:</strong> ${pet.breed}`;
+                
+                const ageInfo = document.createElement('p');
+                ageInfo.innerHTML = `<strong>Age:</strong> ${pet.age} ${pet.age === 1 ? 'year' : 'years'}`;
+                
+                petDetails.appendChild(breedInfo);
+                petDetails.appendChild(ageInfo);
+                
+                petInfo.appendChild(petName);
+                petInfo.appendChild(petDetails);
+                
+                if (pet.funFact) {
+                    const funFact = document.createElement('p');
+                    funFact.className = 'pet-fun-fact';
+                    funFact.innerHTML = `<strong>Fun Fact:</strong> ${pet.funFact}`;
+                    petInfo.appendChild(funFact);
+                }
+                
+                const removeButton = document.createElement('button');
+                removeButton.className = 'remove-pet';
+                removeButton.textContent = 'Remove Pet';
+                removeButton.setAttribute('aria-label', `Remove ${pet.name} from showcase`);
+                
+                // Add keyboard and mouse event handlers
+                removeButton.addEventListener('click', function(event) {
+                    handleRemovePet(event, pet.id);
+                });
+                
+                removeButton.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault(); // Prevent scrolling on space
+                        handleRemovePet(event, pet.id);
+                    }
+                });
+                
+                petInfo.appendChild(removeButton);
+                
+                petCard.appendChild(imageContainer);
+                petCard.appendChild(petInfo);
+                
+                return petCard;
+            }
+            
+            // Function to handle pet removal
+            function handleRemovePet(event, petId) {
+                // Find the pet name before removing it
+                const petToRemove = pets.find(pet => pet.id === petId);
+                const petName = petToRemove ? petToRemove.name : 'Pet';
+                
+                // Remove pet from array
+                pets = pets.filter(pet => pet.id !== petId);
+                
+                // Save to localStorage
+                localStorage.setItem('pets', JSON.stringify(pets));
+                
+                // Update display
+                displayPets();
                 
                 // Announce to screen readers
-                announceTaskAdded(newTask.title);
-            }
-            
-            // Render tasks based on filters
-            function renderTasks() {
-                const statusFilter = filterStatus.value;
-                const categoryFilter = filterCategory.value;
+                const announcement = document.createElement('div');
+                announcement.setAttribute('aria-live', 'assertive');
+                announcement.setAttribute('role', 'status');
+                announcement.style.position = 'absolute';
+                announcement.style.width = '1px';
+                announcement.style.height = '1px';
+                announcement.style.overflow = 'hidden';
+                announcement.textContent = `${petName} has been removed from your pet showcase.`;
+                document.body.appendChild(announcement);
                 
-                // Filter tasks
-                const filteredTasks = tasks.filter(task => {
-                    const statusMatch = statusFilter === 'all' || 
-                                      (statusFilter === 'active' && !task.completed) || 
-                                      (statusFilter === 'completed' && task.completed);
-                    
-                    const categoryMatch = categoryFilter === 'all' || task.category === categoryFilter;
-                    
-                    return statusMatch && categoryMatch;
-                });
-                
-                // Clear task list
-                taskList.innerHTML = '';
-                
-                // Show empty state if no tasks
-                if (filteredTasks.length === 0) {
-                    const emptyState = document.createElement('li');
-                    emptyState.className = 'empty-state';
-                    
-                    if (tasks.length === 0) {
-                        emptyState.innerHTML = '<p>No tasks yet. Add a task to get started!</p>';
-                    } else {
-                        emptyState.innerHTML = '<p>No tasks match your filters.</p>';
-                    }
-                    
-                    taskList.appendChild(emptyState);
-                    return;
-                }
-                
-                // Render filtered tasks
-                filteredTasks.forEach(task => {
-                    const taskItem = document.createElement('li');
-                    taskItem.className = `task-item ${task.completed ? 'task-completed' : ''}`;
-                    taskItem.setAttribute('data-task-id', task.id);
-                    
-                    // Format due date for display
-                    let formattedDate = '';
-                    if (task.dueDate) {
-                        const date = new Date(task.dueDate);
-                        formattedDate = date.toLocaleDateString();
-                    }
-                    
-                    // Create task HTML
-                    taskItem.innerHTML = `
-                        <input 
-                            type="checkbox" 
-                            id="task-${task.id}" 
-                            class="task-checkbox" 
-                            ${task.completed ? 'checked' : ''}
-                            aria-label="Mark task ${task.title} as ${task.completed ? 'incomplete' : 'complete'}"
-                        >
-                        <div class="task-content">
-                            <h3 class="task-title">${escapeHTML(task.title)}</h3>
-                            <div class="task-category">${getCategoryLabel(task.category)}</div>
-                            ${formattedDate ? `<div class="task-due-date">Due: ${formattedDate}</div>` : ''}
-                        </div>
-                        <div class="task-actions">
-                            <button 
-                                class="btn btn-small btn-secondary delete-task" 
-                                aria-label="Delete task ${escapeHTML(task.title)}"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    `;
-                    
-                    // Add event listeners
-                    const checkbox = taskItem.querySelector('.task-checkbox');
-                    checkbox.addEventListener('change', function(event) {
-                        toggleTaskCompletion(task.id, event.target.checked);
-                    });
-                    
-                    // Add keyboard support for checkbox
-                    checkbox.addEventListener('keydown', function(event) {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault();
-                            this.checked = !this.checked;
-                            toggleTaskCompletion(task.id, this.checked);
-                        }
-                    });
-                    
-                    const deleteButton = taskItem.querySelector('.delete-task');
-                    deleteButton.addEventListener('click', function() {
-                        deleteTask(task.id);
-                    });
-                    
-                    // Add keyboard support for delete button
-                    deleteButton.addEventListener('keydown', function(event) {
-                        if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault();
-                            deleteTask(task.id);
-                        }
-                    });
-                    
-                    taskList.appendChild(taskItem);
-                });
-            }
-            
-            // Toggle task completion
-            function toggleTaskCompletion(taskId, isCompleted) {
-                const taskIndex = tasks.findIndex(task => task.id === taskId);
-                
-                if (taskIndex !== -1) {
-                    const task = tasks[taskIndex];
-                    const wasCompletedBefore = task.completed;
-                    
-                    // Update task completion status
-                    task.completed = isCompleted;
-                    
-                    // Award points if task is being completed (not if it's being unchecked)
-                    if (isCompleted && !wasCompletedBefore) {
-                        rewards += 10;
-                        updateRewardsDisplay();
-                        showRewardNotification('You earned 10 points for completing a task!');
-                    }
-                    
-                    // Save and render
-                    saveTasks();
-                    renderTasks();
-                    
-                    // Announce to screen readers
-                    if (isCompleted) {
-                        announceTaskCompleted(task.title);
-                    }
-                }
-            }
-            
-            // Delete task
-            function deleteTask(taskId) {
-                const taskIndex = tasks.findIndex(task => task.id === taskId);
-                
-                if (taskIndex !== -1) {
-                    const taskTitle = tasks[taskIndex].title;
-                    
-                    // Remove task from array
-                    tasks.splice(taskIndex, 1);
-                    
-                    // Save and render
-                    saveTasks();
-                    renderTasks();
-                    
-                    // Announce to screen readers
-                    announceTaskDeleted(taskTitle);
-                }
-            }
-            
-            // Save tasks to localStorage
-            function saveTasks() {
-                localStorage.setItem('tasks', JSON.stringify(tasks));
-                localStorage.setItem('rewards', rewards.toString());
-            }
-            
-            // Load tasks from localStorage
-            function loadTasks() {
-                const savedTasks = localStorage.getItem('tasks');
-                const savedRewards = localStorage.getItem('rewards');
-                
-                if (savedTasks) {
-                    tasks = JSON.parse(savedTasks);
-                }
-                
-                if (savedRewards) {
-                    rewards = parseInt(savedRewards, 10);
-                }
-            }
-            
-            // Update rewards display
-            function updateRewardsDisplay() {
-                rewardsDisplay.textContent = rewards.toString();
-            }
-            
-            // Show reward notification
-            function showRewardNotification(message) {
-                rewardNotification.textContent = message;
-                rewardNotification.classList.add('show');
-                
+                // Remove announcement after it's been read
                 setTimeout(() => {
-                    rewardNotification.classList.remove('show');
+                    document.body.removeChild(announcement);
                 }, 3000);
-            }
-            
-            // Helper function to get category label
-            function getCategoryLabel(category) {
-                const categories = {
-                    'work': 'Work',
-                    'personal': 'Personal',
-                    'health': 'Health',
-                    'education': 'Education',
-                    'other': 'Other'
-                };
-                
-                return categories[category] || 'Other';
-            }
-            
-            // Helper function to escape HTML
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-            
-            // Announce task added to screen readers
-            function announceTaskAdded(taskTitle) {
-                const announcement = document.createElement('div');
-                announcement.setAttribute('aria-live', 'assertive');
-                announcement.className = 'sr-only';
-                announcement.textContent = `Task "${taskTitle}" has been added.`;
-                document.body.appendChild(announcement);
-                
-                setTimeout(() => {
-                    document.body.removeChild(announcement);
-                }, 1000);
-            }
-            
-            // Announce task completed to screen readers
-            function announceTaskCompleted(taskTitle) {
-                const announcement = document.createElement('div');
-                announcement.setAttribute('aria-live', 'assertive');
-                announcement.className = 'sr-only';
-                announcement.textContent = `Task "${taskTitle}" has been completed. You earned 10 points!`;
-                document.body.appendChild(announcement);
-                
-                setTimeout(() => {
-                    document.body.removeChild(announcement);
-                }, 1000);
-            }
-            
-            // Announce task deleted to screen readers
-            function announceTaskDeleted(taskTitle) {
-                const announcement = document.createElement('div');
-                announcement.setAttribute('aria-live', 'assertive');
-                announcement.className = 'sr-only';
-                announcement.textContent = `Task "${taskTitle}" has been deleted.`;
-                document.body.appendChild(announcement);
-                
-                setTimeout(() => {
-                    document.body.removeChild(announcement);
-                }, 1000);
             }
         });
     </script>
