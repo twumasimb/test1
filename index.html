@@ -3,28 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event RSVP - Confirm Your Attendance</title>
-    <style>
-        /* CSS Reset and Base Styles */
-        * {
-            box-sizing: border-box;<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Featured Products - Interactive Card Gallery</title>
+    <title>Accessible To-Do List Application</title>
     <style>
         /* Base styles with accessibility in mind */
         :root {
             --primary-color: #0066cc;
-            --secondary-color: #004080;
-            --text-color: #333333;
-            --light-text: #ffffff;
-            --background-color: #f5f5f5;
-            --card-background: #ffffff;
-            --focus-color: #0066cc;
-            --border-color: #dddddd;
+            --primary-dark: #004c99;
             --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --white: #ffffff;
+            --focus-outline: 3px solid var(--primary-color);
         }
 
         * {
@@ -36,8 +28,8 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--background-color);
+            color: #333;
+            background-color: var(--light-gray);
             padding: 0;
             margin: 0;
         }
@@ -48,15 +40,9 @@
         select:focus, 
         textarea:focus, 
         a:focus,
-        .card:focus {
-            outline: 3px solid var(--focus-color);
+        [role="button"]:focus {
+            outline: var(--focus-outline);
             outline-offset: 2px;
-        }
-
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, 
-        .dark-bg a:focus {
-            outline: 3px solid #ffffff;
         }
 
         /* Skip link for keyboard users */
@@ -75,739 +61,243 @@
             top: 0;
         }
 
-        /* Layout components */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
         header {
             background-color: var(--primary-color);
-            color: var(--light-text);
-            padding: 1rem 0;
+            color: white;
+            padding: 1rem;
+            text-align: center;
         }
 
         main {
-            padding: 2rem 0;
-        }
-
-        footer {
-            background-color: var(--secondary-color);
-            color: var(--light-text);
-            padding: 1.5rem 0;
-            margin-top: 2rem;
-        }
-
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        /* Navigation */
-        nav ul {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-        }
-
-        nav li {
-            margin-right: 1.5rem;
-        }
-
-        nav a {
-            color: var(--light-text);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 0;
-            display: inline-block;
-        }
-
-        nav a:hover, 
-        nav a:focus {
-            text-decoration: underline;
-        }
-
-        /* Cards section */
-        .cards-section {
-            margin: 2rem 0;
-        }
-
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 1.5rem;
-        }
-
-        /* Card component with accessibility features */
-        .card {
-            background: var(--card-background);
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Interactive states for cards */
-        .card:hover,
-        .card:focus-within {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-img-container {
-            position: relative;
-            overflow: hidden;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
-        }
-
-        .card-img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .card:hover .card-img,
-        .card:focus-within .card-img {
-            transform: scale(1.05);
-        }
-
-        .card-content {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-
-        .card-description {
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-
-        .card-price {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: var(--secondary-color);
-        }
-
-        .card-button {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .card-button:hover,
-        .card-button:focus {
-            background-color: var(--secondary-color);
-        }
-
-        /* Badge for featured items */
-        .badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background-color: var(--success-color);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            z-index: 1;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .cards-container {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-                gap: 1.5rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            h2 {
-                font-size: 1.75rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .cards-container {
-                grid-template-columns: 1fr;
-            }
-
-            nav ul {
-                flex-direction: column;
-            }
-
-            nav li {
-                margin-right: 0;
-                margin-bottom: 0.5rem;
-            }
-        }
-
-        /* Utility classes */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <!-- Skip link for keyboard users -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <header>
-        <div class="container">
-            <nav role="navigation" aria-label="Main navigation">
-                <ul>
-                    <li><a href="#" aria-current="page">Home</a></li>
-                    <li><a href="#">Products</a></li>
-                    <li><a href="#">Services</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main id="main-content">
-        <div class="container">
-            <h1>Featured Products</h1>
-            <p>Explore our selection of premium products designed to meet your needs. Each item is carefully crafted with attention to detail and quality.</p>
-
-            <section class="cards-section" aria-labelledby="products-heading">
-                <h2 id="products-heading">Our Top Selections</h2>
-                <div class="cards-container">
-                    <!-- Card 1 -->
-                    <article class="card" tabindex="0">
-                        <div class="card-img-container">
-                            <img src="https://via.placeholder.com/600x400?text=Premium+Headphones" alt="Premium wireless headphones with noise cancellation" class="card-img">
-                        </div>
-                        <span class="badge" aria-label="Featured product">Featured</span>
-                        <div class="card-content">
-                            <h3 class="card-title">Premium Headphones</h3>
-                            <p class="card-description">Experience crystal clear sound with our noise-cancelling wireless headphones. Perfect for music lovers and professionals.</p>
-                            <p class="card-price" aria-label="Price: 199 dollars">$199.00</p>
-                            <button class="card-button" onclick="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </article>
-
-                    <!-- Card 2 -->
-                    <article class="card" tabindex="0">
-                        <div class="card-img-container">
-                            <img src="https://via.placeholder.com/600x400?text=Smart+Watch" alt="Smart fitness watch with heart rate monitor" class="card-img">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">Smart Fitness Watch</h3>
-                            <p class="card-description">Track your fitness goals with our advanced smart watch. Features include heart rate monitoring, sleep tracking, and more.</p>
-                            <p class="card-price" aria-label="Price: 149 dollars">$149.00</p>
-                            <button class="card-button" onclick="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </article>
-
-                    <!-- Card 3 -->
-                    <article class="card" tabindex="0">
-                        <div class="card-img-container">
-                            <img src="https://via.placeholder.com/600x400?text=Wireless+Speaker" alt="Portable wireless Bluetooth speaker" class="card-img">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">Wireless Speaker</h3>
-                            <p class="card-description">Take your music anywhere with this portable Bluetooth speaker. Waterproof design with 20 hours of battery life.</p>
-                            <p class="card-price" aria-label="Price: 89 dollars">$89.00</p>
-                            <button class="card-button" onclick="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </article>
-
-                    <!-- Card 4 -->
-                    <article class="card" tabindex="0">
-                        <div class="card-img-container">
-                            <img src="https://via.placeholder.com/600x400?text=Laptop+Backpack" alt="Ergonomic laptop backpack with multiple compartments" class="card-img">
-                        </div>
-                        <span class="badge" aria-label="Featured product">Featured</span>
-                        <div class="card-content">
-                            <h3 class="card-title">Ergonomic Laptop Backpack</h3>
-                            <p class="card-description">Carry your tech comfortably with our ergonomic backpack. Features padded laptop compartment and multiple storage pockets.</p>
-                            <p class="card-price" aria-label="Price: 79 dollars">$79.00</p>
-                            <button class="card-button" onclick="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </article>
-
-                    <!-- Card 5 -->
-                    <article class="card" tabindex="0">
-                        <div class="card-img-container">
-                            <img src="https://via.placeholder.com/600x400?text=Coffee+Maker" alt="Programmable coffee maker with thermal carafe" class="card-img">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">Programmable Coffee Maker</h3>
-                            <p class="card-description">Wake up to fresh coffee with our programmable coffee maker. Features thermal carafe to keep your coffee hot for hours.</p>
-                            <p class="card-price" aria-label="Price: 129 dollars">$129.00</p>
-                            <button class="card-button" onclick="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </article>
-
-                    <!-- Card 6 -->
-                    <article class="card" tabindex="0">
-                        <div class="card-img-container">
-                            <img src="https://via.placeholder.com/600x400?text=Desk+Lamp" alt="Adjustable LED desk lamp with multiple brightness settings" class="card-img">
-                        </div>
-                        <div class="card-content">
-                            <h3 class="card-title">Adjustable LED Desk Lamp</h3>
-                            <p class="card-description">Illuminate your workspace with our adjustable LED lamp. Features multiple brightness levels and color temperatures.</p>
-                            <p class="card-price" aria-label="Price: 59 dollars">$59.00</p>
-                            <button class="card-button" onclick="handleInteraction(event)" onkeydown="handleInteraction(event)">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </article>
-                </div>
-            </section>
-
-            <section aria-labelledby="services-heading">
-                <h2 id="services-heading">Our Services</h2>
-                <p>We offer a range of services to complement our products and enhance your experience. Contact us to learn more about how we can help you.</p>
-                <a href="#" class="card-button" style="margin-top: 1rem;">View All Services</a>
-            </section>
-        </div>
-    </main>
-
-    <footer>
-        <div class="container">
-            <div class="text-center">
-                <p>&copy; 2023 Product Showcase. All rights reserved.</p>
-                <p>
-                    <a href="#" style="color: white; margin-right: 1rem;">Privacy Policy</a>
-                    <a href="#" style="color: white; margin-right: 1rem;">Terms of Service</a>
-                    <a href="#" style="color: white;">Contact Us</a>
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // For any element with mouse events, add keyboard support
-        function handleInteraction(event) {
-            // Handle both mouse and keyboard events
-            if (event.type === 'click' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                
-                // Prevent default space bar scrolling
-                if (event.type === 'keydown' && event.key === ' ') {
-                    event.preventDefault();
-                }
-                
-                // Get the button that was clicked
-                const button = event.currentTarget;
-                
-                // Visual feedback for the button
-                button.style.opacity = '0.8';
-                setTimeout(() => {
-                    button.style.opacity = '1';
-                }, 200);
-                
-                // Get product information from the card
-                const card = button.closest('.card');
-                const productTitle = card.querySelector('.card-title').textContent;
-                const productPrice = card.querySelector('.card-price').textContent;
-                
-                // Announce to screen readers using aria-live region
-                updateCartFeedback(productTitle);
-                
-                // In a real application, you would add the product to the cart here
-                console.log(`Added to cart: ${productTitle} - ${productPrice}`);
-            }
-        }
-
-        // Create an aria-live region for cart updates
-        document.addEventListener('DOMContentLoaded', function() {
-            const liveRegion = document.createElement('div');
-            liveRegion.setAttribute('aria-live', 'polite');
-            liveRegion.setAttribute('aria-atomic', 'true');
-            liveRegion.classList.add('sr-only');
-            liveRegion.id = 'cart-feedback';
-            document.body.appendChild(liveRegion);
-        });
-
-        // Update the aria-live region with cart feedback
-        function updateCartFeedback(productTitle) {
-            const liveRegion = document.getElementById('cart-feedback');
-            if (liveRegion) {
-                liveRegion.textContent = `${productTitle} added to your cart.`;
-                
-                // Clear the message after screen readers have time to announce it
-                setTimeout(() => {
-                    liveRegion.textContent = '';
-                }, 3000);
-            }
-        }
-
-        // Make cards keyboard navigable
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.card');
-            
-            cards.forEach(card => {
-                // Allow cards to be activated with Enter key
-                card.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter') {
-                        // Find and click the button inside this card
-                        const button = this.querySelector('.card-button');
-                        if (button) {
-                            button.click();
-                            button.focus(); // Move focus to the button
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
-            padding: 0;
-            margin: 0;
-        }
-
-        /* Container styles */
-        .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header styles */
-        header {
-            background-color: #3a0ca3;
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        /* Navigation styles */
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav li {
-            margin-left: 1.5rem;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        nav a:hover, nav a:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            text-decoration: underline;
-        }
-
-        /* Main content styles */
-        main {
-            padding: 2rem 0;
+            padding: 2rem 1rem;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: #3a0ca3;
-            text-align: center;
+            margin-bottom: 1rem;
         }
 
         h2 {
-            font-size: 1.8rem;
             margin: 1.5rem 0 1rem;
-            color: #4361ee;
-        }
-
-        h3 {
-            font-size: 1.3rem;
-            margin: 1rem 0 0.5rem;
-            color: #4361ee;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        /* Card styles */
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
+            color: var(--dark-gray);
         }
 
         /* Form styles */
+        .task-form {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 600;
+            font-weight: bold;
+        }
+
+        input, 
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
         }
 
         .required-field::after {
             content: " *";
-            color: #e63946;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: 3px solid #4361ee;
-            outline-offset: 2px;
-            border-color: #4361ee;
+            color: var(--danger-color);
         }
 
         .error-message {
-            color: #e63946;
+            color: var(--danger-color);
             font-size: 0.875rem;
             margin-top: 0.25rem;
             display: none;
         }
 
-        .form-group.error input, 
-        .form-group.error select, 
-        .form-group.error textarea {
-            border-color: #e63946;
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
         }
 
-        .form-group.error .error-message {
-            display: block;
-        }
-
-        /* Button styles */
-        .btn {
-            display: inline-block;
-            background-color: #4361ee;
+        button {
+            background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 4px;
             padding: 0.75rem 1.5rem;
             font-size: 1rem;
-            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background-color 0.2s;
         }
 
-        .btn:hover {
-            background-color: #3a0ca3;
+        button:hover {
+            background-color: var(--primary-dark);
         }
 
-        .btn:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
+        button:active {
+            transform: translateY(1px);
         }
 
-        .btn:active {
-            transform: scale(0.98);
+        button.delete-btn {
+            background-color: var(--danger-color);
+            padding: 0.5rem;
+            margin-left: 0.5rem;
         }
 
-        /* Attendee list styles */
-        .attendees-list {
+        button.delete-btn:hover {
+            background-color: #bd2130;
+        }
+
+        /* Task list styles */
+        .tasks-container {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+
+        .task-list {
             list-style: none;
         }
 
-        .attendee-item {
-            background-color: #f8f9fa;
-            border-left: 4px solid #4361ee;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0 4px 4px 0;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        /* Two-column layout for larger screens */
-        .flex-container {
+        .task-item {
             display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        @media (min-width: 768px) {
-            .flex-container {
-                flex-direction: row;
-            }
-
-            .flex-item {
-                flex: 1;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Success message */
-        .success-message {
-            background-color: #d1fae5;
-            border-left: 4px solid #10b981;
-            color: #065f46;
+            align-items: center;
             padding: 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+            transition: background-color 0.2s;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .task-checkbox {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-details {
+            display: flex;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .task-priority {
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .priority-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .priority-high {
+            background-color: var(--danger-color);
+        }
+
+        .priority-medium {
+            background-color: var(--warning-color);
+        }
+
+        .priority-low {
+            background-color: var(--success-color);
+        }
+
+        .task-completed .task-title {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        /* Filter controls */
+        .filter-controls {
+            display: flex;
             margin-bottom: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-label {
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
             border-radius: 4px;
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
+            border: 1px solid #ccc;
         }
 
-        /* Footer styles */
-        footer {
-            background-color: #3a0ca3;
-            color: white;
-            padding: 2rem 0;
-            margin-top: 2rem;
+        /* Responsive styles */
+        @media (max-width: 600px) {
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            
+            .task-details {
+                flex-direction: column;
+            }
+            
+            .task-priority {
+                margin-bottom: 0.25rem;
+            }
         }
 
-        footer a {
-            color: white;
-            text-decoration: underline;
+        /* High contrast mode support */
+        @media (forced-colors: active) {
+            button, 
+            .priority-indicator {
+                forced-color-adjust: none;
+            }
         }
 
-        footer a:hover, footer a:focus {
-            text-decoration: none;
-        }
-
-        /* Skip link for keyboard users */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: #4361ee;
-            color: white;
-            padding: 8px;
-            z-index: 100;
-            transition: top 0.3s;
-        }
-
-        .skip-link:focus {
-            top: 0;
-            outline: 3px solid #0066cc;
-        }
-
-        /* Ensure all interactive elements have visible focus indicators */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid #0066cc;
-            outline-offset: 2px;
-        }
-
-        /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
-        }
-
-        /* Visually hidden elements (for screen readers) */
-        .sr-only {
+        /* Announcement area for screen readers */
+        .sr-announcements {
             position: absolute;
             width: 1px;
             height: 1px;
@@ -816,314 +306,384 @@
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
             white-space: nowrap;
-            border-width: 0;
+            border: 0;
         }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-
+    
     <header>
-        <div class="container">
-            <div class="logo" role="banner">Event RSVP</div>
-            <nav role="navigation" aria-label="Main navigation">
-                <ul>
-                    <li><a href="#event-details">Event Details</a></li>
-                    <li><a href="#rsvp-form">RSVP Form</a></li>
-                    <li><a href="#attendees">Attendees</a></li>
-                </ul>
-            </nav>
-        </div>
+        <h1>Accessible To-Do List</h1>
     </header>
-
-    <main id="main-content" class="container">
-        <h1>Annual Community Gathering</h1>
-        
-        <section id="event-details" class="card" aria-labelledby="event-details-heading">
-            <h2 id="event-details-heading">Event Details</h2>
-            <p>Join us for our annual community gathering! This year's event will feature guest speakers, networking opportunities, and a catered lunch.</p>
+    
+    <main id="main-content">
+        <section class="task-form" aria-labelledby="form-heading">
+            <h2 id="form-heading">Add New Task</h2>
             
-            <div class="flex-container">
-                <div class="flex-item">
-                    <h3>When and Where</h3>
-                    <p><strong>Date:</strong> September 15, 2023</p>
-                    <p><strong>Time:</strong> 10:00 AM - 4:00 PM</p>
-                    <p><strong>Location:</strong> Community Center, 123 Main Street</p>
-                </div>
-                <div class="flex-item">
-                    <h3>What to Expect</h3>
-                    <ul>
-                        <li>Keynote presentations from industry leaders</li>
-                        <li>Interactive workshops</li>
-                        <li>Networking lunch</li>
-                        <li>Community awards ceremony</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="rsvp-form" class="card" aria-labelledby="rsvp-heading">
-            <h2 id="rsvp-heading">RSVP for the Event</h2>
-            <p>Please fill out the form below to confirm your attendance. Fields marked with an asterisk (*) are required.</p>
-            
-            <div id="success-message" class="success-message" role="alert" aria-live="polite">
-                Thank you for your RSVP! We look forward to seeing you at the event.
-            </div>
-            
-            <form id="rsvp-form-element" novalidate>
-                <div class="flex-container">
-                    <div class="flex-item">
-                        <div class="form-group">
-                            <label for="full-name" class="required-field">Full Name</label>
-                            <input 
-                                type="text" 
-                                id="full-name" 
-                                name="full-name" 
-                                required 
-                                aria-required="true"
-                                aria-describedby="full-name-error"
-                            >
-                            <div id="full-name-error" class="error-message">Please enter your full name</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email" class="required-field">Email Address</label>
-                            <input 
-                                type="email" 
-                                id="email" 
-                                name="email" 
-                                required 
-                                aria-required="true"
-                                aria-describedby="email-error"
-                            >
-                            <div id="email-error" class="error-message">Please enter a valid email address</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Phone Number (optional)</label>
-                            <input 
-                                type="tel" 
-                                id="phone" 
-                                name="phone"
-                                aria-describedby="phone-error"
-                            >
-                            <div id="phone-error" class="error-message">Please enter a valid phone number</div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex-item">
-                        <div class="form-group">
-                            <label for="attendance" class="required-field">Will you be attending?</label>
-                            <select 
-                                id="attendance" 
-                                name="attendance" 
-                                required 
-                                aria-required="true"
-                                aria-describedby="attendance-error"
-                            >
-                                <option value="">Please select an option</option>
-                                <option value="yes">Yes, I will attend</option>
-                                <option value="no">No, I cannot attend</option>
-                                <option value="maybe">Maybe, I'm not sure yet</option>
-                            </select>
-                            <div id="attendance-error" class="error-message">Please select your attendance status</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="guests">Number of Additional Guests</label>
-                            <select id="guests" name="guests">
-                                <option value="0">0 - Just myself</option>
-                                <option value="1">1 guest</option>
-                                <option value="2">2 guests</option>
-                                <option value="3">3 guests</option>
-                                <option value="4">4 guests</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="dietary">Dietary Restrictions (optional)</label>
-                            <textarea 
-                                id="dietary" 
-                                name="dietary" 
-                                rows="3"
-                                placeholder="Please list any dietary restrictions or allergies"
-                            ></textarea>
-                        </div>
-                    </div>
+            <form id="new-task-form">
+                <div class="form-group">
+                    <label for="task-title" class="required-field">Task Title</label>
+                    <input 
+                        type="text" 
+                        id="task-title" 
+                        name="task-title" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="title-error"
+                    >
+                    <div id="title-error" class="error-message">Please enter a task title</div>
                 </div>
                 
-                <button 
-                    type="submit" 
-                    class="btn" 
-                    id="submit-rsvp"
-                    onmousedown="handleInteraction(event)" 
-                    onkeydown="handleInteraction(event)"
-                >
-                    Submit RSVP
-                </button>
+                <div class="form-group">
+                    <label for="task-priority">Priority Level</label>
+                    <select id="task-priority" name="task-priority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="task-date">Due Date</label>
+                    <input 
+                        type="date" 
+                        id="task-date" 
+                        name="task-date"
+                        min="2023-01-01"
+                    >
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" id="add-task-btn">Add Task</button>
+                </div>
             </form>
         </section>
         
-        <section id="attendees" class="card" aria-labelledby="attendees-heading">
-            <h2 id="attendees-heading">Confirmed Attendees</h2>
-            <p>The following people have confirmed their attendance:</p>
+        <section class="tasks-section" aria-labelledby="tasks-heading">
+            <h2 id="tasks-heading">Your Tasks</h2>
             
-            <ul id="attendees-list" class="attendees-list" aria-live="polite">
-                <li class="attendee-item">
-                    <strong>Jane Smith</strong> - Attending with 2 guests
-                </li>
-                <li class="attendee-item">
-                    <strong>John Doe</strong> - Attending alone
-                </li>
-                <li class="attendee-item">
-                    <strong>Alex Johnson</strong> - Attending with 1 guest
-                </li>
-            </ul>
+            <div class="filter-controls" role="group" aria-labelledby="filter-heading">
+                <h3 id="filter-heading" class="sr-only">Filter Tasks</h3>
+                
+                <div class="filter-group">
+                    <label for="filter-status" class="filter-label">Status:</label>
+                    <select id="filter-status" class="filter-select">
+                        <option value="all">All</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filter-priority" class="filter-label">Priority:</label>
+                    <select id="filter-priority" class="filter-select">
+                        <option value="all">All</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="tasks-container">
+                <ul id="task-list" class="task-list" aria-live="polite">
+                    <!-- Tasks will be added here dynamically -->
+                    <li class="empty-state">
+                        <p>You have no tasks yet. Add a task to get started!</p>
+                    </li>
+                </ul>
+            </div>
         </section>
     </main>
-
-    <footer class="dark-bg">
-        <div class="container">
-            <p>© 2023 Community Event Organization. All rights reserved.</p>
-            <p>For questions about the event or accessibility needs, please contact us at <a href="mailto:events@example.com">events@example.com</a> or call <a href="tel:+15551234567">(555) 123-4567</a>.</p>
-        </div>
-    </footer>
-
+    
+    <div id="sr-announcements" class="sr-announcements" aria-live="polite"></div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('rsvp-form-element');
-            const attendeesList = document.getElementById('attendees-list');
-            const successMessage = document.getElementById('success-message');
+            // DOM Elements
+            const taskForm = document.getElementById('new-task-form');
+            const taskTitleInput = document.getElementById('task-title');
+            const taskPrioritySelect = document.getElementById('task-priority');
+            const taskDateInput = document.getElementById('task-date');
+            const taskList = document.getElementById('task-list');
+            const titleError = document.getElementById('title-error');
+            const filterStatus = document.getElementById('filter-status');
+            const filterPriority = document.getElementById('filter-priority');
+            const srAnnouncements = document.getElementById('sr-announcements');
             
-            // Form validation and submission
-            form.addEventListener('submit', function(event) {
+            // Set min date to today
+            const today = new Date().toISOString().split('T')[0];
+            taskDateInput.setAttribute('min', today);
+            
+            // Initialize tasks array from localStorage or empty array
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            
+            // Render initial tasks
+            renderTasks();
+            
+            // Form submission handler
+            taskForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 
-                // Reset previous error states
-                const formGroups = form.querySelectorAll('.form-group');
-                formGroups.forEach(group => group.classList.remove('error'));
-                
-                // Validate required fields
-                let isValid = true;
-                
-                // Validate name
-                const nameInput = document.getElementById('full-name');
-                if (!nameInput.value.trim()) {
-                    showError(nameInput, 'full-name-error');
-                    isValid = false;
+                // Validate form
+                if (!taskTitleInput.value.trim()) {
+                    titleError.style.display = 'block';
+                    taskTitleInput.setAttribute('aria-invalid', 'true');
+                    return;
                 }
                 
-                // Validate email
-                const emailInput = document.getElementById('email');
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailPattern.test(emailInput.value.trim())) {
-                    showError(emailInput, 'email-error');
-                    isValid = false;
+                // Clear any previous errors
+                titleError.style.display = 'none';
+                taskTitleInput.setAttribute('aria-invalid', 'false');
+                
+                // Create new task object
+                const newTask = {
+                    id: Date.now().toString(),
+                    title: taskTitleInput.value.trim(),
+                    priority: taskPrioritySelect.value,
+                    date: taskDateInput.value || '',
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Add task to array
+                tasks.push(newTask);
+                
+                // Save to localStorage
+                saveTasks();
+                
+                // Reset form
+                taskForm.reset();
+                
+                // Render updated tasks
+                renderTasks();
+                
+                // Announce to screen readers
+                announceToScreenReader(`Task added: ${newTask.title}`);
+                
+                // Set focus back to title input for adding another task
+                taskTitleInput.focus();
+            });
+            
+            // Task list event delegation for checkboxes and delete buttons
+            taskList.addEventListener('click', function(event) {
+                const target = event.target;
+                
+                // Handle task completion checkbox
+                if (target.classList.contains('task-checkbox')) {
+                    const taskId = target.getAttribute('data-id');
+                    toggleTaskCompletion(taskId);
                 }
                 
-                // Validate phone (if provided)
-                const phoneInput = document.getElementById('phone');
-                if (phoneInput.value.trim() !== '') {
-                    const phonePattern = /^[\d\s\-\(\)]+$/;
-                    if (!phonePattern.test(phoneInput.value.trim())) {
-                        showError(phoneInput, 'phone-error');
-                        isValid = false;
-                    }
-                }
-                
-                // Validate attendance selection
-                const attendanceSelect = document.getElementById('attendance');
-                if (!attendanceSelect.value) {
-                    showError(attendanceSelect, 'attendance-error');
-                    isValid = false;
-                }
-                
-                // If form is valid, process submission
-                if (isValid) {
-                    // Get form values
-                    const name = nameInput.value.trim();
-                    const attendance = attendanceSelect.value;
-                    const guests = document.getElementById('guests').value;
-                    
-                    // Only add to attendee list if attending
-                    if (attendance === 'yes') {
-                        // Create new attendee item
-                        const newAttendee = document.createElement('li');
-                        newAttendee.className = 'attendee-item';
-                        
-                        // Set attendee text based on number of guests
-                        const guestText = guests === '0' ? 
-                            'Attending alone' : 
-                            `Attending with ${guests} guest${guests > 1 ? 's' : ''}`;
-                        
-                        newAttendee.innerHTML = `<strong>${name}</strong> - ${guestText}`;
-                        
-                        // Add to list
-                        attendeesList.appendChild(newAttendee);
-                    }
-                    
-                    // Show success message
-                    successMessage.style.display = 'block';
-                    
-                    // Reset form
-                    form.reset();
-                    
-                    // Scroll to success message
-                    successMessage.scrollIntoView({ behavior: 'smooth' });
-                    
-                    // Set focus to success message for screen readers
-                    successMessage.setAttribute('tabindex', '-1');
-                    successMessage.focus();
-                    
-                    // Hide success message after 5 seconds
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 5000);
+                // Handle delete button
+                if (target.classList.contains('delete-btn')) {
+                    const taskId = target.getAttribute('data-id');
+                    deleteTask(taskId);
                 }
             });
             
-            // Function to show error for a field
-            function showError(inputElement, errorId) {
-                const formGroup = inputElement.closest('.form-group');
-                formGroup.classList.add('error');
-                inputElement.setAttribute('aria-invalid', 'true');
+            // Task list keyboard event handling
+            taskList.addEventListener('keydown', function(event) {
+                const target = event.target;
                 
-                // Set focus on first error field
-                if (document.querySelector('.form-group.error input, .form-group.error select, .form-group.error textarea') === inputElement) {
-                    inputElement.focus();
+                // Handle checkbox with keyboard
+                if (target.classList.contains('task-checkbox') && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    const taskId = target.getAttribute('data-id');
+                    toggleTaskCompletion(taskId);
+                }
+                
+                // Handle delete button with keyboard
+                if (target.classList.contains('delete-btn') && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    const taskId = target.getAttribute('data-id');
+                    deleteTask(taskId);
+                }
+            });
+            
+            // Filter change handlers
+            filterStatus.addEventListener('change', renderTasks);
+            filterPriority.addEventListener('change', renderTasks);
+            
+            // Toggle task completion status
+            function toggleTaskCompletion(taskId) {
+                const taskIndex = tasks.findIndex(task => task.id === taskId);
+                
+                if (taskIndex !== -1) {
+                    tasks[taskIndex].completed = !tasks[taskIndex].completed;
+                    saveTasks();
+                    renderTasks();
+                    
+                    const status = tasks[taskIndex].completed ? 'completed' : 'active';
+                    announceToScreenReader(`Task marked as ${status}: ${tasks[taskIndex].title}`);
                 }
             }
             
-            // Add keyboard support for interactive elements
-            const interactiveElements = document.querySelectorAll('button, a');
-            interactiveElements.forEach(element => {
-                element.addEventListener('keydown', handleInteraction);
-                element.addEventListener('mousedown', handleInteraction);
+            // Delete task
+            function deleteTask(taskId) {
+                const taskIndex = tasks.findIndex(task => task.id === taskId);
+                
+                if (taskIndex !== -1) {
+                    const deletedTask = tasks[taskIndex];
+                    tasks = tasks.filter(task => task.id !== taskId);
+                    saveTasks();
+                    renderTasks();
+                    
+                    announceToScreenReader(`Task deleted: ${deletedTask.title}`);
+                }
+            }
+            
+            // Save tasks to localStorage
+            function saveTasks() {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+            
+            // Render tasks based on current filters
+            function renderTasks() {
+                const statusFilter = filterStatus.value;
+                const priorityFilter = filterPriority.value;
+                
+                // Filter tasks based on selected filters
+                let filteredTasks = tasks;
+                
+                if (statusFilter !== 'all') {
+                    const isCompleted = statusFilter === 'completed';
+                    filteredTasks = filteredTasks.filter(task => task.completed === isCompleted);
+                }
+                
+                if (priorityFilter !== 'all') {
+                    filteredTasks = filteredTasks.filter(task => task.priority === priorityFilter);
+                }
+                
+                // Clear current task list
+                taskList.innerHTML = '';
+                
+                // Show empty state if no tasks
+                if (filteredTasks.length === 0) {
+                    const emptyState = document.createElement('li');
+                    emptyState.className = 'empty-state';
+                    
+                    // Different message based on whether we have tasks but they're filtered out
+                    if (tasks.length > 0) {
+                        emptyState.innerHTML = '<p>No tasks match your current filters.</p>';
+                    } else {
+                        emptyState.innerHTML = '<p>You have no tasks yet. Add a task to get started!</p>';
+                    }
+                    
+                    taskList.appendChild(emptyState);
+                    return;
+                }
+                
+                // Sort tasks: incomplete first, then by priority (high to low), then by date
+                filteredTasks.sort((a, b) => {
+                    // First by completion status
+                    if (a.completed !== b.completed) {
+                        return a.completed ? 1 : -1;
+                    }
+                    
+                    // Then by priority
+                    const priorityOrder = { high: 0, medium: 1, low: 2 };
+                    if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+                        return priorityOrder[a.priority] - priorityOrder[b.priority];
+                    }
+                    
+                    // Then by due date if both have dates
+                    if (a.date && b.date) {
+                        return new Date(a.date) - new Date(b.date);
+                    }
+                    
+                    // Tasks with dates come before tasks without dates
+                    if (a.date && !b.date) return -1;
+                    if (!a.date && b.date) return 1;
+                    
+                    // Finally by creation date
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                });
+                
+                // Render each task
+                filteredTasks.forEach(task => {
+                    const taskItem = document.createElement('li');
+                    taskItem.className = `task-item ${task.completed ? 'task-completed' : ''}`;
+                    taskItem.setAttribute('data-id', task.id);
+                    
+                    // Format date for display
+                    let formattedDate = '';
+                    if (task.date) {
+                        const dateObj = new Date(task.date);
+                        formattedDate = dateObj.toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                        });
+                    }
+                    
+                    // Priority label for screen readers
+                    const priorityLabel = {
+                        high: 'High priority',
+                        medium: 'Medium priority',
+                        low: 'Low priority'
+                    };
+                    
+                    // Create task HTML
+                    taskItem.innerHTML = `
+                        <input 
+                            type="checkbox" 
+                            id="task-${task.id}" 
+                            class="task-checkbox" 
+                            data-id="${task.id}" 
+                            ${task.completed ? 'checked' : ''}
+                            aria-label="Mark task as ${task.completed ? 'active' : 'completed'}: ${task.title}"
+                        >
+                        <div class="task-content">
+                            <div class="task-title">${escapeHTML(task.title)}</div>
+                            <div class="task-details">
+                                <div class="task-priority" aria-label="${priorityLabel[task.priority]}">
+                                    <span class="priority-indicator priority-${task.priority}" aria-hidden="true"></span>
+                                    ${capitalizeFirst(task.priority)}
+                                </div>
+                                ${task.date ? `<div class="task-date">Due: ${formattedDate}</div>` : ''}
+                            </div>
+                        </div>
+                        <button 
+                            type="button" 
+                            class="delete-btn" 
+                            data-id="${task.id}" 
+                            aria-label="Delete task: ${task.title}"
+                        >
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    `;
+                    
+                    taskList.appendChild(taskItem);
+                });
+            }
+            
+            // Helper function to capitalize first letter
+            function capitalizeFirst(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+            
+            // Helper function to escape HTML
+            function escapeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+            
+            // Announce messages to screen readers
+            function announceToScreenReader(message) {
+                srAnnouncements.textContent = message;
+            }
+            
+            // Set up validation on input
+            taskTitleInput.addEventListener('input', function() {
+                if (taskTitleInput.value.trim()) {
+                    titleError.style.display = 'none';
+                    taskTitleInput.setAttribute('aria-invalid', 'false');
+                }
             });
         });
-        
-        // For any element with mouse events, add keyboard support
-        function handleInteraction(event) {
-            // Handle both mouse and keyboard events
-            if (event.type === 'mousedown' || 
-                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                
-                // Prevent default space bar scrolling
-                if (event.key === ' ') {
-                    event.preventDefault();
-                }
-                
-                // If it's a keydown event, simulate click
-                if (event.type === 'keydown') {
-                    // For buttons, the click event will fire automatically
-                    // For other elements, we might need to trigger it manually
-                    if (event.target.tagName !== 'BUTTON') {
-                        event.target.click();
-                    }
-                }
-            }
-        }
     </script>
 </body>
 </html>
-
