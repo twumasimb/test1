@@ -3,54 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event RSVP - Confirm Your Attendance</title>
+    <title>Interactive Meditation Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
             margin: 0;
             padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
         }
         header {
-            background-color: #0066cc;
-            color: white;
-            padding: 10px 0;
             text-align: center;
+            margin-bottom: 20px;
         }
-        main {
-            margin: 20px 0;
+        h1 {
+            color: #4a4a4a;
         }
-        form {
+        .timer-controls {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            align-items: center;
         }
         label {
-            font-weight: bold;
+            margin: 10px 0;
         }
-        input, button {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        input[type="number"] {
+            width: 80px;
+            padding: 5px;
+            font-size: 16px;
         }
         button {
             background-color: #0066cc;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
         }
-        button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+        button:focus {
+            outline: 3px solid #0066cc;
+            outline-offset: 2px;
         }
-        .attendees-list {
+        .progress {
             margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #fff;
+            font-size: 18px;
         }
         /* Ensure all interactive elements have visible focus indicators */
-        button:focus, input:focus, select:focus, textarea:focus {
+        button:focus, input:focus {
             outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
@@ -58,74 +57,73 @@
 </head>
 <body>
     <header>
-        <h1>Event RSVP</h1>
+        <h1>Meditation Timer</h1>
+        <nav role="navigation" aria-label="Main navigation">
+            <ul>
+                <li><a href="#timer" accesskey="t">Timer</a></li>
+                <li><a href="#progress" accesskey="p">Progress</a></li>
+            </ul>
+        </nav>
     </header>
     <main>
-        <section>
-            <h2>Confirm Your Attendance</h2>
-            <form id="rsvpForm" aria-labelledby="rsvpFormLabel">
-                <label for="name">Your Name <span aria-hidden="true">*</span></label>
-                <input type="text" id="name" name="name" required aria-describedby="nameError">
-                <div id="nameError" class="error-message" aria-live="assertive"></div>
-
-                <label for="email">Your Email <span aria-hidden="true">*</span></label>
-                <input type="email" id="email" name="email" required aria-describedby="emailError">
-                <div id="emailError" class="error-message" aria-live="assertive"></div>
-
-                <button type="submit">Submit RSVP</button>
-            </form>
-        </section>
-
-        <section>
-            <h2>Attendees List</h2>
-            <div class="attendees-list" id="attendeesList" aria-live="polite">
-                <p>No attendees yet.</p>
+        <section id="timer" aria-labelledby="timer-heading">
+            <h2 id="timer-heading">Set Your Meditation Session</h2>
+            <div class="timer-controls">
+                <label for="sessionLength">Session Length (minutes):</label>
+                <input type="number" id="sessionLength" name="sessionLength" min="1" required aria-describedby="length-description">
+                <span id="length-description" class="visually-hidden">Enter the desired session length in minutes.</span>
+                <button id="startButton" onmousedown="handleInteraction(event)" onkeydown="handleInteraction(event)">Start Timer</button>
             </div>
         </section>
+        <section id="progress" aria-labelledby="progress-heading">
+            <h2 id="progress-heading">Progress Tracker</h2>
+            <div class="progress" id="progressDisplay">You have completed: 0 minutes</div>
+        </section>
     </main>
+    <footer>
+        <p>&copy; 2023 Meditation Timer. All rights reserved.</p>
+    </footer>
     <script>
-        document.getElementById('rsvpForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            let hasError = false;
+        let timer;
+        let totalMinutes = 0;
 
-            // Clear previous error messages
-            document.getElementById('nameError').textContent = '';
-            document.getElementById('emailError').textContent = '';
-
-            // Validate name
-            if (name === '') {
-                document.getElementById('nameError').textContent = 'Name is required.';
-                hasError = true;
-            }
-
-            // Validate email
-            if (email === '') {
-                document.getElementById('emailError').textContent = 'Email is required.';
-                hasError = true;
-            } else if (!validateEmail(email)) {
-                document.getElementById('emailError').textContent = 'Please enter a valid email address.';
-                hasError = true;
-            }
-
-            // If no errors, add attendee to list
-            if (!hasError) {
-                addAttendee(name, email);
-                document.getElementById('rsvpForm').reset();
+        document.getElementById('startButton').addEventListener('click', startTimer);
+        document.getElementById('sessionLength').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                startTimer();
             }
         });
 
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(String(email).toLowerCase());
+        function handleInteraction(event) {
+            // Handle both mouse and keyboard events
+            if (event.type === 'click' || 
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                startTimer();
+            }
         }
 
-        function addAttendee(name, email) {
-            const attendeesList = document.getElementById('attendeesList');
-            const newAttendee = document.createElement('p');
-            newAttendee.textContent = `${name} (${email})`;
-            attendeesList.appendChild(newAttendee);
+        function startTimer() {
+            const sessionLength = document.getElementById('sessionLength').value;
+            if (sessionLength < 1) {
+                alert("Please enter a valid session length.");
+                return;
+            }
+            totalMinutes = sessionLength;
+            let secondsRemaining = sessionLength * 60;
+            updateProgress();
+
+            timer = setInterval(() => {
+                secondsRemaining--;
+                if (secondsRemaining <= 0) {
+                    clearInterval(timer);
+                    alert("Session complete! Well done.");
+                }
+                updateProgress();
+            }, 1000);
+        }
+
+        function updateProgress() {
+            document.getElementById('progressDisplay').innerText = `You have completed: ${totalMinutes - Math.floor((totalMinutes * 60 - (totalMinutes * 60 - (totalMinutes * 60 - (totalMinutes * 60)))) / 60)} minutes`;
         }
     </script>
 </body>
