@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Travel Map - Share Your Journeys</title>
+    <title>Fitness Tracker - Log and Monitor Your Workouts</title>
     <style>
         /* Base styles with accessibility in mind */
         :root {
-            --primary-color: #0066cc;
-            --secondary-color: #004080;
+            --primary-color: #3a86ff;
+            --primary-dark: #2667cc;
+            --secondary-color: #ff006e;
             --text-color: #333333;
-            --light-bg: #f5f5f5;
-            --error-color: #d32f2f;
-            --success-color: #2e7d32;
+            --background-color: #f8f9fa;
+            --light-gray: #e9ecef;
+            --medium-gray: #ced4da;
+            --dark-gray: #6c757d;
+            --success-color: #38b000;
+            --error-color: #d00000;
             --focus-color: #0066cc;
         }
 
@@ -23,210 +27,285 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: #ffffff;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+            background-color: var(--background-color);
+            padding: 0;
+            margin: 0;
         }
 
         /* Ensure all interactive elements have visible focus indicators */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+        button:focus, 
+        input:focus, 
+        select:focus, 
+        textarea:focus, 
+        a:focus,
+        [tabindex]:focus {
             outline: 3px solid var(--focus-color);
             outline-offset: 2px;
         }
 
         /* High contrast focus for dark backgrounds */
-        .dark-bg button:focus, .dark-bg a:focus {
+        .dark-bg button:focus, 
+        .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
 
+        /* Skip link for keyboard users */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
         header {
-            padding: 20px 0;
-            border-bottom: 1px solid #ddd;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
         }
 
         h1 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            color: var(--secondary-color);
-            margin: 20px 0;
-            font-size: 1.8rem;
-        }
-
-        h3 {
-            margin: 15px 0;
-            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
         }
 
         main {
-            padding: 20px 0;
-            min-height: 70vh;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
         }
 
-        .map-container {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            border: 2px solid #ddd;
-            margin: 20px 0;
-            background-color: var(--light-bg);
-            overflow: hidden;
+        section {
+            margin-bottom: 2rem;
         }
 
-        .map {
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23e6f2ff"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23cce0ff" stroke-width="1"/></svg>');
-            position: relative;
+        h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--light-gray);
+            padding-bottom: 0.5rem;
         }
 
-        .map-pin {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            transform: translate(-50%, -100%);
-            cursor: pointer;
-            z-index: 10;
+        h3 {
+            margin-bottom: 0.75rem;
         }
 
-        .map-pin::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 24px;
-            height: 24px;
-            background-color: var(--primary-color);
-            border-radius: 50% 50% 0 50%;
-            transform: rotate(45deg);
-        }
-
-        .map-pin:focus {
-            outline: 3px solid var(--focus-color);
-            outline-offset: 2px;
-        }
-
-        .pin-info {
-            position: absolute;
-            background: white;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            width: 250px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 20;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .pin-info h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-        }
-
-        .pin-info p {
-            margin: 10px 0;
-        }
-
-        .pin-info .close-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: none;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
+        /* Form styles */
         .form-container {
-            background-color: var(--light-bg);
-            padding: 20px;
-            border-radius: 5px;
-            margin: 20px 0;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 1rem;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
         .required-field::after {
-            content: "*";
+            content: " *";
             color: var(--error-color);
-            margin-left: 5px;
         }
 
-        input, textarea, select {
+        input,
+        select,
+        textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
+            padding: 0.75rem;
+            border: 1px solid var(--medium-gray);
             border-radius: 4px;
             font-size: 1rem;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
         }
 
         button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 10px 15px;
             border-radius: 4px;
-            cursor: pointer;
+            padding: 0.75rem 1.5rem;
             font-size: 1rem;
+            cursor: pointer;
             transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: var(--secondary-color);
+            background-color: var(--primary-dark);
         }
 
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
+        button:active {
+            transform: translateY(1px);
         }
 
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .success-message {
-            color: var(--success-color);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .experiences-list {
-            margin: 20px 0;
-        }
-
-        .experience-card {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 15px;
+        /* Workout log styles */
+        .workout-log {
             background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .experience-card h3 {
-            margin-top: 0;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--background-color);
+        }
+
+        .delete-btn {
+            background-color: var(--error-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #b00000;
+        }
+
+        /* Chart container */
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            height: 300px;
+            position: relative;
+        }
+
+        .chart {
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+        }
+
+        .chart-bar {
+            background-color: var(--primary-color);
+            width: 40px;
+            margin: 0 5px;
+            position: relative;
+            transition: height 0.5s;
+            min-height: 1px;
+        }
+
+        .chart-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+
+        .chart-bar-value {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .chart-y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .chart-y-label {
+            font-size: 0.75rem;
+            color: var(--dark-gray);
+        }
+
+        /* Summary cards */
+        .summary-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: bold;
             color: var(--primary-color);
+            margin: 0.5rem 0;
         }
 
+        /* Responsive design */
+        @media screen and (max-width: 768px) {
+            .summary-container {
+                grid-template-columns: 1fr;
+            }
+
+            th, td {
+                padding: 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            .chart-container {
+                height: 200px;
+            }
+        }
+
+        /* Screen reader only class */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -239,487 +318,475 @@
             border-width: 0;
         }
 
-        .instructions {
-            background-color: #e6f2ff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            border-left: 4px solid var(--primary-color);
+        /* No data message */
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: var(--dark-gray);
+            font-style: italic;
         }
 
+        /* Visually hidden but accessible to screen readers */
         .visually-hidden {
             position: absolute;
             width: 1px;
             height: 1px;
-            padding: 0;
             margin: -1px;
+            padding: 0;
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
             border: 0;
         }
 
-        footer {
-            margin-top: 40px;
-            padding: 20px 0;
-            border-top: 1px solid #ddd;
-            text-align: center;
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            z-index: 1000;
         }
 
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .map-container {
-                height: 350px;
-            }
-
-            .pin-info {
-                width: 200px;
-            }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .map-container {
-                height: 300px;
-            }
-
-            .pin-info {
-                width: 180px;
-            }
+        .toast.error {
+            background-color: var(--error-color);
         }
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <header>
-        <h1>Interactive Travel Map</h1>
-        <p>Share your travel experiences and discover new destinations!</p>
+        <h1>Fitness Tracker</h1>
+        <p>Log and monitor your daily workouts</p>
     </header>
-
-    <main>
-        <section aria-labelledby="map-section-heading">
-            <h2 id="map-section-heading">Your Travel Map</h2>
-            
-            <div class="instructions" aria-labelledby="instructions-heading">
-                <h3 id="instructions-heading">How to Use This Map</h3>
-                <p>Click or tap anywhere on the map to add a new location pin. You can then enter details about your experience at that location.</p>
-                <p>Use the tab key to navigate through pins and press Enter to view details.</p>
-            </div>
-
-            <div class="map-container" id="map-container">
-                <div id="map" class="map" 
-                     role="application" 
-                     aria-label="Interactive travel map. Click anywhere to add a pin."
-                     tabindex="0">
-                    <!-- Map pins will be added here dynamically -->
+    
+    <main id="main-content">
+        <section aria-labelledby="summary-heading">
+            <h2 id="summary-heading">Workout Summary</h2>
+            <div class="summary-container">
+                <div class="summary-card" aria-labelledby="total-workouts-label">
+                    <h3 id="total-workouts-label">Total Workouts</h3>
+                    <p class="summary-value" id="total-workouts">0</p>
+                </div>
+                <div class="summary-card" aria-labelledby="total-duration-label">
+                    <h3 id="total-duration-label">Total Duration (min)</h3>
+                    <p class="summary-value" id="total-duration">0</p>
+                </div>
+                <div class="summary-card" aria-labelledby="total-calories-label">
+                    <h3 id="total-calories-label">Total Calories Burned</h3>
+                    <p class="summary-value" id="total-calories">0</p>
                 </div>
             </div>
         </section>
-
-        <section aria-labelledby="add-experience-heading">
-            <h2 id="add-experience-heading">Add Your Travel Experience</h2>
-            
-            <div class="form-container">
-                <form id="experience-form" novalidate>
-                    <div class="form-group">
-                        <label for="location-name" class="required-field">Location Name</label>
-                        <input type="text" id="location-name" name="location-name" required aria-required="true" aria-describedby="location-name-error">
-                        <div id="location-name-error" class="error-message" aria-live="polite"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="country" class="required-field">Country</label>
-                        <input type="text" id="country" name="country" required aria-required="true" aria-describedby="country-error">
-                        <div id="country-error" class="error-message" aria-live="polite"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="visit-date" class="required-field">Date of Visit</label>
-                        <input type="date" id="visit-date" name="visit-date" required aria-required="true" aria-describedby="visit-date-error">
-                        <div id="visit-date-error" class="error-message" aria-live="polite"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="experience" class="required-field">Your Experience</label>
-                        <textarea id="experience" name="experience" rows="4" required aria-required="true" aria-describedby="experience-error"></textarea>
-                        <div id="experience-error" class="error-message" aria-live="polite"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="rating">Rating (1-5)</label>
-                        <select id="rating" name="rating">
-                            <option value="5">5 - Excellent</option>
-                            <option value="4">4 - Very Good</option>
-                            <option value="3" selected>3 - Good</option>
-                            <option value="2">2 - Fair</option>
-                            <option value="1">1 - Poor</option>
-                        </select>
-                    </div>
-                    
-                    <input type="hidden" id="pin-x" name="pin-x" value="">
-                    <input type="hidden" id="pin-y" name="pin-y" value="">
-                    
-                    <button type="submit" id="submit-btn">Add Experience</button>
-                    <div id="form-status" class="success-message" aria-live="polite"></div>
-                </form>
+        
+        <section aria-labelledby="progress-heading">
+            <h2 id="progress-heading">Weekly Progress</h2>
+            <div class="chart-container">
+                <div class="chart" id="workout-chart" aria-label="Bar chart showing calories burned by day of the week">
+                    <!-- Chart bars will be generated by JavaScript -->
+                </div>
+                <div id="chart-description" class="sr-only">
+                    This chart shows calories burned for each day of the week.
+                </div>
             </div>
         </section>
-
-        <section aria-labelledby="experiences-heading">
-            <h2 id="experiences-heading">Shared Experiences</h2>
-            <div id="experiences-list" class="experiences-list" aria-live="polite">
-                <!-- Experiences will be added here dynamically -->
-                <p id="no-experiences">No experiences have been shared yet. Be the first to add your travel story!</p>
+        
+        <section aria-labelledby="add-workout-heading">
+            <h2 id="add-workout-heading">Add New Workout</h2>
+            <form id="workout-form" class="form-container" novalidate>
+                <div class="form-group">
+                    <label for="workout-date" class="required-field">Date</label>
+                    <input type="date" id="workout-date" name="workout-date" required aria-describedby="date-error">
+                    <p id="date-error" class="error-message">Please select a valid date</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="exercise-type" class="required-field">Exercise Type</label>
+                    <select id="exercise-type" name="exercise-type" required aria-describedby="exercise-type-error">
+                        <option value="">Select exercise type</option>
+                        <option value="Running">Running</option>
+                        <option value="Walking">Walking</option>
+                        <option value="Cycling">Cycling</option>
+                        <option value="Swimming">Swimming</option>
+                        <option value="Weight Training">Weight Training</option>
+                        <option value="Yoga">Yoga</option>
+                        <option value="HIIT">HIIT</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <p id="exercise-type-error" class="error-message">Please select an exercise type</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration" class="required-field">Duration (minutes)</label>
+                    <input type="number" id="duration" name="duration" min="1" required aria-describedby="duration-error">
+                    <p id="duration-error" class="error-message">Please enter a valid duration (minimum 1 minute)</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="calories" class="required-field">Calories Burned</label>
+                    <input type="number" id="calories" name="calories" min="1" required aria-describedby="calories-error">
+                    <p id="calories-error" class="error-message">Please enter a valid calorie count (minimum 1 calorie)</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes" name="notes" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" id="submit-workout">Add Workout</button>
+            </form>
+        </section>
+        
+        <section aria-labelledby="workout-log-heading">
+            <h2 id="workout-log-heading">Workout Log</h2>
+            <div class="workout-log">
+                <div id="no-workouts-message" class="no-data">
+                    <p>No workouts logged yet. Add your first workout above!</p>
+                </div>
+                <div id="workout-table-container" style="display: none;">
+                    <table id="workout-table" aria-label="List of recorded workouts">
+                        <caption class="sr-only">Your logged workouts with date, exercise type, duration, and calories burned</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Exercise Type</th>
+                                <th scope="col">Duration (min)</th>
+                                <th scope="col">Calories Burned</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="workout-log-body">
+                            <!-- Workout entries will be added here by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
-
+    
     <footer>
-        <p>&copy; 2023 Interactive Travel Map. All rights reserved.</p>
+        <p>&copy; 2023 Fitness Tracker. All rights reserved.</p>
     </footer>
-
+    
+    <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // State management
-            const state = {
-                pins: [],
-                experiences: [],
-                activePinInfo: null,
-                selectedPinCoords: null
-            };
-
-            // DOM elements
-            const map = document.getElementById('map');
-            const form = document.getElementById('experience-form');
-            const pinXInput = document.getElementById('pin-x');
-            const pinYInput = document.getElementById('pin-y');
-            const experiencesList = document.getElementById('experiences-list');
-            const noExperiencesMsg = document.getElementById('no-experiences');
-            const formStatus = document.getElementById('form-status');
-
-            // Form fields
-            const locationNameInput = document.getElementById('location-name');
-            const countryInput = document.getElementById('country');
-            const visitDateInput = document.getElementById('visit-date');
-            const experienceInput = document.getElementById('experience');
-            const ratingInput = document.getElementById('rating');
-
-            // Error message elements
-            const locationNameError = document.getElementById('location-name-error');
-            const countryError = document.getElementById('country-error');
-            const visitDateError = document.getElementById('visit-date-error');
-            const experienceError = document.getElementById('experience-error');
-
-            // Initialize map click handler
-            initializeMap();
-
-            // Initialize form submission
-            initializeForm();
-
-            // Load any saved experiences from localStorage
-            loadSavedExperiences();
-
-            // Map initialization
-            function initializeMap() {
-                // Add click event to map for adding pins
-                map.addEventListener('click', handleMapClick);
-                map.addEventListener('keydown', handleMapKeydown);
-            }
-
-            // Handle map keyboard navigation
-            function handleMapKeydown(event) {
-                // Allow users to add a pin with Enter key when map is focused
-                if (event.key === 'Enter') {
-                    // Since we can't determine coordinates from keyboard,
-                    // we'll place a pin in the center of the map
-                    const mapRect = map.getBoundingClientRect();
-                    const centerX = mapRect.width / 2;
-                    const centerY = mapRect.height / 2;
-                    
-                    addPin(centerX, centerY);
-                    setSelectedPinCoords(centerX, centerY);
-                    
-                    // Announce to screen readers
-                    announceToScreenReader('Pin added to center of map. You can now fill in the experience details.');
-                    
-                    // Focus the first form field
-                    locationNameInput.focus();
+            // Initialize variables
+            let workouts = [];
+            const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            
+            // Load saved workouts from localStorage
+            loadWorkouts();
+            updateSummary();
+            updateChart();
+            
+            // Form submission handler
+            const workoutForm = document.getElementById('workout-form');
+            workoutForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Validate form
+                if (validateForm()) {
+                    addWorkout();
+                    workoutForm.reset();
+                    showToast('Workout added successfully!');
+                }
+            });
+            
+            // Keyboard event handler for interactive elements
+            function handleInteraction(event, callback) {
+                if (event.type === 'click' || 
+                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+                    if (event.type === 'keydown') {
+                        event.preventDefault(); // Prevent scrolling on space key
+                    }
+                    callback();
                 }
             }
-
-            // Handle map click for adding pins
-            function handleMapClick(event) {
-                const mapRect = map.getBoundingClientRect();
-                const x = event.clientX - mapRect.left;
-                const y = event.clientY - mapRect.top;
-                
-                addPin(x, y);
-                setSelectedPinCoords(x, y);
-                
-                // Announce to screen readers
-                announceToScreenReader('Pin added to map. You can now fill in the experience details.');
-                
-                // Focus the first form field
-                locationNameInput.focus();
-            }
-
-            // Add a pin to the map
-            function addPin(x, y) {
-                // Create pin element
-                const pin = document.createElement('div');
-                pin.className = 'map-pin';
-                pin.style.left = `${x}px`;
-                pin.style.top = `${y}px`;
-                pin.setAttribute('tabindex', '0');
-                pin.setAttribute('role', 'button');
-                pin.setAttribute('aria-label', 'Map pin. Press Enter to add details.');
-                
-                // Add event listeners for pin interaction
-                pin.addEventListener('click', function() {
-                    setSelectedPinCoords(x, y);
-                    locationNameInput.focus();
-                });
-                
-                pin.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        setSelectedPinCoords(x, y);
-                        locationNameInput.focus();
-                    }
-                });
-                
-                // Add pin to map
-                map.appendChild(pin);
-                
-                // Store pin data
-                state.pins.push({
-                    element: pin,
-                    x: x,
-                    y: y
-                });
-            }
-
-            // Set the selected pin coordinates for the form
-            function setSelectedPinCoords(x, y) {
-                state.selectedPinCoords = { x, y };
-                pinXInput.value = x;
-                pinYInput.value = y;
-            }
-
-            // Initialize form submission
-            function initializeForm() {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    
-                    // Validate form
-                    if (validateForm()) {
-                        // Create experience object
-                        const experience = {
-                            id: Date.now(), // Unique ID based on timestamp
-                            location: locationNameInput.value.trim(),
-                            country: countryInput.value.trim(),
-                            date: visitDateInput.value,
-                            experience: experienceInput.value.trim(),
-                            rating: parseInt(ratingInput.value),
-                            coordinates: {
-                                x: parseFloat(pinXInput.value),
-                                y: parseFloat(pinYInput.value)
-                            }
-                        };
-                        
-                        // Add experience to state
-                        state.experiences.push(experience);
-                        
-                        // Save to localStorage
-                        saveExperiences();
-                        
-                        // Update UI
-                        renderExperiences();
-                        
-                        // Reset form
-                        form.reset();
-                        pinXInput.value = '';
-                        pinYInput.value = '';
-                        state.selectedPinCoords = null;
-                        
-                        // Show success message
-                        formStatus.textContent = 'Experience added successfully!';
-                        setTimeout(() => {
-                            formStatus.textContent = '';
-                        }, 3000);
-                        
-                        // Announce to screen readers
-                        announceToScreenReader('Experience added successfully!');
-                    }
-                });
-            }
-
-            // Validate form inputs
+            
+            // Form validation
             function validateForm() {
+                const date = document.getElementById('workout-date').value;
+                const exerciseType = document.getElementById('exercise-type').value;
+                const duration = document.getElementById('duration').value;
+                const calories = document.getElementById('calories').value;
+                
                 let isValid = true;
                 
-                // Reset error messages
-                locationNameError.textContent = '';
-                countryError.textContent = '';
-                visitDateError.textContent = '';
-                experienceError.textContent = '';
-                
-                // Validate location name
-                if (!locationNameInput.value.trim()) {
-                    locationNameError.textContent = 'Please enter a location name';
+                // Validate date
+                if (!date) {
+                    showError('date-error', true);
                     isValid = false;
+                } else {
+                    showError('date-error', false);
                 }
                 
-                // Validate country
-                if (!countryInput.value.trim()) {
-                    countryError.textContent = 'Please enter a country';
+                // Validate exercise type
+                if (!exerciseType) {
+                    showError('exercise-type-error', true);
                     isValid = false;
+                } else {
+                    showError('exercise-type-error', false);
                 }
                 
-                // Validate visit date
-                if (!visitDateInput.value) {
-                    visitDateError.textContent = 'Please select a date of visit';
+                // Validate duration
+                if (!duration || duration < 1) {
+                    showError('duration-error', true);
                     isValid = false;
+                } else {
+                    showError('duration-error', false);
                 }
                 
-                // Validate experience
-                if (!experienceInput.value.trim()) {
-                    experienceError.textContent = 'Please share your experience';
+                // Validate calories
+                if (!calories || calories < 1) {
+                    showError('calories-error', true);
                     isValid = false;
-                }
-                
-                // Validate pin coordinates
-                if (!pinXInput.value || !pinYInput.value) {
-                    formStatus.textContent = 'Please select a location on the map first';
-                    formStatus.className = 'error-message';
-                    setTimeout(() => {
-                        formStatus.textContent = '';
-                        formStatus.className = 'success-message';
-                    }, 3000);
-                    isValid = false;
+                } else {
+                    showError('calories-error', false);
                 }
                 
                 return isValid;
             }
-
-            // Render experiences list
-            function renderExperiences() {
-                // Clear current list except for the "no experiences" message
-                const children = Array.from(experiencesList.children);
-                children.forEach(child => {
-                    if (child.id !== 'no-experiences') {
-                        experiencesList.removeChild(child);
+            
+            // Show/hide error messages
+            function showError(errorId, show) {
+                const errorElement = document.getElementById(errorId);
+                errorElement.style.display = show ? 'block' : 'none';
+                
+                // If showing error, set aria-invalid on the associated input
+                if (show) {
+                    const inputId = errorId.replace('-error', '');
+                    document.getElementById(inputId).setAttribute('aria-invalid', 'true');
+                } else {
+                    const inputId = errorId.replace('-error', '');
+                    document.getElementById(inputId).removeAttribute('aria-invalid');
+                }
+            }
+            
+            // Add a new workout
+            function addWorkout() {
+                const date = document.getElementById('workout-date').value;
+                const exerciseType = document.getElementById('exercise-type').value;
+                const duration = parseInt(document.getElementById('duration').value);
+                const calories = parseInt(document.getElementById('calories').value);
+                const notes = document.getElementById('notes').value;
+                
+                const workout = {
+                    id: Date.now(), // Use timestamp as unique ID
+                    date: date,
+                    exerciseType: exerciseType,
+                    duration: duration,
+                    calories: calories,
+                    notes: notes
+                };
+                
+                workouts.push(workout);
+                saveWorkouts();
+                updateWorkoutLog();
+                updateSummary();
+                updateChart();
+            }
+            
+            // Delete a workout
+            function deleteWorkout(id) {
+                workouts = workouts.filter(workout => workout.id !== id);
+                saveWorkouts();
+                updateWorkoutLog();
+                updateSummary();
+                updateChart();
+                showToast('Workout deleted');
+            }
+            
+            // Update the workout log table
+            function updateWorkoutLog() {
+                const workoutLogBody = document.getElementById('workout-log-body');
+                const noWorkoutsMessage = document.getElementById('no-workouts-message');
+                const workoutTableContainer = document.getElementById('workout-table-container');
+                
+                // Clear existing rows
+                workoutLogBody.innerHTML = '';
+                
+                // Show/hide appropriate elements based on whether there are workouts
+                if (workouts.length === 0) {
+                    noWorkoutsMessage.style.display = 'block';
+                    workoutTableContainer.style.display = 'none';
+                    return;
+                } else {
+                    noWorkoutsMessage.style.display = 'none';
+                    workoutTableContainer.style.display = 'block';
+                }
+                
+                // Sort workouts by date (newest first)
+                const sortedWorkouts = [...workouts].sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Add rows for each workout
+                sortedWorkouts.forEach(workout => {
+                    const row = document.createElement('tr');
+                    
+                    // Format date for display
+                    const formattedDate = new Date(workout.date).toLocaleDateString();
+                    
+                    row.innerHTML = `
+                        <td>${formattedDate}</td>
+                        <td>${workout.exerciseType}</td>
+                        <td>${workout.duration}</td>
+                        <td>${workout.calories}</td>
+                        <td>
+                            <button 
+                                class="delete-btn" 
+                                aria-label="Delete ${workout.exerciseType} workout from ${formattedDate}"
+                                data-id="${workout.id}"
+                                onclick="event.stopPropagation(); handleDeleteWorkout(event, ${workout.id})"
+                                onkeydown="handleDeleteWorkout(event, ${workout.id})">
+                                Delete
+                            </button>
+                        </td>
+                    `;
+                    
+                    // Add notes as expandable row if present
+                    if (workout.notes) {
+                        const notesRow = document.createElement('tr');
+                        notesRow.innerHTML = `
+                            <td colspan="5">
+                                <strong>Notes:</strong> ${workout.notes}
+                            </td>
+                        `;
+                        workoutLogBody.appendChild(row);
+                        workoutLogBody.appendChild(notesRow);
+                    } else {
+                        workoutLogBody.appendChild(row);
                     }
                 });
+            }
+            
+            // Update summary statistics
+            function updateSummary() {
+                const totalWorkouts = workouts.length;
+                const totalDuration = workouts.reduce((sum, workout) => sum + workout.duration, 0);
+                const totalCalories = workouts.reduce((sum, workout) => sum + workout.calories, 0);
                 
-                // Show/hide "no experiences" message
-                if (state.experiences.length === 0) {
-                    noExperiencesMsg.style.display = 'block';
-                } else {
-                    noExperiencesMsg.style.display = 'none';
+                document.getElementById('total-workouts').textContent = totalWorkouts;
+                document.getElementById('total-duration').textContent = totalDuration;
+                document.getElementById('total-calories').textContent = totalCalories;
+            }
+            
+            // Update progress chart
+            function updateChart() {
+                const chartContainer = document.getElementById('workout-chart');
+                chartContainer.innerHTML = '';
+                
+                // Get current date and calculate the start of the week (Sunday)
+                const today = new Date();
+                const startOfWeek = new Date(today);
+                startOfWeek.setDate(today.getDate() - today.getDay()); // Set to Sunday
+                
+                // Create array for each day of the week
+                const weekData = [];
+                for (let i = 0; i < 7; i++) {
+                    const day = new Date(startOfWeek);
+                    day.setDate(startOfWeek.getDate() + i);
                     
-                    // Add experiences to the list
-                    state.experiences.forEach(exp => {
-                        const card = document.createElement('article');
-                        card.className = 'experience-card';
-                        card.setAttribute('aria-labelledby', `exp-title-${exp.id}`);
-                        
-                        const title = document.createElement('h3');
-                        title.id = `exp-title-${exp.id}`;
-                        title.textContent = `${exp.location}, ${exp.country}`;
-                        
-                        const date = document.createElement('p');
-                        date.innerHTML = `<strong>Date:</strong> ${formatDate(exp.date)}`;
-                        
-                        const rating = document.createElement('p');
-                        rating.innerHTML = `<strong>Rating:</strong> ${getRatingStars(exp.rating)}`;
-                        
-                        const expText = document.createElement('p');
-                        expText.textContent = exp.experience;
-                        
-                        card.appendChild(title);
-                        card.appendChild(date);
-                        card.appendChild(rating);
-                        card.appendChild(expText);
-                        
-                        experiencesList.appendChild(card);
+                    // Format date to match workout date format (YYYY-MM-DD)
+                    const formattedDate = day.toISOString().split('T')[0];
+                    
+                    // Sum calories for this day
+                    const dayCalories = workouts
+                        .filter(workout => workout.date === formattedDate)
+                        .reduce((sum, workout) => sum + workout.calories, 0);
+                    
+                    weekData.push({
+                        day: daysOfWeek[i],
+                        date: formattedDate,
+                        calories: dayCalories
                     });
                 }
-            }
-
-            // Format date for display
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                return date.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-            }
-
-            // Generate rating stars
-            function getRatingStars(rating) {
-                const fullStar = '★';
-                const emptyStar = '☆';
-                const stars = fullStar.repeat(rating) + emptyStar.repeat(5 - rating);
-                return `<span aria-label="${rating} out of 5 stars">${stars}</span>`;
-            }
-
-            // Save experiences to localStorage
-            function saveExperiences() {
-                try {
-                    localStorage.setItem('travelExperiences', JSON.stringify(state.experiences));
-                } catch (error) {
-                    console.error('Error saving to localStorage:', error);
-                }
-            }
-
-            // Load experiences from localStorage
-            function loadSavedExperiences() {
-                try {
-                    const savedExperiences = localStorage.getItem('travelExperiences');
-                    if (savedExperiences) {
-                        state.experiences = JSON.parse(savedExperiences);
-                        
-                        // Render experiences
-                        renderExperiences();
-                        
-                        // Recreate pins for saved experiences
-                        state.experiences.forEach(exp => {
-                            addPin(exp.coordinates.x, exp.coordinates.y);
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error loading from localStorage:', error);
-                }
-            }
-
-            // Utility function to announce messages to screen readers
-            function announceToScreenReader(message) {
-                const announcement = document.createElement('div');
-                announcement.setAttribute('aria-live', 'assertive');
-                announcement.classList.add('sr-only');
-                announcement.textContent = message;
-                document.body.appendChild(announcement);
                 
-                // Remove after announcement is read
+                // Find maximum calories for scaling
+                const maxCalories = Math.max(...weekData.map(day => day.calories), 100); // Minimum 100 for scale
+                
+                // Create bars for each day
+                weekData.forEach(day => {
+                    const barHeight = day.calories > 0 ? (day.calories / maxCalories) * 100 : 0;
+                    
+                    const barContainer = document.createElement('div');
+                    barContainer.style.height = '100%';
+                    barContainer.style.display = 'flex';
+                    barContainer.style.flexDirection = 'column';
+                    barContainer.style.alignItems = 'center';
+                    barContainer.style.position = 'relative';
+                    
+                    const bar = document.createElement('div');
+                    bar.className = 'chart-bar';
+                    bar.style.height = `${barHeight}%`;
+                    bar.setAttribute('aria-label', `${day.day}: ${day.calories} calories burned`);
+                    bar.setAttribute('role', 'img');
+                    
+                    const label = document.createElement('div');
+                    label.className = 'chart-bar-label';
+                    label.textContent = day.day.substring(0, 3); // First 3 letters of day name
+                    
+                    const value = document.createElement('div');
+                    value.className = 'chart-bar-value';
+                    value.textContent = day.calories;
+                    
+                    barContainer.appendChild(bar);
+                    barContainer.appendChild(label);
+                    
+                    if (day.calories > 0) {
+                        barContainer.appendChild(value);
+                    }
+                    
+                    chartContainer.appendChild(barContainer);
+                });
+                
+                // Update the screen reader description with actual data
+                const chartDescription = document.getElementById('chart-description');
+                chartDescription.textContent = `Weekly calories burned: ${weekData.map(day => `${day.day}: ${day.calories} calories`).join(', ')}`;
+            }
+            
+            // Save workouts to localStorage
+            function saveWorkouts() {
+                localStorage.setItem('workouts', JSON.stringify(workouts));
+            }
+            
+            // Load workouts from localStorage
+            function loadWorkouts() {
+                const savedWorkouts = localStorage.getItem('workouts');
+                if (savedWorkouts) {
+                    workouts = JSON.parse(savedWorkouts);
+                    updateWorkoutLog();
+                }
+            }
+            
+            // Show toast notification
+            function showToast(message, isError = false) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = isError ? 'toast error show' : 'toast show';
+                
+                // Hide toast after 3 seconds
                 setTimeout(() => {
-                    document.body.removeChild(announcement);
+                    toast.className = 'toast';
                 }, 3000);
             }
-
-            // Handle interaction events for both mouse and keyboard
-            function handleInteraction(event) {
-                if (event.type === 'click' || 
-                    (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
-                    // Your action here
-                    if (event.type === 'keydown') {
-                        event.preventDefault(); // Prevent scrolling with space key
-                    }
-                }
-            }
+            
+            // Make functions available globally for event handlers
+            window.handleDeleteWorkout = function(event, id) {
+                handleInteraction(event, () => deleteWorkout(id));
+            };
         });
     </script>
 </body>
