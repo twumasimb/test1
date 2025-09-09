@@ -3,758 +3,963 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Personal Blog – Read, Search, and Comment</title>
-    <meta name="description" content="A personal blog with accessible articles, search, and commenting features. WCAG 2.1 AA compliant, keyboard and screen reader friendly.">
+    <title>Accessible Color Palette Mixer and Theme Preview</title>
     <style>
         :root {
-            --primary: #17497a;
-            --secondary: #eaeaea;
-            --accent: #0066cc;
-            --danger: #c0392b;
-            --success: #257a36;
-            --text: #1a1a1a;
-            --background: #fff;
-            --focus-outline: #0066cc;
-            --focus-outline-dark: #fff;
+            --focus-outline: 3px solid #0066cc;
+            --focus-outline-dark: 3px solid #ffffff;
+            --required: #d32f2f;
+            --label-color: #222;
+            --input-bg: #fff;
+            --input-border: #888;
+            --input-focus: #0066cc;
+            --palette-bg: #f4f4f4;
+            --palette-border: #ccc;
+            --theme-preview-border: #aaa;
+            --dark-bg: #222;
+            --dark-text: #fff;
+            --theme-border-radius: 8px;
+            --theme-gap: 1.5rem;
         }
+
         html {
             font-size: 100%;
-            box-sizing: border-box;
-            background: var(--background);
         }
-        *, *::before, *::after {
-            box-sizing: inherit;
-        }
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
-            color: var(--text);
-            background: var(--background);
             margin: 0;
-            line-height: 1.6;
+            background: #fff;
+            color: #222;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            line-height: 1.5;
         }
+
         header {
-            background: var(--primary);
+            background: #0066cc;
             color: #fff;
             padding: 1rem 0;
         }
-        .container {
-            width: 90%;
-            max-width: 900px;
+
+        nav {
+            max-width: 1100px;
             margin: 0 auto;
-        }
-        nav[role="navigation"] {
+            padding: 0 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-wrap: wrap;
         }
-        .blog-title {
-            font-size: 2rem;
-            font-weight: bold;
-            letter-spacing: 1px;
+
+        nav ul {
+            list-style: none;
             margin: 0;
-        }
-        .nav-links {
+            padding: 0;
             display: flex;
             gap: 1.5rem;
         }
-        .nav-links a {
+
+        nav a {
             color: #fff;
             text-decoration: none;
             font-weight: 600;
-            position: relative;
-            transition: color 0.2s;
+            transition: text-decoration 0.2s;
         }
-        .nav-links a:focus,
-        .nav-links a:hover {
-            color: #cde7ff;
-        }
-        main {
-            flex: 1;
-            padding: 2rem 0 2rem 0;
-        }
-        h1 {
-            font-size: 2.25rem;
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .search-section {
-            margin-bottom: 2rem;
-            background: var(--secondary);
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .search-label {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        .search-input-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .search-input-group input[type="search"] {
-            flex: 1;
-            padding: 0.5rem;
-            border: 1px solid #888;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        .search-input-group button {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .search-input-group button:focus,
-        .search-input-group button:hover {
-            background: #004e99;
-        }
-        .sr-only {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-        .articles-list {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-        article {
-            background: #f9fafb;
-            border: 1px solid #d6e0eb;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 4px rgba(23,73,122,0.03);
-        }
-        article:focus-within {
-            outline: 3px solid var(--focus-outline);
+
+        nav a:focus, nav a:hover {
+            text-decoration: underline;
+            outline: var(--focus-outline);
             outline-offset: 2px;
         }
-        .article-title {
-            font-size: 1.5rem;
-            color: var(--primary);
+
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1rem 3rem 1rem;
+        }
+
+        h1 {
+            font-size: 2.2rem;
             margin-top: 0;
-            margin-bottom: 0.25rem;
-        }
-        .article-meta {
-            font-size: 0.95rem;
-            color: #666;
-            margin-bottom: 1rem;
-        }
-        .article-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            display: block;
-        }
-        .article-content {
             margin-bottom: 1.5rem;
         }
-        .comments-section {
-            margin-top: 1.5rem;
-        }
-        .comments-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-        }
-        .comments-list {
-            list-style: none;
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
             padding: 0;
-            margin: 0 0 1rem 0;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            border: 0;
         }
-        .comments-list li {
-            background: #eef6fb;
-            border: 1px solid #c5d7e6;
-            border-radius: 4px;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.75rem;
+
+        .palette-mixer-section {
+            background: var(--palette-bg);
+            border: 1px solid var(--palette-border);
+            border-radius: 10px;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            margin-bottom: 2.5rem;
         }
-        .comment-meta {
-            font-size: 0.9rem;
-            color: #555;
-            margin-bottom: 0.2rem;
+
+        .palette-mixer-section h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
         }
-        .comment-content {
-            margin: 0;
+
+        .palette-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: flex-end;
         }
-        .comment-form {
-            background: #eaeaea;
-            border-radius: 6px;
-            padding: 1rem;
-            margin-top: 0.5rem;
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 140px;
         }
-        .comment-form label {
-            display: block;
+
+        label {
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            color: var(--label-color);
+            margin-bottom: 0.5em;
         }
-        .comment-form input[type="text"],
-        .comment-form input[type="email"],
-        .comment-form textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #888;
-            border-radius: 4px;
-            margin-bottom: 0.75rem;
-            font-size: 1rem;
-        }
-        .comment-form textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
+
         .required-indicator {
-            color: var(--danger);
-            margin-left: 0.15em;
+            color: var(--required);
+            margin-left: 0.25em;
         }
-        .comment-form button[type="submit"] {
-            background: var(--success);
+
+        input[type="color"] {
+            width: 3rem;
+            height: 3rem;
+            border: 2px solid var(--input-border);
+            border-radius: 6px;
+            background: var(--input-bg);
+            cursor: pointer;
+            margin-bottom: 0.25em;
+        }
+
+        input[type="text"] {
+            font-size: 1rem;
+            padding: 0.5em;
+            border: 2px solid var(--input-border);
+            border-radius: 5px;
+            background: var(--input-bg);
+            color: #222;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="color"]:focus {
+            border-color: var(--input-focus);
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .palette-colors-list {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0 0.5rem 0;
+            align-items: center;
+        }
+
+        .color-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 72px;
+        }
+
+        .swatch-circle {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            border: 2px solid #444;
+            margin-bottom: 0.3em;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        .swatch-label {
+            font-size: 0.95em;
+            text-align: center;
+            word-break: break-all;
+        }
+
+        .remove-btn {
+            margin-top: 0.3em;
+            background: #d32f2f;
             color: #fff;
             border: none;
-            border-radius: 4px;
-            padding: 0.5rem 1.25rem;
-            font-size: 1rem;
+            border-radius: 5px;
+            padding: 0.3em 0.7em;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .remove-btn:focus, .remove-btn:hover {
+            background: #b71c1c;
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .add-color-btn {
+            background: #0066cc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 0.7em 1.5em;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 0.5em;
+            transition: background 0.2s;
+        }
+
+        .add-color-btn:focus, .add-color-btn:hover {
+            background: #004a99;
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .error-message {
+            color: var(--required);
+            font-size: 0.98em;
+            margin-top: 0.3em;
+        }
+
+        .palette-list-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .palette-list-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .saved-palettes-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .saved-palette {
+            background: #fff;
+            border: 1.5px solid var(--palette-border);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            min-width: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .saved-palette-title {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 0.5em;
+        }
+
+        .saved-palette-swatches {
+            display: flex;
+            gap: 0.5em;
+            margin-bottom: 0.7em;
+        }
+
+        .use-palette-btn {
+            background: #388e3c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5em 1.2em;
+            font-size: 0.98em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 0.5em;
+            transition: background 0.2s;
+        }
+
+        .use-palette-btn:focus, .use-palette-btn:hover {
+            background: #256029;
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .delete-palette-btn {
+            background: #d32f2f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5em 1.2em;
+            font-size: 0.98em;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
         }
-        .comment-form button[type="submit"]:focus,
-        .comment-form button[type="submit"]:hover {
-            background: #185e29;
-        }
-        .form-error {
-            color: var(--danger);
-            font-size: 0.98rem;
-            margin-bottom: 0.5rem;
-        }
-        .form-success {
-            color: var(--success);
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        /* Focus indicators for all interactive elements */
-        button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid var(--focus-outline);
+
+        .delete-palette-btn:focus, .delete-palette-btn:hover {
+            background: #b71c1c;
+            outline: var(--focus-outline);
             outline-offset: 2px;
         }
-        /* For dark backgrounds */
-        .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid var(--focus-outline-dark);
+
+        .theme-preview-section {
+            margin-bottom: 2.5rem;
         }
-        /* Responsive Design */
-        @media (max-width: 700px) {
-            .container {
-                width: 98%;
-                padding: 0 0.5rem;
-            }
-            main {
-                padding: 1rem 0;
-            }
-            .search-section {
-                padding: 1rem 0.75rem;
-            }
-            article {
-                padding: 1rem;
-            }
+
+        .theme-preview-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
         }
-        @media (max-width: 500px) {
-            h1 {
-                font-size: 1.4rem;
-            }
-            .article-title {
-                font-size: 1.1rem;
-            }
-            .search-section {
-                flex-direction: column;
-            }
-            .nav-links {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
+
+        .theme-previews {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--theme-gap);
         }
-        footer {
-            background: var(--primary);
+
+        .theme-preview {
+            flex: 1 1 280px;
+            min-width: 260px;
+            max-width: 340px;
+            border: 2px solid var(--theme-preview-border);
+            border-radius: var(--theme-border-radius);
+            overflow: hidden;
+            background: #fff;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .theme-preview.dark-bg {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            border-color: #222;
+        }
+
+        .theme-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding: 1.2em 1em 0.7em 1em;
+            background: transparent;
+        }
+
+        .theme-body {
+            flex: 1 1 auto;
+            padding: 1em;
+        }
+
+        .theme-btn {
+            border: none;
+            border-radius: 5px;
+            padding: 0.7em 1.3em;
+            font-size: 1em;
+            font-weight: 600;
+            margin-top: 1em;
+            cursor: pointer;
+            background: #0066cc;
             color: #fff;
-            text-align: center;
-            padding: 1rem 0;
-            font-size: 1rem;
-            margin-top: auto;
+            transition: background 0.2s;
         }
-        /* Hide scrollbars for comments on mobile */
-        @media (max-width: 500px) {
-            .comments-list {
-                overflow-x: auto;
+
+        .theme-preview.dark-bg .theme-btn {
+            background: #fff;
+            color: #222;
+        }
+
+        .theme-btn:focus, .theme-btn:hover {
+            background: #004a99;
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .theme-preview.dark-bg .theme-btn:focus, .theme-preview.dark-bg .theme-btn:hover {
+            background: #222;
+            color: #fff;
+            outline: var(--focus-outline-dark);
+        }
+
+        /* Focus indicators (required by WCAG) */
+        button:focus, input:focus, select:focus, textarea:focus, a:focus {
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+        }
+        .dark-bg button:focus, .dark-bg a:focus {
+            outline: var(--focus-outline-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .theme-previews {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            nav ul {
+                gap: 1rem;
+            }
+        }
+        @media (max-width: 600px) {
+            main {
+                padding: 1rem 0.3rem 2rem 0.3rem;
+            }
+            .palette-mixer-section, .theme-preview, .saved-palette {
+                padding: 1rem 0.5rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <nav role="navigation" aria-label="Main navigation">
-                <span class="blog-title" aria-label="Blog Home">Accessible Personal Blog</span>
-                <div class="nav-links">
-                    <a href="#main-content" aria-label="Skip to main content">Skip to Content</a>
-                    <a href="#articles-list" aria-label="View blog articles">Articles</a>
-                    <a href="#about-section" aria-label="About this blog">About</a>
-                </div>
-            </nav>
-        </div>
+        <nav role="navigation" aria-label="Main navigation">
+            <span style="font-size:1.25rem;font-weight:700;">Color Palette Mixer</span>
+            <ul>
+                <li><a href="#mixer-section">Palette Mixer</a></li>
+                <li><a href="#palettes-section">Saved Palettes</a></li>
+                <li><a href="#theme-preview-section">Theme Previews</a></li>
+            </ul>
+        </nav>
     </header>
-    <main id="main-content" tabindex="-1">
-        <div class="container">
-            <h1>Welcome to My Accessible Blog</h1>
-            <section class="search-section" aria-labelledby="search-label">
-                <label id="search-label" for="search-input" class="search-label">Search Articles</label>
-                <form id="search-form" role="search" autocomplete="off">
-                    <div class="search-input-group">
-                        <input type="search" id="search-input" name="search" placeholder="Enter keywords..." aria-label="Search blog articles" aria-describedby="search-help" />
-                        <button type="submit" id="search-button">Search</button>
-                    </div>
-                    <span id="search-help" class="sr-only">Type keywords to filter blog articles. Press Enter or click Search.</span>
-                </form>
-            </section>
-            <section id="articles-list" class="articles-list" aria-label="Blog Articles">
-                <!-- Articles dynamically rendered here -->
-            </section>
-            <section id="about-section" aria-labelledby="about-heading" style="margin-top:2.5rem;">
-                <h2 id="about-heading">About This Blog</h2>
-                <p>
-                    This is a demonstration of a <strong>fully accessible, WCAG 2.1 AA compliant</strong> personal blog. 
-                    You can <strong>read articles</strong>, <strong>search posts</strong>, and <strong>leave comments</strong> – all with keyboard, screen reader, and mobile support.
-                </p>
-                <p>
-                    <em>Accessibility matters. Everyone should be able to participate and share their voice.</em>
-                </p>
-            </section>
-        </div>
+    <main>
+        <h1 id="page-title">Accessible Color Palette Mixer &amp; Theme Preview</h1>
+
+        <!-- Palette Mixer Section -->
+        <section id="mixer-section" class="palette-mixer-section" aria-labelledby="mixer-heading">
+            <h2 id="mixer-heading">Create Your Custom Color Palette</h2>
+            <form class="palette-form" id="palette-form" autocomplete="off" novalidate>
+                <div class="form-group">
+                    <label for="color-name" id="label-color-name">
+                        Color Name
+                        <span class="required-indicator" aria-hidden="true">*</span>
+                    </label>
+                    <input type="text" id="color-name" name="color-name" required maxlength="20" aria-required="true" aria-describedby="color-name-desc color-name-error" />
+                    <span id="color-name-desc" class="sr-only">Enter a short name for your color, e.g. Primary, Accent.</span>
+                    <span id="color-name-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-group">
+                    <label for="color-value" id="label-color-value">
+                        Color Value
+                        <span class="required-indicator" aria-hidden="true">*</span>
+                    </label>
+                    <input type="color" id="color-value" name="color-value" required aria-required="true" aria-describedby="color-value-desc color-value-error" value="#0066cc" />
+                    <span id="color-value-desc" class="sr-only">Pick a color using the color picker.</span>
+                    <span id="color-value-error" class="error-message" aria-live="polite"></span>
+                </div>
+                <div class="form-group" style="align-self: flex-end;">
+                    <button type="submit" class="add-color-btn" id="add-color-btn">
+                        Add Color to Palette
+                    </button>
+                </div>
+            </form>
+            <div class="palette-colors-list" id="palette-colors-list" aria-live="polite" aria-label="Current palette colors">
+                <!-- Dynamically filled -->
+            </div>
+            <div style="margin-top:1.5rem;">
+                <button type="button" id="save-palette-btn" class="add-color-btn" style="background:#388e3c;" disabled>
+                    Save Palette
+                </button>
+            </div>
+            <span id="save-palette-status" class="sr-only" aria-live="polite"></span>
+        </section>
+
+        <!-- Saved Palettes Section -->
+        <section id="palettes-section" class="palette-list-section" aria-labelledby="palettes-heading">
+            <h2 id="palettes-heading">Saved Palettes</h2>
+            <div class="saved-palettes-list" id="saved-palettes-list" aria-live="polite" aria-label="List of saved palettes">
+                <!-- Dynamically filled -->
+            </div>
+        </section>
+
+        <!-- Theme Preview Section -->
+        <section id="theme-preview-section" class="theme-preview-section" aria-labelledby="theme-preview-heading">
+            <h2 id="theme-preview-heading">Theme Previews</h2>
+            <div class="theme-previews" id="theme-previews" aria-live="polite" aria-label="Theme previews with your palette">
+                <!-- Dynamically filled -->
+            </div>
+        </section>
     </main>
     <footer>
-        <span>&copy; 2024 Accessible Personal Blog. All rights reserved.</span>
+        <div style="padding:1.2rem 1rem;text-align:center;font-size:1rem;color:#555;">
+            &copy; 2024 Accessible Color Palette Mixer. All rights reserved.
+        </div>
     </footer>
     <script>
-    // --- Data Model (Demo) ---
-    const blogPosts = [
-        {
-            id: 'post-1',
-            title: 'Building Accessible Web Apps',
-            author: 'Jane Doe',
-            date: '2024-05-20',
-            image: {
-                src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
-                alt: 'Laptop on a desk with accessibility icons overlay'
-            },
-            content: `<p>Accessibility is about making the web usable for everyone, regardless of ability. In this article, we explore the fundamentals of building accessible web applications, including semantic HTML, keyboard navigation, and color contrast.</p>
-            <ul>
-                <li>Use semantic elements for structure</li>
-                <li>Ensure sufficient color contrast</li>
-                <li>Provide keyboard access for all features</li>
-            </ul>
-            <p>By following accessibility guidelines, you ensure your site is inclusive and reaches the widest possible audience.</p>`,
-            comments: [
-                {
-                    name: 'Alex Smith',
-                    email: 'alex@example.com',
-                    date: '2024-05-21',
-                    content: 'Great tips! Accessibility should always be a priority.'
-                }
-            ]
-        },
-        {
-            id: 'post-2',
-            title: 'The Importance of Semantic HTML',
-            author: 'Jane Doe',
-            date: '2024-05-10',
-            image: {
-                src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80',
-                alt: 'HTML5 logo on a white background'
-            },
-            content: `<p>Semantic HTML provides meaning to web content, making it easier for assistive technologies to interpret. Headings, lists, and sections help users navigate and understand your site.</p>
-            <p>Always use <strong>proper heading hierarchy</strong> and avoid skipping levels for clarity and accessibility.</p>`,
-            comments: []
-        },
-        {
-            id: 'post-3',
-            title: 'Color Contrast in UI Design',
-            author: 'Jane Doe',
-            date: '2024-04-28',
-            image: {
-                src: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80',
-                alt: 'Color swatches and palette on a designer desk'
-            },
-            content: `<p>Good color contrast is essential for readability, especially for users with low vision or color blindness. Use tools to check your contrast ratios and ensure text is easy to read against backgrounds.</p>
-            <ol>
-                <li>Check contrast ratios (minimum 4.5:1 for normal text)</li>
-                <li>Don’t use color as the only way to convey information</li>
-            </ol>`,
-            comments: [
-                {
-                    name: 'Maria Lopez',
-                    email: 'maria@example.com',
-                    date: '2024-04-29',
-                    content: 'Thanks for the reminder about color contrast tools!'
-                }
-            ]
-        }
-    ];
-
-    // --- Utility: Date formatting ---
-    function formatDate(iso) {
-        const date = new Date(iso);
-        return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-    }
-
-    // --- Render Articles ---
-    function renderArticles(posts) {
-        const articlesList = document.getElementById('articles-list');
-        articlesList.innerHTML = '';
-        if (posts.length === 0) {
-            const noResults = document.createElement('p');
-            noResults.textContent = 'No articles found. Try a different search term.';
-            noResults.setAttribute('role', 'status');
-            articlesList.appendChild(noResults);
-            return;
-        }
-        posts.forEach((post, idx) => {
-            const article = document.createElement('article');
-            article.setAttribute('tabindex', '-1');
-            article.setAttribute('aria-labelledby', `article-title-${post.id}`);
-            article.setAttribute('id', post.id);
-
-            // Title
-            const h2 = document.createElement('h2');
-            h2.className = 'article-title';
-            h2.id = `article-title-${post.id}`;
-            h2.textContent = post.title;
-            article.appendChild(h2);
-
-            // Meta
-            const meta = document.createElement('div');
-            meta.className = 'article-meta';
-            meta.innerHTML = `By <span>${post.author}</span> &mdash; <time datetime="${post.date}">${formatDate(post.date)}</time>`;
-            article.appendChild(meta);
-
-            // Image (with descriptive alt)
-            if (post.image && post.image.src) {
-                const img = document.createElement('img');
-                img.src = post.image.src;
-                img.alt = post.image.alt;
-                img.className = 'article-image';
-                article.appendChild(img);
-            }
-
-            // Content
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'article-content';
-            contentDiv.innerHTML = post.content;
-            article.appendChild(contentDiv);
-
-            // Comments section
-            const commentsSection = document.createElement('section');
-            commentsSection.className = 'comments-section';
-            commentsSection.setAttribute('aria-labelledby', `comments-title-${post.id}`);
-
-            const commentsTitle = document.createElement('h3');
-            commentsTitle.className = 'comments-title';
-            commentsTitle.id = `comments-title-${post.id}`;
-            commentsTitle.textContent = 'Comments';
-            commentsSection.appendChild(commentsTitle);
-
-            // Comments List
-            const commentsList = document.createElement('ul');
-            commentsList.className = 'comments-list';
-            commentsList.setAttribute('aria-live', 'polite');
-            commentsList.setAttribute('aria-relevant', 'additions');
-            if (post.comments.length === 0) {
-                const noComments = document.createElement('li');
-                noComments.textContent = 'No comments yet. Be the first to comment!';
-                commentsList.appendChild(noComments);
-            } else {
-                post.comments.forEach(comment => {
-                    const li = document.createElement('li');
-                    // Meta
-                    const meta = document.createElement('div');
-                    meta.className = 'comment-meta';
-                    meta.innerHTML = `<strong>${comment.name}</strong> &mdash; <time datetime="${comment.date}">${formatDate(comment.date)}</time>`;
-                    li.appendChild(meta);
-                    // Content
-                    const content = document.createElement('p');
-                    content.className = 'comment-content';
-                    content.textContent = comment.content;
-                    li.appendChild(content);
-                    commentsList.appendChild(li);
-                });
-            }
-            commentsSection.appendChild(commentsList);
-
-            // Comment Form
-            const form = document.createElement('form');
-            form.className = 'comment-form';
-            form.setAttribute('aria-label', `Leave a comment on "${post.title}"`);
-            form.setAttribute('autocomplete', 'off');
-            form.setAttribute('novalidate', 'novalidate');
-            form.setAttribute('data-post-id', post.id);
-
-            // Name
-            const nameLabel = document.createElement('label');
-            nameLabel.setAttribute('for', `name-${post.id}`);
-            nameLabel.innerHTML = 'Name <span class="required-indicator" aria-hidden="true">*</span>';
-            form.appendChild(nameLabel);
-            const nameInput = document.createElement('input');
-            nameInput.type = 'text';
-            nameInput.id = `name-${post.id}`;
-            nameInput.name = 'name';
-            nameInput.required = true;
-            nameInput.setAttribute('aria-required', 'true');
-            nameInput.setAttribute('aria-describedby', `name-desc-${post.id}`);
-            nameInput.autocomplete = 'name';
-            form.appendChild(nameInput);
-            const nameDesc = document.createElement('span');
-            nameDesc.id = `name-desc-${post.id}`;
-            nameDesc.className = 'sr-only';
-            nameDesc.textContent = 'Enter your full name. Required field.';
-            form.appendChild(nameDesc);
-
-            // Email
-            const emailLabel = document.createElement('label');
-            emailLabel.setAttribute('for', `email-${post.id}`);
-            emailLabel.innerHTML = 'Email <span class="required-indicator" aria-hidden="true">*</span>';
-            form.appendChild(emailLabel);
-            const emailInput = document.createElement('input');
-            emailInput.type = 'email';
-            emailInput.id = `email-${post.id}`;
-            emailInput.name = 'email';
-            emailInput.required = true;
-            emailInput.setAttribute('aria-required', 'true');
-            emailInput.setAttribute('aria-describedby', `email-desc-${post.id}`);
-            emailInput.autocomplete = 'email';
-            form.appendChild(emailInput);
-            const emailDesc = document.createElement('span');
-            emailDesc.id = `email-desc-${post.id}`;
-            emailDesc.className = 'sr-only';
-            emailDesc.textContent = 'Enter a valid email address. Required field.';
-            form.appendChild(emailDesc);
-
-            // Comment
-            const commentLabel = document.createElement('label');
-            commentLabel.setAttribute('for', `comment-${post.id}`);
-            commentLabel.innerHTML = 'Comment <span class="required-indicator" aria-hidden="true">*</span>';
-            form.appendChild(commentLabel);
-            const commentTextarea = document.createElement('textarea');
-            commentTextarea.id = `comment-${post.id}`;
-            commentTextarea.name = 'comment';
-            commentTextarea.required = true;
-            commentTextarea.setAttribute('aria-required', 'true');
-            commentTextarea.setAttribute('aria-describedby', `comment-desc-${post.id}`);
-            form.appendChild(commentTextarea);
-            const commentDesc = document.createElement('span');
-            commentDesc.id = `comment-desc-${post.id}`;
-            commentDesc.className = 'sr-only';
-            commentDesc.textContent = 'Enter your comment. Required field.';
-            form.appendChild(commentDesc);
-
-            // Error message area
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'form-error';
-            errorDiv.id = `comment-error-${post.id}`;
-            errorDiv.setAttribute('aria-live', 'assertive');
-            errorDiv.setAttribute('role', 'alert');
-            errorDiv.style.display = 'none';
-            form.appendChild(errorDiv);
-
-            // Success message area
-            const successDiv = document.createElement('div');
-            successDiv.className = 'form-success';
-            successDiv.id = `comment-success-${post.id}`;
-            successDiv.setAttribute('aria-live', 'polite');
-            successDiv.style.display = 'none';
-            form.appendChild(successDiv);
-
-            // Submit
-            const submitBtn = document.createElement('button');
-            submitBtn.type = 'submit';
-            submitBtn.textContent = 'Post Comment';
-            submitBtn.id = `submit-comment-${post.id}`;
-            form.appendChild(submitBtn);
-
-            // Event Listener for Comment Form Submission
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                handleCommentSubmit(event, post.id);
+        // Accessibility: utility function to escape HTML for user input
+        function escapeHTML(str) {
+            return String(str).replace(/[&<>"']/g, function(m) {
+                return ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                })[m];
             });
-
-            commentsSection.appendChild(form);
-            article.appendChild(commentsSection);
-
-            articlesList.appendChild(article);
-        });
-    }
-
-    // --- Handle Comment Submission ---
-    function handleCommentSubmit(event, postId) {
-        const form = event.target;
-        const nameInput = form.querySelector('input[name="name"]');
-        const emailInput = form.querySelector('input[name="email"]');
-        const commentTextarea = form.querySelector('textarea[name="comment"]');
-        const errorDiv = form.querySelector('.form-error');
-        const successDiv = form.querySelector('.form-success');
-
-        // Reset errors
-        errorDiv.style.display = 'none';
-        errorDiv.textContent = '';
-        successDiv.style.display = 'none';
-        successDiv.textContent = '';
-
-        // Validation
-        let valid = true;
-        let errorMsg = '';
-
-        if (!nameInput.value.trim()) {
-            valid = false;
-            errorMsg += 'Name is required. ';
-            nameInput.setAttribute('aria-invalid', 'true');
-        } else {
-            nameInput.removeAttribute('aria-invalid');
-        }
-        if (!emailInput.value.trim()) {
-            valid = false;
-            errorMsg += 'Email is required. ';
-            emailInput.setAttribute('aria-invalid', 'true');
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
-            valid = false;
-            errorMsg += 'Email is not valid. ';
-            emailInput.setAttribute('aria-invalid', 'true');
-        } else {
-            emailInput.removeAttribute('aria-invalid');
-        }
-        if (!commentTextarea.value.trim()) {
-            valid = false;
-            errorMsg += 'Comment is required.';
-            commentTextarea.setAttribute('aria-invalid', 'true');
-        } else {
-            commentTextarea.removeAttribute('aria-invalid');
         }
 
-        if (!valid) {
-            errorDiv.textContent = errorMsg;
-            errorDiv.style.display = 'block';
-            // Associate error message with fields
-            nameInput.setAttribute('aria-describedby', nameInput.getAttribute('aria-describedby') + ' ' + errorDiv.id);
-            emailInput.setAttribute('aria-describedby', emailInput.getAttribute('aria-describedby') + ' ' + errorDiv.id);
-            commentTextarea.setAttribute('aria-describedby', commentTextarea.getAttribute('aria-describedby') + ' ' + errorDiv.id);
-            // Focus the first invalid field
-            if (!nameInput.value.trim()) {
-                nameInput.focus();
-            } else if (!emailInput.value.trim() || emailInput.hasAttribute('aria-invalid')) {
-                emailInput.focus();
-            } else {
-                commentTextarea.focus();
+        // Palette state
+        let currentPalette = [];
+        let savedPalettes = [];
+        let activePaletteIndex = null;
+
+        // DOM Elements
+        const paletteForm = document.getElementById('palette-form');
+        const colorNameInput = document.getElementById('color-name');
+        const colorValueInput = document.getElementById('color-value');
+        const colorNameError = document.getElementById('color-name-error');
+        const colorValueError = document.getElementById('color-value-error');
+        const paletteColorsList = document.getElementById('palette-colors-list');
+        const savePaletteBtn = document.getElementById('save-palette-btn');
+        const savePaletteStatus = document.getElementById('save-palette-status');
+        const savedPalettesList = document.getElementById('saved-palettes-list');
+        const themePreviews = document.getElementById('theme-previews');
+
+        // --- Form Validation ---
+        function validateColorName(name) {
+            if (!name.trim()) {
+                return 'Color name is required.';
             }
-            return;
+            if (name.length > 20) {
+                return 'Color name must be 20 characters or less.';
+            }
+            if (currentPalette.some(c => c.name.toLowerCase() === name.trim().toLowerCase())) {
+                return 'This color name already exists in the palette.';
+            }
+            return '';
+        }
+        function validateColorValue(value) {
+            if (!value) {
+                return 'Color value is required.';
+            }
+            // Accepts #RRGGBB or #RGB
+            if (!/^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(value)) {
+                return 'Invalid color value.';
+            }
+            if (currentPalette.some(c => c.value.toLowerCase() === value.toLowerCase())) {
+                return 'This color is already in the palette.';
+            }
+            return '';
         }
 
-        // Add comment to data model (in-memory for demo)
-        const newComment = {
-            name: nameInput.value.trim(),
-            email: emailInput.value.trim(),
-            date: new Date().toISOString().split('T')[0],
-            content: commentTextarea.value.trim()
-        };
-        const post = blogPosts.find(p => p.id === postId);
-        if (post) {
-            post.comments.push(newComment);
-            // Re-render articles (to update comments list)
-            renderArticles(filteredPosts);
-            // Focus the success message
+        // --- Palette Management ---
+        function renderPaletteColors() {
+            paletteColorsList.innerHTML = '';
+            if (currentPalette.length === 0) {
+                const emptyMsg = document.createElement('span');
+                emptyMsg.textContent = 'No colors in palette yet.';
+                emptyMsg.style.fontStyle = 'italic';
+                paletteColorsList.appendChild(emptyMsg);
+                savePaletteBtn.disabled = true;
+                return;
+            }
+            currentPalette.forEach((color, idx) => {
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.setAttribute('role', 'group');
+                swatch.setAttribute('aria-label', `${color.name}: ${color.value}`);
+
+                const circle = document.createElement('span');
+                circle.className = 'swatch-circle';
+                circle.style.background = color.value;
+                circle.setAttribute('aria-hidden', 'true');
+
+                const label = document.createElement('span');
+                label.className = 'swatch-label';
+                label.textContent = color.name;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'remove-btn';
+                removeBtn.setAttribute('aria-label', `Remove ${color.name} color`);
+                removeBtn.innerText = 'Remove';
+                removeBtn.addEventListener('click', () => removeColor(idx));
+                // Keyboard support is native for button
+
+                swatch.appendChild(circle);
+                swatch.appendChild(label);
+                swatch.appendChild(removeBtn);
+
+                paletteColorsList.appendChild(swatch);
+            });
+            savePaletteBtn.disabled = currentPalette.length < 2;
+        }
+
+        function removeColor(idx) {
+            currentPalette.splice(idx, 1);
+            renderPaletteColors();
+            updateThemePreviews();
+        }
+
+        function resetForm() {
+            colorNameInput.value = '';
+            colorValueInput.value = '#0066cc';
+            colorNameError.textContent = '';
+            colorValueError.textContent = '';
+            colorNameInput.focus();
+        }
+
+        paletteForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            colorNameError.textContent = '';
+            colorValueError.textContent = '';
+            let hasError = false;
+
+            const name = colorNameInput.value.trim();
+            const value = colorValueInput.value;
+
+            const nameError = validateColorName(name);
+            if (nameError) {
+                colorNameError.textContent = nameError;
+                hasError = true;
+            }
+            const valueError = validateColorValue(value);
+            if (valueError) {
+                colorValueError.textContent = valueError;
+                hasError = true;
+            }
+            if (hasError) {
+                return;
+            }
+            currentPalette.push({ name: name, value: value });
+            renderPaletteColors();
+            updateThemePreviews();
+            resetForm();
+        });
+
+        // --- Palette Saving ---
+        function savePalette() {
+            let paletteName = prompt('Enter a name for your palette (max 30 chars):', '');
+            if (paletteName === null) return; // Cancelled
+            paletteName = paletteName.trim();
+            if (!paletteName) {
+                announceSaveStatus('Palette not saved: name is required.');
+                return;
+            }
+            if (paletteName.length > 30) {
+                announceSaveStatus('Palette not saved: name too long.');
+                return;
+            }
+            if (savedPalettes.some(p => p.name.toLowerCase() === paletteName.toLowerCase())) {
+                announceSaveStatus('Palette not saved: name already exists.');
+                return;
+            }
+            savedPalettes.push({
+                name: paletteName,
+                colors: JSON.parse(JSON.stringify(currentPalette))
+            });
+            renderSavedPalettes();
+            announceSaveStatus('Palette saved successfully.');
+        }
+
+        function announceSaveStatus(msg) {
+            savePaletteStatus.textContent = msg;
             setTimeout(() => {
-                const newSuccessDiv = document.getElementById(`comment-success-${postId}`);
-                if (newSuccessDiv) {
-                    newSuccessDiv.textContent = 'Your comment was posted successfully!';
-                    newSuccessDiv.style.display = 'block';
-                    newSuccessDiv.focus();
+                savePaletteStatus.textContent = '';
+            }, 4000);
+        }
+
+        savePaletteBtn.addEventListener('click', savePalette);
+
+        // --- Saved Palettes Management ---
+        function renderSavedPalettes() {
+            savedPalettesList.innerHTML = '';
+            if (savedPalettes.length === 0) {
+                const emptyMsg = document.createElement('span');
+                emptyMsg.textContent = 'No saved palettes yet.';
+                emptyMsg.style.fontStyle = 'italic';
+                savedPalettesList.appendChild(emptyMsg);
+                return;
+            }
+            savedPalettes.forEach((palette, idx) => {
+                const paletteDiv = document.createElement('article');
+                paletteDiv.className = 'saved-palette';
+                paletteDiv.setAttribute('role', 'group');
+                paletteDiv.setAttribute('aria-label', `Palette: ${palette.name}`);
+
+                const title = document.createElement('div');
+                title.className = 'saved-palette-title';
+                title.textContent = palette.name;
+
+                const swatches = document.createElement('div');
+                swatches.className = 'saved-palette-swatches';
+                palette.colors.forEach(color => {
+                    const swatch = document.createElement('span');
+                    swatch.className = 'swatch-circle';
+                    swatch.style.background = color.value;
+                    swatch.title = `${color.name}: ${color.value}`;
+                    swatch.setAttribute('aria-label', `${color.name}: ${color.value}`);
+                    swatches.appendChild(swatch);
+                });
+
+                const useBtn = document.createElement('button');
+                useBtn.type = 'button';
+                useBtn.className = 'use-palette-btn';
+                useBtn.innerText = 'Use Palette';
+                useBtn.setAttribute('aria-label', `Use palette ${palette.name}`);
+                useBtn.addEventListener('click', () => {
+                    currentPalette = JSON.parse(JSON.stringify(palette.colors));
+                    renderPaletteColors();
+                    updateThemePreviews();
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                });
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'delete-palette-btn';
+                deleteBtn.innerText = 'Delete';
+                deleteBtn.setAttribute('aria-label', `Delete palette ${palette.name}`);
+                deleteBtn.addEventListener('click', () => {
+                    if (confirm(`Are you sure you want to delete palette "${palette.name}"?`)) {
+                        savedPalettes.splice(idx, 1);
+                        renderSavedPalettes();
+                    }
+                });
+
+                // Keyboard support is native for button
+
+                paletteDiv.appendChild(title);
+                paletteDiv.appendChild(swatches);
+                paletteDiv.appendChild(useBtn);
+                paletteDiv.appendChild(deleteBtn);
+
+                savedPalettesList.appendChild(paletteDiv);
+            });
+        }
+
+        // --- Theme Previews ---
+        // Example themes: Light, Dark, Modern Card
+        function updateThemePreviews() {
+            themePreviews.innerHTML = '';
+            if (currentPalette.length === 0) {
+                const emptyMsg = document.createElement('span');
+                emptyMsg.textContent = 'Add colors to your palette to preview themes.';
+                emptyMsg.style.fontStyle = 'italic';
+                themePreviews.appendChild(emptyMsg);
+                return;
+            }
+
+            // Utility: pick color from palette by index or fallback
+            function getColor(idx, fallback) {
+                return currentPalette[idx] ? currentPalette[idx].value : fallback;
+            }
+
+            // Accessibility: Ensure contrast for text over backgrounds
+            function getContrastYIQ(hexcolor) {
+                hexcolor = hexcolor.replace('#', '');
+                if (hexcolor.length === 3) {
+                    hexcolor = hexcolor[0]+hexcolor[0]+hexcolor[1]+hexcolor[1]+hexcolor[2]+hexcolor[2];
+                }
+                const r = parseInt(hexcolor.substr(0,2),16);
+                const g = parseInt(hexcolor.substr(2,2),16);
+                const b = parseInt(hexcolor.substr(4,2),16);
+                // YIQ formula
+                return ((r*299)+(g*587)+(b*114))/1000 >= 128 ? '#222' : '#fff';
+            }
+
+            // Theme 1: Light Theme
+            const lightBg = getColor(0, '#f7fafc');
+            const lightAccent = getColor(1, '#0066cc');
+            const lightSecondary = getColor(2, '#388e3c');
+            const lightText = getContrastYIQ(lightBg);
+
+            const lightTheme = document.createElement('article');
+            lightTheme.className = 'theme-preview';
+            lightTheme.setAttribute('role', 'region');
+            lightTheme.setAttribute('aria-label', 'Light Theme Preview');
+            lightTheme.style.background = lightBg;
+            lightTheme.style.color = lightText;
+
+            const lightHeader = document.createElement('div');
+            lightHeader.className = 'theme-header';
+            lightHeader.textContent = 'Light Theme';
+
+            const lightBody = document.createElement('div');
+            lightBody.className = 'theme-body';
+            lightBody.innerHTML = `
+                <h3 style="margin-top:0;font-size:1.1rem;">Welcome!</h3>
+                <p>This is a preview of your palette in a light UI.</p>
+                <ul>
+                    <li><strong>Primary:</strong> <span style="color:${lightAccent};">${lightAccent}</span></li>
+                    <li><strong>Secondary:</strong> <span style="color:${lightSecondary};">${lightSecondary}</span></li>
+                </ul>
+            `;
+            const lightBtn = document.createElement('button');
+            lightBtn.type = 'button';
+            lightBtn.className = 'theme-btn';
+            lightBtn.style.background = lightAccent;
+            lightBtn.style.color = getContrastYIQ(lightAccent);
+            lightBtn.innerText = 'Sample Button';
+            lightBtn.setAttribute('aria-label', 'Sample button in light theme');
+            // Keyboard accessible by default
+
+            lightBody.appendChild(lightBtn);
+            lightTheme.appendChild(lightHeader);
+            lightTheme.appendChild(lightBody);
+
+            // Theme 2: Dark Theme
+            const darkBg = getColor(1, '#222');
+            const darkAccent = getColor(0, '#00bcd4');
+            const darkSecondary = getColor(2, '#ffb300');
+            const darkText = getContrastYIQ(darkBg);
+
+            const darkTheme = document.createElement('article');
+            darkTheme.className = 'theme-preview dark-bg';
+            darkTheme.setAttribute('role', 'region');
+            darkTheme.setAttribute('aria-label', 'Dark Theme Preview');
+            darkTheme.style.background = darkBg;
+            darkTheme.style.color = darkText;
+
+            const darkHeader = document.createElement('div');
+            darkHeader.className = 'theme-header';
+            darkHeader.textContent = 'Dark Theme';
+
+            const darkBody = document.createElement('div');
+            darkBody.className = 'theme-body';
+            darkBody.innerHTML = `
+                <h3 style="margin-top:0;font-size:1.1rem;">Welcome!</h3>
+                <p>This is a preview of your palette in a dark UI.</p>
+                <ul>
+                    <li><strong>Accent:</strong> <span style="color:${darkAccent};">${darkAccent}</span></li>
+                    <li><strong>Highlight:</strong> <span style="color:${darkSecondary};">${darkSecondary}</span></li>
+                </ul>
+            `;
+            const darkBtn = document.createElement('button');
+            darkBtn.type = 'button';
+            darkBtn.className = 'theme-btn';
+            darkBtn.style.background = darkAccent;
+            darkBtn.style.color = getContrastYIQ(darkAccent);
+            darkBtn.innerText = 'Sample Button';
+            darkBtn.setAttribute('aria-label', 'Sample button in dark theme');
+            // Keyboard accessible by default
+
+            darkBody.appendChild(darkBtn);
+            darkTheme.appendChild(darkHeader);
+            darkTheme.appendChild(darkBody);
+
+            // Theme 3: Modern Card
+            const cardBg = getColor(2, '#fff');
+            const cardAccent = getColor(0, '#e91e63');
+            const cardBorder = getColor(1, '#0066cc');
+            const cardText = getContrastYIQ(cardBg);
+
+            const cardTheme = document.createElement('article');
+            cardTheme.className = 'theme-preview';
+            cardTheme.setAttribute('role', 'region');
+            cardTheme.setAttribute('aria-label', 'Modern Card Theme Preview');
+            cardTheme.style.background = cardBg;
+            cardTheme.style.color = cardText;
+            cardTheme.style.borderColor = cardBorder;
+
+            const cardHeader = document.createElement('div');
+            cardHeader.className = 'theme-header';
+            cardHeader.textContent = 'Modern Card';
+
+            const cardBody = document.createElement('div');
+            cardBody.className = 'theme-body';
+            cardBody.innerHTML = `
+                <h3 style="margin-top:0;font-size:1.1rem;">Hello, Designer!</h3>
+                <p>Try your palette in a modern card component.</p>
+                <div style="background:${cardAccent};color:${getContrastYIQ(cardAccent)};padding:0.6em 1em;border-radius:5px;display:inline-block;">
+                    Accent Area
+                </div>
+            `;
+            const cardBtn = document.createElement('button');
+            cardBtn.type = 'button';
+            cardBtn.className = 'theme-btn';
+            cardBtn.style.background = cardBorder;
+            cardBtn.style.color = getContrastYIQ(cardBorder);
+            cardBtn.innerText = 'Sample Button';
+            cardBtn.setAttribute('aria-label', 'Sample button in modern card theme');
+
+            cardBody.appendChild(cardBtn);
+            cardTheme.appendChild(cardHeader);
+            cardTheme.appendChild(cardBody);
+
+            themePreviews.appendChild(lightTheme);
+            themePreviews.appendChild(darkTheme);
+            themePreviews.appendChild(cardTheme);
+        }
+
+        // --- Initial Render ---
+        renderPaletteColors();
+        renderSavedPalettes();
+        updateThemePreviews();
+
+        // --- Accessibility: Keyboard Navigation for Palette Colors List ---
+        // (No custom interactive elements outside of <button>, so native keyboard support suffices.)
+
+        // --- Accessibility: Focus Management ---
+        // Move focus to palette colors after adding a color
+        paletteForm.addEventListener('submit', function(e) {
+            setTimeout(() => {
+                // Focus the first remove button if present
+                const removeBtns = paletteColorsList.querySelectorAll('.remove-btn');
+                if (removeBtns.length > 0) {
+                    removeBtns[removeBtns.length - 1].focus();
                 }
             }, 100);
-        }
-    }
+        });
 
-    // --- Search Functionality ---
-    let filteredPosts = blogPosts.slice();
-
-    function handleSearch(event) {
-        event.preventDefault();
-        const searchInput = document.getElementById('search-input');
-        const query = searchInput.value.trim().toLowerCase();
-        if (!query) {
-            filteredPosts = blogPosts.slice();
-        } else {
-            filteredPosts = blogPosts.filter(post => {
-                return post.title.toLowerCase().includes(query) ||
-                    post.content.toLowerCase().includes(query) ||
-                    post.author.toLowerCase().includes(query);
-            });
-        }
-        renderArticles(filteredPosts);
-        // Move focus to first article (for screen reader context)
-        setTimeout(() => {
-            const firstArticle = document.querySelector('article');
-            if (firstArticle) {
-                firstArticle.focus();
+        // --- Load palettes from localStorage (if any) ---
+        (function loadPalettes() {
+            try {
+                const stored = localStorage.getItem('accessible-palettes');
+                if (stored) {
+                    savedPalettes = JSON.parse(stored);
+                    renderSavedPalettes();
+                }
+            } catch (e) {
+                // ignore
             }
-        }, 50);
-    }
+        })();
 
-    document.getElementById('search-form').addEventListener('submit', handleSearch);
-
-    // --- Keyboard accessibility for search button (space/enter) ---
-    document.getElementById('search-button').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            document.getElementById('search-form').dispatchEvent(new Event('submit', { cancelable: true }));
+        // --- Save palettes to localStorage on change ---
+        function persistPalettes() {
+            try {
+                localStorage.setItem('accessible-palettes', JSON.stringify(savedPalettes));
+            } catch (e) {
+                // ignore
+            }
         }
-    });
+        // Save on palette change
+        const observer = new MutationObserver(persistPalettes);
+        observer.observe(savedPalettesList, { childList: true, subtree: true });
 
-    // --- Initial render ---
-    renderArticles(filteredPosts);
-
-    // --- "Skip to Content" accessibility: move focus to main on click/enter ---
-    document.querySelector('a[href="#main-content"]').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('main-content').focus();
-    });
-    document.querySelector('a[href="#main-content"]').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            document.getElementById('main-content').focus();
+        // --- Accessibility: Announce updates for screen readers ---
+        function announceLiveRegion(message) {
+            savePaletteStatus.textContent = message;
+            setTimeout(() => { savePaletteStatus.textContent = ''; }, 3000);
         }
-    });
 
-    // --- Ensure tab order is logical: nav -> main -> footer ---
+        // --- Accessibility: Keyboard Shortcuts (optional) ---
+        // Alt+S to Save Palette
+        document.addEventListener('keydown', function(e) {
+            if ((e.altKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                if (!savePaletteBtn.disabled) {
+                    savePaletteBtn.focus();
+                    savePalette();
+                }
+            }
+        });
 
-    // --- Ensure all mouse events have keyboard equivalents ---
-    // (All interactive elements are <button>, <a>, or <input> for native support.)
+        // --- Accessibility: Skip to main content shortcut ---
+        // Visually hidden but accessible
+        const skipLink = document.createElement('a');
+        skipLink.href = '#page-title';
+        skipLink.className = 'sr-only';
+        skipLink.innerText = 'Skip to main content';
+        skipLink.tabIndex = 0;
+        document.body.insertBefore(skipLink, document.body.firstChild);
 
-    // --- Responsive font size for 200% zoom ---
-    // (CSS uses relative units and media queries.)
+        // --- Accessibility: Ensure all buttons have visible focus indicator ---
+        // (Handled by CSS above)
 
-    // --- End of script ---
+        // --- Accessibility: Responsive at 200% zoom ---
+        // (Handled by CSS and layout above)
     </script>
 </body>
 </html>
