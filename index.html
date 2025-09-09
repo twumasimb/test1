@@ -3,376 +3,509 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Event Countdown Timer - Days, Hours, Minutes, Seconds</title>
+    <title>User Profile – Jane Doe | Accessible Profile Page</title>
     <style>
         :root {
-            --primary-color: #0057b8;
-            --secondary-color: #f7f7f7;
-            --accent-color: #ffcc00;
-            --text-color: #222222;
-            --progress-bg: #e0e0e0;
-            --progress-fg: #0057b8;
+            --primary: #0066cc;
+            --primary-dark: #004a99;
+            --secondary: #f4f4f4;
+            --text: #222222;
+            --bg: #ffffff;
             --focus-outline: #0066cc;
-            --progress-height: 24px;
+            --focus-outline-dark: #ffffff;
+            --error: #b00020;
+            --avatar-border: #cccccc;
+            --avatar-selected: #0066cc;
         }
 
         html {
             box-sizing: border-box;
+            font-size: 100%;
         }
         *, *:before, *:after {
             box-sizing: inherit;
         }
         body {
             margin: 0;
-            font-family: system-ui, Arial, sans-serif;
-            background: var(--secondary-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
         }
+
         header {
-            background: var(--primary-color);
+            background: var(--primary);
             color: #fff;
             padding: 1rem 0;
         }
         nav {
+            max-width: 900px;
+            margin: 0 auto;
             display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-        }
-        nav li {
-            margin: 0 1rem;
+            justify-content: flex-end;
+            gap: 1.5rem;
         }
         nav a {
             color: #fff;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
-            position: relative;
+            padding: 0.25em 0.5em;
+            border-radius: 4px;
+            transition: background 0.2s;
         }
         nav a:focus, nav a:hover {
-            text-decoration: underline;
+            background: var(--primary-dark);
+            outline: 3px solid var(--focus-outline-dark);
+            outline-offset: 2px;
         }
+
         main {
-            flex: 1;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: var(--secondary);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .profile-header {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
             align-items: center;
-            padding: 2rem 1rem 1rem 1rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-        .countdown-section {
-            width: 100%;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            gap: 2rem;
             margin-bottom: 2rem;
+        }
+        .profile-avatar {
+            flex-shrink: 0;
+        }
+        .profile-avatar img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--avatar-border);
+            object-fit: cover;
+            background: #fff;
+        }
+        .profile-details {
+            flex: 1;
+            min-width: 220px;
+        }
+        .profile-details h2 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+        .profile-details p {
+            margin: 0.5rem 0 1rem 0;
+        }
+
+        .follow-section {
             display: flex;
-            flex-direction: column;
             align-items: center;
-        }
-        .countdown-label {
-            font-size: 1.15rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
+            gap: 1rem;
             margin-bottom: 1.5rem;
         }
-        .countdown-unit {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 70px;
-        }
-        .countdown-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            line-height: 1.1;
-            letter-spacing: 0.04em;
-        }
-        .countdown-desc {
-            font-size: 1rem;
-            color: #555;
-            margin-top: 0.3em;
-        }
-        /* Progress Bar Styles */
-        .progressbar-section {
-            width: 100%;
-            margin-top: 1.5rem;
-        }
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1rem;
-            margin-bottom: 0.3em;
-        }
-        .progress-label span {
-            font-size: 1rem;
-        }
-        .progressbar {
-            width: 100%;
-            height: var(--progress-height);
-            background: var(--progress-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-        .progressbar[role="progressbar"] {
-            /* visually distinguish for screen readers */
-        }
-        .progressbar-value {
-            background: linear-gradient(90deg, var(--progress-fg), var(--accent-color));
-            height: 100%;
-            width: 0;
-            transition: width 0.5s cubic-bezier(.4,2,.6,1);
-        }
-        .progressbar-text {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1rem;
+        .follow-btn {
+            background: var(--primary);
             color: #fff;
+            border: none;
+            padding: 0.75em 1.5em;
+            font-size: 1.1rem;
             font-weight: 600;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            pointer-events: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
         }
-        /* Focus indicators for all interactive elements */
+        .follow-btn[aria-pressed="true"] {
+            background: #ffffff;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        .follow-btn:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+
+        .followers-count {
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .avatar-gallery-section {
+            margin-bottom: 2rem;
+        }
+        .avatar-gallery-section h3 {
+            margin-top: 0;
+            font-size: 1.25rem;
+        }
+        .avatar-gallery {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .avatar-thumb {
+            border: 3px solid var(--avatar-border);
+            border-radius: 50%;
+            padding: 3px;
+            width: 70px;
+            height: 70px;
+            background: #fff;
+            cursor: pointer;
+            transition: border 0.2s;
+            display: inline-block;
+        }
+        .avatar-thumb[aria-current="true"] {
+            border-color: var(--avatar-selected);
+        }
+        .avatar-thumb:focus {
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+        .avatar-thumb img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .social-links-section {
+            margin-bottom: 2rem;
+        }
+        .social-links-section h3 {
+            font-size: 1.25rem;
+        }
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            padding: 0.25em 0.5em;
+            transition: background 0.2s;
+        }
+        .social-link:focus, .social-link:hover {
+            background: #e6f0fa;
+            outline: 3px solid var(--focus-outline);
+            outline-offset: 2px;
+        }
+        .social-link svg {
+            width: 1.2em;
+            height: 1.2em;
+            fill: currentColor;
+        }
+
+        footer {
+            background: var(--primary);
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 3rem;
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 700px) {
+            .profile-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            nav {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 0.5rem;
+            }
+            main {
+                padding: 0.5rem;
+            }
+        }
+
+        /* Focus indicators (required) */
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
             outline: 3px solid var(--focus-outline);
             outline-offset: 2px;
         }
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            .countdown-timer {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            .countdown-section {
-                padding: 1.2rem 0.7rem 1rem 0.7rem;
-            }
-            .progressbar-section {
-                margin-top: 1rem;
-            }
-        }
-        /* Visually hidden utility class for screen readers */
-        .sr-only {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0, 0, 0, 0) !important;
-            border: 0 !important;
-            white-space: nowrap !important;
-        }
-        /* High contrast focus for dark backgrounds (not used here, but included per requirement) */
         .dark-bg button:focus, .dark-bg a:focus {
-            outline: 3px solid #ffffff;
+            outline: 3px solid var(--focus-outline-dark);
         }
     </style>
 </head>
 <body>
     <header>
         <nav role="navigation" aria-label="Main navigation">
-            <ul>
-                <li><a href="#main-content">Skip to main content</a></li>
-                <!-- Add more navigation links as needed -->
-            </ul>
+            <a href="#main-content">Skip to main content</a>
+            <a href="#bio-section">Bio</a>
+            <a href="#avatar-gallery-section">Avatar Gallery</a>
+            <a href="#social-links-section">Social Links</a>
         </nav>
     </header>
     <main id="main-content" tabindex="-1">
-        <h1>Countdown to the Event</h1>
-        <section class="countdown-section" aria-labelledby="event-countdown-heading">
-            <h2 id="event-countdown-heading" class="countdown-label">
-                Time Remaining Until: <span id="event-date-label"></span>
-            </h2>
-            <div class="countdown-timer" aria-live="polite" aria-atomic="true">
-                <div class="countdown-unit">
-                    <span class="countdown-value" id="days" aria-label="Days">--</span>
-                    <span class="countdown-desc">Days</span>
-                </div>
-                <div class="countdown-unit">
-                    <span class="countdown-value" id="hours" aria-label="Hours">--</span>
-                    <span class="countdown-desc">Hours</span>
-                </div>
-                <div class="countdown-unit">
-                    <span class="countdown-value" id="minutes" aria-label="Minutes">--</span>
-                    <span class="countdown-desc">Minutes</span>
-                </div>
-                <div class="countdown-unit">
-                    <span class="countdown-value" id="seconds" aria-label="Seconds">--</span>
-                    <span class="countdown-desc">Seconds</span>
-                </div>
+        <h1>User Profile: Jane Doe</h1>
+        <section class="profile-header" aria-labelledby="profile-heading">
+            <div class="profile-avatar" id="profile-avatar">
+                <!-- Main avatar image, dynamically updated -->
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" 
+                     alt="Jane Doe smiling, wearing glasses" 
+                     id="main-avatar-img">
             </div>
-            <div class="progressbar-section">
-                <div class="progress-label">
-                    <span id="progress-label">Event Progress</span>
-                    <span id="progress-percent" aria-live="polite" aria-atomic="true">0%</span>
-                </div>
-                <div
-                    class="progressbar"
-                    role="progressbar"
-                    aria-labelledby="progress-label"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    aria-valuenow="0"
-                    tabindex="0"
-                >
-                    <div class="progressbar-value" id="progressbar-value"></div>
-                    <span class="progressbar-text" id="progressbar-text">0%</span>
-                </div>
+            <div class="profile-details">
+                <h2 id="profile-heading">Jane Doe</h2>
+                <p id="bio-section">
+                    <strong>Bio:</strong> Jane is a passionate web developer and accessibility advocate from Seattle. She enjoys hiking, reading, and helping others build inclusive digital experiences.
+                </p>
+                <section class="follow-section" aria-label="Follow Jane Doe">
+                    <button 
+                        type="button"
+                        class="follow-btn"
+                        id="follow-btn"
+                        aria-pressed="false"
+                        aria-live="polite"
+                        aria-label="Follow Jane Doe"
+                        onmousedown="handleFollow(event)"
+                        onkeydown="handleFollow(event)">
+                        Follow
+                    </button>
+                    <span class="followers-count" id="followers-count" aria-live="polite">
+                        <span id="followers-number">1,245</span> followers
+                    </span>
+                </section>
             </div>
-            <p id="event-ended-message" class="sr-only" aria-live="assertive"></p>
+        </section>
+
+        <section class="avatar-gallery-section" id="avatar-gallery-section" aria-labelledby="avatar-gallery-heading">
+            <h3 id="avatar-gallery-heading">Avatar Gallery</h3>
+            <ul class="avatar-gallery" role="list" aria-label="Choose Jane's avatar">
+                <!-- Each avatar is a button for accessibility -->
+                <li>
+                    <button 
+                        type="button"
+                        class="avatar-thumb"
+                        aria-label="Jane Doe smiling, wearing glasses (current avatar)"
+                        aria-current="true"
+                        tabindex="0"
+                        data-avatar-src="https://randomuser.me/api/portraits/women/68.jpg"
+                        onmousedown="handleAvatarSelect(event)"
+                        onkeydown="handleAvatarSelect(event)">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Jane Doe smiling, wearing glasses">
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        type="button"
+                        class="avatar-thumb"
+                        aria-label="Jane Doe outdoors, wearing a hat"
+                        aria-current="false"
+                        tabindex="0"
+                        data-avatar-src="https://randomuser.me/api/portraits/women/69.jpg"
+                        onmousedown="handleAvatarSelect(event)"
+                        onkeydown="handleAvatarSelect(event)">
+                        <img src="https://randomuser.me/api/portraits/women/69.jpg" alt="Jane Doe outdoors, wearing a hat">
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        type="button"
+                        class="avatar-thumb"
+                        aria-label="Jane Doe with short hair, laughing"
+                        aria-current="false"
+                        tabindex="0"
+                        data-avatar-src="https://randomuser.me/api/portraits/women/70.jpg"
+                        onmousedown="handleAvatarSelect(event)"
+                        onkeydown="handleAvatarSelect(event)">
+                        <img src="https://randomuser.me/api/portraits/women/70.jpg" alt="Jane Doe with short hair, laughing">
+                    </button>
+                </li>
+                <li>
+                    <button 
+                        type="button"
+                        class="avatar-thumb"
+                        aria-label="Jane Doe at a conference, wearing a blazer"
+                        aria-current="false"
+                        tabindex="0"
+                        data-avatar-src="https://randomuser.me/api/portraits/women/71.jpg"
+                        onmousedown="handleAvatarSelect(event)"
+                        onkeydown="handleAvatarSelect(event)">
+                        <img src="https://randomuser.me/api/portraits/women/71.jpg" alt="Jane Doe at a conference, wearing a blazer">
+                    </button>
+                </li>
+            </ul>
+        </section>
+
+        <section class="social-links-section" id="social-links-section" aria-labelledby="social-links-heading">
+            <h3 id="social-links-heading">Social Media Links</h3>
+            <ul class="social-links" role="list">
+                <li>
+                    <a href="https://twitter.com/janedoe" 
+                       class="social-link"
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       aria-label="Jane Doe on Twitter"
+                       title="Jane Doe on Twitter">
+                        <!-- Twitter SVG Icon (decorative) -->
+                        <span aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                <path d="M23.954 4.569c-0.885 0.392-1.83 0.656-2.825 0.775
+                                1.014-0.608 1.794-1.574 2.163-2.724-0.951 0.564-2.005 0.974-3.127 1.195
+                                -0.897-0.957-2.178-1.555-3.594-1.555-2.72 0-4.924 2.204-4.924 4.924
+                                0 0.386 0.044 0.762 0.128 1.124-4.09-0.205-7.719-2.166-10.148-5.144
+                                -0.424 0.729-0.666 1.577-0.666 2.476 0 1.708 0.87 3.216 2.188 4.099
+                                -0.807-0.026-1.566-0.247-2.229-0.616v0.062c0 2.386 1.698 4.374 3.95 4.827
+                                -0.413 0.112-0.849 0.172-1.299 0.172-0.318 0-0.626-0.031-0.927-0.089
+                                0.627 1.956 2.444 3.377 4.6 3.416-1.685 1.32-3.808 2.107-6.115 2.107
+                                -0.398 0-0.79-0.023-1.175-0.069 2.179 1.397 4.768 2.213 7.557 2.213
+                                9.054 0 14.004-7.496 14.004-13.986 0-0.213-0.005-0.425-0.015-0.637z"/>
+                            </svg>
+                        </span>
+                        <span>Twitter</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://linkedin.com/in/janedoe" 
+                       class="social-link"
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       aria-label="Jane Doe on LinkedIn"
+                       title="Jane Doe on LinkedIn">
+                        <!-- LinkedIn SVG Icon (decorative) -->
+                        <span aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14
+                                c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268
+                                c-.966 0-1.75-.804-1.75-1.732s.784-1.732 1.75-1.732 1.75.804 1.75 1.732
+                                -.784 1.732-1.75 1.732zm13.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.867-3.063
+                                -1.868 0-2.154 1.459-2.154 2.967v5.7h-3v-10h2.885v1.367h.041c.402-.763
+                                1.384-1.566 2.847-1.566 3.045 0 3.607 2.005 3.607 4.614v5.585z"/>
+                            </svg>
+                        </span>
+                        <span>LinkedIn</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://github.com/janedoe" 
+                       class="social-link"
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       aria-label="Jane Doe on GitHub"
+                       title="Jane Doe on GitHub">
+                        <!-- GitHub SVG Icon (decorative) -->
+                        <span aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+                                <path d="M12 .5c-6.627 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205
+                                11.387.6.113.82-.258.82-.577 0-.285-.011-1.04-.017-2.042-3.338.724-4.042-1.61
+                                -4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729
+                                1.205.085 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.419
+                                -1.305.762-1.605-2.665-.304-5.466-1.334-5.466-5.931 0-1.31.469-2.381 1.236
+                                -3.221-.124-.303-.535-1.523.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266
+                                1.984-.399 3.003-.404 1.018.005 2.046.138 3.006.404 2.291-1.553 3.297-1.23
+                                3.297-1.23.653 1.653.242 2.873.119 3.176.77.84 1.235 1.911 1.235 3.221 0
+                                4.609-2.803 5.625-5.475 5.921.43.371.823 1.104.823 2.222 0 1.604-.015 2.896
+                                -.015 3.286 0 .321.216.694.825.576 4.765-1.589 8.199-6.085 8.199-11.386
+                                0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                        </span>
+                        <span>GitHub</span>
+                    </a>
+                </li>
+            </ul>
         </section>
     </main>
     <footer>
-        <section aria-label="Footer information" style="text-align:center; padding: 1.5rem 0 1rem 0;">
-            <small>
-                &copy; <span id="year"></span> Accessible Countdown Timer. All rights reserved.
-            </small>
-        </section>
+        <p>&copy; 2024 Jane Doe | <span lang="en">Accessible Profile Page</span></p>
     </footer>
     <script>
-        // ==== CONFIGURATION ====
-        // Set your event's target date and time (YYYY-MM-DDTHH:MM:SS in local time)
-        // Example: July 31, 2024 at 18:00:00
-        const EVENT_TITLE = "July 31, 2024, 6:00 PM";
-        const EVENT_DATE = new Date("2024-07-31T18:00:00"); // Set your event date here
+        // --- Accessibility: Keyboard support for all interactive elements ---
 
-        // Set the countdown's start date (when to start the progress bar)
-        // If you want the progress bar to start now, use new Date()
-        // If you want to show progress from a specific date, set it below
-        const PROGRESS_START_DATE = new Date(); // Progress starts now
+        // Follow button logic with aria-pressed and live update
+        function handleFollow(event) {
+            // Keyboard accessibility: respond to click, Enter, or Space
+            if (
+                event.type === 'click' ||
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))
+            ) {
+                event.preventDefault();
+                const btn = document.getElementById('follow-btn');
+                const followersNumber = document.getElementById('followers-number');
+                let isFollowing = btn.getAttribute('aria-pressed') === 'true';
+                let count = parseInt(followersNumber.textContent.replace(/,/g, ''), 10);
 
-        // ==== END CONFIGURATION ====
-
-        // Utility: Pad numbers with leading zeros
-        function pad(num, size) {
-            let s = String(num);
-            while (s.length < size) s = "0" + s;
-            return s;
-        }
-
-        // Accessibility: Set the event date label
-        document.getElementById('event-date-label').textContent = EVENT_TITLE;
-
-        // Accessibility: Set current year in footer
-        document.getElementById('year').textContent = new Date().getFullYear();
-
-        // Countdown logic
-        function updateCountdown() {
-            const now = new Date();
-            let distance = EVENT_DATE - now;
-            let ended = false;
-
-            if (distance < 0) {
-                distance = 0;
-                ended = true;
-            }
-
-            // Calculate time units
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Update DOM
-            document.getElementById('days').textContent = pad(days, 2);
-            document.getElementById('hours').textContent = pad(hours, 2);
-            document.getElementById('minutes').textContent = pad(minutes, 2);
-            document.getElementById('seconds').textContent = pad(seconds, 2);
-
-            // Progress bar calculation
-            let total = EVENT_DATE - PROGRESS_START_DATE;
-            let elapsed = now - PROGRESS_START_DATE;
-            if (total <= 0) {
-                // If event date is before or same as start, set progress to 100%
-                total = 1;
-                elapsed = 1;
-            }
-            let percent = Math.min(Math.max((elapsed / total) * 100, 0), 100);
-            percent = ended ? 100 : percent;
-
-            // Update progress bar
-            const progressBar = document.getElementById('progressbar-value');
-            const progressBarText = document.getElementById('progressbar-text');
-            const progressBarContainer = progressBar.parentElement;
-            const progressPercent = document.getElementById('progress-percent');
-            progressBar.style.width = percent + "%";
-            progressBarText.textContent = Math.round(percent) + "%";
-            progressBarContainer.setAttribute('aria-valuenow', Math.round(percent));
-            progressPercent.textContent = Math.round(percent) + "%";
-
-            // If event ended
-            const endedMsg = document.getElementById('event-ended-message');
-            if (ended) {
-                endedMsg.textContent = "The event has ended.";
-                // Visually indicate event ended for all users
-                progressBar.style.background = "#aaa";
-                progressBarText.textContent = "100%";
-                document.getElementById('days').textContent = "00";
-                document.getElementById('hours').textContent = "00";
-                document.getElementById('minutes').textContent = "00";
-                document.getElementById('seconds').textContent = "00";
-            } else {
-                endedMsg.textContent = "";
+                // Toggle follow state
+                if (!isFollowing) {
+                    btn.setAttribute('aria-pressed', 'true');
+                    btn.textContent = 'Following';
+                    btn.setAttribute('aria-label', 'Unfollow Jane Doe');
+                    count++;
+                } else {
+                    btn.setAttribute('aria-pressed', 'false');
+                    btn.textContent = 'Follow';
+                    btn.setAttribute('aria-label', 'Follow Jane Doe');
+                    count--;
+                }
+                // Update followers count with thousands separator
+                followersNumber.textContent = count.toLocaleString();
             }
         }
 
-        // Initial update
-        updateCountdown();
-        // Update every second
-        setInterval(updateCountdown, 1000);
+        // Avatar gallery: select avatar and update main profile image
+        function handleAvatarSelect(event) {
+            // Keyboard accessibility: respond to click, Enter, or Space
+            if (
+                event.type === 'click' ||
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))
+            ) {
+                event.preventDefault();
+                const btn = event.currentTarget;
+                const avatarSrc = btn.getAttribute('data-avatar-src');
+                const mainAvatarImg = document.getElementById('main-avatar-img');
+                mainAvatarImg.src = avatarSrc;
+                // Update alt text for main avatar
+                const imgInBtn = btn.querySelector('img');
+                mainAvatarImg.alt = imgInBtn.alt;
 
-        // Keyboard accessibility for skip link
+                // Update aria-current and aria-label for avatar buttons
+                document.querySelectorAll('.avatar-thumb').forEach(function(thumb) {
+                    thumb.setAttribute('aria-current', 'false');
+                    let label = thumb.getAttribute('aria-label');
+                    if (label && label.endsWith('(current avatar)')) {
+                        // Remove "(current avatar)" from label
+                        thumb.setAttribute('aria-label', label.replace(/\s*\(current avatar\)$/, ''));
+                    }
+                });
+                // Set current avatar
+                btn.setAttribute('aria-current', 'true');
+                // Add "(current avatar)" to aria-label for screen readers
+                let currentLabel = btn.getAttribute('aria-label');
+                if (currentLabel && !currentLabel.endsWith('(current avatar)')) {
+                    btn.setAttribute('aria-label', currentLabel + ' (current avatar)');
+                }
+            }
+        }
+
+        // Add event listeners for all avatar buttons (for mouse and keyboard)
+        document.querySelectorAll('.avatar-thumb').forEach(function(btn) {
+            btn.addEventListener('click', handleAvatarSelect);
+            btn.addEventListener('keydown', handleAvatarSelect);
+        });
+
+        // Add event listeners for follow button (for mouse and keyboard)
+        document.getElementById('follow-btn').addEventListener('click', handleFollow);
+        document.getElementById('follow-btn').addEventListener('keydown', handleFollow);
+
+        // "Skip to main content" link: focus main content on activation
         document.querySelector('a[href="#main-content"]').addEventListener('click', function(e) {
             e.preventDefault();
-            const main = document.getElementById('main-content');
-            main.focus();
+            document.getElementById('main-content').focus();
         });
 
-        // Progress bar: Make sure keyboard users can focus and get info
-        const progressBarContainer = document.querySelector('.progressbar');
-        progressBarContainer.addEventListener('keydown', function(event) {
-            // Space or Enter will read out the current progress
-            if (event.key === ' ' || event.key === 'Enter') {
-                event.preventDefault();
-                // Announce progress via alert
-                const percent = progressBarContainer.getAttribute('aria-valuenow');
-                alert('Event progress is ' + percent + ' percent.');
-            }
-        });
-
-        // For mouse click, also provide info (optional)
-        progressBarContainer.addEventListener('click', function() {
-            const percent = progressBarContainer.getAttribute('aria-valuenow');
-            alert('Event progress is ' + percent + ' percent.');
-        });
-
-        // Note: The progress bar is focusable and exposes its value via aria-valuenow.
-        // Keyboard and screen reader users are notified of progress changes via aria-live regions.
+        // Accessibility: ensure tab order is logical (HTML structure already provides this)
+        // All interactive elements are keyboard accessible by default (buttons, links)
     </script>
 </body>
 </html>
