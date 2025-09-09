@@ -3,27 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracker - Log and Monitor Your Nutrition and Exercise</title>
+    <title>CreativeShare - Upload and Share Your Creative Work</title>
     <style>
-        /* Base styles with accessibility in mind */
-        :root {
-            --primary-color: #2c7be5;
-            --primary-dark: #1a56a0;
-            --secondary-color: #6c757d;
-            --success-color: #28a745;
-            --danger-color: #dc3545;
-            --warning-color: #ffc107;
-            --light-color: #f8f9fa;
-            --dark-color: #343a40;
-            --body-bg: #f5f7fa;
-            --card-bg: #ffffff;
-            --text-color: #212529;
-            --text-muted: #6c757d;
-            --border-color: #dee2e6;
-            --focus-color: #0066cc;
-            --focus-width: 3px;
-        }
-
+        /* Base styles and reset */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -31,12 +13,11 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.5;
-            color: var(--text-color);
-            background-color: var(--body-bg);
-            padding: 0;
-            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            min-height: 100vh;
         }
 
         /* Ensure all interactive elements have visible focus indicators */
@@ -44,347 +25,469 @@
         input:focus, 
         select:focus, 
         textarea:focus, 
-        a:focus,
-        [tabindex]:focus {
-            outline: var(--focus-width) solid var(--focus-color);
+        a:focus {
+            outline: 3px solid #0066cc;
             outline-offset: 2px;
         }
 
         /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, 
-        .dark-bg a:focus,
-        .dark-bg [tabindex]:focus {
-            outline: var(--focus-width) solid #ffffff;
+        .dark-bg a:focus {
+            outline: 3px solid #ffffff;
         }
 
+        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 20px;
         }
 
+        /* Header */
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem 0;
+            background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 1.75rem;
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+            text-decoration: none;
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 1.5rem;
+        }
+
+        nav a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover, 
+        nav a:focus {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+
+        /* Main content */
         main {
             padding: 2rem 0;
         }
 
-        footer {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 1.5rem 0;
+        h1, h2, h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
             margin-top: 2rem;
         }
 
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            line-height: 1.2;
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 1.5rem;
         }
 
         p {
             margin-bottom: 1rem;
         }
 
-        /* Cards */
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
+        /* Upload section */
+        .upload-section {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 6px;
+            padding: 3rem 2rem;
+            text-align: center;
             margin-bottom: 1.5rem;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: border-color 0.3s, background-color 0.3s;
         }
 
-        .card-title {
-            margin-top: 0;
+        .upload-area:hover,
+        .upload-area:focus {
+            border-color: #0066cc;
+            background-color: #f0f7ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #0066cc;
+            background-color: #f0f7ff;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
             margin-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 0.5rem;
+            color: #666;
         }
 
-        /* Forms */
+        .upload-text {
+            margin-bottom: 1rem;
+        }
+
+        .upload-btn {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .upload-btn:hover,
+        .upload-btn:focus {
+            background-color: #0055aa;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* Form styles */
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .required-field::after {
-            content: " *";
-            color: var(--danger-color);
+            content: "*";
+            color: #d9534f;
+            margin-left: 0.25rem;
         }
 
         input[type="text"],
-        input[type="number"],
-        input[type="date"],
-        input[type="time"],
-        select,
-        textarea {
+        textarea,
+        select {
             width: 100%;
             padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
             font-size: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.25rem;
-            background-color: white;
+            font-family: inherit;
         }
 
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            font-weight: 600;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: middle;
-            user-select: none;
-            border: 1px solid transparent;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            line-height: 1.5;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
-        }
-
-        .btn-primary {
-            color: #fff;
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .btn-primary:hover, 
-        .btn-primary:focus {
-            background-color: var(--primary-dark);
-            border-color: var(--primary-dark);
-        }
-
-        .btn-danger {
-            color: #fff;
-            background-color: var(--danger-color);
-            border-color: var(--danger-color);
-        }
-
-        .btn-danger:hover, 
-        .btn-danger:focus {
-            background-color: #bd2130;
-            border-color: #bd2130;
-        }
-
-        /* Grid system */
-        .row {
+        .tags-input {
             display: flex;
             flex-wrap: wrap;
-            margin-right: -0.75rem;
-            margin-left: -0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.5rem;
+            min-height: 3rem;
         }
 
-        .col {
-            flex: 1 0 0%;
-            padding-right: 0.75rem;
-            padding-left: 0.75rem;
-        }
-
-        /* Responsive columns */
-        @media (max-width: 768px) {
-            .row {
-                flex-direction: column;
-            }
-            
-            .col {
-                flex: 0 0 100%;
-                max-width: 100%;
-                margin-bottom: 1rem;
-            }
-        }
-
-        /* Lists */
-        .list-group {
+        .tag {
+            background-color: #e9f2ff;
+            border-radius: 20px;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem;
             display: flex;
-            flex-direction: column;
-            padding-left: 0;
-            margin-bottom: 0;
-            border-radius: 0.25rem;
-        }
-
-        .list-group-item {
-            position: relative;
-            display: block;
-            padding: 0.75rem 1.25rem;
-            background-color: #fff;
-            border: 1px solid var(--border-color);
-        }
-
-        .list-group-item:first-child {
-            border-top-left-radius: 0.25rem;
-            border-top-right-radius: 0.25rem;
-        }
-
-        .list-group-item:last-child {
-            border-bottom-right-radius: 0.25rem;
-            border-bottom-left-radius: 0.25rem;
-        }
-
-        .list-group-item + .list-group-item {
-            border-top: 0;
-        }
-
-        /* Utilities */
-        .text-center {
-            text-align: center;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .mt-2 {
-            margin-top: 0.5rem;
-        }
-
-        .mt-3 {
-            margin-top: 1rem;
-        }
-
-        .mb-2 {
-            margin-bottom: 0.5rem;
-        }
-
-        .mb-3 {
-            margin-bottom: 1rem;
-        }
-
-        .d-flex {
-            display: flex;
-        }
-
-        .justify-content-between {
-            justify-content: space-between;
-        }
-
-        .align-items-center {
             align-items: center;
+            font-size: 0.9rem;
         }
 
-        /* Summary cards */
-        .summary-card {
-            text-align: center;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
+        .tag-remove {
+            background: none;
+            border: none;
+            color: #666;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 0.25rem;
+        }
+
+        .tag-input {
+            flex: 1;
+            min-width: 100px;
+            border: none;
+            outline: none;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .submit-btn {
+            background-color: #28a745;
             color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .summary-card h3 {
-            font-size: 1.25rem;
+        .submit-btn:hover,
+        .submit-btn:focus {
+            background-color: #218838;
+        }
+
+        /* Gallery section */
+        .gallery-section {
+            margin-top: 3rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .gallery-item {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .gallery-item:hover,
+        .gallery-item:focus-within {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-img-container {
+            position: relative;
+            padding-top: 75%; /* 4:3 aspect ratio */
+            overflow: hidden;
+        }
+
+        .gallery-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-content {
+            padding: 1.25rem;
+        }
+
+        .gallery-title {
+            font-size: 1.2rem;
             margin-bottom: 0.5rem;
         }
 
-        .summary-card p {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 0;
+        .gallery-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
         }
 
-        .summary-card.consumed {
-            background-color: var(--primary-color);
+        .gallery-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
         }
 
-        .summary-card.burned {
-            background-color: var(--success-color);
+        .gallery-tag {
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            padding: 0.2rem 0.6rem;
+            margin: 0.25rem;
+            font-size: 0.8rem;
+            color: #555;
         }
 
-        .summary-card.remaining {
-            background-color: var(--warning-color);
-            color: var(--dark-color);
+        /* Preview section */
+        .preview-section {
+            display: none;
+            margin-top: 1.5rem;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .preview-img-container {
+            max-height: 300px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+        }
+
+        .preview-img {
+            width: 100%;
+            height: auto;
+            max-height: 300px;
+            object-fit: contain;
         }
 
         /* Error messages */
         .error-message {
-            color: var(--danger-color);
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            display: none;
+            color: #d9534f;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
-        /* Entry items */
-        .entry-item {
+        /* Status messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--border-color);
         }
 
-        .entry-item:last-child {
-            border-bottom: none;
-        }
-
-        .entry-details {
+        .footer-section {
             flex: 1;
+            min-width: 250px;
+            margin-bottom: 1.5rem;
         }
 
-        .entry-name {
-            font-weight: 600;
+        .footer-heading {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
         }
 
-        .entry-meta {
-            color: var(--text-muted);
-            font-size: 0.875rem;
+        .footer-links {
+            list-style: none;
         }
 
-        .entry-calories {
-            font-weight: 600;
-            margin-right: 1rem;
+        .footer-links li {
+            margin-bottom: 0.5rem;
         }
 
-        .entry-actions button {
-            background: none;
-            border: none;
-            color: var(--danger-color);
-            cursor: pointer;
-            padding: 0.25rem;
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
         }
 
-        /* Progress bar */
-        .progress-container {
-            width: 100%;
-            height: 1.5rem;
-            background-color: #e9ecef;
-            border-radius: 0.25rem;
-            margin: 1rem 0;
-            overflow: hidden;
+        .footer-links a:hover,
+        .footer-links a:focus {
+            color: #fff;
+            text-decoration: underline;
         }
 
-        .progress-bar {
-            height: 100%;
-            background-color: var(--primary-color);
-            border-radius: 0.25rem;
-            transition: width 0.3s ease;
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
         }
 
-        /* Skip link */
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                margin-top: 1rem;
+                width: 100%;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            nav li {
+                margin-left: 0;
+                margin-bottom: 0.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+
+        /* Skip to main content link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background: var(--primary-color);
+            background: #0066cc;
             color: white;
             padding: 8px;
-            z-index: 100;
+            z-index: 1000;
             transition: top 0.3s;
         }
 
@@ -392,7 +495,7 @@
             top: 0;
         }
 
-        /* Screen reader only */
+        /* Visually hidden but accessible to screen readers */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -402,60 +505,7 @@
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
             white-space: nowrap;
-            border-width: 0;
-        }
-
-        /* Date picker */
-        .date-selector {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .date-selector button {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0 1rem;
-            color: var(--primary-color);
-        }
-
-        .date-selector span {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        /* Goal setting modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 2rem;
-            border-radius: 0.5rem;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0.25rem 0.5rem;
+            border: 0;
         }
     </style>
 </head>
@@ -463,829 +513,398 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
     <header>
-        <div class="container">
-            <h1>Calorie Tracker</h1>
+        <div class="container header-content">
+            <a href="#" class="logo" aria-label="CreativeShare Home">CreativeShare</a>
+            
+            <nav role="navigation" aria-label="Main navigation">
+                <ul>
+                    <li><a href="#upload" aria-current="page">Upload</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
-    
+
     <main id="main-content">
         <div class="container">
-            <section class="date-selector" aria-label="Date navigation">
-                <button id="prev-day" aria-label="Previous day">
-                    <span aria-hidden="true">&#8249;</span>
-                </button>
-                <span id="current-date">Today</span>
-                <button id="next-day" aria-label="Next day">
-                    <span aria-hidden="true">&#8250;</span>
-                </button>
+            <section id="hero">
+                <h1>Share Your Creative Work with the World</h1>
+                <p>Upload your photos, illustrations, and artwork to showcase your talent. Add descriptions and tags to help others discover your creative vision.</p>
             </section>
-            
-            <section aria-labelledby="summary-heading">
-                <h2 id="summary-heading" class="sr-only">Daily Summary</h2>
-                <div class="row">
-                    <div class="col">
-                        <div class="summary-card consumed">
-                            <h3>Calories Consumed</h3>
-                            <p id="calories-consumed">0</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="summary-card burned">
-                            <h3>Calories Burned</h3>
-                            <p id="calories-burned">0</p>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="summary-card remaining">
-                            <h3>Net Calories</h3>
-                            <p id="calories-remaining">0</p>
-                        </div>
+
+            <section id="upload" class="upload-section">
+                <h2>Upload Your Work</h2>
+                
+                <!-- Status message area for feedback -->
+                <div id="status-message" class="status-message" style="display: none;" aria-live="polite"></div>
+                
+                <!-- Upload area with keyboard accessibility -->
+                <div id="upload-area" class="upload-area" tabindex="0" role="button" aria-label="Upload area. Click or press Enter to select a file">
+                    <div class="upload-icon" aria-hidden="true">📁</div>
+                    <p class="upload-text">Drag and drop your file here or click to browse</p>
+                    <button type="button" class="upload-btn" id="browse-btn">Browse Files</button>
+                    <input type="file" id="file-input" class="file-input" accept="image/*" aria-label="File upload">
+                </div>
+                
+                <!-- Preview section -->
+                <div id="preview-section" class="preview-section" aria-live="polite">
+                    <h3>Preview</h3>
+                    <div class="preview-img-container">
+                        <img id="preview-img" class="preview-img" src="" alt="Preview of your uploaded work">
                     </div>
                 </div>
                 
-                <div class="card">
-                    <h3>Daily Goal Progress</h3>
-                    <div class="d-flex justify-content-between">
-                        <span>0</span>
-                        <span id="goal-text">Goal: 2000 calories</span>
+                <!-- Form for metadata -->
+                <form id="upload-form">
+                    <div class="form-group">
+                        <label for="title" class="required-field">Title</label>
+                        <input type="text" id="title" name="title" required aria-required="true">
+                        <div id="title-error" class="error-message" aria-live="polite"></div>
                     </div>
-                    <div class="progress-container" aria-label="Goal progress">
-                        <div id="goal-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="4" aria-describedby="description-help"></textarea>
+                        <p id="description-help" class="help-text">Describe your work, inspiration, or techniques used.</p>
                     </div>
-                    <div class="text-center mt-3">
-                        <button id="set-goal-btn" class="btn btn-primary">Set Calorie Goal</button>
+                    
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category">
+                            <option value="">Select a category</option>
+                            <option value="photography">Photography</option>
+                            <option value="illustration">Illustration</option>
+                            <option value="painting">Painting</option>
+                            <option value="digital-art">Digital Art</option>
+                            <option value="sculpture">Sculpture</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="tags-input">Tags</label>
+                        <div class="tags-input" id="tags-container">
+                            <input type="text" id="tags-input" class="tag-input" placeholder="Add tags and press Enter" aria-describedby="tags-help">
+                        </div>
+                        <p id="tags-help" class="help-text">Add relevant tags to help others discover your work. Press Enter after each tag.</p>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submit-btn">Share Your Work</button>
+                </form>
+            </section>
+
+            <section id="gallery" class="gallery-section">
+                <h2>Creative Gallery</h2>
+                <p>Explore amazing creative works shared by our community. Click on any item to view details.</p>
+                
+                <div class="gallery-grid" id="gallery-grid" aria-label="Gallery of creative works">
+                    <!-- Gallery items will be dynamically added here -->
                 </div>
             </section>
-            
-            <div class="row">
-                <div class="col">
-                    <section class="card" aria-labelledby="food-heading">
-                        <h2 id="food-heading" class="card-title">Add Food</h2>
-                        <form id="food-form">
-                            <div class="form-group">
-                                <label for="food-name" class="required-field">Food Name</label>
-                                <input type="text" id="food-name" name="food-name" required aria-required="true">
-                                <div id="food-name-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="food-calories" class="required-field">Calories</label>
-                                <input type="number" id="food-calories" name="food-calories" min="0" required aria-required="true">
-                                <div id="food-calories-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="meal-type">Meal Type</label>
-                                <select id="meal-type" name="meal-type">
-                                    <option value="breakfast">Breakfast</option>
-                                    <option value="lunch">Lunch</option>
-                                    <option value="dinner">Dinner</option>
-                                    <option value="snack">Snack</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="food-time">Time</label>
-                                <input type="time" id="food-time" name="food-time">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="food-notes">Notes</label>
-                                <textarea id="food-notes" name="food-notes" rows="2"></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary">Add Food</button>
-                        </form>
-                    </section>
-                    
-                    <section class="card" aria-labelledby="food-list-heading">
-                        <h2 id="food-list-heading" class="card-title">Food Log</h2>
-                        <div id="food-entries" aria-live="polite">
-                            <p id="no-food-message">No food entries yet for today.</p>
-                        </div>
-                    </section>
-                </div>
-                
-                <div class="col">
-                    <section class="card" aria-labelledby="exercise-heading">
-                        <h2 id="exercise-heading" class="card-title">Add Exercise</h2>
-                        <form id="exercise-form">
-                            <div class="form-group">
-                                <label for="exercise-name" class="required-field">Exercise Name</label>
-                                <input type="text" id="exercise-name" name="exercise-name" required aria-required="true">
-                                <div id="exercise-name-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="exercise-calories" class="required-field">Calories Burned</label>
-                                <input type="number" id="exercise-calories" name="exercise-calories" min="0" required aria-required="true">
-                                <div id="exercise-calories-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="exercise-duration" class="required-field">Duration (minutes)</label>
-                                <input type="number" id="exercise-duration" name="exercise-duration" min="1" required aria-required="true">
-                                <div id="exercise-duration-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="exercise-time">Time</label>
-                                <input type="time" id="exercise-time" name="exercise-time">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="exercise-notes">Notes</label>
-                                <textarea id="exercise-notes" name="exercise-notes" rows="2"></textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary">Add Exercise</button>
-                        </form>
-                    </section>
-                    
-                    <section class="card" aria-labelledby="exercise-list-heading">
-                        <h2 id="exercise-list-heading" class="card-title">Exercise Log</h2>
-                        <div id="exercise-entries" aria-live="polite">
-                            <p id="no-exercise-message">No exercise entries yet for today.</p>
-                        </div>
-                    </section>
-                </div>
-            </div>
         </div>
     </main>
-    
-    <div id="goal-modal" class="modal" role="dialog" aria-labelledby="goal-modal-title" aria-modal="true">
-        <div class="modal-content">
-            <button class="close-modal" aria-label="Close modal">&times;</button>
-            <h2 id="goal-modal-title">Set Daily Calorie Goal</h2>
-            <form id="goal-form">
-                <div class="form-group">
-                    <label for="calorie-goal" class="required-field">Daily Calorie Goal</label>
-                    <input type="number" id="calorie-goal" name="calorie-goal" min="500" max="10000" value="2000" required aria-required="true">
-                    <div id="calorie-goal-error" class="error-message" aria-live="polite"></div>
-                </div>
-                <button type="submit" class="btn btn-primary">Save Goal</button>
-            </form>
+
+    <footer class="dark-bg">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3 class="footer-heading">CreativeShare</h3>
+                <p>A platform for creative minds to share and discover inspiring work.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#upload">Upload</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-heading">Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="#" aria-label="Follow us on Twitter">Twitter</a></li>
+                    <li><a href="#" aria-label="Follow us on Instagram">Instagram</a></li>
+                    <li><a href="#" aria-label="Join our Facebook community">Facebook</a></li>
+                    <li><a href="#" aria-label="Subscribe to our newsletter">Newsletter</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-    
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 Calorie Tracker App. All rights reserved.</p>
+        
+        <div class="container copyright">
+            <p>&copy; 2023 CreativeShare. All rights reserved.</p>
         </div>
     </footer>
-    
+
     <script>
-        // Global state
-        const state = {
-            currentDate: new Date(),
-            calorieGoal: 2000,
-            foodEntries: {},
-            exerciseEntries: {}
-        };
-
-        // DOM elements
-        const elements = {
-            currentDateEl: document.getElementById('current-date'),
-            prevDayBtn: document.getElementById('prev-day'),
-            nextDayBtn: document.getElementById('next-day'),
-            caloriesConsumedEl: document.getElementById('calories-consumed'),
-            caloriesBurnedEl: document.getElementById('calories-burned'),
-            caloriesRemainingEl: document.getElementById('calories-remaining'),
-            goalTextEl: document.getElementById('goal-text'),
-            goalProgressEl: document.getElementById('goal-progress'),
-            setGoalBtn: document.getElementById('set-goal-btn'),
-            goalModal: document.getElementById('goal-modal'),
-            closeModalBtn: document.querySelector('.close-modal'),
-            goalForm: document.getElementById('goal-form'),
-            calorieGoalInput: document.getElementById('calorie-goal'),
-            foodForm: document.getElementById('food-form'),
-            foodEntriesEl: document.getElementById('food-entries'),
-            noFoodMessageEl: document.getElementById('no-food-message'),
-            exerciseForm: document.getElementById('exercise-form'),
-            exerciseEntriesEl: document.getElementById('exercise-entries'),
-            noExerciseMessageEl: document.getElementById('no-exercise-message')
-        };
-
-        // Initialize the app
-        function init() {
-            // Load data from localStorage if available
-            loadFromLocalStorage();
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const fileInput = document.getElementById('file-input');
+            const uploadArea = document.getElementById('upload-area');
+            const browseBtn = document.getElementById('browse-btn');
+            const previewSection = document.getElementById('preview-section');
+            const previewImg = document.getElementById('preview-img');
+            const uploadForm = document.getElementById('upload-form');
+            const titleInput = document.getElementById('title');
+            const titleError = document.getElementById('title-error');
+            const tagsInput = document.getElementById('tags-input');
+            const tagsContainer = document.getElementById('tags-container');
+            const statusMessage = document.getElementById('status-message');
+            const galleryGrid = document.getElementById('gallery-grid');
             
-            // Update the UI with current data
-            updateDateDisplay();
-            updateSummary();
-            renderFoodEntries();
-            renderExerciseEntries();
+            // Sample gallery data
+            const sampleGallery = [
+                {
+                    id: 1,
+                    title: 'Mountain Sunrise',
+                    description: 'A beautiful sunrise captured in the mountains during early autumn.',
+                    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                    tags: ['nature', 'mountains', 'sunrise']
+                },
+                {
+                    id: 2,
+                    title: 'Abstract Painting',
+                    description: 'An abstract expression of emotions using vibrant colors and bold strokes.',
+                    image: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                    tags: ['abstract', 'painting', 'art']
+                },
+                {
+                    id: 3,
+                    title: 'Urban Photography',
+                    description: 'Street photography capturing the essence of city life.',
+                    image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                    tags: ['urban', 'city', 'street']
+                },
+                {
+                    id: 4,
+                    title: 'Digital Illustration',
+                    description: 'A digital illustration exploring fantasy themes and characters.',
+                    image: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                    tags: ['digital', 'illustration', 'fantasy']
+                }
+            ];
             
-            // Set up event listeners
-            setupEventListeners();
-        }
-
-        // Format date as YYYY-MM-DD for storage keys
-        function formatDateKey(date) {
-            return date.toISOString().split('T')[0];
-        }
-
-        // Format date for display
-        function formatDateForDisplay(date) {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('en-US', options);
-        }
-
-        // Update the date display
-        function updateDateDisplay() {
-            const today = new Date();
-            const currentDateKey = formatDateKey(state.currentDate);
-            const todayKey = formatDateKey(today);
+            // Current tags array
+            let currentTags = [];
             
-            if (currentDateKey === todayKey) {
-                elements.currentDateEl.textContent = 'Today';
-            } else {
-                elements.currentDateEl.textContent = formatDateForDisplay(state.currentDate);
-            }
-        }
-
-        // Load data from localStorage
-        function loadFromLocalStorage() {
-            // Load calorie goal
-            const savedGoal = localStorage.getItem('calorieGoal');
-            if (savedGoal) {
-                state.calorieGoal = parseInt(savedGoal, 10);
+            // Initialize gallery with sample data
+            function initializeGallery() {
+                sampleGallery.forEach(item => {
+                    addGalleryItem(item);
+                });
             }
             
-            // Load food and exercise entries for current date
-            const currentDateKey = formatDateKey(state.currentDate);
-            
-            const savedFoodEntries = localStorage.getItem(`foodEntries_${currentDateKey}`);
-            if (savedFoodEntries) {
-                state.foodEntries[currentDateKey] = JSON.parse(savedFoodEntries);
-            } else {
-                state.foodEntries[currentDateKey] = [];
+            // Add gallery item to the grid
+            function addGalleryItem(item) {
+                const galleryItem = document.createElement('article');
+                galleryItem.className = 'gallery-item';
+                
+                // Create tags HTML
+                const tagsHTML = item.tags.map(tag => 
+                    `<span class="gallery-tag">${tag}</span>`
+                ).join('');
+                
+                galleryItem.innerHTML = `
+                    <div class="gallery-img-container">
+                        <img src="${item.image}" alt="${item.title}" class="gallery-img">
+                    </div>
+                    <div class="gallery-content">
+                        <h3 class="gallery-title">${item.title}</h3>
+                        <p class="gallery-description">${item.description}</p>
+                        <div class="gallery-tags">${tagsHTML}</div>
+                    </div>
+                `;
+                
+                galleryGrid.appendChild(galleryItem);
             }
             
-            const savedExerciseEntries = localStorage.getItem(`exerciseEntries_${currentDateKey}`);
-            if (savedExerciseEntries) {
-                state.exerciseEntries[currentDateKey] = JSON.parse(savedExerciseEntries);
-            } else {
-                state.exerciseEntries[currentDateKey] = [];
-            }
-        }
-
-        // Save data to localStorage
-        function saveToLocalStorage() {
-            // Save calorie goal
-            localStorage.setItem('calorieGoal', state.calorieGoal.toString());
-            
-            // Save food and exercise entries for current date
-            const currentDateKey = formatDateKey(state.currentDate);
-            
-            if (state.foodEntries[currentDateKey]) {
-                localStorage.setItem(`foodEntries_${currentDateKey}`, JSON.stringify(state.foodEntries[currentDateKey]));
+            // File upload handling
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (file && file.type.match('image.*')) {
+                    displayPreview(file);
+                }
             }
             
-            if (state.exerciseEntries[currentDateKey]) {
-                localStorage.setItem(`exerciseEntries_${currentDateKey}`, JSON.stringify(state.exerciseEntries[currentDateKey]));
+            // Display image preview
+            function displayPreview(file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.alt = file.name;
+                    previewSection.style.display = 'block';
+                    
+                    // Scroll to preview
+                    previewSection.scrollIntoView({ behavior: 'smooth' });
+                };
+                
+                reader.readAsDataURL(file);
             }
-        }
-
-        // Set up event listeners
-        function setupEventListeners() {
-            // Date navigation
-            elements.prevDayBtn.addEventListener('click', navigateToPreviousDay);
-            elements.prevDayBtn.addEventListener('keydown', handleKeyboardInteraction);
             
-            elements.nextDayBtn.addEventListener('click', navigateToNextDay);
-            elements.nextDayBtn.addEventListener('keydown', handleKeyboardInteraction);
+            // Add a new tag
+            function addTag(tagText) {
+                if (tagText.trim() === '' || currentTags.includes(tagText.trim())) {
+                    return;
+                }
+                
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.textContent = tagText.trim();
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'tag-remove';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.setAttribute('aria-label', `Remove tag ${tagText.trim()}`);
+                removeBtn.addEventListener('click', function() {
+                    tag.remove();
+                    currentTags = currentTags.filter(t => t !== tagText.trim());
+                });
+                
+                // Add keyboard support for remove button
+                removeBtn.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        tag.remove();
+                        currentTags = currentTags.filter(t => t !== tagText.trim());
+                    }
+                });
+                
+                tag.appendChild(removeBtn);
+                tagsContainer.insertBefore(tag, tagsInput);
+                
+                currentTags.push(tagText.trim());
+                tagsInput.value = '';
+            }
             
-            // Goal setting
-            elements.setGoalBtn.addEventListener('click', openGoalModal);
-            elements.setGoalBtn.addEventListener('keydown', handleKeyboardInteraction);
+            // Form submission
+            function handleFormSubmit(event) {
+                event.preventDefault();
+                
+                // Validate title
+                if (titleInput.value.trim() === '') {
+                    titleError.textContent = 'Please enter a title for your work';
+                    titleInput.focus();
+                    return;
+                } else {
+                    titleError.textContent = '';
+                }
+                
+                // Check if image is uploaded
+                if (previewImg.src === '') {
+                    showStatusMessage('Please upload an image', 'error');
+                    return;
+                }
+                
+                // Create new gallery item
+                const newItem = {
+                    id: Date.now(),
+                    title: titleInput.value.trim(),
+                    description: document.getElementById('description').value.trim() || 'No description provided',
+                    image: previewImg.src,
+                    tags: currentTags
+                };
+                
+                // Add to gallery
+                addGalleryItem(newItem);
+                
+                // Show success message
+                showStatusMessage('Your work has been successfully shared!', 'success');
+                
+                // Reset form
+                resetForm();
+                
+                // Scroll to gallery
+                document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+            }
             
-            elements.closeModalBtn.addEventListener('click', closeGoalModal);
-            elements.closeModalBtn.addEventListener('keydown', handleKeyboardInteraction);
+            // Show status message
+            function showStatusMessage(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message';
+                statusMessage.classList.add(`status-${type}`);
+                statusMessage.style.display = 'block';
+                
+                // Auto hide after 5 seconds
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
             
-            elements.goalForm.addEventListener('submit', handleGoalSubmit);
+            // Reset form
+            function resetForm() {
+                uploadForm.reset();
+                previewSection.style.display = 'none';
+                previewImg.src = '';
+                previewImg.alt = '';
+                
+                // Clear tags
+                const tags = document.querySelectorAll('.tag');
+                tags.forEach(tag => tag.remove());
+                currentTags = [];
+            }
             
-            // Close modal when clicking outside
-            window.addEventListener('click', (event) => {
-                if (event.target === elements.goalModal) {
-                    closeGoalModal();
+            // Event Listeners
+            
+            // File input change
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // Browse button click
+            browseBtn.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Upload area click
+            uploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+            
+            // Upload area keyboard support
+            uploadArea.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    fileInput.click();
                 }
             });
             
-            // Food form
-            elements.foodForm.addEventListener('submit', handleFoodSubmit);
-            
-            // Exercise form
-            elements.exerciseForm.addEventListener('submit', handleExerciseSubmit);
-        }
-
-        // Handle keyboard interactions for buttons
-        function handleKeyboardInteraction(event) {
-            if (event.key === 'Enter' || event.key === ' ') {
+            // Drag and drop support
+            uploadArea.addEventListener('dragover', function(event) {
                 event.preventDefault();
-                event.target.click();
-            }
-        }
-
-        // Navigate to previous day
-        function navigateToPreviousDay() {
-            const newDate = new Date(state.currentDate);
-            newDate.setDate(newDate.getDate() - 1);
-            state.currentDate = newDate;
-            
-            updateDateDisplay();
-            loadFromLocalStorage();
-            updateSummary();
-            renderFoodEntries();
-            renderExerciseEntries();
-        }
-
-        // Navigate to next day
-        function navigateToNextDay() {
-            const newDate = new Date(state.currentDate);
-            newDate.setDate(newDate.getDate() + 1);
-            state.currentDate = newDate;
-            
-            updateDateDisplay();
-            loadFromLocalStorage();
-            updateSummary();
-            renderFoodEntries();
-            renderExerciseEntries();
-        }
-
-        // Open goal modal
-        function openGoalModal() {
-            elements.calorieGoalInput.value = state.calorieGoal;
-            elements.goalModal.style.display = 'block';
-            elements.calorieGoalInput.focus();
-        }
-
-        // Close goal modal
-        function closeGoalModal() {
-            elements.goalModal.style.display = 'none';
-            elements.setGoalBtn.focus();
-        }
-
-        // Handle goal form submission
-        function handleGoalSubmit(event) {
-            event.preventDefault();
-            
-            const goalInput = elements.calorieGoalInput;
-            const errorEl = document.getElementById('calorie-goal-error');
-            
-            // Validate input
-            if (!goalInput.value) {
-                errorEl.textContent = 'Please enter a calorie goal';
-                errorEl.style.display = 'block';
-                goalInput.setAttribute('aria-invalid', 'true');
-                return;
-            }
-            
-            const goal = parseInt(goalInput.value, 10);
-            
-            if (isNaN(goal) || goal < 500 || goal > 10000) {
-                errorEl.textContent = 'Please enter a number between 500 and 10000';
-                errorEl.style.display = 'block';
-                goalInput.setAttribute('aria-invalid', 'true');
-                return;
-            }
-            
-            // Clear any error
-            errorEl.style.display = 'none';
-            goalInput.removeAttribute('aria-invalid');
-            
-            // Update state and UI
-            state.calorieGoal = goal;
-            saveToLocalStorage();
-            updateSummary();
-            
-            // Close modal
-            closeGoalModal();
-            
-            // Announce change to screen readers
-            const announcement = document.createElement('div');
-            announcement.setAttribute('aria-live', 'polite');
-            announcement.classList.add('sr-only');
-            announcement.textContent = `Daily calorie goal updated to ${goal} calories`;
-            document.body.appendChild(announcement);
-            
-            // Remove announcement after it's been read
-            setTimeout(() => {
-                document.body.removeChild(announcement);
-            }, 3000);
-        }
-
-        // Handle food form submission
-        function handleFoodSubmit(event) {
-            event.preventDefault();
-            
-            const nameInput = document.getElementById('food-name');
-            const caloriesInput = document.getElementById('food-calories');
-            const mealTypeInput = document.getElementById('meal-type');
-            const timeInput = document.getElementById('food-time');
-            const notesInput = document.getElementById('food-notes');
-            
-            const nameErrorEl = document.getElementById('food-name-error');
-            const caloriesErrorEl = document.getElementById('food-calories-error');
-            
-            let isValid = true;
-            
-            // Validate name
-            if (!nameInput.value.trim()) {
-                nameErrorEl.textContent = 'Please enter a food name';
-                nameErrorEl.style.display = 'block';
-                nameInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                nameErrorEl.style.display = 'none';
-                nameInput.removeAttribute('aria-invalid');
-            }
-            
-            // Validate calories
-            if (!caloriesInput.value) {
-                caloriesErrorEl.textContent = 'Please enter calories';
-                caloriesErrorEl.style.display = 'block';
-                caloriesInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else if (isNaN(parseInt(caloriesInput.value, 10)) || parseInt(caloriesInput.value, 10) < 0) {
-                caloriesErrorEl.textContent = 'Please enter a valid positive number';
-                caloriesErrorEl.style.display = 'block';
-                caloriesInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                caloriesErrorEl.style.display = 'none';
-                caloriesInput.removeAttribute('aria-invalid');
-            }
-            
-            if (!isValid) {
-                return;
-            }
-            
-            // Create new food entry
-            const newEntry = {
-                id: Date.now(), // Use timestamp as unique ID
-                name: nameInput.value.trim(),
-                calories: parseInt(caloriesInput.value, 10),
-                mealType: mealTypeInput.value,
-                time: timeInput.value || '',
-                notes: notesInput.value.trim(),
-                date: formatDateKey(state.currentDate)
-            };
-            
-            // Add to state
-            const currentDateKey = formatDateKey(state.currentDate);
-            if (!state.foodEntries[currentDateKey]) {
-                state.foodEntries[currentDateKey] = [];
-            }
-            
-            state.foodEntries[currentDateKey].push(newEntry);
-            
-            // Save to localStorage
-            saveToLocalStorage();
-            
-            // Update UI
-            renderFoodEntries();
-            updateSummary();
-            
-            // Reset form
-            elements.foodForm.reset();
-            nameInput.focus();
-        }
-
-        // Handle exercise form submission
-        function handleExerciseSubmit(event) {
-            event.preventDefault();
-            
-            const nameInput = document.getElementById('exercise-name');
-            const caloriesInput = document.getElementById('exercise-calories');
-            const durationInput = document.getElementById('exercise-duration');
-            const timeInput = document.getElementById('exercise-time');
-            const notesInput = document.getElementById('exercise-notes');
-            
-            const nameErrorEl = document.getElementById('exercise-name-error');
-            const caloriesErrorEl = document.getElementById('exercise-calories-error');
-            const durationErrorEl = document.getElementById('exercise-duration-error');
-            
-            let isValid = true;
-            
-            // Validate name
-            if (!nameInput.value.trim()) {
-                nameErrorEl.textContent = 'Please enter an exercise name';
-                nameErrorEl.style.display = 'block';
-                nameInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                nameErrorEl.style.display = 'none';
-                nameInput.removeAttribute('aria-invalid');
-            }
-            
-            // Validate calories
-            if (!caloriesInput.value) {
-                caloriesErrorEl.textContent = 'Please enter calories burned';
-                caloriesErrorEl.style.display = 'block';
-                caloriesInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else if (isNaN(parseInt(caloriesInput.value, 10)) || parseInt(caloriesInput.value, 10) < 0) {
-                caloriesErrorEl.textContent = 'Please enter a valid positive number';
-                caloriesErrorEl.style.display = 'block';
-                caloriesInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                caloriesErrorEl.style.display = 'none';
-                caloriesInput.removeAttribute('aria-invalid');
-            }
-            
-            // Validate duration
-            if (!durationInput.value) {
-                durationErrorEl.textContent = 'Please enter duration';
-                durationErrorEl.style.display = 'block';
-                durationInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else if (isNaN(parseInt(durationInput.value, 10)) || parseInt(durationInput.value, 10) <= 0) {
-                durationErrorEl.textContent = 'Please enter a valid positive number';
-                durationErrorEl.style.display = 'block';
-                durationInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                durationErrorEl.style.display = 'none';
-                durationInput.removeAttribute('aria-invalid');
-            }
-            
-            if (!isValid) {
-                return;
-            }
-            
-            // Create new exercise entry
-            const newEntry = {
-                id: Date.now(), // Use timestamp as unique ID
-                name: nameInput.value.trim(),
-                calories: parseInt(caloriesInput.value, 10),
-                duration: parseInt(durationInput.value, 10),
-                time: timeInput.value || '',
-                notes: notesInput.value.trim(),
-                date: formatDateKey(state.currentDate)
-            };
-            
-            // Add to state
-            const currentDateKey = formatDateKey(state.currentDate);
-            if (!state.exerciseEntries[currentDateKey]) {
-                state.exerciseEntries[currentDateKey] = [];
-            }
-            
-            state.exerciseEntries[currentDateKey].push(newEntry);
-            
-            // Save to localStorage
-            saveToLocalStorage();
-            
-            // Update UI
-            renderExerciseEntries();
-            updateSummary();
-            
-            // Reset form
-            elements.exerciseForm.reset();
-            nameInput.focus();
-        }
-
-        // Render food entries
-        function renderFoodEntries() {
-            const currentDateKey = formatDateKey(state.currentDate);
-            const entries = state.foodEntries[currentDateKey] || [];
-            
-            if (entries.length === 0) {
-                elements.noFoodMessageEl.style.display = 'block';
-                elements.foodEntriesEl.innerHTML = '';
-                elements.foodEntriesEl.appendChild(elements.noFoodMessageEl);
-                return;
-            }
-            
-            elements.noFoodMessageEl.style.display = 'none';
-            elements.foodEntriesEl.innerHTML = '';
-            
-            // Sort entries by time if available
-            entries.sort((a, b) => {
-                if (!a.time && !b.time) return 0;
-                if (!a.time) return 1;
-                if (!b.time) return -1;
-                return a.time.localeCompare(b.time);
+                uploadArea.classList.add('dragover');
             });
             
-            entries.forEach(entry => {
-                const entryEl = document.createElement('div');
-                entryEl.className = 'entry-item';
-                entryEl.setAttribute('data-id', entry.id);
-                
-                const timeDisplay = entry.time ? formatTime(entry.time) : '';
-                const mealTypeDisplay = entry.mealType.charAt(0).toUpperCase() + entry.mealType.slice(1);
-                
-                entryEl.innerHTML = `
-                    <div class="entry-details">
-                        <div class="entry-name">${escapeHTML(entry.name)}</div>
-                        <div class="entry-meta">
-                            ${mealTypeDisplay}${timeDisplay ? ` at ${timeDisplay}` : ''}
-                            ${entry.notes ? `<br>${escapeHTML(entry.notes)}` : ''}
-                        </div>
-                    </div>
-                    <div class="entry-calories">${entry.calories} cal</div>
-                    <div class="entry-actions">
-                        <button type="button" class="delete-entry" aria-label="Delete ${escapeHTML(entry.name)}" data-id="${entry.id}">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                `;
-                
-                // Add delete event listener
-                const deleteBtn = entryEl.querySelector('.delete-entry');
-                deleteBtn.addEventListener('click', () => deleteFood(entry.id));
-                deleteBtn.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        deleteFood(entry.id);
-                    }
-                });
-                
-                elements.foodEntriesEl.appendChild(entryEl);
-            });
-        }
-
-        // Render exercise entries
-        function renderExerciseEntries() {
-            const currentDateKey = formatDateKey(state.currentDate);
-            const entries = state.exerciseEntries[currentDateKey] || [];
-            
-            if (entries.length === 0) {
-                elements.noExerciseMessageEl.style.display = 'block';
-                elements.exerciseEntriesEl.innerHTML = '';
-                elements.exerciseEntriesEl.appendChild(elements.noExerciseMessageEl);
-                return;
-            }
-            
-            elements.noExerciseMessageEl.style.display = 'none';
-            elements.exerciseEntriesEl.innerHTML = '';
-            
-            // Sort entries by time if available
-            entries.sort((a, b) => {
-                if (!a.time && !b.time) return 0;
-                if (!a.time) return 1;
-                if (!b.time) return -1;
-                return a.time.localeCompare(b.time);
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.classList.remove('dragover');
             });
             
-            entries.forEach(entry => {
-                const entryEl = document.createElement('div');
-                entryEl.className = 'entry-item';
-                entryEl.setAttribute('data-id', entry.id);
+            uploadArea.addEventListener('drop', function(event) {
+                event.preventDefault();
+                uploadArea.classList.remove('dragover');
                 
-                const timeDisplay = entry.time ? formatTime(entry.time) : '';
-                
-                entryEl.innerHTML = `
-                    <div class="entry-details">
-                        <div class="entry-name">${escapeHTML(entry.name)}</div>
-                        <div class="entry-meta">
-                            ${entry.duration} minutes${timeDisplay ? ` at ${timeDisplay}` : ''}
-                            ${entry.notes ? `<br>${escapeHTML(entry.notes)}` : ''}
-                        </div>
-                    </div>
-                    <div class="entry-calories">${entry.calories} cal</div>
-                    <div class="entry-actions">
-                        <button type="button" class="delete-entry" aria-label="Delete ${escapeHTML(entry.name)}" data-id="${entry.id}">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                `;
-                
-                // Add delete event listener
-                const deleteBtn = entryEl.querySelector('.delete-entry');
-                deleteBtn.addEventListener('click', () => deleteExercise(entry.id));
-                deleteBtn.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        deleteExercise(entry.id);
-                    }
-                });
-                
-                elements.exerciseEntriesEl.appendChild(entryEl);
+                const file = event.dataTransfer.files[0];
+                if (file && file.type.match('image.*')) {
+                    fileInput.files = event.dataTransfer.files;
+                    displayPreview(file);
+                }
             });
-        }
-
-        // Delete food entry
-        function deleteFood(id) {
-            const currentDateKey = formatDateKey(state.currentDate);
             
-            if (!state.foodEntries[currentDateKey]) {
-                return;
-            }
+            // Tags input
+            tagsInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    addTag(tagsInput.value);
+                }
+            });
             
-            // Find the entry to get its name for the confirmation
-            const entry = state.foodEntries[currentDateKey].find(item => item.id === id);
-            if (!entry) return;
+            // Form submission
+            uploadForm.addEventListener('submit', handleFormSubmit);
             
-            const confirmDelete = confirm(`Are you sure you want to delete "${entry.name}"?`);
-            if (!confirmDelete) return;
-            
-            // Filter out the entry to delete
-            state.foodEntries[currentDateKey] = state.foodEntries[currentDateKey].filter(item => item.id !== id);
-            
-            // Save to localStorage
-            saveToLocalStorage();
-            
-            // Update UI
-            renderFoodEntries();
-            updateSummary();
-        }
-
-        // Delete exercise entry
-        function deleteExercise(id) {
-            const currentDateKey = formatDateKey(state.currentDate);
-            
-            if (!state.exerciseEntries[currentDateKey]) {
-                return;
-            }
-            
-            // Find the entry to get its name for the confirmation
-            const entry = state.exerciseEntries[currentDateKey].find(item => item.id === id);
-            if (!entry) return;
-            
-            const confirmDelete = confirm(`Are you sure you want to delete "${entry.name}"?`);
-            if (!confirmDelete) return;
-            
-            // Filter out the entry to delete
-            state.exerciseEntries[currentDateKey] = state.exerciseEntries[currentDateKey].filter(item => item.id !== id);
-            
-            // Save to localStorage
-            saveToLocalStorage();
-            
-            // Update UI
-            renderExerciseEntries();
-            updateSummary();
-        }
-
-        // Update summary section
-        function updateSummary() {
-            const currentDateKey = formatDateKey(state.currentDate);
-            
-            // Calculate total calories consumed
-            const foodEntries = state.foodEntries[currentDateKey] || [];
-            const totalConsumed = foodEntries.reduce((total, entry) => total + entry.calories, 0);
-            
-            // Calculate total calories burned
-            const exerciseEntries = state.exerciseEntries[currentDateKey] || [];
-            const totalBurned = exerciseEntries.reduce((total, entry) => total + entry.calories, 0);
-            
-            // Calculate net calories
-            const netCalories = totalConsumed - totalBurned;
-            
-            // Update UI
-            elements.caloriesConsumedEl.textContent = totalConsumed;
-            elements.caloriesBurnedEl.textContent = totalBurned;
-            elements.caloriesRemainingEl.textContent = netCalories;
-            
-            // Update goal text
-            elements.goalTextEl.textContent = `Goal: ${state.calorieGoal} calories`;
-            
-            // Update progress bar
-            const progressPercentage = Math.min(100, Math.max(0, (totalConsumed / state.calorieGoal) * 100));
-            elements.goalProgressEl.style.width = `${progressPercentage}%`;
-            elements.goalProgressEl.setAttribute('aria-valuenow', Math.round(progressPercentage));
-            
-            // Change progress bar color based on percentage
-            if (progressPercentage > 100) {
-                elements.goalProgressEl.style.backgroundColor = var(--danger-color);
-            } else if (progressPercentage > 85) {
-                elements.goalProgressEl.style.backgroundColor = var(--warning-color);
-            } else {
-                elements.goalProgressEl.style.backgroundColor = var(--primary-color);
-            }
-        }
-
-        // Format time for display
-        function formatTime(timeString) {
-            if (!timeString) return '';
-            
-            const [hours, minutes] = timeString.split(':');
-            const hour = parseInt(hours, 10);
-            
-            if (hour === 0) {
-                return `12:${minutes} AM`;
-            } else if (hour < 12) {
-                return `${hour}:${minutes} AM`;
-            } else if (hour === 12) {
-                return `12:${minutes} PM`;
-            } else {
-                return `${hour - 12}:${minutes} PM`;
-            }
-        }
-
-        // Escape HTML to prevent XSS
-        function escapeHTML(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
-
-        // Initialize the app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init);
+            // Initialize gallery
+            initializeGallery();
+        });
     </script>
 </body>
 </html>
