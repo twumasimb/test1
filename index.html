@@ -3,754 +3,536 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Daily Task Tracker with Rewards</title>
-    <meta name="description" content="An accessible daily task tracker app where users can create, organize, and track tasks while earning rewards. WCAG 2.1 AA compliant, keyboard accessible, and screen reader friendly.">
+    <title>Creative Share: Upload and Share Your Art & Photos</title>
     <style>
-        :root {
-            --primary: #0066cc;
-            --primary-dark: #004a99;
-            --accent: #ffd700;
-            --bg: #f9f9fb;
-            --surface: #fff;
-            --border: #e0e0e0;
-            --text: #222;
-            --text-light: #666;
-            --error: #b00020;
-            --success: #2e7d32;
-            --focus: var(--primary);
-            --reward-bg: #fffbe6;
-        }
+        /* Reset & base styles */
         html {
-            font-size: 100%;
             box-sizing: border-box;
+            font-size: 18px;
+            background: #f8fafc;
+            color: #1a1a1a;
         }
-        *, *::before, *::after {
+        *, *:before, *:after {
             box-sizing: inherit;
         }
         body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
         header {
-            background: var(--primary);
+            background: #22223b;
             color: #fff;
-            padding: 1rem 0;
+            padding: 0;
         }
-        nav {
-            max-width: 700px;
+        .site-header {
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 1.2rem 1rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
         }
-        .app-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: bold;
             letter-spacing: 1px;
         }
+        nav[role="navigation"] ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1.2rem;
+        }
+        nav[role="navigation"] a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.3em 0.8em;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        nav[role="navigation"] a:focus,
+        nav[role="navigation"] a:hover {
+            background: #4a4e69;
+            outline: 3px solid #ffffff;
+            outline-offset: 2px;
+        }
+
         main {
             flex: 1 0 auto;
-            max-width: 700px;
-            margin: 2rem auto 1rem auto;
-            background: var(--surface);
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            padding: 2rem 1.5rem;
+            max-width: 900px;
+            margin: 2rem auto 0 auto;
+            padding: 1rem;
         }
         h1 {
             font-size: 2rem;
-            margin-top: 0;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5em;
         }
         section {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
-        /* Task Form */
-        .task-form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-        .form-group {
-            flex: 1 1 200px;
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        input[type="text"], input[type="date"], select {
-            padding: 0.5rem;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            font-size: 1rem;
+        .upload-section {
             background: #fff;
-            color: var(--text);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(34,34,59,0.05);
+            padding: 2rem 1.5rem;
         }
-        input[type="text"]:invalid, input[type="date"]:invalid {
-            border-color: var(--error);
+        .upload-form label {
+            display: block;
+            margin-bottom: 0.3em;
+            font-weight: 500;
         }
-        .required-indicator {
-            color: var(--error);
+        .upload-form input[type="file"] {
+            margin-bottom: 1em;
+        }
+        .required {
+            color: #d7263d;
+            font-weight: bold;
             margin-left: 0.2em;
+        }
+        .upload-form input[type="text"],
+        .upload-form textarea {
+            width: 100%;
+            max-width: 100%;
+            padding: 0.6em;
+            margin-bottom: 1em;
+            border: 1px solid #bfc0c0;
+            border-radius: 4px;
             font-size: 1em;
+            background: #f4f6f8;
         }
-        .error-message {
-            color: var(--error);
-            font-size: 0.95em;
-            margin-top: 0.15em;
+        .upload-form textarea {
+            resize: vertical;
+            min-height: 70px;
         }
-        button {
-            padding: 0.6em 1.4em;
-            background: var(--primary);
+        .upload-form button[type="submit"] {
+            background: #22223b;
             color: #fff;
             border: none;
+            padding: 0.8em 2em;
             border-radius: 4px;
-            font-size: 1rem;
+            font-size: 1em;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.2s;
-            margin-top: 0.25em;
         }
-        button:disabled {
-            background: #b3d1f3;
-            color: #eee;
-            cursor: not-allowed;
+        .upload-form button[type="submit"]:hover,
+        .upload-form button[type="submit"]:focus {
+            background: #4a4e69;
         }
+        /* Focus indicators for all interactive elements */
         button:focus, input:focus, select:focus, textarea:focus, a:focus {
-            outline: 3px solid var(--focus);
+            outline: 3px solid #0066cc;
             outline-offset: 2px;
-        }
-        /* Task List */
-        .task-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .task-item {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            background: #f5faff;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            gap: 1rem;
-        }
-        .task-item.completed {
-            background: #e7f9e9;
-            border-color: #c8e6c9;
-            text-decoration: line-through;
-            opacity: 0.8;
-        }
-        .task-details {
-            flex: 1 1 auto;
-            min-width: 0;
-        }
-        .task-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0 0 0.3em 0;
-            word-break: break-word;
-        }
-        .task-meta {
-            font-size: 0.98em;
-            color: var(--text-light);
-            margin-bottom: 0.4em;
-        }
-        .task-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5em;
-        }
-        .task-actions button {
-            width: 2.5em;
-            height: 2.5em;
-            border-radius: 50%;
-            padding: 0;
-            font-size: 1.2em;
-            background: #fff;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            transition: background 0.2s, color 0.2s;
-        }
-        .task-actions button:focus {
-            outline: 3px solid var(--focus);
-        }
-        .task-actions button[aria-pressed="true"] {
-            background: var(--primary);
-            color: #fff;
-        }
-        .task-actions button[aria-label="Edit task"] {
-            border-color: #ff9800;
-            color: #ff9800;
-        }
-        .task-actions button[aria-label="Edit task"]:focus {
-            outline: 3px solid #ff9800;
-        }
-        .task-actions button[aria-label="Delete task"] {
-            border-color: var(--error);
-            color: var(--error);
-        }
-        .task-actions button[aria-label="Delete task"]:focus {
-            outline: 3px solid var(--error);
-        }
-        /* Rewards Section */
-        .rewards-section {
-            background: var(--reward-bg);
-            border: 1px solid #ffe082;
-            border-radius: 6px;
-            padding: 1rem;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-        }
-        .rewards-icon {
-            font-size: 2.2em;
-            color: var(--accent);
-            flex-shrink: 0;
-        }
-        .rewards-info {
-            flex: 1 1 auto;
-        }
-        .rewards-count {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: var(--primary-dark);
-        }
-        /* Responsive */
-        @media (max-width: 600px) {
-            main {
-                padding: 1rem 0.5rem;
-            }
-            .task-form {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-            .rewards-section {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-        }
-        /* Visually hidden (for screen reader only text) */
-        .sr-only {
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0, 0, 0, 0) !important;
-            border: 0 !important;
-        }
-        /* Drag handle styling */
-        .drag-handle {
-            cursor: grab;
-            font-size: 1.5em;
-            color: var(--primary-dark);
-            margin-right: 0.5em;
-            user-select: none;
-        }
-        .task-item[aria-grabbed="true"] {
-            border: 2px dashed var(--primary-dark);
-            background: #e3f0fc;
-        }
-        /* Live region styling */
-        #live-region {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
         }
         /* High contrast focus for dark backgrounds */
         .dark-bg button:focus, .dark-bg a:focus {
             outline: 3px solid #ffffff;
         }
+        /* Error messages */
+        .form-error {
+            color: #d7263d;
+            font-size: 1em;
+            margin-top: -0.8em;
+            margin-bottom: 1em;
+            display: block;
+        }
+        /* Gallery styles */
+        .gallery-section {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(34,34,59,0.05);
+            padding: 2rem 1.5rem;
+        }
+        .gallery-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        .art-card {
+            background: #f4f6f8;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(34,34,59,0.05);
+            padding: 1em;
+            display: flex;
+            flex-direction: column;
+            min-height: 340px;
+        }
+        .art-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            background: #e0e0e0;
+            margin-bottom: 0.8em;
+            object-fit: cover;
+            min-height: 180px;
+        }
+        .art-card .art-desc {
+            font-size: 1em;
+            margin-bottom: 0.6em;
+        }
+        .art-card .art-tags {
+            margin-top: auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4em;
+        }
+        .art-card .art-tag {
+            background: #22223b;
+            color: #fff;
+            border-radius: 3px;
+            padding: 0.2em 0.7em;
+            font-size: 0.95em;
+            margin-bottom: 0.3em;
+            letter-spacing: 0.02em;
+        }
+        /* Visually hidden class for accessibility */
+        .visually-hidden {
+            position: absolute !important;
+            height: 1px; width: 1px;
+            overflow: hidden;
+            clip: rect(1px, 1px, 1px, 1px);
+            white-space: nowrap;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 700px) {
+            .site-header, main {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+            .upload-section, .gallery-section {
+                padding: 1rem 0.5rem;
+            }
+        }
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+            .site-title {
+                font-size: 1.1rem;
+            }
+        }
+        /* Footer */
+        footer {
+            background: #22223b;
+            color: #fff;
+            text-align: center;
+            padding: 1.2rem 1rem;
+            font-size: 1em;
+            margin-top: 2rem;
+            flex-shrink: 0;
+        }
+        /* Tag input hint */
+        .tag-hint {
+            font-size: 0.95em;
+            color: #444;
+            margin-bottom: 0.5em;
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav role="navigation" aria-label="Main navigation">
-            <span class="app-title">Daily Task Tracker</span>
-            <a href="#main-content" class="skip-link" style="color:#fff; background:var(--primary-dark); padding:0.3em 0.8em; border-radius:4px; text-decoration:none;">Skip to main content</a>
-        </nav>
+        <div class="site-header">
+            <span class="site-title">Creative Share</span>
+            <nav role="navigation" aria-label="Main navigation">
+                <ul>
+                    <li><a href="#upload-section">Upload Work</a></li>
+                    <li><a href="#gallery-section">Gallery</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
-    <main id="main-content" tabindex="-1">
-        <h1>Accessible Daily Task Tracker</h1>
-        <!-- Rewards Section -->
-        <section class="rewards-section" aria-labelledby="rewards-heading">
-            <span class="rewards-icon" aria-hidden="true">🏆</span>
-            <div class="rewards-info">
-                <h2 id="rewards-heading" style="margin:0 0 0.2em 0; font-size:1.1em;">Your Rewards</h2>
-                <span class="rewards-count" id="rewards-count" aria-live="polite" aria-atomic="true">0</span>
-                <span id="rewards-label"> completed tasks</span>
-            </div>
-        </section>
-        <!-- Task Creation Form -->
-        <section aria-labelledby="add-task-heading">
-            <h2 id="add-task-heading">Add a New Task</h2>
-            <form id="task-form" class="task-form" autocomplete="off" novalidate aria-describedby="task-form-desc">
-                <div id="task-form-desc" class="sr-only">
-                    Enter the task title, optional description, and due date. All fields marked with an asterisk are required.
+    <main>
+        <h1>Share Your Creative Work</h1>
+        <section id="upload-section" class="upload-section" aria-labelledby="upload-heading">
+            <h2 id="upload-heading">Upload Your Art or Photo</h2>
+            <form id="upload-form" class="upload-form" autocomplete="off" novalidate>
+                <div>
+                    <label for="art-file">
+                        Select image file
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        type="file" 
+                        id="art-file" 
+                        name="art-file" 
+                        accept="image/*" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="art-file-desc art-file-error"
+                    >
+                    <span id="art-file-desc" class="tag-hint">Accepted formats: JPEG, PNG, GIF, SVG. Max 5MB.</span>
+                    <span id="art-file-error" class="form-error" aria-live="polite"></span>
                 </div>
-                <div class="form-group">
-                    <label for="task-title">Task Title <span class="required-indicator" aria-hidden="true">*</span></label>
-                    <input type="text" id="task-title" name="task-title" required aria-required="true" maxlength="80" aria-describedby="task-title-error" />
-                    <span id="task-title-error" class="error-message" role="alert" aria-live="assertive"></span>
+                <div>
+                    <label for="art-desc">
+                        Description
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <textarea 
+                        id="art-desc" 
+                        name="art-desc" 
+                        rows="3" 
+                        maxlength="250" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="art-desc-desc art-desc-error"
+                        placeholder="Describe your work (max 250 characters)"
+                    ></textarea>
+                    <span id="art-desc-desc" class="tag-hint">Give your work a meaningful description for all users.</span>
+                    <span id="art-desc-error" class="form-error" aria-live="polite"></span>
                 </div>
-                <div class="form-group">
-                    <label for="task-desc">Description</label>
-                    <input type="text" id="task-desc" name="task-desc" maxlength="120" aria-describedby="task-desc-error" />
-                    <span id="task-desc-error" class="error-message" role="alert" aria-live="assertive"></span>
+                <div>
+                    <label for="art-tags">
+                        Tags
+                        <span class="required" aria-hidden="true">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="art-tags" 
+                        name="art-tags" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="art-tags-desc art-tags-error"
+                        placeholder="e.g. nature, watercolor, portrait"
+                        maxlength="100"
+                        autocomplete="off"
+                    >
+                    <span id="art-tags-desc" class="tag-hint">Separate tags with commas. (At least one tag required)</span>
+                    <span id="art-tags-error" class="form-error" aria-live="polite"></span>
                 </div>
-                <div class="form-group">
-                    <label for="task-date">Due Date <span class="required-indicator" aria-hidden="true">*</span></label>
-                    <input type="date" id="task-date" name="task-date" required aria-required="true" aria-describedby="task-date-error" />
-                    <span id="task-date-error" class="error-message" role="alert" aria-live="assertive"></span>
-                </div>
-                <div class="form-group" style="flex:0 0 120px;">
-                    <button type="submit" id="add-task-btn">Add Task</button>
-                </div>
+                <button type="submit" id="upload-btn">Upload Work</button>
             </form>
         </section>
-        <!-- Task List Section -->
-        <section aria-labelledby="tasks-heading">
-            <h2 id="tasks-heading">Your Tasks</h2>
-            <ul id="task-list" class="task-list" aria-live="polite" aria-relevant="additions removals">
-                <!-- Tasks will be rendered here -->
+        <section id="gallery-section" class="gallery-section" aria-labelledby="gallery-heading">
+            <h2 id="gallery-heading">Gallery</h2>
+            <ul id="gallery-list" class="gallery-list" aria-live="polite" aria-relevant="additions">
+                <!-- Gallery items inserted here -->
             </ul>
-            <div id="no-tasks-msg" aria-live="polite" style="color:var(--text-light); font-size:1.1em;">No tasks yet. Add your first task above!</div>
+            <div id="empty-gallery-msg" role="status" aria-live="polite">
+                <p>No creative works uploaded yet. Be the first to share your art!</p>
+            </div>
         </section>
-        <!-- Live region for dynamic updates (screen reader feedback) -->
-        <div id="live-region" aria-live="polite" aria-atomic="true"></div>
     </main>
     <footer>
-        <div style="max-width:700px; margin:0 auto; padding:1.2em 1em; color:var(--text-light); font-size:0.98em;">
-            <p>
-                <strong>Accessible Daily Task Tracker</strong> &mdash; Built with <span aria-label="love">♥</span> for everyone.<br>
-                <span>WCAG 2.1 AA Compliant &bull; Keyboard &amp; Screen Reader Accessible</span>
-            </p>
-        </div>
+        <p>
+            &copy; <span id="year"></span> Creative Share &ndash; Built for everyone.
+        </p>
     </footer>
     <script>
-    // -------------------------
-    // Accessible Task Tracker JS
-    // -------------------------
+        // Utility: set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Data Model
-    let tasks = [];
-    let rewards = 0;
-    let editingTaskId = null; // Track if editing
-
-    // DOM Elements
-    const taskForm = document.getElementById('task-form');
-    const taskTitleInput = document.getElementById('task-title');
-    const taskDescInput = document.getElementById('task-desc');
-    const taskDateInput = document.getElementById('task-date');
-    const taskList = document.getElementById('task-list');
-    const rewardsCount = document.getElementById('rewards-count');
-    const liveRegion = document.getElementById('live-region');
-    const noTasksMsg = document.getElementById('no-tasks-msg');
-
-    // Error Message Elements
-    const taskTitleError = document.getElementById('task-title-error');
-    const taskDescError = document.getElementById('task-desc-error');
-    const taskDateError = document.getElementById('task-date-error');
-
-    // Focus management for accessibility
-    function setFocusTo(selector) {
-        const el = document.querySelector(selector);
-        if (el) el.focus();
-    }
-
-    // Helper: Generate unique ID for tasks
-    function generateId() {
-        return 'task-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
-    }
-
-    // Helper: Announce messages to screen readers
-    function announce(msg) {
-        liveRegion.textContent = '';
-        setTimeout(() => {
-            liveRegion.textContent = msg;
-        }, 100); // Ensures update is recognized
-    }
-
-    // Update rewards display
-    function updateRewards() {
-        rewards = tasks.filter(t => t.completed).length;
-        rewardsCount.textContent = rewards;
-    }
-
-    // Render tasks list
-    function renderTasks() {
-        // Remove all children
-        while (taskList.firstChild) taskList.removeChild(taskList.firstChild);
-
-        if (tasks.length === 0) {
-            noTasksMsg.style.display = 'block';
-            return;
+        // Accessibility: focus management for error summary
+        function focusFirstErrorField(errors) {
+            if (errors.length > 0) {
+                const field = document.getElementById(errors[0]);
+                if (field) {
+                    field.focus();
+                }
+            }
         }
-        noTasksMsg.style.display = 'none';
 
-        tasks.forEach((task, idx) => {
+        // Accessibility: Keyboard interaction handler for custom elements
+        function handleInteraction(event, callback) {
+            if (
+                event.type === 'click' ||
+                (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))
+            ) {
+                event.preventDefault();
+                callback();
+            }
+        }
+
+        // Validate form fields and provide accessible error messages
+        function validateUploadForm(form) {
+            let valid = true;
+            const errors = [];
+
+            // Clear previous errors
+            document.getElementById('art-file-error').textContent = '';
+            document.getElementById('art-desc-error').textContent = '';
+            document.getElementById('art-tags-error').textContent = '';
+
+            // File validation
+            const fileInput = form['art-file'];
+            const file = fileInput.files[0];
+            if (!file) {
+                document.getElementById('art-file-error').textContent = 'Please select an image file to upload.';
+                errors.push('art-file');
+                valid = false;
+            } else if (!/^image\//.test(file.type)) {
+                document.getElementById('art-file-error').textContent = 'File must be an image (JPEG, PNG, GIF, SVG).';
+                errors.push('art-file');
+                valid = false;
+            } else if (file.size > 5 * 1024 * 1024) {
+                document.getElementById('art-file-error').textContent = 'Image must be less than 5MB.';
+                errors.push('art-file');
+                valid = false;
+            }
+
+            // Description validation
+            const desc = form['art-desc'].value.trim();
+            if (!desc) {
+                document.getElementById('art-desc-error').textContent = 'Please provide a description of your work.';
+                errors.push('art-desc');
+                valid = false;
+            } else if (desc.length > 250) {
+                document.getElementById('art-desc-error').textContent = 'Description cannot exceed 250 characters.';
+                errors.push('art-desc');
+                valid = false;
+            }
+
+            // Tags validation
+            const tagsInput = form['art-tags'].value.trim();
+            if (!tagsInput) {
+                document.getElementById('art-tags-error').textContent = 'Please provide at least one tag.';
+                errors.push('art-tags');
+                valid = false;
+            } else {
+                // Split tags, check for at least one non-empty
+                const tagsArr = tagsInput.split(',').map(t => t.trim()).filter(Boolean);
+                if (tagsArr.length === 0) {
+                    document.getElementById('art-tags-error').textContent = 'Please provide at least one tag.';
+                    errors.push('art-tags');
+                    valid = false;
+                }
+            }
+
+            // Focus first error field for accessibility
+            if (!valid) {
+                setTimeout(() => focusFirstErrorField(errors), 0);
+            }
+            return valid;
+        }
+
+        // Accessible image alt text generator
+        function generateAltText(description, tags) {
+            // Use description as primary alt text, append tags for context
+            if (tags && tags.length > 0) {
+                return description + ' (Tags: ' + tags.join(', ') + ')';
+            }
+            return description;
+        }
+
+        // Add uploaded art to the gallery
+        function addToGallery(imageDataUrl, description, tags) {
+            const galleryList = document.getElementById('gallery-list');
+            const emptyMsg = document.getElementById('empty-gallery-msg');
+            if (emptyMsg) {
+                emptyMsg.style.display = 'none';
+            }
+
+            // Create article element for each artwork
             const li = document.createElement('li');
-            li.className = 'task-item' + (task.completed ? ' completed' : '');
+            li.className = 'art-card';
+            li.setAttribute('tabindex', '-1'); // Allow programmatic focus for accessibility
+
+            // Image with accessible alt text
+            const img = document.createElement('img');
+            img.src = imageDataUrl;
+            img.alt = generateAltText(description, tags);
+            img.loading = "lazy";
+
+            // Description
+            const descP = document.createElement('p');
+            descP.className = 'art-desc';
+            descP.textContent = description;
+
+            // Tags
+            const tagsDiv = document.createElement('div');
+            tagsDiv.className = 'art-tags';
+            tags.forEach(tag => {
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'art-tag';
+                tagSpan.textContent = tag;
+                tagsDiv.appendChild(tagSpan);
+            });
+
+            // Compose card
+            li.appendChild(img);
+            li.appendChild(descP);
+            li.appendChild(tagsDiv);
+
+            // Insert at the top for latest first
+            galleryList.insertBefore(li, galleryList.firstChild);
+
+            // Announce addition for screen readers
+            li.setAttribute('aria-live', 'polite');
             li.setAttribute('role', 'article');
-            li.setAttribute('aria-labelledby', `task-title-${task.id}`);
-            li.setAttribute('draggable', 'true');
-            li.setAttribute('tabindex', '0');
-            li.setAttribute('aria-grabbed', 'false');
-            li.dataset.id = task.id;
+            li.focus();
+        }
 
-            // Drag handle for reordering
-            const dragHandle = document.createElement('span');
-            dragHandle.className = 'drag-handle';
-            dragHandle.setAttribute('role', 'button');
-            dragHandle.setAttribute('tabindex', '0');
-            dragHandle.setAttribute('aria-label', 'Drag to reorder');
-            dragHandle.innerHTML = '&#9776;'; // Hamburger icon
-            // Keyboard support for drag handle
-            dragHandle.addEventListener('keydown', function(e) {
-                // Allow up/down arrow to reorder
-                if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    moveTask(idx, idx - 1);
-                } else if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    moveTask(idx, idx + 1);
-                }
-            });
-            dragHandle.addEventListener('mousedown', e => e.stopPropagation());
-            dragHandle.addEventListener('click', e => e.stopPropagation());
+        // Form submission handler
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const form = event.target;
 
-            // Task details
-            const detailsDiv = document.createElement('div');
-            detailsDiv.className = 'task-details';
-
-            const title = document.createElement('span');
-            title.className = 'task-title';
-            title.id = `task-title-${task.id}`;
-            title.textContent = task.title;
-            detailsDiv.appendChild(title);
-
-            const meta = document.createElement('div');
-            meta.className = 'task-meta';
-            meta.innerHTML = `<span>Due: <strong>${task.dueDate}</strong></span>`;
-            if (task.description) {
-                meta.innerHTML += ` &mdash; <span>${task.description}</span>`;
+            if (!validateUploadForm(form)) {
+                return;
             }
-            detailsDiv.appendChild(meta);
 
-            // Actions (complete, edit, delete)
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'task-actions';
+            // Gather form data
+            const file = form['art-file'].files[0];
+            const description = form['art-desc'].value.trim();
+            const tagsArr = form['art-tags'].value.split(',').map(t => t.trim()).filter(Boolean);
 
-            // Complete/Undo button
-            const completeBtn = document.createElement('button');
-            completeBtn.type = 'button';
-            completeBtn.setAttribute('aria-label', task.completed ? 'Mark as incomplete' : 'Mark as complete');
-            completeBtn.setAttribute('aria-pressed', task.completed ? 'true' : 'false');
-            completeBtn.title = task.completed ? 'Mark as incomplete' : 'Mark as complete';
-            completeBtn.innerHTML = task.completed ? '✔' : '<span aria-hidden="true">○</span>';
-            completeBtn.className = 'complete-btn';
-            completeBtn.tabIndex = 0;
-            // Keyboard/mouse event for completion
-            completeBtn.addEventListener('click', () => toggleComplete(task.id));
-            completeBtn.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    toggleComplete(task.id);
-                }
-            });
+            // Read image file as DataURL
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                addToGallery(e.target.result, description, tagsArr);
 
-            // Edit button
-            const editBtn = document.createElement('button');
-            editBtn.type = 'button';
-            editBtn.setAttribute('aria-label', 'Edit task');
-            editBtn.title = 'Edit task';
-            editBtn.innerHTML = '✎';
-            editBtn.className = 'edit-btn';
-            editBtn.tabIndex = 0;
-            editBtn.addEventListener('click', () => startEditTask(task.id));
-            editBtn.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    startEditTask(task.id);
-                }
-            });
-
-            // Delete button
-            const deleteBtn = document.createElement('button');
-            deleteBtn.type = 'button';
-            deleteBtn.setAttribute('aria-label', 'Delete task');
-            deleteBtn.title = 'Delete task';
-            deleteBtn.innerHTML = '🗑';
-            deleteBtn.className = 'delete-btn';
-            deleteBtn.tabIndex = 0;
-            deleteBtn.addEventListener('click', () => deleteTask(task.id));
-            deleteBtn.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    deleteTask(task.id);
-                }
-            });
-
-            actionsDiv.appendChild(completeBtn);
-            actionsDiv.appendChild(editBtn);
-            actionsDiv.appendChild(deleteBtn);
-
-            li.appendChild(dragHandle);
-            li.appendChild(detailsDiv);
-            li.appendChild(actionsDiv);
-
-            // Drag and drop handlers for mouse
-            li.addEventListener('dragstart', handleDragStart);
-            li.addEventListener('dragover', handleDragOver);
-            li.addEventListener('drop', handleDrop);
-            li.addEventListener('dragend', handleDragEnd);
-
-            // Keyboard drag-and-drop support
-            li.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    moveTask(idx, idx - 1);
-                } else if (e.ctrlKey && e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    moveTask(idx, idx + 1);
-                }
-            });
-
-            taskList.appendChild(li);
-        });
-        updateRewards();
-    }
-
-    // Move task in the list (for drag or keyboard reordering)
-    function moveTask(fromIdx, toIdx) {
-        if (toIdx < 0 || toIdx >= tasks.length) return;
-        const [moved] = tasks.splice(fromIdx, 1);
-        tasks.splice(toIdx, 0, moved);
-        renderTasks();
-        announce(`Task "${moved.title}" moved to position ${toIdx + 1}`);
-    }
-
-    // Drag-and-drop handlers
-    let draggedTaskId = null;
-    function handleDragStart(e) {
-        draggedTaskId = this.dataset.id;
-        this.setAttribute('aria-grabbed', 'true');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', draggedTaskId);
-    }
-    function handleDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-    }
-    function handleDrop(e) {
-        e.preventDefault();
-        const targetId = this.dataset.id;
-        if (draggedTaskId && targetId && draggedTaskId !== targetId) {
-            const fromIdx = tasks.findIndex(t => t.id === draggedTaskId);
-            const toIdx = tasks.findIndex(t => t.id === targetId);
-            moveTask(fromIdx, toIdx);
-        }
-    }
-    function handleDragEnd(e) {
-        this.setAttribute('aria-grabbed', 'false');
-        draggedTaskId = null;
-    }
-
-    // Toggle task completion
-    function toggleComplete(id) {
-        const idx = tasks.findIndex(t => t.id === id);
-        if (idx === -1) return;
-        tasks[idx].completed = !tasks[idx].completed;
-        renderTasks();
-        announce(tasks[idx].completed ?
-            `Task "${tasks[idx].title}" marked as complete. Reward earned!` :
-            `Task "${tasks[idx].title}" marked as incomplete. Reward removed.`);
-    }
-
-    // Delete task
-    function deleteTask(id) {
-        const idx = tasks.findIndex(t => t.id === id);
-        if (idx === -1) return;
-        const title = tasks[idx].title;
-        tasks.splice(idx, 1);
-        renderTasks();
-        announce(`Task "${title}" deleted.`);
-    }
-
-    // Edit task
-    function startEditTask(id) {
-        const task = tasks.find(t => t.id === id);
-        if (!task) return;
-        editingTaskId = id;
-        taskTitleInput.value = task.title;
-        taskDescInput.value = task.description || '';
-        taskDateInput.value = task.dueDate;
-        document.getElementById('add-task-btn').textContent = 'Update Task';
-        announce(`Editing task "${task.title}".`);
-        setFocusTo('#task-title');
-    }
-
-    // Validate form fields
-    function validateTaskForm() {
-        let valid = true;
-        // Title validation
-        if (!taskTitleInput.value.trim()) {
-            taskTitleError.textContent = 'Task title is required.';
-            valid = false;
-        } else if (taskTitleInput.value.trim().length > 80) {
-            taskTitleError.textContent = 'Task title must be 80 characters or less.';
-            valid = false;
-        } else {
-            taskTitleError.textContent = '';
-        }
-        // Description validation
-        if (taskDescInput.value.trim().length > 120) {
-            taskDescError.textContent = 'Description must be 120 characters or less.';
-            valid = false;
-        } else {
-            taskDescError.textContent = '';
-        }
-        // Date validation
-        if (!taskDateInput.value) {
-            taskDateError.textContent = 'Due date is required.';
-            valid = false;
-        } else {
-            taskDateError.textContent = '';
-        }
-        return valid;
-    }
-
-    // Reset form to add mode
-    function resetForm() {
-        taskForm.reset();
-        editingTaskId = null;
-        document.getElementById('add-task-btn').textContent = 'Add Task';
-        taskTitleError.textContent = '';
-        taskDescError.textContent = '';
-        taskDateError.textContent = '';
-    }
-
-    // Handle form submit
-    taskForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        if (!validateTaskForm()) {
-            announce('Please fix form errors before submitting.');
-            return;
-        }
-        const title = taskTitleInput.value.trim();
-        const description = taskDescInput.value.trim();
-        const dueDate = taskDateInput.value;
-        if (editingTaskId) {
-            // Update existing task
-            const idx = tasks.findIndex(t => t.id === editingTaskId);
-            if (idx !== -1) {
-                tasks[idx].title = title;
-                tasks[idx].description = description;
-                tasks[idx].dueDate = dueDate;
-                announce(`Task "${title}" updated.`);
-            }
-        } else {
-            // Add new task
-            const newTask = {
-                id: generateId(),
-                title,
-                description,
-                dueDate,
-                completed: false
+                // Reset form
+                form.reset();
+                // Move focus to gallery heading for context
+                document.getElementById('gallery-heading').focus();
             };
-            tasks.push(newTask);
-            announce(`Task "${title}" added.`);
-        }
-        resetForm();
-        renderTasks();
-        setFocusTo('#task-title');
-    });
+            reader.onerror = function() {
+                document.getElementById('art-file-error').textContent = 'Could not read the image file. Please try another.';
+                document.getElementById('art-file').focus();
+            };
+            reader.readAsDataURL(file);
+        });
 
-    // Keyboard accessibility for skip link
-    document.querySelector('.skip-link').addEventListener('click', function(e) {
-        e.preventDefault();
-        setFocusTo('#main-content');
-    });
+        // Accessibility: make gallery heading focusable for context shift
+        document.getElementById('gallery-heading').setAttribute('tabindex', '-1');
 
-    // Initial rendering
-    renderTasks();
+        // Accessibility: Keyboard support for navigation links (redundant for <a>, but pattern included for custom elements)
+        // Example pattern (not strictly needed here, as <a> is natively accessible):
+        // document.querySelectorAll('nav[role="navigation"] a').forEach(link => {
+        //     link.addEventListener('keydown', function(e) {
+        //         handleInteraction(e, () => link.click());
+        //     });
+        // });
 
-    // Accessibility: clear errors on input
-    taskTitleInput.addEventListener('input', () => { taskTitleError.textContent = ''; });
-    taskDescInput.addEventListener('input', () => { taskDescError.textContent = ''; });
-    taskDateInput.addEventListener('input', () => { taskDateError.textContent = ''; });
+        // Responsive: Hide empty gallery message when there are items
+        const observer = new MutationObserver(() => {
+            const galleryList = document.getElementById('gallery-list');
+            const emptyMsg = document.getElementById('empty-gallery-msg');
+            if (galleryList.children.length === 0) {
+                emptyMsg.style.display = 'block';
+            } else {
+                emptyMsg.style.display = 'none';
+            }
+        });
+        observer.observe(document.getElementById('gallery-list'), { childList: true });
 
-    // Accessibility: ensure all interactive elements are keyboard accessible
-    // Already handled via proper button/input usage and tabindex.
-
-    // Responsive: handle font scaling (200% zoom)
-    // Already handled via relative units in CSS.
-
-    // Prevent accidental form submission on Enter in description field
-    taskDescInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-        }
-    });
-
-    // Accessibility: Ensure focus is visible after mouse click (for custom elements)
-    // No custom focus management needed, as buttons/inputs are used.
-
-    // Accessibility: Announce reordering via keyboard drag-and-drop
-    // Already handled in moveTask()
-
-    // Save/load tasks from localStorage (optional, for persistence)
-    // Uncomment the following lines if you want persistence:
-    /*
-    function saveTasks() {
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
-    function loadTasks() {
-        const data = localStorage.getItem('tasks');
-        if (data) {
-            tasks = JSON.parse(data);
-        }
-    }
-    // On load
-    loadTasks();
-    renderTasks();
-    // On any change
-    function afterChange() {
-        saveTasks();
-        renderTasks();
-    }
-    // Replace all renderTasks() calls with afterChange()
-    */
-
+        // Accessibility: Announce empty gallery on load
+        window.addEventListener('DOMContentLoaded', function() {
+            const galleryList = document.getElementById('gallery-list');
+            const emptyMsg = document.getElementById('empty-gallery-msg');
+            if (galleryList.children.length === 0 && emptyMsg) {
+                emptyMsg.style.display = 'block';
+            }
+        });
     </script>
-    <!--
-        Key Accessibility Features:
-        - Semantic HTML5 structure with <nav>, <main>, <section>, <footer>
-        - Proper heading hierarchy (h1, h2)
-        - All form inputs have <label> and error messages with aria-describedby
-        - Required fields visually indicated and with aria-required
-        - All interactive elements are native buttons or keyboard accessible with tabindex/aria
-        - Visible focus indicators (3px outline) with high contrast
-        - All dynamic updates announced via aria-live regions
-        - Color contrast and color independence (no info by color alone)
-        - Drag-and-drop supports both mouse and keyboard (arrow keys)
-        - Skip link for keyboard users
-        - Responsive/mobile-friendly design
-    -->
 </body>
 </html>
