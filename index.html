@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Showcase</title>
+    <title>Calorie Tracker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,101 +19,161 @@
             background-color: #4CAF50;
             color: white;
             width: 100%;
+            padding: 1rem;
             text-align: center;
-            padding: 1em 0;
         }
         main {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            margin: 2rem 0;
         }
-        .pet-card {
+        form {
             background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin: 10px;
-            padding: 15px;
-            width: 250px;
-            text-align: center;
-            transition: transform 0.2s;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
         }
-        .pet-card:hover {
-            transform: scale(1.05);
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
         }
-        .pet-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 50%;
-        }
-        .pet-card h2 {
-            margin: 10px 0 5px;
-            font-size: 1.5em;
-        }
-        .pet-card p {
-            margin: 5px 0;
-        }
-        .pet-card .fun-fact {
-            font-style: italic;
-            color: #555;
-        }
-        footer {
-            background-color: #333;
-            color: white;
+        input, select, textarea {
             width: 100%;
-            text-align: center;
-            padding: 1em 0;
-            margin-top: auto;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        a {
-            color: #4CAF50;
-            text-decoration: none;
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
         }
-        a:hover {
-            text-decoration: underline;
+        button:hover {
+            background-color: #45a049;
+        }
+        .results {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        .results h2 {
+            margin-top: 0;
+        }
+        .results p {
+            margin: 0.5rem 0;
+        }
+        .goal-form {
+            margin-top: 2rem;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #333;
+                color: #f4f4f9;
+            }
+            header {
+                background-color: #2e7d32;
+            }
+            button {
+                background-color: #2e7d32;
+            }
+            button:hover {
+                background-color: #1b5e20;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Pet Showcase</h1>
+        <h1>Calorie Tracker</h1>
     </header>
     <main>
-        <article class="pet-card" tabindex="0" aria-label="Pet profile for Whiskers, a 3-year-old Siamese cat">
-            <img src="https://via.placeholder.com/150" alt="A playful Siamese cat named Whiskers">
-            <h2>Whiskers</h2>
-            <p><strong>Breed:</strong> Siamese</p>
-            <p><strong>Age:</strong> 3 years</p>
-            <p class="fun-fact">Fun Fact: Whiskers loves to play with laser pointers!</p>
-        </article>
-        <article class="pet-card" tabindex="0" aria-label="Pet profile for Max, a 5-year-old Golden Retriever">
-            <img src="https://via.placeholder.com/150" alt="A friendly Golden Retriever named Max">
-            <h2>Max</h2>
-            <p><strong>Breed:</strong> Golden Retriever</p>
-            <p><strong>Age:</strong> 5 years</p>
-            <p class="fun-fact">Fun Fact: Max can fetch a ball from up to 200 feet away!</p>
-        </article>
-        <article class="pet-card" tabindex="0" aria-label="Pet profile for Luna, a 2-year-old Maine Coon">
-            <img src="https://via.placeholder.com/150" alt="A fluffy Maine Coon named Luna">
-            <h2>Luna</h2>
-            <p><strong>Breed:</strong> Maine Coon</p>
-            <p><strong>Age:</strong> 2 years</p>
-            <p class="fun-fact">Fun Fact: Luna is a great climber and loves to explore high places!</p>
-        </article>
+        <form id="foodForm" aria-labelledby="foodFormLabel">
+            <h2 id="foodFormLabel">Log a Meal</h2>
+            <label for="foodName">Food Name:</label>
+            <input type="text" id="foodName" name="foodName" required aria-required="true">
+            <label for="calories">Calories:</label>
+            <input type="number" id="calories" name="calories" required aria-required="true" min="0">
+            <button type="submit">Add Meal</button>
+        </form>
+        <form id="exerciseForm" aria-labelledby="exerciseFormLabel">
+            <h2 id="exerciseFormLabel">Log an Exercise</h2>
+            <label for="exerciseName">Exercise Name:</label>
+            <input type="text" id="exerciseName" name="exerciseName" required aria-required="true">
+            <label for="caloriesBurned">Calories Burned:</label>
+            <input type="number" id="caloriesBurned" name="caloriesBurned" required aria-required="true" min="0">
+            <button type="submit">Add Exercise</button>
+        </form>
+        <div class="results" aria-live="polite">
+            <h2>Daily Totals</h2>
+            <p>Calories Consumed: <span id="totalCaloriesConsumed">0</span></p>
+            <p>Calories Burned: <span id="totalCaloriesBurned">0</span></p>
+            <p>Net Calories: <span id="netCalories">0</span></p>
+        </div>
+        <form id="goalForm" class="goal-form" aria-labelledby="goalFormLabel">
+            <h2 id="goalFormLabel">Set a Fitness Goal</h2>
+            <label for="goalCalories">Calories Goal:</label>
+            <input type="number" id="goalCalories" name="goalCalories" required aria-required="true" min="0">
+            <button type="submit">Set Goal</button>
+        </form>
+        <div class="results" aria-live="polite">
+            <h2>Fitness Goal</h2>
+            <p>Calories Goal: <span id="caloriesGoal">0</span></p>
+            <p>Progress: <span id="progress">0%</span></p>
+        </div>
     </main>
-    <footer>
-        <p>&copy; 2023 Pet Showcase. All rights reserved.</p>
-    </footer>
     <script>
-        // Optional: Add JavaScript for additional interactivity if needed
-        document.querySelectorAll('.pet-card').forEach(card => {
-            card.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    alert(`You've selected ${this.querySelector('h2').textContent}!`);
-                }
+        document.addEventListener('DOMContentLoaded', () => {
+            const foodForm = document.getElementById('foodForm');
+            const exerciseForm = document.getElementById('exerciseForm');
+            const goalForm = document.getElementById('goalForm');
+            let totalCaloriesConsumed = 0;
+            let totalCaloriesBurned = 0;
+            let caloriesGoal = 0;
+
+            foodForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const calories = parseInt(document.getElementById('calories').value, 10);
+                totalCaloriesConsumed += calories;
+                updateTotals();
+                foodForm.reset();
             });
+
+            exerciseForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const caloriesBurned = parseInt(document.getElementById('caloriesBurned').value, 10);
+                totalCaloriesBurned += caloriesBurned;
+                updateTotals();
+                exerciseForm.reset();
+            });
+
+            goalForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                caloriesGoal = parseInt(document.getElementById('goalCalories').value, 10);
+                updateProgress();
+                goalForm.reset();
+            });
+
+            function updateTotals() {
+                document.getElementById('totalCaloriesConsumed').textContent = totalCaloriesConsumed;
+                document.getElementById('totalCaloriesBurned').textContent = totalCaloriesBurned;
+                document.getElementById('netCalories').textContent = totalCaloriesConsumed - totalCaloriesBurned;
+                updateProgress();
+            }
+
+            function updateProgress() {
+                document.getElementById('caloriesGoal').textContent = caloriesGoal;
+                const progress = caloriesGoal > 0 ? Math.min((totalCaloriesConsumed - totalCaloriesBurned) / caloriesGoal * 100, 100) : 0;
+                document.getElementById('progress').textContent = `${progress.toFixed(2)}%`;
+            }
         });
     </script>
 </body>
