@@ -3,200 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Showcase</title>
+    <title>Creative Work Gallery</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
+            background-color: #f4f4f9;
+            color: #333;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         header {
             background-color: #4CAF50;
             color: white;
-            padding: 1em 0;
-            text-align: center;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-        .pet-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .pet-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .pet-card h2 {
-            margin: 0 0 10px;
-            font-size: 1.5em;
-        }
-        .pet-card p {
-            margin: 0 0 10px;
-        }
-        .pet-card .fun-fact {
-            font-style: italic;
-            color: #777;
-        }
-        .add-pet-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 1em;
-            margin-top: 20px;
-        }
-        .add-pet-button:hover {
-            background-color: #45a049;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
             width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
+            padding: 1rem;
+            text-align: center;
         }
-        .modal-content {
+        main {
+            width: 90%;
+            max-width: 800px;
+            margin: 2rem 0;
+        }
+        form {
             background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 8px;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .modal-content label {
+        label {
             display: block;
-            margin-bottom: 10px;
-        }
-        .modal-content input, .modal-content textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .modal-content button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .modal-content button:hover {
-            background-color: #45a049;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
+            margin-bottom: 0.5rem;
             font-weight: bold;
         }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="file"] {
+            margin-bottom: 1rem;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .gallery-item {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .gallery-item p {
+            margin: 0.5rem 0;
+        }
+        @media (max-width: 600px) {
+            main {
+                width: 95%;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Pet Showcase</h1>
+        <h1>Creative Work Gallery</h1>
     </header>
-    <div class="container">
-        <div id="pet-list" role="region" aria-label="Pet Showcase">
-            <!-- Pet cards will be dynamically added here -->
-        </div>
-        <button id="add-pet-button" class="add-pet-button" aria-label="Add a new pet">Add a New Pet</button>
-    </div>
-
-    <!-- The Modal -->
-    <div id="add-pet-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
-        <div class="modal-content">
-            <span class="close" aria-label="Close modal">&times;</span>
-            <h2 id="modal-title">Add a New Pet</h2>
-            <p id="modal-description">Please fill out the form to add a new pet to the showcase.</p>
-            <form id="add-pet-form">
-                <label for="pet-name">Pet Name:</label>
-                <input type="text" id="pet-name" name="pet-name" required>
-                <label for="pet-breed">Breed:</label>
-                <input type="text" id="pet-breed" name="pet-breed" required>
-                <label for="pet-age">Age:</label>
-                <input type="number" id="pet-age" name="pet-age" required>
-                <label for="pet-photo">Photo URL:</label>
-                <input type="url" id="pet-photo" name="pet-photo" required>
-                <label for="pet-fun-fact">Fun Fact:</label>
-                <textarea id="pet-fun-fact" name="pet-fun-fact" required></textarea>
-                <button type="submit" aria-label="Submit new pet">Submit</button>
-            </form>
-        </div>
-    </div>
-
+    <main>
+        <form id="uploadForm" aria-labelledby="uploadFormLabel">
+            <h2 id="uploadFormLabel">Upload Your Creative Work</h2>
+            <label for="fileUpload">Upload Image:</label>
+            <input type="file" id="fileUpload" name="fileUpload" accept="image/*" required aria-required="true">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required aria-required="true"></textarea>
+            <label for="tags">Tags (comma separated):</label>
+            <input type="text" id="tags" name="tags" required aria-required="true">
+            <button type="submit">Upload</button>
+        </form>
+        <section aria-labelledby="galleryLabel" class="gallery" id="gallery">
+            <h2 id="galleryLabel" class="visually-hidden">Gallery of Uploaded Works</h2>
+        </section>
+    </main>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addPetButton = document.getElementById('add-pet-button');
-            const addPetModal = document.getElementById('add-pet-modal');
-            const closeBtn = document.querySelector('.close');
-            const addPetForm = document.getElementById('add-pet-form');
-            const petList = document.getElementById('pet-list');
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('fileUpload');
+            const description = document.getElementById('description').value;
+            const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const gallery = document.getElementById('gallery');
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    galleryItem.innerHTML = `
+                        <img src="${e.target.result}" alt="${description}">
+                        <p>${description}</p>
+                        <p><strong>Tags:</strong> ${tags.join(', ')}</p>
+                    `;
+                    gallery.appendChild(galleryItem);
+                };
+                reader.readAsDataURL(file);
+                document.getElementById('uploadForm').reset();
+            }
+        });
 
-            addPetButton.addEventListener('click', function() {
-                addPetModal.style.display = 'block';
-            });
-
-            closeBtn.addEventListener('click', function() {
-                addPetModal.style.display = 'none';
-            });
-
-            window.addEventListener('click', function(event) {
-                if (event.target == addPetModal) {
-                    addPetModal.style.display = 'none';
+        // Ensure keyboard navigation works for all interactive elements
+        document.querySelectorAll('button, input, textarea').forEach(element => {
+            element.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.target.click();
                 }
-            });
-
-            addPetForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const petName = document.getElementById('pet-name').value;
-                const petBreed = document.getElementById('pet-breed').value;
-                const petAge = document.getElementById('pet-age').value;
-                const petPhoto = document.getElementById('pet-photo').value;
-                const petFunFact = document.getElementById('pet-fun-fact').value;
-
-                const petCard = `
-                    <div class="pet-card" role="article" aria-label="Pet card for ${petName}">
-                        <img src="${petPhoto}" alt="${petName} - ${petBreed}" role="img" aria-label="${petName} - ${petBreed}">
-                        <h2>${petName}</h2>
-                        <p><strong>Breed:</strong> ${petBreed}</p>
-                        <p><strong>Age:</strong> ${petAge} years</p>
-                        <p class="fun-fact"><strong>Fun Fact:</strong> ${petFunFact}</p>
-                    </div>
-                `;
-
-                petList.insertAdjacentHTML('beforeend', petCard);
-                addPetModal.style.display = 'none';
-                addPetForm.reset();
             });
         });
     </script>
