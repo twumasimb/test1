@@ -3,158 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Tracker</title>
+    <title>Creative Work Share</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #f4f4f4;
+            color: #333;
         }
-        .container {
-            background: #fff;
-            padding: 20px;
+        header {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 2rem;
+        }
+        form {
+            background-color: #fff;
+            padding: 1rem;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 600px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input, textarea {
             width: 100%;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        form {
-            display: flex;
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
             border: 1px solid #ccc;
             border-radius: 4px;
-            margin-right: 10px;
         }
         button {
-            padding: 10px 20px;
-            border: none;
-            background: #007BFF;
+            background-color: #007BFF;
             color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background 0.3s;
         }
         button:hover {
-            background: #0056b3;
+            background-color: #0056b3;
         }
-        .tasks {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .task {
+        .gallery {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
         }
-        .task:last-child {
-            border-bottom: none;
+        .gallery-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            flex: 1 1 200px;
+            max-width: 300px;
         }
-        .task.completed {
-            text-decoration: line-through;
-            color: #888;
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
         }
-        .task button {
-            background: none;
-            border: none;
-            color: #007BFF;
-            cursor: pointer;
-            font-size: 16px;
+        .gallery-item h3 {
+            margin: 0;
+            font-size: 1.2rem;
         }
-        .task button:hover {
-            text-decoration: underline;
+        .gallery-item p {
+            margin: 0.5rem 0;
         }
-        .reward {
-            color: #28a745;
-            font-weight: bold;
+        .gallery-item .tags {
+            margin-top: 0.5rem;
+        }
+        .tags span {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-right: 0.5rem;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
         }
     </style>
 </head>
 <body>
-    <div class="container" role="application" aria-label="Task Tracker">
-        <h1>Task Tracker</h1>
-        <form id="taskForm">
-            <input type="text" id="taskInput" placeholder="Add a new task" aria-label="Add a new task" required>
-            <button type="submit" aria-label="Add Task">Add Task</button>
+    <header>
+        <h1>Creative Work Share</h1>
+    </header>
+    <main>
+        <form id="uploadForm" aria-label="Upload Creative Work Form">
+            <label for="fileInput">Upload Image:</label>
+            <input type="file" id="fileInput" name="file" accept="image/*" required>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+            <label for="tags">Tags (comma separated):</label>
+            <input type="text" id="tags" name="tags" required>
+            <button type="submit">Upload</button>
         </form>
-        <ul id="tasks" class="tasks" aria-label="List of tasks">
-            <!-- Tasks will be dynamically added here -->
-        </ul>
-        <div id="reward" class="reward" aria-live="polite" aria-atomic="true" role="status">
-            <!-- Reward message will be dynamically updated here -->
+        <div class="gallery" id="gallery" aria-label="Gallery of Creative Works">
+            <!-- Gallery items will be dynamically added here -->
         </div>
-    </div>
-
+    </main>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const taskForm = document.getElementById('taskForm');
-            const taskInput = document.getElementById('taskInput');
-            const tasksList = document.getElementById('tasks');
-            const rewardMessage = document.getElementById('reward');
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('fileInput');
+            const description = document.getElementById('description').value;
+            const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
 
-            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-            let rewards = 0;
+            if (fileInput.files.length === 0) {
+                alert('Please select an image to upload.');
+                return;
+            }
 
-            function renderTasks() {
-                tasksList.innerHTML = '';
-                tasks.forEach((task, index) => {
-                    const li = document.createElement('li');
-                    li.className = 'task';
-                    li.tabIndex = 0;
-                    li.innerHTML = `
-                        <span>${task.text}</span>
-                        <button aria-label="Complete task: ${task.text}">Complete</button>
-                    `;
-                    if (task.completed) {
-                        li.classList.add('completed');
-                    }
-                    li.querySelector('button').addEventListener('click', () => {
-                        completeTask(index);
-                    });
-                    tasksList.appendChild(li);
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const gallery = document.getElementById('gallery');
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = description;
+                img.loading = 'lazy';
+
+                const h3 = document.createElement('h3');
+                h3.textContent = description;
+
+                const p = document.createElement('p');
+                p.textContent = 'Tags:';
+
+                const tagsContainer = document.createElement('div');
+                tagsContainer.className = 'tags';
+
+                tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.textContent = tag;
+                    tagsContainer.appendChild(tagElement);
                 });
-            }
 
-            function completeTask(index) {
-                tasks[index].completed = true;
-                rewards += 10;
-                localStorage.setItem('tasks', JSON.stringify(tasks));
-                renderTasks();
-                updateRewardMessage();
-            }
+                galleryItem.appendChild(img);
+                galleryItem.appendChild(h3);
+                galleryItem.appendChild(p);
+                galleryItem.appendChild(tagsContainer);
 
-            function updateRewardMessage() {
-                rewardMessage.textContent = `Rewards: ${rewards} points`;
-            }
+                gallery.appendChild(galleryItem);
 
-            taskForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const taskText = taskInput.value.trim();
-                if (taskText) {
-                    tasks.push({ text: taskText, completed: false });
-                    localStorage.setItem('tasks', JSON.stringify(tasks));
-                    taskInput.value = '';
-                    renderTasks();
-                }
-            });
+                // Clear form fields
+                fileInput.value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('tags').value = '';
+            };
 
-            renderTasks();
-            updateRewardMessage();
+            reader.readAsDataURL(file);
         });
     </script>
 </body>
