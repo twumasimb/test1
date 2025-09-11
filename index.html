@@ -3,625 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CreativeShare - Upload & Share Your Art</title>
+    <title>Task Tracker</title>
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            color: white;
-        }
-
-        header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .upload-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .upload-form {
-            display: grid;
-            gap: 20px;
-        }
-
-        .form-group {
             display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #555;
-        }
-
-        input, textarea {
-            padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-        }
-
-        .file-upload {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .file-upload input[type="file"] {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .file-upload-label {
-            display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 40px 20px;
-            border: 3px dashed #667eea;
-            border-radius: 12px;
-            background: linear-gradient(45deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
-            transition: all 0.3s ease;
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .file-upload:hover .file-upload-label {
-            border-color: #764ba2;
-            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            transform: translateY(-2px);
-        }
-
-        .upload-icon {
-            margin-right: 10px;
-            font-size: 24px;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .tags-input {
-            position: relative;
-        }
-
-        .tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .tag {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            display: flex;
             align-items: center;
-            gap: 6px;
-            animation: tagSlideIn 0.3s ease;
+            height: 100vh;
         }
-
-        @keyframes tagSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
         }
-
-        .tag-remove {
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: #007BFF;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .tasks {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .task:last-child {
+            border-bottom: none;
+        }
+        .task.completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        .task button {
             background: none;
             border: none;
-            color: white;
+            color: #007BFF;
             cursor: pointer;
-            padding: 0;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .tag-remove:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .upload-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 15px 30px;
             font-size: 16px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
-
-        .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        .task button:hover {
+            text-decoration: underline;
         }
-
-        .upload-btn:active {
-            transform: translateY(0);
-        }
-
-        .upload-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .artwork-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
-            animation: cardSlideIn 0.5s ease;
-        }
-
-        @keyframes cardSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .artwork-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 40px rgba(0,0,0,0.15);
-        }
-
-        .artwork-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .artwork-image:hover {
-            transform: scale(1.05);
-        }
-
-        .artwork-info {
-            padding: 20px;
-        }
-
-        .artwork-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .artwork-description {
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .artwork-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .artwork-tag {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 90vw;
-            max-height: 90vh;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .modal-image {
-            width: 100%;
-            height: auto;
-            max-height: 70vh;
-            object-fit: contain;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: white;
-            padding: 60px 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            opacity: 0.8;
-        }
-
-        .empty-state p {
-            font-size: 1.1rem;
-            opacity: 0.7;
-        }
-
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-            
-            .container {
-                padding: 15px;
-            }
-            
-            .upload-section {
-                padding: 20px;
-                margin-bottom: 30px;
-            }
-            
-            .gallery {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
+        .reward {
+            color: #28a745;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>CreativeShare</h1>
-            <p>Upload and share your creative work with the world</p>
-        </header>
-
-        <section class="upload-section">
-            <form class="upload-form" id="uploadForm">
-                <div class="form-group">
-                    <label for="fileInput">Select Your Artwork</label>
-                    <div class="file-upload">
-                        <input type="file" id="fileInput" accept="image/*" required>
-                        <div class="file-upload-label">
-                            <span class="upload-icon">📸</span>
-                            <span>Click to upload or drag & drop your image</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="titleInput">Title</label>
-                    <input type="text" id="titleInput" placeholder="Give your artwork a title..." required>
-                </div>
-
-                <div class="form-group">
-                    <label for="descriptionInput">Description</label>
-                    <textarea id="descriptionInput" placeholder="Describe your artwork, inspiration, or technique..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="tagInput">Tags</label>
-                    <input type="text" id="tagInput" placeholder="Add tags (press Enter after each tag)">
-                    <div class="tags-container" id="tagsContainer"></div>
-                </div>
-
-                <button type="submit" class="upload-btn">Share Your Artwork</button>
-            </form>
-        </section>
-
-        <section class="gallery" id="gallery">
-            <div class="empty-state">
-                <h3>No artwork yet</h3>
-                <p>Be the first to share your creative work!</p>
-            </div>
-        </section>
-    </div>
-
-    <div class="modal" id="imageModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <img class="modal-image" id="modalImage" src="" alt="">
+    <div class="container" role="application" aria-label="Task Tracker">
+        <h1>Task Tracker</h1>
+        <form id="taskForm">
+            <input type="text" id="taskInput" placeholder="Add a new task" aria-label="Add a new task" required>
+            <button type="submit" aria-label="Add Task">Add Task</button>
+        </form>
+        <ul id="tasks" class="tasks" aria-label="List of tasks">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
+        <div id="reward" class="reward" aria-live="polite" aria-atomic="true" role="status">
+            <!-- Reward message will be dynamically updated here -->
         </div>
     </div>
 
     <script>
-        let artworks = [];
-        let currentTags = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskForm = document.getElementById('taskForm');
+            const taskInput = document.getElementById('taskInput');
+            const tasksList = document.getElementById('tasks');
+            const rewardMessage = document.getElementById('reward');
 
-        // File upload handling
-        const fileInput = document.getElementById('fileInput');
-        const fileUploadLabel = document.querySelector('.file-upload-label');
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            let rewards = 0;
 
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                fileUploadLabel.innerHTML = `
-                    <span class="upload-icon">✓</span>
-                    <span>Selected: ${file.name}</span>
-                `;
-                fileUploadLabel.style.borderColor = '#4CAF50';
-                fileUploadLabel.style.color = '#4CAF50';
+            function renderTasks() {
+                tasksList.innerHTML = '';
+                tasks.forEach((task, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'task';
+                    li.tabIndex = 0;
+                    li.innerHTML = `
+                        <span>${task.text}</span>
+                        <button aria-label="Complete task: ${task.text}">Complete</button>
+                    `;
+                    if (task.completed) {
+                        li.classList.add('completed');
+                    }
+                    li.querySelector('button').addEventListener('click', () => {
+                        completeTask(index);
+                    });
+                    tasksList.appendChild(li);
+                });
             }
-        });
 
-        // Drag and drop functionality
-        const fileUpload = document.querySelector('.file-upload');
-        
-        fileUpload.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            fileUploadLabel.style.borderColor = '#764ba2';
-            fileUploadLabel.style.background = 'linear-gradient(45deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15))';
-        });
-
-        fileUpload.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            fileUploadLabel.style.borderColor = '#667eea';
-            fileUploadLabel.style.background = 'linear-gradient(45deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05))';
-        });
-
-        fileUpload.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const files = e.dataTransfer.files;
-            if (files.length > 0 && files[0].type.startsWith('image/')) {
-                fileInput.files = files;
-                const event = new Event('change', { bubbles: true });
-                fileInput.dispatchEvent(event);
+            function completeTask(index) {
+                tasks[index].completed = true;
+                rewards += 10;
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+                renderTasks();
+                updateRewardMessage();
             }
-            fileUploadLabel.style.borderColor = '#667eea';
-            fileUploadLabel.style.background = 'linear-gradient(45deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05))';
-        });
 
-        // Tag handling
-        const tagInput = document.getElementById('tagInput');
-        const tagsContainer = document.getElementById('tagsContainer');
+            function updateRewardMessage() {
+                rewardMessage.textContent = `Rewards: ${rewards} points`;
+            }
 
-        tagInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
+            taskForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                const tagText = this.value.trim();
-                if (tagText && !currentTags.includes(tagText)) {
-                    addTag(tagText);
-                    this.value = '';
+                const taskText = taskInput.value.trim();
+                if (taskText) {
+                    tasks.push({ text: taskText, completed: false });
+                    localStorage.setItem('tasks', JSON.stringify(tasks));
+                    taskInput.value = '';
+                    renderTasks();
                 }
-            }
+            });
+
+            renderTasks();
+            updateRewardMessage();
         });
-
-        function addTag(tagText) {
-            currentTags.push(tagText);
-            renderTags();
-        }
-
-        function removeTag(tagText) {
-            currentTags = currentTags.filter(tag => tag !== tagText);
-            renderTags();
-        }
-
-        function renderTags() {
-            tagsContainer.innerHTML = currentTags.map(tag => `
-                <span class="tag">
-                    ${tag}
-                    <button type="button" class="tag-remove" onclick="removeTag('${tag}')">×</button>
-                </span>
-            `).join('');
-        }
-
-        // Form submission
-        const uploadForm = document.getElementById('uploadForm');
-        uploadForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const fileInput = document.getElementById('fileInput');
-            const titleInput = document.getElementById('titleInput');
-            const descriptionInput = document.getElementById('descriptionInput');
-            
-            if (!fileInput.files[0]) {
-                alert('Please select an image file');
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            
-            reader.onload = function(e) {
-                const artwork = {
-                    id: Date.now(),
-                    title: titleInput.value,
-                    description: descriptionInput.value,
-                    tags: [...currentTags],
-                    imageUrl: e.target.result,
-                    timestamp: new Date()
-                };
-                
-                artworks.unshift(artwork);
-                renderGallery();
-                
-                // Reset form
-                uploadForm.reset();
-                currentTags = [];
-                renderTags();
-                fileUploadLabel.innerHTML = `
-                    <span class="upload-icon">📸</span>
-                    <span>Click to upload or drag & drop your image</span>
-                `;
-                fileUploadLabel.style.borderColor = '#667eea';
-                fileUploadLabel.style.color = '#667eea';
-            };
-            
-            reader.readAsDataURL(file);
-        });
-
-        // Gallery rendering
-        function renderGallery() {
-            const gallery = document.getElementById('gallery');
-            
-            if (artworks.length === 0) {
-                gallery.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No artwork yet</h3>
-                        <p>Be the first to share your creative work!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            gallery.innerHTML = artworks.map(artwork => `
-                <div class="artwork-card">
-                    <img 
-                        src="${artwork.imageUrl}" 
-                        alt="${artwork.title}" 
-                        class="artwork-image"
-                        onclick="openModal('${artwork.imageUrl}')"
-                    >
-                    <div class="artwork-info">
-                        <h3 class="artwork-title">${artwork.title}</h3>
-                        ${artwork.description ? `<p class="artwork-description">${artwork.description}</p>` : ''}
-                        <div class="artwork-tags">
-                            ${artwork.tags.map(tag => `<span class="artwork-tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Modal functionality
-        function openModal(imageUrl) {
-            const modal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-            modalImage.src = imageUrl;
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('imageModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close modal when clicking outside the image
-        document.getElementById('imageModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-
-        // Initialize gallery
-        renderGallery();
     </script>
 </body>
 </html>
