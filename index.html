@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Showcase - Show Off Your Furry Friends!</title>
+    <title>CreativeShare - Upload & Share Your Art</title>
     <style>
         * {
             margin: 0;
@@ -12,54 +12,50 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            color: #333;
+            line-height: 1.6;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
         }
 
-        .header {
+        header {
             text-align: center;
             margin-bottom: 40px;
             color: white;
         }
 
-        .header h1 {
+        header h1 {
             font-size: 3rem;
+            font-weight: 700;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        .header p {
+        header p {
             font-size: 1.2rem;
             opacity: 0.9;
         }
 
-        .add-pet-section {
+        .upload-section {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .add-pet-section h2 {
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .form-grid {
+        .upload-form {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 20px;
         }
 
         .form-group {
@@ -67,387 +63,565 @@
             flex-direction: column;
         }
 
-        .form-group label {
-            margin-bottom: 5px;
-            font-weight: bold;
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
             color: #555;
         }
 
-        .form-group input, .form-group textarea {
-            padding: 12px;
+        input, textarea {
+            padding: 12px 16px;
             border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
         }
 
-        .form-group input:focus, .form-group textarea:focus {
+        input:focus, textarea:focus {
             outline: none;
             border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
 
-        .form-group textarea {
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            transition: all 0.3s ease;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .file-upload:hover .file-upload-label {
+            border-color: #764ba2;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            transform: translateY(-2px);
+        }
+
+        .upload-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        textarea {
             resize: vertical;
             min-height: 80px;
         }
 
-        .add-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .tags-input {
+            position: relative;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            animation: tagSlideIn 0.3s ease;
+        }
+
+        @keyframes tagSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .tag-remove {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .tag-remove:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
             padding: 15px 30px;
-            border-radius: 25px;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .add-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .pets-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .pet-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .pet-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
 
-        .pet-card::before {
-            content: '';
-            position: absolute;
+        .upload-btn:active {
+            transform: translateY(0);
+        }
+
+        .upload-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .artwork-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            animation: cardSlideIn 0.5s ease;
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+        }
+
+        .artwork-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .artwork-image:hover {
+            transform: scale(1.05);
+        }
+
+        .artwork-info {
+            padding: 20px;
+        }
+
+        .artwork-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .artwork-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .artwork-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .artwork-tag {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }
-
-        .pet-photo {
-            width: 100%;
-            height: 200px;
-            background-color: #f0f0f0;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        .pet-photo img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
         }
 
-        .pet-photo.placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            font-size: 48px;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
-        }
-
-        .pet-info h3 {
-            color: #333;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .pet-details {
-            margin-bottom: 15px;
-        }
-
-        .pet-detail {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .pet-detail:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            font-weight: bold;
-            color: #555;
-        }
-
-        .detail-value {
-            color: #777;
-        }
-
-        .fun-fact {
-            background: linear-gradient(135deg, #667eea20, #764ba220);
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-            margin-top: 15px;
-        }
-
-        .fun-fact-label {
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 5px;
-        }
-
-        .fun-fact-text {
-            color: #555;
-            font-style: italic;
-        }
-
-        .delete-btn {
+        .modal-content {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ff4757;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90vw;
+            max-height: 90vh;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
             color: white;
             border: none;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
             cursor: pointer;
+            font-size: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            opacity: 0;
-        }
-
-        .pet-card:hover .delete-btn {
-            opacity: 1;
-        }
-
-        .delete-btn:hover {
-            background: #ff3742;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .pets-grid {
-                grid-template-columns: 1fr;
-            }
         }
 
         .empty-state {
             text-align: center;
             color: white;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+            padding: 60px 20px;
         }
 
         .empty-state h3 {
+            font-size: 2rem;
             margin-bottom: 10px;
-            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .upload-section {
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🐾 Pet Showcase</h1>
-            <p>Show off your adorable furry, feathered, and scaly friends!</p>
-        </div>
+        <header>
+            <h1>CreativeShare</h1>
+            <p>Upload and share your creative work with the world</p>
+        </header>
 
-        <div class="add-pet-section">
-            <h2>Add Your Pet</h2>
-            <form id="petForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="petName">Pet Name *</label>
-                        <input type="text" id="petName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="petBreed">Breed</label>
-                        <input type="text" id="petBreed" placeholder="e.g., Golden Retriever">
-                    </div>
-                    <div class="form-group">
-                        <label for="petAge">Age</label>
-                        <input type="text" id="petAge" placeholder="e.g., 3 years">
-                    </div>
-                    <div class="form-group">
-                        <label for="petPhoto">Photo URL</label>
-                        <input type="url" id="petPhoto" placeholder="https://...">
-                    </div>
-                </div>
+        <section class="upload-section">
+            <form class="upload-form" id="uploadForm">
                 <div class="form-group">
-                    <label for="petFunFact">Fun Fact</label>
-                    <textarea id="petFunFact" placeholder="Tell us something interesting about your pet!"></textarea>
+                    <label for="fileInput">Select Your Artwork</label>
+                    <div class="file-upload">
+                        <input type="file" id="fileInput" accept="image/*" required>
+                        <div class="file-upload-label">
+                            <span class="upload-icon">📸</span>
+                            <span>Click to upload or drag & drop your image</span>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="add-btn">Add My Pet 🐕</button>
-            </form>
-        </div>
 
-        <div id="petsContainer">
-            <div class="pets-grid" id="petsGrid"></div>
+                <div class="form-group">
+                    <label for="titleInput">Title</label>
+                    <input type="text" id="titleInput" placeholder="Give your artwork a title..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descriptionInput">Description</label>
+                    <textarea id="descriptionInput" placeholder="Describe your artwork, inspiration, or technique..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="tagInput">Tags</label>
+                    <input type="text" id="tagInput" placeholder="Add tags (press Enter after each tag)">
+                    <div class="tags-container" id="tagsContainer"></div>
+                </div>
+
+                <button type="submit" class="upload-btn">Share Your Artwork</button>
+            </form>
+        </section>
+
+        <section class="gallery" id="gallery">
+            <div class="empty-state">
+                <h3>No artwork yet</h3>
+                <p>Be the first to share your creative work!</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <img class="modal-image" id="modalImage" src="" alt="">
         </div>
     </div>
 
     <script>
-        let pets = [
-            {
-                id: 1,
-                name: "Luna",
-                breed: "Golden Retriever",
-                age: "3 years",
-                photo: "https://images.unsplash.com/photo-1552053831-71594a27632d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-                funFact: "Luna can catch frisbees mid-air and has never missed one! She also knows how to open doors with her paws."
-            },
-            {
-                id: 2,
-                name: "Whiskers",
-                breed: "Persian Cat",
-                age: "5 years",
-                photo: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-                funFact: "Whiskers has a daily routine of sitting by the window at exactly 3 PM to watch birds. He's never late!"
-            },
-            {
-                id: 3,
-                name: "Charlie",
-                breed: "Labrador Mix",
-                age: "7 years",
-                photo: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-                funFact: "Charlie is a therapy dog who visits hospitals every weekend. He's helped over 200 patients smile!"
-            },
-            {
-                id: 4,
-                name: "Bella",
-                breed: "British Shorthair",
-                age: "2 years",
-                photo: "https://images.unsplash.com/photo-1596854407944-bf87f6fdd49e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
-                funFact: "Bella has learned to high-five and sits on command. She also loves playing fetch like a dog!"
-            }
-        ];
+        let artworks = [];
+        let currentTags = [];
 
-        let nextId = 5;
+        // File upload handling
+        const fileInput = document.getElementById('fileInput');
+        const fileUploadLabel = document.querySelector('.file-upload-label');
 
-        function createPetCard(pet) {
-            return `
-                <div class="pet-card">
-                    <button class="delete-btn" onclick="deletePet(${pet.id})" title="Remove pet">×</button>
-                    <div class="pet-photo ${pet.photo ? '' : 'placeholder'}">
-                        ${pet.photo ? `<img src="${pet.photo}" alt="${pet.name}" onerror="this.parentNode.innerHTML='🐾'">` : '🐾'}
-                    </div>
-                    <div class="pet-info">
-                        <h3>${pet.name}</h3>
-                        <div class="pet-details">
-                            <div class="pet-detail">
-                                <span class="detail-label">Breed:</span>
-                                <span class="detail-value">${pet.breed || 'Mixed'}</span>
-                            </div>
-                            <div class="pet-detail">
-                                <span class="detail-label">Age:</span>
-                                <span class="detail-value">${pet.age || 'Unknown'}</span>
-                            </div>
-                        </div>
-                        ${pet.funFact ? `
-                            <div class="fun-fact">
-                                <div class="fun-fact-label">Fun Fact:</div>
-                                <div class="fun-fact-text">${pet.funFact}</div>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderPets() {
-            const petsGrid = document.getElementById('petsGrid');
-            const petsContainer = document.getElementById('petsContainer');
-            
-            if (pets.length === 0) {
-                petsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <h3>No pets yet!</h3>
-                        <p>Add your first pet using the form above to get started.</p>
-                    </div>
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                fileUploadLabel.innerHTML = `
+                    <span class="upload-icon">✓</span>
+                    <span>Selected: ${file.name}</span>
                 `;
-            } else {
-                petsContainer.innerHTML = `<div class="pets-grid" id="petsGrid">${pets.map(createPetCard).join('')}</div>`;
+                fileUploadLabel.style.borderColor = '#4CAF50';
+                fileUploadLabel.style.color = '#4CAF50';
             }
+        });
+
+        // Drag and drop functionality
+        const fileUpload = document.querySelector('.file-upload');
+        
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUploadLabel.style.borderColor = '#764ba2';
+            fileUploadLabel.style.background = 'linear-gradient(45deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15))';
+        });
+
+        fileUpload.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            fileUploadLabel.style.borderColor = '#667eea';
+            fileUploadLabel.style.background = 'linear-gradient(45deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05))';
+        });
+
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                fileInput.files = files;
+                const event = new Event('change', { bubbles: true });
+                fileInput.dispatchEvent(event);
+            }
+            fileUploadLabel.style.borderColor = '#667eea';
+            fileUploadLabel.style.background = 'linear-gradient(45deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05))';
+        });
+
+        // Tag handling
+        const tagInput = document.getElementById('tagInput');
+        const tagsContainer = document.getElementById('tagsContainer');
+
+        tagInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const tagText = this.value.trim();
+                if (tagText && !currentTags.includes(tagText)) {
+                    addTag(tagText);
+                    this.value = '';
+                }
+            }
+        });
+
+        function addTag(tagText) {
+            currentTags.push(tagText);
+            renderTags();
         }
 
-        function addPet(event) {
-            event.preventDefault();
-            
-            const name = document.getElementById('petName').value.trim();
-            const breed = document.getElementById('petBreed').value.trim();
-            const age = document.getElementById('petAge').value.trim();
-            const photo = document.getElementById('petPhoto').value.trim();
-            const funFact = document.getElementById('petFunFact').value.trim();
+        function removeTag(tagText) {
+            currentTags = currentTags.filter(tag => tag !== tagText);
+            renderTags();
+        }
 
-            if (!name) {
-                alert('Please enter your pet\'s name!');
+        function renderTags() {
+            tagsContainer.innerHTML = currentTags.map(tag => `
+                <span class="tag">
+                    ${tag}
+                    <button type="button" class="tag-remove" onclick="removeTag('${tag}')">×</button>
+                </span>
+            `).join('');
+        }
+
+        // Form submission
+        const uploadForm = document.getElementById('uploadForm');
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const fileInput = document.getElementById('fileInput');
+            const titleInput = document.getElementById('titleInput');
+            const descriptionInput = document.getElementById('descriptionInput');
+            
+            if (!fileInput.files[0]) {
+                alert('Please select an image file');
                 return;
             }
 
-            const newPet = {
-                id: nextId++,
-                name: name,
-                breed: breed,
-                age: age,
-                photo: photo,
-                funFact: funFact
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const artwork = {
+                    id: Date.now(),
+                    title: titleInput.value,
+                    description: descriptionInput.value,
+                    tags: [...currentTags],
+                    imageUrl: e.target.result,
+                    timestamp: new Date()
+                };
+                
+                artworks.unshift(artwork);
+                renderGallery();
+                
+                // Reset form
+                uploadForm.reset();
+                currentTags = [];
+                renderTags();
+                fileUploadLabel.innerHTML = `
+                    <span class="upload-icon">📸</span>
+                    <span>Click to upload or drag & drop your image</span>
+                `;
+                fileUploadLabel.style.borderColor = '#667eea';
+                fileUploadLabel.style.color = '#667eea';
             };
-
-            pets.push(newPet);
-            renderPets();
             
-            // Reset form
-            document.getElementById('petForm').reset();
-            
-            // Scroll to the new pet card
-            setTimeout(() => {
-                const newCard = document.querySelector(`[onclick="deletePet(${newPet.id})"]`).closest('.pet-card');
-                newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-        }
+            reader.readAsDataURL(file);
+        });
 
-        function deletePet(id) {
-            if (confirm('Are you sure you want to remove this pet from the showcase?')) {
-                pets = pets.filter(pet => pet.id !== id);
-                renderPets();
+        // Gallery rendering
+        function renderGallery() {
+            const gallery = document.getElementById('gallery');
+            
+            if (artworks.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No artwork yet</h3>
+                        <p>Be the first to share your creative work!</p>
+                    </div>
+                `;
+                return;
             }
+            
+            gallery.innerHTML = artworks.map(artwork => `
+                <div class="artwork-card">
+                    <img 
+                        src="${artwork.imageUrl}" 
+                        alt="${artwork.title}" 
+                        class="artwork-image"
+                        onclick="openModal('${artwork.imageUrl}')"
+                    >
+                    <div class="artwork-info">
+                        <h3 class="artwork-title">${artwork.title}</h3>
+                        ${artwork.description ? `<p class="artwork-description">${artwork.description}</p>` : ''}
+                        <div class="artwork-tags">
+                            ${artwork.tags.map(tag => `<span class="artwork-tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // Initialize
-        document.getElementById('petForm').addEventListener('submit', addPet);
-        renderPets();
+        // Modal functionality
+        function openModal(imageUrl) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = imageUrl;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside the image
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize gallery
+        renderGallery();
     </script>
 </body>
 </html>
