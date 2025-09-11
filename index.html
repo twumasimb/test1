@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Work Gallery</title>
+    <title>Pet Showcase</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,122 +19,99 @@
             background-color: #4CAF50;
             color: white;
             width: 100%;
-            padding: 1rem;
             text-align: center;
+            padding: 1em 0;
         }
         main {
-            width: 90%;
-            max-width: 800px;
-            margin: 2rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
         }
-        form {
+        .pet-card {
             background-color: white;
-            padding: 1rem;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 10px;
+            padding: 15px;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.2s;
         }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
+        .pet-card:hover {
+            transform: scale(1.05);
         }
-        input[type="text"],
-        textarea {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        input[type="file"] {
-            margin-bottom: 1rem;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .gallery-item {
-            background-color: white;
-            padding: 1rem;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .gallery-item img {
-            width: 100%;
+        .pet-card img {
+            max-width: 100%;
             height: auto;
-            border-radius: 5px;
+            border-radius: 50%;
         }
-        .gallery-item p {
-            margin: 0.5rem 0;
+        .pet-card h2 {
+            margin: 10px 0 5px;
+            font-size: 1.5em;
         }
-        @media (max-width: 600px) {
-            main {
-                width: 95%;
-            }
+        .pet-card p {
+            margin: 5px 0;
+        }
+        .pet-card .fun-fact {
+            font-style: italic;
+            color: #555;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            width: 100%;
+            text-align: center;
+            padding: 1em 0;
+            margin-top: auto;
+        }
+        a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Creative Work Gallery</h1>
+        <h1>Pet Showcase</h1>
     </header>
     <main>
-        <form id="uploadForm" aria-labelledby="uploadFormLabel">
-            <h2 id="uploadFormLabel">Upload Your Creative Work</h2>
-            <label for="fileUpload">Upload Image:</label>
-            <input type="file" id="fileUpload" name="fileUpload" accept="image/*" required aria-required="true">
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="4" required aria-required="true"></textarea>
-            <label for="tags">Tags (comma separated):</label>
-            <input type="text" id="tags" name="tags" required aria-required="true">
-            <button type="submit">Upload</button>
-        </form>
-        <section aria-labelledby="galleryLabel" class="gallery" id="gallery">
-            <h2 id="galleryLabel" class="visually-hidden">Gallery of Uploaded Works</h2>
-        </section>
+        <article class="pet-card" tabindex="0" aria-label="Pet profile for Whiskers, a 3-year-old Siamese cat">
+            <img src="https://via.placeholder.com/150" alt="A playful Siamese cat named Whiskers">
+            <h2>Whiskers</h2>
+            <p><strong>Breed:</strong> Siamese</p>
+            <p><strong>Age:</strong> 3 years</p>
+            <p class="fun-fact">Fun Fact: Whiskers loves to play with laser pointers!</p>
+        </article>
+        <article class="pet-card" tabindex="0" aria-label="Pet profile for Max, a 5-year-old Golden Retriever">
+            <img src="https://via.placeholder.com/150" alt="A friendly Golden Retriever named Max">
+            <h2>Max</h2>
+            <p><strong>Breed:</strong> Golden Retriever</p>
+            <p><strong>Age:</strong> 5 years</p>
+            <p class="fun-fact">Fun Fact: Max can fetch a ball from up to 200 feet away!</p>
+        </article>
+        <article class="pet-card" tabindex="0" aria-label="Pet profile for Luna, a 2-year-old Maine Coon">
+            <img src="https://via.placeholder.com/150" alt="A fluffy Maine Coon named Luna">
+            <h2>Luna</h2>
+            <p><strong>Breed:</strong> Maine Coon</p>
+            <p><strong>Age:</strong> 2 years</p>
+            <p class="fun-fact">Fun Fact: Luna is a great climber and loves to explore high places!</p>
+        </article>
     </main>
+    <footer>
+        <p>&copy; 2023 Pet Showcase. All rights reserved.</p>
+    </footer>
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const fileInput = document.getElementById('fileUpload');
-            const description = document.getElementById('description').value;
-            const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
-            const file = fileInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const gallery = document.getElementById('gallery');
-                    const galleryItem = document.createElement('div');
-                    galleryItem.className = 'gallery-item';
-                    galleryItem.innerHTML = `
-                        <img src="${e.target.result}" alt="${description}">
-                        <p>${description}</p>
-                        <p><strong>Tags:</strong> ${tags.join(', ')}</p>
-                    `;
-                    gallery.appendChild(galleryItem);
-                };
-                reader.readAsDataURL(file);
-                document.getElementById('uploadForm').reset();
-            }
-        });
-
-        // Ensure keyboard navigation works for all interactive elements
-        document.querySelectorAll('button, input, textarea').forEach(element => {
-            element.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter') {
-                    event.target.click();
+        // Optional: Add JavaScript for additional interactivity if needed
+        document.querySelectorAll('.pet-card').forEach(card => {
+            card.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    alert(`You've selected ${this.querySelector('h2').textContent}!`);
                 }
             });
         });
