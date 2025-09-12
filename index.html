@@ -3,249 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracking Webpage</title>
+    <title>Event Countdown Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            line-height: 1.5;
             color: #333;
-            line-height: 1.6;
-        }
-        header, nav, main, footer {
-            padding: 20px;
-        }
-        header {
-            background-color: #4CAF50;
-            color: #fff;
-            text-align: center;
-        }
-        nav {
-            background-color: #333;
-            color: #fff;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
+            background-color: #f9f9f9;
             margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-        nav ul li {
-            margin: 0 15px;
-        }
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 15px;
-            display: inline-block;
-        }
-        nav ul li a:hover {
-            background-color: #575757;
-        }
-        main {
+            padding: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            min-height: 100vh;
         }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            margin: 20px 0;
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            background-color: #4CAF50;
+        header, footer {
+            background-color: #007BFF;
             color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .summary {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            margin: 20px 0;
-        }
-        .summary h2 {
-            margin-bottom: 20px;
-        }
-        .summary table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .summary th, .summary td {
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-        .summary th {
-            background-color: #f2f2f2;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
+            padding: 1rem;
             text-align: center;
+        }
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .countdown div {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            flex: 1;
+            text-align: center;
+        }
+        .countdown div span {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .countdown div small {
+            font-size: 1rem;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 2rem;
+            height: 20px;
+        }
+        .progress-bar .progress {
+            height: 100%;
+            background-color: #007BFF;
+            width: 0;
+            transition: width 0.5s;
         }
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background-color: #4CAF50;
+            background-color: #007BFF;
             color: #fff;
-            padding: 10px;
+            padding: 0.5rem;
+            text-decoration: none;
             z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
-            outline: 2px solid #4CAF50;
         }
-        .visually-hidden {
-            position: absolute;
-            clip: rect(0 0 0 0);
-            width: 1px;
-            height: 1px;
-            margin: -1px;
+        .form-container {
+            margin-top: 2rem;
         }
-        .error {
+        .form-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-container button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+        .form-container .error {
             color: #ff0000;
-            font-weight: bold;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a href="#main" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
     <header>
-        <h1>Calorie Tracking Webpage</h1>
+        <h1>Event Countdown Timer</h1>
     </header>
-    <nav aria-label="Main Navigation">
-        <ul>
-            <li><a href="#add-food">Add Food</a></li>
-            <li><a href="#add-exercise">Add Exercise</a></li>
-            <li><a href="#summary">Summary</a></li>
-        </ul>
-    </nav>
-    <main id="main-content">
-        <section id="add-food">
-            <h2>Add Food Entry</h2>
-            <form id="food-form">
-                <label for="food-name">Food Name:</label>
-                <input type="text" id="food-name" name="food-name" required aria-required="true">
-                <label for="calories">Calories:</label>
-                <input type="number" id="calories" name="calories" required aria-required="true">
-                <button type="submit">Add Food</button>
-            </form>
-        </section>
-        <section id="add-exercise">
-            <h2>Add Exercise Entry</h2>
-            <form id="exercise-form">
-                <label for="exercise-name">Exercise Name:</label>
-                <input type="text" id="exercise-name" name="exercise-name" required aria-required="true">
-                <label for="calories-burned">Calories Burned:</label>
-                <input type="number" id="calories-burned" name="calories-burned" required aria-required="true">
-                <button type="submit">Add Exercise</button>
-            </form>
-        </section>
-        <section id="summary">
-            <h2>Summary</h2>
-            <div class="summary">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Calories</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Calories Consumed</td>
-                            <td id="calories-consumed">0</td>
-                        </tr>
-                        <tr>
-                            <td>Calories Burned</td>
-                            <td id="calories-burned">0</td>
-                        </tr>
-                        <tr>
-                            <td>Net Calories</td>
-                            <td id="net-calories">0</td>
-                        </tr>
-                    </tbody>
-                </table>
+    <main id="main">
+        <div class="container">
+            <h2>Countdown to the Big Event</h2>
+            <div class="countdown" aria-live="polite" aria-atomic="true">
+                <div>
+                    <span id="days">00</span>
+                    <small>Days</small>
+                </div>
+                <div>
+                    <span id="hours">00</span>
+                    <small>Hours</small>
+                </div>
+                <div>
+                    <span id="minutes">00</span>
+                    <small>Minutes</small>
+                </div>
+                <div>
+                    <span id="seconds">00</span>
+                    <small>Seconds</small>
+                </div>
             </div>
-        </section>
+            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="form-container">
+                <form id="eventForm">
+                    <label for="eventDate">Enter Event Date (YYYY-MM-DD HH:MM:SS):</label>
+                    <input type="datetime-local" id="eventDate" name="eventDate" required aria-required="true">
+                    <button type="submit">Set Event Date</button>
+                    <div class="error" id="formError" aria-live="polite" aria-atomic="true" role="alert"></div>
+                </form>
+            </div>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2023 Calorie Tracker. All rights reserved.</p>
+        <p>&copy; 2023 Event Countdown Timer. All rights reserved.</p>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const foodForm = document.getElementById('food-form');
-            const exerciseForm = document.getElementById('exercise-form');
-            const caloriesConsumed = document.getElementById('calories-consumed');
-            const caloriesBurned = document.getElementById('calories-burned');
-            const netCalories = document.getElementById('net-calories');
+        const countdownElements = document.querySelectorAll('.countdown div span');
+        const progressBar = document.getElementById('progress');
+        const form = document.getElementById('eventForm');
+        const eventDateInput = document.getElementById('eventDate');
+        const formError = document.getElementById('formError');
 
-            let totalCaloriesConsumed = 0;
-            let totalCaloriesBurned = 0;
+        let targetDate = new Date('2023-12-31T23:59:59').getTime();
+        let interval;
 
-            foodForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const foodName = document.getElementById('food-name').value;
-                const calories = parseInt(document.getElementById('calories').value, 10);
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
 
-                if (isNaN(calories) || calories <= 0) {
-                    alert('Please enter a valid number of calories.');
-                    return;
-                }
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                totalCaloriesConsumed += calories;
-                caloriesConsumed.textContent = totalCaloriesConsumed;
-                updateNetCalories();
-                foodForm.reset();
-            });
+            countdownElements[0].textContent = days;
+            countdownElements[1].textContent = hours;
+            countdownElements[2].textContent = minutes;
+            countdownElements[3].textContent = seconds;
 
-            exerciseForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const exerciseName = document.getElementById('exercise-name').value;
-                const caloriesBurned = parseInt(document.getElementById('calories-burned').value, 10);
+            const progress = (distance / (targetDate - now)) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', progress);
 
-                if (isNaN(caloriesBurned) || caloriesBurned <= 0) {
-                    alert('Please enter a valid number of calories burned.');
-                    return;
-                }
+            if (distance < 0) {
+                clearInterval(interval);
+                countdownElements.forEach(element => element.textContent = '00');
+                progressBar.style.width = '100%';
+                progressBar.setAttribute('aria-valuenow', '100');
+            }
+        }
 
-                totalCaloriesBurned += caloriesBurned;
-                document.getElementById('calories-burned').textContent = totalCaloriesBurned;
-                updateNetCalories();
-                exerciseForm.reset();
-            });
-
-            function updateNetCalories() {
-                netCalories.textContent = totalCaloriesConsumed - totalCaloriesBurned;
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newTargetDate = new Date(eventDateInput.value).getTime();
+            if (isNaN(newTargetDate)) {
+                formError.textContent = 'Please enter a valid date and time.';
+                formError.setAttribute('aria-invalid', 'true');
+            } else {
+                targetDate = newTargetDate;
+                formError.textContent = '';
+                formError.setAttribute('aria-invalid', 'false');
+                clearInterval(interval);
+                interval = setInterval(updateCountdown, 1000);
             }
         });
+
+        interval = setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
