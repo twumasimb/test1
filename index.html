@@ -3,488 +3,957 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Space Explorer | Learn About Constellations & Planets</title>
+    <title>CreativeShare - Upload and Share Your Creative Work</title>
     <style>
-        /* Base Styles */
+        /* Base Styles with Enhanced Accessibility */
         :root {
-            --primary: #0b0e23;
-            --secondary: #1a1f3b;
-            --accent: #4d79ff;
-            --text: #ffffff;
-            --highlight: #ffd700;
-            --star: rgba(255, 255, 255, 0.8);
-            --constellation: #4d79ff;
-            --modal-bg: rgba(11, 14, 35, 0.95);
-            --contrast-ratio: 7.5; /* Meets AAA contrast requirements */
+            --primary-color: #2a5298;
+            --primary-dark: #1a3a70;
+            --secondary-color: #6b38a6;
+            --accent-color: #c45e2d;
+            --text-color: #222222;
+            --background-color: #ffffff;
+            --light-bg: #f5f7fa;
+            --error-color: #d32f2f;
+            --success-color: #2e7d32;
+            --border-color: #d1d5db;
+            --focus-outline: 3px solid #4d90fe;
+        }
+
+        /* Respect user preferences for reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--primary);
-            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            max-width: 100%;
             overflow-x: hidden;
         }
 
-        /* Skip Link */
-        .skip-link {
-            position: absolute;
-            left: -9999px;
-            top: 0;
-            background-color: var(--highlight);
-            color: var(--primary);
-            padding: 1rem;
-            z-index: 100;
-            font-weight: bold;
+        /* Enhanced Typography for AAA Compliance */
+        p, li, label, input, textarea, button {
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 80ch; /* Maximum 80 characters per line */
         }
 
-        .skip-link:focus {
-            left: 0;
-        }
-
-        /* Header & Navigation */
-        header {
-            background-color: var(--secondary);
-            padding: 1rem 2rem;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--highlight);
-            text-decoration: none;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-
-        nav li {
-            margin-left: 2rem;
-        }
-
-        nav a {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-            position: relative;
-        }
-
-        nav a:hover,
-        nav a:focus {
-            background-color: rgba(77, 121, 255, 0.2);
-            outline: 2px solid var(--accent);
-        }
-
-        nav a[aria-current="page"] {
-            background-color: var(--accent);
-            color: var(--primary);
-        }
-
-        /* Mobile Navigation */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        /* Main Content */
-        main {
-            flex: 1;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        h1, h2, h3 {
-            color: var(--highlight);
-            margin-bottom: 1rem;
-            line-height: 1.2;
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            line-height: 1.3;
+            color: var(--text-color);
         }
 
         h1 {
             font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
+            margin-top: 0;
         }
 
         h2 {
             font-size: 2rem;
-            margin-top: 3rem;
         }
 
         h3 {
             font-size: 1.5rem;
         }
 
-        p {
-            margin-bottom: 1rem;
-            max-width: 70ch;
+        p, ul, ol {
+            margin-bottom: 1.5rem;
         }
 
-        /* Space Background */
-        .space-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .star {
-            position: absolute;
-            background-color: var(--star);
-            border-radius: 50%;
-            animation: twinkle var(--duration, 5s) infinite ease-in-out;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-
-        /* Constellations Section */
-        .constellations-container {
+        /* Enhanced Focus States for AAA Compliance */
+        a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px var(--background-color), 0 0 0 4px var(--primary-color);
+            border-radius: 2px;
+            z-index: 1;
             position: relative;
-            min-height: 500px;
-            margin: 3rem 0;
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            overflow: hidden;
         }
 
-        .constellation {
+        /* Skip Link */
+        .skip-link {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: var(--constellation);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            z-index: 2;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            z-index: 100;
+            text-decoration: none;
+            transition: top 0.2s;
+            border-radius: 0 0 4px 0;
         }
 
-        .constellation:hover,
-        .constellation:focus {
-            transform: scale(1.5);
-            box-shadow: 0 0 15px var(--constellation);
+        .skip-link:focus {
+            top: 0;
             outline: none;
         }
 
-        .constellation-line {
-            position: absolute;
-            height: 2px;
-            background-color: var(--constellation);
-            transform-origin: left center;
-            z-index: 1;
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Constellation Info Modal */
-        .modal {
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 2.5rem;
+            margin: 0;
+            text-align: center;
+        }
+
+        .site-description {
+            font-size: 1.2rem;
+            margin: 0.5rem 0 1.5rem;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        /* Navigation Styles */
+        nav {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .nav-list {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-list li {
+            margin: 0 0.5rem;
+        }
+
+        .nav-list a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            display: inline-block;
+            position: relative;
+            transition: background-color 0.2s;
+        }
+
+        .nav-list a:hover, 
+        .nav-list a:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            text-decoration: underline;
+        }
+
+        .nav-list a.active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Content Styles */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            margin: 0.5rem auto 0;
+            border-radius: 2px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .upload-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+        }
+
+        .file-upload-container {
+            position: relative;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: border-color 0.2s;
+            cursor: pointer;
+        }
+
+        .file-upload-container:hover,
+        .file-upload-container:focus-within {
+            border-color: var(--primary-color);
+        }
+
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .file-upload-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .file-upload-text {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-help {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .file-preview {
+            margin-top: 1rem;
             display: none;
-            position: fixed;
+        }
+
+        .file-preview.show {
+            display: block;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tags-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.5rem;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .tag-text {
+            margin-right: 0.5rem;
+        }
+
+        .tag-remove {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .tag-remove:hover,
+        .tag-remove:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .tags-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0.5rem;
+            font-size: 1rem;
+            min-width: 100px;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus {
+            background-color: #5a2e8a;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            margin-bottom: 3rem;
+        }
+
+        .gallery-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background-color 0.2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn:focus {
+            background-color: #e9ecef;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            background-color: white;
+            position: relative;
+        }
+
+        .gallery-item:hover,
+        .gallery-item:focus-within {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-image-container {
+            position: relative;
+            padding-top: 75%; /* 4:3 Aspect Ratio */
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .gallery-image {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--modal-bg);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s;
+            object-fit: cover;
+            transition: transform 0.3s;
         }
 
-        .modal.show {
+        .gallery-item:hover .gallery-image,
+        .gallery-item:focus-within .gallery-image {
+            transform: scale(1.05);
+        }
+
+        .gallery-content {
+            padding: 1.25rem;
+        }
+
+        .gallery-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .gallery-description {
+            color: #666;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .gallery-tags {
             display: flex;
-            opacity: 1;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
         }
 
-        .modal-content {
-            background-color: var(--secondary);
-            padding: 2rem;
+        .gallery-tag {
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .gallery-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .gallery-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            object-fit: cover;
+        }
+
+        .gallery-date {
+            font-style: italic;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background-color: white;
             border-radius: 8px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
+            max-width: 90%;
+            width: 800px;
+            max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin: 0;
+            color: var(--text-color);
         }
 
         .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
             background: none;
             border: none;
-            color: var(--text);
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 0.5rem;
+            color: #666;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
         }
 
         .modal-close:hover,
         .modal-close:focus {
-            color: var(--highlight);
-            outline: 2px solid var(--highlight);
+            background-color: var(--light-bg);
+            color: var(--text-color);
         }
 
-        .modal h2 {
-            margin-top: 0;
-            color: var(--highlight);
-        }
-
-        .modal img {
-            max-width: 100%;
-            height: auto;
-            margin: 1rem 0;
-            border-radius: 4px;
-        }
-
-        /* Planets Gallery */
-        .planets-section {
-            margin: 4rem 0;
-        }
-
-        .planets-gallery {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 2rem;
-            padding: 2rem 0;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--secondary);
-        }
-
-        .planets-gallery::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .planets-gallery::-webkit-scrollbar-track {
-            background: var(--secondary);
-        }
-
-        .planets-gallery::-webkit-scrollbar-thumb {
-            background-color: var(--accent);
-            border-radius: 4px;
-        }
-
-        .planet-card {
-            scroll-snap-align: start;
-            min-width: 300px;
-            background-color: var(--secondary);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s;
-        }
-
-        .planet-card:hover,
-        .planet-card:focus-within {
-            transform: translateY(-10px);
-            outline: 2px solid var(--highlight);
-        }
-
-        .planet-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .planet-info {
+        .modal-body {
             padding: 1.5rem;
         }
 
-        .planet-info h3 {
-            margin-top: 0;
+        .modal-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
         }
 
-        .planet-fact {
-            margin-bottom: 1rem;
+        .modal-description {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .modal-tags {
             display: flex;
-            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .planet-fact-icon {
-            margin-right: 0.5rem;
-            color: var(--highlight);
+        .modal-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
         }
 
-        /* Footer */
+        /* Alert/Notification Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .alert.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            border-left: 4px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            border-left: 4px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .alert-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .alert-message {
+            flex: 1;
+        }
+
+        .alert-close {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .alert-close:hover,
+        .alert-close:focus {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer Styles */
         footer {
-            background-color: var(--secondary);
-            padding: 2rem;
-            text-align: center;
-            margin-top: 3rem;
+            background-color: #2c3e50;
+            color: white;
+            padding: 3rem 1.5rem;
         }
 
-        .footer-content {
+        .footer-container {
             max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover,
+        .footer-links a:focus {
+            color: white;
+            text-decoration: underline;
         }
 
         .social-links {
             display: flex;
-            justify-content: center;
-            margin: 1rem 0;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         .social-link {
-            color: var(--text);
-            margin: 0 1rem;
-            font-size: 1.5rem;
-            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s;
         }
 
         .social-link:hover,
         .social-link:focus {
-            color: var(--highlight);
-            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Accessibility Features */
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #bdc3c7;
         }
 
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-
-            .star {
-                animation: none;
-            }
-        }
-
-        /* Responsive Design */
+        /* Responsive Styles */
         @media (max-width: 768px) {
             .header-container {
-                flex-direction: column;
-                align-items: flex-start;
+                text-align: center;
             }
 
-            nav {
-                width: 100%;
-                margin-top: 1rem;
-            }
-
-            nav ul {
-                flex-direction: column;
-                display: none;
-            }
-
-            nav ul.show {
-                display: flex;
-            }
-
-            nav li {
-                margin: 0.5rem 0;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-                position: absolute;
-                top: 1rem;
-                right: 1rem;
-            }
-
-            h1 {
+            .site-title {
                 font-size: 2rem;
             }
 
-            h2 {
-                font-size: 1.5rem;
+            .site-description {
+                font-size: 1rem;
             }
 
-            .constellations-container {
-                min-height: 300px;
+            .nav-list {
+                flex-direction: column;
+                align-items: center;
             }
+
+            .nav-list li {
+                margin: 0.25rem 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .nav-list a {
+                display: block;
+                width: 100%;
+            }
+
+            .gallery-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-container {
+                max-width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .filter-container {
+                justify-content: center;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .modal-container {
+                width: 95%;
+            }
+        }
+
+        /* Loading Indicator */
+        .loading-spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            display: inline;
         }
 
         /* High Contrast Mode */
         @media (prefers-contrast: more) {
             :root {
-                --primary: #000000;
-                --secondary: #000000;
-                --text: #ffffff;
-                --highlight: #ffff00;
-                --accent: #ffff00;
-                --star: #ffffff;
-                --constellation: #ffff00;
+                --primary-color: #0000ee;
+                --primary-dark: #00008b;
+                --secondary-color: #6a0dad;
+                --accent-color: #b22222;
+                --text-color: #000000;
+                --background-color: #ffffff;
+                --light-bg: #f0f0f0;
+                --border-color: #000000;
             }
 
-            nav a:hover,
-            nav a:focus {
-                outline: 3px solid var(--highlight);
+            .btn, .tag, .gallery-tag {
+                border: 2px solid black;
             }
 
-            .constellation {
-                border: 2px solid var(--highlight);
+            .gallery-item, .modal-container {
+                border: 2px solid black;
+            }
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --text-color: #f0f0f0;
+                --background-color: #121212;
+                --light-bg: #2a2a2a;
+                --border-color: #444444;
+            }
+
+            .gallery-item, .modal-container {
+                background-color: #1e1e1e;
+            }
+
+            .gallery-title, .modal-title {
+                color: #f0f0f0;
+            }
+
+            .gallery-description, .modal-description {
+                color: #cccccc;
+            }
+
+            .gallery-tag {
+                background-color: #2a2a2a;
+                color: #90caf9;
+            }
+
+            .filter-btn {
+                background-color: #2a2a2a;
+                color: #f0f0f0;
+                border-color: #444444;
+            }
+
+            .filter-btn:hover,
+            .filter-btn:focus {
+                background-color: #3a3a3a;
+            }
+
+            .alert-success {
+                background-color: rgba(46, 125, 50, 0.2);
+                color: #81c784;
+            }
+
+            .alert-error {
+                background-color: rgba(211, 47, 47, 0.2);
+                color: #e57373;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Skip Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Header -->
     <header>
         <div class="header-container">
-            <a href="#" class="logo">Space Explorer</a>
-            <button class="mobile-menu-btn" aria-expanded="false" aria-controls="main-nav">
-                <span class="visually-hidden">Menu</span>
-                ☰
-            </button>
-            <nav id="main-nav">
-                <ul>
-                    <li><a href="#constellations" aria-current="page">Constellations</a></li>
-                    <li><a href="#planets">Planets</a></li>
+            <h1 class="site-title">CreativeShare</h1>
+            <p class="site-description">Upload, share, and discover amazing creative work from artists around the world.</p>
+            
+            <nav aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li><a href="#home" class="active" aria-current="page">Home</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#upload">Upload</a></li>
                     <li><a href="#about">About</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
@@ -492,417 +961,727 @@
         </div>
     </header>
 
-    <!-- Space Background -->
-    <div class="space-background" id="space-bg"></div>
-
-    <!-- Main Content -->
     <main id="main-content">
-        <h1>Explore the Wonders of Our Universe</h1>
+        <!-- Upload Section -->
+        <section id="upload" class="upload-section" aria-labelledby="upload-heading">
+            <h2 id="upload-heading" class="section-title">Share Your Creative Work</h2>
+            
+            <div id="upload-alert" class="alert" role="alert" aria-live="assertive"></div>
+            
+            <form id="upload-form" class="upload-form" novalidate>
+                <div class="form-group">
+                    <label for="title">Title <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                    <input type="text" id="title" name="title" class="form-control" required aria-required="true" aria-describedby="title-help">
+                    <div id="title-help" class="form-text">Give your work a descriptive title (maximum 100 characters)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" aria-describedby="description-help"></textarea>
+                    <div id="description-help" class="form-text">Tell us about your creative work, inspiration, or techniques used</div>
+                </div>
+                
+                <div class="form-group">
+                    <label id="file-upload-label">Upload Image <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                    <div class="file-upload-container" tabindex="0" aria-describedby="file-upload-help">
+                        <label for="file-upload" class="file-upload-label">
+                            <div class="file-upload-icon" aria-hidden="true">📁</div>
+                            <div class="file-upload-text">Click or drag file to upload</div>
+                            <div class="file-upload-help" id="file-upload-help">Supported formats: JPG, PNG, GIF (max 5MB)</div>
+                        </label>
+                        <input type="file" id="file-upload" name="file-upload" class="file-upload-input" accept="image/*" required aria-required="true" aria-labelledby="file-upload-label">
+                    </div>
+                    
+                    <div id="file-preview" class="file-preview">
+                        <img id="preview-image" class="preview-image" src="" alt="Preview of uploaded image">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tags-input">Tags</label>
+                    <div class="tags-input-container" id="tags-container">
+                        <input type="text" id="tags-input" class="tags-input" placeholder="Add tags and press Enter" aria-describedby="tags-help">
+                    </div>
+                    <div id="tags-help" class="form-text">Add relevant tags to help others discover your work (e.g., photography, abstract, nature)</div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="submit-button">
+                        <span id="submit-text">Share Your Work</span>
+                        <span id="loading-indicator" style="display: none;">
+                            <span class="loading-spinner" aria-hidden="true"></span>
+                            <span class="loading-text">Uploading...</span>
+                        </span>
+                    </button>
+                </div>
+            </form>
+        </section>
         
-        <section id="constellations">
-            <h2>Discover Constellations</h2>
-            <p>Click on any constellation to learn more about its history, mythology, and scientific significance.</p>
+        <!-- Gallery Section -->
+        <section id="gallery" class="gallery-section" aria-labelledby="gallery-heading">
+            <h2 id="gallery-heading" class="section-title">Creative Gallery</h2>
             
-            <div class="constellations-container" id="constellations-map">
-                <!-- Constellations will be added dynamically with JavaScript -->
+            <div class="gallery-controls">
+                <div class="search-container">
+                    <span class="search-icon" aria-hidden="true">🔍</span>
+                    <input type="search" id="gallery-search" class="search-input" placeholder="Search gallery..." aria-label="Search gallery">
+                </div>
+                
+                <div class="filter-container" role="group" aria-label="Filter gallery by category">
+                    <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+                    <button class="filter-btn" data-filter="photography" aria-pressed="false">Photography</button>
+                    <button class="filter-btn" data-filter="illustration" aria-pressed="false">Illustration</button>
+                    <button class="filter-btn" data-filter="digital" aria-pressed="false">Digital Art</button>
+                    <button class="filter-btn" data-filter="traditional" aria-pressed="false">Traditional</button>
+                </div>
             </div>
-        </section>
-
-        <section id="planets" class="planets-section">
-            <h2>Planets of Our Solar System</h2>
-            <p>Scroll horizontally to explore the planets and learn fascinating facts about each one.</p>
             
-            <div class="planets-gallery">
-                <!-- Planet cards will be added dynamically with JavaScript -->
+            <div id="gallery-grid" class="gallery-grid">
+                <!-- Gallery items will be dynamically added here -->
             </div>
-        </section>
-
-        <section id="about">
-            <h2>About This Project</h2>
-            <p>This interactive space explorer was created to make astronomy accessible to everyone. Our goal is to provide engaging, educational content about our universe while maintaining the highest standards of web accessibility.</p>
-            <p>All content has been carefully curated to ensure accuracy and to spark curiosity about the cosmos.</p>
         </section>
     </main>
-
-    <!-- Constellation Info Modal -->
-    <div class="modal" id="constellation-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal-content">
-            <button class="modal-close" aria-label="Close modal">×</button>
-            <h2 id="modal-title">Constellation Name</h2>
-            <img id="modal-image" src="" alt="">
-            <div id="modal-content">
-                <!-- Content will be added dynamically -->
+    
+    <!-- Modal for viewing gallery items -->
+    <div id="gallery-modal" class="modal-overlay" role="dialog" aria-labelledby="modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modal-title" class="modal-title">Artwork Title</h3>
+                <button id="modal-close" class="modal-close" aria-label="Close modal">×</button>
+            </div>
+            <div class="modal-body">
+                <img id="modal-image" class="modal-image" src="" alt="">
+                <p id="modal-description" class="modal-description"></p>
+                <div id="modal-tags" class="modal-tags"></div>
+                <div class="modal-meta">
+                    <div id="modal-author" class="modal-author"></div>
+                    <div id="modal-date" class="modal-date"></div>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
+    
     <footer>
-        <div class="footer-content">
-            <p>&copy; 2023 Space Explorer. All rights reserved.</p>
-            <div class="social-links">
-                <a href="#" class="social-link" aria-label="Facebook"><span aria-hidden="true">f</span></a>
-                <a href="#" class="social-link" aria-label="Twitter"><span aria-hidden="true">t</span></a>
-                <a href="#" class="social-link" aria-label="Instagram"><span aria-hidden="true">i</span></a>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About CreativeShare</h3>
+                <p>CreativeShare is a platform for artists and creators to share their work with the world. Join our community to showcase your creativity and discover amazing art.</p>
             </div>
-            <p>This website meets WCAG 2.2 AAA accessibility standards.</p>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#upload">Upload</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <p>Follow us on social media for updates and featured artwork.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <span aria-hidden="true">f</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <span aria-hidden="true">t</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <span aria-hidden="true">i</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Pinterest">
+                        <span aria-hidden="true">p</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 CreativeShare. All rights reserved. <a href="#privacy">Privacy Policy</a> | <a href="#terms">Terms of Service</a></p>
         </div>
     </footer>
 
     <script>
-        // Create stars for background
-        function createStars() {
-            const spaceBg = document.getElementById('space-bg');
-            const starCount = 200;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample gallery data
+            const galleryData = [
+                {
+                    id: 1,
+                    title: "Mountain Sunrise",
+                    description: "A beautiful sunrise captured from the summit of Mount Rainier during an early morning hike. The colors were absolutely breathtaking.",
+                    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+                    tags: ["photography", "nature", "landscape", "mountains"],
+                    author: "Alex Johnson",
+                    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+                    date: "May 15, 2023"
+                },
+                {
+                    id: 2,
+                    title: "Urban Sketching",
+                    description: "A pen and ink sketch of a busy downtown street corner. I love capturing the energy and architecture of urban environments.",
+                    image: "https://images.unsplash.com/photo-1574887427561-d3d5d58c9273?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+                    tags: ["illustration", "traditional", "urban", "sketch"],
+                    author: "Maya Patel",
+                    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+                    date: "June 2, 2023"
+                },
+                {
+                    id: 3,
+                    title: "Digital Dreamscape",
+                    description: "A surreal digital painting exploring themes of dreams and consciousness. Created using Procreate on iPad Pro.",
+                    image: "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
+                    tags: ["digital", "surreal", "illustration", "fantasy"],
+                    author: "Jordan Lee",
+                    avatar: "https://randomuser.me/api/portraits/men/22.jpg",
+                    date: "April 18, 2023"
+                },
+                {
+                    id: 4,
+                    title: "Autumn Forest",
+                    description: "The vibrant colors of fall captured in a local forest. I was amazed by how the light filtered through the leaves.",
+                    image: "https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1374&q=80",
+                    tags: ["photography", "nature", "autumn", "forest"],
+                    author: "Emma Wilson",
+                    avatar: "https://randomuser.me/api/portraits/women/29.jpg",
+                    date: "October 10, 2023"
+                },
+                {
+                    id: 5,
+                    title: "Abstract Composition",
+                    description: "An exploration of color and form. This acrylic painting on canvas was inspired by the works of Kandinsky and Miró.",
+                    image: "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1458&q=80",
+                    tags: ["traditional", "abstract", "painting", "colorful"],
+                    author: "Carlos Rodriguez",
+                    avatar: "https://randomuser.me/api/portraits/men/67.jpg",
+                    date: "March 5, 2023"
+                },
+                {
+                    id: 6,
+                    title: "Coastal Sunset",
+                    description: "The dramatic colors of sunset along the Pacific Coast Highway. I waited hours for the perfect light conditions.",
+                    image: "https://images.unsplash.com/photo-1503803548695-c2a7b4a5b875?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+                    tags: ["photography", "nature", "sunset", "ocean"],
+                    author: "Sophia Chen",
+                    avatar: "https://randomuser.me/api/portraits/women/54.jpg",
+                    date: "July 22, 2023"
+                }
+            ];
+
+            // Initialize the gallery
+            initGallery(galleryData);
             
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                
-                // Random position
-                const x = Math.random() * 100;
-                const y = Math.random() * 100;
-                
-                // Random size (1-3px)
-                const size = Math.random() * 2 + 1;
-                
-                // Random animation duration (3-10s)
-                const duration = Math.random() * 7 + 3;
-                
-                star.style.left = `${x}%`;
-                star.style.top = `${y}%`;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.setProperty('--duration', `${duration}s`);
-                
-                spaceBg.appendChild(star);
-            }
-        }
-
-        // Constellation data
-        const constellations = [
-            {
-                id: 'ursa-major',
-                name: 'Ursa Major (The Great Bear)',
-                x: 20,
-                y: 30,
-                connections: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [1, 7], [7, 8]],
-                stars: [
-                    {x: 20, y: 30}, {x: 25, y: 35}, {x: 30, y: 30}, 
-                    {x: 35, y: 25}, {x: 40, y: 20}, {x: 45, y: 15}, 
-                    {x: 50, y: 10}, {x: 25, y: 25}, {x: 20, y: 20}
-                ],
-                description: `
-                    <p>Ursa Major, also known as the Great Bear, is a constellation in the northern sky. It's one of the most recognizable constellations and contains the famous asterism known as the Big Dipper.</p>
-                    <p>In many cultures, Ursa Major has been seen as a bear. The ancient Greeks associated it with the myth of Callisto, a nymph who was turned into a bear by Zeus's jealous wife Hera.</p>
-                    <h3>Notable Features</h3>
-                    <ul>
-                        <li>The Big Dipper asterism is part of Ursa Major</li>
-                        <li>Contains several bright stars including Dubhe and Alkaid</li>
-                        <li>Visible year-round in northern latitudes</li>
-                        <li>Used for navigation to find Polaris (the North Star)</li>
-                    </ul>
-                `,
-                imageAlt: 'Illustration of Ursa Major constellation showing the Big Dipper asterism'
-            },
-            {
-                id: 'orion',
-                name: 'Orion (The Hunter)',
-                x: 70,
-                y: 40,
-                connections: [[0, 1], [1, 2], [2, 3], [1, 4], [4, 5], [5, 6], [6, 7], [7, 8]],
-                stars: [
-                    {x: 70, y: 40}, {x: 75, y: 45}, {x: 80, y: 40}, 
-                    {x: 85, y: 35}, {x: 75, y: 35}, {x: 70, y: 30}, 
-                    {x: 65, y: 25}, {x: 60, y: 20}, {x: 55, y: 15}
-                ],
-                description: `
-                    <p>Orion is one of the most conspicuous and recognizable constellations in the night sky. It's named after Orion, a hunter in Greek mythology.</p>
-                    <p>Orion is prominent during winter evenings in the northern hemisphere, and is visible from November to February. It's easily identified by its distinctive "belt" of three bright stars.</p>
-                    <h3>Notable Features</h3>
-                    <ul>
-                        <li>Contains two of the brightest stars in the sky: Rigel and Betelgeuse</li>
-                        <li>The Orion Nebula (M42) is a famous star-forming region visible to the naked eye</li>
-                        <li>Orion's Belt consists of three bright stars in a straight line</li>
-                        <li>Contains many bright deep sky objects for amateur astronomers</li>
-                    </ul>
-                `,
-                imageAlt: 'Illustration of Orion constellation showing the hunter figure with belt and sword'
-            },
-            {
-                id: 'cassiopeia',
-                name: 'Cassiopeia (The Queen)',
-                x: 30,
-                y: 70,
-                connections: [[0, 1], [1, 2], [2, 3], [3, 4]],
-                stars: [
-                    {x: 30, y: 70}, {x: 35, y: 75}, {x: 40, y: 70}, 
-                    {x: 45, y: 75}, {x: 50, y: 70}
-                ],
-                description: `
-                    <p>Cassiopeia is a constellation in the northern sky named after the vain queen Cassiopeia in Greek mythology. It's easily recognizable by its distinctive "W" shape formed by five bright stars.</p>
-                    <p>In Greek myth, Cassiopeia boasted that her daughter Andromeda was more beautiful than the Nereids, sea nymphs. As punishment, the sea god Poseidon placed her in the heavens in a position where she's sometimes upside down.</p>
-                    <h3>Notable Features</h3>
-                    <ul>
-                        <li>Distinctive "W" or "M" shape depending on its position in the sky</li>
-                        <li>Contains several open clusters visible with binoculars</li>
-                        <li>Located opposite the Big Dipper across the North Star</li>
-                        <li>Visible year-round in northern latitudes</li>
-                    </ul>
-                `,
-                imageAlt: 'Illustration of Cassiopeia constellation showing the distinctive W shape'
-            }
-        ];
-
-        // Planet data
-        const planets = [
-            {
-                name: "Mercury",
-                image: "https://science.nasa.gov/wp-content/uploads/2023/09/mercury-messenger-globe-pia15162-800x800.jpg",
-                imageAlt: "Planet Mercury showing its cratered surface",
-                facts: [
-                    "Closest planet to the Sun",
-                    "Smallest planet in our solar system",
-                    "Surface temperature ranges from -173°C to 427°C",
-                    "Orbits the Sun every 88 Earth days"
-                ]
-            },
-            {
-                name: "Venus",
-                image: "https://science.nasa.gov/wp-content/uploads/2023/09/venus-magellan-colorized-800x800.jpg",
-                imageAlt: "Planet Venus showing its thick cloudy atmosphere",
-                facts: [
-                    "Second planet from the Sun",
-                    "Hottest planet with surface temperature of 462°C",
-                    "Rotates in the opposite direction to most planets",
-                    "A day on Venus is longer than its year"
-                ]
-            },
-            {
-                name: "Earth",
-                image: "https://science.nasa.gov/wp-content/uploads/2023/09/earth-blue-marble-800x800.jpg",
-                imageAlt: "The Earth showing continents and oceans from space",
-                facts: [
-                    "Only known planet with liquid water on surface",
-                    "Home to millions of species including humans",
-                    "Atmosphere composed of 78% nitrogen, 21% oxygen",
-                    "Orbits the Sun every 365.25 days"
-                ]
-            },
-            {
-                name: "Mars",
-                image: "https://science.nasa.gov/wp-content/uploads/2023/09/mars-globe-valles-marineris-enhanced-800x800.jpg",
-                imageAlt: "Planet Mars showing its red surface and Valles Marineris canyon",
-                facts: [
-                    "Known as the Red Planet due to iron oxide on surface",
-                    "Home to Olympus Mons, the largest volcano in solar system",
-                    "Has two small moons: Phobos and Deimos",
-                    "Target for human exploration missions"
-                ]
-            },
-            {
-                name: "Jupiter",
-                image: "https://science.nasa.gov/wp-content/uploads/2023/09/jupiter-new-horizons-800x800.jpg",
-                imageAlt: "Planet Jupiter showing its colorful cloud bands and Great Red Spot",
-                facts: [
-                    "Largest planet in our solar system",
-                    "Has at least 79 known moons",
-                    "Great Red Spot is a giant storm larger than Earth",
-                    "Strong magnetic field and intense radiation belts"
-                ]
-            },
-            {
-                name: "Saturn",
-                image: "https://science.nasa.gov/wp-content/uploads/2023/09/saturn-cassini-800x800.jpg",
-                imageAlt: "Planet Saturn showing its iconic ring system",
-                facts: [
-                    "Known for its spectacular ring system",
-                    "Second largest planet in solar system",
-                    "Rings are made mostly of ice particles",
-                    "Has at least 82 moons, including Titan"
-                ]
-            },
-            {
-                name: "Uranus",
-                image: "https://science.nasa.gov/wp-content/uploads/2023/09/uranus-voyager-800x800.jpg",
-                imageAlt: "Planet Uranus showing its blue-green color and faint rings",
-                facts: [
-                    "Rotates on its side with an axial tilt of 98 degrees",
-                    "Atmosphere contains methane which gives it blue color",
-                    "Has 13 known rings and 27 moons",
-                    "Coldest planetary atmosphere in solar system"
-                ]
-            },
-            {
-                name: "Neptune",
-                image: "https://science.nasa.gov/wp-content/uploads/2023/09/neptune-voyager-800x800.jpg",
-                imageAlt: "Planet Neptune showing its deep blue color and storm systems",
-                facts: [
-                    "Most distant planet from the Sun",
-                    "Has the strongest winds in the solar system",
-                    "Discovered through mathematical predictions",
-                    "Takes 165 Earth years to orbit the Sun"
-                ]
-            }
-        ];
-
-        // Create constellations
-        function createConstellations() {
-            const container = document.getElementById('constellations-map');
+            // Initialize form handling
+            initFormHandling();
             
-            constellations.forEach(constellation => {
-                // Create stars
-                constellation.stars.forEach((star, index) => {
-                    const starElement = document.createElement('div');
-                    starElement.className = 'constellation';
-                    starElement.style.left = `${star.x}%`;
-                    starElement.style.top = `${star.y}%`;
-                    starElement.setAttribute('role', 'button');
-                    starElement.setAttribute('aria-label', `Star in ${constellation.name}`);
-                    starElement.setAttribute('tabindex', '0');
-                    starElement.dataset.constellationId = constellation.id;
-                    
-                    container.appendChild(starElement);
+            // Initialize modal functionality
+            initModal();
+            
+            // Initialize navigation
+            initNavigation();
+        });
+
+        // Initialize the gallery with data
+        function initGallery(data) {
+            const galleryGrid = document.getElementById('gallery-grid');
+            const searchInput = document.getElementById('gallery-search');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            
+            // Render initial gallery
+            renderGallery(data);
+            
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                const filteredData = data.filter(item => {
+                    return item.title.toLowerCase().includes(searchTerm) || 
+                           item.description.toLowerCase().includes(searchTerm) || 
+                           item.tags.some(tag => tag.toLowerCase().includes(searchTerm));
                 });
+                renderGallery(filteredData);
                 
-                // Create connecting lines
-                constellation.connections.forEach(connection => {
-                    const [startIdx, endIdx] = connection;
-                    const start = constellation.stars[startIdx];
-                    const end = constellation.stars[endIdx];
-                    
-                    const line = document.createElement('div');
-                    line.className = 'constellation-line';
-                    
-                    // Calculate line position and dimensions
-                    const dx = end.x - start.x;
-                    const dy = end.y - start.y;
-                    const length = Math.sqrt(dx * dx + dy * dy);
-                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                    
-                    line.style.left = `${start.x}%`;
-                    line.style.top = `${start.y}%`;
-                    line.style.width = `${length}%`;
-                    line.style.transform = `rotate(${angle}deg)`;
-                    
-                    container.appendChild(line);
-                });
+                // Announce search results to screen readers
+                const resultsCount = filteredData.length;
+                const resultsText = resultsCount === 1 ? '1 result found' : `${resultsCount} results found`;
+                announceToScreenReader(resultsText);
             });
-        }
-
-        // Create planet cards
-        function createPlanetCards() {
-            const gallery = document.querySelector('.planets-gallery');
             
-            planets.forEach(planet => {
-                const card = document.createElement('div');
-                card.className = 'planet-card';
-                card.tabIndex = 0;
-                
-                card.innerHTML = `
-                    <img src="${planet.image}" alt="${planet.imageAlt}" class="planet-image">
-                    <div class="planet-info">
-                        <h3>${planet.name}</h3>
-                        ${planet.facts.map(fact => `
-                            <div class="planet-fact">
-                                <span class="planet-fact-icon" aria-hidden="true">★</span>
-                                <span>${fact}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-                
-                gallery.appendChild(card);
-            });
-        }
-
-        // Modal functionality
-        function setupModal() {
-            const modal = document.getElementById('constellation-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalImage = document.getElementById('modal-image');
-            const modalContent = document.getElementById('modal-content');
-            const closeBtn = document.querySelector('.modal-close');
-            
-            // Open modal when constellation is clicked
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('constellation')) {
-                    const constellationId = e.target.dataset.constellationId;
-                    const constellation = constellations.find(c => c.id === constellationId);
+            // Filter functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update aria-pressed state
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                        btn.setAttribute('aria-pressed', 'false');
+                    });
+                    this.classList.add('active');
+                    this.setAttribute('aria-pressed', 'true');
                     
-                    if (constellation) {
-                        modalTitle.textContent = constellation.name;
-                        modalImage.src = `https://science.nasa.gov/wp-content/uploads/2023/09/${constellation.id}-800x800.jpg`;
-                        modalImage.alt = constellation.imageAlt;
-                        modalContent.innerHTML = constellation.description;
-                        
-                        modal.classList.add('show');
-                        modal.setAttribute('aria-hidden', 'false');
-                        document.body.style.overflow = 'hidden';
-                        
-                        // Focus on modal content for screen readers
-                        setTimeout(() => {
-                            modal.querySelector('.modal-content').focus();
-                        }, 100);
+                    const filter = this.dataset.filter;
+                    let filteredData;
+                    
+                    if (filter === 'all') {
+                        filteredData = data;
+                    } else {
+                        filteredData = data.filter(item => item.tags.includes(filter));
                     }
+                    
+                    renderGallery(filteredData);
+                    
+                    // Announce filter results to screen readers
+                    const resultsCount = filteredData.length;
+                    const resultsText = `Filtered by ${filter}. ${resultsCount} ${resultsCount === 1 ? 'item' : 'items'} found.`;
+                    announceToScreenReader(resultsText);
+                });
+            });
+            
+            // Function to render gallery items
+            function renderGallery(items) {
+                galleryGrid.innerHTML = '';
+                
+                if (items.length === 0) {
+                    const noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.textContent = 'No matching items found. Try a different search or filter.';
+                    galleryGrid.appendChild(noResults);
+                    return;
+                }
+                
+                items.forEach(item => {
+                    const galleryItem = document.createElement('article');
+                    galleryItem.className = 'gallery-item';
+                    galleryItem.setAttribute('data-id', item.id);
+                    galleryItem.tabIndex = 0; // Make focusable
+                    
+                    // Create image container
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'gallery-image-container';
+                    
+                    const image = document.createElement('img');
+                    image.className = 'gallery-image';
+                    image.src = item.image;
+                    image.alt = item.title; // Use title as alt text
+                    imageContainer.appendChild(image);
+                    
+                    // Create content container
+                    const content = document.createElement('div');
+                    content.className = 'gallery-content';
+                    
+                    const title = document.createElement('h3');
+                    title.className = 'gallery-title';
+                    title.textContent = item.title;
+                    
+                    const description = document.createElement('p');
+                    description.className = 'gallery-description';
+                    description.textContent = item.description;
+                    
+                    const tags = document.createElement('div');
+                    tags.className = 'gallery-tags';
+                    item.tags.forEach(tag => {
+                        const tagSpan = document.createElement('span');
+                        tagSpan.className = 'gallery-tag';
+                        tagSpan.textContent = tag;
+                        tags.appendChild(tagSpan);
+                    });
+                    
+                    const meta = document.createElement('div');
+                    meta.className = 'gallery-meta';
+                    
+                    const author = document.createElement('div');
+                    author.className = 'gallery-author';
+                    
+                    const avatar = document.createElement('img');
+                    avatar.className = 'author-avatar';
+                    avatar.src = item.avatar;
+                    avatar.alt = '';
+                    avatar.setAttribute('role', 'presentation');
+                    
+                    const authorName = document.createElement('span');
+                    authorName.textContent = item.author;
+                    
+                    author.appendChild(avatar);
+                    author.appendChild(authorName);
+                    
+                    const date = document.createElement('div');
+                    date.className = 'gallery-date';
+                    date.textContent = item.date;
+                    
+                    meta.appendChild(author);
+                    meta.appendChild(date);
+                    
+                    content.appendChild(title);
+                    content.appendChild(description);
+                    content.appendChild(tags);
+                    content.appendChild(meta);
+                    
+                    galleryItem.appendChild(imageContainer);
+                    galleryItem.appendChild(content);
+                    
+                    // Add event listeners for opening the modal
+                    galleryItem.addEventListener('click', () => openModal(item));
+                    galleryItem.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            openModal(item);
+                        }
+                    });
+                    
+                    galleryGrid.appendChild(galleryItem);
+                });
+            }
+        }
+
+        // Initialize form handling
+        function initFormHandling() {
+            const uploadForm = document.getElementById('upload-form');
+            const fileUpload = document.getElementById('file-upload');
+            const filePreview = document.getElementById('file-preview');
+            const previewImage = document.getElementById('preview-image');
+            const tagsInput = document.getElementById('tags-input');
+            const tagsContainer = document.getElementById('tags-container');
+            const submitButton = document.getElementById('submit-button');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const submitText = document.getElementById('submit-text');
+            const uploadAlert = document.getElementById('upload-alert');
+            const fileUploadContainer = document.querySelector('.file-upload-container');
+            
+            // Tags array to store added tags
+            let tags = [];
+            
+            // File upload preview
+            fileUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                
+                if (file) {
+                    // Validate file type
+                    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                    if (!validTypes.includes(file.type)) {
+                        showAlert('Please select a valid image file (JPG, PNG, or GIF).', 'error');
+                        fileUpload.value = '';
+                        return;
+                    }
+                    
+                    // Validate file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        showAlert('File size exceeds 5MB limit. Please select a smaller file.', 'error');
+                        fileUpload.value = '';
+                        return;
+                    }
+                    
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        previewImage.alt = file.name;
+                        filePreview.classList.add('show');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    filePreview.classList.remove('show');
                 }
             });
             
-            // Close modal
-            function closeModal() {
-                modal.classList.remove('show');
-                modal.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = 'auto';
+            // Make the file upload container keyboard accessible
+            fileUploadContainer.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    fileUpload.click();
+                }
+            });
+            
+            // Tags input handling
+            tagsInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ',') {
+                    e.preventDefault();
+                    addTag();
+                }
+            });
+            
+            tagsInput.addEventListener('blur', function() {
+                addTag();
+            });
+            
+            function addTag() {
+                const tagText = tagsInput.value.trim();
+                
+                if (tagText && !tags.includes(tagText)) {
+                    // Create tag element
+                    const tag = document.createElement('div');
+                    tag.className = 'tag';
+                    
+                    const tagTextSpan = document.createElement('span');
+                    tagTextSpan.className = 'tag-text';
+                    tagTextSpan.textContent = tagText;
+                    
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'tag-remove';
+                    removeButton.innerHTML = '&times;';
+                    removeButton.setAttribute('aria-label', `Remove tag ${tagText}`);
+                    removeButton.addEventListener('click', function() {
+                        tag.remove();
+                        tags = tags.filter(t => t !== tagText);
+                    });
+                    
+                    tag.appendChild(tagTextSpan);
+                    tag.appendChild(removeButton);
+                    
+                    // Insert tag before the input
+                    tagsContainer.insertBefore(tag, tagsInput);
+                    
+                    // Add to tags array
+                    tags.push(tagText);
+                    
+                    // Clear input
+                    tagsInput.value = '';
+                }
             }
             
-            closeBtn.addEventListener('click', closeModal);
+            // Form submission
+            uploadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate form
+                const title = document.getElementById('title').value.trim();
+                const description = document.getElementById('description').value.trim();
+                const file = fileUpload.files[0];
+                
+                if (!title) {
+                    showAlert('Please enter a title for your work.', 'error');
+                    document.getElementById('title').focus();
+                    return;
+                }
+                
+                if (!file) {
+                    showAlert('Please select an image to upload.', 'error');
+                    return;
+                }
+                
+                // Show loading state
+                submitButton.disabled = true;
+                submitText.style.display = 'none';
+                loadingIndicator.style.display = 'inline-block';
+                
+                // Simulate form submission (would be an actual API call in production)
+                setTimeout(() => {
+                    // Reset form
+                    uploadForm.reset();
+                    filePreview.classList.remove('show');
+                    
+                    // Remove all tags
+                    const tagElements = document.querySelectorAll('.tag');
+                    tagElements.forEach(tag => tag.remove());
+                    tags = [];
+                    
+                    // Show success message
+                    showAlert('Your work has been successfully uploaded and shared!', 'success');
+                    
+                    // Reset button state
+                    submitButton.disabled = false;
+                    submitText.style.display = 'inline';
+                    loadingIndicator.style.display = 'none';
+                    
+                    // Announce success to screen readers
+                    announceToScreenReader('Your work has been successfully uploaded and shared!');
+                    
+                    // Scroll to gallery to see the new addition
+                    document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+                }, 2000);
+            });
             
-            // Close modal when clicking outside content
-            modal.addEventListener('click', (e) => {
+            // Show alert message
+            function showAlert(message, type) {
+                uploadAlert.className = `alert alert-${type} show`;
+                
+                // Create alert content
+                uploadAlert.innerHTML = `
+                    <div class="alert-icon" aria-hidden="true">${type === 'success' ? '✓' : '⚠'}</div>
+                    <div class="alert-message">${message}</div>
+                    <button class="alert-close" aria-label="Close alert">×</button>
+                `;
+                
+                // Add event listener to close button
+                const closeButton = uploadAlert.querySelector('.alert-close');
+                closeButton.addEventListener('click', () => {
+                    uploadAlert.classList.remove('show');
+                });
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    uploadAlert.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        // Initialize modal functionality
+        function initModal() {
+            const modal = document.getElementById('gallery-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalImage = document.getElementById('modal-image');
+            const modalDescription = document.getElementById('modal-description');
+            const modalTags = document.getElementById('modal-tags');
+            const modalAuthor = document.getElementById('modal-author');
+            const modalDate = document.getElementById('modal-date');
+            const modalClose = document.getElementById('modal-close');
+            
+            // Close modal when clicking the close button
+            modalClose.addEventListener('click', closeModal);
+            
+            // Close modal when clicking outside the content
+            modal.addEventListener('click', function(e) {
                 if (e.target === modal) {
                     closeModal();
                 }
             });
             
             // Close modal with Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('show')) {
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
                     closeModal();
                 }
             });
-        }
-
-        // Mobile menu toggle
-        function setupMobileMenu() {
-            const menuBtn = document.querySelector('.mobile-menu-btn');
-            const nav = document.querySelector('#main-nav ul');
             
-            menuBtn.addEventListener('click', () => {
-                const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
-                menuBtn.setAttribute('aria-expanded', !isExpanded);
-                nav.classList.toggle('show');
-            });
-        }
-
-        // Keyboard navigation for constellations
-        function setupKeyboardNavigation() {
-            document.addEventListener('keydown', (e) => {
-                if (e.target.classList.contains('constellation') && (e.key === 'Enter' || e.key === ' ')) {
-                    e.preventDefault();
-                    e.target.click();
+            // Function to open modal with item data
+            window.openModal = function(item) {
+                // Set modal content
+                modalTitle.textContent = item.title;
+                modalImage.src = item.image;
+                modalImage.alt = item.title;
+                modalDescription.textContent = item.description;
+                
+                // Set tags
+                modalTags.innerHTML = '';
+                item.tags.forEach(tag => {
+                    const tagSpan = document.createElement('span');
+                    tagSpan.className = 'gallery-tag';
+                    tagSpan.textContent = tag;
+                    modalTags.appendChild(tagSpan);
+                });
+                
+                // Set author and date
+                modalAuthor.textContent = `By ${item.author}`;
+                modalDate.textContent = item.date;
+                
+                // Show modal
+                modal.classList.add('active');
+                
+                // Set focus to modal
+                modal.focus();
+                
+                // Trap focus within modal
+                trapFocus(modal);
+                
+                // Announce to screen readers
+                announceToScreenReader(`Opened image details for ${item.title}`);
+                
+                // Save last focused element to return focus when modal closes
+                window.lastFocusedElement = document.activeElement;
+            };
+            
+            // Function to close modal
+            function closeModal() {
+                modal.classList.remove('active');
+                
+                // Return focus to last focused element
+                if (window.lastFocusedElement) {
+                    window.lastFocusedElement.focus();
                 }
+                
+                // Announce to screen readers
+                announceToScreenReader('Image details closed');
+            }
+            
+            // Function to trap focus within modal
+            function trapFocus(element) {
+                const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                const firstFocusableElement = focusableElements[0];
+                const lastFocusableElement = focusableElements[focusableElements.length - 1];
+                
+                element.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        // Shift + Tab
+                        if (e.shiftKey) {
+                            if (document.activeElement === firstFocusableElement) {
+                                e.preventDefault();
+                                lastFocusableElement.focus();
+                            }
+                        } 
+                        // Tab
+                        else {
+                            if (document.activeElement === lastFocusableElement) {
+                                e.preventDefault();
+                                firstFocusableElement.focus();
+                            }
+                        }
+                    }
+                });
+                
+                // Set initial focus
+                firstFocusableElement.focus();
+            }
+        }
+
+        // Initialize navigation
+        function initNavigation() {
+            const navLinks = document.querySelectorAll('.nav-list a');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(navLink => {
+                        navLink.classList.remove('active');
+                        navLink.removeAttribute('aria-current');
+                    });
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    this.setAttribute('aria-current', 'page');
+                    
+                    // Get the target section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    // Scroll to target section
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Announce navigation to screen readers
+                        announceToScreenReader(`Navigated to ${this.textContent} section`);
+                    }
+                });
             });
         }
 
-        // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', () => {
-            createStars();
-            createConstellations();
-            createPlanetCards();
-            setupModal();
-            setupMobileMenu();
-            setupKeyboardNavigation();
-        });
+        // Helper function to announce messages to screen readers
+        function announceToScreenReader(message) {
+            // Check if we already have an announcement element
+            let announcer = document.getElementById('screen-reader-announcer');
+            
+            if (!announcer) {
+                // Create the announcer element
+                announcer = document.createElement('div');
+                announcer.id = 'screen-reader-announcer';
+                announcer.setAttribute('aria-live', 'polite');
+                announcer.setAttribute('aria-atomic', 'true');
+                announcer.className = 'sr-only';
+                announcer.style.position = 'absolute';
+                announcer.style.width = '1px';
+                announcer.style.height = '1px';
+                announcer.style.padding = '0';
+                announcer.style.margin = '-1px';
+                announcer.style.overflow = 'hidden';
+                announcer.style.clip = 'rect(0, 0, 0, 0)';
+                announcer.style.whiteSpace = 'nowrap';
+                announcer.style.border = '0';
+                document.body.appendChild(announcer);
+            }
+            
+            // Set the message
+            announcer.textContent = message;
+        }
     </script>
 </body>
 </html>
