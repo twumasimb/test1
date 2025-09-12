@@ -2,1580 +2,1475 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Accessible Digital Art Gallery – Interactive, Filterable, AAA Compliant</title>
+  <title>Stellar Explorer: Accessible Interactive Space Website</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Color theme meta for user selection -->
-  <meta name="color-scheme" content="light dark">
-  <link rel="icon" href="data:," />
+  <!-- User-selectable color themes for AAA 1.4.8 compliance -->
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle fill='navy' cx='16' cy='16' r='16'/><circle fill='yellow' cx='20' cy='12' r='5'/></svg>">
   <style>
     :root {
-      /* Vibrant, high-contrast color palette (7:1+) */
-      --color-bg: #f5f6fa;
-      --color-bg-dark: #181825;
-      --color-primary: #003366;
-      --color-primary-dark: #80d8ff;
-      --color-accent: #ffd600;
-      --color-accent-dark: #ffab00;
-      --color-focus: #ff3d00;
-      --color-focus-dark: #00e676;
-      --color-card: #ffffff;
-      --color-card-dark: #232946;
-      --color-text: #0a0a0a;
-      --color-text-dark: #f5f6fa;
-      --color-border: #002147;
-      --color-border-dark: #80d8ff;
-      --color-shadow: rgba(0, 51, 102, 0.10);
-      --color-shadow-dark: rgba(128, 216, 255, 0.15);
-
-      /* Enhanced focus */
-      --focus-outline: 3px solid var(--color-focus);
-      --focus-outline-dark: 3px solid var(--color-focus-dark);
-
-      /* Spacing & sizing */
-      --header-height: 80px;
-      --nav-width: 250px;
-      --sidebar-width: 270px;
-      --footer-height: 60px;
-      --card-min-width: 260px;
-      --card-max-width: 360px;
-      --card-min-height: 320px;
-      --card-gap: 2rem;
-      --transition: 0.22s cubic-bezier(.4,0,.2,1);
-
-      /* Typography */
-      --font-main: 'Segoe UI', 'Arial', sans-serif;
-      --font-size: 1.18rem;
-      --line-height: 1.6;
-      --line-spacing: 1.5em;
-      --paragraph-spacing: 2.25em;
-      --max-line-length: 80ch;
+      /* AAA contrast-compliant color palette */
+      --color-bg: #10121a;
+      --color-bg-light: #22253a;
+      --color-bg-dark: #070810;
+      --color-primary: #ffe066; /* Vibrant yellow (stars/planets) */
+      --color-secondary: #6dd3fa; /* Blue accent */
+      --color-tertiary: #ff71ce; /* Pink accent */
+      --color-quaternary: #01cdfe; /* Cyan accent */
+      --color-focus: #fff200;
+      --color-text: #f8f8ff;
+      --color-text-secondary: #e0e0f0;
+      --color-card: #1c1e2b;
+      --color-border: #ffe066;
+      --color-nav: #1a1b23;
+      --color-link: #ffe066;
+      --color-link-hover: #01cdfe;
+      --color-visited: #6dd3fa;
+      --color-shadow: rgba(0,0,0,0.7);
+      --font-size-base: 1.15rem;
+      --font-size-large: 1.4rem;
+      --font-size-xlarge: 2rem;
+      --line-height: 1.7;
+      --focus-outline: 2.5px solid var(--color-focus);
+      --focus-shadow: 0 0 0 3px var(--color-secondary);
+      --min-target: 44px;
     }
 
-    [data-theme="dark"] {
-      --color-bg: var(--color-bg-dark);
-      --color-primary: var(--color-primary-dark);
-      --color-accent: var(--color-accent-dark);
-      --color-focus: var(--color-focus-dark);
-      --color-card: var(--color-card-dark);
-      --color-text: var(--color-text-dark);
-      --color-border: var(--color-border-dark);
-      --color-shadow: var(--color-shadow-dark);
-      --focus-outline: var(--focus-outline-dark);
+    @media (prefers-color-scheme: light) {
+      :root {
+        --color-bg: #fffbe9;
+        --color-bg-light: #f8f8ff;
+        --color-bg-dark: #e9ecef;
+        --color-primary: #4d3d00;
+        --color-secondary: #03639c;
+        --color-tertiary: #be1e5a;
+        --color-quaternary: #2b9eb3;
+        --color-focus: #d1a700;
+        --color-text: #111113;
+        --color-text-secondary: #33334a;
+        --color-card: #f3f3fa;
+        --color-border: #b7a900;
+        --color-nav: #f1efe3;
+        --color-link: #4d3d00;
+        --color-link-hover: #2b9eb3;
+        --color-visited: #03639c;
+        --color-shadow: rgba(0,0,0,0.15);
+      }
     }
 
     html {
-      font-family: var(--font-main);
-      font-size: 18px;
       background: var(--color-bg);
       color: var(--color-text);
+      font-size: 18px;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
       line-height: var(--line-height);
       scroll-behavior: smooth;
-      min-height: 100%;
-      width: 100%;
+      word-break: break-word;
     }
     body {
       margin: 0;
       background: var(--color-bg);
       color: var(--color-text);
       min-height: 100vh;
-      min-width: 100vw;
-      font-size: var(--font-size);
-      max-width: 100vw;
-      overflow-x: hidden;
     }
-    /* Skip Link */
+
+    /* Skip links */
     .skip-link {
       position: absolute;
       left: 8px;
       top: 8px;
       background: var(--color-primary);
-      color: #fff;
-      padding: 0.5em 1em;
+      color: #1a1a1a;
+      padding: 0.6em 1.2em;
       z-index: 1000;
-      border-radius: 0.3em;
       font-weight: bold;
+      border-radius: 0.4em;
+      box-shadow: 0 2px 8px var(--color-shadow);
       text-decoration: none;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.18s;
+      transition: opacity 0.2s;
+      min-width: var(--min-target);
+      min-height: var(--min-target);
     }
     .skip-link:focus {
       opacity: 1;
       pointer-events: auto;
       outline: var(--focus-outline);
+      outline-offset: 2px;
     }
-    /* Header */
+
+    /* Header & Navigation */
     header {
+      background: linear-gradient(90deg, var(--color-bg-dark) 0%, var(--color-nav) 100%);
+      padding: 0;
+      box-shadow: 0 2px 10px var(--color-shadow);
+      position: relative;
+      z-index: 10;
+    }
+    .site-title {
+      font-size: var(--font-size-xlarge);
+      font-weight: bold;
+      margin: 0;
+      padding: 1.1rem 1.5rem 0.4rem 1.5rem;
+      letter-spacing: 0.02em;
+      color: var(--color-primary);
+      text-shadow: 0 1px 4px #000, 0 0 10px var(--color-secondary);
+    }
+    nav[aria-label] {
       display: flex;
+      flex-wrap: wrap;
+      gap: 0.2em 2em;
+      padding: 0.6em 1.5em 1em 1.5em;
       align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
-      color: #fff;
-      height: var(--header-height);
-      padding: 0 2rem;
-      box-shadow: 0 2px 8px var(--color-shadow);
-      position: sticky;
-      top: 0;
-      z-index: 30;
+      background: var(--color-nav);
+      border-bottom: 2px solid var(--color-border);
     }
-    .logo {
+    nav[aria-label] ul {
+      list-style: none;
       display: flex;
-      align-items: center;
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-shadow: 0 2px 8px #0002;
+      flex-wrap: wrap;
+      gap: 0.5em 1.8em;
+      margin: 0;
+      padding: 0;
     }
-    .logo svg {
-      margin-right: 0.5em;
-      width: 2em;
-      height: 2em;
-      flex-shrink: 0;
-    }
-    /* Navigation */
-    nav[aria-label="Main navigation"] {
-      display: flex;
-      align-items: center;
-      gap: 1.5em;
-      font-size: 1.1em;
-    }
-    .nav-link {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.6em 1.2em;
-      border-radius: 0.5em;
-      background: transparent;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 600;
-      border: 2px solid transparent;
-      min-width: 44px;
-      min-height: 44px;
-      transition: background var(--transition), color var(--transition), border var(--transition);
+    nav[aria-label] li {
       position: relative;
     }
-    .nav-link:focus,
-    .nav-link[aria-current="page"] {
+    nav[aria-label] a,
+    nav[aria-label] button {
+      display: inline-flex;
+      align-items: center;
+      font-size: 1.08em;
+      color: var(--color-link);
+      background: none;
+      border: none;
+      text-decoration: none;
+      padding: 0.5em 0.7em;
+      border-radius: 0.4em;
+      min-width: var(--min-target);
+      min-height: var(--min-target);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      font-weight: 600;
+      outline: none;
+      box-shadow: none;
+      position: relative;
+    }
+    nav[aria-label] a:focus,
+    nav[aria-label] button:focus {
       outline: var(--focus-outline);
-      background: var(--color-accent);
-      color: var(--color-primary);
-      border: 2px solid var(--color-focus);
+      background: var(--color-secondary);
+      color: #1a1a1a;
       z-index: 1;
     }
-    .nav-link:hover {
-      background: var(--color-accent);
-      color: var(--color-primary);
+    nav[aria-label] a[aria-current="page"] {
+      background: var(--color-primary);
+      color: #1a1a1a;
+      font-weight: bold;
+      border-bottom: 3px solid var(--color-secondary);
+    }
+    nav[aria-label] a:hover,
+    nav[aria-label] button:hover {
+      background: var(--color-link-hover);
+      color: #1a1a1a;
     }
     /* Breadcrumbs */
     nav[aria-label="Breadcrumb"] {
-      display: flex;
-      align-items: center;
-      margin: 1em 0 1.5em 0;
+      background: none;
+      padding: 0.4em 1.5em 0.4em 1.5em;
       font-size: 1em;
     }
-    .breadcrumbs {
+    nav[aria-label="Breadcrumb"] ol {
       list-style: none;
       display: flex;
-      gap: 0.75em;
-      padding: 0;
-      margin: 0;
-    }
-    .breadcrumbs li {
-      display: flex;
-      align-items: center;
-    }
-    .breadcrumbs li:not(:last-child)::after {
-      content: "›";
-      margin: 0 0.5em;
-      color: var(--color-primary);
-      font-weight: bold;
-    }
-    .breadcrumbs a {
-      color: var(--color-primary);
-      text-decoration: underline;
-      font-weight: 500;
-      min-width: 44px;
-      min-height: 44px;
-      border-radius: 0.25em;
-      transition: background var(--transition), color var(--transition);
-      padding: 0.1em 0.4em;
-    }
-    .breadcrumbs a:focus {
-      outline: var(--focus-outline);
-      background: var(--color-accent);
-      color: var(--color-primary);
-    }
-    .breadcrumbs li[aria-current="page"] {
-      font-weight: bold;
-      color: var(--color-accent);
-      text-decoration: none;
-    }
-    /* Sidebar */
-    aside[aria-label="Gallery filters"] {
-      background: linear-gradient(180deg, var(--color-card) 0%, var(--color-accent) 100%);
-      border-right: 3px solid var(--color-border);
-      min-width: var(--sidebar-width);
-      max-width: var(--sidebar-width);
-      padding: 2rem 1.5rem 1.5rem 1.5rem;
-      position: sticky;
-      top: var(--header-height);
-      align-self: flex-start;
-      height: calc(100vh - var(--header-height));
-      box-shadow: 2px 0 10px var(--color-shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 2.5em;
-    }
-    .filter-group {
-      margin-bottom: 2em;
-    }
-    .filter-group label {
-      font-weight: 600;
-      display: block;
-      margin-bottom: 0.4em;
-      color: var(--color-primary);
-    }
-    .category-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.7em;
-    }
-    .category-list li {
-      display: flex;
-      align-items: center;
-    }
-    .category-checkbox {
-      margin-right: 0.7em;
-      min-width: 24px;
-      min-height: 24px;
-      accent-color: var(--color-primary);
-      border-radius: 0.25em;
-    }
-    .category-checkbox:focus {
-      outline: var(--focus-outline);
-    }
-    /* Search Bar */
-    .search-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6em;
-    }
-    .search-label {
-      font-weight: 600;
-      color: var(--color-primary);
-    }
-    .search-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-      width: 100%;
-    }
-    .search-input {
-      flex: 1 1 0%;
-      padding: 0.7em 1em;
-      border: 2px solid var(--color-border);
-      border-radius: 0.4em;
-      font-size: 1.1em;
-      background: var(--color-card);
-      color: var(--color-text);
-      min-width: 0;
-      min-height: 44px;
-      transition: border var(--transition), background var(--transition);
-      outline: none;
-    }
-    .search-input:focus {
-      border: 2px solid var(--color-focus);
-      outline: var(--focus-outline);
-      background: var(--color-accent);
-      color: var(--color-primary);
-    }
-    .search-btn {
-      background: var(--color-primary);
-      color: #fff;
-      border: none;
-      border-radius: 0.4em;
-      padding: 0.7em 1.1em;
-      font-size: 1em;
-      font-weight: bold;
-      min-width: 44px;
-      min-height: 44px;
-      cursor: pointer;
-      transition: background var(--transition), color var(--transition);
-      display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 0.4em;
+      margin: 0;
+      padding: 0;
     }
-    .search-btn:focus {
-      outline: var(--focus-outline);
-      background: var(--color-accent);
-      color: var(--color-primary);
+    nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
+      content: "›";
+      color: var(--color-secondary);
+      margin: 0 0.4em;
     }
-    /* Dark mode toggle */
-    .toggle-group {
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 0.7em;
-    }
-    .toggle-label {
-      font-weight: 600;
-      color: var(--color-primary);
-      margin-bottom: 0.2em;
-    }
-    .darkmode-toggle {
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-      background: var(--color-primary);
-      color: #fff;
+    nav[aria-label="Breadcrumb"] a {
+      color: var(--color-link);
+      text-decoration: underline;
+      background: none;
       border: none;
-      border-radius: 0.5em;
-      padding: 0.7em 1.1em;
-      font-size: 1em;
-      min-width: 44px;
-      min-height: 44px;
-      cursor: pointer;
-      transition: background var(--transition), color var(--transition);
+      padding: 0.2em 0.4em;
+      min-width: var(--min-target);
+      min-height: var(--min-target);
+    }
+    nav[aria-label="Breadcrumb"] a:focus {
+      outline: var(--focus-outline);
+      background: var(--color-secondary);
+      color: #1a1a1a;
+    }
+    nav[aria-label="Breadcrumb"] li:last-child span {
+      color: var(--color-primary);
       font-weight: bold;
     }
-    .darkmode-toggle:focus {
-      outline: var(--focus-outline);
-      background: var(--color-accent);
-      color: var(--color-primary);
-    }
-    /* Main Content Layout */
-    .layout {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      max-width: 100vw;
-      min-height: calc(100vh - var(--header-height) - var(--footer-height));
-      margin: 0 auto;
-      width: 100%;
-      background: var(--color-bg);
-    }
+
+    /* Main Layout */
     main {
-      flex: 1 1 0%;
-      padding: 2.5rem 2rem 2rem 2rem;
-      max-width: 100vw;
-      min-width: 0;
-      background: var(--color-bg);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    /* Gallery Grid */
-    .gallery-section {
-      width: 100%;
-      margin: 0 auto;
-      max-width: 1400px;
-      padding: 0;
-    }
-    .gallery-heading {
-      font-size: 2.1rem;
-      margin-bottom: 0.7em;
-      color: var(--color-primary);
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      line-height: 1.2;
-      max-width: var(--max-line-length);
-    }
-    .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width), 1fr));
-      gap: var(--card-gap);
-      width: 100%;
+      grid-template-columns: 1fr minmax(320px, 500px);
+      gap: 2.5rem;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0;
-      list-style: none;
-      min-height: 420px;
-    }
-    /* Gallery Card */
-    .gallery-card {
+      padding: 2.5rem 1.2rem 2rem 1.2rem;
+      background: none;
       position: relative;
-      background: linear-gradient(120deg, var(--color-card) 0%, var(--color-accent) 100%);
-      border: 2.5px solid var(--color-border);
-      border-radius: 1.1em;
-      box-shadow: 0 2px 12px var(--color-shadow);
-      overflow: hidden;
-      min-width: var(--card-min-width);
-      max-width: var(--card-max-width);
-      min-height: var(--card-min-height);
-      transition: box-shadow var(--transition), border var(--transition), background var(--transition);
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      cursor: pointer;
-      outline: none;
-    }
-    .gallery-card:focus-within,
-    .gallery-card:focus-visible {
-      outline: var(--focus-outline);
-      box-shadow: 0 0 0 4px var(--color-focus);
       z-index: 2;
     }
-    .gallery-card:focus {
-      outline: var(--focus-outline);
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+      }
     }
-    .gallery-card .thumb {
-      width: 100%;
-      height: 210px;
-      object-fit: cover;
-      border-bottom: 2px solid var(--color-border);
-      background: #dbeafe;
-      transition: filter var(--transition);
-      filter: brightness(0.96) contrast(1.2);
+
+    /* Space Canvas (background stars & constellations) */
+    #space-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background: none;
       display: block;
     }
-    .gallery-card .card-content {
-      padding: 1.1em 1.2em 1.2em 1.2em;
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 0%;
-      justify-content: flex-start;
-      min-height: 120px;
+    /* Visually hidden but accessible constellation map description */
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      border: 0;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
-    .gallery-card .art-title {
-      font-size: 1.2em;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin-bottom: 0.3em;
-      line-height: 1.3;
-      max-width: var(--max-line-length);
-    }
-    .gallery-card .art-artist {
-      font-size: 1em;
-      color: var(--color-border);
-      font-weight: 600;
-      margin-bottom: 0.7em;
-      max-width: var(--max-line-length);
-    }
-    .gallery-card .art-category {
-      font-size: 0.95em;
-      font-style: italic;
-      color: var(--color-accent);
-      margin-bottom: 0.7em;
-      max-width: var(--max-line-length);
-    }
-    .gallery-card .art-desc {
-      font-size: 1em;
-      color: var(--color-text);
-      margin-bottom: 0.7em;
-      max-width: var(--max-line-length);
-      line-height: 1.5;
-    }
-    .gallery-card .card-actions {
-      margin-top: auto;
-      display: flex;
-      gap: 0.7em;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .gallery-card .view-btn {
-      background: var(--color-primary);
-      color: #fff;
-      border: none;
-      border-radius: 0.5em;
-      padding: 0.7em 1.1em;
-      font-size: 1em;
-      min-width: 44px;
-      min-height: 44px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background var(--transition), color var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 0.4em;
-    }
-    .gallery-card .view-btn:focus {
-      outline: var(--focus-outline);
-      background: var(--color-accent);
-      color: var(--color-primary);
-    }
-    /* Card hover/focus overlay */
-    .gallery-card .card-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(120deg, #fffce0cc 0%, #ffd600cc 100%);
-      color: var(--color-primary);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--transition);
-      z-index: 3;
-      padding: 2em 1.2em 1.2em 1.2em;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      border-radius: 1.1em;
-      font-size: 1.1em;
-    }
-    .gallery-card:focus-within .card-overlay,
-    .gallery-card:focus-visible .card-overlay,
-    .gallery-card:hover .card-overlay {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .gallery-card .card-overlay strong {
-      font-size: 1.15em;
-      font-weight: 700;
-      margin-bottom: 0.4em;
-      color: var(--color-primary);
-    }
-    /* Modal styles */
-    .modal-backdrop {
+
+    /* Constellation Info Modal */
+    #constellation-modal {
+      display: none;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(20, 20, 30, 0.92);
-      z-index: 9999;
-      display: flex;
+      z-index: 1001;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(16,18,26,0.92);
       align-items: center;
       justify-content: center;
-      transition: opacity 0.22s;
-      opacity: 0;
-      pointer-events: none;
+      transition: opacity 0.2s;
     }
-    .modal-backdrop[aria-hidden="false"] {
-      opacity: 1;
-      pointer-events: auto;
+    #constellation-modal[aria-hidden="false"] {
+      display: flex;
     }
     .modal-dialog {
       background: var(--color-card);
       color: var(--color-text);
-      border-radius: 1.3em;
-      max-width: 96vw;
-      max-height: 90vh;
-      width: 700px;
-      box-shadow: 0 4px 40px #0008;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      padding: 2.5em 2em 2em 2em;
+      border-radius: 1.2em;
+      box-shadow: 0 6px 32px var(--color-shadow);
+      padding: 2.2em 2em 1.5em 2em;
+      max-width: 480px;
+      min-width: 320px;
       outline: none;
-      transition: box-shadow var(--transition);
-      overflow: auto;
+      position: relative;
+      border: 2.5px solid var(--color-primary);
     }
     .modal-dialog:focus {
       outline: var(--focus-outline);
+      box-shadow: var(--focus-shadow);
     }
     .modal-close-btn {
       position: absolute;
       top: 1.1em;
       right: 1.1em;
-      background: var(--color-primary);
-      color: #fff;
+      background: var(--color-secondary);
+      color: #1a1a1a;
       border: none;
-      border-radius: 0.5em;
-      padding: 0.7em 1.1em;
-      font-size: 1.1em;
-      min-width: 44px;
-      min-height: 44px;
+      border-radius: 50%;
+      width: var(--min-target);
+      height: var(--min-target);
+      font-size: 1.4em;
       cursor: pointer;
-      font-weight: bold;
-      z-index: 1;
-      transition: background var(--transition), color var(--transition);
+      transition: background 0.2s, color 0.2s;
       display: flex;
       align-items: center;
-      gap: 0.4em;
+      justify-content: center;
+      outline: none;
     }
     .modal-close-btn:focus {
       outline: var(--focus-outline);
-      background: var(--color-accent);
+      background: var(--color-primary);
+      color: #1a1a1a;
+    }
+    .modal-title {
+      font-size: var(--font-size-large);
+      font-weight: bold;
       color: var(--color-primary);
-    }
-    .modal-art-img {
-      width: 100%;
-      max-height: 350px;
-      object-fit: contain;
-      border-radius: 0.7em;
-      background: #dbeafe;
-      border: 2px solid var(--color-border);
-      margin-bottom: 1.2em;
-      box-shadow: 0 2px 16px var(--color-shadow);
-    }
-    .modal-art-title {
-      font-size: 2em;
-      font-weight: 700;
-      color: var(--color-primary);
-      margin-bottom: 0.4em;
-      line-height: 1.2;
-      max-width: var(--max-line-length);
-    }
-    .modal-art-artist {
-      font-size: 1.15em;
-      color: var(--color-border);
-      font-weight: 600;
-      margin-bottom: 0.6em;
-      max-width: var(--max-line-length);
-    }
-    .modal-art-category {
-      font-size: 1em;
-      font-style: italic;
-      color: var(--color-accent);
       margin-bottom: 0.7em;
-      max-width: var(--max-line-length);
+      margin-top: 0;
     }
-    .modal-art-desc {
-      font-size: 1.1em;
-      color: var(--color-text);
-      margin-bottom: 1.2em;
-      max-width: var(--max-line-length);
-      line-height: 1.5;
+    .modal-description {
+      font-size: 1.08em;
+      margin-bottom: 0.5em;
     }
-    .modal-art-meta {
-      font-size: 0.95em;
-      color: var(--color-border);
-      margin-bottom: 0.6em;
-      max-width: var(--max-line-length);
+
+    /* Section Headings */
+    section {
+      margin-bottom: 2.5rem;
     }
-    /* Modal transitions */
-    @media (prefers-reduced-motion: no-preference) {
-      .modal-backdrop {
-        transition: opacity 0.22s cubic-bezier(.4,0,.2,1);
-      }
-      .modal-dialog {
-        transition: box-shadow 0.22s cubic-bezier(.4,0,.2,1), transform 0.22s cubic-bezier(.4,0,.2,1);
-        transform: scale(0.97);
-      }
-      .modal-backdrop[aria-hidden="false"] .modal-dialog {
-        transform: scale(1);
-      }
-    }
-    /* Responsive Design */
-    @media (max-width: 1200px) {
-      aside[aria-label="Gallery filters"] {
-        min-width: 200px;
-        max-width: 200px;
-        padding: 1.2rem 0.7rem 1rem 0.7rem;
-      }
-      .layout {
-        gap: 0.6em;
-      }
-    }
-    @media (max-width: 900px) {
-      .layout {
-        flex-direction: column;
-      }
-      aside[aria-label="Gallery filters"] {
-        position: static;
-        width: 100vw;
-        min-width: 0;
-        max-width: 100vw;
-        height: auto;
-        border-right: none;
-        border-bottom: 3px solid var(--color-border);
-        flex-direction: row;
-        gap: 2em;
-        box-shadow: none;
-        padding: 1.1em 2em 1.1em 2em;
-      }
-      main {
-        padding: 1.2em 1em 1em 1em;
-      }
-    }
-    @media (max-width: 650px) {
-      .gallery-grid {
-        grid-template-columns: 1fr;
-        gap: 1.2em;
-      }
-      .modal-dialog {
-        width: 96vw;
-        padding: 1.2em 0.6em 1em 0.6em;
-      }
-      aside[aria-label="Gallery filters"] {
-        flex-direction: column;
-        gap: 1.2em;
-        padding: 1em 0.5em 1em 0.5em;
-      }
-    }
-    /* Footer */
-    footer {
-      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
-      color: #fff;
-      height: var(--footer-height);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      font-size: 1em;
-      font-weight: 500;
-      box-shadow: 0 -2px 8px var(--color-shadow);
-      position: relative;
-      z-index: 20;
-    }
-    .footer-links {
-      display: flex;
-      gap: 1.2em;
-    }
-    .footer-link {
-      color: #fff;
-      text-decoration: underline;
-      min-width: 44px;
-      min-height: 44px;
-      border-radius: 0.25em;
-      padding: 0.1em 0.4em;
-      transition: background var(--transition), color var(--transition);
-    }
-    .footer-link:focus {
-      outline: var(--focus-outline);
-      background: var(--color-accent);
+    h1, h2, h3, h4 {
+      font-family: inherit;
+      font-weight: bold;
       color: var(--color-primary);
+      margin-top: 0;
+      margin-bottom: 0.6em;
+      line-height: 1.3;
+      letter-spacing: 0.01em;
     }
-    /* Focus indicators for all interactive elements */
-    a:focus, button:focus, input:focus, [tabindex]:focus {
-      outline: var(--focus-outline);
-      outline-offset: 2px;
-      z-index: 3;
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5em;
     }
-    /* Enhanced focus for keyboard users */
-    @media (hover: none) {
-      a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
-        outline: var(--focus-outline);
-      }
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.3em;
     }
-    /* Custom scrollbar for dark mode */
-    [data-theme="dark"] ::-webkit-scrollbar {
-      width: 14px;
-      background: #232946;
+    h3 {
+      font-size: 1.18rem;
+      color: var(--color-secondary);
     }
-    [data-theme="dark"] ::-webkit-scrollbar-thumb {
-      background: #2d3a57;
-      border-radius: 8px;
-      border: 3px solid #232946;
+    h4 {
+      font-size: 1.05rem;
+      color: var(--color-tertiary);
     }
-    /* User-selectable colors */
-    .color-picker-group {
+
+    /* Planet Gallery */
+    .planet-gallery-section {
+      grid-column: 2;
+      background: var(--color-bg-light);
+      border-radius: 1.2em;
+      box-shadow: 0 2px 14px var(--color-shadow);
+      padding: 1.5em 1em 2em 1em;
+      min-width: 320px;
+      max-width: 520px;
+      position: relative;
+      z-index: 2;
       display: flex;
       flex-direction: column;
-      gap: 0.6em;
+      align-items: center;
+    }
+    @media (max-width: 900px) {
+      .planet-gallery-section {
+        grid-column: 1;
+        max-width: 100%;
+      }
+    }
+    .planet-gallery-heading {
+      font-size: 1.35rem;
+      color: var(--color-primary);
+      margin-bottom: 0.8em;
+      text-align: center;
+    }
+    .planet-gallery {
+      display: flex;
+      overflow-x: auto;
+      gap: 1.2em;
+      padding: 0.7em 0.2em;
+      scroll-behavior: smooth;
+      margin-bottom: 0.8em;
+      min-height: 310px;
+    }
+    .planet-card {
+      background: var(--color-card);
+      border: 2.5px solid var(--color-border);
+      border-radius: 1.1em;
+      box-shadow: 0 2px 10px var(--color-shadow);
+      min-width: 260px;
+      max-width: 280px;
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1.2em 1em 1em 1em;
+      position: relative;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .planet-card:focus-within,
+    .planet-card:focus-visible {
+      outline: var(--focus-outline);
+      border-color: var(--color-focus);
+      box-shadow: var(--focus-shadow);
+    }
+    .planet-img {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--color-bg-dark);
+      border: 3px solid var(--color-primary);
+      object-fit: cover;
+      margin-bottom: 0.7em;
+      box-shadow: 0 0 0 4px var(--color-secondary);
+      display: block;
+    }
+    .planet-name {
+      font-size: 1.13em;
+      color: var(--color-primary);
+      font-weight: bold;
+      margin-bottom: 0.3em;
+      text-align: center;
+    }
+    .planet-fact {
+      color: var(--color-text-secondary);
+      font-size: 1em;
+      margin-bottom: 0.3em;
+      text-align: center;
+    }
+    .planet-gallery-controls {
+      display: flex;
+      gap: 1em;
+      justify-content: center;
+      margin-bottom: 0.5em;
+    }
+    .gallery-btn {
+      background: var(--color-secondary);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 0.7em;
+      padding: 0.7em 1.3em;
+      font-size: 1.12em;
+      min-width: var(--min-target);
+      min-height: var(--min-target);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      font-weight: bold;
+      outline: none;
+      box-shadow: 0 1px 4px var(--color-shadow);
+    }
+    .gallery-btn:focus {
+      outline: var(--focus-outline);
+      background: var(--color-primary);
+      color: #1a1a1a;
+    }
+    .gallery-btn[aria-disabled="true"] {
+      opacity: 0.6;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+    /* Gallery scrollbar for AAA touch */
+    .planet-gallery {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-secondary) var(--color-bg-light);
+    }
+    .planet-gallery::-webkit-scrollbar {
+      height: 12px;
+      background: var(--color-bg-light);
+    }
+    .planet-gallery::-webkit-scrollbar-thumb {
+      background: var(--color-secondary);
+      border-radius: 8px;
+    }
+
+    /* Search & Sitemap */
+    .search-section, .sitemap-section {
+      margin-top: 2.5em;
+      margin-bottom: 2.5em;
+    }
+    .search-form {
+      display: flex;
+      gap: 0.7em;
+      align-items: center;
+      margin-bottom: 0.8em;
+    }
+    .search-input {
+      font-size: 1.05em;
+      padding: 0.6em 1em;
+      border-radius: 0.5em;
+      border: 2px solid var(--color-secondary);
+      background: var(--color-bg-light);
+      color: var(--color-text);
+      min-width: 220px;
+      outline: none;
+      min-height: var(--min-target);
+    }
+    .search-input:focus {
+      outline: var(--focus-outline);
+      border-color: var(--color-focus);
+      background: var(--color-bg-dark);
+    }
+    .search-btn {
+      background: var(--color-primary);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 0.5em;
+      padding: 0.6em 1.2em;
+      font-size: 1.07em;
+      min-width: var(--min-target);
+      min-height: var(--min-target);
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    .search-btn:focus {
+      outline: var(--focus-outline);
+      background: var(--color-secondary);
+      color: #1a1a1a;
+    }
+    .search-results {
+      margin-top: 0.8em;
+      background: var(--color-card);
+      border-radius: 0.7em;
+      padding: 0.8em 1em;
+      color: var(--color-text-secondary);
+      box-shadow: 0 1px 6px var(--color-shadow);
+      font-size: 1em;
+      min-height: 2em;
+    }
+    .search-results[aria-live] {
+      outline: none;
+    }
+
+    /* Help Box */
+    .help-box {
+      background: var(--color-bg-light);
+      border-left: 5px solid var(--color-secondary);
+      padding: 1.1em 1.5em;
+      border-radius: 0.8em;
+      margin-bottom: 2em;
+      color: var(--color-text-secondary);
+      font-size: 1em;
+      box-shadow: 0 1px 8px var(--color-shadow);
+      max-width: 650px;
+    }
+    .help-box strong {
+      color: var(--color-primary);
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(90deg, var(--color-bg-dark) 0%, var(--color-nav) 100%);
+      color: var(--color-primary);
+      text-align: center;
+      padding: 1.3em 0 2em 0;
+      font-size: 1em;
+      border-top: 2px solid var(--color-border);
+      box-shadow: 0 -2px 12px var(--color-shadow);
+      margin-top: 2em;
+      letter-spacing: 0.01em;
+    }
+    .footer-links {
+      margin-top: 0.6em;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2em;
+      justify-content: center;
+    }
+    .footer-links a {
+      color: var(--color-link);
+      text-decoration: underline;
+      font-weight: bold;
+      background: none;
+      border-radius: 0.3em;
+      padding: 0.3em 0.6em;
+      min-width: var(--min-target);
+      min-height: var(--min-target);
+      transition: background 0.2s, color 0.2s;
+    }
+    .footer-links a:focus {
+      outline: var(--focus-outline);
+      background: var(--color-secondary);
+      color: #1a1a1a;
+    }
+
+    /* Focus indicator for all interactive elements */
+    a:focus, button:focus, input:focus, [tabindex]:focus, .planet-card:focus-within {
+      outline: var(--focus-outline) !important;
+      box-shadow: var(--focus-shadow) !important;
+      z-index: 2;
+    }
+
+    /* Responsive font and layout */
+    @media (max-width: 600px) {
+      html { font-size: 16px; }
+      .planet-gallery-section { padding: 0.7em 0.2em 1em 0.2em; }
+      .modal-dialog { min-width: 90vw; padding: 1.2em 0.6em; }
+    }
+
+    /* AAA: User can change foreground/background colors (1.4.8) */
+    .theme-switcher {
+      margin-top: 1.5em;
+      margin-bottom: 1.2em;
+      display: flex;
+      gap: 1em;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    .theme-switcher label {
+      font-size: 1em;
+      color: var(--color-primary);
+      font-weight: bold;
+      margin-right: 0.5em;
+    }
+    .theme-btn {
+      background: var(--color-secondary);
+      color: #1a1a1a;
+      border: none;
+      border-radius: 0.5em;
+      padding: 0.5em 1.2em;
+      font-size: 1em;
+      min-width: var(--min-target);
+      min-height: var(--min-target);
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    .theme-btn:focus {
+      outline: var(--focus-outline);
+      background: var(--color-primary);
+      color: #1a1a1a;
+    }
+
+    /* Visually indicate current theme */
+    .theme-btn[aria-pressed="true"] {
+      background: var(--color-primary);
+      color: #1a1a1a;
+      border: 2.5px solid var(--color-secondary);
+    }
+
+    /* Line/paragraph spacing for AAA (1.4.8) */
+    p, ul, ol, dl, .planet-fact {
+      line-height: 1.7;
+      margin-bottom: 1.2em;
+      max-width: 70ch;
+    }
+    p + p, ul + p, ol + p, dl + p {
       margin-top: 1.2em;
     }
-    .color-picker-label {
-      font-weight: 600;
-      color: var(--color-primary);
+    /* No justified text */
+    p, .planet-fact, li, h1, h2, h3, h4, h5, h6 {
+      text-align: left;
+      text-justify: none;
     }
-    .color-picker-row {
+    /* Limit line width */
+    main, .planet-gallery-section, .help-box {
+      max-width: 80ch;
+    }
+
+    /* AAA: Pause/stop controls for auto animations (motion) */
+    .motion-controls {
+      margin-top: 1em;
+      margin-bottom: 1.2em;
       display: flex;
-      gap: 1.2em;
+      gap: 1em;
       align-items: center;
     }
-    .color-picker {
-      width: 44px;
-      height: 44px;
-      border: 2px solid var(--color-border);
+    .motion-btn {
+      background: var(--color-tertiary);
+      color: #1a1a1a;
+      border: none;
       border-radius: 0.5em;
-      background: transparent;
+      padding: 0.5em 1.2em;
+      font-size: 1em;
+      min-width: var(--min-target);
+      min-height: var(--min-target);
       cursor: pointer;
-      padding: 0;
-      min-width: 44px;
-      min-height: 44px;
-    }
-    .color-picker:focus {
-      outline: var(--focus-outline);
-      border: 2px solid var(--color-focus);
-    }
-    /* Status region */
-    .sr-only, .visually-hidden {
-      position: absolute !important;
-      width: 1px !important;
-      height: 1px !important;
-      padding: 0 !important;
-      margin: -1px !important;
-      overflow: hidden !important;
-      clip: rect(0, 0, 0, 0) !important;
-      white-space: nowrap !important;
-      border: 0 !important;
-    }
-    /* Contextual help icon */
-    .help-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 1.5em;
-      height: 1.5em;
-      background: var(--color-accent);
-      color: var(--color-primary);
-      border-radius: 50%;
-      font-size: 1.1em;
       font-weight: bold;
-      margin-left: 0.3em;
-      border: 2px solid var(--color-border);
-      cursor: help;
-      position: relative;
+      transition: background 0.2s, color 0.2s;
+      outline: none;
     }
-    .help-tooltip {
-      position: absolute;
-      left: 120%;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--color-card);
-      color: var(--color-primary);
-      border: 2px solid var(--color-border);
-      border-radius: 0.4em;
-      padding: 0.7em 1.1em;
-      font-size: 0.97em;
-      min-width: 220px;
-      box-shadow: 0 2px 8px var(--color-shadow);
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.12s;
-      white-space: normal;
+    .motion-btn:focus {
+      outline: var(--focus-outline);
+      background: var(--color-primary);
+      color: #1a1a1a;
     }
-    .help-icon:focus .help-tooltip,
-    .help-icon:hover .help-tooltip {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    /* Status region for live updates */
-    #status-region {
-      position: fixed;
-      left: 50%;
-      top: 12px;
-      transform: translateX(-50%);
-      background: var(--color-accent);
-      color: var(--color-primary);
-      border: 2px solid var(--color-border);
-      border-radius: 0.5em;
-      padding: 0.8em 1.5em;
-      font-size: 1.1em;
-      font-weight: 600;
-      z-index: 20000;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.18s;
-    }
-    #status-region[aria-live="polite"].show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    /* Zoom/line spacing/paragraph spacing/width */
-    main, .gallery-card, .modal-dialog, .gallery-card .art-desc, .modal-art-desc {
-      line-height: var(--line-spacing);
-      max-width: var(--max-line-length);
-    }
-    p {
-      margin-bottom: var(--paragraph-spacing);
-    }
-    /* Prevent horizontal scroll at 200% zoom */
-    html, body {
-      overflow-x: hidden;
-      max-width: 100vw;
+    .motion-btn[aria-pressed="true"] {
+      background: var(--color-primary);
+      color: #1a1a1a;
+      border: 2.5px solid var(--color-tertiary);
     }
   </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link" id="skip-link">Skip to main content</a>
+  <a href="#main-content" class="skip-link" id="skip-main">Skip to main content</a>
   <header>
-    <div class="logo" aria-label="Digital Art Gallery Home">
-      <!-- SVG Icon: Gallery -->
-      <svg aria-hidden="true" focusable="false" width="32" height="32" viewBox="0 0 32 32" fill="none">
-        <rect x="2" y="6" width="28" height="20" rx="4" fill="#ffd600" stroke="#003366" stroke-width="2"/>
-        <rect x="6" y="10" width="20" height="12" rx="2" fill="#fff" stroke="#003366" stroke-width="2"/>
-        <circle cx="11" cy="15" r="2" fill="#80d8ff" stroke="#003366" stroke-width="1.5"/>
-        <path d="M10 20l4-5 4 6 4-3 2 2" stroke="#003366" stroke-width="2" fill="none"/>
-      </svg>
-      Art Gallery
-    </div>
-    <nav aria-label="Main navigation" id="main-nav">
-      <a href="#main-content" class="nav-link" aria-current="page">Gallery</a>
-      <a href="#about" class="nav-link">About</a>
-      <a href="#help" class="nav-link">Help</a>
-      <a href="#sitemap" class="nav-link">Sitemap</a>
-    </nav>
-  </header>
-  <nav aria-label="Breadcrumb" id="breadcrumb-nav">
-    <ol class="breadcrumbs">
-      <li><a href="#main-content">Home</a></li>
-      <li aria-current="page">Gallery</li>
-    </ol>
-  </nav>
-  <div class="layout">
-    <aside aria-label="Gallery filters">
-      <form id="filter-form" aria-labelledby="filters-heading">
-        <h2 id="filters-heading" style="font-size:1.2em;margin-bottom:1em;color:var(--color-primary);font-weight:700;">Filters</h2>
-        <fieldset class="filter-group" aria-labelledby="category-label">
-          <legend id="category-label" style="font-weight:600;color:var(--color-primary);margin-bottom:0.3em;">Category</legend>
-          <ul class="category-list" id="category-list">
-            <!-- Populated by JS -->
-          </ul>
-        </fieldset>
-        <fieldset class="search-group" aria-labelledby="search-label">
-          <legend id="search-label" class="search-label">Search Artworks</legend>
-          <div class="search-bar">
-            <label for="search-input" class="sr-only">Search artworks by title, artist, or description</label>
-            <input type="search" id="search-input" class="search-input" name="search"
-              autocomplete="off" aria-describedby="search-help"
-              placeholder="Type to search..." minlength="1" maxlength="80"
-              aria-label="Search artworks by title, artist, or description"
-              inputmode="search" spellcheck="false" />
-            <button type="submit" class="search-btn" aria-label="Submit search">
-              <svg aria-hidden="true" focusable="false" width="20" height="20" fill="none" viewBox="0 0 20 20">
-                <circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="2"/>
-                <path d="M14.5 14.5L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <span class="sr-only">Search</span>
-            </button>
-          </div>
-          <span id="search-help" class="sr-only">Enter keywords to search artworks by title, artist, or description.</span>
-        </fieldset>
-        <div class="toggle-group">
-          <label for="darkmode-toggle" class="toggle-label">
-            Dark Mode
-            <span class="help-icon" tabindex="0" aria-label="Dark mode help">
-              ?
-              <span class="help-tooltip" role="tooltip" id="darkmode-help">
-                Toggle between light and dark color schemes for improved comfort and accessibility. Your preference will be saved for future visits.
-              </span>
-            </span>
-          </label>
-          <button type="button" id="darkmode-toggle" class="darkmode-toggle" aria-pressed="false" aria-describedby="darkmode-help">
-            <svg aria-hidden="true" focusable="false" width="22" height="22" fill="none" viewBox="0 0 22 22">
-              <circle cx="11" cy="11" r="9" stroke="currentColor" stroke-width="2"/>
-              <path d="M11 3v2M11 17v2M4.22 4.22l1.42 1.42M16.36 16.36l1.42 1.42M3 11h2M17 11h2M4.22 17.78l1.42-1.42M16.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/>
-            </svg>
-            <span id="darkmode-label">Enable Dark Mode</span>
-          </button>
-        </div>
-        <div class="color-picker-group">
-          <label class="color-picker-label" for="color-bg-picker">
-            Background Color
-            <span class="help-icon" tabindex="0" aria-label="Background color help">
-              ?
-              <span class="help-tooltip" role="tooltip" id="bgcolor-help">
-                Choose a background color for the gallery interface. This helps with visual comfort and accessibility. Your selection is saved for future visits.
-              </span>
-            </span>
-          </label>
-          <div class="color-picker-row">
-            <input type="color" id="color-bg-picker" class="color-picker" aria-describedby="bgcolor-help" value="#f5f6fa" title="Pick a background color" />
-            <label for="color-text-picker" class="color-picker-label" style="margin-left:1em;">
-              Text Color
-              <span class="help-icon" tabindex="0" aria-label="Text color help">
-                ?
-                <span class="help-tooltip" role="tooltip" id="textcolor-help">
-                  Choose a text color for the gallery interface. Ensure strong contrast with the background for readability.
-                </span>
-              </span>
-            </label>
-            <input type="color" id="color-text-picker" class="color-picker" aria-describedby="textcolor-help" value="#0a0a0a" title="Pick a text color" />
-          </div>
-        </div>
-      </form>
-    </aside>
-    <main id="main-content" tabindex="-1">
-      <section class="gallery-section" aria-labelledby="gallery-heading">
-        <h1 id="gallery-heading" class="gallery-heading">Digital Art Gallery</h1>
-        <p id="gallery-desc" style="font-size:1.15em;color:var(--color-border);max-width:var(--max-line-length);">
-          Browse, search, and filter a curated collection of digital artworks from diverse artists and styles. 
-          Each piece is presented with detailed descriptions and accessible media. Use the filters and search to explore.
-        </p>
-        <ul class="gallery-grid" id="gallery-grid" aria-live="polite" aria-busy="false" aria-describedby="gallery-desc">
-          <!-- Gallery items populated by JS -->
-        </ul>
-        <div id="no-results" style="display:none;color:var(--color-primary);font-weight:700;font-size:1.2em;margin-top:2em;" role="status" aria-live="polite">
-          No artworks found matching your criteria.
-        </div>
-      </section>
-      <section id="about" aria-labelledby="about-heading" style="margin-top:3em;">
-        <h2 id="about-heading" style="font-size:1.4em;color:var(--color-primary);font-weight:700;">About This Gallery</h2>
-        <p>
-          The <strong>Accessible Digital Art Gallery</strong> is a demonstration of inclusive, interactive web design. 
-          It is fully compliant with <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 <abbr title="Triple A">AAA</abbr> standards, ensuring everyone can explore and enjoy digital art regardless of ability.
-        </p>
-        <ul>
-          <li>All images have descriptive <code>alt</code> text and are keyboard accessible.</li>
-          <li>Full-screen modals are fully accessible with keyboard and screen readers.</li>
-          <li>Filtering, search, and navigation are available by mouse, keyboard, or touch.</li>
-          <li>High-contrast, colorful design with user-selectable color themes.</li>
-          <li>All interactive elements are at least 44x44px and have enhanced focus indicators.</li>
-        </ul>
-      </section>
-      <section id="help" aria-labelledby="help-heading" style="margin-top:3em;">
-        <h2 id="help-heading" style="font-size:1.4em;color:var(--color-primary);font-weight:700;">Help &amp; Accessibility</h2>
-        <p>
-          <strong>Keyboard Navigation:</strong> Use <kbd>Tab</kbd> and <kbd>Shift+Tab</kbd> to move between controls. 
-          Press <kbd>Enter</kbd> or <kbd>Space</kbd> to activate buttons and open artwork modals. 
-          In modals, press <kbd>Esc</kbd> to close.
-        </p>
-        <p>
-          <strong>Screen Reader Users:</strong> All images, buttons, and form fields are labeled. 
-          Live region status messages will announce filter/search results and color/theme changes.
-        </p>
-        <p>
-          <strong>Color &amp; Theme:</strong> Use the color pickers and dark mode toggle in the sidebar to adjust the gallery's appearance for your needs.
-        </p>
-        <p>
-          <strong>Contextual Help:</strong> Help icons (<span class="help-icon" aria-hidden="true">?</span>) provide additional guidance for controls.
-        </p>
-        <p>
-          <strong>Definitions:</strong> 
-          <dl>
-            <dt><abbr title="Web Content Accessibility Guidelines">WCAG</abbr></dt>
-            <dd>International standards for making web content more accessible.</dd>
-            <dt><abbr title="Triple A">AAA</abbr></dt>
-            <dd>The highest level of accessibility conformance in WCAG.</dd>
-          </dl>
-        </p>
-        <p>
-          <strong>Reading Level:</strong> All content is written at a lower secondary education reading level.
-        </p>
-      </section>
-      <section id="sitemap" aria-labelledby="sitemap-heading" style="margin-top:3em;">
-        <h2 id="sitemap-heading" style="font-size:1.4em;color:var(--color-primary);font-weight:700;">Sitemap</h2>
-        <ul>
-          <li><a href="#main-content">Gallery</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#help">Help</a></li>
-          <li><a href="#sitemap">Sitemap</a></li>
-        </ul>
-      </section>
-    </main>
-    <!-- Modal: Fullscreen Artwork View -->
-    <div id="art-modal-backdrop" class="modal-backdrop" aria-hidden="true" aria-label="Artwork details modal" role="dialog" aria-modal="true">
-      <div class="modal-dialog" role="document" tabindex="-1" aria-labelledby="modal-title" aria-describedby="modal-desc">
-        <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close artwork details">
-          <svg aria-hidden="true" focusable="false" width="20" height="20" fill="none" viewBox="0 0 20 20">
-            <path d="M5 5l10 10M15 5l-10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <span>Close</span>
-        </button>
-        <img src="" alt="" id="modal-art-img" class="modal-art-img" />
-        <h3 id="modal-title" class="modal-art-title"></h3>
-        <div id="modal-artist" class="modal-art-artist"></div>
-        <div id="modal-category" class="modal-art-category"></div>
-        <div id="modal-desc" class="modal-art-desc"></div>
-        <div id="modal-meta" class="modal-art-meta"></div>
-      </div>
-    </div>
-    <!-- Status region for live updates -->
-    <div id="status-region" role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
-  </div>
-  <footer>
-    <div>
-      &copy; <span id="current-year"></span> Accessible Digital Art Gallery
-    </div>
-    <nav aria-label="Footer links">
-      <ul class="footer-links">
-        <li><a href="#help" class="footer-link">Accessibility Help</a></li>
-        <li><a href="#about" class="footer-link">About</a></li>
-        <li><a href="#sitemap" class="footer-link">Sitemap</a></li>
+    <h1 class="site-title" id="site-title">Stellar Explorer: Accessible Interactive Space Website</h1>
+    <nav aria-label="Main Navigation" id="main-nav">
+      <ul>
+        <li><a href="#main-content" aria-current="page">Home</a></li>
+        <li><a href="#constellations-section">Constellations</a></li>
+        <li><a href="#planet-gallery-section">Planets Gallery</a></li>
+        <li><a href="#search-section">Search</a></li>
+        <li><a href="#sitemap-section">Sitemap</a></li>
+        <li><a href="#help-section">Help</a></li>
       </ul>
     </nav>
+    <nav aria-label="Breadcrumb" id="breadcrumb-nav">
+      <ol>
+        <li><a href="#main-content">Home</a></li>
+        <li><span aria-current="page">Stellar Explorer</span></li>
+      </ol>
+    </nav>
+  </header>
+  <!-- Space canvas background -->
+  <canvas id="space-canvas" aria-hidden="true"></canvas>
+  <main id="main-content" tabindex="-1">
+    <section id="help-section" aria-labelledby="help-heading">
+      <div class="help-box" role="region" aria-label="Help and Accessibility Information">
+        <h2 id="help-heading">Help &amp; Accessibility</h2>
+        <p>
+          <strong>Welcome to Stellar Explorer!</strong> This site is fully accessible and AAA-compliant. Use the navigation above, or <a href="#search-section">search</a> for space topics. 
+          <ul>
+            <li>To explore constellations, use keyboard or mouse to select stars or lines on the map.</li>
+            <li>Planet gallery is horizontally scrollable; use <kbd>Tab</kbd> or gallery controls for navigation.</li>
+            <li>All images have descriptive alt text. Motion and color themes can be adjusted below.</li>
+            <li>Skip links and headings help with quick navigation. For help, see this section at any time.</li>
+          </ul>
+        </p>
+        <div class="theme-switcher" role="group" aria-label="Theme color controls">
+          <label for="theme-select">Choose color theme:</label>
+          <button type="button" class="theme-btn" id="theme-dark" aria-pressed="true">Dark</button>
+          <button type="button" class="theme-btn" id="theme-light" aria-pressed="false">Light</button>
+          <button type="button" class="theme-btn" id="theme-highcontrast" aria-pressed="false">High Contrast</button>
+        </div>
+        <div class="motion-controls" role="group" aria-label="Motion controls">
+          <label for="motion-toggle">Animations:</label>
+          <button type="button" class="motion-btn" id="motion-on" aria-pressed="true">On</button>
+          <button type="button" class="motion-btn" id="motion-off" aria-pressed="false">Off</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="constellations-section" aria-labelledby="constellations-heading">
+      <h2 id="constellations-heading">Interactive Constellation Map</h2>
+      <p>
+        Explore some famous constellations! Select a star or constellation line on the map below to learn more. 
+        <span id="constellation-map-desc" class="visually-hidden">
+          The interactive star map displays constellations: Orion, Ursa Major, and Cassiopeia. Each star is a button with an accessible label. Constellation lines are keyboard accessible and display information when activated.
+        </span>
+      </p>
+      <!-- The interactive map is rendered on the canvas and fully described above -->
+    </section>
+
+    <section id="planet-gallery-section" class="planet-gallery-section" aria-labelledby="planet-gallery-heading">
+      <h2 id="planet-gallery-heading" class="planet-gallery-heading">Planets Gallery</h2>
+      <p>
+        Scroll through our solar system's planets! Use the arrow controls or scroll horizontally. Each planet has a colorful image and a fun fact.
+      </p>
+      <div class="planet-gallery-controls" role="group" aria-label="Planet gallery controls">
+        <button type="button" class="gallery-btn" id="gallery-prev" aria-label="Scroll to previous planet" aria-disabled="true">&larr; Previous</button>
+        <button type="button" class="gallery-btn" id="gallery-next" aria-label="Scroll to next planet">&rarr; Next</button>
+      </div>
+      <div class="planet-gallery" id="planet-gallery" tabindex="0" aria-label="Solar system planet gallery" role="listbox">
+        <!-- Planet cards inserted by JS -->
+      </div>
+    </section>
+
+    <section id="search-section" class="search-section" aria-labelledby="search-heading">
+      <h2 id="search-heading">Search Space Topics</h2>
+      <form class="search-form" id="search-form" role="search" aria-label="Search space topics" autocomplete="off">
+        <label for="search-input">Search constellations or planets:</label>
+        <input type="search" id="search-input" class="search-input" name="q" autocomplete="off" aria-describedby="search-help" aria-label="Search constellations or planets" required aria-required="true" />
+        <button type="submit" class="search-btn">Search</button>
+      </form>
+      <div id="search-help" class="visually-hidden">Type a planet or constellation name to find related information. Results will appear below.</div>
+      <div class="search-results" id="search-results" aria-live="polite" role="status"></div>
+    </section>
+
+    <section id="sitemap-section" class="sitemap-section" aria-labelledby="sitemap-heading">
+      <h2 id="sitemap-heading">Sitemap</h2>
+      <ul>
+        <li><a href="#main-content">Home</a></li>
+        <li><a href="#constellations-section">Constellations</a></li>
+        <li><a href="#planet-gallery-section">Planets Gallery</a></li>
+        <li><a href="#search-section">Search</a></li>
+        <li><a href="#help-section">Help &amp; Accessibility</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <!-- Constellation Info Modal (AAA accessible modal) -->
+  <div id="constellation-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" aria-hidden="true">
+    <div class="modal-dialog" tabindex="0">
+      <button type="button" class="modal-close-btn" id="modal-close-btn" aria-label="Close constellation info dialog">&times;</button>
+      <h3 id="modal-title" class="modal-title"></h3>
+      <div id="modal-desc" class="modal-description"></div>
+    </div>
+  </div>
+
+  <footer>
+    <div>
+      <strong>Stellar Explorer</strong> &copy; 2024 | Created for Accessible Space Education
+    </div>
+    <div class="footer-links">
+      <a href="#help-section">Accessibility Info</a>
+      <a href="#sitemap-section">Sitemap</a>
+      <a href="#main-content">Back to Top</a>
+    </div>
   </footer>
+
+  <!-- JavaScript for interactivity, accessibility, and canvas rendering -->
   <script>
-    // --- Data: Example artworks for the gallery ---
-    const ARTWORKS = [
-      {
-        id: "art1",
-        title: "Celestial Dreams",
-        artist: "Ava Lin",
-        category: "Digital Painting",
-        src: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80",
-        alt: "An ethereal digital painting of a starry night sky with vibrant nebula clouds swirling above a calm lake.",
-        description: "A vibrant digital painting capturing the wonders of the cosmos. Swirling nebulae and twinkling stars reflect over a tranquil lake, evoking a sense of awe and serenity.",
-        meta: "Created in 2023 using Procreate. 3500x2500px.",
-        tags: ["space", "night", "cosmos"]
-      },
-      {
-        id: "art2",
-        title: "Urban Harmony",
-        artist: "Miguel Santos",
-        category: "Vector Art",
-        src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-        alt: "A colorful vector illustration of a modern cityscape at sunset, with geometric buildings and lively streets.",
-        description: "This vector artwork brings together geometric forms and warm sunset hues to depict a harmonious city environment, bustling with life and color.",
-        meta: "Created in 2022 using Adobe Illustrator. 4000x3000px.",
-        tags: ["city", "sunset", "geometry"]
-      },
-      {
-        id: "art3",
-        title: "Forest Reverie",
-        artist: "Jin Park",
-        category: "Digital Painting",
-        src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80",
-        alt: "A lush digital painting of a sun-dappled forest with tall trees, green ferns, and golden light filtering through the leaves.",
-        description: "A peaceful forest scene painted digitally, highlighting the beauty of nature through soft light and rich textures.",
-        meta: "Created in 2023 using Krita. 3200x2200px.",
-        tags: ["forest", "nature", "sunlight"]
-      },
-      {
-        id: "art4",
-        title: "Retro Waves",
-        artist: "Samira Patel",
-        category: "3D Render",
-        src: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80",
-        alt: "A neon-lit 3D render of a retro-futuristic landscape with purple mountains and a glowing sun.",
-        description: "Inspired by 1980s synthwave aesthetics, this 3D render features neon colors, grid lines, and a glowing sun rising over polygonal mountains.",
-        meta: "Created in 2021 using Blender. 3840x2160px.",
-        tags: ["retro", "synthwave", "neon"]
-      },
-      {
-        id: "art5",
-        title: "Oceanic Flow",
-        artist: "Riley Chen",
-        category: "Digital Collage",
-        src: "https://images.unsplash.com/photo-1465101178521-c1a9136a0c09?auto=format&fit=crop&w=800&q=80",
-        alt: "A dynamic digital collage blending ocean waves, abstract shapes, and vibrant blue tones.",
-        description: "A digital collage that combines photographs of ocean waves with abstract digital shapes, creating a sense of movement and energy.",
-        meta: "Created in 2022 using Photoshop. 3000x2000px.",
-        tags: ["ocean", "collage", "abstract"]
-      },
-      {
-        id: "art6",
-        title: "Blooming Code",
-        artist: "Leila Johnson",
-        category: "Generative Art",
-        src: "https://images.unsplash.com/photo-1465101178521-c1a9136a0c09?auto=format&fit=crop&w=800&q=80",
-        alt: "A generative artwork showing colorful flowers emerging from lines of code.",
-        description: "This generative piece visualizes the intersection of technology and nature, with algorithmically generated flowers blossoming from code.",
-        meta: "Created in 2023 using Processing. 2400x1800px.",
-        tags: ["flowers", "generative", "technology"]
-      },
-      {
-        id: "art7",
-        title: "Dawn Over Peaks",
-        artist: "Ava Lin",
-        category: "Digital Painting",
-        src: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=800&q=80",
-        alt: "A digital painting of a sunrise over jagged mountain peaks, with golden light illuminating snowy slopes.",
-        description: "An uplifting mountain landscape, painted digitally, with warm light and cool shadows capturing the magic of dawn.",
-        meta: "Created in 2023 using Procreate. 3500x2500px.",
-        tags: ["mountains", "sunrise", "landscape"]
-      },
-      {
-        id: "art8",
-        title: "Pixel Spirits",
-        artist: "Kiran Desai",
-        category: "Pixel Art",
-        src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-        alt: "A pixel art scene of glowing spirits floating above a moonlit river.",
-        description: "A whimsical pixel art creation featuring glowing spirits and shimmering water, invoking a sense of wonder and nostalgia.",
-        meta: "Created in 2022 using Aseprite. 320x240px.",
-        tags: ["pixel", "spirits", "night"]
-      },
-      {
-        id: "art9",
-        title: "Mechanical Garden",
-        artist: "Jin Park",
-        category: "3D Render",
-        src: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80",
-        alt: "A detailed 3D render of mechanical flowers blooming in a futuristic garden.",
-        description: "A blend of organic and mechanical forms, this 3D render depicts a garden where metallic flowers bloom under artificial lights.",
-        meta: "Created in 2021 using Blender. 3840x2160px.",
-        tags: ["3d", "mechanical", "flowers"]
-      },
-      {
-        id: "art10",
-        title: "Digital Tides",
-        artist: "Samira Patel",
-        category: "Generative Art",
-        src: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80",
-        alt: "A generative artwork of flowing digital waves in shades of blue and teal.",
-        description: "Algorithmic waves ebb and flow in this generative piece, exploring patterns and rhythms found in nature and code.",
-        meta: "Created in 2023 using Processing. 2400x1800px.",
-        tags: ["generative", "waves", "blue"]
-      }
-    ];
-
-    // --- Gallery categories (derived from artworks) ---
-    const CATEGORIES = [...new Set(ARTWORKS.map(a => a.category))];
-
-    // --- Accessibility: Announce status messages ---
-    function announceStatus(msg) {
-      const status = document.getElementById('status-region');
-      status.textContent = msg;
-      status.classList.add('show');
-      setTimeout(() => {
-        status.classList.remove('show');
-        status.textContent = '';
-      }, 3500);
-    }
-
-    // --- Populate category filters ---
-    function renderCategoryFilters() {
-      const ul = document.getElementById('category-list');
-      ul.innerHTML = '';
-      CATEGORIES.forEach((cat, idx) => {
-        const id = `cat-${idx}`;
-        const li = document.createElement('li');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = id;
-        checkbox.name = 'category';
-        checkbox.value = cat;
-        checkbox.className = 'category-checkbox';
-        checkbox.setAttribute('aria-label', cat);
-        checkbox.setAttribute('aria-checked', 'false');
-        checkbox.setAttribute('tabindex', '0');
-        checkbox.style.minWidth = '24px';
-        checkbox.style.minHeight = '24px';
-        checkbox.addEventListener('change', () => {
-          checkbox.setAttribute('aria-checked', checkbox.checked ? 'true' : 'false');
-          updateGallery();
-        });
-        li.appendChild(checkbox);
-        const label = document.createElement('label');
-        label.setAttribute('for', id);
-        label.textContent = cat;
-        li.appendChild(label);
-        ul.appendChild(li);
-      });
-    }
-
-    // --- Gallery filtering and search state ---
-    let selectedCategories = [];
-    let searchQuery = '';
-
-    // --- Filter and render gallery ---
-    function filterArtworks() {
-      return ARTWORKS.filter(art => {
-        // Category filter
-        if (selectedCategories.length && !selectedCategories.includes(art.category)) return false;
-        // Search filter
-        if (searchQuery) {
-          const query = searchQuery.toLowerCase();
-          return (
-            art.title.toLowerCase().includes(query) ||
-            art.artist.toLowerCase().includes(query) ||
-            art.description.toLowerCase().includes(query)
-          );
-        }
-        return true;
-      });
-    }
-
-    function updateGallery(announce = true) {
-      // Update selectedCategories
-      selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked')).map(cb => cb.value);
-      // Update searchQuery
-      searchQuery = document.getElementById('search-input').value.trim();
-      // Filter
-      const filtered = filterArtworks();
-      renderGallery(filtered);
-      // Announce result
-      if (announce) {
-        if (filtered.length === 0) {
-          announceStatus('No artworks found matching your criteria.');
-        } else {
-          announceStatus(`Showing ${filtered.length} artwork${filtered.length > 1 ? 's' : ''}.`);
-        }
-      }
-    }
-
-    // --- Render gallery grid ---
-    function renderGallery(artworks) {
-      const grid = document.getElementById('gallery-grid');
-      grid.setAttribute('aria-busy', 'true');
-      grid.innerHTML = '';
-      if (!artworks.length) {
-        document.getElementById('no-results').style.display = 'block';
-        grid.setAttribute('aria-busy', 'false');
-        return;
-      } else {
-        document.getElementById('no-results').style.display = 'none';
-      }
-      artworks.forEach((art, idx) => {
-        const li = document.createElement('li');
-        li.className = 'gallery-card';
-        li.setAttribute('tabindex', '0');
-        li.setAttribute('role', 'article');
-        li.setAttribute('aria-labelledby', `art-title-${art.id}`);
-        li.setAttribute('aria-describedby', `art-desc-${art.id}`);
-        li.setAttribute('data-art-id', art.id);
-
-        // Thumbnail
-        const img = document.createElement('img');
-        img.src = art.src;
-        img.alt = art.alt;
-        img.className = 'thumb';
-        img.setAttribute('width', '360');
-        img.setAttribute('height', '210');
-        img.setAttribute('tabindex', '-1');
-        img.setAttribute('loading', 'lazy');
-        img.setAttribute('draggable', 'false');
-        img.setAttribute('aria-describedby', `art-desc-${art.id}`);
-        li.appendChild(img);
-
-        // Card content
-        const content = document.createElement('div');
-        content.className = 'card-content';
-
-        const title = document.createElement('div');
-        title.className = 'art-title';
-        title.id = `art-title-${art.id}`;
-        title.textContent = art.title;
-        content.appendChild(title);
-
-        const artist = document.createElement('div');
-        artist.className = 'art-artist';
-        artist.textContent = `By ${art.artist}`;
-        content.appendChild(artist);
-
-        const category = document.createElement('div');
-        category.className = 'art-category';
-        category.textContent = art.category;
-        content.appendChild(category);
-
-        const desc = document.createElement('div');
-        desc.className = 'art-desc';
-        desc.id = `art-desc-${art.id}`;
-        desc.textContent = art.description;
-        content.appendChild(desc);
-
-        // Actions
-        const actions = document.createElement('div');
-        actions.className = 'card-actions';
-
-        const viewBtn = document.createElement('button');
-        viewBtn.type = 'button';
-        viewBtn.className = 'view-btn';
-        viewBtn.textContent = 'View';
-        viewBtn.setAttribute('aria-label', `View details for ${art.title}`);
-        viewBtn.setAttribute('tabindex', '0');
-        viewBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          openModal(art);
-        });
-        viewBtn.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openModal(art);
-          }
-        });
-        actions.appendChild(viewBtn);
-        content.appendChild(actions);
-
-        li.appendChild(content);
-
-        // Overlay for hover/focus
-        const overlay = document.createElement('div');
-        overlay.className = 'card-overlay';
-        overlay.innerHTML = `<strong>${art.title}</strong><span>By ${art.artist}</span><span style="margin-top:0.4em;">${art.category}</span>`;
-        overlay.setAttribute('aria-hidden', 'true');
-        li.appendChild(overlay);
-
-        // Card: click or keyboard open modal
-        li.addEventListener('click', (e) => {
-          if (e.target.tagName !== 'BUTTON') openModal(art);
-        });
-        li.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openModal(art);
-          }
-        });
-
-        grid.appendChild(li);
-      });
-      grid.setAttribute('aria-busy', 'false');
-    }
-
-    // --- Modal logic ---
-    let lastFocusedElement = null;
-    function openModal(art) {
-      const backdrop = document.getElementById('art-modal-backdrop');
-      const dialog = backdrop.querySelector('.modal-dialog');
-      backdrop.setAttribute('aria-hidden', 'false');
-      // Fill modal content
-      document.getElementById('modal-art-img').src = art.src;
-      document.getElementById('modal-art-img').alt = art.alt;
-      document.getElementById('modal-title').textContent = art.title;
-      document.getElementById('modal-artist').textContent = `By ${art.artist}`;
-      document.getElementById('modal-category').textContent = art.category;
-      document.getElementById('modal-desc').textContent = art.description;
-      document.getElementById('modal-meta').textContent = art.meta;
-      // Focus management
-      lastFocusedElement = document.activeElement;
-      dialog.focus();
-      // Trap focus
-      trapModalFocus();
-      // Prevent background scroll
-      document.body.style.overflow = 'hidden';
-      announceStatus(`Opened details for ${art.title}.`);
-    }
-    function closeModal() {
-      const backdrop = document.getElementById('art-modal-backdrop');
-      backdrop.setAttribute('aria-hidden', 'true');
-      // Remove focus trap
-      releaseModalFocus();
-      // Restore focus
-      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-        lastFocusedElement.focus();
-      }
-      // Allow scroll
-      document.body.style.overflow = '';
-      announceStatus('Closed artwork details.');
-    }
-    // Modal close button
-    document.getElementById('modal-close-btn').addEventListener('click', closeModal);
-    document.getElementById('art-modal-backdrop').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) closeModal();
-    });
-    // Modal keyboard handling
-    document.addEventListener('keydown', (e) => {
-      const backdrop = document.getElementById('art-modal-backdrop');
-      if (backdrop.getAttribute('aria-hidden') === 'false') {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          closeModal();
-        }
-        // Trap focus
-        trapModalFocus(e);
-      }
-    });
-    // Modal focus trap logic
-    function trapModalFocus(e) {
-      const backdrop = document.getElementById('art-modal-backdrop');
-      if (backdrop.getAttribute('aria-hidden') === 'true') return;
-      const focusable = backdrop.querySelectorAll('button, [tabindex]:not([tabindex="-1"]), input, select, textarea, a[href]');
-      const first = focusable[0], last = focusable[focusable.length - 1];
-      document.onkeydown = function(event) {
-        if (event.key === 'Tab') {
-          if (event.shiftKey) {
+    // Accessibility: focus trap for modal
+    function trapFocus(element) {
+      const focusable = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      function handle(e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey) {
             if (document.activeElement === first) {
-              event.preventDefault();
+              e.preventDefault();
               last.focus();
             }
           } else {
             if (document.activeElement === last) {
-              event.preventDefault();
+              e.preventDefault();
               first.focus();
             }
           }
         }
-      };
+      }
+      element.addEventListener('keydown', handle);
+      return () => element.removeEventListener('keydown', handle);
     }
-    function releaseModalFocus() {
-      document.onkeydown = null;
+
+    // Theme switching (AAA 1.4.8)
+    const themeBtns = {
+      dark: document.getElementById('theme-dark'),
+      light: document.getElementById('theme-light'),
+      highcontrast: document.getElementById('theme-highcontrast')
+    };
+    function setTheme(theme) {
+      document.documentElement.removeAttribute('data-theme');
+      for (const key in themeBtns) {
+        themeBtns[key].setAttribute('aria-pressed', String(key === theme));
+      }
+      if (theme === 'dark') {
+        document.documentElement.style.setProperty('--color-bg', '#10121a');
+        document.documentElement.style.setProperty('--color-bg-light', '#22253a');
+        document.documentElement.style.setProperty('--color-bg-dark', '#070810');
+        document.documentElement.style.setProperty('--color-primary', '#ffe066');
+        document.documentElement.style.setProperty('--color-secondary', '#6dd3fa');
+        document.documentElement.style.setProperty('--color-tertiary', '#ff71ce');
+        document.documentElement.style.setProperty('--color-quaternary', '#01cdfe');
+        document.documentElement.style.setProperty('--color-focus', '#fff200');
+        document.documentElement.style.setProperty('--color-text', '#f8f8ff');
+        document.documentElement.style.setProperty('--color-text-secondary', '#e0e0f0');
+        document.documentElement.style.setProperty('--color-card', '#1c1e2b');
+        document.documentElement.style.setProperty('--color-border', '#ffe066');
+        document.documentElement.style.setProperty('--color-nav', '#1a1b23');
+        document.documentElement.style.setProperty('--color-link', '#ffe066');
+        document.documentElement.style.setProperty('--color-link-hover', '#01cdfe');
+        document.documentElement.style.setProperty('--color-visited', '#6dd3fa');
+        document.documentElement.style.setProperty('--color-shadow', 'rgba(0,0,0,0.7)');
+      } else if (theme === 'light') {
+        document.documentElement.style.setProperty('--color-bg', '#fffbe9');
+        document.documentElement.style.setProperty('--color-bg-light', '#f8f8ff');
+        document.documentElement.style.setProperty('--color-bg-dark', '#e9ecef');
+        document.documentElement.style.setProperty('--color-primary', '#4d3d00');
+        document.documentElement.style.setProperty('--color-secondary', '#03639c');
+        document.documentElement.style.setProperty('--color-tertiary', '#be1e5a');
+        document.documentElement.style.setProperty('--color-quaternary', '#2b9eb3');
+        document.documentElement.style.setProperty('--color-focus', '#d1a700');
+        document.documentElement.style.setProperty('--color-text', '#111113');
+        document.documentElement.style.setProperty('--color-text-secondary', '#33334a');
+        document.documentElement.style.setProperty('--color-card', '#f3f3fa');
+        document.documentElement.style.setProperty('--color-border', '#b7a900');
+        document.documentElement.style.setProperty('--color-nav', '#f1efe3');
+        document.documentElement.style.setProperty('--color-link', '#4d3d00');
+        document.documentElement.style.setProperty('--color-link-hover', '#2b9eb3');
+        document.documentElement.style.setProperty('--color-visited', '#03639c');
+        document.documentElement.style.setProperty('--color-shadow', 'rgba(0,0,0,0.15)');
+      } else if (theme === 'highcontrast') {
+        document.documentElement.style.setProperty('--color-bg', '#000');
+        document.documentElement.style.setProperty('--color-bg-light', '#111');
+        document.documentElement.style.setProperty('--color-bg-dark', '#000');
+        document.documentElement.style.setProperty('--color-primary', '#fff');
+        document.documentElement.style.setProperty('--color-secondary', '#00ffff');
+        document.documentElement.style.setProperty('--color-tertiary', '#ff00ff');
+        document.documentElement.style.setProperty('--color-quaternary', '#ffff00');
+        document.documentElement.style.setProperty('--color-focus', '#fff200');
+        document.documentElement.style.setProperty('--color-text', '#fff');
+        document.documentElement.style.setProperty('--color-text-secondary', '#fff');
+        document.documentElement.style.setProperty('--color-card', '#000');
+        document.documentElement.style.setProperty('--color-border', '#fff');
+        document.documentElement.style.setProperty('--color-nav', '#000');
+        document.documentElement.style.setProperty('--color-link', '#fff');
+        document.documentElement.style.setProperty('--color-link-hover', '#00ffff');
+        document.documentElement.style.setProperty('--color-visited', '#ff00ff');
+        document.documentElement.style.setProperty('--color-shadow', 'rgba(0,0,0,0.9)');
+      }
     }
+    themeBtns.dark.addEventListener('click', () => setTheme('dark'));
+    themeBtns.light.addEventListener('click', () => setTheme('light'));
+    themeBtns.highcontrast.addEventListener('click', () => setTheme('highcontrast'));
 
-    // --- Filter form handlers ---
-    document.getElementById('filter-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      updateGallery();
-    });
-    document.getElementById('search-input').addEventListener('input', function() {
-      updateGallery(false);
-    });
-
-    // --- Dark mode toggle ---
-    const darkModeBtn = document.getElementById('darkmode-toggle');
-    function setDarkMode(enabled, announce = true) {
-      document.documentElement.setAttribute('data-theme', enabled ? 'dark' : 'light');
-      darkModeBtn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
-      document.getElementById('darkmode-label').textContent = enabled ? 'Disable Dark Mode' : 'Enable Dark Mode';
-      localStorage.setItem('gallery-darkmode', enabled ? '1' : '0');
-      if (announce) announceStatus(enabled ? 'Dark mode enabled.' : 'Light mode enabled.');
+    // Motion controls (AAA)
+    let allowMotion = true;
+    const motionBtns = {
+      on: document.getElementById('motion-on'),
+      off: document.getElementById('motion-off')
+    };
+    function setMotion(on) {
+      allowMotion = on;
+      motionBtns.on.setAttribute('aria-pressed', String(on));
+      motionBtns.off.setAttribute('aria-pressed', String(!on));
+      if (!on) {
+        cancelAnimationFrame(animationId);
+        drawSpace(true); // static
+      } else {
+        drawSpace();
+      }
     }
-    darkModeBtn.addEventListener('click', function() {
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-      setDarkMode(!isDark);
-    });
+    motionBtns.on.addEventListener('click', () => setMotion(true));
+    motionBtns.off.addEventListener('click', () => setMotion(false));
 
-    // --- Color pickers (user-selectable fg/bg colors) ---
-    function setCustomColors(bg, text, announce = true) {
-      document.documentElement.style.setProperty('--color-bg', bg);
-      document.documentElement.style.setProperty('--color-card', bg);
-      document.documentElement.style.setProperty('--color-text', text);
-      localStorage.setItem('gallery-bgcolor', bg);
-      localStorage.setItem('gallery-textcolor', text);
-      if (announce) announceStatus('Custom colors applied.');
-    }
-    document.getElementById('color-bg-picker').addEventListener('input', function() {
-      setCustomColors(this.value, document.getElementById('color-text-picker').value);
-    });
-    document.getElementById('color-text-picker').addEventListener('input', function() {
-      setCustomColors(document.getElementById('color-bg-picker').value, this.value);
-    });
-
-    // --- Help icon keyboard support (tooltips) ---
-    document.querySelectorAll('.help-icon').forEach(icon => {
-      icon.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          icon.querySelector('.help-tooltip').style.opacity = '1';
-        }
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          icon.querySelector('.help-tooltip').style.opacity = '0';
-        }
-      });
-      icon.addEventListener('blur', () => {
-        icon.querySelector('.help-tooltip').style.opacity = '0';
-      });
-    });
-
-    // --- Skip link: focus main content ---
-    document.getElementById('skip-link').addEventListener('click', function(e) {
+    // Accessibility: Skip to main content focus
+    document.getElementById('skip-main').addEventListener('click', function(e) {
       setTimeout(() => {
         document.getElementById('main-content').focus();
-      }, 100);
+      }, 50);
     });
 
-    // --- On load: initialize gallery and settings ---
-    function initGallery() {
-      renderCategoryFilters();
-      // Restore dark mode preference
-      const darkPref = localStorage.getItem('gallery-darkmode');
-      if (darkPref === '1') setDarkMode(true, false);
-      // Restore custom colors
-      const bg = localStorage.getItem('gallery-bgcolor');
-      const text = localStorage.getItem('gallery-textcolor');
-      if (bg && text) {
-        document.getElementById('color-bg-picker').value = bg;
-        document.getElementById('color-text-picker').value = text;
-        setCustomColors(bg, text, false);
+    // --- Interactive Constellation Map ---
+    // Data for constellations (positions are relative to canvas size)
+    const CONSTELLATIONS = [
+      {
+        id: 'orion',
+        name: 'Orion',
+        description: `Orion is one of the most recognizable constellations in the night sky. Its brightest stars form a pattern resembling a hunter. Notable stars include Betelgeuse (a red supergiant) and Rigel (a blue supergiant). Orion's Belt is made up of three aligned stars: Alnitak, Alnilam, and Mintaka.`,
+        stars: [
+          {id: 'betelgeuse', name: 'Betelgeuse', x: 0.27, y: 0.32, mag: 0.5, desc: 'Betelgeuse is a red supergiant, one of the largest visible to the naked eye.'},
+          {id: 'bellatrix', name: 'Bellatrix', x: 0.41, y: 0.26, mag: 1.6, desc: 'Bellatrix is a blue giant, also known as the Amazon Star.'},
+          {id: 'alnilam', name: 'Alnilam', x: 0.36, y: 0.48, mag: 1.7, desc: 'Alnilam is the central star of Orion\'s Belt.'},
+          {id: 'alnitak', name: 'Alnitak', x: 0.32, y: 0.52, mag: 1.7, desc: 'Alnitak is the leftmost star in Orion\'s Belt.'},
+          {id: 'mintaka', name: 'Mintaka', x: 0.40, y: 0.52, mag: 2.2, desc: 'Mintaka is the rightmost star in Orion\'s Belt.'},
+          {id: 'rigel', name: 'Rigel', x: 0.48, y: 0.65, mag: 0.1, desc: 'Rigel is a blue supergiant, the brightest star in Orion.'},
+          {id: 'saiph', name: 'Saiph', x: 0.36, y: 0.68, mag: 2.1, desc: 'Saiph is a blue supergiant, marking Orion\'s right knee.'}
+        ],
+        lines: [
+          // [from, to] (by star index)
+          [0,1],[0,3],[1,2],[2,3],[2,4],[4,1],[2,5],[2,6]
+        ]
+      },
+      {
+        id: 'ursa-major',
+        name: 'Ursa Major',
+        description: `Ursa Major, the Great Bear, is home to the Big Dipper asterism. It's one of the largest and most well-known constellations. The Big Dipper's pointer stars help locate Polaris, the North Star.`,
+        stars: [
+          {id: 'dubhe', name: 'Dubhe', x: 0.7, y: 0.18, mag: 1.8, desc: 'Dubhe is the brightest star in Ursa Major.'},
+          {id: 'merak', name: 'Merak', x: 0.68, y: 0.25, mag: 2.3, desc: 'Merak is one of the Big Dipper\'s pointer stars.'},
+          {id: 'phecda', name: 'Phecda', x: 0.67, y: 0.34, mag: 2.4, desc: 'Phecda forms the bottom left of the Big Dipper.'},
+          {id: 'megrez', name: 'Megrez', x: 0.72, y: 0.32, mag: 3.3, desc: 'Megrez connects the handle and the bowl of the Big Dipper.'},
+          {id: 'alioth', name: 'Alioth', x: 0.78, y: 0.35, mag: 1.8, desc: 'Alioth is the brightest star in the Big Dipper\'s handle.'},
+          {id: 'mizar', name: 'Mizar', x: 0.83, y: 0.38, mag: 2.1, desc: 'Mizar is famous for its double star system.'},
+          {id: 'alkaid', name: 'Alkaid', x: 0.89, y: 0.41, mag: 1.9, desc: 'Alkaid is the end star of the Big Dipper\'s handle.'}
+        ],
+        lines: [
+          [0,1],[1,2],[2,3],[3,4],[4,5],[5,6]
+        ]
+      },
+      {
+        id: 'cassiopeia',
+        name: 'Cassiopeia',
+        description: `Cassiopeia is easily recognized by its distinctive "W" shape. It represents the vain queen Cassiopeia from Greek mythology. Its stars are bright and form a zigzag in the sky.`,
+        stars: [
+          {id: 'schedar', name: 'Schedar', x: 0.12, y: 0.12, mag: 2.2, desc: 'Schedar is the brightest star in Cassiopeia.'},
+          {id: 'caph', name: 'Caph', x: 0.19, y: 0.17, mag: 2.3, desc: 'Caph is a white giant at the end of the "W".'},
+          {id: 'gamma-cas', name: 'Gamma Cassiopeiae', x: 0.16, y: 0.21, mag: 2.5, desc: 'Gamma Cassiopeiae is a variable star.'},
+          {id: 'rho-cas', name: 'Rho Cassiopeiae', x: 0.13, y: 0.25, mag: 4.5, desc: 'Rho Cassiopeiae is a yellow hypergiant.'},
+          {id: 'sigin', name: 'Segin', x: 0.09, y: 0.18, mag: 3.4, desc: 'Segin is at the other end of the "W".'}
+        ],
+        lines: [
+          [0,1],[1,2],[2,3],[3,4]
+        ]
       }
-      // Render gallery
-      updateGallery(false);
-      // Set current year in footer
-      document.getElementById('current-year').textContent = new Date().getFullYear();
-    }
-    window.addEventListener('DOMContentLoaded', initGallery);
+    ];
 
-    // --- Reduced motion: respect prefers-reduced-motion ---
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.body.classList.add('reduced-motion');
-      // Remove transitions/animations if needed
-      const style = document.createElement('style');
-      style.textContent = `
-        * {
-          transition: none !important;
-          animation: none !important;
-        }
-      `;
-      document.head.appendChild(style);
+    // Render constellations on canvas, and handle keyboard/mouse interaction
+    const canvas = document.getElementById('space-canvas');
+    let ctx = null;
+    let animationId = null;
+    let starMapElements = []; // {type, constellation, starIdx, lineIdx, x, y, r, ...}
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawSpace();
     }
-    // --- Touch target enhancement (pointer cancellation, up-event completion) ---
-    document.querySelectorAll('button, .nav-link, .footer-link, .view-btn').forEach(el => {
-      el.addEventListener('pointerdown', e => {
-        // Only act on pointerup for activation
-        e.preventDefault();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) setMotion(false);
+
+    function drawSpace(staticOnly = false) {
+      if (!ctx) ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw background gradient
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, getComputedStyle(document.documentElement).getPropertyValue('--color-bg-dark').trim());
+      grad.addColorStop(1, getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim());
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw random stars
+      const starCount = Math.max(200, Math.floor(window.innerWidth / 5));
+      for (let i = 0; i < starCount; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const r = Math.random() * 0.7 + 0.5;
+        ctx.globalAlpha = Math.random() * 0.4 + 0.6;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, 2 * Math.PI);
+        ctx.fillStyle = (i % 5 === 0) ? getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() : '#fff';
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      // Draw constellations
+      starMapElements = [];
+      CONSTELLATIONS.forEach((c, ci) => {
+        // Draw lines
+        c.lines.forEach((l, li) => {
+          const [fromIdx, toIdx] = l;
+          const from = c.stars[fromIdx];
+          const to = c.stars[toIdx];
+          const fx = from.x * canvas.width;
+          const fy = from.y * canvas.height;
+          const tx = to.x * canvas.width;
+          const ty = to.y * canvas.height;
+          ctx.save();
+          ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-secondary').trim();
+          ctx.lineWidth = 3.5;
+          ctx.shadowColor = getComputedStyle(document.documentElement).getPropertyValue('--color-tertiary').trim();
+          ctx.shadowBlur = 10;
+          ctx.beginPath();
+          ctx.moveTo(fx, fy);
+          ctx.lineTo(tx, ty);
+          ctx.stroke();
+          ctx.restore();
+          // Store for interaction
+          starMapElements.push({
+            type: 'line',
+            constellation: ci,
+            lineIdx: li,
+            x1: fx, y1: fy, x2: tx, y2: ty,
+            focusable: true
+          });
+        });
+        // Draw stars
+        c.stars.forEach((s, si) => {
+          const sx = s.x * canvas.width;
+          const sy = s.y * canvas.height;
+          let r = Math.max(8, 16 - s.mag * 2);
+          // Animate twinkle if allowed
+          if (allowMotion && !staticOnly) {
+            r += Math.sin(Date.now() / 250 + sx + sy) * 1.2;
+          }
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(sx, sy, r, 0, 2 * Math.PI);
+          ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
+          ctx.shadowColor = getComputedStyle(document.documentElement).getPropertyValue('--color-quaternary').trim();
+          ctx.shadowBlur = 16;
+          ctx.globalAlpha = 0.98;
+          ctx.fill();
+          ctx.restore();
+          // Star outline for focus
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(sx, sy, r+2.5, 0, 2 * Math.PI);
+          ctx.strokeStyle = '#fff';
+          ctx.lineWidth = 2;
+          ctx.globalAlpha = 0.15;
+          ctx.stroke();
+          ctx.restore();
+          // Store for interaction
+          starMapElements.push({
+            type: 'star',
+            constellation: ci,
+            starIdx: si,
+            x: sx,
+            y: sy,
+            r: r + 6, // interaction radius
+            focusable: true
+          });
+        });
       });
-    });
-    // --- Support for multiple input methods (pointer/mouse/keyboard) ---
-    // No drag required; all functions accessible via click/tap/keyboard
+      if (allowMotion && !staticOnly) {
+        animationId = requestAnimationFrame(drawSpace);
+      }
+    }
+    // Initial draw
+    resizeCanvas();
 
-    // --- Ensure all links/buttons have at least 44x44px ---
-    // (Enforced via CSS min-width/min-height)
+    // Keyboard/Mouse Accessible Star Map Overlay
+    // We'll create offscreen buttons for each interactive star/line for AAA accessibility
+    function createStarMapOverlay() {
+      // Remove any existing overlays
+      document.querySelectorAll('.star-map-overlay').forEach(el => el.remove());
+      const overlay = document.createElement('div');
+      overlay.className = 'star-map-overlay';
+      overlay.style.position = 'fixed';
+      overlay.style.inset = '0';
+      overlay.style.pointerEvents = 'none';
+      overlay.style.zIndex = '3';
+      overlay.setAttribute('aria-hidden', 'false');
+      overlay.setAttribute('role', 'presentation');
+      overlay.style.background = 'none';
+      overlay.style.display = 'block';
+      overlay.id = 'star-map-overlay';
 
-    // --- Error prevention/context-sensitive help ---
-    // (Help icons/tooltips and no destructive actions)
+      // Create focusable buttons for stars/lines
+      starMapElements.forEach((el, idx) => {
+        let btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'star-map-btn';
+        btn.style.position = 'absolute';
+        btn.style.pointerEvents = 'auto';
+        btn.style.background = 'transparent';
+        btn.style.border = '2.5px solid transparent';
+        btn.style.borderRadius = '50%';
+        btn.style.minWidth = '44px';
+        btn.style.minHeight = '44px';
+        btn.style.width = '44px';
+        btn.style.height = '44px';
+        btn.style.outline = 'none';
+        btn.style.transition = 'border-color 0.2s, box-shadow 0.2s';
+        btn.setAttribute('tabindex', '0');
+        btn.setAttribute('aria-haspopup', 'dialog');
+        btn.setAttribute('aria-label', '');
+        btn.setAttribute('aria-describedby', 'constellation-map-desc');
+        btn.setAttribute('data-idx', idx);
 
-    // --- No timing, interruptions, or authentication required ---
+        if (el.type === 'star') {
+          btn.style.left = (el.x - 22) + 'px';
+          btn.style.top = (el.y - 22) + 'px';
+          btn.setAttribute('aria-label', CONSTELLATIONS[el.constellation].stars[el.starIdx].name + ' in ' + CONSTELLATIONS[el.constellation].name + ', star');
+        } else if (el.type === 'line') {
+          // Place at midpoint of line, make elliptical
+          const mx = (el.x1 + el.x2) / 2 - 22;
+          const my = (el.y1 + el.y2) / 2 - 22;
+          btn.style.left = mx + 'px';
+          btn.style.top = my + 'px';
+          btn.style.borderRadius = '40%';
+          btn.setAttribute('aria-label', CONSTELLATIONS[el.constellation].name + ' constellation line');
+        }
+        // Focus/hover indicator
+        btn.addEventListener('focus', function() {
+          btn.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--color-focus');
+          btn.style.boxShadow = '0 0 0 3px ' + getComputedStyle(document.documentElement).getPropertyValue('--color-secondary');
+        });
+        btn.addEventListener('blur', function() {
+          btn.style.borderColor = 'transparent';
+          btn.style.boxShadow = 'none';
+        });
+        // Open modal on click/keyboard
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          showConstellationInfo(el);
+        });
+        btn.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            showConstellationInfo(el);
+          }
+        });
+        overlay.appendChild(btn);
+      });
+      document.body.appendChild(overlay);
+    }
+    // Recreate overlay after resize or redraw
+    window.addEventListener('resize', () => setTimeout(createStarMapOverlay, 300));
+    setTimeout(createStarMapOverlay, 400);
 
-    // --- Pronunciation example for ambiguous word (none present, but here's a pattern) ---
-    // <span lang="en" aria-label="read as 'lead', like the metal">lead</span>
-
-    // --- ARIA state management for checkboxes ---
-    document.addEventListener('change', function(e) {
-      if (e.target.classList.contains('category-checkbox')) {
-        e.target.setAttribute('aria-checked', e.target.checked ? 'true' : 'false');
+    // Modal dialog for constellation/star info
+    const modal = document.getElementById('constellation-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-desc');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    let untrap = null;
+    function showConstellationInfo(el) {
+      modal.setAttribute('aria-hidden', 'false');
+      modal.style.display = 'flex';
+      let title = '';
+      let desc = '';
+      if (el.type === 'star') {
+        const c = CONSTELLATIONS[el.constellation];
+        const s = c.stars[el.starIdx];
+        title = s.name + ' (' + c.name + ')';
+        desc = `<strong>${s.name}</strong> is a star in the <strong>${c.name}</strong> constellation.<br>${s.desc}`;
+      } else if (el.type === 'line') {
+        const c = CONSTELLATIONS[el.constellation];
+        title = c.name + ' (Constellation)';
+        desc = `<strong>${c.name}</strong>: ${c.description}`;
+      }
+      modalTitle.textContent = title;
+      modalDesc.innerHTML = desc;
+      modal.querySelector('.modal-dialog').focus();
+      document.body.style.overflow = 'hidden';
+      untrap = trapFocus(modal.querySelector('.modal-dialog'));
+    }
+    function closeModal() {
+      modal.setAttribute('aria-hidden', 'true');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+      if (untrap) untrap();
+      // Return focus to last focused star/line
+      const overlay = document.getElementById('star-map-overlay');
+      if (overlay && overlay.lastActiveBtn) {
+        overlay.lastActiveBtn.focus();
+      }
+    }
+    modalCloseBtn.addEventListener('click', closeModal);
+    modal.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeModal();
       }
     });
+    // Keep track of last active button for focus return
+    document.body.addEventListener('mousedown', function(e) {
+      const overlay = document.getElementById('star-map-overlay');
+      if (overlay && overlay.contains(e.target) && e.target.classList.contains('star-map-btn')) {
+        overlay.lastActiveBtn = e.target;
+      }
+    });
+    document.body.addEventListener('keydown', function(e) {
+      const overlay = document.getElementById('star-map-overlay');
+      if (overlay && document.activeElement && overlay.contains(document.activeElement) && document.activeElement.classList.contains('star-map-btn')) {
+        overlay.lastActiveBtn = document.activeElement;
+      }
+    });
+
+    // Redraw overlay on theme/motion change
+    for (const btn of Object.values(themeBtns)) {
+      btn.addEventListener('click', () => setTimeout(() => { drawSpace(); createStarMapOverlay(); }, 200));
+    }
+    for (const btn of Object.values(motionBtns)) {
+      btn.addEventListener('click', () => setTimeout(() => { drawSpace(); createStarMapOverlay(); }, 200));
+    }
+
+    // --- Planet Gallery ---
+    const PLANETS = [
+      {
+        name: 'Mercury',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg',
+        alt: 'True color image of Mercury, a gray rocky planet',
+        fact: 'Mercury is the smallest planet and closest to the Sun.',
+      },
+      {
+        name: 'Venus',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg',
+        alt: 'Image of Venus, a pale yellowish planet with thick clouds',
+        fact: 'Venus is the hottest planet in the solar system.',
+      },
+      {
+        name: 'Earth',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg',
+        alt: 'Photo of Earth from space, blue oceans and white clouds visible',
+        fact: 'Earth is the only planet known to support life.',
+      },
+      {
+        name: 'Mars',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg',
+        alt: 'Image of Mars, a reddish planet with visible surface features',
+        fact: 'Mars is known as the Red Planet.',
+      },
+      {
+        name: 'Jupiter',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg',
+        alt: 'Image of Jupiter, a large striped planet with the Great Red Spot',
+        fact: 'Jupiter is the largest planet in our solar system.',
+      },
+      {
+        name: 'Saturn',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg',
+        alt: 'Image of Saturn with its iconic rings clearly visible',
+        fact: 'Saturn is famous for its beautiful rings.',
+      },
+      {
+        name: 'Uranus',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg',
+        alt: 'Image of Uranus, a pale blue-green planet',
+        fact: 'Uranus rotates on its side compared to other planets.',
+      },
+      {
+        name: 'Neptune',
+        img: 'https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg',
+        alt: 'Image of Neptune, a deep blue planet',
+        fact: 'Neptune has the strongest winds in the solar system.',
+      }
+    ];
+    const gallery = document.getElementById('planet-gallery');
+    const galleryPrev = document.getElementById('gallery-prev');
+    const galleryNext = document.getElementById('gallery-next');
+    let galleryIndex = 0;
+    function renderGallery() {
+      gallery.innerHTML = '';
+      PLANETS.forEach((planet, idx) => {
+        const card = document.createElement('div');
+        card.className = 'planet-card';
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'option');
+        card.setAttribute('aria-label', planet.name + ' planet card');
+        card.setAttribute('aria-selected', idx === galleryIndex ? 'true' : 'false');
+        const img = document.createElement('img');
+        img.src = planet.img;
+        img.alt = planet.alt;
+        img.className = 'planet-img';
+        img.width = 88;
+        img.height = 88;
+        img.setAttribute('aria-describedby', 'planet-fact-' + idx);
+        card.appendChild(img);
+        const name = document.createElement('div');
+        name.className = 'planet-name';
+        name.textContent = planet.name;
+        card.appendChild(name);
+        const fact = document.createElement('div');
+        fact.className = 'planet-fact';
+        fact.textContent = planet.fact;
+        fact.id = 'planet-fact-' + idx;
+        card.appendChild(fact);
+        gallery.appendChild(card);
+      });
+      // Scroll to current index
+      const cardEls = gallery.querySelectorAll('.planet-card');
+      if (cardEls[galleryIndex]) {
+        cardEls[galleryIndex].focus();
+        cardEls[galleryIndex].setAttribute('aria-selected', 'true');
+        cardEls.forEach((el, idx) => {
+          if (idx !== galleryIndex) el.setAttribute('aria-selected', 'false');
+        });
+        // Scroll so card is visible
+        const cardRect = cardEls[galleryIndex].getBoundingClientRect();
+        const galleryRect = gallery.getBoundingClientRect();
+        if (cardRect.left < galleryRect.left || cardRect.right > galleryRect.right) {
+          gallery.scrollLeft = cardEls[galleryIndex].offsetLeft - 20;
+        }
+      }
+      // Disable/enable controls
+      galleryPrev.setAttribute('aria-disabled', galleryIndex === 0 ? 'true' : 'false');
+      galleryNext.setAttribute('aria-disabled', galleryIndex === PLANETS.length - 1 ? 'true' : 'false');
+    }
+    renderGallery();
+
+    galleryPrev.addEventListener('click', () => {
+      if (galleryIndex > 0) {
+        galleryIndex--;
+        renderGallery();
+      }
+    });
+    galleryNext.addEventListener('click', () => {
+      if (galleryIndex < PLANETS.length - 1) {
+        galleryIndex++;
+        renderGallery();
+      }
+    });
+    // Keyboard navigation for gallery
+    gallery.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowRight') {
+        if (galleryIndex < PLANETS.length - 1) {
+          galleryIndex++;
+          renderGallery();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (galleryIndex > 0) {
+          galleryIndex--;
+          renderGallery();
+        }
+      }
+    });
+    // Card focus via tab
+    gallery.addEventListener('focusin', function(e) {
+      const idx = Array.from(gallery.children).indexOf(document.activeElement);
+      if (idx >= 0) {
+        galleryIndex = idx;
+        renderGallery();
+      }
+    });
+    // Touch swipe for gallery (AAA: multiple input)
+    let startX = null;
+    gallery.addEventListener('touchstart', function(e) {
+      if (e.touches.length === 1) startX = e.touches[0].clientX;
+    });
+    gallery.addEventListener('touchend', function(e) {
+      if (startX !== null && e.changedTouches.length === 1) {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 30) {
+          if (dx < 0 && galleryIndex < PLANETS.length - 1) {
+            galleryIndex++;
+            renderGallery();
+          } else if (dx > 0 && galleryIndex > 0) {
+            galleryIndex--;
+            renderGallery();
+          }
+        }
+      }
+      startX = null;
+    });
+
+    // --- Search Functionality ---
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    function searchTopics(q) {
+      q = q.trim().toLowerCase();
+      let results = [];
+      // Planets
+      PLANETS.forEach(p => {
+        if (p.name.toLowerCase().includes(q) || p.fact.toLowerCase().includes(q)) {
+          results.push(`<strong>${p.name}</strong>: ${p.fact}`);
+        }
+      });
+      // Constellations
+      CONSTELLATIONS.forEach(c => {
+        if (c.name.toLowerCase().includes(q) || c.description.toLowerCase().includes(q)) {
+          results.push(`<strong>${c.name}</strong>: ${c.description}`);
+        }
+        c.stars.forEach(s => {
+          if (s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q)) {
+            results.push(`<strong>${s.name}</strong> in <strong>${c.name}</strong>: ${s.desc}`);
+          }
+        });
+      });
+      return results;
+    }
+    searchForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const q = searchInput.value;
+      if (!q.trim()) {
+        searchResults.innerHTML = 'Please enter a search term.';
+        return;
+      }
+      const results = searchTopics(q);
+      if (results.length === 0) {
+        searchResults.innerHTML = 'No results found for <strong>' + q + '</strong>. Try a planet or constellation name.';
+      } else {
+        searchResults.innerHTML = '<ul>' + results.map(r => `<li>${r}</li>`).join('') + '</ul>';
+      }
+    });
+
+    // --- Accessibility: Focus management, AAA ---
+    // Enhanced focus indicators already in CSS
+    // No keyboard trap except in modal (focus trap)
+    // Logical tab order: skip links, nav, main, sections, footer
+
+    // --- End of script ---
   </script>
 </body>
 </html>
