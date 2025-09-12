@@ -3,23 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Portfolio - Showcase of Personal Projects</title>
+    <title>Community Recipe Exchange - Share and Discover Recipes</title>
     <style>
-        /* CSS Reset and Base Styles */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        /* Base Styles with Enhanced Accessibility */
+        :root {
+            --primary-color: #2b6cb0;
+            --primary-dark: #1a4971;
+            --secondary-color: #38a169;
+            --secondary-dark: #276749;
+            --accent-color: #d69e2e;
+            --accent-dark: #975a16;
+            --text-color: #1a202c;
+            --text-light: #4a5568;
+            --background-color: #f7fafc;
+            --background-alt: #edf2f7;
+            --error-color: #e53e3e;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --border-color: #cbd5e0;
+            --focus-color: #4299e1;
+            --focus-outline: 3px solid #4299e1;
         }
 
-        /* Enhanced Focus Styles for AAA compliance */
-        :focus {
-            outline: 3px solid #2563eb;
-            outline-offset: 2px;
-            box-shadow: 0 0 0 2px #fff;
-        }
-
-        /* Respect user's motion preferences */
+        /* Respect user preferences for reduced motion */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.001ms !important;
@@ -29,66 +35,89 @@
             }
         }
 
-        html {
-            font-size: 100%;
-            scroll-behavior: smooth;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
-            color: #0f172a;
-            background-color: #f8fafc;
+            color: var(--text-color);
+            background-color: var(--background-color);
             padding: 0;
             margin: 0;
             min-height: 100vh;
         }
 
-        /* Typography with enhanced contrast for AAA compliance */
+        /* Enhanced Typography for AAA Compliance */
+        p, li, td, th, label, input, textarea, select, button {
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 80ch; /* Maximum 80 characters per line */
+        }
+
         h1, h2, h3, h4, h5, h6 {
+            margin-top: 1.5em;
             margin-bottom: 0.75em;
-            line-height: 1.2;
+            line-height: 1.3;
+            color: var(--text-color);
             font-weight: 700;
-            color: #0f172a;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-top: 0;
+            font-size: 2.25rem;
+            margin-top: 0.5em;
         }
 
         h2 {
-            font-size: 2rem;
-            margin-top: 1.5rem;
+            font-size: 1.8rem;
         }
 
         h3 {
             font-size: 1.5rem;
-            margin-top: 1.25rem;
         }
 
-        p, ul, ol {
-            margin-bottom: 1.5rem;
-            max-width: 70ch; /* For optimal reading length */
+        h4 {
+            font-size: 1.25rem;
         }
 
-        /* Skip link for keyboard users */
+        p {
+            margin-bottom: 1.5em; /* Paragraph spacing at least 1.5 times line spacing */
+        }
+
+        /* Enhanced Focus Styles for AAA Compliance */
+        a:focus, button:focus, input:focus, textarea:focus, select:focus, [tabindex]:focus {
+            outline: var(--focus-outline);
+            outline-offset: 2px;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+            border-radius: 2px;
+            z-index: 1;
+            position: relative;
+        }
+
+        /* Skip Link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background: #2563eb;
+            background: var(--primary-color);
             color: white;
-            padding: 8px;
+            padding: 8px 16px;
             z-index: 100;
-            transition: top 0.3s;
+            transition: top 0.2s;
+            font-weight: bold;
+            border-radius: 0 0 4px 0;
         }
 
         .skip-link:focus {
             top: 0;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
         }
 
-        /* Layout Components */
+        /* Container */
         .container {
             width: 100%;
             max-width: 1200px;
@@ -96,288 +125,249 @@
             padding: 0 1.5rem;
         }
 
+        /* Header */
         header {
-            background-color: #1e293b;
+            background-color: var(--primary-color);
             color: white;
             padding: 1.5rem 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .header-content {
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
+            justify-content: space-between;
             gap: 1rem;
         }
 
-        .logo {
-            font-size: 1.75rem;
-            font-weight: 700;
+        .site-title {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .site-title a {
             color: white;
             text-decoration: none;
         }
 
-        /* Navigation Styles */
-        nav ul {
+        .site-description {
+            font-size: 1.1rem;
+            margin: 0.5rem 0 0;
+            font-weight: normal;
+        }
+
+        /* Navigation */
+        nav {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .nav-list {
             display: flex;
             list-style: none;
             gap: 1.5rem;
-            margin: 0;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        nav a {
-            color: #e2e8f0;
+        .nav-list li a {
+            color: white;
             text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
             border-radius: 4px;
             transition: background-color 0.3s;
         }
 
-        nav a:hover, nav a:focus {
-            background-color: #334155;
+        .nav-list li a:hover,
+        .nav-list li a:focus {
+            background-color: var(--primary-dark);
             text-decoration: underline;
         }
 
-        /* Main Content Area */
+        /* Main Content */
         main {
             padding: 2rem 0;
+            min-height: 70vh;
         }
 
-        .hero {
-            background-color: #0f172a;
-            color: white;
-            padding: 4rem 0;
-            margin-bottom: 3rem;
+        .section-title {
             text-align: center;
-        }
-
-        .hero h1 {
-            color: white;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-        }
-
-        /* Filter Controls */
-        .filter-controls {
             margin-bottom: 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: center;
+            color: var(--primary-color);
         }
 
-        .filter-label {
-            font-weight: 600;
-            margin-right: 0.5rem;
-        }
-
-        .filter-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-        }
-
-        .filter-button {
-            background-color: #e2e8f0;
-            color: #0f172a;
-            border: 2px solid #cbd5e1;
-            border-radius: 30px;
-            padding: 0.5rem 1.25rem;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            min-height: 44px;
-            min-width: 44px;
-            transition: all 0.3s;
-        }
-
-        .filter-button:hover, .filter-button:focus {
-            background-color: #cbd5e1;
-        }
-
-        .filter-button.active {
-            background-color: #2563eb;
-            color: white;
-            border-color: #2563eb;
-        }
-
-        /* Project Grid */
-        .projects-grid {
+        /* Recipe Cards */
+        .recipe-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
+            margin-top: 2rem;
         }
 
-        .project-card {
+        .recipe-card {
             background-color: white;
             border-radius: 8px;
-            overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
             position: relative;
             display: flex;
             flex-direction: column;
+            height: 100%;
         }
 
-        .project-card:hover, .project-card:focus-within {
+        .recipe-card:hover,
+        .recipe-card:focus-within {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .project-image {
+        .recipe-card-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
 
-        .project-content {
+        .recipe-card-content {
             padding: 1.5rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
 
-        .project-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
+        .recipe-card-title {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 0.75rem;
+            color: var(--primary-color);
         }
 
-        .project-category {
-            display: inline-block;
-            background-color: #e2e8f0;
-            color: #0f172a;
-            padding: 0.25rem 0.75rem;
-            border-radius: 30px;
-            font-size: 0.875rem;
+        .recipe-card-meta {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
         }
 
-        .project-description {
+        .recipe-card-description {
             margin-bottom: 1.5rem;
-            flex-grow: 1;
         }
 
-        .project-link {
-            display: inline-flex;
-            align-items: center;
-            background-color: #2563eb;
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            font-weight: 500;
+        .recipe-card-footer {
             margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .recipe-card-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recipe-card-rating-stars {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .recipe-card-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
             min-height: 44px;
             min-width: 44px;
-            justify-content: center;
-            transition: background-color 0.3s;
         }
 
-        .project-link:hover, .project-link:focus {
-            background-color: #1d4ed8;
-            text-decoration: underline;
+        .recipe-card-button:hover,
+        .recipe-card-button:focus {
+            background-color: var(--primary-dark);
         }
 
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.75);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
-            background-color: white;
-            border-radius: 8px;
-            max-width: 800px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
+        /* Search Section */
+        .search-section {
+            background-color: var(--background-alt);
             padding: 2rem;
-            position: relative;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 3rem;
         }
 
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
+        .search-form {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background-color: #e2e8f0;
-            color: #0f172a;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .modal-close:hover, .modal-close:focus {
-            background-color: #cbd5e1;
-        }
-
-        .modal-image {
-            width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-content h3 {
-            margin-top: 0;
-        }
-
-        .modal-meta {
+        .search-row {
             display: flex;
             gap: 1rem;
-            margin-bottom: 1.5rem;
             flex-wrap: wrap;
         }
 
-        .modal-category, .modal-date {
-            background-color: #e2e8f0;
-            padding: 0.25rem 0.75rem;
-            border-radius: 30px;
-            font-size: 0.875rem;
+        .search-group {
+            flex: 1;
+            min-width: 250px;
         }
 
-        /* Contact Section */
-        .contact-section {
-            background-color: #e2e8f0;
-            padding: 4rem 0;
-            margin-top: 3rem;
+        .search-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
         }
 
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
+        .search-input,
+        .search-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            min-height: 44px;
+        }
+
+        .search-input:focus,
+        .search-select:focus {
+            border-color: var(--focus-color);
+        }
+
+        .search-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            min-height: 44px;
+            min-width: 44px;
+            margin-top: 1rem;
+            align-self: flex-start;
+        }
+
+        .search-button:hover,
+        .search-button:focus {
+            background-color: var(--secondary-dark);
+        }
+
+        /* Add Recipe Form */
+        .add-recipe-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
         }
 
         .form-group {
@@ -390,17 +380,15 @@
             font-weight: 600;
         }
 
-        .form-input, .form-textarea {
+        .form-input,
+        .form-textarea,
+        .form-select {
             width: 100%;
             padding: 0.75rem;
-            border: 2px solid #cbd5e1;
+            border: 2px solid var(--border-color);
             border-radius: 4px;
             font-size: 1rem;
-            font-family: inherit;
-        }
-
-        .form-input:focus, .form-textarea:focus {
-            border-color: #2563eb;
+            min-height: 44px;
         }
 
         .form-textarea {
@@ -408,78 +396,339 @@
             resize: vertical;
         }
 
-        .form-submit {
-            background-color: #2563eb;
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            border-color: var(--focus-color);
+        }
+
+        .form-hint {
+            display: block;
+            margin-top: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .form-error {
+            color: var(--error-color);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .required-field::after {
+            content: "*";
+            color: var(--error-color);
+            margin-left: 0.25rem;
+        }
+
+        .form-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .form-button:hover,
+        .form-button:focus {
+            background-color: var(--primary-dark);
+        }
+
+        .form-button.secondary {
+            background-color: var(--text-light);
+        }
+
+        .form-button.secondary:hover,
+        .form-button.secondary:focus {
+            background-color: var(--text-color);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Ingredients List in Form */
+        .ingredients-list {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .ingredient-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            background-color: var(--background-alt);
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+
+        .ingredient-text {
+            flex-grow: 1;
+        }
+
+        .remove-ingredient {
+            background-color: var(--error-color);
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 500;
+            width: 44px;
+            height: 44px;
             cursor: pointer;
-            min-height: 44px;
-            min-width: 44px;
-            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0.5rem;
         }
 
-        .form-submit:hover, .form-submit:focus {
-            background-color: #1d4ed8;
+        .remove-ingredient:hover,
+        .remove-ingredient:focus {
+            background-color: #c53030;
         }
 
-        .error-message {
-            color: #dc2626;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-            display: none;
+        .add-ingredient-row {
+            display: flex;
+            gap: 1rem;
         }
 
-        .form-input.error, .form-textarea.error {
-            border-color: #dc2626;
+        .add-ingredient-input {
+            flex-grow: 1;
+        }
+
+        /* Recipe Detail Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            background-color: var(--background-alt);
+            color: var(--text-color);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .recipe-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .recipe-section {
+            margin-bottom: 2rem;
+        }
+
+        .recipe-section-title {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .ingredients-list,
+        .instructions-list {
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ingredients-list li,
+        .instructions-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .recipe-rating-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .rating-star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #d1d5db;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rating-star.active {
+            color: var(--accent-color);
+        }
+
+        .rating-star:hover,
+        .rating-star:focus {
+            color: var(--accent-dark);
         }
 
         /* Footer */
         footer {
-            background-color: #1e293b;
+            background-color: var(--text-color);
             color: white;
             padding: 2rem 0;
-            text-align: center;
+            margin-top: 3rem;
         }
 
         .footer-content {
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
             gap: 1.5rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            list-style: none;
-            margin: 0;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
             justify-content: center;
-            width: 44px;
-            height: 44px;
-            background-color: #334155;
+        }
+
+        .footer-links a {
             color: white;
-            border-radius: 50%;
             text-decoration: none;
-            transition: background-color 0.3s;
         }
 
-        .social-link:hover, .social-link:focus {
-            background-color: #475569;
+        .footer-links a:hover,
+        .footer-links a:focus {
+            text-decoration: underline;
         }
 
-        .copyright {
+        .footer-copyright {
             margin-top: 1rem;
-            font-size: 0.875rem;
-            color: #cbd5e1;
+            font-size: 0.9rem;
+            color: #a0aec0;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            background-color: var(--success-color);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-width: 300px;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.error {
+            background-color: var(--error-color);
+        }
+
+        .notification.warning {
+            background-color: var(--warning-color);
+        }
+
+        /* Responsive Styles */
+        @media (min-width: 768px) {
+            .header-content {
+                flex-direction: row;
+            }
+
+            nav {
+                width: auto;
+                margin-top: 0;
+            }
+
+            .search-form {
+                flex-direction: row;
+                align-items: flex-end;
+            }
+
+            .search-button {
+                margin-top: 0;
+            }
         }
 
         /* Accessibility Enhancements */
@@ -492,663 +741,1056 @@
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
             white-space: nowrap;
-            border: 0;
+            border-width: 0;
         }
 
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            nav ul {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-        }
-
-        /* Loading State */
+        /* Loading Indicator */
         .loading {
-            display: none;
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
         }
 
-        .loading.active {
-            display: block;
+        .loading::after {
+            content: "...";
+            animation: loading-dots 1.5s infinite;
         }
 
-        .spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 5px solid #e2e8f0;
-            border-radius: 50%;
-            border-top-color: #2563eb;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
+        @keyframes loading-dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
         }
 
         /* No Results Message */
         .no-results {
             text-align: center;
             padding: 2rem;
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+
+        /* Tab Navigation for Recipe Detail */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .tab-button:hover,
+        .tab-button:focus {
+            background-color: var(--background-alt);
+        }
+
+        .tab-button.active {
+            border-bottom-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .tab-content {
             display: none;
         }
 
-        .no-results.active {
+        .tab-content.active {
             display: block;
         }
 
-        /* Status Messages for Screen Readers */
-        .sr-status {
-            position: absolute;
-            width: 1px;
-            height: 1px;
+        /* Filter Tags */
+        .filter-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .filter-tag {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .remove-tag {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
             padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
+            border-radius: 50%;
+        }
+
+        .remove-tag:hover,
+        .remove-tag:focus {
+            background-color: rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
-    <a href="#main" class="skip-link">Skip to main content</a>
-    
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <header>
         <div class="container header-content">
-            <a href="#" class="logo" aria-label="Creative Portfolio Home">Creative Portfolio</a>
-            <nav aria-label="Main Navigation">
-                <ul>
-                    <li><a href="#projects" aria-current="page">Projects</a></li>
+            <div>
+                <h1 class="site-title"><a href="#">Community Recipe Exchange</a></h1>
+                <p class="site-description">Share, discover, and enjoy delicious recipes</p>
+            </div>
+            <nav aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li><a href="#" aria-current="page">Home</a></li>
+                    <li><a href="#add-recipe">Add Recipe</a></li>
+                    <li><a href="#search-recipes">Search Recipes</a></li>
                     <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <main id="main">
-        <section class="hero">
-            <div class="container">
-                <h1>Creative Portfolio</h1>
-                <p>Explore my collection of creative projects spanning design, photography, and digital art. Each project represents a unique exploration of ideas and techniques.</p>
-            </div>
-        </section>
-
-        <section id="projects" class="container">
-            <h2>Featured Projects</h2>
-            <p>Browse through my latest work and filter by category to find specific types of projects.</p>
-            
-            <div class="filter-controls" role="group" aria-labelledby="filter-label">
-                <span id="filter-label" class="filter-label">Filter by:</span>
-                <div class="filter-buttons">
-                    <button class="filter-button active" data-filter="all" aria-pressed="true">All Projects</button>
-                    <button class="filter-button" data-filter="design" aria-pressed="false">Design</button>
-                    <button class="filter-button" data-filter="photography" aria-pressed="false">Photography</button>
-                    <button class="filter-button" data-filter="art" aria-pressed="false">Digital Art</button>
-                </div>
-            </div>
-            
-            <div aria-live="polite" class="sr-status" id="filter-status"></div>
-            
-            <div class="loading" id="loading" aria-hidden="true">
-                <div class="spinner" aria-hidden="true"></div>
-                <p>Loading projects...</p>
-            </div>
-            
-            <div class="no-results" id="no-results">
-                <h3>No Projects Found</h3>
-                <p>No projects match your current filter selection. Please try another category.</p>
-            </div>
-            
-            <div class="projects-grid" id="projects-grid">
-                <!-- Project 1 -->
-                <article class="project-card" data-category="design">
-                    <img src="https://via.placeholder.com/600x400/0f172a/ffffff?text=Brand+Identity" alt="Brand identity design showing logo variations and color palette" class="project-image">
-                    <div class="project-content">
-                        <h3 class="project-title">Brand Identity System</h3>
-                        <span class="project-category">Design</span>
-                        <p class="project-description">A comprehensive brand identity system for a sustainable fashion company, including logo design, typography, and color palette.</p>
-                        <button class="project-link" aria-haspopup="dialog" data-project-id="1">View Project Details</button>
+    <main id="main-content">
+        <div class="container">
+            <section id="search-recipes" class="search-section" aria-labelledby="search-heading">
+                <h2 id="search-heading" class="section-title">Find Recipes</h2>
+                <form id="search-form" class="search-form" aria-label="Recipe search form">
+                    <div class="search-row">
+                        <div class="search-group">
+                            <label for="search-term" class="search-label">Recipe Name</label>
+                            <input type="text" id="search-term" class="search-input" placeholder="Enter recipe name..." aria-describedby="search-term-hint">
+                            <span id="search-term-hint" class="form-hint">Search by recipe title or description</span>
+                        </div>
+                        <div class="search-group">
+                            <label for="search-ingredient" class="search-label">Ingredient</label>
+                            <input type="text" id="search-ingredient" class="search-input" placeholder="Enter ingredient..." aria-describedby="search-ingredient-hint">
+                            <span id="search-ingredient-hint" class="form-hint">Search recipes containing this ingredient</span>
+                        </div>
+                        <div class="search-group">
+                            <label for="search-category" class="search-label">Category</label>
+                            <select id="search-category" class="search-select" aria-describedby="search-category-hint">
+                                <option value="">All Categories</option>
+                                <option value="breakfast">Breakfast</option>
+                                <option value="lunch">Lunch</option>
+                                <option value="dinner">Dinner</option>
+                                <option value="dessert">Dessert</option>
+                                <option value="snack">Snack</option>
+                                <option value="vegetarian">Vegetarian</option>
+                                <option value="vegan">Vegan</option>
+                            </select>
+                            <span id="search-category-hint" class="form-hint">Filter by recipe category</span>
+                        </div>
                     </div>
-                </article>
-                
-                <!-- Project 2 -->
-                <article class="project-card" data-category="photography">
-                    <img src="https://via.placeholder.com/600x400/1e293b/ffffff?text=Urban+Photography" alt="Black and white urban landscape photograph showing city architecture" class="project-image">
-                    <div class="project-content">
-                        <h3 class="project-title">Urban Landscapes</h3>
-                        <span class="project-category">Photography</span>
-                        <p class="project-description">A series of black and white photographs exploring the geometry and patterns of modern urban architecture.</p>
-                        <button class="project-link" aria-haspopup="dialog" data-project-id="2">View Project Details</button>
-                    </div>
-                </article>
-                
-                <!-- Project 3 -->
-                <article class="project-card" data-category="art">
-                    <img src="https://via.placeholder.com/600x400/2563eb/ffffff?text=Digital+Illustration" alt="Colorful digital illustration of an abstract landscape" class="project-image">
-                    <div class="project-content">
-                        <h3 class="project-title">Abstract Dreamscapes</h3>
-                        <span class="project-category">Digital Art</span>
-                        <p class="project-description">A collection of digital illustrations exploring surreal landscapes and dreamlike environments using vibrant colors.</p>
-                        <button class="project-link" aria-haspopup="dialog" data-project-id="3">View Project Details</button>
-                    </div>
-                </article>
-                
-                <!-- Project 4 -->
-                <article class="project-card" data-category="design">
-                    <img src="https://via.placeholder.com/600x400/334155/ffffff?text=UI+Design" alt="Mobile app interface design showing multiple screens" class="project-image">
-                    <div class="project-content">
-                        <h3 class="project-title">Health App UI Design</h3>
-                        <span class="project-category">Design</span>
-                        <p class="project-description">User interface design for a health tracking mobile application with a focus on accessibility and intuitive navigation.</p>
-                        <button class="project-link" aria-haspopup="dialog" data-project-id="4">View Project Details</button>
-                    </div>
-                </article>
-                
-                <!-- Project 5 -->
-                <article class="project-card" data-category="photography">
-                    <img src="https://via.placeholder.com/600x400/475569/ffffff?text=Nature+Photography" alt="Close-up nature photograph of dewdrops on a leaf" class="project-image">
-                    <div class="project-content">
-                        <h3 class="project-title">Macro Nature</h3>
-                        <span class="project-category">Photography</span>
-                        <p class="project-description">Macro photography series capturing the intricate details of plants, insects, and natural textures.</p>
-                        <button class="project-link" aria-haspopup="dialog" data-project-id="5">View Project Details</button>
-                    </div>
-                </article>
-                
-                <!-- Project 6 -->
-                <article class="project-card" data-category="art">
-                    <img src="https://via.placeholder.com/600x400/64748b/ffffff?text=3D+Rendering" alt="3D rendered scene of a futuristic interior space" class="project-image">
-                    <div class="project-content">
-                        <h3 class="project-title">Future Habitats</h3>
-                        <span class="project-category">Digital Art</span>
-                        <p class="project-description">3D rendered environments exploring concepts of future living spaces and sustainable architecture.</p>
-                        <button class="project-link" aria-haspopup="dialog" data-project-id="6">View Project Details</button>
-                    </div>
-                </article>
-            </div>
-        </section>
-        
-        <section id="about" class="container">
-            <h2>About Me</h2>
-            <p>I'm a multidisciplinary creative with a passion for visual storytelling and innovative design. With over 8 years of experience across various creative fields, I focus on creating meaningful and impactful work that connects with audiences.</p>
-            <p>My approach combines technical expertise with artistic vision, allowing me to tackle projects from multiple perspectives. Whether designing brand identities, capturing compelling photographs, or creating digital artwork, I bring a unique blend of skills to every project.</p>
-            <p>I'm constantly exploring new techniques and mediums to expand my creative toolkit and push the boundaries of my work.</p>
-        </section>
-        
-        <section id="contact" class="contact-section">
-            <div class="container">
-                <h2>Get In Touch</h2>
-                <p>Interested in working together or have questions about my projects? Fill out the form below and I'll get back to you as soon as possible.</p>
-                
-                <form class="contact-form" id="contact-form" novalidate>
-                    <div class="form-group">
-                        <label for="name" class="form-label">Name <span aria-hidden="true">*</span><span class="visually-hidden">(required)</span></label>
-                        <input type="text" id="name" name="name" class="form-input" required aria-required="true" aria-describedby="name-error">
-                        <div id="name-error" class="error-message" aria-live="polite"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email" class="form-label">Email <span aria-hidden="true">*</span><span class="visually-hidden">(required)</span></label>
-                        <input type="email" id="email" name="email" class="form-input" required aria-required="true" aria-describedby="email-error" autocomplete="email">
-                        <div id="email-error" class="error-message" aria-live="polite"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="subject" class="form-label">Subject</label>
-                        <input type="text" id="subject" name="subject" class="form-input">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message" class="form-label">Message <span aria-hidden="true">*</span><span class="visually-hidden">(required)</span></label>
-                        <textarea id="message" name="message" class="form-textarea" required aria-required="true" aria-describedby="message-error"></textarea>
-                        <div id="message-error" class="error-message" aria-live="polite"></div>
-                    </div>
-                    
-                    <button type="submit" class="form-submit">Send Message</button>
+                    <button type="submit" class="search-button" id="search-button">
+                        Search Recipes
+                    </button>
                 </form>
-            </div>
-        </section>
+
+                <div id="filter-tags" class="filter-tags" aria-live="polite"></div>
+            </section>
+
+            <section id="recipe-results" aria-labelledby="results-heading">
+                <h2 id="results-heading" class="section-title">Featured Recipes</h2>
+                <div id="recipe-grid" class="recipe-grid" aria-live="polite">
+                    <!-- Recipe cards will be dynamically inserted here -->
+                </div>
+                <div id="no-results" class="no-results" style="display: none;">
+                    <p>No recipes found matching your search criteria. Try different search terms or <a href="#add-recipe">add your own recipe</a>!</p>
+                </div>
+                <div id="loading" class="loading" style="display: none;">
+                    Loading recipes<span class="visually-hidden"> please wait</span>
+                </div>
+            </section>
+
+            <section id="add-recipe" class="add-recipe-section" aria-labelledby="add-recipe-heading">
+                <h2 id="add-recipe-heading" class="section-title">Share Your Recipe</h2>
+                <form id="recipe-form" aria-label="Recipe submission form">
+                    <div class="form-group">
+                        <label for="recipe-title" class="form-label required-field">Recipe Title</label>
+                        <input type="text" id="recipe-title" name="title" class="form-input" required aria-describedby="title-hint title-error" aria-required="true">
+                        <span id="title-hint" class="form-hint">Enter a descriptive title for your recipe</span>
+                        <span id="title-error" class="form-error" role="alert" aria-live="assertive"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipe-description" class="form-label required-field">Description</label>
+                        <textarea id="recipe-description" name="description" class="form-textarea" required aria-describedby="description-hint description-error" aria-required="true"></textarea>
+                        <span id="description-hint" class="form-hint">Briefly describe your recipe (history, flavor profile, etc.)</span>
+                        <span id="description-error" class="form-error" role="alert" aria-live="assertive"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipe-category" class="form-label required-field">Category</label>
+                        <select id="recipe-category" name="category" class="form-select" required aria-describedby="category-hint category-error" aria-required="true">
+                            <option value="">Select a category</option>
+                            <option value="breakfast">Breakfast</option>
+                            <option value="lunch">Lunch</option>
+                            <option value="dinner">Dinner</option>
+                            <option value="dessert">Dessert</option>
+                            <option value="snack">Snack</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                        </select>
+                        <span id="category-hint" class="form-hint">Choose the category that best fits your recipe</span>
+                        <span id="category-error" class="form-error" role="alert" aria-live="assertive"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipe-prep-time" class="form-label required-field">Preparation Time (minutes)</label>
+                        <input type="number" id="recipe-prep-time" name="prepTime" class="form-input" min="1" required aria-describedby="prep-time-hint prep-time-error" aria-required="true">
+                        <span id="prep-time-hint" class="form-hint">How long it takes to prepare ingredients</span>
+                        <span id="prep-time-error" class="form-error" role="alert" aria-live="assertive"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipe-cook-time" class="form-label required-field">Cooking Time (minutes)</label>
+                        <input type="number" id="recipe-cook-time" name="cookTime" class="form-input" min="0" required aria-describedby="cook-time-hint cook-time-error" aria-required="true">
+                        <span id="cook-time-hint" class="form-hint">How long it takes to cook (0 for no-cook recipes)</span>
+                        <span id="cook-time-error" class="form-error" role="alert" aria-live="assertive"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label id="ingredients-label" class="form-label required-field">Ingredients</label>
+                        <ul id="ingredients-list" class="ingredients-list" aria-labelledby="ingredients-label" aria-describedby="ingredients-hint ingredients-error"></ul>
+                        
+                        <div class="add-ingredient-row">
+                            <div class="add-ingredient-input">
+                                <label for="new-ingredient" class="visually-hidden">Add ingredient</label>
+                                <input type="text" id="new-ingredient" class="form-input" placeholder="Enter an ingredient..." aria-describedby="ingredients-hint">
+                            </div>
+                            <button type="button" id="add-ingredient-btn" class="form-button">Add Ingredient</button>
+                        </div>
+                        <span id="ingredients-hint" class="form-hint">Include quantity, unit, and ingredient name (e.g., "2 cups flour")</span>
+                        <span id="ingredients-error" class="form-error" role="alert" aria-live="assertive"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipe-instructions" class="form-label required-field">Instructions</label>
+                        <textarea id="recipe-instructions" name="instructions" class="form-textarea" required aria-describedby="instructions-hint instructions-error" aria-required="true"></textarea>
+                        <span id="instructions-hint" class="form-hint">Provide step-by-step instructions. Use a new line for each step.</span>
+                        <span id="instructions-error" class="form-error" role="alert" aria-live="assertive"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipe-image-url" class="form-label">Image URL</label>
+                        <input type="url" id="recipe-image-url" name="imageUrl" class="form-input" aria-describedby="image-url-hint image-url-error">
+                        <span id="image-url-hint" class="form-hint">Provide a URL to an image of your recipe (optional)</span>
+                        <span id="image-url-error" class="form-error" role="alert" aria-live="assertive"></span>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="form-button" id="submit-recipe">Submit Recipe</button>
+                        <button type="reset" class="form-button secondary">Clear Form</button>
+                    </div>
+                </form>
+            </section>
+        </div>
     </main>
-    
+
     <footer>
         <div class="container footer-content">
-            <nav aria-label="Social Media Links">
-                <ul class="social-links">
-                    <li><a href="#" class="social-link" aria-label="LinkedIn Profile"><span aria-hidden="true">in</span></a></li>
-                    <li><a href="#" class="social-link" aria-label="Instagram Profile"><span aria-hidden="true">ig</span></a></li>
-                    <li><a href="#" class="social-link" aria-label="Behance Portfolio"><span aria-hidden="true">Be</span></a></li>
-                    <li><a href="#" class="social-link" aria-label="Twitter Profile"><span aria-hidden="true">X</span></a></li>
-                </ul>
-            </nav>
-            <p class="copyright">&copy; 2023 Creative Portfolio. All rights reserved.</p>
+            <p>Community Recipe Exchange - A place to share and discover delicious recipes</p>
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#add-recipe">Add Recipe</a>
+                <a href="#search-recipes">Search Recipes</a>
+                <a href="#about">About</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Use</a>
+                <a href="#">Contact Us</a>
+            </div>
+            <p class="footer-copyright">© 2023 Community Recipe Exchange. All rights reserved.</p>
         </div>
     </footer>
-    
-    <!-- Project Details Modal -->
-    <div class="modal-overlay" id="modal-overlay" aria-hidden="true">
-        <div class="modal" id="project-modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
-            <button class="modal-close" id="modal-close" aria-label="Close modal">×</button>
-            <div class="modal-content" id="modal-content">
+
+    <!-- Recipe Detail Modal (hidden by default) -->
+    <div id="recipe-modal" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title" class="modal-title">Recipe Details</h2>
+                <button id="modal-close" class="modal-close" aria-label="Close recipe details">×</button>
+            </div>
+            <div class="modal-body" id="modal-content">
                 <!-- Modal content will be dynamically inserted here -->
             </div>
         </div>
     </div>
-    
+
+    <!-- Notification element (hidden by default) -->
+    <div id="notification" class="notification" role="alert" aria-live="assertive"></div>
+
     <script>
-        // Project data for modal content
-        const projectData = [
+        // Sample recipe data for demonstration
+        const sampleRecipes = [
             {
                 id: 1,
-                title: "Brand Identity System",
-                category: "Design",
-                date: "October 2023",
-                image: "https://via.placeholder.com/800x500/0f172a/ffffff?text=Brand+Identity",
-                imageAlt: "Brand identity design showing logo variations, typography samples, and color palette for a sustainable fashion company",
-                description: `
-                    <p>This comprehensive brand identity system was developed for a sustainable fashion company looking to establish a strong visual presence in the market. The project involved extensive research into the company's values, target audience, and competitive landscape.</p>
-                    
-                    <h4>Project Scope</h4>
-                    <ul>
-                        <li>Logo design with multiple variations for different applications</li>
-                        <li>Typography system with primary and secondary typefaces</li>
-                        <li>Color palette development with accessibility considerations</li>
-                        <li>Brand guidelines document</li>
-                        <li>Application examples across digital and print media</li>
-                    </ul>
-                    
-                    <p>The final brand identity successfully communicates the company's commitment to sustainability while maintaining a contemporary and fashionable aesthetic. The system provides flexibility for various applications while ensuring brand consistency across all touchpoints.</p>
-                `
+                title: "Classic Chocolate Chip Cookies",
+                description: "Soft and chewy chocolate chip cookies with a perfect golden edge. A timeless favorite that's easy to make and always a crowd-pleaser.",
+                category: "dessert",
+                prepTime: 15,
+                cookTime: 10,
+                ingredients: [
+                    "2 1/4 cups all-purpose flour",
+                    "1 teaspoon baking soda",
+                    "1 teaspoon salt",
+                    "1 cup (2 sticks) unsalted butter, softened",
+                    "3/4 cup granulated sugar",
+                    "3/4 cup packed brown sugar",
+                    "2 large eggs",
+                    "2 teaspoons vanilla extract",
+                    "2 cups semi-sweet chocolate chips"
+                ],
+                instructions: "1. Preheat oven to 375°F (190°C).\n2. Combine flour, baking soda, and salt in a small bowl.\n3. Beat butter, granulated sugar, and brown sugar in a large mixer bowl.\n4. Add eggs one at a time, beating well after each addition. Stir in vanilla extract.\n5. Gradually beat in flour mixture. Stir in chocolate chips.\n6. Drop by rounded tablespoon onto ungreased baking sheets.\n7. Bake for 9 to 11 minutes or until golden brown.\n8. Cool on baking sheets for 2 minutes; remove to wire racks to cool completely.",
+                imageUrl: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e",
+                author: "Jane Smith",
+                datePosted: "2023-05-15",
+                ratings: [5, 4, 5, 5, 4]
             },
             {
                 id: 2,
-                title: "Urban Landscapes",
-                category: "Photography",
-                date: "August 2023",
-                image: "https://via.placeholder.com/800x500/1e293b/ffffff?text=Urban+Photography",
-                imageAlt: "Black and white urban landscape photograph showing the geometric patterns of modern city architecture",
-                description: `
-                    <p>Urban Landscapes is a series of black and white photographs exploring the geometry, patterns, and textures found in modern urban architecture. Shot over a period of six months in various cities, the collection examines the relationship between built environments and negative space.</p>
-                    
-                    <h4>Technical Approach</h4>
-                    <p>All images were captured using a full-frame camera with prime lenses to maximize image quality and creative control. The black and white processing emphasizes form, texture, and the interplay of light and shadow.</p>
-                    
-                    <h4>Exhibition History</h4>
-                    <ul>
-                        <li>Gallery 23, "Urban Perspectives" - September 2023</li>
-                        <li>Online showcase, Photography Monthly - October 2023</li>
-                    </ul>
-                    
-                    <p>This ongoing project continues to evolve as I explore new urban environments and architectural styles.</p>
-                `
+                title: "Vegetarian Pasta Primavera",
+                description: "A colorful and nutritious pasta dish loaded with fresh seasonal vegetables and tossed in a light garlic and olive oil sauce.",
+                category: "vegetarian",
+                prepTime: 20,
+                cookTime: 15,
+                ingredients: [
+                    "12 oz fettuccine pasta",
+                    "2 tablespoons olive oil",
+                    "3 cloves garlic, minced",
+                    "1 red bell pepper, sliced",
+                    "1 yellow bell pepper, sliced",
+                    "1 zucchini, sliced into half-moons",
+                    "1 yellow squash, sliced into half-moons",
+                    "1 cup cherry tomatoes, halved",
+                    "1 cup broccoli florets",
+                    "1/4 cup fresh basil, chopped",
+                    "1/4 cup grated Parmesan cheese",
+                    "Salt and pepper to taste",
+                    "Red pepper flakes (optional)"
+                ],
+                instructions: "1. Cook pasta according to package directions. Reserve 1/2 cup of pasta water before draining.\n2. Heat olive oil in a large skillet over medium heat. Add garlic and cook for 30 seconds.\n3. Add bell peppers, zucchini, yellow squash, and broccoli. Cook for 5-7 minutes until vegetables begin to soften.\n4. Add cherry tomatoes and cook for another 2 minutes.\n5. Add drained pasta to the skillet along with a splash of reserved pasta water.\n6. Toss everything together and add basil, Parmesan cheese, salt, and pepper.\n7. If the pasta seems dry, add more pasta water as needed.\n8. Serve immediately with additional Parmesan cheese and red pepper flakes if desired.",
+                imageUrl: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601",
+                author: "Michael Johnson",
+                datePosted: "2023-06-02",
+                ratings: [4, 5, 4, 3, 5]
             },
             {
                 id: 3,
-                title: "Abstract Dreamscapes",
-                category: "Digital Art",
-                date: "July 2023",
-                image: "https://via.placeholder.com/800x500/2563eb/ffffff?text=Digital+Illustration",
-                imageAlt: "Colorful digital illustration depicting an abstract dreamlike landscape with vibrant colors and surreal elements",
-                description: `
-                    <p>Abstract Dreamscapes is a collection of digital illustrations exploring surreal landscapes and dreamlike environments. The series uses vibrant colors, organic forms, and impossible perspectives to create immersive visual experiences that blur the line between reality and imagination.</p>
-                    
-                    <h4>Creative Process</h4>
-                    <p>Each piece begins with hand-drawn sketches that are then developed digitally using a combination of illustration and painting techniques. The work incorporates elements of both abstract and representational art to create rich, layered compositions.</p>
-                    
-                    <h4>Inspiration</h4>
-                    <p>This series draws inspiration from dreams, natural landscapes, and the subconscious mind. It explores themes of memory, perception, and the fluid nature of reality.</p>
-                    
-                    <p>The complete collection includes 12 illustrations available as limited edition prints.</p>
-                `
+                title: "Homemade Breakfast Burrito",
+                description: "Start your day with these protein-packed breakfast burritos filled with scrambled eggs, crispy potatoes, cheese, and fresh vegetables.",
+                category: "breakfast",
+                prepTime: 15,
+                cookTime: 20,
+                ingredients: [
+                    "4 large flour tortillas",
+                    "8 large eggs",
+                    "2 tablespoons milk",
+                    "2 cups diced potatoes",
+                    "1 tablespoon olive oil",
+                    "1 bell pepper, diced",
+                    "1 small onion, diced",
+                    "1 cup shredded cheddar cheese",
+                    "1/4 cup chopped fresh cilantro",
+                    "1 avocado, sliced",
+                    "Salsa or hot sauce (to serve)",
+                    "Salt and pepper to taste"
+                ],
+                instructions: "1. Heat olive oil in a skillet over medium heat. Add potatoes and cook until crispy, about 10-12 minutes. Season with salt and pepper.\n2. In the same skillet, add bell pepper and onion. Cook until softened, about 5 minutes.\n3. Whisk eggs and milk together in a bowl. Season with salt and pepper.\n4. Pour egg mixture into the skillet with vegetables and cook, stirring occasionally, until eggs are scrambled and cooked through.\n5. Warm tortillas in the microwave for 20 seconds or in a dry skillet.\n6. Assemble burritos by placing a portion of the egg mixture, potatoes, cheese, cilantro, and avocado slices on each tortilla.\n7. Fold in the sides of the tortilla, then roll up tightly.\n8. Serve with salsa or hot sauce on the side.\n9. Optional: Wrap in foil and freeze for quick breakfasts throughout the week.",
+                imageUrl: "https://images.unsplash.com/photo-1584178639036-613ba57e5e73",
+                author: "Sarah Williams",
+                datePosted: "2023-05-28",
+                ratings: [5, 5, 4, 5, 5]
             },
             {
                 id: 4,
-                title: "Health App UI Design",
-                category: "Design",
-                date: "September 2023",
-                image: "https://via.placeholder.com/800x500/334155/ffffff?text=UI+Design",
-                imageAlt: "Mobile app interface design showing multiple screens of a health tracking application with clean, accessible design",
-                description: `
-                    <p>This UI design project focused on creating an intuitive and accessible interface for a health tracking mobile application. The design prioritizes ease of use, clear information hierarchy, and accessibility for users with diverse needs.</p>
-                    
-                    <h4>Design Challenges</h4>
-                    <p>The main challenges included presenting complex health data in an understandable way, designing for users with varying levels of technical proficiency, and ensuring the interface remained accessible to users with visual impairments.</p>
-                    
-                    <h4>Key Features</h4>
-                    <ul>
-                        <li>Customizable dashboard with health metrics visualization</li>
-                        <li>Medication tracking and reminder system</li>
-                        <li>Activity and nutrition logging interfaces</li>
-                        <li>Progress reports and goal setting tools</li>
-                        <li>Integration with wearable devices</li>
-                    </ul>
-                    
-                    <p>The final design was tested with diverse user groups and refined based on feedback to ensure it met both functional and accessibility requirements.</p>
-                `
-            },
-            {
-                id: 5,
-                title: "Macro Nature",
-                category: "Photography",
-                date: "June 2023",
-                image: "https://via.placeholder.com/800x500/475569/ffffff?text=Nature+Photography",
-                imageAlt: "Close-up macro photograph showing dewdrops on a leaf with incredible detail and natural lighting",
-                description: `
-                    <p>Macro Nature is a photography series that reveals the hidden details of the natural world through extreme close-up images. The collection focuses on plants, insects, and natural textures that are often overlooked by the naked eye.</p>
-                    
-                    <h4>Technical Details</h4>
-                    <p>All images were captured using specialized macro lenses and controlled lighting to reveal minute details while maintaining natural color and atmosphere. Many images required focus stacking techniques to achieve maximum depth of field.</p>
-                    
-                    <h4>Subjects Explored</h4>
-                    <ul>
-                        <li>Water droplets on plant surfaces</li>
-                        <li>Insect anatomy and behavior</li>
-                        <li>Flower structures and pollen</li>
-                        <li>Natural patterns and textures</li>
-                        <li>Fungi and lichen formations</li>
-                    </ul>
-                    
-                    <p>This project has been featured in several nature photography publications and continues to expand as new subjects and techniques are explored.</p>
-                `
-            },
-            {
-                id: 6,
-                title: "Future Habitats",
-                category: "Digital Art",
-                date: "May 2023",
-                image: "https://via.placeholder.com/800x500/64748b/ffffff?text=3D+Rendering",
-                imageAlt: "3D rendered scene depicting a futuristic living space with sustainable design elements and innovative architecture",
-                description: `
-                    <p>Future Habitats is a series of 3D rendered environments that explore concepts of future living spaces and sustainable architecture. The project examines how technology, environmental concerns, and changing social patterns might influence the design of human habitats.</p>
-                    
-                    <h4>Conceptual Themes</h4>
-                    <p>Each environment in the series addresses specific themes such as climate adaptation, resource efficiency, community integration, and technological augmentation of living spaces.</p>
-                    
-                    <h4>Technical Approach</h4>
-                    <p>The environments were created using advanced 3D modeling and rendering software, with particular attention to lighting, materials, and atmospheric effects to create realistic yet visionary spaces.</p>
-                    
-                    <h4>Project Impact</h4>
-                    <p>This speculative design project has been used in educational contexts to stimulate discussion about the future of architecture and urban planning in response to global challenges.</p>
-                `
+                title: "Hearty Beef Stew",
+                description: "A comforting, slow-cooked beef stew with tender chunks of beef, potatoes, carrots, and a rich, flavorful broth. Perfect for cold evenings.",
+                category: "dinner",
+                prepTime: 30,
+                cookTime: 120,
+                ingredients: [
+                    "2 pounds beef stew meat, cut into 1-inch cubes",
+                    "1/4 cup all-purpose flour",
+                    "2 tablespoons olive oil",
+                    "2 onions, chopped",
+                    "4 cloves garlic, minced",
+                    "4 carrots, sliced",
+                    "3 celery stalks, chopped",
+                    "1 pound potatoes, cubed",
+                    "4 cups beef broth",
+                    "1 cup red wine (optional)",
+                    "2 tablespoons tomato paste",
+                    "1 bay leaf",
+                    "1 teaspoon dried thyme",
+                    "1 teaspoon dried rosemary",
+                    "Salt and pepper to taste",
+                    "Fresh parsley for garnish"
+                ],
+                instructions: "1. Toss beef cubes with flour, salt, and pepper until coated.\n2. Heat olive oil in a large pot over medium-high heat. Brown the beef on all sides, working in batches if necessary. Transfer to a plate.\n3. In the same pot, add onions and cook until softened, about 5 minutes. Add garlic and cook for 1 minute more.\n4. Add carrots, celery, and potatoes to the pot and stir to combine.\n5. Return beef to the pot. Add beef broth, wine (if using), tomato paste, bay leaf, thyme, and rosemary.\n6. Bring to a boil, then reduce heat to low. Cover and simmer for 1.5 to 2 hours, until beef is tender and vegetables are cooked through.\n7. Remove bay leaf before serving.\n8. Garnish with fresh parsley and serve hot with crusty bread.",
+                imageUrl: "https://images.unsplash.com/photo-1608500218890-c4f9a2f2f222",
+                author: "Robert Brown",
+                datePosted: "2023-06-10",
+                ratings: [5, 4, 5, 4, 5]
             }
         ];
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Filter functionality
-            const filterButtons = document.querySelectorAll('.filter-button');
-            const projectCards = document.querySelectorAll('.project-card');
-            const projectsGrid = document.getElementById('projects-grid');
-            const noResults = document.getElementById('no-results');
-            const loading = document.getElementById('loading');
-            const filterStatus = document.getElementById('filter-status');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Update button states
-                    filterButtons.forEach(btn => {
-                        btn.classList.remove('active');
-                        btn.setAttribute('aria-pressed', 'false');
-                    });
-                    this.classList.add('active');
-                    this.setAttribute('aria-pressed', 'true');
-                    
-                    const filter = this.getAttribute('data-filter');
-                    
-                    // Show loading state
-                    projectsGrid.style.display = 'none';
-                    noResults.classList.remove('active');
-                    loading.classList.add('active');
-                    
-                    // Simulate loading delay for demonstration
-                    setTimeout(() => {
-                        let visibleCount = 0;
-                        
-                        projectCards.forEach(card => {
-                            const category = card.getAttribute('data-category');
-                            if (filter === 'all' || category === filter) {
-                                card.style.display = 'block';
-                                visibleCount++;
-                            } else {
-                                card.style.display = 'none';
-                            }
-                        });
-                        
-                        // Hide loading state
-                        loading.classList.remove('active');
-                        
-                        // Show appropriate content
-                        if (visibleCount === 0) {
-                            noResults.classList.add('active');
-                            projectsGrid.style.display = 'none';
-                            filterStatus.textContent = `No projects found in the ${filter} category.`;
-                        } else {
-                            noResults.classList.remove('active');
-                            projectsGrid.style.display = 'grid';
-                            filterStatus.textContent = `Showing ${visibleCount} projects in the ${filter === 'all' ? 'all projects' : filter} category.`;
-                        }
-                    }, 500);
-                });
-            });
-            
-            // Modal functionality
-            const modalOverlay = document.getElementById('modal-overlay');
-            const projectModal = document.getElementById('project-modal');
-            const modalContent = document.getElementById('modal-content');
-            const modalClose = document.getElementById('modal-close');
-            const projectLinks = document.querySelectorAll('.project-link');
-            
-            // Open modal
-            projectLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    const projectId = parseInt(this.getAttribute('data-project-id'));
-                    const project = projectData.find(p => p.id === projectId);
-                    
-                    if (project) {
-                        modalContent.innerHTML = `
-                            <img src="${project.image}" alt="${project.imageAlt}" class="modal-image">
-                            <h3 id="modal-title">${project.title}</h3>
-                            <div class="modal-meta">
-                                <span class="modal-category">${project.category}</span>
-                                <span class="modal-date">${project.date}</span>
-                            </div>
-                            <div class="modal-description">
-                                ${project.description}
-                            </div>
-                        `;
-                        
-                        modalOverlay.classList.add('active');
-                        modalOverlay.setAttribute('aria-hidden', 'false');
-                        projectModal.setAttribute('aria-hidden', 'false');
-                        
-                        // Set focus to modal
-                        modalClose.focus();
-                        
-                        // Save last focused element to return focus when modal closes
-                        modalOverlay.lastFocusedElement = this;
-                    }
-                });
-            });
-            
-            // Close modal functions
-            function closeModal() {
-                modalOverlay.classList.remove('active');
-                modalOverlay.setAttribute('aria-hidden', 'true');
-                projectModal.setAttribute('aria-hidden', 'true');
-                
-                // Return focus to the element that opened the modal
-                if (modalOverlay.lastFocusedElement) {
-                    modalOverlay.lastFocusedElement.focus();
+        // DOM Elements
+        const recipeGrid = document.getElementById('recipe-grid');
+        const recipeForm = document.getElementById('recipe-form');
+        const searchForm = document.getElementById('search-form');
+        const ingredientsList = document.getElementById('ingredients-list');
+        const newIngredientInput = document.getElementById('new-ingredient');
+        const addIngredientBtn = document.getElementById('add-ingredient-btn');
+        const recipeModal = document.getElementById('recipe-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalContent = document.getElementById('modal-content');
+        const notification = document.getElementById('notification');
+        const noResults = document.getElementById('no-results');
+        const loading = document.getElementById('loading');
+        const filterTags = document.getElementById('filter-tags');
+        const resultsHeading = document.getElementById('results-heading');
+
+        // State management
+        let recipes = [...sampleRecipes];
+        let currentFilters = {
+            term: '',
+            ingredient: '',
+            category: ''
+        };
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            displayRecipes(recipes);
+            setupEventListeners();
+        });
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Add ingredient button
+            addIngredientBtn.addEventListener('click', addIngredient);
+            newIngredientInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addIngredient();
                 }
+            });
+
+            // Recipe form submission
+            recipeForm.addEventListener('submit', handleRecipeSubmit);
+
+            // Search form submission
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleSearch();
+            });
+
+            // Modal close button
+            modalClose.addEventListener('click', closeModal);
+            // Close modal when clicking outside
+            recipeModal.addEventListener('click', (e) => {
+                if (e.target === recipeModal) {
+                    closeModal();
+                }
+            });
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && recipeModal.style.display !== 'none') {
+                    closeModal();
+                }
+            });
+        }
+
+        // Add ingredient to the list
+        function addIngredient() {
+            const ingredientText = newIngredientInput.value.trim();
+            if (ingredientText) {
+                const li = document.createElement('li');
+                li.className = 'ingredient-item';
+                li.innerHTML = `
+                    <span class="ingredient-text">${ingredientText}</span>
+                    <button type="button" class="remove-ingredient" aria-label="Remove ${ingredientText}">×</button>
+                `;
+                ingredientsList.appendChild(li);
+                
+                // Add event listener to remove button
+                const removeBtn = li.querySelector('.remove-ingredient');
+                removeBtn.addEventListener('click', () => {
+                    li.remove();
+                    validateIngredients();
+                });
+                
+                newIngredientInput.value = '';
+                newIngredientInput.focus();
+                validateIngredients();
+            }
+        }
+
+        // Form validation functions
+        function validateTitle() {
+            const titleInput = document.getElementById('recipe-title');
+            const errorElement = document.getElementById('title-error');
+            
+            if (!titleInput.value.trim()) {
+                errorElement.textContent = 'Recipe title is required';
+                titleInput.setAttribute('aria-invalid', 'true');
+                return false;
+            } else {
+                errorElement.textContent = '';
+                titleInput.removeAttribute('aria-invalid');
+                return true;
+            }
+        }
+
+        function validateDescription() {
+            const descInput = document.getElementById('recipe-description');
+            const errorElement = document.getElementById('description-error');
+            
+            if (!descInput.value.trim()) {
+                errorElement.textContent = 'Recipe description is required';
+                descInput.setAttribute('aria-invalid', 'true');
+                return false;
+            } else {
+                errorElement.textContent = '';
+                descInput.removeAttribute('aria-invalid');
+                return true;
+            }
+        }
+
+        function validateCategory() {
+            const categorySelect = document.getElementById('recipe-category');
+            const errorElement = document.getElementById('category-error');
+            
+            if (!categorySelect.value) {
+                errorElement.textContent = 'Please select a category';
+                categorySelect.setAttribute('aria-invalid', 'true');
+                return false;
+            } else {
+                errorElement.textContent = '';
+                categorySelect.removeAttribute('aria-invalid');
+                return true;
+            }
+        }
+
+        function validatePrepTime() {
+            const prepTimeInput = document.getElementById('recipe-prep-time');
+            const errorElement = document.getElementById('prep-time-error');
+            const value = parseInt(prepTimeInput.value);
+            
+            if (isNaN(value) || value < 1) {
+                errorElement.textContent = 'Please enter a valid preparation time (minimum 1 minute)';
+                prepTimeInput.setAttribute('aria-invalid', 'true');
+                return false;
+            } else {
+                errorElement.textContent = '';
+                prepTimeInput.removeAttribute('aria-invalid');
+                return true;
+            }
+        }
+
+        function validateCookTime() {
+            const cookTimeInput = document.getElementById('recipe-cook-time');
+            const errorElement = document.getElementById('cook-time-error');
+            const value = parseInt(cookTimeInput.value);
+            
+            if (isNaN(value) || value < 0) {
+                errorElement.textContent = 'Please enter a valid cooking time (0 or more)';
+                cookTimeInput.setAttribute('aria-invalid', 'true');
+                return false;
+            } else {
+                errorElement.textContent = '';
+                cookTimeInput.removeAttribute('aria-invalid');
+                return true;
+            }
+        }
+
+        function validateIngredients() {
+            const errorElement = document.getElementById('ingredients-error');
+            
+            if (ingredientsList.children.length === 0) {
+                errorElement.textContent = 'Please add at least one ingredient';
+                return false;
+            } else {
+                errorElement.textContent = '';
+                return true;
+            }
+        }
+
+        function validateInstructions() {
+            const instructionsInput = document.getElementById('recipe-instructions');
+            const errorElement = document.getElementById('instructions-error');
+            
+            if (!instructionsInput.value.trim()) {
+                errorElement.textContent = 'Recipe instructions are required';
+                instructionsInput.setAttribute('aria-invalid', 'true');
+                return false;
+            } else {
+                errorElement.textContent = '';
+                instructionsInput.removeAttribute('aria-invalid');
+                return true;
+            }
+        }
+
+        function validateImageUrl() {
+            const imageUrlInput = document.getElementById('recipe-image-url');
+            const errorElement = document.getElementById('image-url-error');
+            const url = imageUrlInput.value.trim();
+            
+            if (url && !isValidUrl(url)) {
+                errorElement.textContent = 'Please enter a valid URL';
+                imageUrlInput.setAttribute('aria-invalid', 'true');
+                return false;
+            } else {
+                errorElement.textContent = '';
+                imageUrlInput.removeAttribute('aria-invalid');
+                return true;
+            }
+        }
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        // Handle recipe form submission
+        function handleRecipeSubmit(e) {
+            e.preventDefault();
+            
+            // Validate all fields
+            const isValid = 
+                validateTitle() &&
+                validateDescription() &&
+                validateCategory() &&
+                validatePrepTime() &&
+                validateCookTime() &&
+                validateIngredients() &&
+                validateInstructions() &&
+                validateImageUrl();
+            
+            if (!isValid) {
+                showNotification('Please fix the errors in the form', 'error');
+                return;
             }
             
-            // Close on button click
-            modalClose.addEventListener('click', closeModal);
+            // Collect form data
+            const newRecipe = {
+                id: recipes.length + 1,
+                title: document.getElementById('recipe-title').value.trim(),
+                description: document.getElementById('recipe-description').value.trim(),
+                category: document.getElementById('recipe-category').value,
+                prepTime: parseInt(document.getElementById('recipe-prep-time').value),
+                cookTime: parseInt(document.getElementById('recipe-cook-time').value),
+                ingredients: Array.from(ingredientsList.querySelectorAll('.ingredient-text')).map(el => el.textContent),
+                instructions: document.getElementById('recipe-instructions').value.trim(),
+                imageUrl: document.getElementById('recipe-image-url').value.trim() || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352',
+                author: 'You',
+                datePosted: new Date().toISOString().split('T')[0],
+                ratings: []
+            };
             
-            // Close on overlay click
-            modalOverlay.addEventListener('click', function(e) {
-                if (e.target === modalOverlay) {
-                    closeModal();
-                }
-            });
+            // Add the new recipe to the collection
+            recipes.unshift(newRecipe);
             
-            // Close on Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-                    closeModal();
-                }
-            });
+            // Reset the form
+            recipeForm.reset();
+            ingredientsList.innerHTML = '';
             
-            // Trap focus in modal
-            projectModal.addEventListener('keydown', function(e) {
-                if (e.key === 'Tab') {
-                    // All focusable elements in the modal
-                    const focusableElements = projectModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                    const firstElement = focusableElements[0];
-                    const lastElement = focusableElements[focusableElements.length - 1];
+            // Show notification
+            showNotification('Recipe added successfully!', 'success');
+            
+            // Update the displayed recipes
+            displayRecipes(recipes);
+            
+            // Scroll to the recipe results section
+            document.getElementById('recipe-results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Handle search form submission
+        function handleSearch() {
+            const searchTerm = document.getElementById('search-term').value.trim().toLowerCase();
+            const searchIngredient = document.getElementById('search-ingredient').value.trim().toLowerCase();
+            const searchCategory = document.getElementById('search-category').value;
+            
+            // Update current filters
+            currentFilters = {
+                term: searchTerm,
+                ingredient: searchIngredient,
+                category: searchCategory
+            };
+            
+            // Show loading indicator
+            loading.style.display = 'flex';
+            recipeGrid.style.display = 'none';
+            noResults.style.display = 'none';
+            
+            // Update filter tags
+            updateFilterTags();
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                // Filter recipes
+                const filteredRecipes = recipes.filter(recipe => {
+                    const matchesTerm = !searchTerm || 
+                        recipe.title.toLowerCase().includes(searchTerm) || 
+                        recipe.description.toLowerCase().includes(searchTerm);
                     
-                    // If shift+tab and focus is on first element, move to last element
-                    if (e.shiftKey && document.activeElement === firstElement) {
-                        e.preventDefault();
-                        lastElement.focus();
-                    }
-                    // If tab and focus is on last element, move to first element
-                    else if (!e.shiftKey && document.activeElement === lastElement) {
-                        e.preventDefault();
-                        firstElement.focus();
-                    }
+                    const matchesIngredient = !searchIngredient || 
+                        recipe.ingredients.some(ingredient => 
+                            ingredient.toLowerCase().includes(searchIngredient));
+                    
+                    const matchesCategory = !searchCategory || 
+                        recipe.category === searchCategory;
+                    
+                    return matchesTerm && matchesIngredient && matchesCategory;
+                });
+                
+                // Update results heading
+                resultsHeading.textContent = searchTerm || searchIngredient || searchCategory 
+                    ? 'Search Results' 
+                    : 'All Recipes';
+                
+                // Display filtered recipes
+                displayRecipes(filteredRecipes);
+                
+                // Hide loading indicator
+                loading.style.display = 'none';
+                
+                // Show appropriate content
+                if (filteredRecipes.length > 0) {
+                    recipeGrid.style.display = 'grid';
+                    noResults.style.display = 'none';
+                } else {
+                    recipeGrid.style.display = 'none';
+                    noResults.style.display = 'block';
                 }
+            }, 500); // Simulate network delay
+        }
+
+        // Update filter tags display
+        function updateFilterTags() {
+            filterTags.innerHTML = '';
+            
+            if (currentFilters.term) {
+                addFilterTag('Term', currentFilters.term);
+            }
+            
+            if (currentFilters.ingredient) {
+                addFilterTag('Ingredient', currentFilters.ingredient);
+            }
+            
+            if (currentFilters.category) {
+                const categorySelect = document.getElementById('search-category');
+                const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
+                addFilterTag('Category', categoryText);
+            }
+        }
+
+        // Add a filter tag to the display
+        function addFilterTag(type, value) {
+            const tag = document.createElement('div');
+            tag.className = 'filter-tag';
+            tag.innerHTML = `
+                <span>${type}: ${value}</span>
+                <button class="remove-tag" data-type="${type.toLowerCase()}" aria-label="Remove ${type} filter">×</button>
+            `;
+            
+            // Add event listener to remove tag
+            const removeBtn = tag.querySelector('.remove-tag');
+            removeBtn.addEventListener('click', () => {
+                const filterType = removeBtn.getAttribute('data-type');
+                currentFilters[filterType] = '';
+                
+                // Update form fields
+                if (filterType === 'term') {
+                    document.getElementById('search-term').value = '';
+                } else if (filterType === 'ingredient') {
+                    document.getElementById('search-ingredient').value = '';
+                } else if (filterType === 'category') {
+                    document.getElementById('search-category').value = '';
+                }
+                
+                // Trigger search again
+                handleSearch();
             });
             
-            // Form validation
-            const contactForm = document.getElementById('contact-form');
+            filterTags.appendChild(tag);
+        }
+
+        // Display recipes in the grid
+        function displayRecipes(recipesToShow) {
+            recipeGrid.innerHTML = '';
             
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+            recipesToShow.forEach(recipe => {
+                const avgRating = recipe.ratings.length 
+                    ? (recipe.ratings.reduce((sum, rating) => sum + rating, 0) / recipe.ratings.length).toFixed(1) 
+                    : 'No ratings';
                 
-                let isValid = true;
+                const ratingStars = recipe.ratings.length 
+                    ? generateStarRating(avgRating) 
+                    : '';
                 
-                // Validate name
-                const nameInput = document.getElementById('name');
-                const nameError = document.getElementById('name-error');
+                const card = document.createElement('article');
+                card.className = 'recipe-card';
+                card.innerHTML = `
+                    <img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-card-image">
+                    <div class="recipe-card-content">
+                        <h3 class="recipe-card-title">${recipe.title}</h3>
+                        <div class="recipe-card-meta">
+                            <span>By ${recipe.author}</span>
+                            <span>${recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}</span>
+                        </div>
+                        <p class="recipe-card-description">${truncateText(recipe.description, 100)}</p>
+                        <div class="recipe-card-footer">
+                            <div class="recipe-card-rating">
+                                <span class="recipe-card-rating-stars">${ratingStars}</span>
+                                <span>${recipe.ratings.length ? avgRating : 'No ratings'}</span>
+                            </div>
+                            <button class="recipe-card-button view-recipe" data-id="${recipe.id}" aria-label="View ${recipe.title} recipe details">View Recipe</button>
+                        </div>
+                    </div>
+                `;
                 
-                if (!nameInput.value.trim()) {
-                    isValid = false;
-                    nameInput.classList.add('error');
-                    nameError.textContent = 'Please enter your name';
-                    nameError.style.display = 'block';
-                    nameInput.setAttribute('aria-invalid', 'true');
-                } else {
-                    nameInput.classList.remove('error');
-                    nameError.style.display = 'none';
-                    nameInput.setAttribute('aria-invalid', 'false');
-                }
+                // Add event listener to view recipe button
+                const viewButton = card.querySelector('.view-recipe');
+                viewButton.addEventListener('click', () => {
+                    openRecipeModal(recipe);
+                });
                 
-                // Validate email
-                const emailInput = document.getElementById('email');
-                const emailError = document.getElementById('email-error');
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                recipeGrid.appendChild(card);
+            });
+        }
+
+        // Generate star rating HTML
+        function generateStarRating(rating) {
+            const fullStars = Math.floor(rating);
+            const halfStar = rating % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+            
+            let starsHTML = '';
+            
+            // Full stars
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '★';
+            }
+            
+            // Half star
+            if (halfStar) {
+                starsHTML += '★';
+            }
+            
+            // Empty stars
+            for (let i = 0; i < emptyStars; i++) {
+                starsHTML += '☆';
+            }
+            
+            return starsHTML;
+        }
+
+        // Truncate text to a specific length
+        function truncateText(text, maxLength) {
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+
+        // Open recipe detail modal
+        function openRecipeModal(recipe) {
+            const avgRating = recipe.ratings.length 
+                ? (recipe.ratings.reduce((sum, rating) => sum + rating, 0) / recipe.ratings.length).toFixed(1) 
+                : 'No ratings yet';
+            
+            // Format ingredients as list items
+            const ingredientsHTML = recipe.ingredients
+                .map(ingredient => `<li>${ingredient}</li>`)
+                .join('');
+            
+            // Format instructions as list items (assuming numbered format)
+            const instructionsArray = recipe.instructions.split('\n').filter(step => step.trim());
+            const instructionsHTML = instructionsArray
+                .map(instruction => `<li>${instruction.replace(/^\d+\.\s*/, '')}</li>`)
+                .join('');
+            
+            modalContent.innerHTML = `
+                <img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-image">
                 
-                if (!emailInput.value.trim() || !emailPattern.test(emailInput.value)) {
-                    isValid = false;
-                    emailInput.classList.add('error');
-                    emailError.textContent = !emailInput.value.trim() ? 'Please enter your email address' : 'Please enter a valid email address';
-                    emailError.style.display = 'block';
-                    emailInput.setAttribute('aria-invalid', 'true');
-                } else {
-                    emailInput.classList.remove('error');
-                    emailError.style.display = 'none';
-                    emailInput.setAttribute('aria-invalid', 'false');
-                }
+                <div class="recipe-meta">
+                    <span>By ${recipe.author} on ${formatDate(recipe.datePosted)}</span>
+                    <span>Category: ${recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}</span>
+                </div>
                 
-                // Validate message
-                const messageInput = document.getElementById('message');
-                const messageError = document.getElementById('message-error');
+                <p>${recipe.description}</p>
                 
-                if (!messageInput.value.trim()) {
-                    isValid = false;
-                    messageInput.classList.add('error');
-                    messageError.textContent = 'Please enter your message';
-                    messageError.style.display = 'block';
-                    messageInput.setAttribute('aria-invalid', 'true');
-                } else {
-                    messageInput.classList.remove('error');
-                    messageError.style.display = 'none';
-                    messageInput.setAttribute('aria-invalid', 'false');
-                }
+                <div class="recipe-meta">
+                    <span>Prep Time: ${recipe.prepTime} minutes</span>
+                    <span>Cook Time: ${recipe.cookTime} minutes</span>
+                    <span>Total Time: ${recipe.prepTime + recipe.cookTime} minutes</span>
+                </div>
                 
-                // If form is valid, submit (simulated)
-                if (isValid) {
-                    // In a real application, you would submit the form data here
-                    alert('Form submitted successfully! In a real application, this would send your message.');
-                    contactForm.reset();
-                } else {
-                    // Focus the first invalid field
-                    contactForm.querySelector('.form-input.error, .form-textarea.error').focus();
-                }
+                <div class="tabs">
+                    <button id="tab-ingredients" class="tab-button active" aria-selected="true">Ingredients</button>
+                    <button id="tab-instructions" class="tab-button" aria-selected="false">Instructions</button>
+                </div>
+                
+                <div id="content-ingredients" class="tab-content active">
+                    <div class="recipe-section">
+                        <h3 class="recipe-section-title">Ingredients</h3>
+                        <ul class="ingredients-list">
+                            ${ingredientsHTML}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div id="content-instructions" class="tab-content">
+                    <div class="recipe-section">
+                        <h3 class="recipe-section-title">Instructions</h3>
+                        <ol class="instructions-list">
+                            ${instructionsHTML}
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="recipe-rating-section">
+                    <h3>Rate this Recipe</h3>
+                    <p>Current Rating: ${avgRating} (${recipe.ratings.length} ${recipe.ratings.length === 1 ? 'rating' : 'ratings'})</p>
+                    <div class="rating-stars" role="radiogroup" aria-label="Rate this recipe from 1 to 5 stars">
+                        <button class="rating-star" data-rating="1" aria-label="1 star" role="radio" aria-checked="false">★</button>
+                        <button class="rating-star" data-rating="2" aria-label="2 stars" role="radio" aria-checked="false">★</button>
+                        <button class="rating-star" data-rating="3" aria-label="3 stars" role="radio" aria-checked="false">★</button>
+                        <button class="rating-star" data-rating="4" aria-label="4 stars" role="radio" aria-checked="false">★</button>
+                        <button class="rating-star" data-rating="5" aria-label="5 stars" role="radio" aria-checked="false">★</button>
+                    </div>
+                </div>
+            `;
+            
+            // Set modal title
+            document.getElementById('modal-title').textContent = recipe.title;
+            
+            // Show modal
+            recipeModal.style.display = 'flex';
+            
+            // Set focus to the modal close button
+            modalClose.focus();
+            
+            // Add event listeners for tabs
+            const tabIngredients = document.getElementById('tab-ingredients');
+            const tabInstructions = document.getElementById('tab-instructions');
+            const contentIngredients = document.getElementById('content-ingredients');
+            const contentInstructions = document.getElementById('content-instructions');
+            
+            tabIngredients.addEventListener('click', () => {
+                tabIngredients.classList.add('active');
+                tabInstructions.classList.remove('active');
+                contentIngredients.classList.add('active');
+                contentInstructions.classList.remove('active');
+                tabIngredients.setAttribute('aria-selected', 'true');
+                tabInstructions.setAttribute('aria-selected', 'false');
             });
             
-            // Real-time validation feedback
-            const formInputs = document.querySelectorAll('.form-input, .form-textarea');
+            tabInstructions.addEventListener('click', () => {
+                tabInstructions.classList.add('active');
+                tabIngredients.classList.remove('active');
+                contentInstructions.classList.add('active');
+                contentIngredients.classList.remove('active');
+                tabInstructions.setAttribute('aria-selected', 'true');
+                tabIngredients.setAttribute('aria-selected', 'false');
+            });
             
-            formInputs.forEach(input => {
-                input.addEventListener('blur', function() {
-                    // Validate on blur
-                    if (this.hasAttribute('required') && !this.value.trim()) {
-                        this.classList.add('error');
-                        const errorElement = document.getElementById(`${this.id}-error`);
-                        errorElement.textContent = `Please enter your ${this.id}`;
-                        errorElement.style.display = 'block';
-                        this.setAttribute('aria-invalid', 'true');
-                    } else if (this.id === 'email' && this.value.trim()) {
-                        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (!emailPattern.test(this.value)) {
-                            this.classList.add('error');
-                            const errorElement = document.getElementById(`${this.id}-error`);
-                            errorElement.textContent = 'Please enter a valid email address';
-                            errorElement.style.display = 'block';
-                            this.setAttribute('aria-invalid', 'true');
+            // Add event listeners for rating stars
+            const ratingStars = document.querySelectorAll('.rating-star');
+            ratingStars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = parseInt(star.getAttribute('data-rating'));
+                    rateRecipe(recipe.id, rating);
+                    
+                    // Update visual state
+                    ratingStars.forEach(s => {
+                        const starRating = parseInt(s.getAttribute('data-rating'));
+                        if (starRating <= rating) {
+                            s.classList.add('active');
+                            s.setAttribute('aria-checked', 'true');
                         } else {
-                            this.classList.remove('error');
-                            document.getElementById(`${this.id}-error`).style.display = 'none';
-                            this.setAttribute('aria-invalid', 'false');
+                            s.classList.remove('active');
+                            s.setAttribute('aria-checked', 'false');
                         }
-                    } else {
-                        this.classList.remove('error');
-                        const errorElement = document.getElementById(`${this.id}-error`);
-                        if (errorElement) {
-                            errorElement.style.display = 'none';
-                        }
-                        this.setAttribute('aria-invalid', 'false');
-                    }
+                    });
                 });
                 
-                // Clear error on input
-                input.addEventListener('input', function() {
-                    if (this.classList.contains('error')) {
-                        if ((this.id === 'email' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value)) || 
-                            (this.id !== 'email' && this.value.trim())) {
-                            this.classList.remove('error');
-                            document.getElementById(`${this.id}-error`).style.display = 'none';
-                            this.setAttribute('aria-invalid', 'false');
-                        }
+                // Keyboard navigation for rating stars
+                star.addEventListener('keydown', (e) => {
+                    const rating = parseInt(star.getAttribute('data-rating'));
+                    
+                    if (e.key === 'ArrowRight' && rating < 5) {
+                        e.preventDefault();
+                        ratingStars[rating].focus();
+                    } else if (e.key === 'ArrowLeft' && rating > 1) {
+                        e.preventDefault();
+                        ratingStars[rating - 2].focus();
                     }
                 });
             });
-        });
+        }
+
+        // Close recipe modal
+        function closeModal() {
+            recipeModal.style.display = 'none';
+            
+            // Return focus to the element that opened the modal
+            const activeRecipeButton = document.activeElement;
+            if (activeRecipeButton && activeRecipeButton.classList.contains('view-recipe')) {
+                activeRecipeButton.focus();
+            }
+        }
+
+        // Rate a recipe
+        function rateRecipe(recipeId, rating) {
+            const recipe = recipes.find(r => r.id === recipeId);
+            if (recipe) {
+                recipe.ratings.push(rating);
+                showNotification('Thank you for rating this recipe!', 'success');
+                
+                // Update the recipe card
+                displayRecipes(recipes);
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
     </script>
 </body>
 </html>
