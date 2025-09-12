@@ -3,35 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Share - Upload and Showcase Your Artwork</title>
+    <title>Accessible Budget Calculator | Track Your Monthly Income and Expenses</title>
     <style>
-        /* Reset and Base Styles */
+        /* Base Styles */
         :root {
-            --primary-color: #4a6fa5;
-            --secondary-color: #ff7e5f;
-            --accent-color: #6c5ce7;
-            --text-color: #2d3436;
-            --light-text: #f5f6fa;
-            --bg-color: #f9f9f9;
-            --card-bg: #ffffff;
-            --error-color: #d63031;
-            --success-color: #00b894;
-            --border-radius: 8px;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --text-color: #333;
+            --text-light: #fff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: var(--bg-color);
+            background-color: var(--light-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -43,902 +42,756 @@
             top: -40px;
             left: 0;
             background: var(--primary-color);
-            color: white;
+            color: var(--text-light);
             padding: 8px;
             z-index: 100;
-            transition: top 0.3s;
+            transition: var(--transition);
         }
 
         .skip-link:focus {
             top: 0;
         }
 
-        /* Typography */
-        h1, h2, h3, h4 {
-            line-height: 1.2;
-            margin-bottom: 1rem;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-        }
-
-        h2 {
-            font-size: 2rem;
-            color: var(--secondary-color);
-        }
-
-        h3 {
-            font-size: 1.5rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-
-        a:hover, a:focus {
-            text-decoration: underline;
-            outline: 2px solid var(--accent-color);
-            outline-offset: 2px;
-        }
-
-        /* Layout */
+        /* Header */
         header {
             background-color: var(--primary-color);
-            color: var(--light-text);
+            color: var(--text-light);
             padding: 1rem 2rem;
             box-shadow: var(--shadow);
         }
 
-        nav {
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: var(--light-text);
         }
 
-        .nav-links {
+        /* Navigation */
+        nav {
+            display: flex;
+        }
+
+        .nav-list {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
         }
 
-        .nav-links a {
-            color: var(--light-text);
+        .nav-item {
+            margin-left: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
             padding: 0.5rem;
-            border-radius: var(--border-radius);
+            border-radius: 4px;
             transition: var(--transition);
         }
 
-        .nav-links a:hover, .nav-links a:focus {
+        .nav-link:hover,
+        .nav-link:focus {
             background-color: rgba(255, 255, 255, 0.2);
-            text-decoration: none;
+            outline: 2px solid var(--text-light);
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--light-text);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
+        /* Main Content */
         main {
             flex: 1;
-            padding: 2rem;
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 2rem auto;
+            padding: 0 2rem;
             width: 100%;
         }
 
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            color: var(--secondary-color);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--dark-color);
+            margin: 1rem 0;
+            font-size: 1.4rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            max-width: 80ch;
+        }
+
+        /* Budget Calculator Section */
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-section, .results-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        /* Forms */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        input, select, button {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        input:focus, select:focus, button:focus {
+            outline: 3px solid var(--secondary-color);
+            outline-offset: 2px;
+            border-color: var(--secondary-color);
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        button:hover, button:focus {
+            background-color: #2980b9;
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+        }
+
+        .btn-danger:hover, .btn-danger:focus {
+            background-color: #c0392b;
+        }
+
+        .btn-small {
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Expense List */
+        .expense-list {
+            list-style: none;
+            margin-top: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+            align-items: center;
+        }
+
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+
+        .expense-item-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Results Section */
+        .summary-card {
+            background-color: var(--light-color);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .positive {
+            color: var(--success-color);
+        }
+
+        .negative {
+            color: var(--accent-color);
+        }
+
+        /* Chart Section */
+        .chart-container {
+            margin-top: 2rem;
+            height: 300px;
+            position: relative;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Accessibility Features */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Footer */
         footer {
             background-color: var(--primary-color);
-            color: var(--light-text);
+            color: var(--text-light);
             text-align: center;
             padding: 1.5rem;
             margin-top: 2rem;
         }
 
-        /* Cards and Grid */
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .art-card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-
-        .art-card:hover, .art-card:focus-within {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .art-card img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .art-card-content {
-            padding: 1.5rem;
-        }
-
-        .art-card h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        .art-card .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 0.5rem 0;
-        }
-
-        .tag {
-            background-color: var(--accent-color);
-            color: var(--light-text);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        /* Forms */
-        .form-container {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            max-width: 800px;
-            margin: 2rem auto;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="file"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        input[type="text"]:focus,
-        textarea:focus,
-        select:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.3);
-        }
-
-        textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .required-field::after {
-            content: " *";
-            color: var(--error-color);
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.9rem;
-            margin-top: 0.3rem;
-            display: none;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            min-width: 120px;
-            min-height: 44px;
-        }
-
-        button:hover, button:focus {
-            background-color: #3a5a8f;
-            outline: 2px solid var(--accent-color);
-            outline-offset: 2px;
-        }
-
-        button.secondary {
-            background-color: var(--secondary-color);
-        }
-
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background-color: var(--card-bg);
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            max-width: 800px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        /* Filter Controls */
-        .filter-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            align-items: center;
-        }
-
-        .filter-controls label {
-            margin-bottom: 0;
-            margin-right: 0.5rem;
-        }
-
-        .filter-controls select {
-            min-width: 150px;
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                width: 100%;
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .header-container {
                 flex-direction: column;
-                gap: 0;
+                gap: 1rem;
             }
 
-            .nav-links.active {
-                display: flex;
-                margin-top: 1rem;
+            .nav-list {
+                flex-direction: column;
+                gap: 0.5rem;
             }
 
-            .nav-links li {
-                width: 100%;
+            .nav-item {
+                margin-left: 0;
             }
 
-            .nav-links a {
-                display: block;
-                padding: 1rem;
-                border-radius: 0;
+            main {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            nav, footer {
+                display: none;
             }
 
-            .mobile-menu-btn {
-                display: block;
+            body {
+                background-color: white;
+                color: black;
             }
 
-            .gallery {
+            .calculator-container {
                 grid-template-columns: 1fr;
             }
-        }
 
-        /* Reduced Motion */
-        @media (prefers-reduced-motion) {
-            * {
-                transition: none !important;
-            }
-
-            .art-card:hover, .art-card:focus-within {
-                transform: none;
-            }
-        }
-
-        /* High Contrast Mode */
-        @media (prefers-contrast: more) {
-            :root {
-                --primary-color: #0000ff;
-                --secondary-color: #ff0000;
-                --accent-color: #ffff00;
-                --text-color: #000000;
-                --light-text: #ffffff;
-                --bg-color: #ffffff;
-                --card-bg: #ffffff;
-            }
-
-            a, button {
-                text-decoration: underline;
-            }
-
-            button {
-                border: 2px solid #000000;
-            }
-
-            input, textarea, select {
-                border: 2px solid #000000;
+            .input-section, .results-section {
+                box-shadow: none;
+                border: 1px solid #ddd;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Skip to Main Content Link -->
+    <!-- Skip Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Header with Navigation -->
+    <!-- Header -->
     <header>
-        <nav aria-label="Main navigation">
-            <div class="logo">Creative Share</div>
-            <button class="mobile-menu-btn" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
-                ☰
-            </button>
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#featured" class="active">Featured</a></li>
-                <li><a href="#gallery">Gallery</a></li>
-                <li><a href="#upload">Upload</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+        <div class="header-container">
+            <div class="logo">Budget Tracker</div>
+            <nav aria-label="Main Navigation">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Resources</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <!-- Main Content -->
     <main id="main-content">
-        <!-- Hero Section -->
-        <section aria-labelledby="hero-heading">
-            <h1 id="hero-heading">Share Your Creative Work with the World</h1>
-            <p>Upload your photos, artwork, and creative projects to showcase your talent and connect with other artists.</p>
-            <button id="open-upload-modal" class="secondary" aria-haspopup="dialog">Upload Your Work</button>
-        </section>
+        <h1>Monthly Budget Calculator</h1>
+        <p>Track your income and expenses to better understand your financial situation. Enter your monthly income and add your expenses to see a breakdown of where your money is going.</p>
 
-        <!-- Featured Artwork -->
-        <section aria-labelledby="featured-heading" id="featured">
-            <h2 id="featured-heading">Featured Artwork</h2>
-            <div class="gallery">
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?painting,1" alt="Abstract painting with vibrant colors and geometric shapes">
-                    <div class="art-card-content">
-                        <h3>Colorful Abstraction</h3>
-                        <p>An exploration of color and form in abstract expressionism.</p>
-                        <div class="tags">
-                            <span class="tag">Painting</span>
-                            <span class="tag">Abstract</span>
-                            <span class="tag">Colorful</span>
-                        </div>
+        <div class="calculator-container">
+            <!-- Input Section -->
+            <section class="input-section" aria-labelledby="input-section-heading">
+                <h2 id="input-section-heading">Enter Your Budget Details</h2>
+                
+                <form id="budget-form">
+                    <div class="form-group">
+                        <label for="income">Monthly Income ($)</label>
+                        <input type="number" id="income" name="income" min="0" step="0.01" required aria-required="true">
                     </div>
-                </article>
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?photography,1" alt="Black and white portrait of a woman with dramatic lighting">
-                    <div class="art-card-content">
-                        <h3>Portrait Study</h3>
-                        <p>Dramatic black and white portrait capturing raw emotion.</p>
-                        <div class="tags">
-                            <span class="tag">Photography</span>
-                            <span class="tag">Portrait</span>
-                            <span class="tag">Black & White</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?digital,art,1" alt="Digital illustration of a futuristic cityscape">
-                    <div class="art-card-content">
-                        <h3>Digital Dreams</h3>
-                        <p>Futuristic cityscape created with digital painting techniques.</p>
-                        <div class="tags">
-                            <span class="tag">Digital Art</span>
-                            <span class="tag">Sci-Fi</span>
-                            <span class="tag">Concept Art</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </section>
 
-        <!-- Gallery with Filtering -->
-        <section aria-labelledby="gallery-heading" id="gallery">
-            <h2 id="gallery-heading">Community Gallery</h2>
-            
-            <div class="filter-controls">
-                <label for="category-filter">Filter by Category:</label>
-                <select id="category-filter" aria-label="Filter artworks by category">
-                    <option value="all">All Categories</option>
-                    <option value="painting">Painting</option>
-                    <option value="photography">Photography</option>
-                    <option value="digital">Digital Art</option>
-                    <option value="sculpture">Sculpture</option>
-                    <option value="illustration">Illustration</option>
-                </select>
-                
-                <label for="sort-by">Sort By:</label>
-                <select id="sort-by" aria-label="Sort artworks">
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
-                    <option value="popular">Most Popular</option>
-                </select>
-                
-                <div class="search-box">
-                    <label for="search" class="visually-hidden">Search artworks</label>
-                    <input type="text" id="search" placeholder="Search artworks..." aria-label="Search artworks">
-                </div>
-            </div>
-            
-            <div class="gallery" id="artwork-gallery">
-                <!-- Artwork cards will be dynamically inserted here -->
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?art,2" alt="Mixed media collage with newspaper clippings and paint">
-                    <div class="art-card-content">
-                        <h3>Urban Collage</h3>
-                        <p>Mixed media piece combining newspaper clippings with acrylic paint.</p>
-                        <div class="tags">
-                            <span class="tag">Mixed Media</span>
-                            <span class="tag">Collage</span>
-                            <span class="tag">Urban</span>
-                        </div>
+                    <h3>Add Expenses</h3>
+                    <div class="form-group">
+                        <label for="expense-name">Expense Name</label>
+                        <input type="text" id="expense-name" name="expense-name" required aria-required="true">
                     </div>
-                </article>
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?sculpture,1" alt="Bronze sculpture of abstract human forms">
-                    <div class="art-card-content">
-                        <h3>Bronze Figures</h3>
-                        <p>Abstract human forms cast in bronze with a polished finish.</p>
-                        <div class="tags">
-                            <span class="tag">Sculpture</span>
-                            <span class="tag">Bronze</span>
-                            <span class="tag">Abstract</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?illustration,1" alt="Watercolor illustration of botanical elements">
-                    <div class="art-card-content">
-                        <h3>Botanical Study</h3>
-                        <p>Delicate watercolor illustrations of various plant species.</p>
-                        <div class="tags">
-                            <span class="tag">Illustration</span>
-                            <span class="tag">Watercolor</span>
-                            <span class="tag">Botanical</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?street,art,1" alt="Vibrant street art mural on a brick wall">
-                    <div class="art-card-content">
-                        <h3>Street Mural</h3>
-                        <p>Large-scale mural featuring vibrant colors and social commentary.</p>
-                        <div class="tags">
-                            <span class="tag">Street Art</span>
-                            <span class="tag">Mural</span>
-                            <span class="tag">Public Art</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?ceramic,1" alt="Handcrafted ceramic vase with intricate patterns">
-                    <div class="art-card-content">
-                        <h3>Ceramic Vase</h3>
-                        <p>Hand-thrown ceramic vase with intricate carved patterns.</p>
-                        <div class="tags">
-                            <span class="tag">Ceramics</span>
-                            <span class="tag">Pottery</span>
-                            <span class="tag">Handmade</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="art-card" tabindex="0">
-                    <img src="https://source.unsplash.com/random/600x400/?fiber,art,1" alt="Textile art piece with woven fibers and embroidery">
-                    <div class="art-card-content">
-                        <h3>Textile Art</h3>
-                        <p>Experimental fiber art combining weaving and embroidery techniques.</p>
-                        <div class="tags">
-                            <span class="tag">Textile</span>
-                            <span class="tag">Fiber Art</span>
-                            <span class="tag">Experimental</span>
-                        </div>
-                    </div>
-                </article>
-            </div>
-        </section>
 
-        <!-- Upload Modal -->
-        <div class="modal" id="upload-modal" role="dialog" aria-modal="true" aria-labelledby="upload-modal-title">
-            <div class="modal-content">
-                <button class="close-modal" aria-label="Close upload form">×</button>
-                <h2 id="upload-modal-title">Upload Your Creative Work</h2>
-                
-                <form id="upload-form" aria-describedby="upload-instructions">
-                    <p id="upload-instructions">Fill out the form below to share your artwork with the community. All fields marked with an asterisk (*) are required.</p>
-                    
                     <div class="form-group">
-                        <label for="art-title" class="required-field">Title</label>
-                        <input type="text" id="art-title" name="title" required aria-required="true">
-                        <div class="error-message" id="title-error">Please enter a title for your artwork.</div>
+                        <label for="expense-amount">Amount ($)</label>
+                        <input type="number" id="expense-amount" name="expense-amount" min="0" step="0.01" required aria-required="true">
                     </div>
-                    
+
                     <div class="form-group">
-                        <label for="art-description">Description</label>
-                        <textarea id="art-description" name="description" aria-describedby="description-help"></textarea>
-                        <p id="description-help">Tell us about your artwork - the inspiration, techniques used, or any special meaning.</p>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="art-category" class="required-field">Category</label>
-                        <select id="art-category" name="category" required aria-required="true">
+                        <label for="expense-category">Category</label>
+                        <select id="expense-category" name="expense-category" required aria-required="true">
                             <option value="">Select a category</option>
-                            <option value="painting">Painting</option>
-                            <option value="photography">Photography</option>
-                            <option value="digital">Digital Art</option>
-                            <option value="sculpture">Sculpture</option>
-                            <option value="illustration">Illustration</option>
-                            <option value="other">Other</option>
+                            <option value="Housing">Housing</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Food">Food</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Savings">Savings</option>
+                            <option value="Debt">Debt Payments</option>
+                            <option value="Other">Other</option>
                         </select>
-                        <div class="error-message" id="category-error">Please select a category.</div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="art-tags">Tags (comma separated)</label>
-                        <input type="text" id="art-tags" name="tags" aria-describedby="tags-help">
-                        <p id="tags-help">Add relevant tags to help others discover your work (e.g., abstract, portrait, landscape).</p>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="art-file" class="required-field">Upload Image</label>
-                        <input type="file" id="art-file" name="file" accept="image/*" required aria-required="true">
-                        <div class="error-message" id="file-error">Please select an image file to upload.</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="artist-name">Your Name</label>
-                        <input type="text" id="artist-name" name="artist" aria-describedby="artist-help">
-                        <p id="artist-help">How you'd like to be credited (leave blank for anonymous).</p>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="artist-website">Website (optional)</label>
-                        <input type="url" id="artist-website" name="website" placeholder="https://example.com">
-                    </div>
-                    
-                    <button type="submit" class="secondary">Upload Artwork</button>
+
+                    <button type="button" id="add-expense">Add Expense</button>
                 </form>
-            </div>
+
+                <h3>Your Expenses</h3>
+                <ul class="expense-list" id="expense-list" aria-live="polite">
+                    <!-- Expenses will be added here dynamically -->
+                </ul>
+
+                <button type="button" id="calculate-budget" class="btn-danger">Calculate Budget</button>
+                <button type="button" id="reset-budget">Reset</button>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" aria-labelledby="results-section-heading">
+                <h2 id="results-section-heading">Budget Summary</h2>
+                
+                <div class="summary-card">
+                    <h3>Total Income</h3>
+                    <div class="summary-value" id="total-income">$0.00</div>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Total Expenses</h3>
+                    <div class="summary-value" id="total-expenses">$0.00</div>
+                </div>
+
+                <div class="summary-card">
+                    <h3>Remaining Balance</h3>
+                    <div class="summary-value" id="remaining-balance">$0.00</div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="budget-chart" aria-label="Visual breakdown of expense categories" role="img"></canvas>
+                    <div id="chart-description" class="visually-hidden">
+                        This pie chart shows the percentage breakdown of your expenses by category.
+                    </div>
+                </div>
+
+                <div id="budget-message" aria-live="polite"></div>
+            </section>
         </div>
     </main>
 
     <!-- Footer -->
     <footer>
-        <div>
-            <h2>Creative Share</h2>
-            <p>A platform for artists to showcase their work and connect with the community.</p>
+        <div class="footer-content">
+            <p>&copy; 2023 Accessible Budget Tracker. All rights reserved.</p>
+            <p>This tool is designed to be fully accessible to all users.</p>
         </div>
-        <nav aria-label="Footer navigation">
-            <ul>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#terms">Terms of Service</a></li>
-                <li><a href="#privacy">Privacy Policy</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-        <p>&copy; 2023 Creative Share. All rights reserved.</p>
     </footer>
 
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const incomeInput = document.getElementById('income');
+            const expenseNameInput = document.getElementById('expense-name');
+            const expenseAmountInput = document.getElementById('expense-amount');
+            const expenseCategoryInput = document.getElementById('expense-category');
+            const addExpenseBtn = document.getElementById('add-expense');
+            const calculateBtn = document.getElementById('calculate-budget');
+            const resetBtn = document.getElementById('reset-budget');
+            const expenseList = document.getElementById('expense-list');
+            const totalIncomeDisplay = document.getElementById('total-income');
+            const totalExpensesDisplay = document.getElementById('total-expenses');
+            const remainingBalanceDisplay = document.getElementById('remaining-balance');
+            const budgetMessage = document.getElementById('budget-message');
+            const budgetChartCanvas = document.getElementById('budget-chart');
 
-        mobileMenuBtn.addEventListener('click', function() {
-            const isExpanded = this.getAttribute('aria-expanded') === 'true';
-            this.setAttribute('aria-expanded', !isExpanded);
-            navLinks.classList.toggle('active');
-        });
+            // Budget Data
+            let budgetData = {
+                income: 0,
+                expenses: [],
+                categories: {}
+            };
 
-        // Modal Handling
-        const uploadModal = document.getElementById('upload-modal');
-        const openModalBtn = document.getElementById('open-upload-modal');
-        const closeModalBtn = document.querySelector('.close-modal');
+            // Chart Instance
+            let budgetChart = null;
 
-        openModalBtn.addEventListener('click', function() {
-            uploadModal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            uploadModal.setAttribute('aria-hidden', 'false');
-        });
-
-        closeModalBtn.addEventListener('click', function() {
-            uploadModal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            uploadModal.setAttribute('aria-hidden', 'true');
-        });
-
-        // Close modal when clicking outside content
-        uploadModal.addEventListener('click', function(e) {
-            if (e.target === uploadModal) {
-                uploadModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                uploadModal.setAttribute('aria-hidden', 'true');
-            }
-        });
-
-        // Form Validation
-        const uploadForm = document.getElementById('upload-form');
-        const titleInput = document.getElementById('art-title');
-        const categoryInput = document.getElementById('art-category');
-        const fileInput = document.getElementById('art-file');
-        const titleError = document.getElementById('title-error');
-        const categoryError = document.getElementById('category-error');
-        const fileError = document.getElementById('file-error');
-
-        uploadForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            let isValid = true;
-
-            // Validate title
-            if (titleInput.value.trim() === '') {
-                titleError.style.display = 'block';
-                titleInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                titleError.style.display = 'none';
-                titleInput.setAttribute('aria-invalid', 'false');
+            // Initialize the application
+            function init() {
+                loadFromLocalStorage();
+                updateUI();
+                setupEventListeners();
             }
 
-            // Validate category
-            if (categoryInput.value === '') {
-                categoryError.style.display = 'block';
-                categoryInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                categoryError.style.display = 'none';
-                categoryInput.setAttribute('aria-invalid', 'false');
-            }
-
-            // Validate file
-            if (fileInput.files.length === 0) {
-                fileError.style.display = 'block';
-                fileInput.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                fileError.style.display = 'none';
-                fileInput.setAttribute('aria-invalid', 'false');
-            }
-
-            if (isValid) {
-                // In a real app, you would upload the file here
-                alert('Artwork submitted successfully!');
-                uploadModal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-                uploadModal.setAttribute('aria-hidden', 'true');
-                uploadForm.reset();
-            }
-        });
-
-        // Filter and Search Functionality
-        const categoryFilter = document.getElementById('category-filter');
-        const sortBy = document.getElementById('sort-by');
-        const searchInput = document.getElementById('search');
-        const artworkGallery = document.getElementById('artwork-gallery');
-
-        // Sample data for demonstration
-        const artworks = [
-            {
-                title: "Urban Collage",
-                description: "Mixed media piece combining newspaper clippings with acrylic paint.",
-                tags: ["Mixed Media", "Collage", "Urban"],
-                category: "other",
-                img: "https://source.unsplash.com/random/600x400/?art,2",
-                alt: "Mixed media collage with newspaper clippings and paint",
-                date: new Date(2023, 5, 15),
-                likes: 42
-            },
-            {
-                title: "Bronze Figures",
-                description: "Abstract human forms cast in bronze with a polished finish.",
-                tags: ["Sculpture", "Bronze", "Abstract"],
-                category: "sculpture",
-                img: "https://source.unsplash.com/random/600x400/?sculpture,1",
-                alt: "Bronze sculpture of abstract human forms",
-                date: new Date(2023, 4, 22),
-                likes: 78
-            },
-            {
-                title: "Botanical Study",
-                description: "Delicate watercolor illustrations of various plant species.",
-                tags: ["Illustration", "Watercolor", "Botanical"],
-                category: "illustration",
-                img: "https://source.unsplash.com/random/600x400/?illustration,1",
-                alt: "Watercolor illustration of botanical elements",
-                date: new Date(2023, 6, 3),
-                likes: 35
-            },
-            {
-                title: "Street Mural",
-                description: "Large-scale mural featuring vibrant colors and social commentary.",
-                tags: ["Street Art", "Mural", "Public Art"],
-                category: "other",
-                img: "https://source.unsplash.com/random/600x400/?street,art,1",
-                alt: "Vibrant street art mural on a brick wall",
-                date: new Date(2023, 3, 18),
-                likes: 112
-            },
-            {
-                title: "Ceramic Vase",
-                description: "Hand-thrown ceramic vase with intricate carved patterns.",
-                tags: ["Ceramics", "Pottery", "Handmade"],
-                category: "sculpture",
-                img: "https://source.unsplash.com/random/600x400/?ceramic,1",
-                alt: "Handcrafted ceramic vase with intricate patterns",
-                date: new Date(2023, 2, 30),
-                likes: 64
-            },
-            {
-                title: "Textile Art",
-                description: "Experimental fiber art combining weaving and embroidery techniques.",
-                tags: ["Textile", "Fiber Art", "Experimental"],
-                category: "other",
-                img: "https://source.unsplash.com/random/600x400/?fiber,art,1",
-                alt: "Textile art piece with woven fibers and embroidery",
-                date: new Date(2023, 1, 14),
-                likes: 29
-            }
-        ];
-
-        // Render artworks
-        function renderArtworks(artworksToRender) {
-            artworkGallery.innerHTML = '';
-            
-            if (artworksToRender.length === 0) {
-                artworkGallery.innerHTML = '<div class="empty-state"><p>No artworks found matching your criteria.</p></div>';
-                return;
-            }
-            
-            artworksToRender.forEach(artwork => {
-                const card = document.createElement('article');
-                card.className = 'art-card';
-                card.tabIndex = 0;
-                
-                card.innerHTML = `
-                    <img src="${artwork.img}" alt="${artwork.alt}">
-                    <div class="art-card-content">
-                        <h3>${artwork.title}</h3>
-                        <p>${artwork.description}</p>
-                        <div class="tags">
-                            ${artwork.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-                
-                artworkGallery.appendChild(card);
-            });
-        }
-
-        // Filter and sort artworks
-        function filterAndSortArtworks() {
-            const category = categoryFilter.value;
-            const sortMethod = sortBy.value;
-            const searchTerm = searchInput.value.toLowerCase();
-            
-            let filtered = artworks.filter(artwork => {
-                const matchesCategory = category === 'all' || artwork.category === category;
-                const matchesSearch = artwork.title.toLowerCase().includes(searchTerm) || 
-                                     artwork.description.toLowerCase().includes(searchTerm) ||
-                                     artwork.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-                
-                return matchesCategory && matchesSearch;
-            });
-            
-            // Sort artworks
-            if (sortMethod === 'newest') {
-                filtered.sort((a, b) => b.date - a.date);
-            } else if (sortMethod === 'oldest') {
-                filtered.sort((a, b) => a.date - b.date);
-            } else if (sortMethod === 'popular') {
-                filtered.sort((a, b) => b.likes - a.likes);
-            }
-            
-            renderArtworks(filtered);
-        }
-
-        // Event listeners for filtering
-        categoryFilter.addEventListener('change', filterAndSortArtworks);
-        sortBy.addEventListener('change', filterAndSortArtworks);
-        searchInput.addEventListener('input', filterAndSortArtworks);
-
-        // Initial render
-        renderArtworks(artworks);
-
-        // Keyboard navigation for modal
-        document.addEventListener('keydown', function(e) {
-            if (uploadModal.classList.contains('active')) {
-                if (e.key === 'Escape') {
-                    uploadModal.classList.remove('active');
-                    document.body.style.overflow = 'auto';
-                    uploadModal.setAttribute('aria-hidden', 'true');
+            // Load data from localStorage
+            function loadFromLocalStorage() {
+                const savedData = localStorage.getItem('budgetData');
+                if (savedData) {
+                    budgetData = JSON.parse(savedData);
                 }
-                
-                // Trap focus inside modal when open
-                if (e.key === 'Tab') {
-                    const focusableElements = uploadModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                    const firstElement = focusableElements[0];
-                    const lastElement = focusableElements[focusableElements.length - 1];
-                    
-                    if (e.shiftKey) {
-                        if (document.activeElement === firstElement) {
-                            lastElement.focus();
-                            e.preventDefault();
-                        }
-                    } else {
-                        if (document.activeElement === lastElement) {
-                            firstElement.focus();
-                            e.preventDefault();
-                        }
+            }
+
+            // Save data to localStorage
+            function saveToLocalStorage() {
+                localStorage.setItem('budgetData', JSON.stringify(budgetData));
+            }
+
+            // Set up event listeners
+            function setupEventListeners() {
+                addExpenseBtn.addEventListener('click', addExpense);
+                calculateBtn.addEventListener('click', calculateBudget);
+                resetBtn.addEventListener('click', resetBudget);
+
+                // Keyboard support for buttons
+                addExpenseBtn.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        addExpense();
                     }
+                });
+
+                calculateBtn.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        calculateBudget();
+                    }
+                });
+
+                resetBtn.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        resetBudget();
+                    }
+                });
+
+                // Form submission prevention
+                document.getElementById('budget-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                });
+            }
+
+            // Add an expense to the list
+            function addExpense() {
+                const name = expenseNameInput.value.trim();
+                const amount = parseFloat(expenseAmountInput.value);
+                const category = expenseCategoryInput.value;
+
+                // Validate inputs
+                if (!name || isNaN(amount) || amount <= 0 || !category) {
+                    showError('Please fill in all expense fields with valid values.');
+                    return;
+                }
+
+                // Add expense to data
+                const expense = {
+                    id: Date.now(),
+                    name,
+                    amount,
+                    category
+                };
+
+                budgetData.expenses.push(expense);
+                saveToLocalStorage();
+                updateUI();
+
+                // Clear input fields
+                expenseNameInput.value = '';
+                expenseAmountInput.value = '';
+                expenseCategoryInput.value = '';
+                expenseNameInput.focus();
+
+                // Announce to screen readers
+                announceToScreenReader(`Added expense: ${name} for $${amount.toFixed(2)} under ${category} category.`);
+            }
+
+            // Remove an expense from the list
+            function removeExpense(id) {
+                budgetData.expenses = budgetData.expenses.filter(expense => expense.id !== id);
+                saveToLocalStorage();
+                updateUI();
+            }
+
+            // Calculate the budget summary
+            function calculateBudget() {
+                const income = parseFloat(incomeInput.value);
+
+                // Validate income
+                if (isNaN(income) || income <= 0) {
+                    showError('Please enter a valid income amount.');
+                    return;
+                }
+
+                if (budgetData.expenses.length === 0) {
+                    showError('Please add at least one expense.');
+                    return;
+                }
+
+                budgetData.income = income;
+                saveToLocalStorage();
+
+                // Calculate totals
+                const totalExpenses = budgetData.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+                const remainingBalance = budgetData.income - totalExpenses;
+
+                // Update UI
+                totalIncomeDisplay.textContent = `$${budgetData.income.toFixed(2)}`;
+                totalExpensesDisplay.textContent = `$${totalExpenses.toFixed(2)}`;
+                remainingBalanceDisplay.textContent = `$${remainingBalance.toFixed(2)}`;
+
+                // Set color based on balance
+                if (remainingBalance >= 0) {
+                    remainingBalanceDisplay.className = 'summary-value positive';
+                    budgetMessage.textContent = 'Good job! You have money left over this month.';
+                } else {
+                    remainingBalanceDisplay.className = 'summary-value negative';
+                    budgetMessage.textContent = 'Warning: You are spending more than you earn this month.';
+                }
+
+                // Update chart
+                updateChart();
+
+                // Announce to screen readers
+                announceToScreenReader(`Budget calculated. Income: $${budgetData.income.toFixed(2)}, Expenses: $${totalExpenses.toFixed(2)}, Remaining: $${remainingBalance.toFixed(2)}. ${budgetMessage.textContent}`);
+            }
+
+            // Reset the budget calculator
+            function resetBudget() {
+                if (confirm('Are you sure you want to reset all budget data? This cannot be undone.')) {
+                    budgetData = {
+                        income: 0,
+                        expenses: [],
+                        categories: {}
+                    };
+                    
+                    incomeInput.value = '';
+                    expenseNameInput.value = '';
+                    expenseAmountInput.value = '';
+                    expenseCategoryInput.value = '';
+                    
+                    saveToLocalStorage();
+                    updateUI();
+                    
+                    // Clear chart if it exists
+                    if (budgetChart) {
+                        budgetChart.destroy();
+                        budgetChart = null;
+                    }
+                    
+                    budgetMessage.textContent = '';
+                    
+                    // Announce to screen readers
+                    announceToScreenReader('Budget calculator has been reset.');
                 }
             }
+
+            // Update the UI based on current data
+            function updateUI() {
+                // Update income display if it exists
+                if (budgetData.income > 0) {
+                    incomeInput.value = budgetData.income;
+                }
+
+                // Update expense list
+                expenseList.innerHTML = '';
+                
+                if (budgetData.expenses.length === 0) {
+                    const emptyMessage = document.createElement('li');
+                    emptyMessage.textContent = 'No expenses added yet.';
+                    emptyMessage.classList.add('empty-message');
+                    expenseList.appendChild(emptyMessage);
+                } else {
+                    budgetData.expenses.forEach(expense => {
+                        const expenseItem = document.createElement('li');
+                        expenseItem.className = 'expense-item';
+                        expenseItem.innerHTML = `
+                            <div>
+                                <strong>${expense.name}</strong><br>
+                                <span>$${expense.amount.toFixed(2)} - ${expense.category}</span>
+                            </div>
+                            <div class="expense-item-controls">
+                                <button class="btn-danger btn-small" data-id="${expense.id}" aria-label="Remove ${expense.name} expense">×</button>
+                            </div>
+                        `;
+                        
+                        const removeBtn = expenseItem.querySelector('button');
+                        removeBtn.addEventListener('click', () => removeExpense(expense.id));
+                        removeBtn.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                removeExpense(expense.id);
+                            }
+                        });
+                        
+                        expenseList.appendChild(expenseItem);
+                    });
+                }
+            }
+
+            // Update the chart visualization
+            function updateChart() {
+                // Group expenses by category
+                const categories = {};
+                budgetData.expenses.forEach(expense => {
+                    if (!categories[expense.category]) {
+                        categories[expense.category] = 0;
+                    }
+                    categories[expense.category] += expense.amount;
+                });
+
+                // Prepare data for chart
+                const labels = Object.keys(categories);
+                const data = Object.values(categories);
+                const backgroundColors = [
+                    '#3498db', '#e74c3c', '#2ecc71', '#f39c12', 
+                    '#9b59b6', '#1abc9c', '#d35400', '#34495e',
+                    '#7f8c8d', '#27ae60'
+                ];
+
+                // Get or create chart
+                const ctx = budgetChartCanvas.getContext('2d');
+                
+                if (budgetChart) {
+                    budgetChart.data.labels = labels;
+                    budgetChart.data.datasets[0].data = data;
+                    budgetChart.update();
+                } else {
+                    budgetChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                data: data,
+                                backgroundColor: backgroundColors,
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'right',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.raw || 0;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = Math.round((value / total) * 100);
+                                            return `${label}: $${value.toFixed(2)} (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Update chart description for screen readers
+                let description = 'Expense breakdown by category: ';
+                labels.forEach((label, index) => {
+                    const value = data[index];
+                    const percentage = Math.round((value / budgetData.expenses.reduce((sum, exp) => sum + exp.amount, 0)) * 100);
+                    description += `${label} accounts for ${percentage}% of expenses, `;
+                });
+                document.getElementById('chart-description').textContent = description.slice(0, -2) + '.';
+            }
+
+            // Show error message
+            function showError(message) {
+                budgetMessage.textContent = message;
+                budgetMessage.style.color = 'var(--accent-color)';
+                
+                // Announce to screen readers
+                announceToScreenReader(`Error: ${message}`);
+            }
+
+            // Announce messages to screen readers
+            function announceToScreenReader(message) {
+                const announcement = document.createElement('div');
+                announcement.setAttribute('aria-live', 'polite');
+                announcement.className = 'visually-hidden';
+                announcement.textContent = message;
+                document.body.appendChild(announcement);
+                
+                // Remove after a short delay
+                setTimeout(() => {
+                    document.body.removeChild(announcement);
+                }, 1000);
+            }
+
+            // Initialize the app
+            init();
         });
     </script>
 </body>
