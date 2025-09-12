@@ -3,98 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Community Recipe Exchange - Share and Discover Recipes</title>
+    <title>Accessible Digital Art Gallery - Browse and Explore Interactive Artworks</title>
     <style>
-        /* Base Styles with Enhanced Accessibility */
-        :root {
-            --primary-color: #2b6cb0;
-            --primary-dark: #1a4971;
-            --secondary-color: #38a169;
-            --secondary-dark: #276749;
-            --accent-color: #d69e2e;
-            --accent-dark: #975a16;
-            --text-color: #1a202c;
-            --text-light: #4a5568;
-            --background-color: #f7fafc;
-            --background-alt: #edf2f7;
-            --error-color: #e53e3e;
-            --success-color: #38a169;
-            --warning-color: #d69e2e;
-            --border-color: #cbd5e0;
-            --focus-color: #4299e1;
-            --focus-outline: 3px solid #4299e1;
-        }
-
-        /* Respect user preferences for reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.001ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
-        * {
+        /* CSS Reset and Base Styles */
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        /* Custom Properties for Theming */
+        :root {
+            /* Light Mode Colors */
+            --color-background: #f8f9fa;
+            --color-text: #121212;
+            --color-primary: #3949ab;
+            --color-secondary: #5c6bc0;
+            --color-accent: #7986cb;
+            --color-border: #d1d5db;
+            --color-card: #ffffff;
+            --color-overlay: rgba(0, 0, 0, 0.75);
+            --color-focus: #ff5722;
+            --color-error: #d32f2f;
+            --color-success: #388e3c;
+            --color-button-text: #ffffff;
+            --color-shadow: rgba(0, 0, 0, 0.1);
+            --color-tooltip: #424242;
+            --color-tooltip-text: #ffffff;
+            --color-skip-link: #ffffff;
+            --color-skip-link-bg: #000000;
+        }
+
+        /* Dark Mode Colors */
+        [data-theme="dark"] {
+            --color-background: #121212;
+            --color-text: #f8f9fa;
+            --color-primary: #7986cb;
+            --color-secondary: #5c6bc0;
+            --color-accent: #3949ab;
+            --color-border: #424242;
+            --color-card: #1e1e1e;
+            --color-overlay: rgba(0, 0, 0, 0.85);
+            --color-focus: #ff9800;
+            --color-error: #ef5350;
+            --color-success: #66bb6a;
+            --color-shadow: rgba(0, 0, 0, 0.3);
+            --color-tooltip: #f5f5f5;
+            --color-tooltip-text: #121212;
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Base Styles */
+        html {
+            font-size: 100%;
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--background-color);
+            color: var(--color-text);
+            background-color: var(--color-background);
             padding: 0;
             margin: 0;
             min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Enhanced Typography for AAA Compliance */
-        p, li, td, th, label, input, textarea, select, button {
-            font-size: 1rem;
-            line-height: 1.6;
-            max-width: 80ch; /* Maximum 80 characters per line */
-        }
-
+        /* Typography */
         h1, h2, h3, h4, h5, h6 {
-            margin-top: 1.5em;
-            margin-bottom: 0.75em;
-            line-height: 1.3;
-            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 0.5rem;
             font-weight: 700;
+            line-height: 1.2;
+            color: var(--color-text);
         }
 
         h1 {
-            font-size: 2.25rem;
-            margin-top: 0.5em;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
 
         h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
         }
 
         h3 {
             font-size: 1.5rem;
-        }
-
-        h4 {
-            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
         }
 
         p {
-            margin-bottom: 1.5em; /* Paragraph spacing at least 1.5 times line spacing */
-        }
-
-        /* Enhanced Focus Styles for AAA Compliance */
-        a:focus, button:focus, input:focus, textarea:focus, select:focus, [tabindex]:focus {
-            outline: var(--focus-outline);
-            outline-offset: 2px;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-            border-radius: 2px;
-            z-index: 1;
-            position: relative;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            max-width: 70ch; /* For better readability */
+            line-height: 1.6; /* WCAG AAA requirement */
         }
 
         /* Skip Link */
@@ -102,35 +115,51 @@
             position: absolute;
             top: -40px;
             left: 0;
-            background: var(--primary-color);
-            color: white;
-            padding: 8px 16px;
+            background: var(--color-skip-link-bg);
+            color: var(--color-skip-link);
+            padding: 8px;
             z-index: 100;
-            transition: top 0.2s;
-            font-weight: bold;
-            border-radius: 0 0 4px 0;
+            font-weight: 700;
+            text-decoration: none;
+            border: 2px solid transparent;
+            transition: top 0.3s ease;
         }
 
         .skip-link:focus {
             top: 0;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+            outline: 2px solid var(--color-focus);
+            outline-offset: 2px;
         }
 
-        /* Container */
+        /* Focus Styles - Enhanced for AAA compliance */
+        :focus {
+            outline: 3px solid var(--color-focus);
+            outline-offset: 3px;
+        }
+
+        :focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--color-focus);
+            outline-offset: 3px;
+        }
+
+        /* Layout */
         .container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 1.5rem;
+            padding: 0 1rem;
         }
 
         /* Header */
         header {
-            background-color: var(--primary-color);
+            background-color: var(--color-primary);
             color: white;
-            padding: 1.5rem 0;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px var(--color-shadow);
         }
 
         .header-content {
@@ -141,8 +170,14 @@
             gap: 1rem;
         }
 
+        @media (min-width: 768px) {
+            .header-content {
+                flex-direction: row;
+            }
+        }
+
         .site-title {
-            font-size: 2rem;
+            font-size: 1.75rem;
             margin: 0;
         }
 
@@ -151,389 +186,333 @@
             text-decoration: none;
         }
 
-        .site-description {
-            font-size: 1.1rem;
-            margin: 0.5rem 0 0;
-            font-weight: normal;
-        }
-
-        /* Navigation */
-        nav {
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .nav-list {
+        /* Main Navigation */
+        .main-nav ul {
             display: flex;
             list-style: none;
             gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
         }
 
-        .nav-list li a {
+        .main-nav a {
             color: white;
             text-decoration: none;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
+            font-weight: 500;
+            padding: 0.5rem;
             border-radius: 4px;
             transition: background-color 0.3s;
         }
 
-        .nav-list li a:hover,
-        .nav-list li a:focus {
-            background-color: var(--primary-dark);
-            text-decoration: underline;
+        .main-nav a:hover,
+        .main-nav a:focus {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
         /* Main Content */
         main {
             padding: 2rem 0;
-            min-height: 70vh;
         }
 
-        .section-title {
-            text-align: center;
+        /* Gallery Controls */
+        .gallery-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
             margin-bottom: 2rem;
-            color: var(--primary-color);
+            align-items: center;
+            justify-content: space-between;
         }
 
-        /* Recipe Cards */
-        .recipe-grid {
+        /* Search Form */
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-form label {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--color-border);
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: var(--color-card);
+            color: var(--color-text);
+            min-width: 0;
+        }
+
+        .search-input:focus {
+            border-color: var(--color-primary);
+        }
+
+        .search-button {
+            padding: 0.75rem 1.25rem;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-button:hover,
+        .search-button:focus {
+            background-color: var(--color-secondary);
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--color-border);
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: var(--color-card);
+            color: var(--color-text);
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .filter-select:focus {
+            border-color: var(--color-primary);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background-color: transparent;
+            border: 2px solid var(--color-border);
+            border-radius: 4px;
+            padding: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+            color: var(--color-text);
+        }
+
+        .theme-toggle:hover,
+        .theme-toggle:focus {
+            background-color: var(--color-border);
+        }
+
+        .theme-toggle svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
 
-        .recipe-card {
-            background-color: white;
+        /* Artwork Card */
+        .artwork-card {
+            background-color: var(--color-card);
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px var(--color-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             display: flex;
             flex-direction: column;
             height: 100%;
+            border: 1px solid var(--color-border);
         }
 
-        .recipe-card:hover,
-        .recipe-card:focus-within {
+        .artwork-card:hover,
+        .artwork-card:focus-within {
             transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 15px var(--color-shadow);
         }
 
-        .recipe-card-image {
+        .artwork-image-container {
+            position: relative;
+            padding-top: 75%; /* 4:3 Aspect Ratio */
+            overflow: hidden;
+        }
+
+        .artwork-image {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
         }
 
-        .recipe-card-content {
+        .artwork-card:hover .artwork-image,
+        .artwork-card:focus-within .artwork-image {
+            transform: scale(1.05);
+        }
+
+        .artwork-info {
             padding: 1.5rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
 
-        .recipe-card-title {
-            font-size: 1.5rem;
-            margin-top: 0;
+        .artwork-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+
+        .artwork-artist {
+            font-size: 1rem;
+            color: var(--color-secondary);
             margin-bottom: 0.75rem;
-            color: var(--primary-color);
+            font-weight: 500;
         }
 
-        .recipe-card-meta {
-            display: flex;
-            justify-content: space-between;
+        .artwork-description {
             margin-bottom: 1rem;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .recipe-card-description {
-            margin-bottom: 1.5rem;
-        }
-
-        .recipe-card-footer {
-            margin-top: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .recipe-card-rating {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .recipe-card-rating-stars {
-            color: var(--accent-color);
-            font-size: 1.2rem;
-        }
-
-        .recipe-card-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 0.9rem;
-            min-height: 44px;
-            min-width: 44px;
-        }
-
-        .recipe-card-button:hover,
-        .recipe-card-button:focus {
-            background-color: var(--primary-dark);
-        }
-
-        /* Search Section */
-        .search-section {
-            background-color: var(--background-alt);
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 3rem;
-        }
-
-        .search-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .search-row {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .search-group {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .search-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .search-input,
-        .search-select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-            min-height: 44px;
-        }
-
-        .search-input:focus,
-        .search-select:focus {
-            border-color: var(--focus-color);
-        }
-
-        .search-button {
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            min-height: 44px;
-            min-width: 44px;
-            margin-top: 1rem;
-            align-self: flex-start;
-        }
-
-        .search-button:hover,
-        .search-button:focus {
-            background-color: var(--secondary-dark);
-        }
-
-        /* Add Recipe Form */
-        .add-recipe-section {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 3rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-        }
-
-        .form-input,
-        .form-textarea,
-        .form-select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-            min-height: 44px;
-        }
-
-        .form-textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            border-color: var(--focus-color);
-        }
-
-        .form-hint {
-            display: block;
-            margin-top: 0.5rem;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .form-error {
-            color: var(--error-color);
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .required-field::after {
-            content: "*";
-            color: var(--error-color);
-            margin-left: 0.25rem;
-        }
-
-        .form-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 4px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            min-height: 44px;
-            min-width: 44px;
-        }
-
-        .form-button:hover,
-        .form-button:focus {
-            background-color: var(--primary-dark);
-        }
-
-        .form-button.secondary {
-            background-color: var(--text-light);
-        }
-
-        .form-button.secondary:hover,
-        .form-button.secondary:focus {
-            background-color: var(--text-color);
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        /* Ingredients List in Form */
-        .ingredients-list {
-            list-style: none;
-            margin-bottom: 1rem;
-        }
-
-        .ingredient-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.5rem;
-            background-color: var(--background-alt);
-            padding: 0.5rem;
-            border-radius: 4px;
-        }
-
-        .ingredient-text {
+            font-size: 0.95rem;
             flex-grow: 1;
         }
 
-        .remove-ingredient {
-            background-color: var(--error-color);
+        .artwork-category {
+            display: inline-block;
+            background-color: var(--color-accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .artwork-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .view-button {
+            background-color: var(--color-primary);
             color: white;
             border: none;
             border-radius: 4px;
-            width: 44px;
-            height: 44px;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .view-button:hover,
+        .view-button:focus {
+            background-color: var(--color-secondary);
+        }
+
+        .favorite-button {
+            background-color: transparent;
+            border: 2px solid var(--color-border);
+            border-radius: 4px;
+            padding: 0.75rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 0.5rem;
+            min-width: 44px;
+            min-height: 44px;
+            color: var(--color-text);
         }
 
-        .remove-ingredient:hover,
-        .remove-ingredient:focus {
-            background-color: #c53030;
+        .favorite-button:hover,
+        .favorite-button:focus {
+            background-color: var(--color-border);
         }
 
-        .add-ingredient-row {
-            display: flex;
-            gap: 1rem;
+        .favorite-button svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
 
-        .add-ingredient-input {
-            flex-grow: 1;
+        .favorite-button[aria-pressed="true"] svg {
+            fill: #e91e63;
+            color: #e91e63;
         }
 
-        /* Recipe Detail Modal */
-        .modal-overlay {
+        /* Modal */
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: var(--color-overlay);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             z-index: 1000;
-            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
-        .modal {
-            background-color: white;
+        .modal.is-active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--color-card);
             border-radius: 8px;
-            max-width: 800px;
-            width: 100%;
+            max-width: 90%;
+            width: 1000px;
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-header {
             padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background-color: white;
-            z-index: 1;
+            border-bottom: 1px solid var(--color-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -541,109 +520,153 @@
 
         .modal-title {
             margin: 0;
-            color: var(--primary-color);
+            font-size: 1.5rem;
         }
 
         .modal-close {
-            background: none;
+            background: transparent;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--text-light);
-            width: 44px;
-            height: 44px;
+            padding: 0.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            min-width: 44px;
+            min-height: 44px;
+            color: var(--color-text);
         }
 
         .modal-close:hover,
         .modal-close:focus {
-            background-color: var(--background-alt);
-            color: var(--text-color);
+            color: var(--color-primary);
         }
 
         .modal-body {
             padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
 
-        .recipe-image {
+        @media (min-width: 768px) {
+            .modal-body {
+                flex-direction: row;
+            }
+        }
+
+        .modal-image-container {
+            flex: 1;
+            min-height: 300px;
+            position: relative;
+        }
+
+        .modal-image {
             width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
+            height: auto;
+            max-height: 60vh;
+            object-fit: contain;
+            border-radius: 4px;
         }
 
-        .recipe-meta {
+        .modal-details {
+            flex: 1;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-            color: var(--text-light);
+            flex-direction: column;
         }
 
-        .recipe-section {
-            margin-bottom: 2rem;
-        }
-
-        .recipe-section-title {
-            color: var(--primary-color);
+        .modal-artist {
+            font-size: 1.25rem;
+            color: var(--color-secondary);
             margin-bottom: 1rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.5rem;
         }
 
-        .ingredients-list,
-        .instructions-list {
-            padding-left: 1.5rem;
+        .modal-description {
             margin-bottom: 1.5rem;
+            line-height: 1.7;
         }
 
-        .ingredients-list li,
-        .instructions-list li {
-            margin-bottom: 0.5rem;
+        .modal-metadata {
+            margin-top: auto;
         }
 
-        .recipe-rating-section {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .rating-stars {
+        .metadata-item {
             display: flex;
-            gap: 0.5rem;
-            margin: 1rem 0;
+            margin-bottom: 0.75rem;
         }
 
-        .rating-star {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #d1d5db;
-            transition: color 0.3s;
-            background: none;
-            border: none;
-            padding: 0;
-            width: 44px;
-            height: 44px;
+        .metadata-label {
+            font-weight: 600;
+            min-width: 120px;
+        }
+
+        .modal-actions {
             display: flex;
-            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            background-color: var(--color-card);
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 1px solid var(--color-border);
+        }
+
+        .no-results h3 {
+            margin-bottom: 1rem;
+        }
+
+        /* Loading Indicator */
+        .loading {
+            display: flex;
             justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            min-height: 200px;
         }
 
-        .rating-star.active {
-            color: var(--accent-color);
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--color-border);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .rating-star:hover,
-        .rating-star:focus {
-            color: var(--accent-dark);
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .status-message.success {
+            background-color: rgba(56, 142, 60, 0.1);
+            color: var(--color-success);
+            border: 1px solid var(--color-success);
+        }
+
+        .status-message.error {
+            background-color: rgba(211, 47, 47, 0.1);
+            color: var(--color-error);
+            border: 1px solid var(--color-error);
         }
 
         /* Footer */
         footer {
-            background-color: var(--text-color);
+            background-color: var(--color-primary);
             color: white;
             padding: 2rem 0;
             margin-top: 3rem;
@@ -652,86 +675,56 @@
         .footer-content {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        .footer-section {
+            flex: 1;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
         }
 
         .footer-links {
-            display: flex;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
         }
 
         .footer-links a {
-            color: white;
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
+            transition: color 0.3s;
         }
 
         .footer-links a:hover,
         .footer-links a:focus {
+            color: white;
             text-decoration: underline;
         }
 
-        .footer-copyright {
-            margin-top: 1rem;
+        .copyright {
+            margin-top: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
             font-size: 0.9rem;
-            color: #a0aec0;
         }
 
-        /* Notification */
-        .notification {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 1rem;
-            border-radius: 4px;
-            background-color: var(--success-color);
-            color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            max-width: 300px;
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .notification.error {
-            background-color: var(--error-color);
-        }
-
-        .notification.warning {
-            background-color: var(--warning-color);
-        }
-
-        /* Responsive Styles */
-        @media (min-width: 768px) {
-            .header-content {
-                flex-direction: row;
-            }
-
-            nav {
-                width: auto;
-                margin-top: 0;
-            }
-
-            .search-form {
-                flex-direction: row;
-                align-items: flex-end;
-            }
-
-            .search-button {
-                margin-top: 0;
-            }
-        }
-
-        /* Accessibility Enhancements */
+        /* Utility Classes */
         .visually-hidden {
             position: absolute;
             width: 1px;
@@ -741,111 +734,40 @@
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
             white-space: nowrap;
-            border-width: 0;
+            border: 0;
         }
 
-        /* Loading Indicator */
-        .loading {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .loading::after {
-            content: "...";
-            animation: loading-dots 1.5s infinite;
-        }
-
-        @keyframes loading-dots {
-            0%, 20% { content: "."; }
-            40% { content: ".."; }
-            60%, 100% { content: "..."; }
-        }
-
-        /* No Results Message */
-        .no-results {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-light);
-            font-size: 1.2rem;
-        }
-
-        /* Tab Navigation for Recipe Detail */
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1.5rem;
-        }
-
-        .tab-button {
-            padding: 0.75rem 1.5rem;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            font-weight: 600;
-            cursor: pointer;
-            min-height: 44px;
-            min-width: 44px;
-        }
-
-        .tab-button:hover,
-        .tab-button:focus {
-            background-color: var(--background-alt);
-        }
-
-        .tab-button.active {
-            border-bottom-color: var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* Filter Tags */
-        .filter-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
-
-        .filter-tag {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .remove-tag {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
             padding: 0;
-            border-radius: 50%;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
-        .remove-tag:hover,
-        .remove-tag:focus {
-            background-color: rgba(255, 255, 255, 0.2);
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .gallery-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-select {
+                width: 100%;
+            }
+
+            .search-form {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -854,16 +776,14 @@
 
     <header>
         <div class="container header-content">
-            <div>
-                <h1 class="site-title"><a href="#">Community Recipe Exchange</a></h1>
-                <p class="site-description">Share, discover, and enjoy delicious recipes</p>
-            </div>
-            <nav aria-label="Main navigation">
-                <ul class="nav-list">
-                    <li><a href="#" aria-current="page">Home</a></li>
-                    <li><a href="#add-recipe">Add Recipe</a></li>
-                    <li><a href="#search-recipes">Search Recipes</a></li>
-                    <li><a href="#about">About</a></li>
+            <h1 class="site-title"><a href="#">Digital Art Gallery</a></h1>
+            <nav class="main-nav" aria-label="Main navigation">
+                <ul>
+                    <li><a href="#" aria-current="page">Gallery</a></li>
+                    <li><a href="#">Artists</a></li>
+                    <li><a href="#">Collections</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -871,926 +791,605 @@
 
     <main id="main-content">
         <div class="container">
-            <section id="search-recipes" class="search-section" aria-labelledby="search-heading">
-                <h2 id="search-heading" class="section-title">Find Recipes</h2>
-                <form id="search-form" class="search-form" aria-label="Recipe search form">
-                    <div class="search-row">
-                        <div class="search-group">
-                            <label for="search-term" class="search-label">Recipe Name</label>
-                            <input type="text" id="search-term" class="search-input" placeholder="Enter recipe name..." aria-describedby="search-term-hint">
-                            <span id="search-term-hint" class="form-hint">Search by recipe title or description</span>
-                        </div>
-                        <div class="search-group">
-                            <label for="search-ingredient" class="search-label">Ingredient</label>
-                            <input type="text" id="search-ingredient" class="search-input" placeholder="Enter ingredient..." aria-describedby="search-ingredient-hint">
-                            <span id="search-ingredient-hint" class="form-hint">Search recipes containing this ingredient</span>
-                        </div>
-                        <div class="search-group">
-                            <label for="search-category" class="search-label">Category</label>
-                            <select id="search-category" class="search-select" aria-describedby="search-category-hint">
-                                <option value="">All Categories</option>
-                                <option value="breakfast">Breakfast</option>
-                                <option value="lunch">Lunch</option>
-                                <option value="dinner">Dinner</option>
-                                <option value="dessert">Dessert</option>
-                                <option value="snack">Snack</option>
-                                <option value="vegetarian">Vegetarian</option>
-                                <option value="vegan">Vegan</option>
+            <section aria-labelledby="gallery-heading">
+                <h2 id="gallery-heading">Explore Digital Artworks</h2>
+                <p>Browse our curated collection of digital art from talented artists around the world. Click on any artwork to view it in detail.</p>
+
+                <div class="gallery-controls">
+                    <form class="search-form" role="search" aria-label="Search artworks">
+                        <label for="search-input">Search artworks</label>
+                        <input type="search" id="search-input" class="search-input" placeholder="Search by title, artist, or keyword" aria-describedby="search-instructions">
+                        <button type="submit" class="search-button">
+                            <span class="visually-hidden">Search</span>
+                            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                            </svg>
+                        </button>
+                    </form>
+                    <p id="search-instructions" class="visually-hidden">Type keywords and press Enter or the Search button to search</p>
+
+                    <div class="filter-controls">
+                        <div>
+                            <label for="category-filter" class="filter-label">Filter by Category:</label>
+                            <select id="category-filter" class="filter-select" aria-label="Filter artworks by category">
+                                <option value="all">All Categories</option>
+                                <option value="digital-painting">Digital Painting</option>
+                                <option value="3d-art">3D Art</option>
+                                <option value="pixel-art">Pixel Art</option>
+                                <option value="generative-art">Generative Art</option>
+                                <option value="photo-manipulation">Photo Manipulation</option>
                             </select>
-                            <span id="search-category-hint" class="form-hint">Filter by recipe category</span>
                         </div>
+
+                        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode" aria-pressed="false">
+                            <span class="visually-hidden">Toggle dark mode</span>
+                            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="currentColor" d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/>
+                            </svg>
+                        </button>
                     </div>
-                    <button type="submit" class="search-button" id="search-button">
-                        Search Recipes
-                    </button>
-                </form>
-
-                <div id="filter-tags" class="filter-tags" aria-live="polite"></div>
-            </section>
-
-            <section id="recipe-results" aria-labelledby="results-heading">
-                <h2 id="results-heading" class="section-title">Featured Recipes</h2>
-                <div id="recipe-grid" class="recipe-grid" aria-live="polite">
-                    <!-- Recipe cards will be dynamically inserted here -->
                 </div>
-                <div id="no-results" class="no-results" style="display: none;">
-                    <p>No recipes found matching your search criteria. Try different search terms or <a href="#add-recipe">add your own recipe</a>!</p>
+
+                <div id="status-container" role="status" aria-live="polite"></div>
+
+                <div id="gallery-grid" class="gallery-grid">
+                    <!-- Gallery items will be loaded here -->
                 </div>
-                <div id="loading" class="loading" style="display: none;">
-                    Loading recipes<span class="visually-hidden"> please wait</span>
-                </div>
-            </section>
-
-            <section id="add-recipe" class="add-recipe-section" aria-labelledby="add-recipe-heading">
-                <h2 id="add-recipe-heading" class="section-title">Share Your Recipe</h2>
-                <form id="recipe-form" aria-label="Recipe submission form">
-                    <div class="form-group">
-                        <label for="recipe-title" class="form-label required-field">Recipe Title</label>
-                        <input type="text" id="recipe-title" name="title" class="form-input" required aria-describedby="title-hint title-error" aria-required="true">
-                        <span id="title-hint" class="form-hint">Enter a descriptive title for your recipe</span>
-                        <span id="title-error" class="form-error" role="alert" aria-live="assertive"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="recipe-description" class="form-label required-field">Description</label>
-                        <textarea id="recipe-description" name="description" class="form-textarea" required aria-describedby="description-hint description-error" aria-required="true"></textarea>
-                        <span id="description-hint" class="form-hint">Briefly describe your recipe (history, flavor profile, etc.)</span>
-                        <span id="description-error" class="form-error" role="alert" aria-live="assertive"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="recipe-category" class="form-label required-field">Category</label>
-                        <select id="recipe-category" name="category" class="form-select" required aria-describedby="category-hint category-error" aria-required="true">
-                            <option value="">Select a category</option>
-                            <option value="breakfast">Breakfast</option>
-                            <option value="lunch">Lunch</option>
-                            <option value="dinner">Dinner</option>
-                            <option value="dessert">Dessert</option>
-                            <option value="snack">Snack</option>
-                            <option value="vegetarian">Vegetarian</option>
-                            <option value="vegan">Vegan</option>
-                        </select>
-                        <span id="category-hint" class="form-hint">Choose the category that best fits your recipe</span>
-                        <span id="category-error" class="form-error" role="alert" aria-live="assertive"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="recipe-prep-time" class="form-label required-field">Preparation Time (minutes)</label>
-                        <input type="number" id="recipe-prep-time" name="prepTime" class="form-input" min="1" required aria-describedby="prep-time-hint prep-time-error" aria-required="true">
-                        <span id="prep-time-hint" class="form-hint">How long it takes to prepare ingredients</span>
-                        <span id="prep-time-error" class="form-error" role="alert" aria-live="assertive"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="recipe-cook-time" class="form-label required-field">Cooking Time (minutes)</label>
-                        <input type="number" id="recipe-cook-time" name="cookTime" class="form-input" min="0" required aria-describedby="cook-time-hint cook-time-error" aria-required="true">
-                        <span id="cook-time-hint" class="form-hint">How long it takes to cook (0 for no-cook recipes)</span>
-                        <span id="cook-time-error" class="form-error" role="alert" aria-live="assertive"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label id="ingredients-label" class="form-label required-field">Ingredients</label>
-                        <ul id="ingredients-list" class="ingredients-list" aria-labelledby="ingredients-label" aria-describedby="ingredients-hint ingredients-error"></ul>
-                        
-                        <div class="add-ingredient-row">
-                            <div class="add-ingredient-input">
-                                <label for="new-ingredient" class="visually-hidden">Add ingredient</label>
-                                <input type="text" id="new-ingredient" class="form-input" placeholder="Enter an ingredient..." aria-describedby="ingredients-hint">
-                            </div>
-                            <button type="button" id="add-ingredient-btn" class="form-button">Add Ingredient</button>
-                        </div>
-                        <span id="ingredients-hint" class="form-hint">Include quantity, unit, and ingredient name (e.g., "2 cups flour")</span>
-                        <span id="ingredients-error" class="form-error" role="alert" aria-live="assertive"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="recipe-instructions" class="form-label required-field">Instructions</label>
-                        <textarea id="recipe-instructions" name="instructions" class="form-textarea" required aria-describedby="instructions-hint instructions-error" aria-required="true"></textarea>
-                        <span id="instructions-hint" class="form-hint">Provide step-by-step instructions. Use a new line for each step.</span>
-                        <span id="instructions-error" class="form-error" role="alert" aria-live="assertive"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="recipe-image-url" class="form-label">Image URL</label>
-                        <input type="url" id="recipe-image-url" name="imageUrl" class="form-input" aria-describedby="image-url-hint image-url-error">
-                        <span id="image-url-hint" class="form-hint">Provide a URL to an image of your recipe (optional)</span>
-                        <span id="image-url-error" class="form-error" role="alert" aria-live="assertive"></span>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" class="form-button" id="submit-recipe">Submit Recipe</button>
-                        <button type="reset" class="form-button secondary">Clear Form</button>
-                    </div>
-                </form>
             </section>
         </div>
     </main>
 
-    <footer>
-        <div class="container footer-content">
-            <p>Community Recipe Exchange - A place to share and discover delicious recipes</p>
-            <div class="footer-links">
-                <a href="#">Home</a>
-                <a href="#add-recipe">Add Recipe</a>
-                <a href="#search-recipes">Search Recipes</a>
-                <a href="#about">About</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Use</a>
-                <a href="#">Contact Us</a>
-            </div>
-            <p class="footer-copyright">© 2023 Community Recipe Exchange. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Recipe Detail Modal (hidden by default) -->
-    <div id="recipe-modal" class="modal-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <div class="modal">
+    <div id="artwork-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" hidden>
+        <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-title" class="modal-title">Recipe Details</h2>
-                <button id="modal-close" class="modal-close" aria-label="Close recipe details">×</button>
+                <h2 id="modal-title">Artwork Title</h2>
+                <button id="modal-close" class="modal-close" aria-label="Close modal">
+                    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
+                    </svg>
+                </button>
             </div>
-            <div class="modal-body" id="modal-content">
-                <!-- Modal content will be dynamically inserted here -->
+            <div class="modal-body">
+                <div class="modal-image-container">
+                    <img id="modal-image" class="modal-image" src="" alt="" />
+                </div>
+                <div class="modal-details">
+                    <p id="modal-artist" class="modal-artist">Artist Name</p>
+                    <div id="modal-description" class="modal-description">Artwork description will appear here.</div>
+                    <div class="modal-metadata">
+                        <div class="metadata-item">
+                            <span class="metadata-label">Category:</span>
+                            <span id="modal-category">Category</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Created:</span>
+                            <span id="modal-date">Date</span>
+                        </div>
+                        <div class="metadata-item">
+                            <span class="metadata-label">Technique:</span>
+                            <span id="modal-technique">Technique</span>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="view-button" id="view-original">View Original Size</button>
+                        <button class="favorite-button" id="modal-favorite" aria-pressed="false" aria-label="Add to favorites">
+                            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification element (hidden by default) -->
-    <div id="notification" class="notification" role="alert" aria-live="assertive"></div>
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>Digital Art Gallery</h3>
+                <p>Showcasing the best digital art from around the world. Our curated collection features works from established and emerging artists.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Artists</a></li>
+                    <li><a href="#">Collections</a></li>
+                    <li><a href="#">Submit Artwork</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:info@digitalartgallery.com">info@digitalartgallery.com</a></li>
+                    <li><a href="tel:+1234567890">+1 (234) 567-890</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Digital Art Gallery. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
-        // Sample recipe data for demonstration
-        const sampleRecipes = [
-            {
-                id: 1,
-                title: "Classic Chocolate Chip Cookies",
-                description: "Soft and chewy chocolate chip cookies with a perfect golden edge. A timeless favorite that's easy to make and always a crowd-pleaser.",
-                category: "dessert",
-                prepTime: 15,
-                cookTime: 10,
-                ingredients: [
-                    "2 1/4 cups all-purpose flour",
-                    "1 teaspoon baking soda",
-                    "1 teaspoon salt",
-                    "1 cup (2 sticks) unsalted butter, softened",
-                    "3/4 cup granulated sugar",
-                    "3/4 cup packed brown sugar",
-                    "2 large eggs",
-                    "2 teaspoons vanilla extract",
-                    "2 cups semi-sweet chocolate chips"
-                ],
-                instructions: "1. Preheat oven to 375°F (190°C).\n2. Combine flour, baking soda, and salt in a small bowl.\n3. Beat butter, granulated sugar, and brown sugar in a large mixer bowl.\n4. Add eggs one at a time, beating well after each addition. Stir in vanilla extract.\n5. Gradually beat in flour mixture. Stir in chocolate chips.\n6. Drop by rounded tablespoon onto ungreased baking sheets.\n7. Bake for 9 to 11 minutes or until golden brown.\n8. Cool on baking sheets for 2 minutes; remove to wire racks to cool completely.",
-                imageUrl: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e",
-                author: "Jane Smith",
-                datePosted: "2023-05-15",
-                ratings: [5, 4, 5, 5, 4]
-            },
-            {
-                id: 2,
-                title: "Vegetarian Pasta Primavera",
-                description: "A colorful and nutritious pasta dish loaded with fresh seasonal vegetables and tossed in a light garlic and olive oil sauce.",
-                category: "vegetarian",
-                prepTime: 20,
-                cookTime: 15,
-                ingredients: [
-                    "12 oz fettuccine pasta",
-                    "2 tablespoons olive oil",
-                    "3 cloves garlic, minced",
-                    "1 red bell pepper, sliced",
-                    "1 yellow bell pepper, sliced",
-                    "1 zucchini, sliced into half-moons",
-                    "1 yellow squash, sliced into half-moons",
-                    "1 cup cherry tomatoes, halved",
-                    "1 cup broccoli florets",
-                    "1/4 cup fresh basil, chopped",
-                    "1/4 cup grated Parmesan cheese",
-                    "Salt and pepper to taste",
-                    "Red pepper flakes (optional)"
-                ],
-                instructions: "1. Cook pasta according to package directions. Reserve 1/2 cup of pasta water before draining.\n2. Heat olive oil in a large skillet over medium heat. Add garlic and cook for 30 seconds.\n3. Add bell peppers, zucchini, yellow squash, and broccoli. Cook for 5-7 minutes until vegetables begin to soften.\n4. Add cherry tomatoes and cook for another 2 minutes.\n5. Add drained pasta to the skillet along with a splash of reserved pasta water.\n6. Toss everything together and add basil, Parmesan cheese, salt, and pepper.\n7. If the pasta seems dry, add more pasta water as needed.\n8. Serve immediately with additional Parmesan cheese and red pepper flakes if desired.",
-                imageUrl: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601",
-                author: "Michael Johnson",
-                datePosted: "2023-06-02",
-                ratings: [4, 5, 4, 3, 5]
-            },
-            {
-                id: 3,
-                title: "Homemade Breakfast Burrito",
-                description: "Start your day with these protein-packed breakfast burritos filled with scrambled eggs, crispy potatoes, cheese, and fresh vegetables.",
-                category: "breakfast",
-                prepTime: 15,
-                cookTime: 20,
-                ingredients: [
-                    "4 large flour tortillas",
-                    "8 large eggs",
-                    "2 tablespoons milk",
-                    "2 cups diced potatoes",
-                    "1 tablespoon olive oil",
-                    "1 bell pepper, diced",
-                    "1 small onion, diced",
-                    "1 cup shredded cheddar cheese",
-                    "1/4 cup chopped fresh cilantro",
-                    "1 avocado, sliced",
-                    "Salsa or hot sauce (to serve)",
-                    "Salt and pepper to taste"
-                ],
-                instructions: "1. Heat olive oil in a skillet over medium heat. Add potatoes and cook until crispy, about 10-12 minutes. Season with salt and pepper.\n2. In the same skillet, add bell pepper and onion. Cook until softened, about 5 minutes.\n3. Whisk eggs and milk together in a bowl. Season with salt and pepper.\n4. Pour egg mixture into the skillet with vegetables and cook, stirring occasionally, until eggs are scrambled and cooked through.\n5. Warm tortillas in the microwave for 20 seconds or in a dry skillet.\n6. Assemble burritos by placing a portion of the egg mixture, potatoes, cheese, cilantro, and avocado slices on each tortilla.\n7. Fold in the sides of the tortilla, then roll up tightly.\n8. Serve with salsa or hot sauce on the side.\n9. Optional: Wrap in foil and freeze for quick breakfasts throughout the week.",
-                imageUrl: "https://images.unsplash.com/photo-1584178639036-613ba57e5e73",
-                author: "Sarah Williams",
-                datePosted: "2023-05-28",
-                ratings: [5, 5, 4, 5, 5]
-            },
-            {
-                id: 4,
-                title: "Hearty Beef Stew",
-                description: "A comforting, slow-cooked beef stew with tender chunks of beef, potatoes, carrots, and a rich, flavorful broth. Perfect for cold evenings.",
-                category: "dinner",
-                prepTime: 30,
-                cookTime: 120,
-                ingredients: [
-                    "2 pounds beef stew meat, cut into 1-inch cubes",
-                    "1/4 cup all-purpose flour",
-                    "2 tablespoons olive oil",
-                    "2 onions, chopped",
-                    "4 cloves garlic, minced",
-                    "4 carrots, sliced",
-                    "3 celery stalks, chopped",
-                    "1 pound potatoes, cubed",
-                    "4 cups beef broth",
-                    "1 cup red wine (optional)",
-                    "2 tablespoons tomato paste",
-                    "1 bay leaf",
-                    "1 teaspoon dried thyme",
-                    "1 teaspoon dried rosemary",
-                    "Salt and pepper to taste",
-                    "Fresh parsley for garnish"
-                ],
-                instructions: "1. Toss beef cubes with flour, salt, and pepper until coated.\n2. Heat olive oil in a large pot over medium-high heat. Brown the beef on all sides, working in batches if necessary. Transfer to a plate.\n3. In the same pot, add onions and cook until softened, about 5 minutes. Add garlic and cook for 1 minute more.\n4. Add carrots, celery, and potatoes to the pot and stir to combine.\n5. Return beef to the pot. Add beef broth, wine (if using), tomato paste, bay leaf, thyme, and rosemary.\n6. Bring to a boil, then reduce heat to low. Cover and simmer for 1.5 to 2 hours, until beef is tender and vegetables are cooked through.\n7. Remove bay leaf before serving.\n8. Garnish with fresh parsley and serve hot with crusty bread.",
-                imageUrl: "https://images.unsplash.com/photo-1608500218890-c4f9a2f2f222",
-                author: "Robert Brown",
-                datePosted: "2023-06-10",
-                ratings: [5, 4, 5, 4, 5]
-            }
-        ];
-
-        // DOM Elements
-        const recipeGrid = document.getElementById('recipe-grid');
-        const recipeForm = document.getElementById('recipe-form');
-        const searchForm = document.getElementById('search-form');
-        const ingredientsList = document.getElementById('ingredients-list');
-        const newIngredientInput = document.getElementById('new-ingredient');
-        const addIngredientBtn = document.getElementById('add-ingredient-btn');
-        const recipeModal = document.getElementById('recipe-modal');
-        const modalClose = document.getElementById('modal-close');
-        const modalContent = document.getElementById('modal-content');
-        const notification = document.getElementById('notification');
-        const noResults = document.getElementById('no-results');
-        const loading = document.getElementById('loading');
-        const filterTags = document.getElementById('filter-tags');
-        const resultsHeading = document.getElementById('results-heading');
-
-        // State management
-        let recipes = [...sampleRecipes];
-        let currentFilters = {
-            term: '',
-            ingredient: '',
-            category: ''
-        };
-
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', () => {
-            displayRecipes(recipes);
-            setupEventListeners();
-        });
-
-        // Set up event listeners
-        function setupEventListeners() {
-            // Add ingredient button
-            addIngredientBtn.addEventListener('click', addIngredient);
-            newIngredientInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addIngredient();
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sample artwork data
+            const artworks = [
+                {
+                    id: 1,
+                    title: "Cosmic Dreamscape",
+                    artist: "Elena Rivera",
+                    description: "A vibrant digital painting depicting a surreal cosmic landscape with floating islands and ethereal light. The artwork explores themes of dreams and the subconscious mind through vivid colors and flowing forms.",
+                    category: "digital-painting",
+                    image: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    date: "2023-03-15",
+                    technique: "Digital Painting",
+                    favorite: false
+                },
+                {
+                    id: 2,
+                    title: "Neon City Nights",
+                    artist: "Marcus Chen",
+                    description: "A detailed 3D rendering of a futuristic cityscape at night, illuminated by neon lights and holographic advertisements. The piece captures the essence of cyberpunk aesthetics with its atmospheric lighting and intricate architectural details.",
+                    category: "3d-art",
+                    image: "https://images.unsplash.com/photo-1569172122301-bc5008bc09c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    date: "2023-01-22",
+                    technique: "3D Modeling and Rendering",
+                    favorite: false
+                },
+                {
+                    id: 3,
+                    title: "Retro Adventure",
+                    artist: "Pixel Pioneers",
+                    description: "A nostalgic pixel art scene depicting a hero's journey through a fantasy world. The artwork pays homage to classic 8-bit and 16-bit video games while adding modern pixel art techniques and a rich color palette.",
+                    category: "pixel-art",
+                    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    date: "2022-11-05",
+                    technique: "Pixel Art",
+                    favorite: false
+                },
+                {
+                    id: 4,
+                    title: "Algorithmic Harmony",
+                    artist: "Ada Lovelace",
+                    description: "A generative artwork created through code and mathematical algorithms. The piece evolves and changes with each viewing, creating unique patterns and color combinations that explore the intersection of art and computation.",
+                    category: "generative-art",
+                    image: "https://images.unsplash.com/photo-1614851099511-773084f6911d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    date: "2023-04-02",
+                    technique: "JavaScript and WebGL",
+                    favorite: false
+                },
+                {
+                    id: 5,
+                    title: "Surreal Metamorphosis",
+                    artist: "Sofia Mendez",
+                    description: "A surreal photo manipulation that blends human and natural elements to create a dreamlike transformation scene. The artwork explores themes of identity and our connection to the natural world through seamless digital compositing.",
+                    category: "photo-manipulation",
+                    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1064&q=80",
+                    date: "2022-12-18",
+                    technique: "Photo Manipulation",
+                    favorite: false
+                },
+                {
+                    id: 6,
+                    title: "Digital Impressionism",
+                    artist: "Jean-Michel Virtuel",
+                    description: "A digital painting inspired by classical Impressionist techniques, capturing a modern urban scene with soft brushstrokes and vibrant colors. The piece blends traditional art influences with digital media capabilities.",
+                    category: "digital-painting",
+                    image: "https://images.unsplash.com/photo-1633412802994-5c058f151b66?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    date: "2023-02-14",
+                    technique: "Digital Painting",
+                    favorite: false
+                },
+                {
+                    id: 7,
+                    title: "Geometric Abstraction",
+                    artist: "Kazimir Digital",
+                    description: "A bold abstract composition featuring geometric shapes and a limited color palette. The artwork explores visual rhythm and balance through precise arrangement of forms and careful color relationships.",
+                    category: "generative-art",
+                    image: "https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    date: "2022-10-30",
+                    technique: "Vector Art",
+                    favorite: false
+                },
+                {
+                    id: 8,
+                    title: "Mythical Creatures",
+                    artist: "Fantasy Collective",
+                    description: "A detailed 3D sculpture of imaginary creatures inspired by world mythology and folklore. The digital sculpture showcases intricate texturing and organic modeling to create believable yet fantastical beings.",
+                    category: "3d-art",
+                    image: "https://images.unsplash.com/photo-1604871000636-074fa5117945?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
+                    date: "2023-01-05",
+                    technique: "3D Sculpting",
+                    favorite: false
+                },
+                {
+                    id: 9,
+                    title: "8-Bit Nostalgia",
+                    artist: "Retro Pixels",
+                    description: "A pixel art tribute to classic video game characters and scenes from the 1980s. The artwork captures the charm and limitations of early video game graphics while adding contemporary pixel art techniques.",
+                    category: "pixel-art",
+                    image: "https://images.unsplash.com/photo-1585504198199-20277593b94f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80",
+                    date: "2022-09-18",
+                    technique: "Pixel Art",
+                    favorite: false
+                },
+                {
+                    id: 10,
+                    title: "Nature Reimagined",
+                    artist: "Eco Digital",
+                    description: "A photo manipulation that transforms ordinary natural scenes into fantastical landscapes. The artwork blends photography with digital painting to create an enhanced vision of nature that feels both familiar and otherworldly.",
+                    category: "photo-manipulation",
+                    image: "https://images.unsplash.com/photo-1633109741715-f648d51b7f17?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80",
+                    date: "2023-03-22",
+                    technique: "Photo Manipulation",
+                    favorite: false
+                },
+                {
+                    id: 11,
+                    title: "Fractal Dimensions",
+                    artist: "Mandelbrot",
+                    description: "A mesmerizing exploration of fractal mathematics visualized through digital art. The piece reveals the infinite complexity and self-similarity of fractal patterns through vibrant colors and intricate detail.",
+                    category: "generative-art",
+                    image: "https://images.unsplash.com/photo-1580927752452-89d86da3fa0a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    date: "2022-08-15",
+                    technique: "Fractal Generation",
+                    favorite: false
+                },
+                {
+                    id: 12,
+                    title: "Virtual Reality",
+                    artist: "Immersive Arts",
+                    description: "A conceptual 3D artwork depicting a person's journey through virtual reality. The piece explores the blurring boundaries between physical and digital experiences in our increasingly connected world.",
+                    category: "3d-art",
+                    image: "https://images.unsplash.com/photo-1617802690992-15d93263d3a9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+                    date: "2023-02-28",
+                    technique: "3D Modeling and Composition",
+                    favorite: false
                 }
-            });
+            ];
 
-            // Recipe form submission
-            recipeForm.addEventListener('submit', handleRecipeSubmit);
+            // DOM Elements
+            const galleryGrid = document.getElementById('gallery-grid');
+            const categoryFilter = document.getElementById('category-filter');
+            const searchInput = document.getElementById('search-input');
+            const searchForm = document.querySelector('.search-form');
+            const themeToggle = document.getElementById('theme-toggle');
+            const modal = document.getElementById('artwork-modal');
+            const modalClose = document.getElementById('modal-close');
+            const modalTitle = document.getElementById('modal-title');
+            const modalArtist = document.getElementById('modal-artist');
+            const modalImage = document.getElementById('modal-image');
+            const modalDescription = document.getElementById('modal-description');
+            const modalCategory = document.getElementById('modal-category');
+            const modalDate = document.getElementById('modal-date');
+            const modalTechnique = document.getElementById('modal-technique');
+            const modalFavorite = document.getElementById('modal-favorite');
+            const viewOriginal = document.getElementById('view-original');
+            const statusContainer = document.getElementById('status-container');
 
-            // Search form submission
-            searchForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                handleSearch();
-            });
+            // State
+            let currentArtworks = [...artworks];
+            let currentArtwork = null;
+            let isDarkMode = false;
 
-            // Modal close button
-            modalClose.addEventListener('click', closeModal);
-            // Close modal when clicking outside
-            recipeModal.addEventListener('click', (e) => {
-                if (e.target === recipeModal) {
-                    closeModal();
-                }
-            });
-            // Close modal with Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && recipeModal.style.display !== 'none') {
-                    closeModal();
-                }
-            });
-        }
-
-        // Add ingredient to the list
-        function addIngredient() {
-            const ingredientText = newIngredientInput.value.trim();
-            if (ingredientText) {
-                const li = document.createElement('li');
-                li.className = 'ingredient-item';
-                li.innerHTML = `
-                    <span class="ingredient-text">${ingredientText}</span>
-                    <button type="button" class="remove-ingredient" aria-label="Remove ${ingredientText}">×</button>
-                `;
-                ingredientsList.appendChild(li);
-                
-                // Add event listener to remove button
-                const removeBtn = li.querySelector('.remove-ingredient');
-                removeBtn.addEventListener('click', () => {
-                    li.remove();
-                    validateIngredients();
-                });
-                
-                newIngredientInput.value = '';
-                newIngredientInput.focus();
-                validateIngredients();
+            // Initialize the gallery
+            function initGallery() {
+                renderArtworks(artworks);
+                setupEventListeners();
+                checkPreferredColorScheme();
             }
-        }
 
-        // Form validation functions
-        function validateTitle() {
-            const titleInput = document.getElementById('recipe-title');
-            const errorElement = document.getElementById('title-error');
-            
-            if (!titleInput.value.trim()) {
-                errorElement.textContent = 'Recipe title is required';
-                titleInput.setAttribute('aria-invalid', 'true');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                titleInput.removeAttribute('aria-invalid');
-                return true;
-            }
-        }
+            // Render artworks to the gallery
+            function renderArtworks(artworksToRender) {
+                // Clear the gallery
+                galleryGrid.innerHTML = '';
 
-        function validateDescription() {
-            const descInput = document.getElementById('recipe-description');
-            const errorElement = document.getElementById('description-error');
-            
-            if (!descInput.value.trim()) {
-                errorElement.textContent = 'Recipe description is required';
-                descInput.setAttribute('aria-invalid', 'true');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                descInput.removeAttribute('aria-invalid');
-                return true;
-            }
-        }
-
-        function validateCategory() {
-            const categorySelect = document.getElementById('recipe-category');
-            const errorElement = document.getElementById('category-error');
-            
-            if (!categorySelect.value) {
-                errorElement.textContent = 'Please select a category';
-                categorySelect.setAttribute('aria-invalid', 'true');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                categorySelect.removeAttribute('aria-invalid');
-                return true;
-            }
-        }
-
-        function validatePrepTime() {
-            const prepTimeInput = document.getElementById('recipe-prep-time');
-            const errorElement = document.getElementById('prep-time-error');
-            const value = parseInt(prepTimeInput.value);
-            
-            if (isNaN(value) || value < 1) {
-                errorElement.textContent = 'Please enter a valid preparation time (minimum 1 minute)';
-                prepTimeInput.setAttribute('aria-invalid', 'true');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                prepTimeInput.removeAttribute('aria-invalid');
-                return true;
-            }
-        }
-
-        function validateCookTime() {
-            const cookTimeInput = document.getElementById('recipe-cook-time');
-            const errorElement = document.getElementById('cook-time-error');
-            const value = parseInt(cookTimeInput.value);
-            
-            if (isNaN(value) || value < 0) {
-                errorElement.textContent = 'Please enter a valid cooking time (0 or more)';
-                cookTimeInput.setAttribute('aria-invalid', 'true');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                cookTimeInput.removeAttribute('aria-invalid');
-                return true;
-            }
-        }
-
-        function validateIngredients() {
-            const errorElement = document.getElementById('ingredients-error');
-            
-            if (ingredientsList.children.length === 0) {
-                errorElement.textContent = 'Please add at least one ingredient';
-                return false;
-            } else {
-                errorElement.textContent = '';
-                return true;
-            }
-        }
-
-        function validateInstructions() {
-            const instructionsInput = document.getElementById('recipe-instructions');
-            const errorElement = document.getElementById('instructions-error');
-            
-            if (!instructionsInput.value.trim()) {
-                errorElement.textContent = 'Recipe instructions are required';
-                instructionsInput.setAttribute('aria-invalid', 'true');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                instructionsInput.removeAttribute('aria-invalid');
-                return true;
-            }
-        }
-
-        function validateImageUrl() {
-            const imageUrlInput = document.getElementById('recipe-image-url');
-            const errorElement = document.getElementById('image-url-error');
-            const url = imageUrlInput.value.trim();
-            
-            if (url && !isValidUrl(url)) {
-                errorElement.textContent = 'Please enter a valid URL';
-                imageUrlInput.setAttribute('aria-invalid', 'true');
-                return false;
-            } else {
-                errorElement.textContent = '';
-                imageUrlInput.removeAttribute('aria-invalid');
-                return true;
-            }
-        }
-
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
-            }
-        }
-
-        // Handle recipe form submission
-        function handleRecipeSubmit(e) {
-            e.preventDefault();
-            
-            // Validate all fields
-            const isValid = 
-                validateTitle() &&
-                validateDescription() &&
-                validateCategory() &&
-                validatePrepTime() &&
-                validateCookTime() &&
-                validateIngredients() &&
-                validateInstructions() &&
-                validateImageUrl();
-            
-            if (!isValid) {
-                showNotification('Please fix the errors in the form', 'error');
-                return;
-            }
-            
-            // Collect form data
-            const newRecipe = {
-                id: recipes.length + 1,
-                title: document.getElementById('recipe-title').value.trim(),
-                description: document.getElementById('recipe-description').value.trim(),
-                category: document.getElementById('recipe-category').value,
-                prepTime: parseInt(document.getElementById('recipe-prep-time').value),
-                cookTime: parseInt(document.getElementById('recipe-cook-time').value),
-                ingredients: Array.from(ingredientsList.querySelectorAll('.ingredient-text')).map(el => el.textContent),
-                instructions: document.getElementById('recipe-instructions').value.trim(),
-                imageUrl: document.getElementById('recipe-image-url').value.trim() || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352',
-                author: 'You',
-                datePosted: new Date().toISOString().split('T')[0],
-                ratings: []
-            };
-            
-            // Add the new recipe to the collection
-            recipes.unshift(newRecipe);
-            
-            // Reset the form
-            recipeForm.reset();
-            ingredientsList.innerHTML = '';
-            
-            // Show notification
-            showNotification('Recipe added successfully!', 'success');
-            
-            // Update the displayed recipes
-            displayRecipes(recipes);
-            
-            // Scroll to the recipe results section
-            document.getElementById('recipe-results').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Handle search form submission
-        function handleSearch() {
-            const searchTerm = document.getElementById('search-term').value.trim().toLowerCase();
-            const searchIngredient = document.getElementById('search-ingredient').value.trim().toLowerCase();
-            const searchCategory = document.getElementById('search-category').value;
-            
-            // Update current filters
-            currentFilters = {
-                term: searchTerm,
-                ingredient: searchIngredient,
-                category: searchCategory
-            };
-            
-            // Show loading indicator
-            loading.style.display = 'flex';
-            recipeGrid.style.display = 'none';
-            noResults.style.display = 'none';
-            
-            // Update filter tags
-            updateFilterTags();
-            
-            // Simulate loading delay
-            setTimeout(() => {
-                // Filter recipes
-                const filteredRecipes = recipes.filter(recipe => {
-                    const matchesTerm = !searchTerm || 
-                        recipe.title.toLowerCase().includes(searchTerm) || 
-                        recipe.description.toLowerCase().includes(searchTerm);
-                    
-                    const matchesIngredient = !searchIngredient || 
-                        recipe.ingredients.some(ingredient => 
-                            ingredient.toLowerCase().includes(searchIngredient));
-                    
-                    const matchesCategory = !searchCategory || 
-                        recipe.category === searchCategory;
-                    
-                    return matchesTerm && matchesIngredient && matchesCategory;
-                });
-                
-                // Update results heading
-                resultsHeading.textContent = searchTerm || searchIngredient || searchCategory 
-                    ? 'Search Results' 
-                    : 'All Recipes';
-                
-                // Display filtered recipes
-                displayRecipes(filteredRecipes);
-                
-                // Hide loading indicator
-                loading.style.display = 'none';
-                
-                // Show appropriate content
-                if (filteredRecipes.length > 0) {
-                    recipeGrid.style.display = 'grid';
-                    noResults.style.display = 'none';
-                } else {
-                    recipeGrid.style.display = 'none';
-                    noResults.style.display = 'block';
-                }
-            }, 500); // Simulate network delay
-        }
-
-        // Update filter tags display
-        function updateFilterTags() {
-            filterTags.innerHTML = '';
-            
-            if (currentFilters.term) {
-                addFilterTag('Term', currentFilters.term);
-            }
-            
-            if (currentFilters.ingredient) {
-                addFilterTag('Ingredient', currentFilters.ingredient);
-            }
-            
-            if (currentFilters.category) {
-                const categorySelect = document.getElementById('search-category');
-                const categoryText = categorySelect.options[categorySelect.selectedIndex].text;
-                addFilterTag('Category', categoryText);
-            }
-        }
-
-        // Add a filter tag to the display
-        function addFilterTag(type, value) {
-            const tag = document.createElement('div');
-            tag.className = 'filter-tag';
-            tag.innerHTML = `
-                <span>${type}: ${value}</span>
-                <button class="remove-tag" data-type="${type.toLowerCase()}" aria-label="Remove ${type} filter">×</button>
-            `;
-            
-            // Add event listener to remove tag
-            const removeBtn = tag.querySelector('.remove-tag');
-            removeBtn.addEventListener('click', () => {
-                const filterType = removeBtn.getAttribute('data-type');
-                currentFilters[filterType] = '';
-                
-                // Update form fields
-                if (filterType === 'term') {
-                    document.getElementById('search-term').value = '';
-                } else if (filterType === 'ingredient') {
-                    document.getElementById('search-ingredient').value = '';
-                } else if (filterType === 'category') {
-                    document.getElementById('search-category').value = '';
-                }
-                
-                // Trigger search again
-                handleSearch();
-            });
-            
-            filterTags.appendChild(tag);
-        }
-
-        // Display recipes in the grid
-        function displayRecipes(recipesToShow) {
-            recipeGrid.innerHTML = '';
-            
-            recipesToShow.forEach(recipe => {
-                const avgRating = recipe.ratings.length 
-                    ? (recipe.ratings.reduce((sum, rating) => sum + rating, 0) / recipe.ratings.length).toFixed(1) 
-                    : 'No ratings';
-                
-                const ratingStars = recipe.ratings.length 
-                    ? generateStarRating(avgRating) 
-                    : '';
-                
-                const card = document.createElement('article');
-                card.className = 'recipe-card';
-                card.innerHTML = `
-                    <img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-card-image">
-                    <div class="recipe-card-content">
-                        <h3 class="recipe-card-title">${recipe.title}</h3>
-                        <div class="recipe-card-meta">
-                            <span>By ${recipe.author}</span>
-                            <span>${recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}</span>
+                if (artworksToRender.length === 0) {
+                    galleryGrid.innerHTML = `
+                        <div class="no-results">
+                            <h3>No artworks found</h3>
+                            <p>Try adjusting your search or filter criteria.</p>
                         </div>
-                        <p class="recipe-card-description">${truncateText(recipe.description, 100)}</p>
-                        <div class="recipe-card-footer">
-                            <div class="recipe-card-rating">
-                                <span class="recipe-card-rating-stars">${ratingStars}</span>
-                                <span>${recipe.ratings.length ? avgRating : 'No ratings'}</span>
+                    `;
+                    return;
+                }
+
+                // Create artwork cards
+                artworksToRender.forEach(artwork => {
+                    const artworkCard = document.createElement('article');
+                    artworkCard.className = 'artwork-card';
+                    artworkCard.setAttribute('data-id', artwork.id);
+
+                    artworkCard.innerHTML = `
+                        <div class="artwork-image-container">
+                            <img 
+                                src="${artwork.image}" 
+                                alt="${artwork.title} by ${artwork.artist} - ${artwork.description}" 
+                                class="artwork-image"
+                            >
+                        </div>
+                        <div class="artwork-info">
+                            <h3 class="artwork-title">${artwork.title}</h3>
+                            <p class="artwork-artist">${artwork.artist}</p>
+                            <span class="artwork-category">${formatCategory(artwork.category)}</span>
+                            <p class="artwork-description">${truncateText(artwork.description, 100)}</p>
+                            <div class="artwork-actions">
+                                <button class="view-button" aria-label="View details of ${artwork.title}">View Details</button>
+                                <button class="favorite-button" aria-pressed="${artwork.favorite}" aria-label="${artwork.favorite ? 'Remove from favorites' : 'Add to favorites'}">
+                                    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                        <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                </button>
                             </div>
-                            <button class="recipe-card-button view-recipe" data-id="${recipe.id}" aria-label="View ${recipe.title} recipe details">View Recipe</button>
                         </div>
-                    </div>
-                `;
-                
-                // Add event listener to view recipe button
-                const viewButton = card.querySelector('.view-recipe');
-                viewButton.addEventListener('click', () => {
-                    openRecipeModal(recipe);
-                });
-                
-                recipeGrid.appendChild(card);
-            });
-        }
+                    `;
 
-        // Generate star rating HTML
-        function generateStarRating(rating) {
-            const fullStars = Math.floor(rating);
-            const halfStar = rating % 1 >= 0.5;
-            const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-            
-            let starsHTML = '';
-            
-            // Full stars
-            for (let i = 0; i < fullStars; i++) {
-                starsHTML += '★';
-            }
-            
-            // Half star
-            if (halfStar) {
-                starsHTML += '★';
-            }
-            
-            // Empty stars
-            for (let i = 0; i < emptyStars; i++) {
-                starsHTML += '☆';
-            }
-            
-            return starsHTML;
-        }
+                    // Add event listeners
+                    const viewButton = artworkCard.querySelector('.view-button');
+                    viewButton.addEventListener('click', () => openModal(artwork));
 
-        // Truncate text to a specific length
-        function truncateText(text, maxLength) {
-            if (text.length <= maxLength) return text;
-            return text.substring(0, maxLength) + '...';
-        }
-
-        // Open recipe detail modal
-        function openRecipeModal(recipe) {
-            const avgRating = recipe.ratings.length 
-                ? (recipe.ratings.reduce((sum, rating) => sum + rating, 0) / recipe.ratings.length).toFixed(1) 
-                : 'No ratings yet';
-            
-            // Format ingredients as list items
-            const ingredientsHTML = recipe.ingredients
-                .map(ingredient => `<li>${ingredient}</li>`)
-                .join('');
-            
-            // Format instructions as list items (assuming numbered format)
-            const instructionsArray = recipe.instructions.split('\n').filter(step => step.trim());
-            const instructionsHTML = instructionsArray
-                .map(instruction => `<li>${instruction.replace(/^\d+\.\s*/, '')}</li>`)
-                .join('');
-            
-            modalContent.innerHTML = `
-                <img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-image">
-                
-                <div class="recipe-meta">
-                    <span>By ${recipe.author} on ${formatDate(recipe.datePosted)}</span>
-                    <span>Category: ${recipe.category.charAt(0).toUpperCase() + recipe.category.slice(1)}</span>
-                </div>
-                
-                <p>${recipe.description}</p>
-                
-                <div class="recipe-meta">
-                    <span>Prep Time: ${recipe.prepTime} minutes</span>
-                    <span>Cook Time: ${recipe.cookTime} minutes</span>
-                    <span>Total Time: ${recipe.prepTime + recipe.cookTime} minutes</span>
-                </div>
-                
-                <div class="tabs">
-                    <button id="tab-ingredients" class="tab-button active" aria-selected="true">Ingredients</button>
-                    <button id="tab-instructions" class="tab-button" aria-selected="false">Instructions</button>
-                </div>
-                
-                <div id="content-ingredients" class="tab-content active">
-                    <div class="recipe-section">
-                        <h3 class="recipe-section-title">Ingredients</h3>
-                        <ul class="ingredients-list">
-                            ${ingredientsHTML}
-                        </ul>
-                    </div>
-                </div>
-                
-                <div id="content-instructions" class="tab-content">
-                    <div class="recipe-section">
-                        <h3 class="recipe-section-title">Instructions</h3>
-                        <ol class="instructions-list">
-                            ${instructionsHTML}
-                        </ol>
-                    </div>
-                </div>
-                
-                <div class="recipe-rating-section">
-                    <h3>Rate this Recipe</h3>
-                    <p>Current Rating: ${avgRating} (${recipe.ratings.length} ${recipe.ratings.length === 1 ? 'rating' : 'ratings'})</p>
-                    <div class="rating-stars" role="radiogroup" aria-label="Rate this recipe from 1 to 5 stars">
-                        <button class="rating-star" data-rating="1" aria-label="1 star" role="radio" aria-checked="false">★</button>
-                        <button class="rating-star" data-rating="2" aria-label="2 stars" role="radio" aria-checked="false">★</button>
-                        <button class="rating-star" data-rating="3" aria-label="3 stars" role="radio" aria-checked="false">★</button>
-                        <button class="rating-star" data-rating="4" aria-label="4 stars" role="radio" aria-checked="false">★</button>
-                        <button class="rating-star" data-rating="5" aria-label="5 stars" role="radio" aria-checked="false">★</button>
-                    </div>
-                </div>
-            `;
-            
-            // Set modal title
-            document.getElementById('modal-title').textContent = recipe.title;
-            
-            // Show modal
-            recipeModal.style.display = 'flex';
-            
-            // Set focus to the modal close button
-            modalClose.focus();
-            
-            // Add event listeners for tabs
-            const tabIngredients = document.getElementById('tab-ingredients');
-            const tabInstructions = document.getElementById('tab-instructions');
-            const contentIngredients = document.getElementById('content-ingredients');
-            const contentInstructions = document.getElementById('content-instructions');
-            
-            tabIngredients.addEventListener('click', () => {
-                tabIngredients.classList.add('active');
-                tabInstructions.classList.remove('active');
-                contentIngredients.classList.add('active');
-                contentInstructions.classList.remove('active');
-                tabIngredients.setAttribute('aria-selected', 'true');
-                tabInstructions.setAttribute('aria-selected', 'false');
-            });
-            
-            tabInstructions.addEventListener('click', () => {
-                tabInstructions.classList.add('active');
-                tabIngredients.classList.remove('active');
-                contentInstructions.classList.add('active');
-                contentIngredients.classList.remove('active');
-                tabInstructions.setAttribute('aria-selected', 'true');
-                tabIngredients.setAttribute('aria-selected', 'false');
-            });
-            
-            // Add event listeners for rating stars
-            const ratingStars = document.querySelectorAll('.rating-star');
-            ratingStars.forEach(star => {
-                star.addEventListener('click', () => {
-                    const rating = parseInt(star.getAttribute('data-rating'));
-                    rateRecipe(recipe.id, rating);
-                    
-                    // Update visual state
-                    ratingStars.forEach(s => {
-                        const starRating = parseInt(s.getAttribute('data-rating'));
-                        if (starRating <= rating) {
-                            s.classList.add('active');
-                            s.setAttribute('aria-checked', 'true');
-                        } else {
-                            s.classList.remove('active');
-                            s.setAttribute('aria-checked', 'false');
-                        }
+                    const favoriteButton = artworkCard.querySelector('.favorite-button');
+                    favoriteButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        toggleFavorite(artwork.id);
+                        favoriteButton.setAttribute('aria-pressed', artwork.favorite);
+                        favoriteButton.setAttribute('aria-label', artwork.favorite ? 'Remove from favorites' : 'Add to favorites');
                     });
+
+                    galleryGrid.appendChild(artworkCard);
                 });
-                
-                // Keyboard navigation for rating stars
-                star.addEventListener('keydown', (e) => {
-                    const rating = parseInt(star.getAttribute('data-rating'));
-                    
-                    if (e.key === 'ArrowRight' && rating < 5) {
-                        e.preventDefault();
-                        ratingStars[rating].focus();
-                    } else if (e.key === 'ArrowLeft' && rating > 1) {
-                        e.preventDefault();
-                        ratingStars[rating - 2].focus();
+            }
+
+            // Setup event listeners
+            function setupEventListeners() {
+                // Filter by category
+                categoryFilter.addEventListener('change', filterArtworks);
+
+                // Search form
+                searchForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    filterArtworks();
+                });
+
+                // Search input (for immediate filtering)
+                searchInput.addEventListener('input', filterArtworks);
+
+                // Theme toggle
+                themeToggle.addEventListener('click', toggleTheme);
+
+                // Modal close button
+                modalClose.addEventListener('click', closeModal);
+
+                // Close modal with Escape key
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+                        closeModal();
                     }
                 });
-            });
-        }
 
-        // Close recipe modal
-        function closeModal() {
-            recipeModal.style.display = 'none';
-            
-            // Return focus to the element that opened the modal
-            const activeRecipeButton = document.activeElement;
-            if (activeRecipeButton && activeRecipeButton.classList.contains('view-recipe')) {
-                activeRecipeButton.focus();
+                // Click outside modal to close
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+
+                // Modal favorite button
+                modalFavorite.addEventListener('click', () => {
+                    if (currentArtwork) {
+                        toggleFavorite(currentArtwork.id);
+                        modalFavorite.setAttribute('aria-pressed', currentArtwork.favorite);
+                        modalFavorite.setAttribute('aria-label', currentArtwork.favorite ? 'Remove from favorites' : 'Add to favorites');
+                    }
+                });
+
+                // View original button
+                viewOriginal.addEventListener('click', () => {
+                    if (currentArtwork) {
+                        window.open(currentArtwork.image, '_blank');
+                    }
+                });
             }
-        }
 
-        // Rate a recipe
-        function rateRecipe(recipeId, rating) {
-            const recipe = recipes.find(r => r.id === recipeId);
-            if (recipe) {
-                recipe.ratings.push(rating);
-                showNotification('Thank you for rating this recipe!', 'success');
+            // Filter artworks based on category and search
+            function filterArtworks() {
+                const category = categoryFilter.value;
+                const searchTerm = searchInput.value.toLowerCase().trim();
+
+                // Show loading state
+                galleryGrid.innerHTML = `
+                    <div class="loading">
+                        <div class="loading-spinner" aria-hidden="true"></div>
+                        <p class="sr-only">Loading artworks...</p>
+                    </div>
+                `;
+
+                // Simulate loading delay for better UX
+                setTimeout(() => {
+                    let filtered = [...artworks];
+
+                    // Filter by category
+                    if (category !== 'all') {
+                        filtered = filtered.filter(artwork => artwork.category === category);
+                    }
+
+                    // Filter by search term
+                    if (searchTerm) {
+                        filtered = filtered.filter(artwork => 
+                            artwork.title.toLowerCase().includes(searchTerm) ||
+                            artwork.artist.toLowerCase().includes(searchTerm) ||
+                            artwork.description.toLowerCase().includes(searchTerm) ||
+                            formatCategory(artwork.category).toLowerCase().includes(searchTerm)
+                        );
+                    }
+
+                    currentArtworks = filtered;
+                    renderArtworks(filtered);
+
+                    // Show status message
+                    if (searchTerm || category !== 'all') {
+                        const statusMessage = document.createElement('div');
+                        statusMessage.className = 'status-message success';
+                        statusMessage.textContent = `Showing ${filtered.length} ${filtered.length === 1 ? 'artwork' : 'artworks'} ${category !== 'all' ? `in ${formatCategory(category)}` : ''} ${searchTerm ? `matching "${searchTerm}"` : ''}`;
+                        statusContainer.innerHTML = '';
+                        statusContainer.appendChild(statusMessage);
+                    } else {
+                        statusContainer.innerHTML = '';
+                    }
+                }, 500);
+            }
+
+            // Open modal with artwork details
+            function openModal(artwork) {
+                currentArtwork = artwork;
+
+                // Set modal content
+                modalTitle.textContent = artwork.title;
+                modalArtist.textContent = artwork.artist;
+                modalImage.src = artwork.image;
+                modalImage.alt = `${artwork.title} by ${artwork.artist} - ${artwork.description}`;
+                modalDescription.textContent = artwork.description;
+                modalCategory.textContent = formatCategory(artwork.category);
+                modalDate.textContent = formatDate(artwork.date);
+                modalTechnique.textContent = artwork.technique;
+                modalFavorite.setAttribute('aria-pressed', artwork.favorite);
+                modalFavorite.setAttribute('aria-label', artwork.favorite ? 'Remove from favorites' : 'Add to favorites');
+
+                // Show modal
+                modal.classList.add('is-active');
+                modal.removeAttribute('hidden');
+
+                // Focus the close button
+                modalClose.focus();
+
+                // Prevent body scrolling
+                document.body.style.overflow = 'hidden';
+            }
+
+            // Close modal
+            function closeModal() {
+                modal.classList.remove('is-active');
                 
-                // Update the recipe card
-                displayRecipes(recipes);
+                // Use setTimeout to allow the fade-out animation to complete
+                setTimeout(() => {
+                    modal.setAttribute('hidden', 'true');
+                }, 300);
+
+                // Restore body scrolling
+                document.body.style.overflow = '';
+
+                // Return focus to the element that opened the modal
+                if (currentArtwork) {
+                    const artworkCard = document.querySelector(`.artwork-card[data-id="${currentArtwork.id}"]`);
+                    if (artworkCard) {
+                        const viewButton = artworkCard.querySelector('.view-button');
+                        if (viewButton) {
+                            viewButton.focus();
+                        }
+                    }
+                }
             }
-        }
 
-        // Show notification
-        function showNotification(message, type = 'success') {
-            notification.textContent = message;
-            notification.className = `notification ${type}`;
-            notification.classList.add('show');
-            
-            // Hide notification after 3 seconds
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+            // Toggle favorite status
+            function toggleFavorite(id) {
+                const artwork = artworks.find(a => a.id === id);
+                if (artwork) {
+                    artwork.favorite = !artwork.favorite;
 
-        // Format date for display
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString(undefined, options);
-        }
+                    // Update UI
+                    const artworkCard = document.querySelector(`.artwork-card[data-id="${id}"]`);
+                    if (artworkCard) {
+                        const favoriteButton = artworkCard.querySelector('.favorite-button');
+                        favoriteButton.setAttribute('aria-pressed', artwork.favorite);
+                    }
+
+                    // Show status message
+                    const statusMessage = document.createElement('div');
+                    statusMessage.className = 'status-message success';
+                    statusMessage.textContent = artwork.favorite 
+                        ? `"${artwork.title}" added to favorites` 
+                        : `"${artwork.title}" removed from favorites`;
+                    
+                    statusContainer.innerHTML = '';
+                    statusContainer.appendChild(statusMessage);
+
+                    // Remove status message after 3 seconds
+                    setTimeout(() => {
+                        statusMessage.remove();
+                    }, 3000);
+                }
+            }
+
+            // Toggle theme
+            function toggleTheme() {
+                isDarkMode = !isDarkMode;
+                document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+                themeToggle.setAttribute('aria-pressed', isDarkMode);
+
+                // Update theme toggle icon
+                const themeIcon = themeToggle.querySelector('svg');
+                if (isDarkMode) {
+                    themeIcon.innerHTML = `<path fill="currentColor" d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>`;
+                } else {
+                    themeIcon.innerHTML = `<path fill="currentColor" d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41.39.39 1.03.39 1.41 0l1.06-1.06z"/>`;
+                }
+
+                // Show status message
+                const statusMessage = document.createElement('div');
+                statusMessage.className = 'status-message success';
+                statusMessage.textContent = isDarkMode 
+                    ? 'Dark mode enabled' 
+                    : 'Light mode enabled';
+                
+                statusContainer.innerHTML = '';
+                statusContainer.appendChild(statusMessage);
+
+                // Remove status message after 3 seconds
+                setTimeout(() => {
+                    statusMessage.remove();
+                }, 3000);
+            }
+
+            // Check user's preferred color scheme
+            function checkPreferredColorScheme() {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    isDarkMode = true;
+                    document.body.setAttribute('data-theme', 'dark');
+                    themeToggle.setAttribute('aria-pressed', 'true');
+                    
+                    // Update theme toggle icon
+                    const themeIcon = themeToggle.querySelector('svg');
+                    themeIcon.innerHTML = `<path fill="currentColor" d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>`;
+                }
+            }
+
+            // Helper function to format category names
+            function formatCategory(category) {
+                return category.split('-').map(word => 
+                    word.charAt(0).toUpperCase() + word.slice(1)
+                ).join(' ');
+            }
+
+            // Helper function to format dates
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString(undefined, options);
+            }
+
+            // Helper function to truncate text
+            function truncateText(text, maxLength) {
+                if (text.length <= maxLength) return text;
+                return text.slice(0, maxLength) + '...';
+            }
+
+            // Initialize the gallery
+            initGallery();
+        });
     </script>
 </body>
 </html>
