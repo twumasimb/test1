@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Calculator</title>
+    <title>Calorie Tracking Webpage</title>
     <style>
         /* Global Styles */
         body {
@@ -12,135 +12,231 @@
             padding: 0;
         }
         
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .budget-form {
+        main {
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 20px;
         }
         
-        .budget-form label {
+        section {
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        label {
+            display: block;
             margin-bottom: 10px;
         }
         
-        .budget-form input[type="number"] {
+        input[type="text"], input[type="number"] {
             width: 100%;
             height: 40px;
             margin-bottom: 20px;
             padding: 10px;
-            font-size: 18px;
+            box-sizing: border-box;
         }
         
-        .budget-form button[type="submit"] {
+        button {
             width: 100%;
             height: 40px;
             background-color: #4CAF50;
             color: #fff;
             padding: 10px;
-            font-size: 18px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         
-        .budget-form button[type="submit"]:hover {
+        button:hover {
             background-color: #3e8e41;
         }
         
-        .budget-breakdown {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 40px;
+        /* Table Styles */
+        table {
+            border-collapse: collapse;
+            width: 100%;
         }
         
-        .budget-breakdown h2 {
-            margin-bottom: 20px;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
         }
         
-        .budget-breakdown ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        th {
+            background-color: #f0f0f0;
         }
         
-        .budget-breakdown li {
-            margin-bottom: 20px;
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
         }
         
-        .budget-breakdown li span {
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
             font-weight: bold;
+        }
+        
+        .close:hover, .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <header>
-        <nav aria-label="Main Navigation">
+        <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#food-entry">Food Entry</a></li>
+                <li><a href="#exercise-routine">Exercise Routine</a></li>
+                <li><a href="#progress-tracking">Progress Tracking</a></li>
             </ul>
         </nav>
     </header>
-    <main class="container">
-        <h1>Budget Calculator</h1>
-        <form class="budget-form" aria-label="Budget Calculator Form">
-            <label for="income">Monthly Income:</label>
-            <input type="number" id="income" required aria-required="true">
-            <label for="fixed-expenses">Fixed Expenses:</label>
-            <input type="number" id="fixed-expenses" required aria-required="true">
-            <label for="variable-expenses">Variable Expenses:</label>
-            <input type="number" id="variable-expenses" required aria-required="true">
-            <button type="submit">Calculate Budget</button>
-        </form>
-        <div class="budget-breakdown" aria-label="Budget Breakdown">
-            <h2>Budget Breakdown:</h2>
-            <ul id="budget-breakdown-list">
-                <!-- Budget breakdown list will be populated here -->
-            </ul>
+    <main>
+        <section id="food-entry">
+            <h1>Food Entry</h1>
+            <form id="food-entry-form">
+                <label for="food-name">Food Name:</label>
+                <input type="text" id="food-name" name="food-name">
+                <label for="calories">Calories:</label>
+                <input type="number" id="calories" name="calories">
+                <button id="add-food-btn">Add Food</button>
+            </form>
+            <table id="food-table">
+                <thead>
+                    <tr>
+                        <th>Food Name</th>
+                        <th>Calories</th>
+                    </tr>
+                </thead>
+                <tbody id="food-table-body">
+                </tbody>
+            </table>
+        </section>
+        <section id="exercise-routine">
+            <h1>Exercise Routine</h1>
+            <form id="exercise-routine-form">
+                <label for="exercise-name">Exercise Name:</label>
+                <input type="text" id="exercise-name" name="exercise-name">
+                <label for="duration">Duration (minutes):</label>
+                <input type="number" id="duration" name="duration">
+                <button id="add-exercise-btn">Add Exercise</button>
+            </form>
+            <table id="exercise-table">
+                <thead>
+                    <tr>
+                        <th>Exercise Name</th>
+                        <th>Duration (minutes)</th>
+                    </tr>
+                </thead>
+                <tbody id="exercise-table-body">
+                </tbody>
+            </table>
+        </section>
+        <section id="progress-tracking">
+            <h1>Progress Tracking</h1>
+            <p id="total-calories">Total Calories: 0</p>
+            <p id="total-duration">Total Duration: 0 minutes</p>
+            <button id="view-progress-btn">View Progress</button>
+        </section>
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Progress Details</h2>
+                <p id="modal-content"></p>
+            </div>
         </div>
     </main>
     <script>
-        // Get the form and budget breakdown elements
-        const budgetForm = document.querySelector('.budget-form');
-        const budgetBreakdownList = document.querySelector('#budget-breakdown-list');
+        // Get elements
+        const foodEntryForm = document.getElementById('food-entry-form');
+        const addFoodBtn = document.getElementById('add-food-btn');
+        const foodTableBody = document.getElementById('food-table-body');
+        const exerciseRoutineForm = document.getElementById('exercise-routine-form');
+        const addExerciseBtn = document.getElementById('add-exercise-btn');
+        const exerciseTableBody = document.getElementById('exercise-table-body');
+        const viewProgressBtn = document.getElementById('view-progress-btn');
+        const modal = document.getElementById('modal');
+        const closeModalBtn = document.querySelector('.close');
+        const modalContent = document.getElementById('modal-content');
+        const totalCaloriesElement = document.getElementById('total-calories');
+        const totalDurationElement = document.getElementById('total-duration');
         
-        // Add event listener to the form submission
-        budgetForm.addEventListener('submit', (e) => {
+        // Initialize variables
+        let totalCalories = 0;
+        let totalDuration = 0;
+        
+        // Add event listeners
+        addFoodBtn.addEventListener('click', addFood);
+        addExerciseBtn.addEventListener('click', addExercise);
+        viewProgressBtn.addEventListener('click', viewProgress);
+        closeModalBtn.addEventListener('click', closeModal);
+        
+        // Functions
+        function addFood(e) {
             e.preventDefault();
-            
-            // Get the input values
-            const income = parseFloat(document.querySelector('#income').value);
-            const fixedExpenses = parseFloat(document.querySelector('#fixed-expenses').value);
-            const variableExpenses = parseFloat(document.querySelector('#variable-expenses').value);
-            
-            // Calculate the budget breakdown
-            const totalExpenses = fixedExpenses + variableExpenses;
-            const disposableIncome = income - totalExpenses;
-            
-            // Create the budget breakdown list items
-            const budgetBreakdownItems = [
-                `Total Expenses: $${totalExpenses.toFixed(2)}`,
-                `Disposable Income: $${disposableIncome.toFixed(2)}`,
-            ];
-            
-            // Populate the budget breakdown list
-            budgetBreakdownList.innerHTML = '';
-            budgetBreakdownItems.forEach((item) => {
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `<span>${item}</span>`;
-                budgetBreakdownList.appendChild(listItem);
-            });
-        });
+            const foodName = document.getElementById('food-name').value;
+            const calories = parseInt(document.getElementById('calories').value);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${foodName}</td>
+                <td>${calories}</td>
+            `;
+            foodTableBody.appendChild(row);
+            totalCalories += calories;
+            totalCaloriesElement.textContent = `Total Calories: ${totalCalories}`;
+        }
+        
+        function addExercise(e) {
+            e.preventDefault();
+            const exerciseName = document.getElementById('exercise-name').value;
+            const duration = parseInt(document.getElementById('duration').value);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${exerciseName}</td>
+                <td>${duration} minutes</td>
+            `;
+            exerciseTableBody.appendChild(row);
+            totalDuration += duration;
+            totalDurationElement.textContent = `Total Duration: ${totalDuration} minutes`;
+        }
+        
+        function viewProgress() {
+            modal.style.display = 'block';
+            modalContent.textContent = `You have consumed ${totalCalories} calories and exercised for ${totalDuration} minutes.`;
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+        }
     </script>
 </body>
 </html>
