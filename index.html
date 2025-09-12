@@ -3,28 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Work Sharing</title>
+    <title>Creative Gallery</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
-        <h1>Creative Work Sharing</h1>
+        <div class="container">
+            <h1>Creative Gallery</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-view="gallery">Gallery</a></li>
+                    <li><a href="#" data-view="upload">Upload</a></li>
+                    <li><a href="#" data-view="about">About</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
-    <main>
-        <section id="upload-section">
-            <h2>Upload Your Work</h2>
+
+    <main class="container">
+        <!-- Gallery View -->
+        <section id="gallery-view" class="view active">
+            <div class="filter-controls">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search by title or tag...">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="filter-tags">
+                    <span class="filter-label">Filter by tag:</span>
+                    <div class="tag-buttons" id="tag-filters">
+                        <button class="tag-btn active" data-tag="all">All</button>
+                        <!-- Tags will be dynamically added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="gallery-grid" id="gallery-grid">
+                <!-- Gallery items will be dynamically added here -->
+                <div class="empty-gallery-message">
+                    <i class="fas fa-images"></i>
+                    <p>No images yet. Be the first to upload!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload View -->
+        <section id="upload-view" class="view">
+            <h2>Share Your Work</h2>
             <form id="upload-form">
-                <input type="file" id="file-input" name="file" accept="image/*" required>
-                <textarea id="description" name="description" placeholder="Add a description..." required></textarea>
-                <input type="text" id="tags" name="tags" placeholder="Add tags (comma-separated)" required>
-                <button type="submit">Upload</button>
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-prompt">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop your image here or click to browse</p>
+                        <span class="file-info">Supports: JPG, PNG, GIF (Max 5MB)</span>
+                    </div>
+                    <img id="preview-image" class="preview-image hidden">
+                    <input type="file" id="file-input" accept="image/*" hidden>
+                </div>
+                
+                <div class="form-group">
+                    <label for="title-input">Title</label>
+                    <input type="text" id="title-input" placeholder="Give your work a title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description-input">Description</label>
+                    <textarea id="description-input" placeholder="Tell us about your work" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tags-input">Tags (comma separated)</label>
+                    <input type="text" id="tags-input" placeholder="e.g., photography, nature, abstract">
+                    <div class="tags-preview" id="tags-preview"></div>
+                </div>
+                
+                <button type="submit" class="btn-primary">Upload & Share</button>
             </form>
         </section>
-        <section id="gallery">
-            <h2>Gallery</h2>
-            <div id="gallery-container"></div>
+
+        <!-- About View -->
+        <section id="about-view" class="view">
+            <h2>About Creative Gallery</h2>
+            <p>Creative Gallery is a platform for artists and creators to share their work with the world. Whether you're a photographer, painter, digital artist, or any other type of creator, this is the place to showcase your talent.</p>
+            
+            <h3>How It Works</h3>
+            <div class="how-it-works">
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-upload"></i></div>
+                    <h4>Upload</h4>
+                    <p>Share your creative work by uploading images.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-tags"></i></div>
+                    <h4>Tag</h4>
+                    <p>Add descriptive tags to help others discover your work.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon"><i class="fas fa-heart"></i></div>
+                    <h4>Engage</h4>
+                    <p>Like and appreciate other creators' work.</p>
+                </div>
+            </div>
         </section>
     </main>
+
+    <!-- Modal for viewing images -->
+    <div id="image-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <img id="modal-image" src="" alt="">
+            <div class="modal-info">
+                <h3 id="modal-title"></h3>
+                <p id="modal-description"></p>
+                <div id="modal-tags" class="modal-tags"></div>
+                <div class="modal-actions">
+                    <button class="like-btn" id="modal-like-btn">
+                        <i class="far fa-heart"></i> <span id="like-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Creative Gallery. All rights reserved.</p>
+        </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
