@@ -3,227 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Portfolio - Showcasing Personal Creative Projects</title>
+    <title>Color Palette Mixer</title>
     <style>
-        /* Global Styles */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.5;
             color: #333;
-            background-color: #f9f9f9;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header, footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            flex: 1;
+            padding: 2rem;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
-        .header {
-            background-color: #007BFF;
+        .color-mixer {
+            display: flex;
+            gap: 1rem;
+        }
+        .color-mixer input[type="color"] {
+            width: 100px;
+            height: 100px;
+        }
+        .color-mixer label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .color-preview {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .color-preview .color-box {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #fff;
-            padding: 20px 0;
-            text-align: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
+        .color-box::before {
+            content: attr(data-color);
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
         }
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background-color: #007BFF;
+            background-color: #333;
             color: #fff;
-            padding: 10px;
+            padding: 0.5rem 1rem;
             z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
         }
-        .nav {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-        }
-        .nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
+        .form-group {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            gap: 0.5rem;
         }
-        .nav ul li {
-            margin: 0 15px;
+        .form-group label {
+            font-weight: bold;
         }
-        .nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.1em;
+        .form-group input {
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        .nav ul li a:hover {
-            text-decoration: underline;
-        }
-        .main {
-            margin-top: 20px;
-        }
-        .projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        .project {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        .project:hover {
-            transform: scale(1.05);
-        }
-        .project img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .project h2 {
-            font-size: 1.5em;
-            margin: 10px;
-        }
-        .project p {
-            margin: 10px;
-        }
-        .footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            margin-top: 20px;
-        }
-        .filter-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .filter-buttons button {
+        .form-group button {
+            padding: 0.5rem 1rem;
             background-color: #007BFF;
             color: #fff;
             border: none;
-            padding: 10px 20px;
-            margin: 0 5px;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
-        .filter-buttons button:hover {
+        .form-group button:hover {
             background-color: #0056b3;
         }
-        .filter-buttons button.active {
-            background-color: #0056b3;
+        .form-group button:active {
+            background-color: #004999;
         }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
+        .form-group button:focus {
+            outline: 2px solid #007BFF;
+            outline-offset: 2px;
+        }
+        .error-message {
+            color: #ff0000;
+            font-weight: bold;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <a class="skip-link" href="#main-content">Skip to main content</a>
-    <header class="header">
-        <h1>Interactive Portfolio</h1>
+    <a href="#main" class="skip-link" tabindex="0">Skip to main content</a>
+    <header>
+        <h1>Color Palette Mixer</h1>
     </header>
-    <nav class="nav" aria-label="Main Navigation">
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
-    <main id="main-content" class="main">
-        <section id="about">
-            <h2>About Me</h2>
-            <p>Hi, I'm a creative developer with a passion for building interactive and accessible web applications. Explore my portfolio to see my latest projects and get in touch if you'd like to collaborate.</p>
-        </section>
-        <section id="projects">
-            <h2>Projects</h2>
-            <div class="filter-buttons">
-                <button class="filter" data-category="all" aria-pressed="true">All</button>
-                <button class="filter" data-category="web" aria-pressed="false">Web Development</button>
-                <button class="filter" data-category="design" aria-pressed="false">Design</button>
-                <button class="filter" data-category="mobile" aria-pressed="false">Mobile Apps</button>
-            </div>
-            <div class="projects">
-                <article class="project" data-category="web">
-                    <img src="project1.jpg" alt="Project 1: Web Development" aria-describedby="project1-description">
-                    <div id="project1-description" class="sr-only">A web development project showcasing a responsive and accessible e-commerce website.</div>
-                    <h2>Project 1</h2>
-                    <p>A responsive and accessible e-commerce website built with modern web technologies.</p>
-                </article>
-                <article class="project" data-category="design">
-                    <img src="project2.jpg" alt="Project 2: Design" aria-describedby="project2-description">
-                    <div id="project2-description" class="sr-only">A design project featuring a modern and user-friendly interface for a mobile app.</div>
-                    <h2>Project 2</h2>
-                    <p>A modern and user-friendly interface design for a mobile app.</p>
-                </article>
-                <article class="project" data-category="mobile">
-                    <img src="project3.jpg" alt="Project 3: Mobile App" aria-describedby="project3-description">
-                    <div id="project3-description" class="sr-only">A mobile app developed for iOS and Android platforms with a focus on performance and accessibility.</div>
-                    <h2>Project 3</h2>
-                    <p>A mobile app developed for iOS and Android platforms with a focus on performance and accessibility.</p>
-                </article>
-                <article class="project" data-category="web">
-                    <img src="project4.jpg" alt="Project 4: Web Development" aria-describedby="project4-description">
-                    <div id="project4-description" class="sr-only">A web development project that includes a complex backend system and a user-friendly frontend.</div>
-                    <h2>Project 4</h2>
-                    <p>A web development project that includes a complex backend system and a user-friendly frontend.</p>
-                </article>
-            </div>
-        </section>
-        <section id="contact">
-            <h2>Contact Me</h2>
-            <p>Feel free to reach out if you have any questions or would like to collaborate on a project.</p>
-            <form action="#" method="post">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required aria-required="true">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" required aria-required="true"></textarea>
-                <button type="submit">Send Message</button>
-            </form>
-        </section>
+    <main id="main">
+        <div class="container">
+            <section>
+                <h2>Color Mixer</h2>
+                <div class="color-mixer">
+                    <div class="form-group">
+                        <label for="color1">Color 1</label>
+                        <input type="color" id="color1" name="color1" value="#ff0000" aria-label="Select color 1">
+                    </div>
+                    <div class="form-group">
+                        <label for="color2">Color 2</label>
+                        <input type="color" id="color2" name="color2" value="#00ff00" aria-label="Select color 2">
+                    </div>
+                    <div class="form-group">
+                        <label for="color3">Color 3</label>
+                        <input type="color" id="color3" name="color3" value="#0000ff" aria-label="Select color 3">
+                    </div>
+                    <div class="form-group">
+                        <button id="mixColors" aria-label="Mix selected colors">Mix Colors</button>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <h2>Color Preview</h2>
+                <div class="color-preview" id="colorPreview">
+                    <div class="color-box" data-color="#ff0000" style="background-color: #ff0000;">#ff0000</div>
+                    <div class="color-box" data-color="#00ff00" style="background-color: #00ff00;">#00ff00</div>
+                    <div class="color-box" data-color="#0000ff" style="background-color: #0000ff;">#0000ff</div>
+                </div>
+            </section>
+        </div>
     </main>
-    <footer class="footer">
-        <p>&copy; 2023 Interactive Portfolio. All rights reserved.</p>
+    <footer>
+        <p>&copy; 2023 Color Palette Mixer. All rights reserved.</p>
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const filters = document.querySelectorAll('.filter');
-            const projects = document.querySelectorAll('.project');
+            const color1 = document.getElementById('color1');
+            const color2 = document.getElementById('color2');
+            const color3 = document.getElementById('color3');
+            const mixButton = document.getElementById('mixColors');
+            const colorPreview = document.getElementById('colorPreview');
 
-            filters.forEach(filter => {
-                filter.addEventListener('click', function() {
-                    filters.forEach(f => f.setAttribute('aria-pressed', 'false'));
-                    this.setAttribute('aria-pressed', 'true');
+            mixButton.addEventListener('click', function() {
+                const color1Value = color1.value;
+                const color2Value = color2.value;
+                const color3Value = color3.value;
 
-                    const category = this.getAttribute('data-category');
-                    projects.forEach(project => {
-                        if (category === 'all' || project.getAttribute('data-category') === category) {
-                            project.style.display = 'block';
-                        } else {
-                            project.style.display = 'none';
-                        }
-                    });
-                });
+                // Mix colors (simple average for demonstration)
+                const mixedColor = mixColors(color1Value, color2Value, color3Value);
+
+                // Update color preview
+                updateColorPreview(mixedColor);
             });
+
+            function mixColors(color1, color2, color3) {
+                const color1RGB = hexToRgb(color1);
+                const color2RGB = hexToRgb(color2);
+                const color3RGB = hexToRgb(color3);
+
+                const mixedR = Math.round((color1RGB.r + color2RGB.r + color3RGB.r) / 3);
+                const mixedG = Math.round((color1RGB.g + color2RGB.g + color3RGB.g) / 3);
+                const mixedB = Math.round((color1RGB.b + color2RGB.b + color3RGB.b) / 3);
+
+                return rgbToHex(mixedR, mixedG, mixedB);
+            }
+
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? {
+                    r: parseInt(result[1], 16),
+                    g: parseInt(result[2], 16),
+                    b: parseInt(result[3], 16)
+                } : null;
+            }
+
+            function rgbToHex(r, g, b) {
+                return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+            }
+
+            function updateColorPreview(mixedColor) {
+                const colorBox = document.createElement('div');
+                colorBox.classList.add('color-box');
+                colorBox.setAttribute('data-color', mixedColor);
+                colorBox.style.backgroundColor = mixedColor;
+                colorBox.textContent = mixedColor;
+                colorPreview.appendChild(colorBox);
+            }
         });
     </script>
 </body>
