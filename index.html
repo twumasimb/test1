@@ -3,69 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Budget Calculator | Track Your Monthly Income and Expenses</title>
+    <title>Accessible Calorie Tracker | Log Meals & Activities</title>
     <style>
-        /* Base Styles */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --text-color: #333;
-            --text-light: #fff;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+            --text-color: #212121;
+            --light-text: #f5f5f5;
+            --bg-color: #ffffff;
+            --card-bg: #f8f9fa;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --focus-outline: 3px solid var(--accent-color);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: var(--light-color);
+            background-color: var(--bg-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Skip Link */
+        /* Skip link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
             background: var(--primary-color);
-            color: var(--text-light);
+            color: var(--light-text);
             padding: 8px;
             z-index: 100;
-            transition: var(--transition);
+            transition: top 0.3s;
         }
 
         .skip-link:focus {
             top: 0;
+            outline: var(--focus-outline);
         }
 
         /* Header */
         header {
             background-color: var(--primary-color);
-            color: var(--text-light);
-            padding: 1rem 2rem;
-            box-shadow: var(--shadow);
+            color: var(--light-text);
+            padding: 1rem;
+            box-shadow: var(--box-shadow);
         }
 
         .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .logo {
@@ -76,207 +78,341 @@
         /* Navigation */
         nav {
             display: flex;
+            align-items: center;
         }
 
-        .nav-list {
+        .nav-menu {
             display: flex;
             list-style: none;
         }
 
-        .nav-item {
+        .nav-menu li {
             margin-left: 1.5rem;
         }
 
-        .nav-link {
-            color: var(--text-light);
+        .nav-menu a {
+            color: var(--light-text);
             text-decoration: none;
             font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a:focus {
+            background-color: var(--secondary-color);
+            outline: var(--focus-outline);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light-text);
+            font-size: 1.5rem;
+            cursor: pointer;
             padding: 0.5rem;
-            border-radius: 4px;
-            transition: var(--transition);
         }
 
-        .nav-link:hover,
-        .nav-link:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            outline: 2px solid var(--text-light);
-        }
-
-        /* Main Content */
+        /* Main content */
         main {
             flex: 1;
             max-width: 1200px;
             margin: 2rem auto;
-            padding: 0 2rem;
+            padding: 0 1rem;
             width: 100%;
         }
 
-        h1 {
+        h1, h2, h3, h4 {
             color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        h1 {
+            font-size: 2.5rem;
         }
 
         h2 {
-            color: var(--secondary-color);
-            margin: 1.5rem 0 1rem;
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
 
         h3 {
-            color: var(--dark-color);
-            margin: 1rem 0;
-            font-size: 1.4rem;
+            font-size: 1.5rem;
         }
 
-        p {
-            margin-bottom: 1rem;
-            max-width: 80ch;
-        }
-
-        /* Budget Calculator Section */
-        .calculator-container {
+        /* Dashboard layout */
+        .dashboard {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 2rem;
-            margin-top: 2rem;
         }
 
-        @media (max-width: 768px) {
-            .calculator-container {
-                grid-template-columns: 1fr;
+        @media (min-width: 992px) {
+            .dashboard {
+                grid-template-columns: 2fr 1fr;
             }
         }
 
-        .input-section, .results-section {
-            background-color: white;
-            border-radius: 8px;
+        /* Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
             padding: 1.5rem;
-            box-shadow: var(--shadow);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
         }
 
         /* Forms */
         form {
-            display: flex;
-            flex-direction: column;
+            display: grid;
             gap: 1rem;
         }
 
         .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         label {
-            font-weight: 600;
-            color: var(--dark-color);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
-        input, select, button {
+        input, select, textarea {
+            width: 100%;
             padding: 0.75rem;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
             font-size: 1rem;
         }
 
-        input:focus, select:focus, button:focus {
-            outline: 3px solid var(--secondary-color);
-            outline-offset: 2px;
-            border-color: var(--secondary-color);
+        input:focus, select:focus, textarea:focus {
+            outline: var(--focus-outline);
+            border-color: var(--accent-color);
         }
 
         button {
-            background-color: var(--secondary-color);
-            color: var(--text-light);
+            background-color: var(--primary-color);
+            color: var(--light-text);
             border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
             cursor: pointer;
-            font-weight: 600;
-            transition: var(--transition);
+            transition: background-color 0.3s;
             min-height: 44px;
             min-width: 44px;
         }
 
         button:hover, button:focus {
-            background-color: #2980b9;
+            background-color: var(--secondary-color);
+            outline: var(--focus-outline);
         }
 
-        .btn-danger {
-            background-color: var(--accent-color);
+        button.secondary {
+            background-color: #6c757d;
         }
 
-        .btn-danger:hover, .btn-danger:focus {
-            background-color: #c0392b;
+        button.secondary:hover, button.secondary:focus {
+            background-color: #5a6268;
         }
 
-        .btn-small {
-            padding: 0.5rem;
-            font-size: 0.9rem;
+        /* Stats display */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        /* Expense List */
-        .expense-list {
-            list-style: none;
-            margin-top: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .expense-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem;
-            border-bottom: 1px solid #eee;
-            align-items: center;
-        }
-
-        .expense-item:last-child {
-            border-bottom: none;
-        }
-
-        .expense-item-controls {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* Results Section */
-        .summary-card {
-            background-color: var(--light-color);
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
             padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
         }
 
-        .summary-value {
-            font-size: 1.5rem;
+        .stat-value {
+            font-size: 2rem;
             font-weight: bold;
+            color: var(--primary-color);
             margin: 0.5rem 0;
         }
 
-        .positive {
-            color: var(--success-color);
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
         }
 
-        .negative {
-            color: var(--accent-color);
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
         }
 
-        /* Chart Section */
-        .chart-container {
-            margin-top: 2rem;
-            height: 300px;
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Progress bars */
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--success-color);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
             position: relative;
+            color: var(--text-color);
+            font-size: 1rem;
         }
 
-        canvas {
+        .tab-btn:focus {
+            outline: var(--focus-outline);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Accessibility Features */
-        .visually-hidden {
+        .modal-content {
+            background-color: var(--bg-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close-btn:hover, .close-btn:focus {
+            color: var(--text-color);
+            outline: var(--focus-outline);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu li {
+                margin: 0.5rem 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Accessibility enhancements */
+        .sr-only {
             position: absolute;
             width: 1px;
             height: 1px;
@@ -285,514 +421,540 @@
             overflow: hidden;
             clip: rect(0, 0, 0, 0);
             white-space: nowrap;
-            border: 0;
+            border-width: 0;
         }
 
-        /* Footer */
-        footer {
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
+        [aria-invalid="true"] {
+            border-color: var(--error-color);
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
         }
 
-        /* Responsive Adjustments */
-        @media (max-width: 600px) {
-            .header-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .nav-list {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .nav-item {
-                margin-left: 0;
-            }
-
-            main {
-                padding: 0 1rem;
-            }
-        }
-
-        /* Print Styles */
-        @media print {
-            nav, footer {
-                display: none;
-            }
-
-            body {
-                background-color: white;
-                color: black;
-            }
-
-            .calculator-container {
-                grid-template-columns: 1fr;
-            }
-
-            .input-section, .results-section {
-                box-shadow: none;
-                border: 1px solid #ddd;
+        /* Animation */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Skip Link -->
+    <!-- Skip link for keyboard users -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Header -->
+    <!-- Header with navigation -->
     <header>
         <div class="header-container">
-            <div class="logo">Budget Tracker</div>
-            <nav aria-label="Main Navigation">
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Resources</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+            <div class="logo">Calorie Tracker</div>
+            <nav aria-label="Main navigation">
+                <button class="mobile-menu-btn" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation menu">
+                    ☰
+                </button>
+                <ul class="nav-menu" id="nav-menu">
+                    <li><a href="#dashboard" class="active">Dashboard</a></li>
+                    <li><a href="#food-log">Food Log</a></li>
+                    <li><a href="#activity-log">Activity Log</a></li>
+                    <li><a href="#goals">Goals</a></li>
+                    <li><a href="#reports">Reports</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main content -->
     <main id="main-content">
-        <h1>Monthly Budget Calculator</h1>
-        <p>Track your income and expenses to better understand your financial situation. Enter your monthly income and add your expenses to see a breakdown of where your money is going.</p>
-
-        <div class="calculator-container">
-            <!-- Input Section -->
-            <section class="input-section" aria-labelledby="input-section-heading">
-                <h2 id="input-section-heading">Enter Your Budget Details</h2>
-                
-                <form id="budget-form">
-                    <div class="form-group">
-                        <label for="income">Monthly Income ($)</label>
-                        <input type="number" id="income" name="income" min="0" step="0.01" required aria-required="true">
-                    </div>
-
-                    <h3>Add Expenses</h3>
-                    <div class="form-group">
-                        <label for="expense-name">Expense Name</label>
-                        <input type="text" id="expense-name" name="expense-name" required aria-required="true">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="expense-amount">Amount ($)</label>
-                        <input type="number" id="expense-amount" name="expense-amount" min="0" step="0.01" required aria-required="true">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="expense-category">Category</label>
-                        <select id="expense-category" name="expense-category" required aria-required="true">
-                            <option value="">Select a category</option>
-                            <option value="Housing">Housing</option>
-                            <option value="Transportation">Transportation</option>
-                            <option value="Food">Food</option>
-                            <option value="Utilities">Utilities</option>
-                            <option value="Healthcare">Healthcare</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Savings">Savings</option>
-                            <option value="Debt">Debt Payments</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <button type="button" id="add-expense">Add Expense</button>
-                </form>
-
-                <h3>Your Expenses</h3>
-                <ul class="expense-list" id="expense-list" aria-live="polite">
-                    <!-- Expenses will be added here dynamically -->
-                </ul>
-
-                <button type="button" id="calculate-budget" class="btn-danger">Calculate Budget</button>
-                <button type="button" id="reset-budget">Reset</button>
-            </section>
-
-            <!-- Results Section -->
-            <section class="results-section" aria-labelledby="results-section-heading">
-                <h2 id="results-section-heading">Budget Summary</h2>
-                
-                <div class="summary-card">
-                    <h3>Total Income</h3>
-                    <div class="summary-value" id="total-income">$0.00</div>
+        <h1>Calorie Tracking Dashboard</h1>
+        
+        <!-- Daily stats summary -->
+        <section aria-labelledby="daily-stats-heading">
+            <h2 id="daily-stats-heading">Today's Summary</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <span class="stat-label">Calories Consumed</span>
+                    <div class="stat-value" id="calories-consumed">0</div>
+                    <span class="stat-label">kcal</span>
                 </div>
-
-                <div class="summary-card">
-                    <h3>Total Expenses</h3>
-                    <div class="summary-value" id="total-expenses">$0.00</div>
+                <div class="stat-card">
+                    <span class="stat-label">Calories Burned</span>
+                    <div class="stat-value" id="calories-burned">0</div>
+                    <span class="stat-label">kcal</span>
                 </div>
-
-                <div class="summary-card">
-                    <h3>Remaining Balance</h3>
-                    <div class="summary-value" id="remaining-balance">$0.00</div>
+                <div class="stat-card">
+                    <span class="stat-label">Net Calories</span>
+                    <div class="stat-value" id="net-calories">0</div>
+                    <span class="stat-label">kcal</span>
                 </div>
-
-                <div class="chart-container">
-                    <canvas id="budget-chart" aria-label="Visual breakdown of expense categories" role="img"></canvas>
-                    <div id="chart-description" class="visually-hidden">
-                        This pie chart shows the percentage breakdown of your expenses by category.
+                <div class="stat-card">
+                    <span class="stat-label">Goal Progress</span>
+                    <div class="progress-container">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
                     </div>
+                    <span class="stat-label" id="goal-progress-text">0% of daily goal</span>
                 </div>
+            </div>
+        </section>
 
-                <div id="budget-message" aria-live="polite"></div>
-            </section>
+        <!-- Main dashboard content -->
+        <div class="dashboard">
+            <!-- Left column -->
+            <div class="dashboard-main">
+                <!-- Food logging section -->
+                <section class="card" aria-labelledby="food-log-heading">
+                    <h2 id="food-log-heading">Log Your Food</h2>
+                    <form id="food-form">
+                        <div class="form-group">
+                            <label for="food-name">Food Name</label>
+                            <input type="text" id="food-name" name="food-name" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="food-calories">Calories</label>
+                            <input type="number" id="food-calories" name="food-calories" required aria-required="true" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="food-serving">Serving Size (optional)</label>
+                            <input type="text" id="food-serving" name="food-serving">
+                        </div>
+                        <div class="form-group">
+                            <label for="food-time">Time</label>
+                            <input type="time" id="food-time" name="food-time" required aria-required="true">
+                        </div>
+                        <button type="submit">Add Food Entry</button>
+                    </form>
+                </section>
+
+                <!-- Activity logging section -->
+                <section class="card" aria-labelledby="activity-log-heading">
+                    <h2 id="activity-log-heading">Log Your Activity</h2>
+                    <form id="activity-form">
+                        <div class="form-group">
+                            <label for="activity-name">Activity Name</label>
+                            <input type="text" id="activity-name" name="activity-name" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="activity-calories">Calories Burned</label>
+                            <input type="number" id="activity-calories" name="activity-calories" required aria-required="true" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="activity-duration">Duration (minutes)</label>
+                            <input type="number" id="activity-duration" name="activity-duration" required aria-required="true" min="1" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="activity-time">Time</label>
+                            <input type="time" id="activity-time" name="activity-time" required aria-required="true">
+                        </div>
+                        <button type="submit">Add Activity Entry</button>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Right column -->
+            <div class="dashboard-sidebar">
+                <!-- Recent entries -->
+                <section class="card" aria-labelledby="recent-entries-heading">
+                    <h2 id="recent-entries-heading">Recent Entries</h2>
+                    <div class="tabs" role="tablist">
+                        <button class="tab-btn active" id="food-tab" role="tab" aria-selected="true" aria-controls="food-entries">Food</button>
+                        <button class="tab-btn" id="activity-tab" role="tab" aria-selected="false" aria-controls="activity-entries">Activity</button>
+                    </div>
+                    <div id="food-entries" class="tab-content active" role="tabpanel" aria-labelledby="food-tab">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Calories</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="food-entries-list">
+                                <!-- Food entries will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="activity-entries" class="tab-content" role="tabpanel" aria-labelledby="activity-tab">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Activity</th>
+                                    <th>Calories</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activity-entries-list">
+                                <!-- Activity entries will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Goals section -->
+                <section class="card" aria-labelledby="goals-heading">
+                    <h2 id="goals-heading">Your Goals</h2>
+                    <div class="goal-item">
+                        <h3>Daily Calorie Goal</h3>
+                        <p id="current-goal">Current goal: 2000 kcal</p>
+                        <button id="edit-goal-btn" class="secondary">Edit Goal</button>
+                    </div>
+                </section>
+            </div>
         </div>
     </main>
 
+    <!-- Goal edit modal -->
+    <div id="goal-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Edit Daily Calorie Goal</h2>
+                <button class="close-btn" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="goal-form">
+                <div class="form-group">
+                    <label for="new-goal">New Daily Calorie Goal</label>
+                    <input type="number" id="new-goal" name="new-goal" required aria-required="true" min="1000" max="5000" step="50" value="2000">
+                </div>
+                <button type="submit">Save Goal</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <p>&copy; 2023 Accessible Budget Tracker. All rights reserved.</p>
-            <p>This tool is designed to be fully accessible to all users.</p>
+        <div class="footer-container">
+            <p>&copy; 2023 Accessible Calorie Tracker. All rights reserved.</p>
+            <nav aria-label="Footer navigation">
+                <ul>
+                    <li><a href="#privacy">Privacy Policy</a></li>
+                    <li><a href="#terms">Terms of Service</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </nav>
         </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM Elements
-            const incomeInput = document.getElementById('income');
-            const expenseNameInput = document.getElementById('expense-name');
-            const expenseAmountInput = document.getElementById('expense-amount');
-            const expenseCategoryInput = document.getElementById('expense-category');
-            const addExpenseBtn = document.getElementById('add-expense');
-            const calculateBtn = document.getElementById('calculate-budget');
-            const resetBtn = document.getElementById('reset-budget');
-            const expenseList = document.getElementById('expense-list');
-            const totalIncomeDisplay = document.getElementById('total-income');
-            const totalExpensesDisplay = document.getElementById('total-expenses');
-            const remainingBalanceDisplay = document.getElementById('remaining-balance');
-            const budgetMessage = document.getElementById('budget-message');
-            const budgetChartCanvas = document.getElementById('budget-chart');
+        // DOM elements
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navMenu = document.querySelector('.nav-menu');
+        const foodForm = document.getElementById('food-form');
+        const activityForm = document.getElementById('activity-form');
+        const goalForm = document.getElementById('goal-form');
+        const editGoalBtn = document.getElementById('edit-goal-btn');
+        const goalModal = document.getElementById('goal-modal');
+        const closeModalBtn = document.querySelector('.close-btn');
+        const foodTab = document.getElementById('food-tab');
+        const activityTab = document.getElementById('activity-tab');
+        const foodEntriesContent = document.getElementById('food-entries');
+        const activityEntriesContent = document.getElementById('activity-entries');
 
-            // Budget Data
-            let budgetData = {
-                income: 0,
-                expenses: [],
-                categories: {}
-            };
+        // Data storage
+        let dailyGoal = 2000;
+        let foodEntries = [];
+        let activityEntries = [];
 
-            // Chart Instance
-            let budgetChart = null;
-
-            // Initialize the application
-            function init() {
-                loadFromLocalStorage();
-                updateUI();
-                setupEventListeners();
-            }
-
-            // Load data from localStorage
-            function loadFromLocalStorage() {
-                const savedData = localStorage.getItem('budgetData');
-                if (savedData) {
-                    budgetData = JSON.parse(savedData);
-                }
-            }
-
-            // Save data to localStorage
-            function saveToLocalStorage() {
-                localStorage.setItem('budgetData', JSON.stringify(budgetData));
-            }
-
-            // Set up event listeners
-            function setupEventListeners() {
-                addExpenseBtn.addEventListener('click', addExpense);
-                calculateBtn.addEventListener('click', calculateBudget);
-                resetBtn.addEventListener('click', resetBudget);
-
-                // Keyboard support for buttons
-                addExpenseBtn.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        addExpense();
-                    }
-                });
-
-                calculateBtn.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        calculateBudget();
-                    }
-                });
-
-                resetBtn.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        resetBudget();
-                    }
-                });
-
-                // Form submission prevention
-                document.getElementById('budget-form').addEventListener('submit', function(e) {
-                    e.preventDefault();
-                });
-            }
-
-            // Add an expense to the list
-            function addExpense() {
-                const name = expenseNameInput.value.trim();
-                const amount = parseFloat(expenseAmountInput.value);
-                const category = expenseCategoryInput.value;
-
-                // Validate inputs
-                if (!name || isNaN(amount) || amount <= 0 || !category) {
-                    showError('Please fill in all expense fields with valid values.');
-                    return;
-                }
-
-                // Add expense to data
-                const expense = {
-                    id: Date.now(),
-                    name,
-                    amount,
-                    category
-                };
-
-                budgetData.expenses.push(expense);
-                saveToLocalStorage();
-                updateUI();
-
-                // Clear input fields
-                expenseNameInput.value = '';
-                expenseAmountInput.value = '';
-                expenseCategoryInput.value = '';
-                expenseNameInput.focus();
-
-                // Announce to screen readers
-                announceToScreenReader(`Added expense: ${name} for $${amount.toFixed(2)} under ${category} category.`);
-            }
-
-            // Remove an expense from the list
-            function removeExpense(id) {
-                budgetData.expenses = budgetData.expenses.filter(expense => expense.id !== id);
-                saveToLocalStorage();
-                updateUI();
-            }
-
-            // Calculate the budget summary
-            function calculateBudget() {
-                const income = parseFloat(incomeInput.value);
-
-                // Validate income
-                if (isNaN(income) || income <= 0) {
-                    showError('Please enter a valid income amount.');
-                    return;
-                }
-
-                if (budgetData.expenses.length === 0) {
-                    showError('Please add at least one expense.');
-                    return;
-                }
-
-                budgetData.income = income;
-                saveToLocalStorage();
-
-                // Calculate totals
-                const totalExpenses = budgetData.expenses.reduce((sum, expense) => sum + expense.amount, 0);
-                const remainingBalance = budgetData.income - totalExpenses;
-
-                // Update UI
-                totalIncomeDisplay.textContent = `$${budgetData.income.toFixed(2)}`;
-                totalExpensesDisplay.textContent = `$${totalExpenses.toFixed(2)}`;
-                remainingBalanceDisplay.textContent = `$${remainingBalance.toFixed(2)}`;
-
-                // Set color based on balance
-                if (remainingBalance >= 0) {
-                    remainingBalanceDisplay.className = 'summary-value positive';
-                    budgetMessage.textContent = 'Good job! You have money left over this month.';
-                } else {
-                    remainingBalanceDisplay.className = 'summary-value negative';
-                    budgetMessage.textContent = 'Warning: You are spending more than you earn this month.';
-                }
-
-                // Update chart
-                updateChart();
-
-                // Announce to screen readers
-                announceToScreenReader(`Budget calculated. Income: $${budgetData.income.toFixed(2)}, Expenses: $${totalExpenses.toFixed(2)}, Remaining: $${remainingBalance.toFixed(2)}. ${budgetMessage.textContent}`);
-            }
-
-            // Reset the budget calculator
-            function resetBudget() {
-                if (confirm('Are you sure you want to reset all budget data? This cannot be undone.')) {
-                    budgetData = {
-                        income: 0,
-                        expenses: [],
-                        categories: {}
-                    };
-                    
-                    incomeInput.value = '';
-                    expenseNameInput.value = '';
-                    expenseAmountInput.value = '';
-                    expenseCategoryInput.value = '';
-                    
-                    saveToLocalStorage();
-                    updateUI();
-                    
-                    // Clear chart if it exists
-                    if (budgetChart) {
-                        budgetChart.destroy();
-                        budgetChart = null;
-                    }
-                    
-                    budgetMessage.textContent = '';
-                    
-                    // Announce to screen readers
-                    announceToScreenReader('Budget calculator has been reset.');
-                }
-            }
-
-            // Update the UI based on current data
-            function updateUI() {
-                // Update income display if it exists
-                if (budgetData.income > 0) {
-                    incomeInput.value = budgetData.income;
-                }
-
-                // Update expense list
-                expenseList.innerHTML = '';
-                
-                if (budgetData.expenses.length === 0) {
-                    const emptyMessage = document.createElement('li');
-                    emptyMessage.textContent = 'No expenses added yet.';
-                    emptyMessage.classList.add('empty-message');
-                    expenseList.appendChild(emptyMessage);
-                } else {
-                    budgetData.expenses.forEach(expense => {
-                        const expenseItem = document.createElement('li');
-                        expenseItem.className = 'expense-item';
-                        expenseItem.innerHTML = `
-                            <div>
-                                <strong>${expense.name}</strong><br>
-                                <span>$${expense.amount.toFixed(2)} - ${expense.category}</span>
-                            </div>
-                            <div class="expense-item-controls">
-                                <button class="btn-danger btn-small" data-id="${expense.id}" aria-label="Remove ${expense.name} expense">×</button>
-                            </div>
-                        `;
-                        
-                        const removeBtn = expenseItem.querySelector('button');
-                        removeBtn.addEventListener('click', () => removeExpense(expense.id));
-                        removeBtn.addEventListener('keydown', (e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                removeExpense(expense.id);
-                            }
-                        });
-                        
-                        expenseList.appendChild(expenseItem);
-                    });
-                }
-            }
-
-            // Update the chart visualization
-            function updateChart() {
-                // Group expenses by category
-                const categories = {};
-                budgetData.expenses.forEach(expense => {
-                    if (!categories[expense.category]) {
-                        categories[expense.category] = 0;
-                    }
-                    categories[expense.category] += expense.amount;
-                });
-
-                // Prepare data for chart
-                const labels = Object.keys(categories);
-                const data = Object.values(categories);
-                const backgroundColors = [
-                    '#3498db', '#e74c3c', '#2ecc71', '#f39c12', 
-                    '#9b59b6', '#1abc9c', '#d35400', '#34495e',
-                    '#7f8c8d', '#27ae60'
-                ];
-
-                // Get or create chart
-                const ctx = budgetChartCanvas.getContext('2d');
-                
-                if (budgetChart) {
-                    budgetChart.data.labels = labels;
-                    budgetChart.data.datasets[0].data = data;
-                    budgetChart.update();
-                } else {
-                    budgetChart = new Chart(ctx, {
-                        type: 'pie',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                data: data,
-                                backgroundColor: backgroundColors,
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'right',
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function(context) {
-                                            const label = context.label || '';
-                                            const value = context.raw || 0;
-                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                            const percentage = Math.round((value / total) * 100);
-                                            return `${label}: $${value.toFixed(2)} (${percentage}%)`;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-
-                // Update chart description for screen readers
-                let description = 'Expense breakdown by category: ';
-                labels.forEach((label, index) => {
-                    const value = data[index];
-                    const percentage = Math.round((value / budgetData.expenses.reduce((sum, exp) => sum + exp.amount, 0)) * 100);
-                    description += `${label} accounts for ${percentage}% of expenses, `;
-                });
-                document.getElementById('chart-description').textContent = description.slice(0, -2) + '.';
-            }
-
-            // Show error message
-            function showError(message) {
-                budgetMessage.textContent = message;
-                budgetMessage.style.color = 'var(--accent-color)';
-                
-                // Announce to screen readers
-                announceToScreenReader(`Error: ${message}`);
-            }
-
-            // Announce messages to screen readers
-            function announceToScreenReader(message) {
-                const announcement = document.createElement('div');
-                announcement.setAttribute('aria-live', 'polite');
-                announcement.className = 'visually-hidden';
-                announcement.textContent = message;
-                document.body.appendChild(announcement);
-                
-                // Remove after a short delay
-                setTimeout(() => {
-                    document.body.removeChild(announcement);
-                }, 1000);
-            }
-
-            // Initialize the app
-            init();
+        // Toggle mobile menu
+        mobileMenuBtn.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !isExpanded);
+            navMenu.classList.toggle('active');
         });
+
+        // Tab functionality
+        foodTab.addEventListener('click', function() {
+            setActiveTab('food');
+        });
+
+        activityTab.addEventListener('click', function() {
+            setActiveTab('activity');
+        });
+
+        function setActiveTab(tab) {
+            if (tab === 'food') {
+                foodTab.classList.add('active');
+                foodTab.setAttribute('aria-selected', 'true');
+                activityTab.classList.remove('active');
+                activityTab.setAttribute('aria-selected', 'false');
+                foodEntriesContent.classList.add('active');
+                activityEntriesContent.classList.remove('active');
+            } else {
+                activityTab.classList.add('active');
+                activityTab.setAttribute('aria-selected', 'true');
+                foodTab.classList.remove('active');
+                foodTab.setAttribute('aria-selected', 'false');
+                activityEntriesContent.classList.add('active');
+                foodEntriesContent.classList.remove('active');
+            }
+        }
+
+        // Modal functionality
+        editGoalBtn.addEventListener('click', function() {
+            goalModal.style.display = 'flex';
+            document.getElementById('new-goal').focus();
+        });
+
+        closeModalBtn.addEventListener('click', function() {
+            goalModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === goalModal) {
+                goalModal.style.display = 'none';
+            }
+        });
+
+        // Form submissions
+        foodForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const foodName = document.getElementById('food-name').value;
+            const calories = parseInt(document.getElementById('food-calories').value);
+            const serving = document.getElementById('food-serving').value;
+            const time = document.getElementById('food-time').value;
+            
+            if (!foodName || isNaN(calories) || !time) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const entry = {
+                id: Date.now(),
+                name: foodName,
+                calories: calories,
+                serving: serving,
+                time: time,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            foodEntries.push(entry);
+            updateFoodEntries();
+            updateStats();
+            this.reset();
+        });
+
+        activityForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const activityName = document.getElementById('activity-name').value;
+            const calories = parseInt(document.getElementById('activity-calories').value);
+            const duration = parseInt(document.getElementById('activity-duration').value);
+            const time = document.getElementById('activity-time').value;
+            
+            if (!activityName || isNaN(calories) || isNaN(duration) || !time) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const entry = {
+                id: Date.now(),
+                name: activityName,
+                calories: calories,
+                duration: duration,
+                time: time,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            activityEntries.push(entry);
+            updateActivityEntries();
+            updateStats();
+            this.reset();
+        });
+
+        goalForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newGoal = parseInt(document.getElementById('new-goal').value);
+            
+            if (isNaN(newGoal) || newGoal < 1000 || newGoal > 5000) {
+                alert('Please enter a valid goal between 1000 and 5000 calories');
+                return;
+            }
+            
+            dailyGoal = newGoal;
+            document.getElementById('current-goal').textContent = `Current goal: ${dailyGoal} kcal`;
+            goalModal.style.display = 'none';
+            updateStats();
+        });
+
+        // Update UI functions
+        function updateFoodEntries() {
+            const tbody = document.getElementById('food-entries-list');
+            tbody.innerHTML = '';
+            
+            // Sort by time (newest first)
+            const sortedEntries = [...foodEntries].sort((a, b) => {
+                return new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time);
+            });
+            
+            sortedEntries.forEach(entry => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${entry.name}${entry.serving ? ` (${entry.serving})` : ''}</td>
+                    <td>${entry.calories}</td>
+                    <td>${formatTime(entry.time)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateActivityEntries() {
+            const tbody = document.getElementById('activity-entries-list');
+            tbody.innerHTML = '';
+            
+            // Sort by time (newest first)
+            const sortedEntries = [...activityEntries].sort((a, b) => {
+                return new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time);
+            });
+            
+            sortedEntries.forEach(entry => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${entry.name} (${entry.duration} min)</td>
+                    <td>${entry.calories}</td>
+                    <td>${formatTime(entry.time)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateStats() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Calculate today's totals
+            const todayFood = foodEntries.filter(entry => entry.date === today);
+            const todayActivity = activityEntries.filter(entry => entry.date === today);
+            
+            const caloriesConsumed = todayFood.reduce((sum, entry) => sum + entry.calories, 0);
+            const caloriesBurned = todayActivity.reduce((sum, entry) => sum + entry.calories, 0);
+            const netCalories = caloriesConsumed - caloriesBurned;
+            
+            // Update UI
+            document.getElementById('calories-consumed').textContent = caloriesConsumed;
+            document.getElementById('calories-burned').textContent = caloriesBurned;
+            document.getElementById('net-calories').textContent = netCalories;
+            
+            // Update progress bar
+            const progress = Math.min(Math.max(0, (caloriesConsumed / dailyGoal) * 100), 100);
+            const progressBar = document.querySelector('.progress-fill');
+            const progressText = document.getElementById('goal-progress-text');
+            
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}% of daily goal`;
+            
+            // Update ARIA attributes
+            document.querySelector('.progress-bar').setAttribute('aria-valuenow', Math.round(progress));
+            
+            // Change color based on progress
+            if (progress > 100) {
+                progressBar.style.backgroundColor = var(--error-color);
+            } else if (progress > 80) {
+                progressBar.style.backgroundColor = var(--warning-color);
+            } else {
+                progressBar.style.backgroundColor = var(--success-color);
+            }
+        }
+
+        // Helper functions
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const hour12 = hour % 12 || 12;
+            return `${hour12}:${minutes} ${ampm}`;
+        }
+
+        // Initialize
+        updateFoodEntries();
+        updateActivityEntries();
+        updateStats();
+
+        // Keyboard navigation for tabs
+        document.querySelectorAll('[role="tab"]').forEach(tab => {
+            tab.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+                    const currentIndex = tabs.indexOf(this);
+                    let nextIndex;
+                    
+                    if (e.key === 'ArrowLeft') {
+                        nextIndex = currentIndex - 1 >= 0 ? currentIndex - 1 : tabs.length - 1;
+                    } else {
+                        nextIndex = currentIndex + 1 < tabs.length ? currentIndex + 1 : 0;
+                    }
+                    
+                    tabs[nextIndex].focus();
+                    tabs[nextIndex].click();
+                }
+            });
+        });
+
+        // Sample data for demo
+        function addSampleData() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            
+            // Add sample food entries
+            foodEntries = [
+                {
+                    id: 1,
+                    name: 'Scrambled Eggs',
+                    calories: 200,
+                    serving: '2 eggs',
+                    time: `${currentHour - 2}:${currentMinute}`,
+                    date: now.toISOString().split('T')[0]
+                },
+                {
+                    id: 2,
+                    name: 'Whole Wheat Toast',
+                    calories: 150,
+                    serving: '2 slices',
+                    time: `${currentHour - 2}:${currentMinute}`,
+                    date: now.toISOString().split('T')[0]
+                },
+                {
+                    id: 3,
+                    name: 'Greek Yogurt with Berries',
+                    calories: 180,
+                    serving: '1 cup',
+                    time: `${currentHour - 4}:${currentMinute}`,
+                    date: now.toISOString().split('T')[0]
+                }
+            ];
+            
+            // Add sample activity entries
+            activityEntries = [
+                {
+                    id: 1,
+                    name: 'Morning Jog',
+                    calories: 300,
+                    duration: 30,
+                    time: `${currentHour - 5}:${currentMinute}`,
+                    date: now.toISOString().split('T')[0]
+                },
+                {
+                    id: 2,
+                    name: 'Yoga Session',
+                    calories: 150,
+                    duration: 45,
+                    time: `${currentHour - 1}:${currentMinute}`,
+                    date: now.toISOString().split('T')[0]
+                }
+            ];
+            
+            updateFoodEntries();
+            updateActivityEntries();
+            updateStats();
+        }
+
+        // Uncomment to add sample data for demo purposes
+        // addSampleData();
     </script>
 </body>
 </html>
