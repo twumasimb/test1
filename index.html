@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Recommendation System</title>
+    <title>Event RSVP Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,21 +12,19 @@
             padding: 0;
             color: #333;
             background-color: #f9f9f9;
+            font-size: 16px;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        header, nav, main, footer {
             padding: 20px;
         }
         header {
             background-color: #007BFF;
             color: #fff;
-            padding: 20px 0;
             text-align: center;
         }
         nav {
-            background-color: #333;
-            padding: 10px 0;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid #ddd;
         }
         nav ul {
             list-style: none;
@@ -36,77 +34,85 @@
             justify-content: center;
         }
         nav ul li {
-            margin: 0 15px;
+            margin: 0 10px;
         }
         nav ul li a {
-            color: #fff;
             text-decoration: none;
-            font-size: 18px;
-        }
-        main {
-            padding: 20px 0;
-        }
-        section {
-            margin-bottom: 40px;
-        }
-        h1, h2, h3 {
-            color: #007BFF;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        input, select, textarea {
-            width: 100%;
+            color: #333;
             padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
+            display: block;
         }
-        button {
+        nav ul li a:hover {
             background-color: #007BFF;
             color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 18px;
         }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .book-list {
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
+            justify-content: space-between;
         }
-        .book-card {
+        .form-section, .attendees-section {
+            flex: 1;
+            margin: 10px;
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
-            width: 300px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .book-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .book-card h3 {
+        .form-section h2, .attendees-section h2 {
             margin-top: 0;
         }
-        .book-card p {
-            margin: 10px 0;
+        .form-section form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-section label {
+            margin-bottom: 5px;
+        }
+        .form-section input, .form-section select, .form-section textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-section button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-section button:hover {
+            background-color: #0056b3;
+        }
+        .attendees-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .attendees-section li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 4px;
+        }
+        .attendees-section li strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .attendees-section li span {
+            color: #777;
+        }
+        footer {
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
         .skip-link {
             position: absolute;
@@ -115,109 +121,121 @@
             background-color: #007BFF;
             color: #fff;
             padding: 10px;
-            text-decoration: none;
             z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
+            outline: 2px solid #0056b3;
         }
         .error-message {
             color: #ff0000;
-            margin-top: 10px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .success-message {
+            color: #008000;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <header>
-        <h1>Book Recommendation System</h1>
+        <h1>Event RSVP</h1>
     </header>
     <nav aria-label="Main Navigation">
         <ul>
-            <li><a href="#form-section">Get Recommendations</a></li>
-            <li><a href="#book-list">Book List</a></li>
+            <li><a href="#form-section">RSVP Form</a></li>
+            <li><a href="#attendees-section">Attendees List</a></li>
         </ul>
     </nav>
     <main id="main-content">
-        <section id="form-section">
-            <h2>Get Book Recommendations</h2>
-            <form id="book-form">
-                <label for="genre">Favorite Genre:</label>
-                <select id="genre" name="genre" required aria-required="true">
-                    <option value="" disabled selected>Select a genre</option>
-                    <option value="fantasy">Fantasy</option>
-                    <option value="science-fiction">Science Fiction</option>
-                    <option value="mystery">Mystery</option>
-                    <option value="romance">Romance</option>
-                    <option value="non-fiction">Non-Fiction</option>
+        <section class="form-section" id="form-section">
+            <h2>RSVP Form</h2>
+            <form id="rsvp-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required aria-required="true" autocomplete="name">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" name="phone" required aria-required="true" autocomplete="tel">
+                <label for="attendance">Will you attend?</label>
+                <select id="attendance" name="attendance" required aria-required="true">
+                    <option value="">Select an option</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
                 </select>
-                <label for="author">Favorite Author:</label>
-                <input type="text" id="author" name="author" placeholder="Enter author name" required aria-required="true">
-                <button type="submit">Get Recommendations</button>
+                <label for="comments">Comments:</label>
+                <textarea id="comments" name="comments" rows="4" cols="50" aria-describedby="comments-help"></textarea>
+                <span id="comments-help" class="hidden">Please provide any additional information or questions here.</span>
+                <button type="submit">Submit</button>
+                <div id="form-messages" class="hidden"></div>
             </form>
-            <div id="error-message" class="error-message" aria-live="assertive" aria-atomic="true" role="alert"></div>
         </section>
-        <section id="book-list">
-            <h2>Book Recommendations</h2>
-            <div class="book-list" id="book-list-container"></div>
+        <section class="attendees-section" id="attendees-section">
+            <h2>Attendees List</h2>
+            <ul id="attendees-list">
+                <!-- Attendees will be dynamically added here -->
+            </ul>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Book Recommendation System. All rights reserved.</p>
+        <p>&copy; 2023 Event RSVP. All rights reserved.</p>
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('book-form');
-            const errorMessage = document.getElementById('error-message');
-            const bookListContainer = document.getElementById('book-list-container');
+            const form = document.getElementById('rsvp-form');
+            const formMessages = document.getElementById('form-messages');
+            const attendeesList = document.getElementById('attendees-list');
+            const commentsHelp = document.getElementById('comments-help');
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
-                errorMessage.textContent = '';
+                formMessages.innerHTML = ''; // Clear previous messages
 
-                const genre = document.getElementById('genre').value;
-                const author = document.getElementById('author').value;
+                const name = form.elements['name'].value.trim();
+                const email = form.elements['email'].value.trim();
+                const phone = form.elements['phone'].value.trim();
+                const attendance = form.elements['attendance'].value.trim();
+                const comments = form.elements['comments'].value.trim();
 
-                if (!genre || !author) {
-                    errorMessage.textContent = 'Please select a genre and enter an author name.';
+                if (!name || !email || !phone || !attendance) {
+                    formMessages.innerHTML = '<div class="error-message">Please fill in all required fields.</div>';
+                    formMessages.classList.remove('hidden');
                     return;
                 }
 
-                // Simulate API call to get book recommendations
-                fetchBookRecommendations(genre, author);
+                // Add attendee to the list
+                const attendeeItem = document.createElement('li');
+                attendeeItem.innerHTML = `
+                    <strong>${name}</strong>
+                    <span>Email: ${email}</span>
+                    <span>Phone: ${phone}</span>
+                    <span>Attendance: ${attendance}</span>
+                    <span>Comments: ${comments}</span>
+                `;
+                attendeesList.appendChild(attendeeItem);
+
+                // Clear form fields
+                form.reset();
+
+                // Show success message
+                formMessages.innerHTML = '<div class="success-message">Thank you for your RSVP!</div>';
+                formMessages.classList.remove('hidden');
             });
 
-            function fetchBookRecommendations(genre, author) {
-                // Simulated book data
-                const books = [
-                    { title: 'The Name of the Wind', author: 'Patrick Rothfuss', genre: 'fantasy', cover: 'https://example.com/book1.jpg', description: 'A fantasy novel about a young man with magical abilities.' },
-                    { title: 'Dune', author: 'Frank Herbert', genre: 'science-fiction', cover: 'https://example.com/book2.jpg', description: 'A science fiction novel set on a desert planet.' },
-                    { title: 'The Girl with the Dragon Tattoo', author: 'Stieg Larsson', genre: 'mystery', cover: 'https://example.com/book3.jpg', description: 'A mystery novel involving a journalist and a hacker.' },
-                    { title: 'Pride and Prejudice', author: 'Jane Austen', genre: 'romance', cover: 'https://example.com/book4.jpg', description: 'A classic romance novel about Elizabeth Bennet and Mr. Darcy.' },
-                    { title: 'Sapiens: A Brief History of Humankind', author: 'Yuval Noah Harari', genre: 'non-fiction', cover: 'https://example.com/book5.jpg', description: 'A non-fiction book exploring the history of human civilization.' }
-                ];
+            // Show help text for comments field
+            form.elements['comments'].addEventListener('focus', function() {
+                commentsHelp.classList.remove('hidden');
+            });
 
-                const filteredBooks = books.filter(book => book.genre === genre && book.author.toLowerCase().includes(author.toLowerCase()));
-
-                if (filteredBooks.length === 0) {
-                    errorMessage.textContent = 'No books found for the selected genre and author.';
-                    return;
-                }
-
-                bookListContainer.innerHTML = '';
-                filteredBooks.forEach(book => {
-                    const bookCard = document.createElement('div');
-                    bookCard.className = 'book-card';
-                    bookCard.innerHTML = `
-                        <img src="${book.cover}" alt="${book.title} by ${book.author}">
-                        <h3>${book.title}</h3>
-                        <p><strong>Author:</strong> ${book.author}</p>
-                        <p><strong>Genre:</strong> ${book.genre}</p>
-                        <p>${book.description}</p>
-                    `;
-                    bookListContainer.appendChild(bookCard);
-                });
-            }
+            form.elements['comments'].addEventListener('blur', function() {
+                commentsHelp.classList.add('hidden');
+            });
         });
     </script>
 </body>
