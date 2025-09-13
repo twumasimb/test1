@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accessible Form Example</title>
+  <title>Personal Blog</title>
   <style>
     /* Global Styles */
     body {
@@ -11,163 +11,172 @@
       margin: 0;
       padding: 0;
     }
-    
-    /* Form Styles */
-    form {
-      max-width: 400px;
-      margin: 20px auto;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: bold;
+      margin-bottom: 0.5em;
+    }
+    p {
+      margin-bottom: 1em;
+    }
+    a {
+      text-decoration: none;
+      color: #337ab7;
+    }
+    a:hover {
+      color: #23527c;
+    }
+    /* Navigation Styles */
+    nav {
+      background-color: #333;
+      color: #fff;
+      padding: 1em;
+      text-align: center;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    nav li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+    nav a {
+      color: #fff;
+    }
+    /* Main Content Styles */
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2em;
+    }
+    .post {
+      background-color: #f7f7f7;
+      padding: 2em;
+      margin-bottom: 2em;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    
-    label {
+    .post h2 {
+      margin-top: 0;
+    }
+    /* Comment Form Styles */
+    .comment-form {
+      margin-top: 2em;
+    }
+    .comment-form label {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 0.5em;
     }
-    
-    input[type="text"], input[type="email"], input[type="password"], input[type="tel"] {
+    .comment-form input, .comment-form textarea {
       width: 100%;
-      height: 40px;
-      margin-bottom: 20px;
-      padding: 10px;
+      padding: 0.5em;
+      margin-bottom: 1em;
       border: 1px solid #ccc;
-      border-radius: 5px;
     }
-    
-    input[type="submit"] {
-      width: 100%;
-      height: 40px;
-      background-color: #4CAF50;
+    .comment-form button[type="submit"] {
+      background-color: #337ab7;
       color: #fff;
-      padding: 10px;
+      padding: 0.5em 1em;
       border: none;
-      border-radius: 5px;
+      border-radius: 0.25em;
       cursor: pointer;
     }
-    
-    input[type="submit"]:hover {
-      background-color: #3e8e41;
+    /* Search Form Styles */
+    .search-form {
+      margin-top: 2em;
     }
-    
-    .error {
-      color: #f00;
-      font-size: 12px;
-      margin-bottom: 10px;
+    .search-form input[type="search"] {
+      width: 100%;
+      padding: 0.5em;
+      margin-bottom: 1em;
+      border: 1px solid #ccc;
     }
-    
-    .success {
-      color: #0f0;
-      font-size: 12px;
-      margin-bottom: 10px;
+    .search-form button[type="submit"] {
+      background-color: #337ab7;
+      color: #fff;
+      padding: 0.5em 1em;
+      border: none;
+      border-radius: 0.25em;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <header>
-    <nav>
+    <nav aria-label="Main Navigation">
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="#posts">Posts</a></li>
+        <li><a href="#comments">Comments</a></li>
+        <li><a href="#search">Search</a></li>
       </ul>
     </nav>
   </header>
   <main>
-    <h1>Accessible Form Example</h1>
-    <form id="myForm">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required aria-required="true">
-      <span id="nameError" class="error"></span>
-      
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required aria-required="true">
-      <span id="emailError" class="error"></span>
-      
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required aria-required="true">
-      <span id="passwordError" class="error"></span>
-      
-      <label for="phone">Phone:</label>
-      <input type="tel" id="phone" name="phone" required aria-required="true">
-      <span id="phoneError" class="error"></span>
-      
-      <input type="submit" value="Submit">
-      <span id="submitError" class="error"></span>
-      <span id="submitSuccess" class="success"></span>
-    </form>
+    <section id="posts">
+      <h2>Posts</h2>
+      <ul>
+        <li>
+          <article class="post">
+            <h2>Post 1</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
+          </article>
+        </li>
+        <li>
+          <article class="post">
+            <h2>Post 2</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
+          </article>
+        </li>
+      </ul>
+    </section>
+    <section id="comments">
+      <h2>Comments</h2>
+      <form class="comment-form" aria-label="Comment Form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+    <section id="search">
+      <h2>Search</h2>
+      <form class="search-form" aria-label="Search Form">
+        <input type="search" id="search-input" name="search-input" required>
+        <button type="submit">Search</button>
+      </form>
+    </section>
   </main>
   <script>
-    // Get the form element
-    const form = document.getElementById('myForm');
-    
-    // Add event listener to the form
-    form.addEventListener('submit', (e) => {
-      // Prevent default form submission
+    // Add event listener to comment form submit button
+    document.querySelector('.comment-form button[type="submit"]').addEventListener('click', (e) => {
       e.preventDefault();
-      
-      // Get the input values
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const phone = document.getElementById('phone').value;
-      
-      // Validate the input values
-      let isValid = true;
-      if (name === '') {
-        document.getElementById('nameError').textContent = 'Name is required';
-        isValid = false;
-      } else {
-        document.getElementById('nameError').textContent = '';
-      }
-      
-      if (email === '') {
-        document.getElementById('emailError').textContent = 'Email is required';
-        isValid = false;
-      } else if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
-        document.getElementById('emailError').textContent = 'Invalid email format';
-        isValid = false;
-      } else {
-        document.getElementById('emailError').textContent = '';
-      }
-      
-      if (password === '') {
-        document.getElementById('passwordError').textContent = 'Password is required';
-        isValid = false;
-      } else if (password.length < 8) {
-        document.getElementById('passwordError').textContent = 'Password must be at least 8 characters';
-        isValid = false;
-      } else {
-        document.getElementById('passwordError').textContent = '';
-      }
-      
-      if (phone === '') {
-        document.getElementById('phoneError').textContent = 'Phone is required';
-        isValid = false;
-      } else if (!phone.match(/^\d{3}-\d{3}-\d{4}$/)) {
-        document.getElementById('phoneError').textContent = 'Invalid phone format';
-        isValid = false;
-      } else {
-        document.getElementById('phoneError').textContent = '';
-      }
-      
-      // If the form is valid, submit it
-      if (isValid) {
-        // Submit the form data
-        const formData = new FormData(form);
-        fetch('/submit', {
-          method: 'POST',
-          body: formData,
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById('submitSuccess').textContent = 'Form submitted successfully';
-        })
-        .catch((error) => {
-          document.getElementById('submitError').textContent = 'Error submitting form';
-        });
-      }
+      // Get form data
+      const formData = new FormData(document.querySelector('.comment-form'));
+      // Send form data to server
+      fetch('/comments', {
+        method: 'POST',
+        body: formData,
+      })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
+    });
+    // Add event listener to search form submit button
+    document.querySelector('.search-form button[type="submit"]').addEventListener('click', (e) => {
+      e.preventDefault();
+      // Get search input value
+      const searchInput = document.querySelector('#search-input').value;
+      // Send search query to server
+      fetch(`/search?q=${searchInput}`, {
+        method: 'GET',
+      })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error));
     });
   </script>
 </body>
