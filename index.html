@@ -3,133 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Countdown Timer</title>
+    <title>Local Events Showcase</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f0f8ff;
+            background-color: #f4f4f4;
             color: #333;
-            line-height: 1.6;
         }
         header {
-            background-color: #4a90e2;
+            background: #007BFF;
             color: white;
-            padding: 20px;
+            padding: 1rem;
             text-align: center;
         }
         nav {
-            margin: 20px 0;
+            background: #0056b3;
+            padding: 0.5rem;
         }
         nav a {
-            color: #4a90e2;
+            color: white;
+            margin: 0 1rem;
             text-decoration: none;
-            margin: 0 15px;
+        }
+        nav a:hover {
+            text-decoration: underline;
         }
         main {
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
+            padding: 1rem;
         }
-        .countdown {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            margin: 20px 0;
-            font-size: 2em;
-        }
-        .progress-container {
-            width: 100%;
-            background-color: #ddd;
+        section {
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1rem;
             border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #007BFF;
+        }
+        .event-card {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 1rem;
             overflow: hidden;
         }
-        .progress-bar {
-            height: 30px;
-            background-color: #4caf50;
-            width: 0%;
-            transition: width 1s;
+        .event-card img {
+            max-width: 100%;
+            height: auto;
+        }
+        .event-details {
+            padding: 1rem;
+        }
+        .filter {
+            margin-bottom: 1rem;
+        }
+        .map {
+            height: 300px;
+            width: 100%;
+            border: 1px solid #ddd;
         }
         footer {
             text-align: center;
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #4a90e2;
+            padding: 1rem;
+            background: #007BFF;
             color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #0056b3;
+            color: white;
+            padding: 8px;
+            z-index: 100;
+        }
+        .skip-link:focus {
+            top: 0;
         }
         @media (prefers-reduced-motion: reduce) {
-            .progress-bar {
-                transition: none;
+            * {
+                transition: none !important;
             }
         }
     </style>
 </head>
 <body>
-
-    <a href="#main" class="skip-link">Skip to main content</a>
-    
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
-        <h1>Event Countdown Timer</h1>
-        <nav aria-label="Main Navigation">
-            <a href="#main">Home</a>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
-        </nav>
+        <h1>Local Events Showcase</h1>
     </header>
-
-    <main id="main">
-        <section>
-            <h2>Countdown to Event</h2>
-            <p>Countdown to our exciting event happening on <strong id="event-date">December 31, 2023</strong>.</p>
-            <div class="countdown" role="timer" aria-live="polite">
-                <div id="days" class="countdown-item"><span class="countdown-value">0</span> Days</div>
-                <div id="hours" class="countdown-item"><span class="countdown-value">0</span> Hours</div>
-                <div id="minutes" class="countdown-item"><span class="countdown-value">0</span> Minutes</div>
-                <div id="seconds" class="countdown-item"><span class="countdown-value">0</span> Seconds</div>
+    <nav aria-label="Main Navigation">
+        <a href="#upcoming-events">Upcoming Events</a>
+        <a href="#past-events">Past Events</a>
+        <a href="#contact">Contact Us</a>
+    </nav>
+    <main id="main-content">
+        <section id="upcoming-events">
+            <h2>Upcoming Events</h2>
+            <div class="filter">
+                <label for="event-category">Filter by Category:</label>
+                <select id="event-category" aria-label="Filter events by category">
+                    <option value="all">All</option>
+                    <option value="music">Music</option>
+                    <option value="art">Art</option>
+                    <option value="food">Food</option>
+                </select>
             </div>
-            <div class="progress-container" aria-label="Countdown Progress">
-                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+            <div id="events-list">
+                <article class="event-card" aria-labelledby="event1">
+                    <img src="https://via.placeholder.com/400" alt="Concert Event" />
+                    <div class="event-details">
+                        <h3 id="event1">Live Music Concert</h3>
+                        <p>Date: <time datetime="2023-10-01">October 1, 2023</time></p>
+                        <p>Location: Central Park</p>
+                        <p>Description: Join us for a night of live music featuring local bands.</p>
+                    </div>
+                </article>
+                <article class="event-card" aria-labelledby="event2">
+                    <img src="https://via.placeholder.com/400" alt="Art Exhibition" />
+                    <div class="event-details">
+                        <h3 id="event2">Art Exhibition</h3>
+                        <p>Date: <time datetime="2023-10-15">October 15, 2023</time></p>
+                        <p>Location: City Gallery</p>
+                        <p>Description: Explore the latest works from local artists.</p>
+                    </div>
+                </article>
             </div>
+            <div id="map" class="map" role="application" aria-label="Map of event locations"></div>
+        </section>
+        <section id="past-events">
+            <h2>Past Events</h2>
+            <article class="event-card" aria-labelledby="event3">
+                <img src="https://via.placeholder.com/400" alt="Food Festival" />
+                <div class="event-details">
+                    <h3 id="event3">Food Festival</h3>
+                    <p>Date: <time datetime="2023-09-20">September 20, 2023</time></p>
+                    <p>Location: Downtown Plaza</p>
+                    <p>Description: A celebration of local cuisine with food trucks and vendors.</p>
+                </div>
+            </article>
+        </section>
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <form aria-labelledby="contact-form">
+                <fieldset>
+                    <legend id="contact-form">Get in Touch</legend>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required aria-required="true" aria-describedby="name-help" />
+                    <span id="name-help">Please enter your full name.</span>
+                    
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required aria-required="true" aria-describedby="email-help" />
+                    <span id="email-help">We will respond to your email.</span>
+                    
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" required aria-required="true" aria-describedby="message-help"></textarea>
+                    <span id="message-help">Your message will be sent to our team.</span>
+                    
+                    <button type="submit">Send Message</button>
+                </fieldset>
+            </form>
         </section>
     </main>
-
     <footer>
-        <p>&copy; 2023 Event Countdown. All rights reserved.</p>
+        <p>&copy; 2023 Local Events Showcase. All rights reserved.</p>
     </footer>
-
     <script>
-        const eventDate = new Date("December 31, 2023 23:59:59").getTime();
-        const countdownElements = {
-            days: document.getElementById("days"),
-            hours: document.getElementById("hours"),
-            minutes: document.getElementById("minutes"),
-            seconds: document.getElementById("seconds"),
-            progressBar: document.querySelector(".progress-bar")
-        };
+        document.getElementById('event-category').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const events = document.querySelectorAll('.event-card');
+            events.forEach(event => {
+                const category = event.getAttribute('data-category');
+                if (selectedCategory === 'all' || category === selectedCategory) {
+                    event.style.display = 'flex';
+                } else {
+                    event.style.display = 'none';
+                }
+            });
+        });
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = eventDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            countdownElements.days.querySelector(".countdown-value").innerText = days;
-            countdownElements.hours.querySelector(".countdown-value").innerText = hours;
-            countdownElements.minutes.querySelector(".countdown-value").innerText = minutes;
-            countdownElements.seconds.querySelector(".countdown-value").innerText = seconds;
-
-            const totalDuration = eventDate - new Date("January 1, 2023").getTime(); // Total countdown duration
-            const elapsedDuration = now - new Date("January 1, 2023").getTime(); // Elapsed time since start
-            const progressPercentage = Math.min((elapsedDuration / totalDuration) * 100, 100);
-            countdownElements.progressBar.style.width = progressPercentage + "%";
-            countdownElements.progressBar.setAttribute("aria-valuenow", progressPercentage);
+        // Initialize map (mock implementation)
+        function initMap() {
+            const mapElement = document.getElementById('map');
+            const map = new google.maps.Map(mapElement, {
+                center: { lat: 40.712776, lng: -74.005974 },
+                zoom: 12,
+            });
+            new google.maps.Marker({
+                position: { lat: 40.712776, lng: -74.005974 },
+                map: map,
+                title: 'Central Park',
+            });
         }
-
-        setInterval(updateCountdown, 1000);
     </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 </body>
 </html>
