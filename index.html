@@ -3,140 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Budget Calculator</title>
+    <title>Calorie Tracker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f8;
+            background-color: #f0f8ff;
             color: #333;
         }
         header {
-            background-color: #007bff;
+            background-color: #4CAF50;
             color: white;
-            padding: 1rem;
+            padding: 10px 0;
             text-align: center;
         }
         nav {
-            background-color: #0056b3;
-            padding: 0.5rem;
+            margin: 20px 0;
         }
         nav a {
+            margin: 0 15px;
             color: white;
-            margin: 0 1rem;
             text-decoration: none;
         }
         main {
-            padding: 1rem;
-            max-width: 800px;
-            margin: auto;
+            padding: 20px;
         }
         section {
-            margin-bottom: 2rem;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        h2 {
+            color: #4CAF50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
         }
         label {
-            display: block;
-            margin: 0.5rem 0;
+            margin-bottom: 5px;
         }
-        input[type="number"], input[type="text"] {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
+        input, button, select {
+            padding: 10px;
+            margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
         button {
-            background-color: #28a745;
+            background-color: #4CAF50;
             color: white;
-            border: none;
-            padding: 0.5rem 1rem;
             cursor: pointer;
-            border-radius: 4px;
         }
-        button:disabled {
-            background-color: #ccc;
-        }
-        .result {
-            background-color: #e2e3e5;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-top: 1rem;
+        button:hover {
+            background-color: #45a049;
         }
         .error {
             color: red;
-            margin-top: -1rem;
-            margin-bottom: 1rem;
+            margin-top: -10px;
+            margin-bottom: 10px;
         }
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: #007bff;
-            color: white;
-            position: relative;
-            bottom: 0;
-            width: 100%;
+        .results {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            background-color: #e8f5e9;
         }
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                transition: none !important;
-            }
+        .calorie-summary {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <a href="#main" class="skip-link">Skip to main content</a>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
-        <h1>Interactive Budget Calculator</h1>
+        <h1>Calorie Tracker</h1>
+        <nav aria-label="Main Navigation">
+            <a href="#log-meals">Log Meals</a>
+            <a href="#log-exercise">Log Exercise</a>
+            <a href="#goals">Set Goals</a>
+        </nav>
     </header>
-    <nav aria-label="Main Navigation">
-        <a href="#calculator">Calculator</a>
-        <a href="#about">About</a>
-    </nav>
-    <main id="main">
-        <section id="calculator">
-            <h2>Calculate Your Budget</h2>
-            <form id="budget-form" aria-labelledby="calculator">
-                <label for="income">Monthly Income:</label>
-                <input type="number" id="income" name="income" required aria-required="true" autocomplete="off" placeholder="Enter your income" />
-                <label for="expenses">Monthly Expenses:</label>
-                <input type="number" id="expenses" name="expenses" required aria-required="true" autocomplete="off" placeholder="Enter your expenses" />
-                <button type="submit">Calculate</button>
-                <p class="error" id="error-message" aria-live="assertive"></p>
+    <main id="main-content">
+        <section id="log-meals">
+            <h2>Log Your Meals</h2>
+            <form id="meal-form" aria-labelledby="meal-form">
+                <label for="food-item">Food Item:</label>
+                <input type="text" id="food-item" name="food-item" required aria-required="true" aria-describedby="food-help" autocomplete="off">
+                <small id="food-help">Enter the name of the food item.</small>
+
+                <label for="calories">Calories:</label>
+                <input type="number" id="calories" name="calories" required aria-required="true" aria-describedby="calories-help" min="1">
+                <small id="calories-help">Enter the number of calories for this food item.</small>
+
+                <button type="submit">Add Meal</button>
+                <div id="meal-error" class="error" aria-live="assertive"></div>
             </form>
-            <div class="result" id="result" aria-hidden="true">
-                <h3>Budget Summary</h3>
-                <p id="summary"></p>
+        </section>
+
+        <section id="log-exercise">
+            <h2>Log Your Exercise</h2>
+            <form id="exercise-form" aria-labelledby="exercise-form">
+                <label for="exercise-item">Exercise:</label>
+                <input type="text" id="exercise-item" name="exercise-item" required aria-required="true" aria-describedby="exercise-help" autocomplete="off">
+                <small id="exercise-help">Enter the type of exercise performed.</small>
+
+                <label for="calories-burned">Calories Burned:</label>
+                <input type="number" id="calories-burned" name="calories-burned" required aria-required="true" aria-describedby="burned-help" min="1">
+                <small id="burned-help">Enter the number of calories burned during the exercise.</small>
+
+                <button type="submit">Add Exercise</button>
+                <div id="exercise-error" class="error" aria-live="assertive"></div>
+            </form>
+        </section>
+
+        <section id="goals">
+            <h2>Set Your Fitness Goals</h2>
+            <form id="goal-form" aria-labelledby="goal-form">
+                <label for="goal-calories">Daily Calorie Goal:</label>
+                <input type="number" id="goal-calories" name="goal-calories" required aria-required="true" min="1">
+                <button type="submit">Set Goal</button>
+                <div id="goal-error" class="error" aria-live="assertive"></div>
+            </form>
+        </section>
+
+        <section class="results">
+            <h2>Your Daily Summary</h2>
+            <div class="calorie-summary" id="calorie-summary">
+                Total Calories Consumed: <span id="total-calories-consumed">0</span><br>
+                Total Calories Burned: <span id="total-calories-burned">0</span><br>
+                Net Calories: <span id="net-calories">0</span>
             </div>
         </section>
-        <section id="about">
-            <h2>About This Tool</h2>
-            <p>This budget calculator helps you manage your finances by allowing you to input your income and expenses, giving you a clear picture of your financial situation.</p>
-        </section>
     </main>
-    <footer>
-        <p>&copy; 2023 Interactive Budget Calculator</p>
-    </footer>
-    <script>
-        document.getElementById('budget-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const income = parseFloat(document.getElementById('income').value);
-            const expenses = parseFloat(document.getElementById('expenses').value);
-            const errorMessage = document.getElementById('error-message');
-            const resultDiv = document.getElementById('result');
-            const summary = document.getElementById('summary');
 
-            if (isNaN(income) || isNaN(expenses)) {
-                errorMessage.textContent = 'Please enter valid numbers for income and expenses.';
-                resultDiv.setAttribute('aria-hidden', 'true');
+    <footer>
+        <p>&copy; 2023 Calorie Tracker. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let totalCaloriesConsumed = 0;
+        let totalCaloriesBurned = 0;
+
+        document.getElementById('meal-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const foodItem = document.getElementById('food-item').value;
+            const calories = parseInt(document.getElementById('calories').value);
+            if (isNaN(calories) || calories <= 0) {
+                document.getElementById('meal-error').textContent = 'Please enter a valid number of calories.';
                 return;
             }
+            totalCaloriesConsumed += calories;
+            document.getElementById('total-calories-consumed').textContent = totalCaloriesConsumed;
+            document.getElementById('meal-error').textContent = '';
+            this.reset();
+        });
 
-            errorMessage.textContent = '';
-            const balance = income - expenses;
-            summary.textContent = `Your balance is $${balance.toFixed(2)}.`;
-            resultDiv.setAttribute('aria-hidden', 'false');
+        document.getElementById('exercise-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const exerciseItem = document.getElementById('exercise-item').value;
+            const caloriesBurned = parseInt(document.getElementById('calories-burned').value);
+            if (isNaN(caloriesBurned) || caloriesBurned <= 0) {
+                document.getElementById('exercise-error').textContent = 'Please enter a valid number of calories burned.';
+                return;
+            }
+            totalCaloriesBurned += caloriesBurned;
+            document.getElementById('total-calories-burned').textContent = totalCaloriesBurned;
+            document.getElementById('exercise-error').textContent = '';
+            this.reset();
+        });
+
+        document.getElementById('goal-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const goalCalories = parseInt(document.getElementById('goal-calories').value);
+            if (isNaN(goalCalories) || goalCalories <= 0) {
+                document.getElementById('goal-error').textContent = 'Please enter a valid calorie goal.';
+                return;
+            }
+            document.getElementById('goal-error').textContent = '';
+            const netCalories = totalCaloriesConsumed - totalCaloriesBurned;
+            document.getElementById('net-calories').textContent = netCalories;
         });
     </script>
 </body>
