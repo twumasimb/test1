@@ -3,120 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pet Showcase</title>
+  <title>Accessible Quiz Webpage</title>
   <style>
     /* Global Styles */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+      background-color: #f0f0f0; /* Light gray background */
+      color: #333; /* Dark gray text */
     }
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+    /* Header Styles */
+    header {
+      background-color: #333; /* Dark gray background */
+      color: #fff; /* White text */
+      padding: 1em;
+      text-align: center;
     }
-    .pet-card {
+    
+    /* Navigation Styles */
+    nav {
+      background-color: #444; /* Darker gray background */
+      padding: 1em;
+    }
+    
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    nav li {
+      margin-right: 20px;
+    }
+    
+    nav a {
+      color: #fff; /* White text */
+      text-decoration: none;
+    }
+    
+    /* Main Content Styles */
+    main {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
-      border: 1px solid #ddd;
-      margin-bottom: 20px;
-      background-color: #fff;
+      padding: 2em;
     }
-    .pet-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 10px;
+    
+    /* Quiz Styles */
+    .quiz {
+      background-color: #fff; /* White background */
+      padding: 2em;
+      border: 1px solid #ddd; /* Light gray border */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     }
-    .pet-card h2 {
-      margin-top: 0;
+    
+    .quiz-question {
+      margin-bottom: 1em;
     }
-    /* Accessibility-focused styles */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-    .sr-only.focusable:active,
-    .sr-only.focusable:focus {
-      clip: auto;
-      height: auto;
+    
+    .quiz-options {
+      list-style: none;
       margin: 0;
-      overflow: visible;
-      position: static;
-      white-space: normal;
-      width: auto;
-      white-space: normal;
+      padding: 0;
     }
-    /* High contrast mode */
-    @media (prefers-contrast: high) {
-      body {
-        background-color: #000;
-        color: #fff;
-      }
-      .container {
-        background-color: #333;
-        color: #fff;
-      }
-      .pet-card {
-        background-color: #444;
-        color: #fff;
-      }
+    
+    .quiz-option {
+      margin-bottom: 10px;
+    }
+    
+    /* Button Styles */
+    button {
+      background-color: #333; /* Dark gray background */
+      color: #fff; /* White text */
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #444; /* Darker gray background */
+    }
+    
+    /* Focus Styles */
+    :focus {
+      outline: 2px solid #333; /* Dark gray outline */
     }
   </style>
 </head>
 <body>
   <header>
-    <nav aria-label="Main Navigation">
-      <ul>
-        <li><a href="#main">Skip to main content</a></li>
-        <li><a href="#pets">Pets</a></li>
-      </ul>
-    </nav>
+    <h1>Accessible Quiz Webpage</h1>
   </header>
-  <main id="main" tabindex="-1">
-    <div class="container">
-      <h1>Pet Showcase</h1>
-      <section id="pets" aria-labelledby="pets-heading">
-        <h2 id="pets-heading">Our Furry Friends</h2>
-        <div class="pet-card">
-          <img src="cat.jpg" alt="A photo of a cat" />
-          <h2>Whiskers</h2>
-          <p>Breed: Siamese</p>
-          <p>Age: 3 years</p>
-          <p>Fun fact: Whiskers loves to chase laser pointers!</p>
+  <nav aria-label="Main Navigation">
+    <ul>
+      <li><a href="#quiz">Quiz</a></li>
+      <li><a href="#results">Results</a></li>
+    </ul>
+  </nav>
+  <main>
+    <section class="quiz" aria-labelledby="quiz-heading">
+      <h2 id="quiz-heading">Quiz</h2>
+      <form>
+        <div class="quiz-question">
+          <p>What is the capital of France?</p>
+          <ul class="quiz-options">
+            <li class="quiz-option">
+              <input type="radio" id="option-1" name="question-1" value="Paris">
+              <label for="option-1">Paris</label>
+            </li>
+            <li class="quiz-option">
+              <input type="radio" id="option-2" name="question-1" value="London">
+              <label for="option-2">London</label>
+            </li>
+            <li class="quiz-option">
+              <input type="radio" id="option-3" name="question-1" value="Berlin">
+              <label for="option-3">Berlin</label>
+            </li>
+          </ul>
         </div>
-        <div class="pet-card">
-          <img src="dog.jpg" alt="A photo of a dog" />
-          <h2>Buddy</h2>
-          <p>Breed: Golden Retriever</p>
-          <p>Age: 5 years</p>
-          <p>Fun fact: Buddy loves to play fetch!</p>
-        </div>
-      </section>
-    </div>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+    <section id="results" aria-labelledby="results-heading">
+      <h2 id="results-heading">Results</h2>
+      <p>Your score will be displayed here.</p>
+    </section>
   </main>
   <script>
-    // Add event listener to nav links for keyboard navigation
-    document.querySelectorAll('nav a').forEach((link) => {
-      link.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          link.click();
-        }
-      });
+    // JavaScript code for quiz functionality
+    const quizForm = document.querySelector('form');
+    const resultsSection = document.querySelector('#results');
+    
+    quizForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const userAnswer = document.querySelector('input[name="question-1"]:checked').value;
+      const correctAnswer = 'Paris';
+      const score = userAnswer === correctAnswer ? 1 : 0;
+      resultsSection.innerHTML = `Your score is ${score} out of 1.`;
     });
   </script>
 </body>
