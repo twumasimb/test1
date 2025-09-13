@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Showcase</title>
+    <title>Interactive Quiz - Accessible Webpage</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,256 +12,231 @@
             background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header, footer {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            flex: 1;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #007BFF;
+        }
+        .quiz-question {
+            margin-bottom: 2rem;
+        }
+        .quiz-question label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .quiz-question input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        .quiz-question .feedback {
+            margin-top: 0.5rem;
+            font-style: italic;
+            display: none;
+        }
+        .quiz-question .feedback.correct {
+            color: green;
+        }
+        .quiz-question .feedback.incorrect {
+            color: red;
+        }
+        .quiz-results {
+            margin-top: 2rem;
+            display: none;
+        }
+        .quiz-results h2 {
+            margin-bottom: 1rem;
+        }
+        .quiz-results ul {
+            list-style: none;
+            padding: 0;
+        }
+        .quiz-results li {
+            margin-bottom: 0.5rem;
+        }
+        .quiz-results li.correct {
+            color: green;
+        }
+        .quiz-results li.incorrect {
+            color: red;
+        }
+        .quiz-controls {
+            margin-top: 2rem;
+        }
+        .quiz-controls button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 4px;
+            min-width: 100px;
+            min-height: 44px;
+        }
+        .quiz-controls button:hover {
+            background-color: #0056b3;
+        }
+        .quiz-controls button:active {
+            background-color: #004080;
+        }
+        .quiz-controls button:focus {
+            outline: 2px solid #007BFF;
+            outline-offset: 2px;
         }
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background-color: #0056b3;
+            background-color: #007BFF;
             color: #fff;
-            padding: 10px;
-            text-decoration: none;
+            padding: 0.5rem;
             z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
+            outline: 2px solid #007BFF;
+            outline-offset: 2px;
         }
-        header {
-            background-color: #0056b3;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
+        .hidden {
+            display: none;
         }
-        nav {
-            background-color: #003d80;
-            padding: 10px;
-            text-align: center;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        nav a:hover, nav a:focus {
-            text-decoration: underline;
-        }
-        main {
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .pet-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .pet-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-        .pet-card h2 {
-            margin-top: 0;
-        }
-        .pet-card p {
-            margin: 10px 0;
-        }
-        .pet-card .fun-fact {
-            font-style: italic;
-            color: #666;
-        }
-        footer {
-            background-color: #0056b3;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-            margin-top: 20px;
-        }
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            margin: -1px;
-            padding: 0;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: #0056b3;
-            outline: none;
-        }
-        .form-group .error {
-            color: #d00;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        .submit-button {
-            background-color: #0056b3;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .submit-button:hover, .submit-button:focus {
-            background-color: #003d80;
-        }
-        .submit-button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
+        @media (prefers-reduced-motion: reduce) {
+            .quiz-question .feedback {
+                transition: none;
+            }
+            .quiz-results {
+                transition: none;
+            }
         }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main" class="skip-link" tabindex="0">Skip to main content</a>
     <header>
-        <h1>Pet Showcase</h1>
+        <h1>Interactive Quiz</h1>
     </header>
-    <nav aria-label="Main Navigation">
-        <a href="#pet-list">View Pets</a>
-        <a href="#add-pet">Add a Pet</a>
-    </nav>
-    <main id="main-content">
-        <section id="pet-list">
-            <h2>Our Pets</h2>
-            <div class="pet-card" tabindex="0" aria-labelledby="pet-name-1">
-                <img src="https://via.placeholder.com/300" alt="Fluffy the Cat" id="pet-image-1">
-                <h2 id="pet-name-1">Fluffy</h2>
-                <p><strong>Breed:</strong> Siamese</p>
-                <p><strong>Age:</strong> 3 years</p>
-                <p class="fun-fact"><strong>Fun Fact:</strong> Fluffy loves to play with strings and chase laser pointers.</p>
-            </div>
-            <div class="pet-card" tabindex="0" aria-labelledby="pet-name-2">
-                <img src="https://via.placeholder.com/300" alt="Buddy the Dog" id="pet-image-2">
-                <h2 id="pet-name-2">Buddy</h2>
-                <p><strong>Breed:</strong> Golden Retriever</p>
-                <p><strong>Age:</strong> 5 years</p>
-                <p class="fun-fact"><strong>Fun Fact:</strong> Buddy is a certified therapy dog and loves to comfort people.</p>
-            </div>
-        </section>
-        <section id="add-pet">
-            <h2>Add a New Pet</h2>
-            <form id="pet-form" aria-label="Add a new pet form">
-                <div class="form-group">
-                    <label for="pet-name">Name:</label>
-                    <input type="text" id="pet-name" name="pet-name" required aria-required="true">
-                    <span class="error" id="name-error" aria-live="polite" aria-atomic="true" role="alert" aria-hidden="true"></span>
+    <main id="main" role="main">
+        <div class="container">
+            <section id="quiz-section" aria-live="polite">
+                <div class="quiz-question" id="question-1">
+                    <h2>Question 1: What is the capital of France?</h2>
+                    <label>
+                        <input type="radio" name="q1" value="a" id="q1-a" aria-label="Paris">
+                        Paris
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="b" id="q1-b" aria-label="Berlin">
+                        Berlin
+                    </label>
+                    <label>
+                        <input type="radio" name="q1" value="c" id="q1-c" aria-label="Madrid">
+                        Madrid
+                    </label>
+                    <div class="feedback" id="feedback-1"></div>
                 </div>
-                <div class="form-group">
-                    <label for="pet-breed">Breed:</label>
-                    <input type="text" id="pet-breed" name="pet-breed" required aria-required="true">
-                    <span class="error" id="breed-error" aria-live="polite" aria-atomic="true" role="alert" aria-hidden="true"></span>
+                <div class="quiz-question" id="question-2">
+                    <h2>Question 2: What is the largest planet in our solar system?</h2>
+                    <label>
+                        <input type="radio" name="q2" value="a" id="q2-a" aria-label="Mars">
+                        Mars
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="b" id="q2-b" aria-label="Jupiter">
+                        Jupiter
+                    </label>
+                    <label>
+                        <input type="radio" name="q2" value="c" id="q2-c" aria-label="Saturn">
+                        Saturn
+                    </label>
+                    <div class="feedback" id="feedback-2"></div>
                 </div>
-                <div class="form-group">
-                    <label for="pet-age">Age:</label>
-                    <input type="number" id="pet-age" name="pet-age" required aria-required="true">
-                    <span class="error" id="age-error" aria-live="polite" aria-atomic="true" role="alert" aria-hidden="true"></span>
+                <div class="quiz-question" id="question-3">
+                    <h2>Question 3: What is the chemical symbol for gold?</h2>
+                    <label>
+                        <input type="radio" name="q3" value="a" id="q3-a" aria-label="Au">
+                        Au
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="b" id="q3-b" aria-label="Ag">
+                        Ag
+                    </label>
+                    <label>
+                        <input type="radio" name="q3" value="c" id="q3-c" aria-label="Cu">
+                        Cu
+                    </label>
+                    <div class="feedback" id="feedback-3"></div>
                 </div>
-                <div class="form-group">
-                    <label for="pet-fun-fact">Fun Fact:</label>
-                    <textarea id="pet-fun-fact" name="pet-fun-fact" required aria-required="true"></textarea>
-                    <span class="error" id="fun-fact-error" aria-live="polite" aria-atomic="true" role="alert" aria-hidden="true"></span>
+                <div class="quiz-controls">
+                    <button id="submit-quiz" aria-label="Submit Quiz">Submit Quiz</button>
                 </div>
-                <button type="submit" class="submit-button" id="submit-button">Add Pet</button>
-            </form>
-        </section>
+                <div class="quiz-results" id="quiz-results" aria-live="polite">
+                    <h2>Quiz Results</h2>
+                    <ul id="results-list"></ul>
+                </div>
+            </section>
+        </div>
     </main>
     <footer>
-        <p>&copy; 2023 Pet Showcase. All rights reserved.</p>
+        <p>&copy; 2023 Interactive Quiz. All rights reserved.</p>
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('pet-form');
-            const submitButton = document.getElementById('submit-button');
-            const nameInput = document.getElementById('pet-name');
-            const breedInput = document.getElementById('pet-breed');
-            const ageInput = document.getElementById('pet-age');
-            const funFactInput = document.getElementById('pet-fun-fact');
-            const nameError = document.getElementById('name-error');
-            const breedError = document.getElementById('breed-error');
-            const ageError = document.getElementById('age-error');
-            const funFactError = document.getElementById('fun-fact-error');
+            const questions = [
+                { id: 'question-1', correct: 'a', question: 'What is the capital of France?', options: ['Paris', 'Berlin', 'Madrid'] },
+                { id: 'question-2', correct: 'b', question: 'What is the largest planet in our solar system?', options: ['Mars', 'Jupiter', 'Saturn'] },
+                { id: 'question-3', correct: 'a', question: 'What is the chemical symbol for gold?', options: ['Au', 'Ag', 'Cu'] }
+            ];
 
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                let isValid = true;
+            const submitButton = document.getElementById('submit-quiz');
+            const resultsList = document.getElementById('results-list');
+            const quizResults = document.getElementById('quiz-results');
 
-                // Reset error messages
-                [nameError, breedError, ageError, funFactError].forEach(error => {
-                    error.textContent = '';
-                    error.setAttribute('aria-hidden', 'true');
+            submitButton.addEventListener('click', function() {
+                let score = 0;
+                resultsList.innerHTML = '';
+
+                questions.forEach(question => {
+                    const selectedOption = document.querySelector(`input[name="${question.id.split('-')[1]}"]:checked`);
+                    const feedback = document.getElementById(`feedback-${question.id.split('-')[1]}`);
+
+                    if (selectedOption) {
+                        if (selectedOption.value === question.correct) {
+                            feedback.classList.add('correct');
+                            feedback.textContent = 'Correct!';
+                            score++;
+                        } else {
+                            feedback.classList.add('incorrect');
+                            feedback.textContent = `Incorrect. The correct answer is ${question.options[question.correct === 'a' ? 0 : question.correct === 'b' ? 1 : 2]}.`;
+                        }
+                        feedback.style.display = 'block';
+                    } else {
+                        feedback.classList.add('incorrect');
+                        feedback.textContent = 'Please select an answer.';
+                        feedback.style.display = 'block';
+                    }
+
+                    const resultItem = document.createElement('li');
+                    resultItem.textContent = `${question.question}: ${selectedOption ? selectedOption.nextElementSibling.textContent : 'Not answered'}`;
+                    resultItem.classList.add(selectedOption && selectedOption.value === question.correct ? 'correct' : 'incorrect');
+                    resultsList.appendChild(resultItem);
                 });
 
-                // Validate name
-                if (nameInput.value.trim() === '') {
-                    nameError.textContent = 'Name is required.';
-                    nameError.setAttribute('aria-hidden', 'false');
-                    isValid = false;
-                }
-
-                // Validate breed
-                if (breedInput.value.trim() === '') {
-                    breedError.textContent = 'Breed is required.';
-                    breedError.setAttribute('aria-hidden', 'false');
-                    isValid = false;
-                }
-
-                // Validate age
-                if (ageInput.value.trim() === '' || isNaN(ageInput.value) || ageInput.value < 0) {
-                    ageError.textContent = 'Age must be a valid number.';
-                    ageError.setAttribute('aria-hidden', 'false');
-                    isValid = false;
-                }
-
-                // Validate fun fact
-                if (funFactInput.value.trim() === '') {
-                    funFactError.textContent = 'Fun fact is required.';
-                    funFactError.setAttribute('aria-hidden', 'false');
-                    isValid = false;
-                }
-
-                if (isValid) {
-                    const petList = document.getElementById('pet-list');
-                    const newPetCard = document.createElement('div');
-                    newPetCard.className = 'pet-card';
-                    newPetCard.tabIndex = 0;
-                    newPetCard.setAttribute('aria-labelledby', `pet-name-${petList.childElementCount + 1}`);
-
-                    newPetCard.innerHTML = `
-                        <img src="https://via.placeholder.com/300" alt="${nameInput.value} the ${breedInput.value}" id="pet-image-${petList.childElementCount + 1}">
-                        <h2 id="pet-name-${petList.childElementCount + 1}">${nameInput.value}</h2>
-                        <p><strong>Breed:</strong> ${breedInput.value}</p>
-                        <p><strong>Age:</strong> ${ageInput.value} years</p>
-                        <p class="fun-fact"><strong>Fun Fact:</strong> ${funFactInput.value}</p>
-                    `;
-
-                    petList.appendChild(newPetCard);
-
-                    // Clear form
-                    form.reset();
-                } else {
-                    submitButton.focus();
-                }
+                quizResults.style.display = 'block';
             });
         });
     </script>
