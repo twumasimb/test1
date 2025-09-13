@@ -3,157 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Work Sharing Platform</title>
+    <title>Interactive Budget Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f0f4f8;
             color: #333;
         }
         header {
-            background-color: #4A90E2;
+            background-color: #007bff;
             color: white;
             padding: 1rem;
             text-align: center;
         }
         nav {
-            margin: 1rem 0;
+            background-color: #0056b3;
+            padding: 0.5rem;
         }
         nav a {
             color: white;
-            margin: 0 15px;
+            margin: 0 1rem;
             text-decoration: none;
         }
-        nav a:focus {
-            outline: 2px solid #FFD700;
-        }
         main {
-            padding: 20px;
+            padding: 1rem;
+            max-width: 800px;
+            margin: auto;
         }
-        .upload-form {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        section {
+            margin-bottom: 2rem;
         }
-        .upload-form label {
+        label {
             display: block;
-            margin: 10px 0 5px;
+            margin: 0.5rem 0;
         }
-        .upload-form input, .upload-form textarea {
+        input[type="number"], input[type="text"] {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .upload-form button {
-            background-color: #4A90E2;
+        button {
+            background-color: #28a745;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            padding: 0.5rem 1rem;
             cursor: pointer;
-        }
-        .upload-form button:focus {
-            outline: 2px solid #FFD700;
-        }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .gallery img {
-            width: 100%;
             border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        .result {
+            background-color: #e2e3e5;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        .error {
+            color: red;
+            margin-top: -1rem;
+            margin-bottom: 1rem;
         }
         footer {
             text-align: center;
             padding: 1rem;
-            background-color: #4A90E2;
+            background-color: #007bff;
             color: white;
             position: relative;
             bottom: 0;
             width: 100%;
         }
         @media (prefers-reduced-motion: reduce) {
-            .upload-form button {
-                transition: none;
+            * {
+                transition: none !important;
             }
         }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main" class="skip-link">Skip to main content</a>
     <header>
-        <h1>Creative Work Sharing Platform</h1>
-        <nav aria-label="Main Navigation">
-            <a href="#upload">Upload</a>
-            <a href="#gallery">Gallery</a>
-        </nav>
+        <h1>Interactive Budget Calculator</h1>
     </header>
-    <main id="main-content">
-        <section id="upload" class="upload-form">
-            <h2>Upload Your Creative Work</h2>
-            <form id="uploadForm" aria-labelledby="upload" novalidate>
-                <label for="fileInput">Choose a file:</label>
-                <input type="file" id="fileInput" accept="image/*" required aria-required="true">
-                
-                <label for="description">Description:</label>
-                <textarea id="description" rows="4" required aria-required="true"></textarea>
-                
-                <label for="tags">Tags (comma-separated):</label>
-                <input type="text" id="tags" aria-describedby="tagsHelp">
-                <small id="tagsHelp">Use commas to separate tags.</small>
-                
-                <button type="submit">Upload</button>
+    <nav aria-label="Main Navigation">
+        <a href="#calculator">Calculator</a>
+        <a href="#about">About</a>
+    </nav>
+    <main id="main">
+        <section id="calculator">
+            <h2>Calculate Your Budget</h2>
+            <form id="budget-form" aria-labelledby="calculator">
+                <label for="income">Monthly Income:</label>
+                <input type="number" id="income" name="income" required aria-required="true" autocomplete="off" placeholder="Enter your income" />
+                <label for="expenses">Monthly Expenses:</label>
+                <input type="number" id="expenses" name="expenses" required aria-required="true" autocomplete="off" placeholder="Enter your expenses" />
+                <button type="submit">Calculate</button>
+                <p class="error" id="error-message" aria-live="assertive"></p>
             </form>
-        </section>
-        <section id="gallery">
-            <h2>Gallery</h2>
-            <div class="gallery" id="galleryContainer" role="grid" aria-labelledby="gallery">
-                <!-- Images will be dynamically inserted here -->
+            <div class="result" id="result" aria-hidden="true">
+                <h3>Budget Summary</h3>
+                <p id="summary"></p>
             </div>
+        </section>
+        <section id="about">
+            <h2>About This Tool</h2>
+            <p>This budget calculator helps you manage your finances by allowing you to input your income and expenses, giving you a clear picture of your financial situation.</p>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Creative Work Sharing Platform</p>
+        <p>&copy; 2023 Interactive Budget Calculator</p>
     </footer>
-
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+        document.getElementById('budget-form').addEventListener('submit', function(event) {
             event.preventDefault();
+            const income = parseFloat(document.getElementById('income').value);
+            const expenses = parseFloat(document.getElementById('expenses').value);
+            const errorMessage = document.getElementById('error-message');
+            const resultDiv = document.getElementById('result');
+            const summary = document.getElementById('summary');
 
-            const fileInput = document.getElementById('fileInput');
-            const description = document.getElementById('description').value;
-            const tags = document.getElementById('tags').value.split(',').map(tag => tag.trim());
-
-            if (fileInput.files.length === 0) {
-                alert('Please select a file to upload.');
+            if (isNaN(income) || isNaN(expenses)) {
+                errorMessage.textContent = 'Please enter valid numbers for income and expenses.';
+                resultDiv.setAttribute('aria-hidden', 'true');
                 return;
             }
 
-            const file = fileInput.files[0];
-            const imgURL = URL.createObjectURL(file);
-
-            const galleryContainer = document.getElementById('galleryContainer');
-            const imgElement = document.createElement('img');
-            imgElement.src = imgURL;
-            imgElement.alt = description;
-
-            const imgCard = document.createElement('div');
-            imgCard.appendChild(imgElement);
-            galleryContainer.appendChild(imgCard);
-
-            // Clear form
-            fileInput.value = '';
-            description.value = '';
-            tags.value = '';
+            errorMessage.textContent = '';
+            const balance = income - expenses;
+            summary.textContent = `Your balance is $${balance.toFixed(2)}.`;
+            resultDiv.setAttribute('aria-hidden', 'false');
         });
     </script>
 </body>
