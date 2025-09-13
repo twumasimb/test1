@@ -3,148 +3,157 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accessible Quiz Webpage</title>
+  <title>Interactive Weather Dashboard</title>
   <style>
     /* Global Styles */
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f0f0f0; /* Light gray background */
-      color: #333; /* Dark gray text */
     }
-    
-    /* Header Styles */
-    header {
-      background-color: #333; /* Dark gray background */
-      color: #fff; /* White text */
-      padding: 1em;
-      text-align: center;
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    
     /* Navigation Styles */
     nav {
-      background-color: #444; /* Darker gray background */
-      padding: 1em;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
     }
-    
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: space-between;
-    }
-    
-    nav li {
-      margin-right: 20px;
-    }
-    
     nav a {
-      color: #fff; /* White text */
+      color: #fff;
       text-decoration: none;
     }
-    
     /* Main Content Styles */
     main {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2em;
+      padding: 20px;
     }
-    
-    /* Quiz Styles */
-    .quiz {
-      background-color: #fff; /* White background */
-      padding: 2em;
-      border: 1px solid #ddd; /* Light gray border */
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    .search-form {
+      margin-bottom: 20px;
     }
-    
-    .quiz-question {
-      margin-bottom: 1em;
+    .search-input {
+      padding: 10px;
+      font-size: 18px;
+      border: 1px solid #ccc;
     }
-    
-    .quiz-options {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    
-    .quiz-option {
-      margin-bottom: 10px;
-    }
-    
-    /* Button Styles */
-    button {
-      background-color: #333; /* Dark gray background */
-      color: #fff; /* White text */
+    .search-button {
+      padding: 10px;
+      font-size: 18px;
+      background-color: #333;
+      color: #fff;
       border: none;
-      padding: 10px 20px;
-      font-size: 16px;
       cursor: pointer;
     }
-    
-    button:hover {
-      background-color: #444; /* Darker gray background */
+    .weather-data {
+      margin-top: 20px;
     }
-    
-    /* Focus Styles */
-    :focus {
-      outline: 2px solid #333; /* Dark gray outline */
+    /* Table Styles */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    /* Accessibility Styles */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    .sr-only-focusable:active, .sr-only-focusable:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip: auto;
+      white-space: normal;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Accessible Quiz Webpage</h1>
+    <nav aria-label="Main Navigation">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
   </header>
-  <nav aria-label="Main Navigation">
-    <ul>
-      <li><a href="#quiz">Quiz</a></li>
-      <li><a href="#results">Results</a></li>
-    </ul>
-  </nav>
   <main>
-    <section class="quiz" aria-labelledby="quiz-heading">
-      <h2 id="quiz-heading">Quiz</h2>
-      <form>
-        <div class="quiz-question">
-          <p>What is the capital of France?</p>
-          <ul class="quiz-options">
-            <li class="quiz-option">
-              <input type="radio" id="option-1" name="question-1" value="Paris">
-              <label for="option-1">Paris</label>
-            </li>
-            <li class="quiz-option">
-              <input type="radio" id="option-2" name="question-1" value="London">
-              <label for="option-2">London</label>
-            </li>
-            <li class="quiz-option">
-              <input type="radio" id="option-3" name="question-1" value="Berlin">
-              <label for="option-3">Berlin</label>
-            </li>
-          </ul>
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-    </section>
-    <section id="results" aria-labelledby="results-heading">
-      <h2 id="results-heading">Results</h2>
-      <p>Your score will be displayed here.</p>
-    </section>
+    <h1>Interactive Weather Dashboard</h1>
+    <form class="search-form" role="search">
+      <label for="search-input">Search for a city:</label>
+      <input type="search" id="search-input" class="search-input" aria-label="Search for a city">
+      <button type="submit" class="search-button" aria-label="Search">Search</button>
+    </form>
+    <div class="weather-data" aria-live="polite" aria-atomic="true">
+      <h2 id="weather-heading">Weather Data</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Temperature</th>
+            <th>Conditions</th>
+            <th>24-Hour Forecast</th>
+          </tr>
+        </thead>
+        <tbody id="weather-data-table">
+          <!-- Weather data will be inserted here -->
+        </tbody>
+      </table>
+    </div>
   </main>
   <script>
-    // JavaScript code for quiz functionality
-    const quizForm = document.querySelector('form');
-    const resultsSection = document.querySelector('#results');
-    
-    quizForm.addEventListener('submit', (event) => {
+    // JavaScript code to handle search form submission and update weather data
+    const searchForm = document.querySelector('.search-form');
+    const searchInput = document.querySelector('#search-input');
+    const weatherData = document.querySelector('.weather-data');
+    const weatherDataTable = document.querySelector('#weather-data-table');
+
+    searchForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      const userAnswer = document.querySelector('input[name="question-1"]:checked').value;
-      const correctAnswer = 'Paris';
-      const score = userAnswer === correctAnswer ? 1 : 0;
-      resultsSection.innerHTML = `Your score is ${score} out of 1.`;
+      const city = searchInput.value.trim();
+      if (city) {
+        // Make API call to retrieve weather data for the searched city
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric`)
+          .then((response) => response.json())
+          .then((data) => {
+            // Update weather data table with retrieved data
+            const temperature = data.main.temp;
+            const conditions = data.weather[0].description;
+            const forecast = data.forecast;
+            const tableRow = document.createElement('tr');
+            tableRow.innerHTML = `
+              <td>${temperature}°C</td>
+              <td>${conditions}</td>
+              <td>${forecast}</td>
+            `;
+            weatherDataTable.appendChild(tableRow);
+            // Update weather heading with city name
+            document.querySelector('#weather-heading').textContent = `Weather in ${city}`;
+          })
+          .catch((error) => console.error(error));
+      }
     });
   </script>
 </body>
