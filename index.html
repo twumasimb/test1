@@ -3,214 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Digital Art Gallery</title>
+    <title>Interactive Space Exploration</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #121212;
-            color: #ffffff;
-            transition: background-color 0.3s ease;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
         }
         header {
-            background-color: #1f1f1f;
+            background-color: rgba(0, 0, 0, 0.8);
             padding: 1rem;
             text-align: center;
         }
-        h1 {
-            margin: 0;
-        }
         nav {
-            margin: 1rem 0;
+            margin-bottom: 1rem;
         }
         nav a {
-            color: #ffffff;
+            color: #fff;
             text-decoration: none;
-            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
         main {
-            padding: 1rem;
+            position: relative;
+            padding: 2rem;
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+        .constellation {
+            cursor: pointer;
+            position: relative;
+            display: inline-block;
+            margin: 0 1rem;
+        }
+        .constellation:hover::after {
+            content: attr(data-info);
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 5px;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
         }
         .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .thumbnail {
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-        }
-        .thumbnail img {
-            width: 100%;
-            border-radius: 8px;
-        }
-        .thumbnail:hover {
-            transform: scale(1.05);
-        }
-        .info {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
-            padding: 0.5rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .thumbnail:hover .info {
-            opacity: 1;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 8px;
-        }
-        .modal.active {
             display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+        }
+        .gallery img {
+            width: 150px;
+            height: 150px;
+            margin: 0 10px;
+            scroll-snap-align: start;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.1);
         }
         footer {
             text-align: center;
             padding: 1rem;
-            background-color: #1f1f1f;
+            background-color: rgba(0, 0, 0, 0.8);
         }
-        .dark-mode-toggle {
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            background-color: #ffffff;
-            color: #000000;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-        .dark-mode-toggle:hover {
-            background-color: #e0e0e0;
-        }
-        .search-bar {
-            margin: 1rem 0;
-            display: flex;
-            justify-content: center;
-        }
-        .search-bar input {
-            padding: 0.5rem;
-            border-radius: 5px;
-            border: 1px solid #ffffff;
-            color: #000000;
-        }
-        .search-bar button {
-            padding: 0.5rem;
-            border-radius: 5px;
-            border: none;
-            background-color: #ffffff;
-            color: #000000;
-            margin-left: 0.5rem;
+        @media (prefers-reduced-motion: reduce) {
+            .gallery img {
+                transition: none;
+            }
         }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
-        <h1>Interactive Digital Art Gallery</h1>
+        <h1>Explore the Cosmos</h1>
         <nav aria-label="Main Navigation">
-            <a href="#" id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">Toggle Dark Mode</a>
+            <a href="#constellations">Constellations</a>
+            <a href="#planet-gallery">Planet Gallery</a>
         </nav>
     </header>
     <main id="main-content">
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search artworks..." aria-label="Search artworks">
-            <button id="searchButton" aria-label="Search">Search</button>
-        </div>
-        <section class="gallery" aria-label="Art Gallery">
-            <div class="thumbnail" tabindex="0" aria-labelledby="art1">
-                <img src="art1.jpg" alt="Abstract painting with vibrant colors" />
-                <div class="info" id="art1">Abstract painting with vibrant colors</div>
+        <section id="constellations">
+            <h2>Constellations</h2>
+            <div class="constellation" data-info="Orion: The Hunter">
+                <svg width="50" height="50" viewBox="0 0 50 50">
+                    <circle cx="25" cy="25" r="20" fill="blue" />
+                </svg>
             </div>
-            <div class="thumbnail" tabindex="0" aria-labelledby="art2">
-                <img src="art2.jpg" alt="Landscape painting depicting mountains" />
-                <div class="info" id="art2">Landscape painting depicting mountains</div>
+            <div class="constellation" data-info="Ursa Major: The Great Bear">
+                <svg width="50" height="50" viewBox="0 0 50 50">
+                    <circle cx="25" cy="25" r="20" fill="green" />
+                </svg>
             </div>
-            <div class="thumbnail" tabindex="0" aria-labelledby="art3">
-                <img src="art3.jpg" alt="Modern sculpture in a city park" />
-                <div class="info" id="art3">Modern sculpture in a city park</div>
+            <div class="constellation" data-info="Cassiopeia: The Queen">
+                <svg width="50" height="50" viewBox="0 0 50 50">
+                    <circle cx="25" cy="25" r="20" fill="red" />
+                </svg>
             </div>
-            <!-- Add more artworks as needed -->
+        </section>
+        <section id="planet-gallery">
+            <h2>Planet Gallery</h2>
+            <div class="gallery" role="region" aria-label="Gallery of Planets">
+                <img src="https://via.placeholder.com/150?text=Earth" alt="Earth" />
+                <img src="https://via.placeholder.com/150?text=Mars" alt="Mars" />
+                <img src="https://via.placeholder.com/150?text=Jupiter" alt="Jupiter" />
+                <img src="https://via.placeholder.com/150?text=Saturn" alt="Saturn" />
+                <img src="https://via.placeholder.com/150?text=Venus" alt="Venus" />
+            </div>
         </section>
     </main>
-    <div class="modal" id="modal" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDesc">
-        <img id="modalImage" alt="Full view of artwork" />
-        <button id="closeModal" aria-label="Close modal">Close</button>
-    </div>
     <footer>
-        <p>&copy; 2023 Interactive Digital Art Gallery. All rights reserved.</p>
+        <p>&copy; 2023 Space Exploration. All rights reserved.</p>
     </footer>
     <script>
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const modal = document.getElementById('modal');
-        const modalImage = document.getElementById('modalImage');
-        const closeModal = document.getElementById('closeModal');
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
-
-        // Dark Mode Toggle
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDarkMode = document.body.classList.contains('dark-mode');
-            document.body.style.backgroundColor = isDarkMode ? '#ffffff' : '#121212';
-            document.body.style.color = isDarkMode ? '#000000' : '#ffffff';
-        });
-
-        // Open Modal
-        thumbnails.forEach(thumbnail => {
-            thumbnail.addEventListener('click', () => {
-                const img = thumbnail.querySelector('img');
-                modalImage.src = img.src;
-                modalImage.alt = img.alt;
-                modal.classList.add('active');
-            });
-
-            thumbnail.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    thumbnail.click();
-                }
-            });
-        });
-
-        // Close Modal
-        closeModal.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
-
-        // Close Modal on Outside Click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-            }
-        });
-
-        // Search Functionality
-        searchButton.addEventListener('click', () => {
-            const searchTerm = searchInput.value.toLowerCase();
-            thumbnails.forEach(thumbnail => {
-                const info = thumbnail.querySelector('.info').textContent.toLowerCase();
-                thumbnail.style.display = info.includes(searchTerm) ? 'block' : 'none';
+        document.querySelectorAll('.constellation').forEach(item => {
+            item.addEventListener('click', () => {
+                alert(`You clicked on ${item.getAttribute('data-info')}`);
             });
         });
     </script>
