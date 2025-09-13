@@ -3,329 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Tracker with Rewards</title>
+    <title>Pet Showcase</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.5;
-            margin: 0;
-            padding: 0;
             color: #333;
             background-color: #f9f9f9;
-            text-align: center;
-        }
-        header, nav, main, footer {
-            padding: 20px;
-        }
-        header {
-            background-color: #007BFF;
-            color: #fff;
-        }
-        nav {
-            background-color: #f1f1f1;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-        }
-        nav ul li {
-            display: inline;
-            margin-right: 10px;
-        }
-        nav ul li a {
-            text-decoration: none;
-            color: #333;
-        }
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .task-list {
-            width: 100%;
-            max-width: 800px;
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .task-list header {
-            background-color: #0056b3;
-            color: #fff;
-            padding: 10px;
-            text-align: left;
-        }
-        .task-list ul {
-            list-style: none;
-            padding: 0;
             margin: 0;
-        }
-        .task-list ul li {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .task-list ul li:last-child {
-            border-bottom: none;
-        }
-        .task-list ul li button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .task-list ul li button:hover {
-            background-color: #0056b3;
-        }
-        .add-task-form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .add-task-form label {
-            margin-bottom: 5px;
-        }
-        .add-task-form input, .add-task-form textarea {
-            width: 100%;
-            max-width: 400px;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
-        .add-task-form button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .add-task-form button:hover {
-            background-color: #0056b3;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
+            padding: 0;
         }
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background-color: #007BFF;
+            background-color: #0056b3;
             color: #fff;
             padding: 10px;
+            text-decoration: none;
             z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
-            outline: 2px solid #0056b3;
         }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fff;
+        header {
+            background-color: #0056b3;
+            color: #fff;
             padding: 20px;
-            border-radius: 5px;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
+            text-align: center;
         }
-        .modal-content button.close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        nav {
+            background-color: #003d80;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover, nav a:focus {
+            text-decoration: underline;
+        }
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .pet-card {
             background-color: #fff;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-        }
-        .modal-content button.close:hover {
-            color: #007BFF;
-        }
-        .modal-content h2 {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .modal-content p {
+        .pet-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
             margin-bottom: 10px;
         }
-        .modal-content button {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
+        .pet-card h2 {
+            margin-top: 0;
         }
-        .modal-content button:hover {
+        .pet-card p {
+            margin: 10px 0;
+        }
+        .pet-card .fun-fact {
+            font-style: italic;
+            color: #666;
+        }
+        footer {
             background-color: #0056b3;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
         }
-        .reward-notification {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #007BFF;
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #0056b3;
+            outline: none;
+        }
+        .form-group .error {
+            color: #d00;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .submit-button {
+            background-color: #0056b3;
             color: #fff;
             padding: 10px 20px;
-            border-radius: 5px;
-            display: none;
-            z-index: 1000;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        .reward-notification.show {
-            display: block;
+        .submit-button:hover, .submit-button:focus {
+            background-color: #003d80;
         }
-        .reward-notification.hide {
-            display: none;
-        }
-        .reward-notification p {
-            margin: 0;
+        .submit-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link" tabindex="0">Skip to main content</a>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
-        <h1>Task Tracker with Rewards</h1>
+        <h1>Pet Showcase</h1>
     </header>
     <nav aria-label="Main Navigation">
-        <ul>
-            <li><a href="#add-task">Add Task</a></li>
-            <li><a href="#task-list">Task List</a></li>
-            <li><a href="#rewards">Rewards</a></li>
-        </ul>
+        <a href="#pet-list">View Pets</a>
+        <a href="#add-pet">Add a Pet</a>
     </nav>
     <main id="main-content">
-        <section id="add-task">
-            <h2>Add a New Task</h2>
-            <form class="add-task-form" id="add-task-form">
-                <label for="task-title">Task Title:</label>
-                <input type="text" id="task-title" name="task-title" required aria-required="true">
-                <label for="task-description">Task Description:</label>
-                <textarea id="task-description" name="task-description" required aria-required="true"></textarea>
-                <button type="submit">Add Task</button>
-            </form>
-        </section>
-        <section id="task-list">
-            <h2>Your Tasks</h2>
-            <div class="task-list">
-                <header>
-                    <h3>Task List</h3>
-                </header>
-                <ul id="task-list-ul">
-                    <!-- Tasks will be dynamically added here -->
-                </ul>
+        <section id="pet-list">
+            <h2>Our Pets</h2>
+            <div class="pet-card" tabindex="0" aria-labelledby="pet-name-1">
+                <img src="https://via.placeholder.com/300" alt="Fluffy the Cat" id="pet-image-1">
+                <h2 id="pet-name-1">Fluffy</h2>
+                <p><strong>Breed:</strong> Siamese</p>
+                <p><strong>Age:</strong> 3 years</p>
+                <p class="fun-fact"><strong>Fun Fact:</strong> Fluffy loves to play with strings and chase laser pointers.</p>
+            </div>
+            <div class="pet-card" tabindex="0" aria-labelledby="pet-name-2">
+                <img src="https://via.placeholder.com/300" alt="Buddy the Dog" id="pet-image-2">
+                <h2 id="pet-name-2">Buddy</h2>
+                <p><strong>Breed:</strong> Golden Retriever</p>
+                <p><strong>Age:</strong> 5 years</p>
+                <p class="fun-fact"><strong>Fun Fact:</strong> Buddy is a certified therapy dog and loves to comfort people.</p>
             </div>
         </section>
-        <section id="rewards">
-            <h2>Rewards</h2>
-            <p>Complete tasks to earn rewards!</p>
-            <button id="view-rewards" aria-label="View Rewards">View Rewards</button>
+        <section id="add-pet">
+            <h2>Add a New Pet</h2>
+            <form id="pet-form" aria-label="Add a new pet form">
+                <div class="form-group">
+                    <label for="pet-name">Name:</label>
+                    <input type="text" id="pet-name" name="pet-name" required aria-required="true">
+                    <span class="error" id="name-error" aria-live="polite" aria-atomic="true" role="alert" aria-hidden="true"></span>
+                </div>
+                <div class="form-group">
+                    <label for="pet-breed">Breed:</label>
+                    <input type="text" id="pet-breed" name="pet-breed" required aria-required="true">
+                    <span class="error" id="breed-error" aria-live="polite" aria-atomic="true" role="alert" aria-hidden="true"></span>
+                </div>
+                <div class="form-group">
+                    <label for="pet-age">Age:</label>
+                    <input type="number" id="pet-age" name="pet-age" required aria-required="true">
+                    <span class="error" id="age-error" aria-live="polite" aria-atomic="true" role="alert" aria-hidden="true"></span>
+                </div>
+                <div class="form-group">
+                    <label for="pet-fun-fact">Fun Fact:</label>
+                    <textarea id="pet-fun-fact" name="pet-fun-fact" required aria-required="true"></textarea>
+                    <span class="error" id="fun-fact-error" aria-live="polite" aria-atomic="true" role="alert" aria-hidden="true"></span>
+                </div>
+                <button type="submit" class="submit-button" id="submit-button">Add Pet</button>
+            </form>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Task Tracker with Rewards. All rights reserved.</p>
+        <p>&copy; 2023 Pet Showcase. All rights reserved.</p>
     </footer>
-    <div id="reward-modal" class="modal" role="dialog" aria-labelledby="reward-modal-title" aria-describedby="reward-modal-description">
-        <div class="modal-content">
-            <button class="close" aria-label="Close Modal" tabindex="0">×</button>
-            <h2 id="reward-modal-title">Congratulations!</h2>
-            <p id="reward-modal-description">You have earned a reward for completing your task!</p>
-            <button id="claim-reward">Claim Reward</button>
-        </div>
-    </div>
-    <div id="reward-notification" class="reward-notification" role="status" aria-live="assertive" aria-atomic="true">
-        <p>You have earned a reward for completing your task!</p>
-    </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const taskList = document.getElementById('task-list-ul');
-            const addTaskForm = document.getElementById('add-task-form');
-            const rewardModal = document.getElementById('reward-modal');
-            const rewardModalClose = rewardModal.querySelector('.close');
-            const claimRewardButton = rewardModal.querySelector('#claim-reward');
-            const rewardNotification = document.getElementById('reward-notification');
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('pet-form');
+            const submitButton = document.getElementById('submit-button');
+            const nameInput = document.getElementById('pet-name');
+            const breedInput = document.getElementById('pet-breed');
+            const ageInput = document.getElementById('pet-age');
+            const funFactInput = document.getElementById('pet-fun-fact');
+            const nameError = document.getElementById('name-error');
+            const breedError = document.getElementById('breed-error');
+            const ageError = document.getElementById('age-error');
+            const funFactError = document.getElementById('fun-fact-error');
 
-            let tasks = [];
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                let isValid = true;
 
-            function addTask(task) {
-                tasks.push(task);
-                renderTaskList();
-            }
-
-            function renderTaskList() {
-                taskList.innerHTML = '';
-                tasks.forEach((task, index) => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <span>${task.title}</span>
-                        <button class="complete-task" data-index="${index}" aria-label="Complete Task ${task.title}">Complete</button>
-                    `;
-                    taskList.appendChild(li);
+                // Reset error messages
+                [nameError, breedError, ageError, funFactError].forEach(error => {
+                    error.textContent = '';
+                    error.setAttribute('aria-hidden', 'true');
                 });
-            }
 
-            addTaskForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-                const taskTitle = document.getElementById('task-title').value;
-                const taskDescription = document.getElementById('task-description').value;
-                if (taskTitle && taskDescription) {
-                    addTask({ title: taskTitle, description: taskDescription });
-                    addTaskForm.reset();
+                // Validate name
+                if (nameInput.value.trim() === '') {
+                    nameError.textContent = 'Name is required.';
+                    nameError.setAttribute('aria-hidden', 'false');
+                    isValid = false;
                 }
-            });
 
-            taskList.addEventListener('click', function (e) {
-                if (e.target.classList.contains('complete-task')) {
-                    const index = e.target.dataset.index;
-                    tasks.splice(index, 1);
-                    renderTaskList();
-                    showRewardModal();
+                // Validate breed
+                if (breedInput.value.trim() === '') {
+                    breedError.textContent = 'Breed is required.';
+                    breedError.setAttribute('aria-hidden', 'false');
+                    isValid = false;
                 }
-            });
 
-            function showRewardModal() {
-                rewardModal.style.display = 'flex';
-                rewardNotification.classList.add('show');
-                setTimeout(() => {
-                    rewardNotification.classList.remove('show');
-                }, 5000);
-            }
+                // Validate age
+                if (ageInput.value.trim() === '' || isNaN(ageInput.value) || ageInput.value < 0) {
+                    ageError.textContent = 'Age must be a valid number.';
+                    ageError.setAttribute('aria-hidden', 'false');
+                    isValid = false;
+                }
 
-            rewardModalClose.addEventListener('click', function () {
-                rewardModal.style.display = 'none';
-            });
+                // Validate fun fact
+                if (funFactInput.value.trim() === '') {
+                    funFactError.textContent = 'Fun fact is required.';
+                    funFactError.setAttribute('aria-hidden', 'false');
+                    isValid = false;
+                }
 
-            claimRewardButton.addEventListener('click', function () {
-                rewardModal.style.display = 'none';
-                alert('Reward claimed successfully!');
-            });
+                if (isValid) {
+                    const petList = document.getElementById('pet-list');
+                    const newPetCard = document.createElement('div');
+                    newPetCard.className = 'pet-card';
+                    newPetCard.tabIndex = 0;
+                    newPetCard.setAttribute('aria-labelledby', `pet-name-${petList.childElementCount + 1}`);
 
-            document.getElementById('view-rewards').addEventListener('click', function () {
-                showRewardModal();
-            });
+                    newPetCard.innerHTML = `
+                        <img src="https://via.placeholder.com/300" alt="${nameInput.value} the ${breedInput.value}" id="pet-image-${petList.childElementCount + 1}">
+                        <h2 id="pet-name-${petList.childElementCount + 1}">${nameInput.value}</h2>
+                        <p><strong>Breed:</strong> ${breedInput.value}</p>
+                        <p><strong>Age:</strong> ${ageInput.value} years</p>
+                        <p class="fun-fact"><strong>Fun Fact:</strong> ${funFactInput.value}</p>
+                    `;
 
-            // Keyboard navigation
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape' && rewardModal.style.display === 'flex') {
-                    rewardModal.style.display = 'none';
+                    petList.appendChild(newPetCard);
+
+                    // Clear form
+                    form.reset();
+                } else {
+                    submitButton.focus();
                 }
             });
         });
