@@ -3,71 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Blog - Read, Comment, and Search</title>
+    <title>User Profile Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.5;
-            margin: 0;
-            padding: 0;
             color: #333;
             background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
         }
         header, nav, main, footer {
             padding: 20px;
         }
         header {
-            background-color: #007BFF;
+            background-color: #007bff;
             color: #fff;
             text-align: center;
         }
         nav {
-            background-color: #f1f1f1;
-            border-bottom: 1px solid #ddd;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-        nav ul li {
-            margin: 0 10px;
-        }
-        nav ul li a {
-            text-decoration: none;
-            color: #333;
-            padding: 10px;
-            display: block;
-        }
-        nav ul li a:hover {
-            background-color: #007BFF;
+            background-color: #333;
             color: #fff;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
         }
         main {
             max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
             gap: 20px;
         }
-        article {
+        .profile-info {
             background-color: #fff;
             border: 1px solid #ddd;
-            border-radius: 5px;
             padding: 20px;
-            flex: 1 1 100%;
-            max-width: 100%;
-            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        @media (min-width: 768px) {
-            article {
-                flex: 1 1 48%;
-            }
+        .profile-info h2 {
+            margin-top: 0;
+        }
+        .profile-info p {
+            margin: 10px 0;
+        }
+        .avatar-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .avatar-gallery img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+        .follow-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .follow-button:hover {
+            background-color: #0056b3;
+        }
+        .social-media-links {
+            margin-top: 20px;
+        }
+        .social-media-links a {
+            display: inline-block;
+            margin-right: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .social-media-links a:hover {
+            text-decoration: underline;
         }
         footer {
-            background-color: #007BFF;
+            background-color: #333;
             color: #fff;
             text-align: center;
             position: fixed;
@@ -78,193 +100,128 @@
             position: absolute;
             top: -40px;
             left: 0;
-            background-color: #007BFF;
+            background-color: #007bff;
             color: #fff;
             padding: 10px;
             z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
+            outline: 2px solid #0056b3;
         }
-        .search-form {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .search-form input {
-            padding: 10px;
-            width: 300px;
-            border: 1px solid #ddd;
-            border-radius: 5px 0 0 5px;
-        }
-        .search-form button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-        }
-        .search-form button:hover {
-            background-color: #0056b3;
-        }
-        .post-content {
-            margin-top: 20px;
-        }
-        .post-content h2 {
-            margin-top: 0;
-        }
-        .post-content p {
-            margin: 10px 0;
-        }
-        .comments {
-            margin-top: 20px;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-        }
-        .comments h3 {
-            margin-top: 0;
-        }
-        .comment-form {
-            margin-top: 20px;
-        }
-        .comment-form label {
+        .form-group label {
             display: block;
             margin-bottom: 5px;
         }
-        .comment-form input, .comment-form textarea {
+        .form-group input, .form-group textarea {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
         }
-        .comment-form button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #007bff;
+            outline: none;
         }
-        .comment-form button:hover {
-            background-color: #0056b3;
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
         }
-        .comment {
-            background-color: #f1f1f1;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        .comment p {
-            margin: 5px 0;
-        }
-        .comment .author {
-            font-weight: bold;
-        }
-        .comment .date {
-            color: #777;
-        }
-        .error {
-            color: red;
-            margin-top: 10px;
+        .success-message {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 5px;
         }
     </style>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <header>
-        <h1>Personal Blog</h1>
+        <h1>User Profile Page</h1>
     </header>
     <nav aria-label="Main Navigation">
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+        <a href="#profile-info">Profile Info</a>
+        <a href="#avatar-gallery">Avatar Gallery</a>
+        <a href="#social-media">Social Media Links</a>
     </nav>
     <main id="main-content">
-        <section class="search-form">
-            <form id="search-form">
-                <input type="text" id="search-input" placeholder="Search for articles" aria-label="Search for articles">
-                <button type="submit" aria-label="Submit search">Search</button>
-            </form>
+        <section id="profile-info" class="profile-info">
+            <h2>User Bio</h2>
+            <p>Hi, I'm John Doe, a full-stack web developer with a passion for creating accessible and user-friendly web applications. I specialize in modern web technologies and adhere to the highest standards of web accessibility.</p>
+            <button class="follow-button" aria-label="Follow John Doe">Follow</button>
         </section>
-        <article>
-            <header>
-                <h2>Article Title</h2>
-                <p>Published on <time datetime="2023-10-01">October 1, 2023</time> by <span class="author">John Doe</span></p>
-            </header>
-            <div class="post-content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed auctor, nunc vel blandit tincidunt, nisl nunc tincidunt nunc, vel blandit nunc nunc vel nunc. Nulla facilisi. Sed auctor, nunc vel blandit tincidunt, nisl nunc tincidunt nunc, vel blandit nunc nunc vel nunc.</p>
-                <p>Donec euismod, nunc vel blandit tincidunt, nisl nunc tincidunt nunc, vel blandit nunc nunc vel nunc. Nulla facilisi. Sed auctor, nunc vel blandit tincidunt, nisl nunc tincidunt nunc, vel blandit nunc nunc vel nunc.</p>
-            </div>
-            <section class="comments">
-                <h3>Comments</h3>
-                <div class="comment">
-                    <p class="author">Jane Smith</p>
-                    <p class="date">October 2, 2023</p>
-                    <p>This is a great article! I learned a lot from it.</p>
-                </div>
-                <div class="comment">
-                    <p class="author">Bob Johnson</p>
-                    <p class="date">October 3, 2023</p>
-                    <p>Thanks for sharing this. It's very insightful.</p>
-                </div>
-                <form class="comment-form" id="comment-form">
-                    <label for="comment-author">Name</label>
-                    <input type="text" id="comment-author" required aria-required="true" aria-label="Your name">
-                    <label for="comment-email">Email</label>
-                    <input type="email" id="comment-email" required aria-required="true" aria-label="Your email">
-                    <label for="comment-text">Comment</label>
-                    <textarea id="comment-text" required aria-required="true" aria-label="Your comment"></textarea>
-                    <button type="submit" aria-label="Submit comment">Submit Comment</button>
-                </form>
-            </section>
-        </article>
+        <section id="avatar-gallery" class="avatar-gallery">
+            <img src="https://via.placeholder.com/100" alt="Avatar 1" aria-describedby="avatar-desc-1">
+            <img src="https://via.placeholder.com/100" alt="Avatar 2" aria-describedby="avatar-desc-2">
+            <img src="https://via.placeholder.com/100" alt="Avatar 3" aria-describedby="avatar-desc-3">
+            <div id="avatar-desc-1" class="sr-only">This is the first avatar image.</div>
+            <div id="avatar-desc-2" class="sr-only">This is the second avatar image.</div>
+            <div id="avatar-desc-3" class="sr-only">This is the third avatar image.</div>
+        </section>
+        <section id="social-media" class="social-media-links">
+            <h2>Connect with Me</h2>
+            <a href="https://twitter.com/johndoe" aria-label="Follow John Doe on Twitter">Twitter</a>
+            <a href="https://github.com/johndoe" aria-label="Follow John Doe on GitHub">GitHub</a>
+            <a href="https://linkedin.com/in/johndoe" aria-label="Connect with John Doe on LinkedIn">LinkedIn</a>
+        </section>
     </main>
     <footer>
-        <p>&copy; 2023 Personal Blog. All rights reserved.</p>
+        <p>&copy; 2023 John Doe. All rights reserved.</p>
     </footer>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const searchForm = document.getElementById('search-form');
-            const commentForm = document.getElementById('comment-form');
-            const errorElement = document.createElement('div');
-            errorElement.className = 'error';
+        document.querySelector('.follow-button').addEventListener('click', function() {
+            alert('Thank you for following!');
+        });
 
-            searchForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const searchInput = document.getElementById('search-input').value;
-                if (searchInput.trim() === '') {
-                    errorElement.textContent = 'Please enter a search term.';
-                    searchForm.appendChild(errorElement);
-                } else {
-                    // Perform search (for demonstration, we'll just log the search term)
-                    console.log('Searching for:', searchInput);
-                    errorElement.textContent = '';
+        // Form validation example
+        document.querySelectorAll('.form-group input, .form-group textarea').forEach(function(input) {
+            input.addEventListener('input', function() {
+                const error = document.querySelector(`#${input.id}-error`);
+                if (error) {
+                    error.remove();
+                }
+                input.setAttribute('aria-invalid', 'false');
+            });
+
+            input.addEventListener('blur', function() {
+                if (input.value.trim() === '') {
+                    const error = document.createElement('div');
+                    error.className = 'error-message';
+                    error.id = `${input.id}-error`;
+                    error.textContent = 'This field is required.';
+                    input.parentNode.appendChild(error);
+                    input.setAttribute('aria-invalid', 'true');
+                    input.setAttribute('aria-describedby', `${input.id}-error`);
+                }
+            });
+        });
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const errors = [];
+            document.querySelectorAll('.form-group input, .form-group textarea').forEach(function(input) {
+                if (input.value.trim() === '') {
+                    errors.push(input);
                 }
             });
 
-            commentForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                const commentAuthor = document.getElementById('comment-author').value;
-                const commentEmail = document.getElementById('comment-email').value;
-                const commentText = document.getElementById('comment-text').value;
+            if (errors.length > 0) {
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'error-message';
+                errorMessage.textContent = 'Please fill out all required fields.';
+                document.querySelector('form').insertBefore(errorMessage, document.querySelector('form').firstChild);
+                return;
+            }
 
-                if (commentAuthor.trim() === '' || commentEmail.trim() === '' || commentText.trim() === '') {
-                    errorElement.textContent = 'All fields are required.';
-                    commentForm.appendChild(errorElement);
-                } else {
-                    // Add comment to the comments section (for demonstration, we'll just log the comment)
-                    console.log('Comment submitted:', {
-                        author: commentAuthor,
-                        email: commentEmail,
-                        text: commentText
-                    });
-                    errorElement.textContent = '';
-                }
-            });
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.textContent = 'Form submitted successfully!';
+            document.querySelector('form').insertBefore(successMessage, document.querySelector('form').firstChild);
         });
     </script>
 </body>
