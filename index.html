@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Local Events Showcase</title>
+    <title>Interactive Portfolio</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,63 +15,51 @@
         }
         header {
             background: #007BFF;
-            color: white;
+            color: #fff;
             padding: 1rem;
             text-align: center;
         }
         nav {
-            background: #0056b3;
-            padding: 0.5rem;
+            margin: 1rem 0;
         }
         nav a {
-            color: white;
-            margin: 0 1rem;
+            color: #fff;
+            margin: 0 15px;
             text-decoration: none;
+            font-weight: bold;
         }
-        nav a:hover {
-            text-decoration: underline;
+        nav a:focus {
+            outline: 2px solid #FFD700;
         }
         main {
             padding: 1rem;
         }
-        section {
-            margin-bottom: 2rem;
-            background: white;
-            padding: 1rem;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h2 {
-            color: #007BFF;
-        }
-        .event-card {
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-        .event-card img {
-            max-width: 100%;
-            height: auto;
-        }
-        .event-details {
-            padding: 1rem;
-        }
-        .filter {
+        .portfolio-filter {
             margin-bottom: 1rem;
         }
-        .map {
-            height: 300px;
-            width: 100%;
+        .portfolio-item {
+            background: #fff;
             border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 1rem 0;
+            padding: 1rem;
+            transition: transform 0.3s;
+        }
+        .portfolio-item:hover {
+            transform: scale(1.02);
+            border-color: #007BFF;
+        }
+        .portfolio-item h3 {
+            margin: 0 0 0.5rem;
+        }
+        .portfolio-item p {
+            margin: 0;
         }
         footer {
             text-align: center;
             padding: 1rem;
             background: #007BFF;
-            color: white;
+            color: #fff;
             position: relative;
             bottom: 0;
             width: 100%;
@@ -80,130 +68,90 @@
             position: absolute;
             top: -40px;
             left: 0;
-            background: #0056b3;
-            color: white;
+            background: #FFD700;
+            color: #333;
             padding: 8px;
             z-index: 100;
         }
         .skip-link:focus {
             top: 0;
         }
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                transition: none !important;
-            }
-        }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
-        <h1>Local Events Showcase</h1>
+        <h1>My Creative Portfolio</h1>
+        <nav aria-label="Main Navigation">
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+        </nav>
     </header>
-    <nav aria-label="Main Navigation">
-        <a href="#upcoming-events">Upcoming Events</a>
-        <a href="#past-events">Past Events</a>
-        <a href="#contact">Contact Us</a>
-    </nav>
     <main id="main-content">
-        <section id="upcoming-events">
-            <h2>Upcoming Events</h2>
-            <div class="filter">
-                <label for="event-category">Filter by Category:</label>
-                <select id="event-category" aria-label="Filter events by category">
+        <section id="about">
+            <h2>About Me</h2>
+            <p>Welcome to my portfolio! I am a creative developer with a passion for building interactive applications.</p>
+        </section>
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="portfolio-filter">
+                <label for="category-filter">Filter by category:</label>
+                <select id="category-filter" aria-label="Project Category Filter">
                     <option value="all">All</option>
-                    <option value="music">Music</option>
+                    <option value="web">Web Development</option>
+                    <option value="design">Design</option>
                     <option value="art">Art</option>
-                    <option value="food">Food</option>
                 </select>
             </div>
-            <div id="events-list">
-                <article class="event-card" aria-labelledby="event1">
-                    <img src="https://via.placeholder.com/400" alt="Concert Event" />
-                    <div class="event-details">
-                        <h3 id="event1">Live Music Concert</h3>
-                        <p>Date: <time datetime="2023-10-01">October 1, 2023</time></p>
-                        <p>Location: Central Park</p>
-                        <p>Description: Join us for a night of live music featuring local bands.</p>
-                    </div>
+            <div id="portfolio-items">
+                <article class="portfolio-item" data-category="web">
+                    <h3>Project One</h3>
+                    <p>A web application built with HTML, CSS, and JavaScript.</p>
                 </article>
-                <article class="event-card" aria-labelledby="event2">
-                    <img src="https://via.placeholder.com/400" alt="Art Exhibition" />
-                    <div class="event-details">
-                        <h3 id="event2">Art Exhibition</h3>
-                        <p>Date: <time datetime="2023-10-15">October 15, 2023</time></p>
-                        <p>Location: City Gallery</p>
-                        <p>Description: Explore the latest works from local artists.</p>
-                    </div>
+                <article class="portfolio-item" data-category="design">
+                    <h3>Project Two</h3>
+                    <p>A graphic design project showcasing modern UI principles.</p>
+                </article>
+                <article class="portfolio-item" data-category="art">
+                    <h3>Project Three</h3>
+                    <p>A digital art piece created using Adobe Illustrator.</p>
+                </article>
+                <article class="portfolio-item" data-category="web">
+                    <h3>Project Four</h3>
+                    <p>A responsive website designed for a local business.</p>
                 </article>
             </div>
-            <div id="map" class="map" role="application" aria-label="Map of event locations"></div>
-        </section>
-        <section id="past-events">
-            <h2>Past Events</h2>
-            <article class="event-card" aria-labelledby="event3">
-                <img src="https://via.placeholder.com/400" alt="Food Festival" />
-                <div class="event-details">
-                    <h3 id="event3">Food Festival</h3>
-                    <p>Date: <time datetime="2023-09-20">September 20, 2023</time></p>
-                    <p>Location: Downtown Plaza</p>
-                    <p>Description: A celebration of local cuisine with food trucks and vendors.</p>
-                </div>
-            </article>
         </section>
         <section id="contact">
-            <h2>Contact Us</h2>
+            <h2>Contact Me</h2>
             <form aria-labelledby="contact-form">
-                <fieldset>
-                    <legend id="contact-form">Get in Touch</legend>
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required aria-required="true" aria-describedby="name-help" />
-                    <span id="name-help">Please enter your full name.</span>
-                    
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required aria-required="true" aria-describedby="email-help" />
-                    <span id="email-help">We will respond to your email.</span>
-                    
-                    <label for="message">Message:</label>
-                    <textarea id="message" name="message" required aria-required="true" aria-describedby="message-help"></textarea>
-                    <span id="message-help">Your message will be sent to our team.</span>
-                    
-                    <button type="submit">Send Message</button>
-                </fieldset>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required aria-required="true">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required aria-required="true">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required aria-required="true"></textarea>
+                <button type="submit">Send Message</button>
             </form>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Local Events Showcase. All rights reserved.</p>
+        <p>&copy; 2023 My Creative Portfolio</p>
     </footer>
     <script>
-        document.getElementById('event-category').addEventListener('change', function() {
+        document.getElementById('category-filter').addEventListener('change', function() {
             const selectedCategory = this.value;
-            const events = document.querySelectorAll('.event-card');
-            events.forEach(event => {
-                const category = event.getAttribute('data-category');
-                if (selectedCategory === 'all' || category === selectedCategory) {
-                    event.style.display = 'flex';
+            const items = document.querySelectorAll('.portfolio-item');
+
+            items.forEach(item => {
+                if (selectedCategory === 'all' || item.dataset.category === selectedCategory) {
+                    item.style.display = 'block';
                 } else {
-                    event.style.display = 'none';
+                    item.style.display = 'none';
                 }
             });
         });
-
-        // Initialize map (mock implementation)
-        function initMap() {
-            const mapElement = document.getElementById('map');
-            const map = new google.maps.Map(mapElement, {
-                center: { lat: 40.712776, lng: -74.005974 },
-                zoom: 12,
-            });
-            new google.maps.Marker({
-                position: { lat: 40.712776, lng: -74.005974 },
-                map: map,
-                title: 'Central Park',
-            });
-        }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 </body>
 </html>
