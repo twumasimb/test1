@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Webpage with Smooth Hover Effects and Transitions</title>
+    <title>Book Recommendation System</title>
     <style>
-        /* Global Styles */
         body {
             font-family: Arial, sans-serif;
             line-height: 1.5;
@@ -31,8 +30,8 @@
         }
         nav ul {
             list-style: none;
-            margin: 0;
             padding: 0;
+            margin: 0;
             display: flex;
             justify-content: center;
         }
@@ -42,16 +41,10 @@
         nav ul li a {
             color: #fff;
             text-decoration: none;
-            font-weight: bold;
-            padding: 10px 15px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        nav ul li a:hover {
-            background-color: #0056b3;
-            color: #fff;
+            font-size: 18px;
         }
         main {
-            margin-top: 20px;
+            padding: 20px 0;
         }
         section {
             margin-bottom: 40px;
@@ -59,49 +52,61 @@
         h1, h2, h3 {
             color: #007BFF;
         }
-        .card {
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .book-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .book-card {
             background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .card img {
+        .book-card img {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
             margin-bottom: 15px;
         }
-        .card h2 {
+        .book-card h3 {
             margin-top: 0;
         }
-        .card p {
-            color: #666;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .button:hover {
-            background-color: #0056b3;
-            color: #fff;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
+        .book-card p {
+            margin: 10px 0;
         }
         .skip-link {
             position: absolute;
@@ -111,103 +116,108 @@
             color: #fff;
             padding: 10px;
             text-decoration: none;
-            transition: top 0.3s;
+            z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
         }
-        /* Accessibility Enhancements */
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            margin: -1px;
-            padding: 0;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-        .focus-visible {
-            outline: 2px solid #007BFF;
-            outline-offset: 2px;
-        }
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            .card:hover {
-                transform: none;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-            .button:hover {
-                background-color: #007BFF;
-            }
+        .error-message {
+            color: #ff0000;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link" tabindex="0">Skip to main content</a>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <header>
-        <h1>Interactive Webpage with Smooth Hover Effects and Transitions</h1>
+        <h1>Book Recommendation System</h1>
     </header>
     <nav aria-label="Main Navigation">
         <ul>
-            <li><a href="#section1">Section 1</a></li>
-            <li><a href="#section2">Section 2</a></li>
-            <li><a href="#section3">Section 3</a></li>
+            <li><a href="#form-section">Get Recommendations</a></li>
+            <li><a href="#book-list">Book List</a></li>
         </ul>
     </nav>
     <main id="main-content">
-        <section id="section1">
-            <h2>Section 1: Introduction</h2>
-            <p>Welcome to this interactive webpage. Explore the smooth hover effects and transitions.</p>
-            <div class="card">
-                <img src="https://via.placeholder.com/600x400" alt="Placeholder Image">
-                <h2>Card Title</h2>
-                <p>This is a sample card with a placeholder image and some text content.</p>
-                <a href="#" class="button">Learn More</a>
-            </div>
-        </section>
-        <section id="section2">
-            <h2>Section 2: Features</h2>
-            <p>This section highlights the features of the webpage.</p>
-            <div class="card">
-                <img src="https://via.placeholder.com/600x400" alt="Placeholder Image">
-                <h2>Card Title</h2>
-                <p>This is another sample card with a placeholder image and some text content.</p>
-                <a href="#" class="button">Learn More</a>
-            </div>
-        </section>
-        <section id="section3">
-            <h2>Section 3: Contact Us</h2>
-            <p>If you have any questions, feel free to contact us.</p>
-            <form action="#" method="post">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required aria-required="true">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" required aria-required="true"></textarea>
-                <button type="submit" class="button">Submit</button>
+        <section id="form-section">
+            <h2>Get Book Recommendations</h2>
+            <form id="book-form">
+                <label for="genre">Favorite Genre:</label>
+                <select id="genre" name="genre" required aria-required="true">
+                    <option value="" disabled selected>Select a genre</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="science-fiction">Science Fiction</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="romance">Romance</option>
+                    <option value="non-fiction">Non-Fiction</option>
+                </select>
+                <label for="author">Favorite Author:</label>
+                <input type="text" id="author" name="author" placeholder="Enter author name" required aria-required="true">
+                <button type="submit">Get Recommendations</button>
             </form>
+            <div id="error-message" class="error-message" aria-live="assertive" aria-atomic="true" role="alert"></div>
+        </section>
+        <section id="book-list">
+            <h2>Book Recommendations</h2>
+            <div class="book-list" id="book-list-container"></div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Interactive Webpage. All rights reserved.</p>
+        <p>&copy; 2023 Book Recommendation System. All rights reserved.</p>
     </footer>
     <script>
-        // JavaScript for enhanced focus management
-        document.querySelectorAll('.button, .card').forEach(element => {
-            element.addEventListener('focus', () => {
-                element.classList.add('focus-visible');
-            });
-            element.addEventListener('blur', () => {
-                element.classList.remove('focus-visible');
-            });
-        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('book-form');
+            const errorMessage = document.getElementById('error-message');
+            const bookListContainer = document.getElementById('book-list-container');
 
-        // JavaScript for skip link
-        document.querySelector('.skip-link').addEventListener('click', (event) => {
-            event.preventDefault();
-            document.getElementById('main-content').focus();
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                errorMessage.textContent = '';
+
+                const genre = document.getElementById('genre').value;
+                const author = document.getElementById('author').value;
+
+                if (!genre || !author) {
+                    errorMessage.textContent = 'Please select a genre and enter an author name.';
+                    return;
+                }
+
+                // Simulate API call to get book recommendations
+                fetchBookRecommendations(genre, author);
+            });
+
+            function fetchBookRecommendations(genre, author) {
+                // Simulated book data
+                const books = [
+                    { title: 'The Name of the Wind', author: 'Patrick Rothfuss', genre: 'fantasy', cover: 'https://example.com/book1.jpg', description: 'A fantasy novel about a young man with magical abilities.' },
+                    { title: 'Dune', author: 'Frank Herbert', genre: 'science-fiction', cover: 'https://example.com/book2.jpg', description: 'A science fiction novel set on a desert planet.' },
+                    { title: 'The Girl with the Dragon Tattoo', author: 'Stieg Larsson', genre: 'mystery', cover: 'https://example.com/book3.jpg', description: 'A mystery novel involving a journalist and a hacker.' },
+                    { title: 'Pride and Prejudice', author: 'Jane Austen', genre: 'romance', cover: 'https://example.com/book4.jpg', description: 'A classic romance novel about Elizabeth Bennet and Mr. Darcy.' },
+                    { title: 'Sapiens: A Brief History of Humankind', author: 'Yuval Noah Harari', genre: 'non-fiction', cover: 'https://example.com/book5.jpg', description: 'A non-fiction book exploring the history of human civilization.' }
+                ];
+
+                const filteredBooks = books.filter(book => book.genre === genre && book.author.toLowerCase().includes(author.toLowerCase()));
+
+                if (filteredBooks.length === 0) {
+                    errorMessage.textContent = 'No books found for the selected genre and author.';
+                    return;
+                }
+
+                bookListContainer.innerHTML = '';
+                filteredBooks.forEach(book => {
+                    const bookCard = document.createElement('div');
+                    bookCard.className = 'book-card';
+                    bookCard.innerHTML = `
+                        <img src="${book.cover}" alt="${book.title} by ${book.author}">
+                        <h3>${book.title}</h3>
+                        <p><strong>Author:</strong> ${book.author}</p>
+                        <p><strong>Genre:</strong> ${book.genre}</p>
+                        <p>${book.description}</p>
+                    `;
+                    bookListContainer.appendChild(bookCard);
+                });
+            }
         });
     </script>
 </body>
