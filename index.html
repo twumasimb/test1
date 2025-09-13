@@ -3,190 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calorie Tracker</title>
+    <title>Event Countdown Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
             margin: 0;
             padding: 0;
             background-color: #f0f8ff;
             color: #333;
+            line-height: 1.6;
         }
         header {
-            background-color: #4CAF50;
+            background-color: #4a90e2;
             color: white;
-            padding: 10px 0;
+            padding: 20px;
             text-align: center;
         }
         nav {
             margin: 20px 0;
         }
         nav a {
-            margin: 0 15px;
-            color: white;
+            color: #4a90e2;
             text-decoration: none;
+            margin: 0 15px;
         }
         main {
             padding: 20px;
+            max-width: 800px;
+            margin: auto;
         }
-        section {
-            margin-bottom: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-        }
-        h2 {
-            color: #4CAF50;
-        }
-        form {
+        .countdown {
             display: flex;
-            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+            font-size: 2em;
         }
-        label {
-            margin-bottom: 5px;
+        .progress-container {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
         }
-        input, button, select {
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+        .progress-bar {
+            height: 30px;
+            background-color: #4caf50;
+            width: 0%;
+            transition: width 1s;
         }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .error {
-            color: red;
-            margin-top: -10px;
-            margin-bottom: 10px;
-        }
-        .results {
+        footer {
+            text-align: center;
             margin-top: 20px;
             padding: 10px;
-            border: 1px solid #4CAF50;
-            background-color: #e8f5e9;
+            background-color: #4a90e2;
+            color: white;
         }
-        .calorie-summary {
-            font-weight: bold;
+        @media (prefers-reduced-motion: reduce) {
+            .progress-bar {
+                transition: none;
+            }
         }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <a href="#main" class="skip-link">Skip to main content</a>
+    
     <header>
-        <h1>Calorie Tracker</h1>
+        <h1>Event Countdown Timer</h1>
         <nav aria-label="Main Navigation">
-            <a href="#log-meals">Log Meals</a>
-            <a href="#log-exercise">Log Exercise</a>
-            <a href="#goals">Set Goals</a>
+            <a href="#main">Home</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
         </nav>
     </header>
-    <main id="main-content">
-        <section id="log-meals">
-            <h2>Log Your Meals</h2>
-            <form id="meal-form" aria-labelledby="meal-form">
-                <label for="food-item">Food Item:</label>
-                <input type="text" id="food-item" name="food-item" required aria-required="true" aria-describedby="food-help" autocomplete="off">
-                <small id="food-help">Enter the name of the food item.</small>
 
-                <label for="calories">Calories:</label>
-                <input type="number" id="calories" name="calories" required aria-required="true" aria-describedby="calories-help" min="1">
-                <small id="calories-help">Enter the number of calories for this food item.</small>
-
-                <button type="submit">Add Meal</button>
-                <div id="meal-error" class="error" aria-live="assertive"></div>
-            </form>
-        </section>
-
-        <section id="log-exercise">
-            <h2>Log Your Exercise</h2>
-            <form id="exercise-form" aria-labelledby="exercise-form">
-                <label for="exercise-item">Exercise:</label>
-                <input type="text" id="exercise-item" name="exercise-item" required aria-required="true" aria-describedby="exercise-help" autocomplete="off">
-                <small id="exercise-help">Enter the type of exercise performed.</small>
-
-                <label for="calories-burned">Calories Burned:</label>
-                <input type="number" id="calories-burned" name="calories-burned" required aria-required="true" aria-describedby="burned-help" min="1">
-                <small id="burned-help">Enter the number of calories burned during the exercise.</small>
-
-                <button type="submit">Add Exercise</button>
-                <div id="exercise-error" class="error" aria-live="assertive"></div>
-            </form>
-        </section>
-
-        <section id="goals">
-            <h2>Set Your Fitness Goals</h2>
-            <form id="goal-form" aria-labelledby="goal-form">
-                <label for="goal-calories">Daily Calorie Goal:</label>
-                <input type="number" id="goal-calories" name="goal-calories" required aria-required="true" min="1">
-                <button type="submit">Set Goal</button>
-                <div id="goal-error" class="error" aria-live="assertive"></div>
-            </form>
-        </section>
-
-        <section class="results">
-            <h2>Your Daily Summary</h2>
-            <div class="calorie-summary" id="calorie-summary">
-                Total Calories Consumed: <span id="total-calories-consumed">0</span><br>
-                Total Calories Burned: <span id="total-calories-burned">0</span><br>
-                Net Calories: <span id="net-calories">0</span>
+    <main id="main">
+        <section>
+            <h2>Countdown to Event</h2>
+            <p>Countdown to our exciting event happening on <strong id="event-date">December 31, 2023</strong>.</p>
+            <div class="countdown" role="timer" aria-live="polite">
+                <div id="days" class="countdown-item"><span class="countdown-value">0</span> Days</div>
+                <div id="hours" class="countdown-item"><span class="countdown-value">0</span> Hours</div>
+                <div id="minutes" class="countdown-item"><span class="countdown-value">0</span> Minutes</div>
+                <div id="seconds" class="countdown-item"><span class="countdown-value">0</span> Seconds</div>
+            </div>
+            <div class="progress-container" aria-label="Countdown Progress">
+                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2023 Calorie Tracker. All rights reserved.</p>
+        <p>&copy; 2023 Event Countdown. All rights reserved.</p>
     </footer>
 
     <script>
-        let totalCaloriesConsumed = 0;
-        let totalCaloriesBurned = 0;
+        const eventDate = new Date("December 31, 2023 23:59:59").getTime();
+        const countdownElements = {
+            days: document.getElementById("days"),
+            hours: document.getElementById("hours"),
+            minutes: document.getElementById("minutes"),
+            seconds: document.getElementById("seconds"),
+            progressBar: document.querySelector(".progress-bar")
+        };
 
-        document.getElementById('meal-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const foodItem = document.getElementById('food-item').value;
-            const calories = parseInt(document.getElementById('calories').value);
-            if (isNaN(calories) || calories <= 0) {
-                document.getElementById('meal-error').textContent = 'Please enter a valid number of calories.';
-                return;
-            }
-            totalCaloriesConsumed += calories;
-            document.getElementById('total-calories-consumed').textContent = totalCaloriesConsumed;
-            document.getElementById('meal-error').textContent = '';
-            this.reset();
-        });
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
 
-        document.getElementById('exercise-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const exerciseItem = document.getElementById('exercise-item').value;
-            const caloriesBurned = parseInt(document.getElementById('calories-burned').value);
-            if (isNaN(caloriesBurned) || caloriesBurned <= 0) {
-                document.getElementById('exercise-error').textContent = 'Please enter a valid number of calories burned.';
-                return;
-            }
-            totalCaloriesBurned += caloriesBurned;
-            document.getElementById('total-calories-burned').textContent = totalCaloriesBurned;
-            document.getElementById('exercise-error').textContent = '';
-            this.reset();
-        });
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById('goal-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const goalCalories = parseInt(document.getElementById('goal-calories').value);
-            if (isNaN(goalCalories) || goalCalories <= 0) {
-                document.getElementById('goal-error').textContent = 'Please enter a valid calorie goal.';
-                return;
-            }
-            document.getElementById('goal-error').textContent = '';
-            const netCalories = totalCaloriesConsumed - totalCaloriesBurned;
-            document.getElementById('net-calories').textContent = netCalories;
-        });
+            countdownElements.days.querySelector(".countdown-value").innerText = days;
+            countdownElements.hours.querySelector(".countdown-value").innerText = hours;
+            countdownElements.minutes.querySelector(".countdown-value").innerText = minutes;
+            countdownElements.seconds.querySelector(".countdown-value").innerText = seconds;
+
+            const totalDuration = eventDate - new Date("January 1, 2023").getTime(); // Total countdown duration
+            const elapsedDuration = now - new Date("January 1, 2023").getTime(); // Elapsed time since start
+            const progressPercentage = Math.min((elapsedDuration / totalDuration) * 100, 100);
+            countdownElements.progressBar.style.width = progressPercentage + "%";
+            countdownElements.progressBar.setAttribute("aria-valuenow", progressPercentage);
+        }
+
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
