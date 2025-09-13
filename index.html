@@ -3,239 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event RSVP Page</title>
+    <title>Meditation Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.5;
             margin: 0;
             padding: 0;
+            background-color: #f0f8ff;
             color: #333;
-            background-color: #f9f9f9;
-            font-size: 16px;
+            line-height: 1.6;
+            text-align: center;
         }
         header, nav, main, footer {
             padding: 20px;
         }
         header {
-            background-color: #007BFF;
+            background-color: #4a90e2;
             color: #fff;
-            text-align: center;
         }
         nav {
-            background-color: #f1f1f1;
-            border-bottom: 1px solid #ddd;
+            background-color: #357ab7;
+            color: #fff;
         }
         nav ul {
             list-style: none;
             padding: 0;
             margin: 0;
-            display: flex;
-            justify-content: center;
         }
         nav ul li {
-            margin: 0 10px;
+            display: inline;
+            margin-right: 10px;
         }
         nav ul li a {
-            text-decoration: none;
-            color: #333;
-            padding: 10px;
-            display: block;
-        }
-        nav ul li a:hover {
-            background-color: #007BFF;
             color: #fff;
+            text-decoration: none;
         }
         main {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        .form-section, .attendees-section {
-            flex: 1;
-            margin: 10px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-        }
-        .form-section h2, .attendees-section h2 {
-            margin-top: 0;
-        }
-        .form-section form {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-section label {
-            margin-bottom: 5px;
-        }
-        .form-section input, .form-section select, .form-section textarea {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .form-section button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .form-section button:hover {
-            background-color: #0056b3;
-        }
-        .attendees-section ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .attendees-section li {
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: #f1f1f1;
-            border-radius: 4px;
-        }
-        .attendees-section li strong {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .attendees-section li span {
-            color: #777;
+            background-color: #e0e0e0;
+            min-height: 400px;
         }
         footer {
-            background-color: #007BFF;
+            background-color: #4a90e2;
             color: #fff;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timer {
+            font-size: 2em;
+            margin: 20px 0;
+        }
+        .controls button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            background-color: #4a90e2;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .controls button:hover {
+            background-color: #357ab7;
+        }
+        .sounds {
+            margin-top: 20px;
+        }
+        .sounds label {
+            display: block;
+            margin: 10px 0;
+        }
+        .sounds input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .progress {
             width: 100%;
+            height: 30px;
+            background-color: #ddd;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #4a90e2;
+            transition: width 0.5s;
         }
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background-color: #007BFF;
+            background-color: #4a90e2;
             color: #fff;
             padding: 10px;
             z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
-            outline: 2px solid #0056b3;
-        }
-        .error-message {
-            color: #ff0000;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        .success-message {
-            color: #008000;
-            font-weight: bold;
-            margin-top: 5px;
         }
         .hidden {
             display: none;
+        }
+        .aria-live {
+            position: absolute;
+            clip: rect(0 0 0 0);
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            border: 0;
         }
     </style>
 </head>
 <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <header>
-        <h1>Event RSVP</h1>
+        <h1>Meditation Timer</h1>
     </header>
     <nav aria-label="Main Navigation">
         <ul>
-            <li><a href="#form-section">RSVP Form</a></li>
-            <li><a href="#attendees-section">Attendees List</a></li>
+            <li><a href="#timer">Timer</a></li>
+            <li><a href="#sounds">Sounds</a></li>
+            <li><a href="#progress">Progress</a></li>
         </ul>
     </nav>
     <main id="main-content">
-        <section class="form-section" id="form-section">
-            <h2>RSVP Form</h2>
-            <form id="rsvp-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required aria-required="true" autocomplete="name">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
-                <label for="phone">Phone:</label>
-                <input type="tel" id="phone" name="phone" required aria-required="true" autocomplete="tel">
-                <label for="attendance">Will you attend?</label>
-                <select id="attendance" name="attendance" required aria-required="true">
-                    <option value="">Select an option</option>
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                </select>
-                <label for="comments">Comments:</label>
-                <textarea id="comments" name="comments" rows="4" cols="50" aria-describedby="comments-help"></textarea>
-                <span id="comments-help" class="hidden">Please provide any additional information or questions here.</span>
-                <button type="submit">Submit</button>
-                <div id="form-messages" class="hidden"></div>
-            </form>
+        <section id="timer">
+            <h2>Set Your Meditation Timer</h2>
+            <div class="timer" id="timer-display">00:00</div>
+            <div class="controls">
+                <button id="start-btn">Start</button>
+                <button id="pause-btn">Pause</button>
+                <button id="reset-btn">Reset</button>
+            </div>
         </section>
-        <section class="attendees-section" id="attendees-section">
-            <h2>Attendees List</h2>
-            <ul id="attendees-list">
-                <!-- Attendees will be dynamically added here -->
-            </ul>
+        <section id="sounds">
+            <h2>Choose Soothing Sounds</h2>
+            <label>
+                <input type="checkbox" id="nature-sounds" value="nature"> Nature Sounds
+            </label>
+            <label>
+                <input type="checkbox" id="ocean-waves" value="ocean"> Ocean Waves
+            </label>
+            <label>
+                <input type="checkbox" id="rainfall" value="rain"> Rainfall
+            </label>
+        </section>
+        <section id="progress">
+            <h2>Track Your Progress</h2>
+            <div class="progress">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="aria-live" aria-live="polite" aria-atomic="true" id="aria-live"></div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Event RSVP. All rights reserved.</p>
+        <p>&copy; 2023 Meditation Timer. All rights reserved.</p>
     </footer>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('rsvp-form');
-            const formMessages = document.getElementById('form-messages');
-            const attendeesList = document.getElementById('attendees-list');
-            const commentsHelp = document.getElementById('comments-help');
+            const timerDisplay = document.getElementById('timer-display');
+            const progressBar = document.getElementById('progress-bar');
+            const startBtn = document.getElementById('start-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const natureSounds = document.getElementById('nature-sounds');
+            const oceanWaves = document.getElementById('ocean-waves');
+            const rainfall = document.getElementById('rainfall');
+            const ariaLive = document.getElementById('aria-live');
 
-            form.addEventListener('submit', function(event) {
-                event.preventDefault();
-                formMessages.innerHTML = ''; // Clear previous messages
+            let time = 0;
+            let interval;
+            let isRunning = false;
 
-                const name = form.elements['name'].value.trim();
-                const email = form.elements['email'].value.trim();
-                const phone = form.elements['phone'].value.trim();
-                const attendance = form.elements['attendance'].value.trim();
-                const comments = form.elements['comments'].value.trim();
-
-                if (!name || !email || !phone || !attendance) {
-                    formMessages.innerHTML = '<div class="error-message">Please fill in all required fields.</div>';
-                    formMessages.classList.remove('hidden');
-                    return;
+            function startTimer() {
+                if (!isRunning) {
+                    interval = setInterval(() => {
+                        time++;
+                        updateTimerDisplay();
+                        updateProgressBar();
+                    }, 1000);
+                    isRunning = true;
+                    startBtn.setAttribute('aria-disabled', 'true');
+                    pauseBtn.removeAttribute('aria-disabled');
+                    resetBtn.removeAttribute('aria-disabled');
                 }
+            }
 
-                // Add attendee to the list
-                const attendeeItem = document.createElement('li');
-                attendeeItem.innerHTML = `
-                    <strong>${name}</strong>
-                    <span>Email: ${email}</span>
-                    <span>Phone: ${phone}</span>
-                    <span>Attendance: ${attendance}</span>
-                    <span>Comments: ${comments}</span>
-                `;
-                attendeesList.appendChild(attendeeItem);
+            function pauseTimer() {
+                if (isRunning) {
+                    clearInterval(interval);
+                    isRunning = false;
+                    startBtn.removeAttribute('aria-disabled');
+                    pauseBtn.setAttribute('aria-disabled', 'true');
+                }
+            }
 
-                // Clear form fields
-                form.reset();
+            function resetTimer() {
+                clearInterval(interval);
+                time = 0;
+                updateTimerDisplay();
+                updateProgressBar();
+                isRunning = false;
+                startBtn.removeAttribute('aria-disabled');
+                pauseBtn.setAttribute('aria-disabled', 'true');
+                resetBtn.setAttribute('aria-disabled', 'true');
+            }
 
-                // Show success message
-                formMessages.innerHTML = '<div class="success-message">Thank you for your RSVP!</div>';
-                formMessages.classList.remove('hidden');
-            });
+            function updateTimerDisplay() {
+                const minutes = Math.floor(time / 60);
+                const seconds = time % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
 
-            // Show help text for comments field
-            form.elements['comments'].addEventListener('focus', function() {
-                commentsHelp.classList.remove('hidden');
-            });
+            function updateProgressBar() {
+                const progress = (time / 600) * 100; // 600 seconds (10 minutes)
+                progressBar.style.width = `${progress}%`;
+                ariaLive.textContent = `Progress: ${progress.toFixed(2)}%`;
+            }
 
-            form.elements['comments'].addEventListener('blur', function() {
-                commentsHelp.classList.add('hidden');
-            });
+            startBtn.addEventListener('click', startTimer);
+            pauseBtn.addEventListener('click', pauseTimer);
+            resetBtn.addEventListener('click', resetTimer);
+
+            natureSounds.addEventListener('change', playSound);
+            oceanWaves.addEventListener('change', playSound);
+            rainfall.addEventListener('change', playSound);
+
+            function playSound(event) {
+                const sound = event.target.value;
+                const audio = new Audio(`sounds/${sound}.mp3`);
+                if (event.target.checked) {
+                    audio.play();
+                } else {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            }
         });
     </script>
 </body>
