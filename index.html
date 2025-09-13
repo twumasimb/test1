@@ -3,64 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Travel Map</title>
+    <title>Fitness Tracker</title>
     <style>
         /* Global Styles */
-        body {
-            font-family: Arial, sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         
-        .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 20px;
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
             background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         
-        .map-container {
-            position: relative;
-            height: 600px;
-            margin-bottom: 20px;
+        /* Header Styles */
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
         }
         
-        #map {
-            height: 100%;
-            width: 100%;
-            border: 1px solid #ddd;
+        /* Navigation Styles */
+        .nav {
+            background-color: #444;
+            padding: 1em;
+            text-align: center;
         }
         
-        .pin {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background-color: #007bff;
-            border-radius: 50%;
-            cursor: pointer;
+        .nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
         }
         
-        .pin:hover {
-            background-color: #0056b3;
+        .nav li {
+            display: inline-block;
+            margin-right: 20px;
         }
         
-        .info-window {
-            position: absolute;
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        /* Main Content Styles */
+        .main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2em;
+        }
+        
+        /* Form Styles */
+        .form {
             background-color: #fff;
-            padding: 10px;
+            padding: 1em;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         
-        .info-window .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 18px;
+        .form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .form input[type="text"], .form input[type="number"] {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .form button[type="submit"] {
+            width: 100%;
+            height: 40px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+        }
+        
+        /* Chart Styles */
+        .chart {
+            width: 100%;
+            height: 400px;
+            background-color: #fff;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Table Styles */
+        .table {
+            width: 100%;
+            background-color: #fff;
+            padding: 1em;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+            clear: both;
         }
         
         /* Accessibility Styles */
@@ -88,79 +153,56 @@
     </style>
 </head>
 <body>
-    <header>
-        <nav aria-label="Main Navigation">
-            <ul>
-                <li><a href="#map">Map</a></li>
-                <li><a href="#pins">Pins</a></li>
-            </ul>
-        </nav>
+    <header class="header" role="banner">
+        <h1>Fitness Tracker</h1>
     </header>
-    <main class="container">
-        <h1>Interactive Travel Map</h1>
-        <div class="map-container">
-            <div id="map" role="img" aria-label="Interactive Travel Map"></div>
-        </div>
-        <section id="pins">
-            <h2>Pins</h2>
-            <ul id="pin-list">
-                <!-- Pin list will be populated dynamically -->
-            </ul>
+    <nav class="nav" role="navigation">
+        <ul>
+            <li><a href="#main">Skip to main content</a></li>
+            <li><a href="#form">Log Workout</a></li>
+            <li><a href="#chart">View Progress</a></li>
+            <li><a href="#table">Workout History</a></li>
+        </ul>
+    </nav>
+    <main class="main" id="main" role="main">
+        <section class="form" id="form" role="region" aria-labelledby="form-heading">
+            <h2 id="form-heading">Log Workout</h2>
+            <form>
+                <label for="exercise-type">Exercise Type:</label>
+                <input type="text" id="exercise-type" name="exercise-type" required aria-required="true">
+                <label for="duration">Duration (minutes):</label>
+                <input type="number" id="duration" name="duration" required aria-required="true">
+                <label for="calories-burned">Calories Burned:</label>
+                <input type="number" id="calories-burned" name="calories-burned" required aria-required="true">
+                <button type="submit">Log Workout</button>
+            </form>
+        </section>
+        <section class="chart" id="chart" role="region" aria-labelledby="chart-heading">
+            <h2 id="chart-heading">View Progress</h2>
+            <canvas id="progress-chart" width="400" height="400" role="img" aria-label="Progress chart showing workout history"></canvas>
+        </section>
+        <section class="table" id="table" role="region" aria-labelledby="table-heading">
+            <h2 id="table-heading">Workout History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Exercise Type</th>
+                        <th>Duration (minutes)</th>
+                        <th>Calories Burned</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table data will be populated here -->
+                </tbody>
+            </table>
         </section>
     </main>
+    <footer class="footer" role="contentinfo">
+        <p>&copy; 2023 Fitness Tracker</p>
+    </footer>
     <script>
-        // Map and pin data
-        const mapData = {
-            center: { lat: 37.7749, lng: -122.4194 },
-            zoom: 12,
-            pins: [
-                { id: 1, lat: 37.7859, lng: -122.4364, title: "Pin 1" },
-                { id: 2, lat: 37.7963, lng: -122.4056, title: "Pin 2" },
-                // Add more pins here...
-            ],
-        };
-        
-        // Initialize map and pins
-        function initMap() {
-            const map = new google.maps.Map(document.getElementById("map"), {
-                center: mapData.center,
-                zoom: mapData.zoom,
-            });
-            
-            mapData.pins.forEach((pin) => {
-                const pinElement = document.createElement("div");
-                pinElement.className = "pin";
-                pinElement.title = pin.title;
-                pinElement.setAttribute("aria-label", pin.title);
-                pinElement.setAttribute("role", "button");
-                
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `<div class="info-window"><h3>${pin.title}</h3><p>This is a sample info window.</p><button class="close" aria-label="Close Info Window">&times;</button></div>`,
-                });
-                
-                google.maps.event.addListener(pinElement, "click", () => {
-                    infoWindow.open(map, pinElement);
-                });
-                
-                map.controls[google.maps.ControlPosition.TOP_CENTER].push(pinElement);
-            });
-        }
-        
-        // Add pins to list
-        function addPinsToList() {
-            const pinList = document.getElementById("pin-list");
-            
-            mapData.pins.forEach((pin) => {
-                const pinListItem = document.createElement("li");
-                pinListItem.textContent = pin.title;
-                pinList.appendChild(pinListItem);
-            });
-        }
-        
-        // Initialize map and add pins to list
-        initMap();
-        addPinsToList();
+        // JavaScript code will be added here
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </body>
 </html>
