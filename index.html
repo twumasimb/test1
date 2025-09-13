@@ -3,179 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible User Profile Page</title>
+    <title>Interactive Travel Map</title>
     <style>
         /* Global Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
         }
         
-        /* Header Styles */
-        .header {
-            background-color: #333;
-            color: #fff;
-            padding: 1em;
-            text-align: center;
-        }
-        
-        /* Navigation Styles */
-        .nav {
-            background-color: #444;
-            padding: 1em;
-            text-align: center;
-        }
-        
-        .nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        .nav li {
-            display: inline-block;
-            margin-right: 20px;
-        }
-        
-        .nav a {
-            color: #fff;
-            text-decoration: none;
-        }
-        
-        /* Main Content Styles */
-        .main {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2em;
-        }
-        
-        /* Profile Card Styles */
-        .profile-card {
-            background-color: #fff;
-            padding: 2em;
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
             border: 1px solid #ddd;
-            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         
-        /* Avatar Gallery Styles */
-        .avatar-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        .map-container {
+            position: relative;
+            height: 600px;
+            margin-bottom: 20px;
         }
         
-        .avatar-gallery img {
-            width: 100px;
-            height: 100px;
-            margin: 10px;
+        #map {
+            height: 100%;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+        
+        .pin {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #007bff;
             border-radius: 50%;
-        }
-        
-        /* Follow Button Styles */
-        .follow-button {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
             cursor: pointer;
         }
         
-        .follow-button:hover {
-            background-color: #444;
+        .pin:hover {
+            background-color: #0056b3;
         }
         
-        /* Social Media Links Styles */
-        .social-media-links {
-            list-style: none;
-            margin: 0;
+        .info-window {
+            position: absolute;
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-window .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        /* Accessibility Styles */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
             padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
         
-        .social-media-links li {
-            display: inline-block;
-            margin-right: 20px;
-        }
-        
-        .social-media-links a {
-            color: #333;
-            text-decoration: none;
-        }
-        
-        /* Footer Styles */
-        .footer {
-            background-color: #333;
-            color: #fff;
-            padding: 1em;
-            text-align: center;
-            clear: both;
-        }
-        
-        /* Enhanced Focus Indicators */
-        :focus {
-            outline: 2px solid #333;
-            outline-offset: 2px;
+        .sr-only-focusable:active, .sr-only-focusable:focus {
+            position: static;
+            width: auto;
+            height: auto;
+            margin: 0;
+            overflow: visible;
+            clip: auto;
+            white-space: normal;
         }
     </style>
 </head>
 <body>
-    <header class="header" role="banner">
-        <h1>Accessible User Profile Page</h1>
+    <header>
+        <nav aria-label="Main Navigation">
+            <ul>
+                <li><a href="#map">Map</a></li>
+                <li><a href="#pins">Pins</a></li>
+            </ul>
+        </nav>
     </header>
-    <nav class="nav" role="navigation" aria-label="Main Navigation">
-        <ul>
-            <li><a href="#profile">Profile</a></li>
-            <li><a href="#avatar-gallery">Avatar Gallery</a></li>
-            <li><a href="#follow-button">Follow Button</a></li>
-            <li><a href="#social-media-links">Social Media Links</a></li>
-        </ul>
-    </nav>
-    <main class="main" role="main">
-        <section id="profile" class="profile-card" aria-labelledby="profile-heading">
-            <h2 id="profile-heading">Profile</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
-        </section>
-        <section id="avatar-gallery" class="avatar-gallery" aria-labelledby="avatar-gallery-heading">
-            <h2 id="avatar-gallery-heading">Avatar Gallery</h2>
-            <img src="avatar1.jpg" alt="Avatar 1" aria-describedby="avatar1-description">
-            <img src="avatar2.jpg" alt="Avatar 2" aria-describedby="avatar2-description">
-            <img src="avatar3.jpg" alt="Avatar 3" aria-describedby="avatar3-description">
-            <p id="avatar1-description">Avatar 1 description</p>
-            <p id="avatar2-description">Avatar 2 description</p>
-            <p id="avatar3-description">Avatar 3 description</p>
-        </section>
-        <section id="follow-button" class="follow-button-container" aria-labelledby="follow-button-heading">
-            <h2 id="follow-button-heading">Follow Button</h2>
-            <button class="follow-button" aria-label="Follow">Follow</button>
-        </section>
-        <section id="social-media-links" class="social-media-links-container" aria-labelledby="social-media-links-heading">
-            <h2 id="social-media-links-heading">Social Media Links</h2>
-            <ul class="social-media-links">
-                <li><a href="#" aria-label="Facebook">Facebook</a></li>
-                <li><a href="#" aria-label="Twitter">Twitter</a></li>
-                <li><a href="#" aria-label="Instagram">Instagram</a></li>
+    <main class="container">
+        <h1>Interactive Travel Map</h1>
+        <div class="map-container">
+            <div id="map" role="img" aria-label="Interactive Travel Map"></div>
+        </div>
+        <section id="pins">
+            <h2>Pins</h2>
+            <ul id="pin-list">
+                <!-- Pin list will be populated dynamically -->
             </ul>
         </section>
     </main>
-    <footer class="footer" role="contentinfo">
-        <p>&copy; 2023 Accessible User Profile Page</p>
-    </footer>
     <script>
-        // Enhanced focus management
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Tab') {
-                document.body.classList.add('focus-outline');
-            }
-        });
+        // Map and pin data
+        const mapData = {
+            center: { lat: 37.7749, lng: -122.4194 },
+            zoom: 12,
+            pins: [
+                { id: 1, lat: 37.7859, lng: -122.4364, title: "Pin 1" },
+                { id: 2, lat: 37.7963, lng: -122.4056, title: "Pin 2" },
+                // Add more pins here...
+            ],
+        };
         
-        document.addEventListener('click', function(event) {
-            document.body.classList.remove('focus-outline');
-        });
+        // Initialize map and pins
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: mapData.center,
+                zoom: mapData.zoom,
+            });
+            
+            mapData.pins.forEach((pin) => {
+                const pinElement = document.createElement("div");
+                pinElement.className = "pin";
+                pinElement.title = pin.title;
+                pinElement.setAttribute("aria-label", pin.title);
+                pinElement.setAttribute("role", "button");
+                
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `<div class="info-window"><h3>${pin.title}</h3><p>This is a sample info window.</p><button class="close" aria-label="Close Info Window">&times;</button></div>`,
+                });
+                
+                google.maps.event.addListener(pinElement, "click", () => {
+                    infoWindow.open(map, pinElement);
+                });
+                
+                map.controls[google.maps.ControlPosition.TOP_CENTER].push(pinElement);
+            });
+        }
+        
+        // Add pins to list
+        function addPinsToList() {
+            const pinList = document.getElementById("pin-list");
+            
+            mapData.pins.forEach((pin) => {
+                const pinListItem = document.createElement("li");
+                pinListItem.textContent = pin.title;
+                pinList.appendChild(pinListItem);
+            });
+        }
+        
+        // Initialize map and add pins to list
+        initMap();
+        addPinsToList();
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </body>
 </html>
