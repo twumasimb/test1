@@ -3,27 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Travel Map</title>
+    <title>Fitness Tracker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
-            line-height: 1.5;
-            font-size: 16px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
         header {
             background-color: #007BFF;
             color: #fff;
-            padding: 1rem;
+            padding: 20px 0;
             text-align: center;
         }
         nav {
             background-color: #333;
             color: #fff;
-            padding: 0.5rem;
+            padding: 10px 0;
         }
         nav ul {
             list-style: none;
@@ -33,87 +37,56 @@
             justify-content: center;
         }
         nav ul li {
-            margin: 0 1rem;
+            margin: 0 15px;
         }
         nav ul li a {
             color: #fff;
             text-decoration: none;
-            padding: 0.5rem;
-        }
-        nav ul li a:hover {
-            background-color: #555;
-            border-radius: 4px;
+            font-weight: bold;
         }
         main {
-            padding: 2rem;
+            margin-top: 20px;
         }
-        .map-container {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            background-color: #e0e0e0;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            overflow: hidden;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .map {
-            width: 100%;
-            height: 100%;
-        }
-        .pin-form {
-            margin-top: 2rem;
-        }
-        .pin-form label {
+        .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
-        .pin-form input,
-        .pin-form textarea {
+        .form-group input,
+        .form-group select {
             width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-        .pin-form button {
+        .form-group button {
             background-color: #007BFF;
             color: #fff;
-            padding: 0.5rem 1rem;
+            padding: 10px 20px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
-        .pin-form button:hover {
+        .form-group button:hover {
             background-color: #0056b3;
         }
-        .pins-list {
-            margin-top: 2rem;
-            list-style: none;
-            padding: 0;
+        .progress-chart {
+            margin-top: 20px;
         }
-        .pins-list li {
-            background-color: #fff;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+        .progress-chart canvas {
+            max-width: 100%;
+            height: auto;
         }
-        .pins-list li h3 {
-            margin-top: 0;
-        }
-        .pins-list li p {
-            margin: 0.5rem 0;
-        }
-        .pins-list li button {
-            background-color: #ff4d4d;
+        footer {
+            background-color: #333;
             color: #fff;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .pins-list li button:hover {
-            background-color: #c40000;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
         }
         .skip-link {
             position: absolute;
@@ -121,248 +94,126 @@
             left: 0;
             background-color: #007BFF;
             color: #fff;
-            padding: 0.5rem;
-            text-decoration: none;
-            border-radius: 4px;
+            padding: 10px;
+            z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
-            outline: 2px solid #0056b3;
+        }
+        .error {
+            color: #ff0000;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .success {
+            color: #008000;
+            font-weight: bold;
+            margin-top: 5px;
         }
         .hidden {
             display: none;
         }
-        .visible {
-            display: block;
-        }
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 600px;
-            width: 90%;
-            position: relative;
-        }
-        .modal-content h2 {
-            margin-top: 0;
-        }
-        .modal-content p {
-            margin: 1rem 0;
-        }
-        .modal-content button {
-            background-color: #007BFF;
-            color: #fff;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .modal-content button:hover {
-            background-color: #0056b3;
-        }
-        .modal-content button.close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #ff4d4d;
-            color: #fff;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .modal-content button.close:hover {
-            background-color: #c40000;
-        }
-        .error-message {
-            color: #ff4d4d;
-            margin-top: 0.5rem;
-        }
-        .success-message {
-            color: #28a745;
-            margin-top: 0.5rem;
-        }
-        .loading {
-            text-align: center;
-            margin-top: 2rem;
-        }
-        .loading::before {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 4px solid #007BFF;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .loading::before {
-                animation: none;
-            }
-        }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
+    <a class="skip-link" href="#main-content" tabindex="0">Skip to main content</a>
     <header>
-        <h1>Interactive Travel Map</h1>
+        <h1>Fitness Tracker</h1>
     </header>
     <nav aria-label="Main Navigation">
         <ul>
-            <li><a href="#add-pin">Add Pin</a></li>
-            <li><a href="#pins-list">View Pins</a></li>
+            <li><a href="#add-exercise">Add Exercise</a></li>
+            <li><a href="#progress-chart">Progress Chart</a></li>
         </ul>
     </nav>
-    <main id="main-content" tabindex="-1">
-        <section id="map-section">
-            <h2>Travel Map</h2>
-            <div class="map-container">
-                <div class="map" id="map"></div>
-            </div>
-        </section>
-        <section id="add-pin">
-            <h2>Add a Pin</h2>
-            <form class="pin-form" id="pin-form">
-                <label for="location">Location:</label>
-                <input type="text" id="location" name="location" required aria-required="true">
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" required aria-required="true"></textarea>
-                <button type="submit">Add Pin</button>
+    <main id="main-content">
+        <section id="add-exercise">
+            <h2>Add Exercise</h2>
+            <form id="exercise-form">
+                <div class="form-group">
+                    <label for="exercise-type">Exercise Type</label>
+                    <select id="exercise-type" name="exercise-type" required aria-required="true">
+                        <option value="">Select Exercise Type</option>
+                        <option value="running">Running</option>
+                        <option value="cycling">Cycling</option>
+                        <option value="swimming">Swimming</option>
+                        <option value="weightlifting">Weightlifting</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="duration">Duration (minutes)</label>
+                    <input type="number" id="duration" name="duration" min="1" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="calories-burned">Calories Burned</label>
+                    <input type="number" id="calories-burned" name="calories-burned" min="1" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <button type="submit">Add Exercise</button>
+                </div>
+                <div class="form-group hidden" id="form-status"></div>
             </form>
-            <div class="error-message" id="error-message" aria-live="assertive" aria-atomic="true" role="alert" aria-hidden="true"></div>
-            <div class="success-message" id="success-message" aria-live="assertive" aria-atomic="true" role="alert" aria-hidden="true"></div>
         </section>
-        <section id="pins-list">
-            <h2>Your Pins</h2>
-            <ul class="pins-list" id="pins-list"></ul>
+        <section id="progress-chart">
+            <h2>Progress Chart</h2>
+            <canvas id="progress-chart-canvas"></canvas>
         </section>
     </main>
     <footer>
-        <p>&copy; 2023 Interactive Travel Map. All rights reserved.</p>
+        <p>&copy; 2023 Fitness Tracker. All rights reserved.</p>
     </footer>
-    <div class="modal" id="pin-modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
-        <div class="modal-content">
-            <h2 id="modal-title">Pin Details</h2>
-            <p id="modal-description"></p>
-            <button class="close" id="close-modal">Close</button>
-        </div>
-    </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const map = document.getElementById('map');
-            const pinForm = document.getElementById('pin-form');
-            const locationInput = document.getElementById('location');
-            const descriptionInput = document.getElementById('description');
-            const pinsList = document.getElementById('pins-list');
-            const errorMessage = document.getElementById('error-message');
-            const successMessage = document.getElementById('success-message');
-            const pinModal = document.getElementById('pin-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalDescription = document.getElementById('modal-description');
-            const closeModalButton = document.getElementById('close-modal');
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('exercise-form');
+            const formStatus = document.getElementById('form-status');
+            const chartCanvas = document.getElementById('progress-chart-canvas');
+            const chartData = {
+                labels: [],
+                datasets: [{
+                    label: 'Calories Burned',
+                    data: [],
+                    backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 1
+                }]
+            };
 
-            let pins = [];
+            const chart = new Chart(chartCanvas, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
 
-            function addPin(location, description) {
-                const pin = {
-                    id: Date.now(),
-                    location,
-                    description
-                };
-                pins.push(pin);
-                renderPins();
-                successMessage.textContent = 'Pin added successfully!';
-                successMessage.classList.remove('hidden');
-                setTimeout(() => {
-                    successMessage.classList.add('hidden');
-                }, 3000);
-            }
-
-            function renderPins() {
-                pinsList.innerHTML = '';
-                pins.forEach(pin => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <h3>${pin.location}</h3>
-                        <p>${pin.description}</p>
-                        <button class="view-pin" data-id="${pin.id}">View Pin</button>
-                        <button class="delete-pin" data-id="${pin.id}">Delete Pin</button>
-                    `;
-                    pinsList.appendChild(li);
-                });
-                document.querySelectorAll('.view-pin').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const pinId = this.getAttribute('data-id');
-                        const pin = pins.find(p => p.id === parseInt(pinId));
-                        modalTitle.textContent = pin.location;
-                        modalDescription.textContent = pin.description;
-                        pinModal.style.display = 'flex';
-                        pinModal.setAttribute('aria-hidden', 'false');
-                        pinModal.setAttribute('aria-modal', 'true');
-                        pinModal.setAttribute('tabindex', '0');
-                        pinModal.focus();
-                    });
-                });
-                document.querySelectorAll('.delete-pin').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const pinId = this.getAttribute('data-id');
-                        pins = pins.filter(p => p.id !== parseInt(pinId));
-                        renderPins();
-                    });
-                });
-            }
-
-            pinForm.addEventListener('submit', function (event) {
+            form.addEventListener('submit', function(event) {
                 event.preventDefault();
-                const location = locationInput.value.trim();
-                const description = descriptionInput.value.trim();
-                if (location && description) {
-                    addPin(location, description);
-                    locationInput.value = '';
-                    descriptionInput.value = '';
+                formStatus.innerHTML = '';
+                formStatus.classList.add('hidden');
+
+                const exerciseType = document.getElementById('exercise-type').value;
+                const duration = document.getElementById('duration').value;
+                const caloriesBurned = document.getElementById('calories-burned').value;
+
+                if (exerciseType && duration && caloriesBurned) {
+                    chartData.labels.push(exerciseType);
+                    chartData.datasets[0].data.push(caloriesBurned);
+                    chart.update();
+
+                    formStatus.innerHTML = 'Exercise added successfully!';
+                    formStatus.classList.remove('error');
+                    formStatus.classList.add('success');
+                    formStatus.classList.remove('hidden');
                 } else {
-                    errorMessage.textContent = 'Please fill in both location and description.';
-                    errorMessage.classList.remove('hidden');
-                    setTimeout(() => {
-                        errorMessage.classList.add('hidden');
-                    }, 3000);
+                    formStatus.innerHTML = 'Please fill in all fields.';
+                    formStatus.classList.remove('success');
+                    formStatus.classList.add('error');
+                    formStatus.classList.remove('hidden');
                 }
-            });
-
-            closeModalButton.addEventListener('click', function () {
-                pinModal.style.display = 'none';
-                pinModal.setAttribute('aria-hidden', 'true');
-                pinModal.removeAttribute('aria-modal');
-                pinModal.removeAttribute('tabindex');
-            });
-
-            document.addEventListener('keydown', function (event) {
-                if (event.key === 'Escape' && !pinModal.getAttribute('aria-hidden')) {
-                    closeModalButton.click();
-                }
-            });
-
-            document.querySelectorAll('.skip-link').forEach(link => {
-                link.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    document.getElementById('main-content').focus();
-                });
             });
         });
     </script>
