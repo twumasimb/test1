@@ -3,255 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco-Friendly Products</title>
+    <title>Accessible Interactive Form</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             line-height: 1.5;
             color: #333;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
-        }
-        header {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 1rem;
-            text-align: center;
-        }
-        nav {
-            background-color: #333;
-            padding: 0.5rem;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-        nav ul li {
-            margin: 0 1rem;
-        }
-        nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            padding: 0.5rem;
-        }
-        nav ul li a:hover {
-            background-color: #555;
-        }
-        main {
-            padding: 2rem;
         }
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
+            padding: 20px;
         }
-        .filter-options {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-        .filter-options label {
-            margin-right: 1rem;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        .product-card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        .product-card:hover {
-            transform: scale(1.05);
-        }
-        .product-card img {
-            width: 100%;
-            height: auto;
-        }
-        .product-card h3 {
-            font-size: 1.2rem;
-            margin: 0.5rem;
-        }
-        .product-card p {
-            margin: 0.5rem;
-        }
-        .product-card button {
-            display: block;
-            width: 100%;
-            padding: 0.5rem;
-            background-color: #4CAF50;
+        header {
+            background-color: #007BFF;
             color: #fff;
-            border: none;
-            border-radius: 0 0 5px 5px;
-            cursor: pointer;
-        }
-        .product-card button:hover {
-            background-color: #45a049;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
+            padding: 10px 0;
             text-align: center;
-            padding: 1rem;
-            margin-top: 2rem;
+        }
+        main {
+            margin-top: 20px;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input:focus, textarea:focus {
+            outline: 2px solid #007BFF;
+            border-color: #007BFF;
+        }
+        .error {
+            color: #FF0000;
+            font-size: 14px;
+            margin-top: -15px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .success {
+            color: #28a745;
+            font-size: 16px;
+            margin-top: 20px;
         }
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background-color: #4CAF50;
+            background-color: #007BFF;
             color: #fff;
-            padding: 0.5rem;
-            z-index: 100;
+            padding: 10px;
+            z-index: 1000;
         }
         .skip-link:focus {
             top: 0;
-            outline: none;
-        }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            margin: -1px;
-            padding: 0;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-        .sr-only:focus {
-            position: static;
-            width: auto;
-            height: auto;
-            margin: 0;
-            padding: 0.25rem;
-            overflow: visible;
-            clip: auto;
-        }
-        .aria-live-region {
-            position: absolute;
-            clip: rect(0 0 0 0);
-            width: 1px;
-            height: 1px;
-            margin: -1px;
-            padding: 0;
-            overflow: hidden;
-            border: 0;
         }
     </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a class="skip-link" href="#main-content" tabindex="0">Skip to main content</a>
     <header>
-        <h1>Eco-Friendly Products</h1>
+        <h1>Accessible Interactive Form</h1>
     </header>
-    <nav aria-label="Main Navigation">
-        <ul>
-            <li><a href="#all">All</a></li>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#personal-care">Personal Care</a></li>
-            <li><a href="#kitchen">Kitchen</a></li>
-            <li><a href="#garden">Garden</a></li>
-        </ul>
-    </nav>
-    <main id="main-content">
-        <div class="container">
-            <div class="filter-options">
-                <label for="category">Category:</label>
-                <select id="category" aria-label="Filter by category">
-                    <option value="all">All</option>
-                    <option value="home">Home</option>
-                    <option value="personal-care">Personal Care</option>
-                    <option value="kitchen">Kitchen</option>
-                    <option value="garden">Garden</option>
-                </select>
-                <label for="sort">Sort by:</label>
-                <select id="sort" aria-label="Sort by">
-                    <option value="price">Price</option>
-                    <option value="popularity">Popularity</option>
-                </select>
-            </div>
-            <div class="product-grid" id="product-grid">
-                <!-- Product Cards will be dynamically generated here -->
-            </div>
-        </div>
+    <main id="main-content" tabindex="-1">
+        <form id="registration-form">
+            <fieldset>
+                <legend>Personal Information</legend>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required aria-required="true" aria-describedby="name-error" autocomplete="name">
+                <span id="name-error" class="error" role="alert" aria-live="assertive" aria-atomic="true"></span>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required aria-required="true" aria-describedby="email-error" autocomplete="email">
+                <span id="email-error" class="error" role="alert" aria-live="assertive" aria-atomic="true"></span>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required aria-required="true" aria-describedby="password-error" autocomplete="new-password">
+                <span id="password-error" class="error" role="alert" aria-live="assertive" aria-atomic="true"></span>
+
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required aria-required="true" aria-describedby="phone-error" autocomplete="tel">
+                <span id="phone-error" class="error" role="alert" aria-live="assertive" aria-atomic="true"></span>
+
+                <button type="submit">Submit</button>
+            </fieldset>
+        </form>
+        <div id="success-message" class="success" role="status" aria-live="assertive" aria-atomic="true" hidden></div>
     </main>
-    <footer>
-        <p>&copy; 2023 Eco-Friendly Products. All rights reserved.</p>
-    </footer>
-    <div class="aria-live-region" aria-live="polite" aria-atomic="true"></div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const products = [
-                { id: 1, name: 'Eco-Friendly Reusable Bags', category: 'home', price: 15.99, image: 'images/bags.jpg', description: 'Durable and reusable bags for grocery shopping.' },
-                { id: 2, name: 'Bamboo Toothbrush', category: 'personal-care', price: 4.99, image: 'images/toothbrush.jpg', description: 'Eco-friendly toothbrush made from bamboo.' },
-                { id: 3, name: 'Stainless Steel Straws', category: 'kitchen', price: 9.99, image: 'images/straws.jpg', description: 'Set of 4 reusable stainless steel straws with cleaning brush.' },
-                { id: 4, name: 'Organic Cotton Towels', category: 'home', price: 24.99, image: 'images/towels.jpg', description: 'Soft and absorbent organic cotton towels.' },
-                { id: 5, name: 'Biodegradable Cleaning Wipes', category: 'kitchen', price: 7.99, image: 'images/wipes.jpg', description: 'Eco-friendly cleaning wipes made from biodegradable materials.' },
-                { id: 6, name: 'Eco-Friendly Planters', category: 'garden', price: 12.99, image: 'images/planters.jpg', description: 'Set of 3 planters made from recycled materials.' },
-                { id: 7, name: 'Eco-Friendly Shampoo Bars', category: 'personal-care', price: 8.99, image: 'images/shampoo.jpg', description: 'Shampoo bars that reduce plastic waste.' },
-                { id: 8, name: 'Eco-Friendly Dish Soap', category: 'kitchen', price: 6.99, image: 'images/dish-soap.jpg', description: 'Concentrated dish soap in a reusable bottle.' },
-                { id: 9, name: 'Eco-Friendly Laundry Detergent', category: 'home', price: 14.99, image: 'images/laundry.jpg', description: 'Biodegradable laundry detergent in a compostable package.' },
-                { id: 10, name: 'Eco-Friendly Compost Bin', category: 'garden', price: 29.99, image: 'images/compost.jpg', description: 'Compost bin made from recycled plastic.' }
-            ];
+            const form = document.getElementById('registration-form');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const phoneInput = document.getElementById('phone');
+            const nameError = document.getElementById('name-error');
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            const phoneError = document.getElementById('phone-error');
+            const successMessage = document.getElementById('success-message');
 
-            const productGrid = document.getElementById('product-grid');
-            const categorySelect = document.getElementById('category');
-            const sortSelect = document.getElementById('sort');
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                clearErrors();
+                let isValid = true;
 
-            function renderProducts(filteredProducts) {
-                productGrid.innerHTML = '';
-                filteredProducts.forEach(product => {
-                    const productCard = document.createElement('div');
-                    productCard.className = 'product-card';
-                    productCard.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
-                        <h3>${product.name}</h3>
-                        <p>Price: $${product.price.toFixed(2)}</p>
-                        <button class="quick-view" aria-label="Quick view ${product.name}" data-id="${product.id}">Quick View</button>
-                        <div class="sr-only" id="product-${product.id}-description">${product.description}</div>
-                    `;
-                    productGrid.appendChild(productCard);
-                });
-            }
-
-            function filterProducts() {
-                const selectedCategory = categorySelect.value;
-                const filteredProducts = products.filter(product => selectedCategory === 'all' || product.category === selectedCategory);
-                renderProducts(filteredProducts);
-            }
-
-            function sortProducts() {
-                const selectedSort = sortSelect.value;
-                let sortedProducts = [...products];
-                if (selectedSort === 'price') {
-                    sortedProducts.sort((a, b) => a.price - b.price);
-                } else if (selectedSort === 'popularity') {
-                    sortedProducts.sort((a, b) => b.popularity - a.popularity);
+                if (!nameInput.value) {
+                    nameError.textContent = 'Name is required.';
+                    nameInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
                 }
-                renderProducts(sortedProducts);
-            }
 
-            categorySelect.addEventListener('change', filterProducts);
-            sortSelect.addEventListener('change', sortProducts);
+                if (!emailInput.value || !validateEmail(emailInput.value)) {
+                    emailError.textContent = 'Valid email is required.';
+                    emailInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                }
 
-            document.addEventListener('click', function(event) {
-                if (event.target.classList.contains('quick-view')) {
-                    const productId = event.target.dataset.id;
-                    const product = products.find(p => p.id === parseInt(productId));
-                    const liveRegion = document.querySelector('.aria-live-region');
-                    liveRegion.textContent = `Quick view: ${product.name} - ${product.description}`;
+                if (!passwordInput.value || passwordInput.value.length < 8) {
+                    passwordError.textContent = 'Password must be at least 8 characters long.';
+                    passwordInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                }
+
+                if (!phoneInput.value || !validatePhone(phoneInput.value)) {
+                    phoneError.textContent = 'Valid phone number is required.';
+                    phoneInput.setAttribute('aria-invalid', 'true');
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    successMessage.textContent = 'Form submitted successfully!';
+                    successMessage.hidden = false;
+                    form.reset();
                 }
             });
 
-            renderProducts(products);
+            function clearErrors() {
+                nameError.textContent = '';
+                emailError.textContent = '';
+                passwordError.textContent = '';
+                phoneError.textContent = '';
+                nameInput.removeAttribute('aria-invalid');
+                emailInput.removeAttribute('aria-invalid');
+                passwordInput.removeAttribute('aria-invalid');
+                phoneInput.removeAttribute('aria-invalid');
+            }
+
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            function validatePhone(phone) {
+                const re = /^\d{10}$/;
+                return re.test(phone);
+            }
         });
     </script>
 </body>
