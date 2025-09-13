@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Music Player</title>
+    <title>Accessible Single-Page Application</title>
     <style>
         /* Global Styles */
         body {
@@ -20,74 +20,72 @@
             padding: 20px;
             background-color: #fff;
             border: 1px solid #ddd;
-            border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         
-        /* Music Player Styles */
-        .music-player {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .music-player audio {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-        
-        .music-player .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .music-player .controls button {
-            margin: 0 10px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50;
+        /* Navigation Styles */
+        nav {
+            background-color: #333;
             color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        nav a {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        /* Form Styles */
+        form {
+            margin-top: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        
+        button[type="submit"] {
+            width: 100%;
+            height: 40px;
+            background-color: #333;
+            color: #fff;
+            border: none;
             cursor: pointer;
         }
         
-        .music-player .controls button:hover {
-            background-color: #3e8e41;
-        }
-        
-        /* Playlist Styles */
-        .playlist {
+        /* Dashboard Styles */
+        .dashboard {
             margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         
-        .playlist ul {
+        .dashboard h2 {
+            margin-top: 0;
+        }
+        
+        /* Task List Styles */
+        .task-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
         
-        .playlist li {
+        .task-list li {
             padding: 10px;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #ccc;
         }
         
-        .playlist li:last-child {
+        .task-list li:last-child {
             border-bottom: none;
-        }
-        
-        .playlist li a {
-            text-decoration: none;
-            color: #333;
-        }
-        
-        .playlist li a:hover {
-            color: #4CAF50;
         }
         
         /* Accessibility Styles */
@@ -103,82 +101,70 @@
             border: 0;
         }
         
-        .sr-only-focusable:active,
-        .sr-only-focusable:focus {
+        .sr-only-focusable:active, .sr-only-focusable:focus {
             position: static;
             width: auto;
             height: auto;
             margin: 0;
             overflow: visible;
-            clip: auto;
             white-space: normal;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Accessible Music Player</h1>
-        <div class="music-player">
-            <audio id="audio" src="music.mp3" type="audio/mp3" controls></audio>
-            <div class="controls">
-                <button id="play-pause">Play/Pause</button>
-                <button id="stop">Stop</button>
-                <button id="volume-up">Volume Up</button>
-                <button id="volume-down">Volume Down</button>
-            </div>
-        </div>
-        <div class="playlist">
-            <h2>Playlist</h2>
+    <header>
+        <nav aria-label="Main Navigation">
             <ul>
-                <li><a href="music1.mp3">Song 1</a></li>
-                <li><a href="music2.mp3">Song 2</a></li>
-                <li><a href="music3.mp3">Song 3</a></li>
+                <li><a href="#main">Skip to main content</a></li>
+                <li><a href="#login">Login</a></li>
+                <li><a href="#dashboard">Dashboard</a></li>
             </ul>
-        </div>
-    </div>
+        </nav>
+    </header>
+    <main id="main" class="container">
+        <h1>Welcome to the Accessible Single-Page Application</h1>
+        <section id="login">
+            <h2>Login</h2>
+            <form>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required aria-required="true">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required aria-required="true">
+                <button type="submit">Login</button>
+            </form>
+        </section>
+        <section id="dashboard" class="dashboard">
+            <h2>Dashboard</h2>
+            <p>Welcome to your dashboard!</p>
+            <ul class="task-list">
+                <li>
+                    <h3>Task 1</h3>
+                    <p>This is task 1.</p>
+                </li>
+                <li>
+                    <h3>Task 2</h3>
+                    <p>This is task 2.</p>
+                </li>
+                <li>
+                    <h3>Task 3</h3>
+                    <p>This is task 3.</p>
+                </li>
+            </ul>
+        </section>
+    </main>
     <script>
-        // Get audio element and buttons
-        const audio = document.getElementById('audio');
-        const playPauseButton = document.getElementById('play-pause');
-        const stopButton = document.getElementById('stop');
-        const volumeUpButton = document.getElementById('volume-up');
-        const volumeDownButton = document.getElementById('volume-down');
-        
-        // Add event listeners to buttons
-        playPauseButton.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                playPauseButton.textContent = 'Pause';
-            } else {
-                audio.pause();
-                playPauseButton.textContent = 'Play';
-            }
+        // Add event listener to login form submission
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Add authentication logic here
+            console.log('Login form submitted!');
         });
         
-        stopButton.addEventListener('click', () => {
-            audio.pause();
-            audio.currentTime = 0;
-            playPauseButton.textContent = 'Play';
-        });
-        
-        volumeUpButton.addEventListener('click', () => {
-            audio.volume += 0.1;
-        });
-        
-        volumeDownButton.addEventListener('click', () => {
-            audio.volume -= 0.1;
-        });
-        
-        // Add keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === ' ') {
-                playPauseButton.click();
-            } else if (e.key === 's') {
-                stopButton.click();
-            } else if (e.key === '+') {
-                volumeUpButton.click();
-            } else if (e.key === '-') {
-                volumeDownButton.click();
+        // Add event listener to dashboard task list
+        document.querySelector('.task-list').addEventListener('click', (e) => {
+            if (e.target.tagName === 'H3') {
+                // Add task selection logic here
+                console.log(`Task ${e.target.textContent} selected!`);
             }
         });
     </script>
