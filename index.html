@@ -1,1200 +1,1544 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Music Player - Listen to your favorite tracks</title>
-    <style>
-        /* CSS Reset and Base Styles */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            /* Color variables with high contrast ratios */
-            --primary-color: #0056b3;
-            --primary-dark: #003a75;
-            --secondary-color: #6c0f8a;
-            --text-color: #121212;
-            --background-color: #f8f9fa;
-            --light-color: #ffffff;
-            --accent-color: #d94e0f;
-            --accent-dark: #a53a0a;
-            --error-color: #c70000;
-            --success-color: #006400;
-            --focus-color: #0056b3;
-            --focus-outline: 3px solid #0056b3;
-            
-            /* Typography */
-            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            --font-size-base: 1rem;
-            --line-height: 1.5;
-        }
-
-        /* Respect user's motion preferences */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.001ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
-        body {
-            font-family: var(--font-family);
-            font-size: var(--font-size-base);
-            line-height: var(--line-height);
-            color: var(--text-color);
-            background-color: var(--background-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Enhanced focus styles for all interactive elements */
-        a:focus, button:focus, input:focus, select:focus, [tabindex]:focus {
-            outline: var(--focus-outline);
-            outline-offset: 2px;
-            box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.25);
-            border-radius: 2px;
-            z-index: 1;
-        }
-
-        /* Skip link */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--primary-color);
-            color: var(--light-color);
-            padding: 10px;
-            z-index: 100;
-            transition: top 0.3s;
-            border: 2px solid var(--light-color);
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .skip-link:focus {
-            top: 0;
-            outline: var(--focus-outline);
-        }
-
-        /* Header styles */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--light-color);
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        header p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Main content area */
-        main {
-            flex: 1;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Music player container */
-        .music-player {
-            background-color: var(--light-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Now playing section */
-        .now-playing {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 2rem;
-            width: 100%;
-            text-align: center;
-        }
-
-        .album-art {
-            width: 250px;
-            height: 250px;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-            object-fit: cover;
-        }
-
-        .song-info {
-            margin-bottom: 1.5rem;
-            width: 100%;
-        }
-
-        .song-title {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-
-        .song-artist {
-            font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 1rem;
-        }
-
-        /* Controls section */
-        .controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 2rem;
-        }
-
-        .playback-controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            gap: 1.5rem;
-        }
-
-        .control-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            font-size: 1.5rem;
-        }
-
-        .control-btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .control-btn.play-pause {
-            width: 80px;
-            height: 80px;
-            font-size: 2rem;
-        }
-
-        .control-btn svg {
-            fill: currentColor;
-            width: 24px;
-            height: 24px;
-        }
-
-        .control-btn.play-pause svg {
-            width: 32px;
-            height: 32px;
-        }
-
-        /* Progress bar */
-        .progress-container {
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 1rem;
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress {
-            height: 100%;
-            background-color: var(--primary-color);
-            width: 0%;
-            border-radius: 5px;
-            transition: width 0.1s linear;
-        }
-
-        .progress-bar-input {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 2;
-        }
-
-        /* Volume control */
-        .volume-container {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            max-width: 300px;
-            gap: 1rem;
-        }
-
-        .volume-icon {
-            color: var(--text-color);
-            font-size: 1.5rem;
-        }
-
-        .volume-slider {
-            flex: 1;
-            height: 8px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: #e0e0e0;
-            border-radius: 4px;
-            outline: none;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
-        }
-
-        .volume-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
-            border: none;
-        }
-
-        .volume-slider:focus {
-            outline: var(--focus-outline);
-        }
-
-        .volume-percentage {
-            min-width: 40px;
-            text-align: right;
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        /* Playlist section */
-        .playlist-section {
-            background-color: var(--light-color);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            width: 100%;
-        }
-
-        .playlist-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .playlist-title {
-            font-size: 1.8rem;
-            color: var(--text-color);
-        }
-
-        .playlist {
-            list-style: none;
-            width: 100%;
-        }
-
-        .playlist-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            border: 2px solid transparent;
-        }
-
-        .playlist-item:hover, .playlist-item:focus {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .playlist-item.active {
-            background-color: rgba(0, 86, 179, 0.1);
-            border-color: var(--primary-color);
-        }
-
-        .playlist-item-number {
-            font-weight: bold;
-            margin-right: 1rem;
-            color: #777;
-            min-width: 30px;
-        }
-
-        .playlist-item-img {
-            width: 50px;
-            height: 50px;
-            border-radius: 4px;
-            margin-right: 1rem;
-            object-fit: cover;
-        }
-
-        .playlist-item-info {
-            flex: 1;
-        }
-
-        .playlist-item-title {
-            font-weight: bold;
-            margin-bottom: 0.25rem;
-            color: var(--text-color);
-        }
-
-        .playlist-item-artist {
-            font-size: 0.9rem;
-            color: #555;
-        }
-
-        .playlist-item-duration {
-            color: #777;
-            font-size: 0.9rem;
-        }
-
-        /* Footer styles */
-        footer {
-            background-color: var(--primary-dark);
-            color: var(--light-color);
-            padding: 2rem;
-            text-align: center;
-        }
-
-        footer p {
-            margin-bottom: 1rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .footer-link {
-            color: var(--light-color);
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-
-        .footer-link:hover, .footer-link:focus {
-            color: #b3d7ff;
-            text-decoration: underline;
-        }
-
-        /* Accessibility features */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .album-art {
-                width: 200px;
-                height: 200px;
-            }
-
-            .song-title {
-                font-size: 1.5rem;
-            }
-
-            .song-artist {
-                font-size: 1rem;
-            }
-
-            .control-btn {
-                width: 50px;
-                height: 50px;
-            }
-
-            .control-btn.play-pause {
-                width: 70px;
-                height: 70px;
-            }
-
-            .playlist-item {
-                padding: 0.75rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            main {
-                padding: 1rem;
-            }
-
-            .music-player, .playlist-section {
-                padding: 1.5rem;
-            }
-
-            .album-art {
-                width: 150px;
-                height: 150px;
-            }
-
-            .playback-controls {
-                gap: 1rem;
-            }
-
-            .control-btn {
-                width: 45px;
-                height: 45px;
-            }
-
-            .control-btn.play-pause {
-                width: 60px;
-                height: 60px;
-            }
-
-            .playlist-item-img {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        /* Animation for loading state */
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        .loading {
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        /* Notification styles */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: transform 0.3s, opacity 0.3s;
-        }
-
-        .notification.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* Visually hidden but accessible to screen readers */
-        .visually-hidden:not(:focus):not(:active) {
-            clip: rect(0 0 0 0);
-            clip-path: inset(50%);
-            height: 1px;
-            overflow: hidden;
-            position: absolute;
-            white-space: nowrap;
-            width: 1px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager Dashboard - Secure Login and Task Management</title>
+  
+  <!-- React CDN Links -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <style>
+    /* CSS Reset with accessibility enhancements */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Global Variables */
+    :root {
+      /* Color scheme with 7:1+ contrast ratios */
+      --primary-color: #0056b3;
+      --primary-dark: #003a75;
+      --primary-light: #4d8edb;
+      --secondary-color: #6a3093;
+      --accent-color: #005e3a;
+      --text-color: #121212;
+      --text-light: #333333;
+      --background-color: #ffffff;
+      --background-alt: #f8f9fa;
+      --error-color: #c42b2b;
+      --success-color: #2e7d32;
+      --warning-color: #8a5d00;
+      --border-color: #565656;
+      --focus-color: #2474cc;
+      --focus-outline: 3px solid var(--focus-color);
+      
+      /* Spacing */
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      
+      /* Typography */
+      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      --font-size-base: 1rem;
+      --line-height-base: 1.5;
+    }
+    
+    /* Enhanced focus styles (WCAG 2.2 AAA: 2.4.13) */
+    *:focus {
+      outline: var(--focus-outline);
+      outline-offset: 2px;
+    }
+    
+    /* Base styles */
+    html {
+      font-size: 100%;
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: var(--font-family);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-base);
+      color: var(--text-color);
+      background-color: var(--background-color);
+      min-height: 100vh;
+      /* WCAG 2.2 AAA: 1.4.8 Visual Presentation */
+      line-height: 1.5;
+      letter-spacing: 0.01em;
+      word-spacing: 0.05em;
+    }
+    
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      margin-bottom: var(--spacing-md);
+      line-height: 1.2;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-top: var(--spacing-xl);
+    }
+    
+    h2 {
+      font-size: 2rem;
+      margin-top: var(--spacing-lg);
+    }
+    
+    h3 {
+      font-size: 1.75rem;
+      margin-top: var(--spacing-md);
+    }
+    
+    p {
+      margin-bottom: var(--spacing-md);
+      max-width: 80ch; /* WCAG 2.2 AAA: 1.4.8 */
+    }
+    
+    /* Links */
+    a {
+      color: var(--primary-color);
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+      transition: color 0.2s ease;
+    }
+    
+    a:hover, a:focus {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+    
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary-color);
+      color: white;
+      padding: var(--spacing-sm) var(--spacing-md);
+      z-index: 100;
+      transition: top 0.2s ease;
+    }
+    
+    .skip-link:focus {
+      top: 0;
+    }
+    
+    /* Layout */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+    }
+    
+    .app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: var(--spacing-md) 0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    
+    .logo a {
+      color: white;
+      text-decoration: none;
+    }
+    
+    main {
+      flex: 1;
+      padding: var(--spacing-xl) 0;
+    }
+    
+    footer {
+      background-color: var(--background-alt);
+      padding: var(--spacing-lg) 0;
+      margin-top: auto;
+      border-top: 1px solid #ddd;
+    }
+    
+    /* Navigation */
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: var(--spacing-md);
+    }
+    
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+    }
+    
+    nav a:hover, nav a:focus {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    
+    /* Forms */
+    .form-group {
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    label {
+      display: block;
+      margin-bottom: var(--spacing-sm);
+      font-weight: 600;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: var(--spacing-md);
+      font-size: 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 4px;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      transition: border-color 0.2s ease;
+      line-height: 1.5;
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--focus-color);
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px; /* WCAG 2.2 AAA: 2.5.5 Target Size */
+      padding: var(--spacing-sm) var(--spacing-lg);
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      position: relative;
+    }
+    
+    .btn:active {
+      transform: translateY(1px);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover, .btn-primary:focus {
+      background-color: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+    
+    .btn-secondary:hover, .btn-secondary:focus {
+      background-color: #5a2780;
+    }
+    
+    .btn-danger {
+      background-color: var(--error-color);
+      color: white;
+    }
+    
+    .btn-danger:hover, .btn-danger:focus {
+      background-color: #a52424;
+    }
+    
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .btn-success:hover, .btn-success:focus {
+      background-color: #236a29;
+    }
+    
+    /* Cards */
+    .card {
+      background-color: var(--background-color);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .card-header {
+      margin-bottom: var(--spacing-md);
+      border-bottom: 1px solid #eee;
+      padding-bottom: var(--spacing-sm);
+    }
+    
+    /* Login/Register Forms */
+    .auth-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .auth-tabs {
+      display: flex;
+      margin-bottom: var(--spacing-lg);
+      border-bottom: 2px solid #eee;
+    }
+    
+    .auth-tab {
+      padding: var(--spacing-md) var(--spacing-lg);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-light);
+      min-width: 44px;
+      min-height: 44px;
+    }
+    
+    .auth-tab.active {
+      color: var(--primary-color);
+      border-bottom: 3px solid var(--primary-color);
+    }
+    
+    /* Dashboard */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+    }
+    
+    @media (min-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr 2fr;
+      }
+    }
+    
+    .dashboard-sidebar {
+      background-color: var(--background-alt);
+      border-radius: 8px;
+      padding: var(--spacing-lg);
+    }
+    
+    .dashboard-main {
+      background-color: var(--background-color);
+    }
+    
+    /* Task List */
+    .task-list {
+      list-style: none;
+    }
+    
+    .task-item {
+      padding: var(--spacing-md);
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .task-item:last-child {
+      border-bottom: none;
+    }
+    
+    .task-checkbox {
+      min-width: 24px;
+      min-height: 24px;
+      margin-right: var(--spacing-md);
+    }
+    
+    .task-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+    
+    .task-completed {
+      text-decoration: line-through;
+      color: var(--text-light);
+    }
+    
+    /* Task Form */
+    .task-form {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .task-input {
+      flex: 1;
+    }
+    
+    /* Status Messages */
+    .status {
+      padding: var(--spacing-md);
+      border-radius: 4px;
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .status-error {
+      background-color: #ffebee;
+      color: var(--error-color);
+      border: 1px solid #ffcdd2;
+    }
+    
+    .status-success {
+      background-color: #e8f5e9;
+      color: var(--success-color);
+      border: 1px solid #c8e6c9;
+    }
+    
+    .status-warning {
+      background-color: #fff8e1;
+      color: var(--warning-color);
+      border: 1px solid #ffecb3;
+    }
+    
+    /* Loading State */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-lg);
+    }
+    
+    .loading-spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--primary-color);
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal {
+      background-color: var(--background-color);
+      border-radius: 8px;
+      padding: var(--spacing-lg);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Utility Classes */
+    .text-center {
+      text-align: center;
+    }
+    
+    .mt-1 { margin-top: var(--spacing-sm); }
+    .mt-2 { margin-top: var(--spacing-md); }
+    .mt-3 { margin-top: var(--spacing-lg); }
+    .mt-4 { margin-top: var(--spacing-xl); }
+    
+    .mb-1 { margin-bottom: var(--spacing-sm); }
+    .mb-2 { margin-bottom: var(--spacing-md); }
+    .mb-3 { margin-bottom: var(--spacing-lg); }
+    .mb-4 { margin-bottom: var(--spacing-xl); }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+      }
+      
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .task-form {
+        flex-direction: column;
+      }
+    }
+    
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+    /* User-selectable colors (WCAG 2.2 AAA: 1.4.8) */
+    .high-contrast {
+      --primary-color: #0000c8;
+      --primary-dark: #00008a;
+      --text-color: #000000;
+      --background-color: #ffffff;
+      --border-color: #000000;
+    }
+    
+    .dark-mode {
+      --text-color: #ffffff;
+      --text-light: #cccccc;
+      --background-color: #121212;
+      --background-alt: #1e1e1e;
+      --border-color: #aaaaaa;
+    }
+  </style>
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <div id="root">
+    <!-- React will render here -->
+    <div aria-live="polite" aria-atomic="true" class="loading">
+      <div class="loading-spinner" aria-hidden="true"></div>
+      <p>Loading application, please wait...</p>
+    </div>
+  </div>
+  
+  <script type="text/babel">
+    // React Components
     
-    <header>
-        <h1>Accessible Music Player</h1>
-        <p>Listen to your favorite tracks with our fully accessible music player</p>
-    </header>
+    // Context for authentication
+    const AuthContext = React.createContext();
     
-    <main id="main-content">
-        <section class="music-player" aria-labelledby="player-title">
-            <h2 id="player-title" class="visually-hidden">Music Player Controls</h2>
-            
-            <div class="now-playing">
-                <img id="album-art" class="album-art" src="https://placehold.co/250x250/0056b3/ffffff?text=Album+Art" alt="Album artwork for the currently playing song" />
-                
-                <div class="song-info">
-                    <h3 id="song-title" class="song-title">Select a song to play</h3>
-                    <p id="song-artist" class="song-artist">Artist name will appear here</p>
-                </div>
-            </div>
-            
-            <div class="controls">
-                <div class="playback-controls">
-                    <button id="prev-btn" class="control-btn" aria-label="Previous song">
-                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
-                        </svg>
-                    </button>
-                    
-                    <button id="play-pause-btn" class="control-btn play-pause" aria-label="Play">
-                        <svg id="play-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"></path>
-                        </svg>
-                        <svg id="pause-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" style="display: none;">
-                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
-                        </svg>
-                    </button>
-                    
-                    <button id="next-btn" class="control-btn" aria-label="Next song">
-                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
-                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="progress-container">
-                    <div class="progress-info">
-                        <span id="current-time">0:00</span>
-                        <span id="duration">0:00</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div id="progress" class="progress"></div>
-                        <input 
-                            type="range" 
-                            id="seek-slider" 
-                            class="progress-bar-input" 
-                            min="0" 
-                            max="100" 
-                            value="0" 
-                            step="0.1"
-                            aria-label="Seek time in track"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                            aria-valuenow="0"
-                            aria-valuetext="0:00 of 0:00"
-                        />
-                    </div>
-                </div>
-                
-                <div class="volume-container">
-                    <button id="mute-btn" class="volume-icon" aria-label="Mute">
-                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
-                        </svg>
-                    </button>
-                    <input 
-                        type="range" 
-                        id="volume-slider" 
-                        class="volume-slider" 
-                        min="0" 
-                        max="100" 
-                        value="80" 
-                        step="1"
-                        aria-label="Volume"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        aria-valuenow="80"
-                        aria-valuetext="Volume 80%"
-                    />
-                    <span id="volume-percentage" class="volume-percentage">80%</span>
-                </div>
-            </div>
-        </section>
+    // Main App Component
+    function App() {
+      const [user, setUser] = React.useState(null);
+      const [loading, setLoading] = React.useState(false);
+      const [error, setError] = React.useState(null);
+      const [preferences, setPreferences] = React.useState({
+        highContrast: false,
+        darkMode: false,
+        reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      });
+      
+      // Simulate authentication
+      const login = (email, password) => {
+        setLoading(true);
+        setError(null);
         
-        <section class="playlist-section" aria-labelledby="playlist-title">
-            <div class="playlist-header">
-                <h2 id="playlist-title" class="playlist-title">Playlist</h2>
+        // Simulate API call
+        setTimeout(() => {
+          if (email === 'user@example.com' && password === 'password123') {
+            setUser({
+              id: 1,
+              name: 'Demo User',
+              email: 'user@example.com',
+              role: 'user'
+            });
+            setLoading(false);
+          } else {
+            setError('Invalid email or password. For demo, use user@example.com / password123');
+            setLoading(false);
+          }
+        }, 1000);
+      };
+      
+      const register = (name, email, password) => {
+        setLoading(true);
+        setError(null);
+        
+        // Simulate API call
+        setTimeout(() => {
+          setUser({
+            id: 1,
+            name: name,
+            email: email,
+            role: 'user'
+          });
+          setLoading(false);
+        }, 1000);
+      };
+      
+      const logout = () => {
+        setUser(null);
+      };
+      
+      const updatePreferences = (newPrefs) => {
+        setPreferences({...preferences, ...newPrefs});
+        
+        // Apply classes to body based on preferences
+        if (newPrefs.highContrast !== undefined) {
+          document.body.classList.toggle('high-contrast', newPrefs.highContrast);
+        }
+        
+        if (newPrefs.darkMode !== undefined) {
+          document.body.classList.toggle('dark-mode', newPrefs.darkMode);
+        }
+      };
+      
+      // Apply initial preferences
+      React.useEffect(() => {
+        document.body.classList.toggle('high-contrast', preferences.highContrast);
+        document.body.classList.toggle('dark-mode', preferences.darkMode);
+      }, []);
+      
+      return (
+        <AuthContext.Provider value={{ user, login, register, logout, loading, error }}>
+          <div className="app">
+            <Header preferences={preferences} updatePreferences={updatePreferences} />
+            <main id="main-content">
+              <div className="container">
+                {user ? <Dashboard /> : <Auth />}
+              </div>
+            </main>
+            <Footer />
+          </div>
+        </AuthContext.Provider>
+      );
+    }
+    
+    // Header Component
+    function Header({ preferences, updatePreferences }) {
+      const { user, logout } = React.useContext(AuthContext);
+      const [showMenu, setShowMenu] = React.useState(false);
+      const [showPreferences, setShowPreferences] = React.useState(false);
+      
+      const toggleMenu = () => {
+        setShowMenu(!showMenu);
+      };
+      
+      const togglePreferences = () => {
+        setShowPreferences(!showPreferences);
+      };
+      
+      return (
+        <header>
+          <div className="container">
+            <div className="header-content">
+              <div className="logo">
+                <a href="#" onClick={(e) => e.preventDefault()}>Task Manager</a>
+              </div>
+              
+              <nav aria-label="Main navigation">
+                <ul>
+                  <li>
+                    <a href="#" onClick={(e) => e.preventDefault()}>Home</a>
+                  </li>
+                  {user ? (
+                    <>
+                      <li>
+                        <a href="#" onClick={(e) => e.preventDefault()}>My Tasks</a>
+                      </li>
+                      <li>
+                        <a href="#" onClick={(e) => {
+                          e.preventDefault();
+                          togglePreferences();
+                        }}>Preferences</a>
+                      </li>
+                      <li>
+                        <a href="#" onClick={(e) => {
+                          e.preventDefault();
+                          logout();
+                        }}>Logout</a>
+                      </li>
+                    </>
+                  ) : (
+                    <li>
+                      <a href="#" onClick={(e) => e.preventDefault()}>About</a>
+                    </li>
+                  )}
+                </ul>
+              </nav>
+            </div>
+          </div>
+          
+          {showPreferences && (
+            <PreferencesModal 
+              preferences={preferences} 
+              updatePreferences={updatePreferences} 
+              onClose={togglePreferences} 
+            />
+          )}
+        </header>
+      );
+    }
+    
+    // Footer Component
+    function Footer() {
+      return (
+        <footer>
+          <div className="container">
+            <div className="footer-content">
+              <p>&copy; {new Date().getFullYear()} Task Manager. All rights reserved.</p>
+              <nav aria-label="Footer navigation">
+                <ul>
+                  <li>
+                    <a href="#" onClick={(e) => e.preventDefault()}>Privacy Policy</a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={(e) => e.preventDefault()}>Terms of Service</a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={(e) => e.preventDefault()}>Contact Us</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </footer>
+      );
+    }
+    
+    // Authentication Component
+    function Auth() {
+      const [activeTab, setActiveTab] = React.useState('login');
+      
+      return (
+        <div className="auth-container">
+          <h1>Welcome to Task Manager</h1>
+          
+          <div className="auth-tabs" role="tablist">
+            <button 
+              className={`auth-tab ${activeTab === 'login' ? 'active' : ''}`}
+              onClick={() => setActiveTab('login')}
+              role="tab"
+              aria-selected={activeTab === 'login'}
+              aria-controls="login-panel"
+              id="login-tab"
+            >
+              Login
+            </button>
+            <button 
+              className={`auth-tab ${activeTab === 'register' ? 'active' : ''}`}
+              onClick={() => setActiveTab('register')}
+              role="tab"
+              aria-selected={activeTab === 'register'}
+              aria-controls="register-panel"
+              id="register-tab"
+            >
+              Register
+            </button>
+          </div>
+          
+          {activeTab === 'login' ? (
+            <div 
+              id="login-panel" 
+              role="tabpanel" 
+              aria-labelledby="login-tab"
+            >
+              <LoginForm />
+            </div>
+          ) : (
+            <div 
+              id="register-panel" 
+              role="tabpanel" 
+              aria-labelledby="register-tab"
+            >
+              <RegisterForm />
+            </div>
+          )}
+        </div>
+      );
+    }
+    
+    // Login Form Component
+    function LoginForm() {
+      const { login, loading, error } = React.useContext(AuthContext);
+      const [email, setEmail] = React.useState('');
+      const [password, setPassword] = React.useState('');
+      const [formErrors, setFormErrors] = React.useState({});
+      
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        // Validate form
+        const errors = {};
+        if (!email) {
+          errors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+          errors.email = 'Email is invalid';
+        }
+        
+        if (!password) {
+          errors.password = 'Password is required';
+        }
+        
+        if (Object.keys(errors).length > 0) {
+          setFormErrors(errors);
+          return;
+        }
+        
+        // Clear errors and submit
+        setFormErrors({});
+        login(email, password);
+      };
+      
+      return (
+        <div className="card">
+          <h2>Login to Your Account</h2>
+          
+          {error && (
+            <div className="status status-error" role="alert">
+              {error}
+            </div>
+          )}
+          
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="form-group">
+              <label htmlFor="email">Email Address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-required="true"
+                aria-invalid={!!formErrors.email}
+                aria-describedby={formErrors.email ? "email-error" : undefined}
+                autoComplete="email"
+              />
+              {formErrors.email && (
+                <div id="email-error" className="status status-error mt-1" role="alert">
+                  {formErrors.email}
+                </div>
+              )}
             </div>
             
-            <ul id="playlist" class="playlist" aria-label="Song playlist">
-                <!-- Playlist items will be generated by JavaScript -->
-            </ul>
-        </section>
-    </main>
-    
-    <footer>
-        <p>Accessible Music Player - Designed with accessibility in mind</p>
-        <div class="footer-links">
-            <a href="#" class="footer-link">About</a>
-            <a href="#" class="footer-link">Privacy Policy</a>
-            <a href="#" class="footer-link">Terms of Service</a>
-            <a href="#" class="footer-link">Contact Us</a>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                aria-required="true"
+                aria-invalid={!!formErrors.password}
+                aria-describedby={formErrors.password ? "password-error" : undefined}
+                autoComplete="current-password"
+              />
+              {formErrors.password && (
+                <div id="password-error" className="status status-error mt-1" role="alert">
+                  {formErrors.password}
+                </div>
+              )}
+            </div>
+            
+            <div className="form-group">
+              <button 
+                type="submit" 
+                className="btn btn-primary" 
+                disabled={loading}
+                aria-busy={loading}
+              >
+                {loading ? 'Logging in...' : 'Login'}
+              </button>
+            </div>
+            
+            <div className="form-group">
+              <p>
+                <a href="#" onClick={(e) => e.preventDefault()}>Forgot your password?</a>
+              </p>
+              <p>
+                Demo credentials: user@example.com / password123
+              </p>
+            </div>
+          </form>
         </div>
-        <p>&copy; 2023 Accessible Music Player. All rights reserved.</p>
-    </footer>
+      );
+    }
     
-    <div id="notification" class="notification" role="status" aria-live="polite"></div>
+    // Register Form Component
+    function RegisterForm() {
+      const { register, loading, error } = React.useContext(AuthContext);
+      const [name, setName] = React.useState('');
+      const [email, setEmail] = React.useState('');
+      const [password, setPassword] = React.useState('');
+      const [confirmPassword, setConfirmPassword] = React.useState('');
+      const [formErrors, setFormErrors] = React.useState({});
+      
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        // Validate form
+        const errors = {};
+        if (!name) {
+          errors.name = 'Name is required';
+        }
+        
+        if (!email) {
+          errors.email = 'Email is required';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+          errors.email = 'Email is invalid';
+        }
+        
+        if (!password) {
+          errors.password = 'Password is required';
+        } else if (password.length < 8) {
+          errors.password = 'Password must be at least 8 characters';
+        }
+        
+        if (password !== confirmPassword) {
+          errors.confirmPassword = 'Passwords do not match';
+        }
+        
+        if (Object.keys(errors).length > 0) {
+          setFormErrors(errors);
+          return;
+        }
+        
+        // Clear errors and submit
+        setFormErrors({});
+        register(name, email, password);
+      };
+      
+      return (
+        <div className="card">
+          <h2>Create a New Account</h2>
+          
+          {error && (
+            <div className="status status-error" role="alert">
+              {error}
+            </div>
+          )}
+          
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="form-group">
+              <label htmlFor="name">Full Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                aria-required="true"
+                aria-invalid={!!formErrors.name}
+                aria-describedby={formErrors.name ? "name-error" : undefined}
+                autoComplete="name"
+              />
+              {formErrors.name && (
+                <div id="name-error" className="status status-error mt-1" role="alert">
+                  {formErrors.name}
+                </div>
+              )}
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="register-email">Email Address</label>
+              <input
+                type="email"
+                id="register-email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                aria-required="true"
+                aria-invalid={!!formErrors.email}
+                aria-describedby={formErrors.email ? "register-email-error" : undefined}
+                autoComplete="email"
+              />
+              {formErrors.email && (
+                <div id="register-email-error" className="status status-error mt-1" role="alert">
+                  {formErrors.email}
+                </div>
+              )}
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="register-password">Password</label>
+              <input
+                type="password"
+                id="register-password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                aria-required="true"
+                aria-invalid={!!formErrors.password}
+                aria-describedby="password-help register-password-error"
+                autoComplete="new-password"
+              />
+              <div id="password-help" className="mt-1">
+                Password must be at least 8 characters long.
+              </div>
+              {formErrors.password && (
+                <div id="register-password-error" className="status status-error mt-1" role="alert">
+                  {formErrors.password}
+                </div>
+              )}
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="confirm-password">Confirm Password</label>
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                aria-required="true"
+                aria-invalid={!!formErrors.confirmPassword}
+                aria-describedby={formErrors.confirmPassword ? "confirm-password-error" : undefined}
+                autoComplete="new-password"
+              />
+              {formErrors.confirmPassword && (
+                <div id="confirm-password-error" className="status status-error mt-1" role="alert">
+                  {formErrors.confirmPassword}
+                </div>
+              )}
+            </div>
+            
+            <div className="form-group">
+              <button 
+                type="submit" 
+                className="btn btn-primary" 
+                disabled={loading}
+                aria-busy={loading}
+              >
+                {loading ? 'Creating Account...' : 'Create Account'}
+              </button>
+            </div>
+          </form>
+        </div>
+      );
+    }
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Audio element
-            const audioElement = new Audio();
-            
-            // DOM elements
-            const playPauseBtn = document.getElementById('play-pause-btn');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const muteBtn = document.getElementById('mute-btn');
-            const volumeSlider = document.getElementById('volume-slider');
-            const volumePercentage = document.getElementById('volume-percentage');
-            const seekSlider = document.getElementById('seek-slider');
-            const currentTimeElement = document.getElementById('current-time');
-            const durationElement = document.getElementById('duration');
-            const progressElement = document.getElementById('progress');
-            const playlistElement = document.getElementById('playlist');
-            const albumArt = document.getElementById('album-art');
-            const songTitle = document.getElementById('song-title');
-            const songArtist = document.getElementById('song-artist');
-            const playIcon = document.getElementById('play-icon');
-            const pauseIcon = document.getElementById('pause-icon');
-            const notification = document.getElementById('notification');
-            
-            // State variables
-            let currentSongIndex = 0;
-            let isPlaying = false;
-            let isMuted = false;
-            let updateTimer;
-            
-            // Sample playlist data
-            const playlist = [
-                {
-                    title: "Acoustic Sunrise",
-                    artist: "Sarah Johnson",
-                    duration: 245, // in seconds
-                    cover: "https://placehold.co/250x250/6c0f8a/ffffff?text=Acoustic+Sunrise",
-                    audioSrc: "https://example.com/audio1.mp3" // This would be a real audio file in production
-                },
-                {
-                    title: "Electric Dreams",
-                    artist: "The Voltage Band",
-                    duration: 198,
-                    cover: "https://placehold.co/250x250/d94e0f/ffffff?text=Electric+Dreams",
-                    audioSrc: "https://example.com/audio2.mp3"
-                },
-                {
-                    title: "Ocean Waves",
-                    artist: "Coastal Sounds",
-                    duration: 312,
-                    cover: "https://placehold.co/250x250/0056b3/ffffff?text=Ocean+Waves",
-                    audioSrc: "https://example.com/audio3.mp3"
-                },
-                {
-                    title: "Mountain High",
-                    artist: "Alpine Echoes",
-                    duration: 274,
-                    cover: "https://placehold.co/250x250/006400/ffffff?text=Mountain+High",
-                    audioSrc: "https://example.com/audio4.mp3"
-                },
-                {
-                    title: "Urban Jungle",
-                    artist: "City Beats",
-                    duration: 183,
-                    cover: "https://placehold.co/250x250/a53a0a/ffffff?text=Urban+Jungle",
-                    audioSrc: "https://example.com/audio5.mp3"
-                }
-            ];
-            
-            // Initialize the player
-            function initPlayer() {
-                // Set initial volume
-                audioElement.volume = 0.8;
-                
-                // Generate playlist items
-                generatePlaylist();
-                
-                // Add event listeners
-                setupEventListeners();
-                
-                // Since we don't have real audio files, we'll simulate audio behavior
-                simulateAudio();
-                
-                // Show a notification
-                showNotification("Music player loaded successfully. Select a song to begin playback.");
-            }
-            
-            // Generate playlist HTML
-            function generatePlaylist() {
-                playlistElement.innerHTML = '';
-                
-                playlist.forEach((song, index) => {
-                    const li = document.createElement('li');
-                    li.className = 'playlist-item';
-                    li.tabIndex = 0;
-                    li.setAttribute('role', 'button');
-                    li.setAttribute('aria-label', `Play ${song.title} by ${song.artist}, Duration: ${formatTime(song.duration)}`);
-                    
-                    li.innerHTML = `
-                        <span class="playlist-item-number">${index + 1}</span>
-                        <img class="playlist-item-img" src="${song.cover}" alt="Album art for ${song.title}" />
-                        <div class="playlist-item-info">
-                            <div class="playlist-item-title">${song.title}</div>
-                            <div class="playlist-item-artist">${song.artist}</div>
-                        </div>
-                        <span class="playlist-item-duration">${formatTime(song.duration)}</span>
-                    `;
-                    
-                    li.addEventListener('click', () => {
-                        loadSong(index);
-                        playSong();
-                    });
-                    
-                    li.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            loadSong(index);
-                            playSong();
-                        }
-                    });
-                    
-                    playlistElement.appendChild(li);
-                });
-            }
-            
-            // Set up event listeners
-            function setupEventListeners() {
-                // Play/Pause button
-                playPauseBtn.addEventListener('click', togglePlayPause);
-                
-                // Previous button
-                prevBtn.addEventListener('click', () => {
-                    prevSong();
-                    showNotification(`Playing previous song: ${playlist[currentSongIndex].title}`);
-                });
-                
-                // Next button
-                nextBtn.addEventListener('click', () => {
-                    nextSong();
-                    showNotification(`Playing next song: ${playlist[currentSongIndex].title}`);
-                });
-                
-                // Mute button
-                muteBtn.addEventListener('click', toggleMute);
-                
-                // Volume slider
-                volumeSlider.addEventListener('input', (e) => {
-                    setVolume(e.target.value);
-                });
-                
-                // Seek slider
-                seekSlider.addEventListener('input', (e) => {
-                    seekTo(e.target.value);
-                });
-                
-                // Audio element events
-                audioElement.addEventListener('timeupdate', updateProgress);
-                audioElement.addEventListener('ended', () => {
-                    nextSong();
-                });
-                
-                // Keyboard shortcuts
-                document.addEventListener('keydown', handleKeyboardShortcuts);
-            }
-            
-            // Load a song
-            function loadSong(index) {
-                clearInterval(updateTimer);
-                resetProgress();
-                
-                currentSongIndex = index;
-                const currentSong = playlist[currentSongIndex];
-                
-                // Update UI
-                albumArt.src = currentSong.cover;
-                albumArt.alt = `Album artwork for ${currentSong.title} by ${currentSong.artist}`;
-                songTitle.textContent = currentSong.title;
-                songArtist.textContent = currentSong.artist;
-                
-                // In a real player, we would set the audio source
-                // audioElement.src = currentSong.audioSrc;
-                // audioElement.load();
-                
-                // Update playlist highlighting
-                updatePlaylistHighlight();
-                
-                // Update duration display
-                durationElement.textContent = formatTime(currentSong.duration);
-                
-                // Set aria-valuemax for seek slider
-                seekSlider.setAttribute('aria-valuemax', currentSong.duration);
-                
-                // Announce to screen readers
-                const announcement = `Now playing: ${currentSong.title} by ${currentSong.artist}`;
-                announceToScreenReader(announcement);
-            }
-            
-            // Play the current song
-            function playSong() {
-                isPlaying = true;
-                
-                // In a real player, we would play the audio
-                // audioElement.play();
-                
-                // Update UI
-                playPauseBtn.setAttribute('aria-label', 'Pause');
-                playIcon.style.display = 'none';
-                pauseIcon.style.display = 'block';
-                
-                // Start progress simulation for demo
-                startProgressSimulation();
-            }
-            
-            // Pause the current song
-            function pauseSong() {
-                isPlaying = false;
-                
-                // In a real player, we would pause the audio
-                // audioElement.pause();
-                
-                // Update UI
-                playPauseBtn.setAttribute('aria-label', 'Play');
-                playIcon.style.display = 'block';
-                pauseIcon.style.display = 'none';
-                
-                // Stop progress simulation
-                clearInterval(updateTimer);
-            }
-            
-            // Toggle play/pause
-            function togglePlayPause() {
-                if (songTitle.textContent === 'Select a song to play') {
-                    // If no song is selected, load the first one
-                    loadSong(0);
-                }
-                
-                if (isPlaying) {
-                    pauseSong();
-                    showNotification("Playback paused");
-                } else {
-                    playSong();
-                    showNotification(`Playing: ${playlist[currentSongIndex].title}`);
-                }
-            }
-            
-            // Go to previous song
-            function prevSong() {
-                currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
-                loadSong(currentSongIndex);
-                if (isPlaying) {
-                    playSong();
-                }
-            }
-            
-            // Go to next song
-            function nextSong() {
-                currentSongIndex = (currentSongIndex + 1) % playlist.length;
-                loadSong(currentSongIndex);
-                if (isPlaying) {
-                    playSong();
-                }
-            }
-            
-            // Toggle mute
-            function toggleMute() {
-                isMuted = !isMuted;
-                
-                // In a real player, we would mute/unmute the audio
-                // audioElement.muted = isMuted;
-                
-                // Update UI
-                if (isMuted) {
-                    muteBtn.innerHTML = `
-                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"></path>
-                        </svg>
-                    `;
-                    muteBtn.setAttribute('aria-label', 'Unmute');
-                    volumeSlider.setAttribute('aria-valuetext', 'Volume muted');
-                    showNotification("Volume muted");
-                } else {
-                    muteBtn.innerHTML = `
-                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
-                        </svg>
-                    `;
-                    muteBtn.setAttribute('aria-label', 'Mute');
-                    const volumeValue = volumeSlider.value;
-                    volumeSlider.setAttribute('aria-valuetext', `Volume ${volumeValue}%`);
-                    showNotification(`Volume unmuted: ${volumeValue}%`);
-                }
-            }
-            
-            // Set volume
-            function setVolume(value) {
-                const volume = value / 100;
-                
-                // In a real player, we would set the audio volume
-                // audioElement.volume = volume;
-                
-                // Update UI
-                volumePercentage.textContent = `${value}%`;
-                volumeSlider.setAttribute('aria-valuenow', value);
-                volumeSlider.setAttribute('aria-valuetext', `Volume ${value}%`);
-                
-                // If volume is set to 0, update mute button
-                if (volume === 0) {
-                    isMuted = true;
-                    muteBtn.innerHTML = `
-                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"></path>
-                        </svg>
-                    `;
-                    muteBtn.setAttribute('aria-label', 'Unmute');
-                } else if (isMuted) {
-                    isMuted = false;
-                    muteBtn.innerHTML = `
-                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
-                        </svg>
-                    `;
-                    muteBtn.setAttribute('aria-label', 'Mute');
-                }
-            }
-            
-            // Seek to a specific position
-            function seekTo(value) {
-                // Calculate the seek position
-                const currentSong = playlist[currentSongIndex];
-                const seekPosition = (value / 100) * currentSong.duration;
-                
-                // In a real player, we would set the current time
-                // audioElement.currentTime = seekPosition;
-                
-                // Update UI
-                currentTimeElement.textContent = formatTime(seekPosition);
-                progressElement.style.width = `${value}%`;
-                
-                // Update ARIA attributes
-                seekSlider.setAttribute('aria-valuenow', seekPosition);
-                seekSlider.setAttribute('aria-valuetext', `${formatTime(seekPosition)} of ${formatTime(currentSong.duration)}`);
-                
-                // For demo purposes, update the simulated current time
-                simulatedCurrentTime = seekPosition;
-            }
-            
-            // Update progress bar and time display
-            function updateProgress() {
-                if (!isPlaying) return;
-                
-                const currentSong = playlist[currentSongIndex];
-                const currentTime = audioElement.currentTime;
-                const duration = currentSong.duration;
-                
-                // Calculate progress percentage
-                const progressPercent = (currentTime / duration) * 100;
-                
-                // Update UI
-                progressElement.style.width = `${progressPercent}%`;
-                currentTimeElement.textContent = formatTime(currentTime);
-                seekSlider.value = progressPercent;
-                
-                // Update ARIA attributes
-                seekSlider.setAttribute('aria-valuenow', currentTime);
-                seekSlider.setAttribute('aria-valuetext', `${formatTime(currentTime)} of ${formatTime(duration)}`);
-            }
-            
-            // Reset progress
-            function resetProgress() {
-                progressElement.style.width = '0%';
-                currentTimeElement.textContent = '0:00';
-                seekSlider.value = 0;
-                seekSlider.setAttribute('aria-valuenow', 0);
-                seekSlider.setAttribute('aria-valuetext', '0:00 of 0:00');
-            }
-            
-            // Update playlist highlight
-            function updatePlaylistHighlight() {
-                const playlistItems = document.querySelectorAll('.playlist-item');
-                
-                playlistItems.forEach((item, index) => {
-                    if (index === currentSongIndex) {
-                        item.classList.add('active');
-                        item.setAttribute('aria-current', 'true');
-                    } else {
-                        item.classList.remove('active');
-                        item.removeAttribute('aria-current');
-                    }
-                });
-            }
-            
-            // Format time in seconds to MM:SS
-            function formatTime(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = Math.floor(seconds % 60);
-                return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-            }
-            
-            // Handle keyboard shortcuts
-            function handleKeyboardShortcuts(e) {
-                // Only handle shortcuts if not in an input field
-                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-                    return;
-                }
-                
-                switch (e.key) {
-                    case ' ':
-                        // Space - Play/Pause
-                        if (e.target !== playPauseBtn && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
-                            e.preventDefault();
-                            togglePlayPause();
-                        }
-                        break;
-                    case 'ArrowLeft':
-                        // Left Arrow - Rewind 5 seconds
-                        e.preventDefault();
-                        seekTo(Math.max(0, (seekSlider.value - 5)));
-                        showNotification("Rewinding 5 seconds");
-                        break;
-                    case 'ArrowRight':
-                        // Right Arrow - Forward 5 seconds
-                        e.preventDefault();
-                        seekTo(Math.min(100, (parseFloat(seekSlider.value) + 5)));
-                        showNotification("Fast forwarding 5 seconds");
-                        break;
-                    case 'ArrowUp':
-                        // Up Arrow - Volume Up
-                        e.preventDefault();
-                        setVolume(Math.min(100, parseInt(volumeSlider.value) + 5));
-                        showNotification(`Volume: ${volumeSlider.value}%`);
-                        break;
-                    case 'ArrowDown':
-                        // Down Arrow - Volume Down
-                        e.preventDefault();
-                        setVolume(Math.max(0, parseInt(volumeSlider.value) - 5));
-                        showNotification(`Volume: ${volumeSlider.value}%`);
-                        break;
-                    case 'm':
-                    case 'M':
-                        // M - Mute/Unmute
-                        toggleMute();
-                        break;
-                    case 'p':
-                    case 'P':
-                        // P - Previous Track
-                        prevSong();
-                        showNotification(`Playing previous song: ${playlist[currentSongIndex].title}`);
-                        break;
-                    case 'n':
-                    case 'N':
-                        // N - Next Track
-                        nextSong();
-                        showNotification(`Playing next song: ${playlist[currentSongIndex].title}`);
-                        break;
-                }
-            }
-            
-            // Show notification
-            function showNotification(message) {
-                notification.textContent = message;
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
-            }
-            
-            // Announce to screen reader using aria-live
-            function announceToScreenReader(message) {
-                // Create a temporary element for screen reader announcement
-                const announcer = document.createElement('div');
-                announcer.setAttribute('aria-live', 'assertive');
-                announcer.classList.add('sr-only');
-                document.body.appendChild(announcer);
-                
-                // Set the message after a small delay to ensure it's read
-                setTimeout(() => {
-                    announcer.textContent = message;
-                    
-                    // Remove the element after it's been read
-                    setTimeout(() => {
-                        document.body.removeChild(announcer);
-                    }, 1000);
-                }, 100);
-            }
-            
-            // Simulate audio behavior for demo purposes
-            let simulatedCurrentTime = 0;
-            
-            function simulateAudio() {
-                // Simulate the timeupdate event
-                audioElement.addEventListener = function(event, callback) {
-                    if (event === 'timeupdate') {
-                        updateTimer = setInterval(() => {
-                            if (isPlaying) {
-                                audioElement.currentTime = simulatedCurrentTime;
-                                callback();
-                            }
-                        }, 1000);
-                    } else if (event === 'ended') {
-                        // We'll handle this in the progress simulation
-                    }
-                };
-            }
-            
-            function startProgressSimulation() {
-                clearInterval(updateTimer);
-                
-                const currentSong = playlist[currentSongIndex];
-                
-                updateTimer = setInterval(() => {
-                    if (isPlaying) {
-                        simulatedCurrentTime += 1;
-                        
-                        // Update the audio element's current time
-                        audioElement.currentTime = simulatedCurrentTime;
-                        
-                        // Update progress
-                        updateProgress();
-                        
-                        // Check if song has ended
-                        if (simulatedCurrentTime >= currentSong.duration) {
-                            clearInterval(updateTimer);
-                            simulatedCurrentTime = 0;
-                            nextSong();
-                        }
-                    }
-                }, 1000);
-            }
-            
-            // Initialize the player
-            initPlayer();
+    // Dashboard Component
+    function Dashboard() {
+      const { user } = React.useContext(AuthContext);
+      const [tasks, setTasks] = React.useState([
+        { id: 1, title: 'Complete project proposal', completed: false, priority: 'high', dueDate: '2023-12-15' },
+        { id: 2, title: 'Review team updates', completed: true, priority: 'medium', dueDate: '2023-12-10' },
+        { id: 3, title: 'Schedule client meeting', completed: false, priority: 'high', dueDate: '2023-12-12' },
+        { id: 4, title: 'Update documentation', completed: false, priority: 'low', dueDate: '2023-12-20' },
+      ]);
+      const [newTask, setNewTask] = React.useState('');
+      const [editingTask, setEditingTask] = React.useState(null);
+      const [filter, setFilter] = React.useState('all');
+      const [statusMessage, setStatusMessage] = React.useState(null);
+      
+      // Filter tasks based on current filter
+      const filteredTasks = React.useMemo(() => {
+        switch (filter) {
+          case 'completed':
+            return tasks.filter(task => task.completed);
+          case 'active':
+            return tasks.filter(task => !task.completed);
+          case 'high':
+            return tasks.filter(task => task.priority === 'high');
+          default:
+            return tasks;
+        }
+      }, [tasks, filter]);
+      
+      // Add new task
+      const addTask = (e) => {
+        e.preventDefault();
+        
+        if (!newTask.trim()) {
+          setStatusMessage({
+            type: 'error',
+            text: 'Task title cannot be empty'
+          });
+          return;
+        }
+        
+        const task = {
+          id: Date.now(),
+          title: newTask,
+          completed: false,
+          priority: 'medium',
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+        };
+        
+        setTasks([...tasks, task]);
+        setNewTask('');
+        setStatusMessage({
+          type: 'success',
+          text: 'Task added successfully'
         });
-    </script>
+        
+        // Clear status message after 3 seconds
+        setTimeout(() => {
+          setStatusMessage(null);
+        }, 3000);
+      };
+      
+      // Toggle task completion
+      const toggleTask = (id) => {
+        setTasks(tasks.map(task => 
+          task.id === id ? { ...task, completed: !task.completed } : task
+        ));
+      };
+      
+      // Delete task
+      const deleteTask = (id) => {
+        setTasks(tasks.filter(task => task.id !== id));
+        setStatusMessage({
+          type: 'success',
+          text: 'Task deleted successfully'
+        });
+        
+        // Clear status message after 3 seconds
+        setTimeout(() => {
+          setStatusMessage(null);
+        }, 3000);
+      };
+      
+      // Edit task
+      const openEditModal = (task) => {
+        setEditingTask({...task});
+      };
+      
+      // Update task
+      const updateTask = () => {
+        if (!editingTask.title.trim()) {
+          return;
+        }
+        
+        setTasks(tasks.map(task => 
+          task.id === editingTask.id ? editingTask : task
+        ));
+        
+        setEditingTask(null);
+        setStatusMessage({
+          type: 'success',
+          text: 'Task updated successfully'
+        });
+        
+        // Clear status message after 3 seconds
+        setTimeout(() => {
+          setStatusMessage(null);
+        }, 3000);
+      };
+      
+      return (
+        <div>
+          <h1>Welcome, {user.name}</h1>
+          
+          {statusMessage && (
+            <div className={`status status-${statusMessage.type}`} role="alert">
+              {statusMessage.text}
+            </div>
+          )}
+          
+          <div className="dashboard">
+            <div className="dashboard-sidebar">
+              <div className="card">
+                <h2>Task Filters</h2>
+                <div className="form-group">
+                  <label htmlFor="task-filter">Filter Tasks</label>
+                  <select 
+                    id="task-filter" 
+                    value={filter} 
+                    onChange={(e) => setFilter(e.target.value)}
+                    aria-label="Filter tasks by status"
+                  >
+                    <option value="all">All Tasks</option>
+                    <option value="active">Active Tasks</option>
+                    <option value="completed">Completed Tasks</option>
+                    <option value="high">High Priority</option>
+                  </select>
+                </div>
+                
+                <div className="mt-3">
+                  <h3>Task Summary</h3>
+                  <p>Total Tasks: {tasks.length}</p>
+                  <p>Completed: {tasks.filter(task => task.completed).length}</p>
+                  <p>Pending: {tasks.filter(task => !task.completed).length}</p>
+                  <p>High Priority: {tasks.filter(task => task.priority === 'high').length}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="dashboard-main">
+              <div className="card">
+                <h2>My Tasks</h2>
+                
+                <form onSubmit={addTask} className="task-form">
+                  <div className="task-input">
+                    <label htmlFor="new-task" className="visually-hidden">New Task</label>
+                    <input
+                      type="text"
+                      id="new-task"
+                      placeholder="Add a new task..."
+                      value={newTask}
+                      onChange={(e) => setNewTask(e.target.value)}
+                      aria-label="Enter a new task"
+                    />
+                  </div>
+                  <button type="submit" className="btn btn-primary">Add Task</button>
+                </form>
+                
+                {filteredTasks.length > 0 ? (
+                  <ul className="task-list" aria-label="Task list">
+                    {filteredTasks.map(task => (
+                      <li key={task.id} className="task-item">
+                        <div>
+                          <input
+                            type="checkbox"
+                            id={`task-${task.id}`}
+                            className="task-checkbox"
+                            checked={task.completed}
+                            onChange={() => toggleTask(task.id)}
+                            aria-label={`Mark "${task.title}" as ${task.completed ? 'incomplete' : 'complete'}`}
+                          />
+                          <label 
+                            htmlFor={`task-${task.id}`}
+                            className={task.completed ? 'task-completed' : ''}
+                          >
+                            {task.title}
+                            <span className="task-meta">
+                              {task.priority === 'high' && (
+                                <span className="task-priority" aria-label="High priority"> (High Priority)</span>
+                              )}
+                              <span className="task-due-date" aria-label={`Due date: ${task.dueDate}`}> - Due: {task.dueDate}</span>
+                            </span>
+                          </label>
+                        </div>
+                        <div className="task-actions">
+                          <button 
+                            className="btn btn-secondary"
+                            onClick={() => openEditModal(task)}
+                            aria-label={`Edit task: ${task.title}`}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            className="btn btn-danger"
+                            onClick={() => deleteTask(task.id)}
+                            aria-label={`Delete task: ${task.title}`}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="text-center mt-3">
+                    <p>No tasks found. Add a new task to get started!</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {editingTask && (
+            <EditTaskModal 
+              task={editingTask} 
+              setTask={setEditingTask} 
+              onSave={updateTask} 
+              onClose={() => setEditingTask(null)} 
+            />
+          )}
+        </div>
+      );
+    }
+    
+    // Edit Task Modal Component
+    function EditTaskModal({ task, setTask, onSave, onClose }) {
+      const modalRef = React.useRef(null);
+      const titleInputRef = React.useRef(null);
+      
+      // Focus on title input when modal opens
+      React.useEffect(() => {
+        if (titleInputRef.current) {
+          titleInputRef.current.focus();
+        }
+        
+        // Save previous active element to restore focus when modal closes
+        const previousActiveElement = document.activeElement;
+        
+        // Handle escape key to close modal
+        const handleKeyDown = (e) => {
+          if (e.key === 'Escape') {
+            onClose();
+          }
+        };
+        
+        document.addEventListener('keydown', handleKeyDown);
+        
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+          // Restore focus when component unmounts
+          if (previousActiveElement) {
+            previousActiveElement.focus();
+          }
+        };
+      }, [onClose]);
+      
+      // Handle clicks outside modal to close it
+      const handleOutsideClick = (e) => {
+        if (modalRef.current && !modalRef.current.contains(e.target)) {
+          onClose();
+        }
+      };
+      
+      const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setTask({
+          ...task,
+          [name]: type === 'checkbox' ? checked : value
+        });
+      };
+      
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave();
+      };
+      
+      return (
+        <div 
+          className="modal-backdrop" 
+          onClick={handleOutsideClick}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="edit-task-title"
+        >
+          <div className="modal" ref={modalRef}>
+            <div className="modal-header">
+              <h2 id="edit-task-title">Edit Task</h2>
+              <button 
+                className="modal-close" 
+                onClick={onClose}
+                aria-label="Close modal"
+              >
+                ×
+              </button>
+            </div>
+            
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="edit-task-title-input">Task Title</label>
+                <input
+                  type="text"
+                  id="edit-task-title-input"
+                  name="title"
+                  value={task.title}
+                  onChange={handleChange}
+                  ref={titleInputRef}
+                  aria-required="true"
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="edit-task-priority">Priority</label>
+                <select
+                  id="edit-task-priority"
+                  name="priority"
+                  value={task.priority}
+                  onChange={handleChange}
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="edit-task-due-date">Due Date</label>
+                <input
+                  type="date"
+                  id="edit-task-due-date"
+                  name="dueDate"
+                  value={task.dueDate}
+                  onChange={handleChange}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    name="completed"
+                    checked={task.completed}
+                    onChange={handleChange}
+                  />
+                  Mark as completed
+                </label>
+              </div>
+              
+              <div className="form-group">
+                <button type="submit" className="btn btn-primary">Save Changes</button>
+                <button type="button" className="btn btn-secondary" onClick={onClose}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      );
+    }
+    
+    // Preferences Modal Component
+    function PreferencesModal({ preferences, updatePreferences, onClose }) {
+      const modalRef = React.useRef(null);
+      
+      // Handle clicks outside modal to close it
+      const handleOutsideClick = (e) => {
+        if (modalRef.current && !modalRef.current.contains(e.target)) {
+          onClose();
+        }
+      };
+      
+      // Handle preference changes
+      const handleChange = (e) => {
+        const { name, checked } = e.target;
+        updatePreferences({ [name]: checked });
+      };
+      
+      // Focus trap and keyboard handling
+      React.useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === 'Escape') {
+            onClose();
+          }
+        };
+        
+        document.addEventListener('keydown', handleKeyDown);
+        
+        // Save previous active element to restore focus when modal closes
+        const previousActiveElement = document.activeElement;
+        
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+          // Restore focus when component unmounts
+          if (previousActiveElement) {
+            previousActiveElement.focus();
+          }
+        };
+      }, [onClose]);
+      
+      return (
+        <div 
+          className="modal-backdrop" 
+          onClick={handleOutsideClick}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="preferences-title"
+        >
+          <div className="modal" ref={modalRef}>
+            <div className="modal-header">
+              <h2 id="preferences-title">Accessibility Preferences</h2>
+              <button 
+                className="modal-close" 
+                onClick={onClose}
+                aria-label="Close preferences modal"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="form-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  name="highContrast"
+                  checked={preferences.highContrast}
+                  onChange={handleChange}
+                />
+                High Contrast Mode
+              </label>
+              <div id="high-contrast-help" className="mt-1">
+                Increases contrast for better readability.
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  name="darkMode"
+                  checked={preferences.darkMode}
+                  onChange={handleChange}
+                />
+                Dark Mode
+              </label>
+              <div id="dark-mode-help" className="mt-1">
+                Uses dark background with light text.
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  name="reducedMotion"
+                  checked={preferences.reducedMotion}
+                  onChange={handleChange}
+                />
+                Reduced Motion
+              </label>
+              <div id="reduced-motion-help" className="mt-1">
+                Minimizes animations and transitions.
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <button type="button" className="btn btn-primary" onClick={onClose}>Save Preferences</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // Render the App
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
 </body>
 </html>
