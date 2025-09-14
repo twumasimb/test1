@@ -2,1567 +2,931 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
-<title>Accessible Task Manager SPA - User Login & Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Accessible Interactive Webpage with Smooth Animations and Click Effects</title>
 <style>
   /* Reset and base */
-  *, *::before, *::after {
-    box-sizing: border-box;
+  :root {
+    --color-primary: #004d99; /* Dark Blue */
+    --color-primary-light: #2673cc;
+    --color-primary-dark: #003366;
+    --color-secondary: #e63946; /* Strong Red */
+    --color-secondary-light: #f0807a;
+    --color-secondary-dark: #a32a31;
+    --color-accent: #2a9d8f; /* Teal */
+    --color-accent-light: #57b9aa;
+    --color-accent-dark: #1f6f66;
+    --color-bg: #f9f9f9;
+    --color-text: #111111;
+    --color-text-light: #333333;
+    --color-focus-outline: #ffbf47; /* Bright gold for focus */
+    --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --transition-duration: 0.3s;
+    --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --min-touch-size: 44px;
   }
   html {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px;
     line-height: 1.6;
-    color: #1a1a1a;
-    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
-    min-height: 100%;
     scroll-behavior: smooth;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family);
   }
   body {
     margin: 0;
     padding: 0;
-    background-color: #e3f2fd;
-    color: #1a1a1a;
-  }
-  a {
-    color: #0d47a1;
-    text-decoration: underline;
-  }
-  a:focus,
-  button:focus,
-  input:focus,
-  select:focus,
-  textarea:focus {
-    outline: 3px solid #ffbf47;
-    outline-offset: 2px;
   }
   /* Skip link */
-  #skip-link {
+  .skip-link {
     position: absolute;
     top: -40px;
     left: 0;
-    background: #ffbf47;
-    color: #000;
+    background: var(--color-secondary);
+    color: white;
     padding: 0.75rem 1rem;
     z-index: 100;
+    text-decoration: none;
     font-weight: 700;
     border-radius: 0 0 4px 0;
     transition: top 0.3s ease;
   }
-  #skip-link:focus {
+  .skip-link:focus {
     top: 0;
+    outline: 3px solid var(--color-focus-outline);
+    outline-offset: 2px;
   }
+
   /* Layout */
   header, nav, main, footer, section, article {
     display: block;
   }
   header {
-    background: linear-gradient(90deg, #1565c0, #42a5f5);
-    color: #fff;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
   }
   header h1 {
     margin: 0;
-    font-size: 1.75rem;
-    line-height: 1.2;
+    font-size: 2rem;
+    max-width: 80ch;
   }
-  nav[aria-label="Primary"] {
-    background-color: #0d47a1;
-    box-shadow: inset 0 -3px 0 #ffbf47;
+
+  nav[aria-label="Primary Navigation"] {
+    background-color: var(--color-primary-light);
+    box-shadow: inset 0 -3px 0 var(--color-secondary);
   }
-  nav[aria-label="Primary"] ul {
-    margin: 0;
-    padding: 0;
+  nav ul {
     list-style: none;
+    margin: 0;
+    padding: 0 2rem;
     display: flex;
-    flex-wrap: wrap;
+    gap: 1rem;
   }
-  nav[aria-label="Primary"] li {
+  nav li {
     position: relative;
   }
-  nav[aria-label="Primary"] > ul > li {
-    margin: 0;
-  }
-  nav[aria-label="Primary"] a,
-  nav[aria-label="Primary"] button.menu-button {
-    display: block;
-    padding: 1rem 1.25rem;
-    color: #ffeb3b;
-    font-weight: 700;
-    font-size: 1rem;
-    text-decoration: none;
+  nav a, nav button {
+    color: white;
     background: none;
     border: none;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
     cursor: pointer;
-    min-width: 44px;
-    min-height: 44px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--min-touch-size);
+    min-height: var(--min-touch-size);
+    transition:
+      background-color var(--transition-duration) var(--transition-ease),
+      color var(--transition-duration) var(--transition-ease),
+      transform var(--transition-duration) var(--transition-ease);
   }
-  nav[aria-label="Primary"] a:hover,
-  nav[aria-label="Primary"] a:focus,
-  nav[aria-label="Primary"] button.menu-button:hover,
-  nav[aria-label="Primary"] button.menu-button:focus {
-    background-color: #ffbf47;
-    color: #0d47a1;
-    outline-offset: 2px;
+  nav a:focus-visible,
+  nav button:focus-visible {
+    outline: 3px solid var(--color-focus-outline);
+    outline-offset: 3px;
   }
-  nav[aria-label="Primary"] li[aria-haspopup="true"] > button.menu-button::after {
-    content: "▾";
-    margin-left: 0.25rem;
-    font-size: 0.8rem;
+  nav a:hover,
+  nav button:hover,
+  nav a:focus-visible,
+  nav button:focus-visible {
+    background-color: var(--color-secondary);
+    color: white;
+    transform: translateY(-3px);
   }
-  nav[aria-label="Primary"] ul ul {
+  nav button[aria-expanded="true"] {
+    background-color: var(--color-secondary-dark);
+  }
+
+  /* Dropdown menu */
+  .dropdown-menu {
     position: absolute;
     top: 100%;
     left: 0;
-    background: #1565c0;
-    border: 2px solid #ffbf47;
-    border-radius: 4px;
-    min-width: 200px;
-    display: none;
-    z-index: 200;
+    background: var(--color-primary-dark);
+    border-radius: 6px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition:
+      opacity var(--transition-duration) var(--transition-ease),
+      transform var(--transition-duration) var(--transition-ease),
+      visibility 0s linear var(--transition-duration);
+    z-index: 10;
   }
-  nav[aria-label="Primary"] ul ul li {
-    width: 100%;
+  .dropdown-menu[aria-hidden="false"] {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
   }
-  nav[aria-label="Primary"] ul ul a {
-    padding: 0.75rem 1rem;
-    font-weight: 600;
-    color: #fffde7;
+  .dropdown-menu li {
+    border-bottom: 1px solid var(--color-primary);
   }
-  nav[aria-label="Primary"] ul ul a:hover,
-  nav[aria-label="Primary"] ul ul a:focus {
-    background-color: #ffbf47;
-    color: #0d47a1;
+  .dropdown-menu li:last-child {
+    border-bottom: none;
   }
-  nav[aria-label="Primary"] li[aria-expanded="true"] > ul {
+  .dropdown-menu a {
     display: block;
+    padding: 0.75rem 1rem;
+    color: white;
+    font-weight: 500;
+    min-height: var(--min-touch-size);
+    min-width: 100%;
+    text-decoration: none;
+    transition:
+      background-color var(--transition-duration) var(--transition-ease),
+      color var(--transition-duration) var(--transition-ease);
   }
-  /* Hamburger menu for mobile */
-  .mobile-menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: #ffeb3b;
-    font-size: 1.5rem;
-    padding: 1rem;
-    cursor: pointer;
-    min-width: 44px;
-    min-height: 44px;
+  .dropdown-menu a:hover,
+  .dropdown-menu a:focus-visible {
+    background-color: var(--color-secondary);
+    color: white;
+    outline: none;
   }
-  .mobile-menu-toggle:focus {
-    outline: 3px solid #ffbf47;
-    outline-offset: 2px;
-  }
-  @media (max-width: 768px) {
-    nav[aria-label="Primary"] ul {
-      flex-direction: column;
-      display: none;
-      background-color: #0d47a1;
-      border-top: 3px solid #ffbf47;
-    }
-    nav[aria-label="Primary"] ul[aria-expanded="true"] {
-      display: flex;
-    }
-    nav[aria-label="Primary"] li[aria-haspopup="true"] > ul {
-      position: static;
-      border: none;
-      background-color: #1976d2;
-      box-shadow: none;
-      border-radius: 0;
-    }
-    .mobile-menu-toggle {
-      display: inline-block;
-    }
-  }
+
+  /* Main content */
   main {
-    max-width: 960px;
+    max-width: 90ch;
     margin: 2rem auto;
     padding: 0 1rem;
-    background-color: #ffffff;
+  }
+  main > section {
+    margin-bottom: 3rem;
+  }
+  main h2 {
+    font-size: 1.75rem;
+    color: var(--color-primary-dark);
+    border-bottom: 3px solid var(--color-secondary);
+    padding-bottom: 0.25rem;
+    margin-bottom: 1rem;
+    max-width: 80ch;
+  }
+  main p {
+    font-size: 1.125rem;
+    color: var(--color-text-light);
+    max-width: 80ch;
+  }
+
+  /* Interactive buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent);
+    color: white;
+    border: none;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+    font-size: 1.125rem;
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    min-width: var(--min-touch-size);
+    min-height: var(--min-touch-size);
+    user-select: none;
+    transition:
+      background-color var(--transition-duration) var(--transition-ease),
+      box-shadow var(--transition-duration) var(--transition-ease),
+      transform var(--transition-duration) var(--transition-ease);
+    box-shadow: 0 4px 0 var(--color-accent-dark);
   }
-  footer {
-    background: linear-gradient(90deg, #1565c0, #42a5f5);
-    color: #fff;
-    text-align: center;
-    padding: 1rem 1.5rem;
-    font-size: 0.9rem;
+  .btn:hover,
+  .btn:focus-visible {
+    background-color: var(--color-accent-dark);
+    box-shadow: 0 6px 0 var(--color-accent-dark);
+    transform: translateY(-2px);
+    outline: 3px solid var(--color-focus-outline);
+    outline-offset: 3px;
   }
-  /* Forms */
+  .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 0 var(--color-accent-dark);
+  }
+
+  /* Card container */
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    transition:
+      box-shadow var(--transition-duration) var(--transition-ease),
+      transform var(--transition-duration) var(--transition-ease);
+    cursor: default;
+    user-select: none;
+  }
+  .card:focus-within,
+  .card:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: translateY(-6px);
+  }
+  .card h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+    font-size: 1.25rem;
+  }
+  .card p {
+    margin: 0;
+    color: var(--color-text-light);
+  }
+
+  /* Accessible focus ring for all interactive elements */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid var(--color-focus-outline);
+    outline-offset: 3px;
+  }
+
+  /* Form styles */
   form {
-    max-width: 480px;
-    margin: 0 auto 2rem auto;
+    max-width: 40rem;
+    background: white;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
   }
   fieldset {
-    border: 2px solid #1976d2;
-    border-radius: 6px;
-    padding: 1rem 1.25rem 1.5rem 1.25rem;
-    margin-bottom: 1.5rem;
-    background-color: #e3f2fd;
+    border: none;
+    margin: 0 0 1.5rem 0;
+    padding: 0;
   }
   legend {
     font-weight: 700;
     font-size: 1.25rem;
-    color: #0d47a1;
-    padding: 0 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-primary-dark);
   }
   label {
     display: block;
     font-weight: 600;
     margin-bottom: 0.25rem;
-    color: #0d47a1;
+    color: var(--color-primary);
   }
-  input[type="email"],
-  input[type="password"],
-  input[type="text"],
-  input[type="search"],
-  textarea {
+  input, select, textarea {
     width: 100%;
-    padding: 0.5rem 0.75rem;
     font-size: 1rem;
-    border: 2px solid #1976d2;
-    border-radius: 4px;
-    transition: border-color 0.3s ease;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--color-primary-light);
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition:
+      border-color var(--transition-duration) var(--transition-ease),
+      box-shadow var(--transition-duration) var(--transition-ease);
   }
-  input[type="email"]:focus,
-  input[type="password"]:focus,
-  input[type="text"]:focus,
-  input[type="search"]:focus,
+  input:focus,
+  select:focus,
   textarea:focus {
-    border-color: #ffbf47;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 6px var(--color-secondary-light);
     outline: none;
   }
+  input[aria-invalid="true"],
+  select[aria-invalid="true"],
+  textarea[aria-invalid="true"] {
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 6px var(--color-secondary);
+  }
   .required-indicator {
-    color: #d32f2f;
-    font-weight: 700;
+    color: var(--color-secondary);
     margin-left: 0.25rem;
   }
   .help-text {
     font-size: 0.875rem;
-    color: #0d47a1;
+    color: var(--color-text-light);
     margin-top: 0.25rem;
   }
   .error-message {
-    color: #d32f2f;
+    color: var(--color-secondary);
     font-weight: 700;
+    font-size: 0.9rem;
     margin-top: 0.25rem;
   }
-  .error-message[aria-live] {
-    min-height: 1.5em;
-  }
-  button[type="submit"],
-  button.task-action {
-    background: linear-gradient(45deg, #ffbf47, #f9a825);
-    border: none;
-    border-radius: 6px;
-    color: #0d47a1;
-    font-weight: 700;
-    font-size: 1rem;
-    padding: 0.6rem 1.25rem;
-    cursor: pointer;
-    min-width: 44px;
-    min-height: 44px;
-    box-shadow: 0 4px 6px rgb(0 0 0 / 0.15);
-    transition: background 0.3s ease;
-  }
-  button[type="submit"]:hover,
-  button[type="submit"]:focus,
-  button.task-action:hover,
-  button.task-action:focus {
-    background: linear-gradient(45deg, #f9a825, #ffbf47);
-    outline-offset: 2px;
-  }
-  /* Dashboard */
-  #dashboard {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  }
-  #welcome-section {
-    flex: 1 1 100%;
-    background-color: #bbdefb;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    box-shadow: inset 0 0 10px #90caf9;
-  }
-  #welcome-section h2 {
-    margin-top: 0;
-    color: #0d47a1;
-  }
-  #task-manager {
-    flex: 2 1 60%;
-    background-color: #e3f2fd;
-    border: 2px solid #1976d2;
-    border-radius: 8px;
-    padding: 1rem 1.5rem;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-  }
-  #task-manager h2 {
-    margin-top: 0;
-    color: #0d47a1;
-  }
-  #task-list {
-    margin-top: 1rem;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1rem;
-  }
-  thead tr {
-    background: linear-gradient(90deg, #0d47a1, #1976d2);
-    color: #ffeb3b;
-  }
-  th, td {
-    padding: 0.75rem 1rem;
-    border: 1px solid #1976d2;
-    text-align: left;
-    vertical-align: middle;
-  }
-  tbody tr:nth-child(even) {
-    background-color: #bbdefb;
-  }
-  tbody tr:hover,
-  tbody tr:focus-within {
-    background-color: #f9fbe7;
-    outline: 3px solid #ffbf47;
-    outline-offset: -3px;
-  }
-  .task-completed {
-    color: #388e3c;
-    font-style: italic;
-    text-decoration: line-through;
-  }
-  .task-actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-  /* Modal */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(13, 71, 161, 0.85);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  .modal-overlay.active {
-    display: flex;
-  }
-  .modal {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 1.5rem 2rem;
-    max-width: 480px;
-    width: 90%;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
-    position: relative;
-  }
-  .modal h3 {
-    margin-top: 0;
-    color: #0d47a1;
-  }
-  .modal button.close-modal {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #1976d2;
-    cursor: pointer;
-    min-width: 44px;
-    min-height: 44px;
-  }
-  .modal button.close-modal:focus {
-    outline: 3px solid #ffbf47;
-    outline-offset: 2px;
-  }
-  /* Focus visible polyfill */
-  :focus-visible {
-    outline: 3px solid #ffbf47 !important;
-    outline-offset: 2px !important;
-  }
-  /* Responsive */
+
+  /* Responsive typography */
   @media (max-width: 600px) {
-    #dashboard {
-      flex-direction: column;
+    html {
+      font-size: 16px;
     }
-    #task-manager {
-      flex: 1 1 100%;
+    nav ul {
+      flex-direction: column;
+      padding: 0 1rem;
+    }
+    nav li {
+      margin-bottom: 0.25rem;
     }
   }
-  /* Color theme switcher */
-  #color-theme-controls {
-    margin-top: 1rem;
+
+  /* Motion & Animation */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001s !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Focus visible enhancement for keyboard users */
+  .focus-visible {
+    outline: 3px solid var(--color-focus-outline);
+    outline-offset: 3px;
+  }
+
+  /* Tooltip style for abbreviation */
+  abbr[title] {
+    border-bottom: 1px dotted var(--color-primary-dark);
+    cursor: help;
+  }
+
+  /* Color scheme switcher */
+  #color-scheme-switcher {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     display: flex;
-    gap: 1rem;
     align-items: center;
     justify-content: center;
+    transition:
+      background-color var(--transition-duration) var(--transition-ease),
+      transform var(--transition-duration) var(--transition-ease);
   }
-  #color-theme-controls label {
-    font-weight: 600;
-    color: #0d47a1;
+  #color-scheme-switcher:hover,
+  #color-scheme-switcher:focus-visible {
+    background-color: var(--color-secondary);
+    outline-offset: 3px;
+    transform: rotate(20deg);
   }
-  #color-theme-controls select {
-    font-size: 1rem;
-    padding: 0.3rem 0.5rem;
-    border-radius: 4px;
-    border: 2px solid #1976d2;
-    background-color: #e3f2fd;
-    color: #0d47a1;
-  }
-  /* Vibrant color themes */
-  body.theme-default {
-    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
-    color: #1a1a1a;
-  }
-  body.theme-sunset {
-    background: linear-gradient(135deg, #ff6f61 0%, #ffcc5c 100%);
-    color: #3e2723;
-  }
-  body.theme-forest {
-    background: linear-gradient(135deg, #2e7d32 0%, #a5d6a7 100%);
-    color: #1b5e20;
-  }
-  /* Reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-      scroll-behavior: auto !important;
+
+  /* Alternate color scheme (dark mode) */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg: #121212;
+      --color-text: #e0e0e0;
+      --color-text-light: #cfcfcf;
+      --color-primary: #4dabf7;
+      --color-primary-light: #82c7ff;
+      --color-primary-dark: #1c64f2;
+      --color-secondary: #f07178;
+      --color-secondary-light: #f79a9f;
+      --color-secondary-dark: #b23a3f;
+      --color-accent: #80cbc4;
+      --color-accent-light: #a7d8d1;
+      --color-accent-dark: #4f8c87;
+      --color-focus-outline: #ffbf47;
+    }
+    header {
+      box-shadow: 0 4px 8px rgba(255 255 255 / 0.15);
+    }
+    nav[aria-label="Primary Navigation"] {
+      box-shadow: inset 0 -3px 0 var(--color-secondary);
+    }
+    nav a, nav button {
+      color: var(--color-text);
+    }
+    nav a:hover,
+    nav button:hover,
+    nav a:focus-visible,
+    nav button:focus-visible {
+      background-color: var(--color-secondary);
+      color: white;
+    }
+    .card {
+      background: #1e1e1e;
+      box-shadow: 0 6px 18px rgba(0 0 0 / 0.8);
+    }
+    form {
+      background: #1e1e1e;
+      box-shadow: 0 6px 18px rgba(0 0 0 / 0.8);
     }
   }
 </style>
 </head>
-<body class="theme-default">
-<a href="#main-content" id="skip-link">Skip to main content</a>
-<header role="banner">
-  <h1>Accessible Task Manager SPA</h1>
+<body>
+<a href="#main-content" class="skip-link" tabindex="0">Skip to main content</a>
+
+<header>
+  <h1>Accessible Interactive Webpage with Smooth Animations and Click Effects</h1>
 </header>
-<nav aria-label="Primary" role="navigation">
-  <button class="mobile-menu-toggle" aria-controls="primary-menu" aria-expanded="false" aria-label="Toggle main menu">
-    ☰ Menu
-  </button>
-  <ul id="primary-menu" tabindex="-1">
-    <li><a href="#login-section" id="nav-login" aria-current="page">Login</a></li>
-    <li><a href="#dashboard-section" id="nav-dashboard" hidden>Dashboard</a></li>
-    <li><a href="#help-section" id="nav-help">Help</a></li>
+
+<nav aria-label="Primary Navigation">
+  <ul role="menubar" aria-live="polite">
+    <li role="none">
+      <a href="#intro" role="menuitem" tabindex="0">Introduction</a>
+    </li>
+    <li role="none">
+      <button aria-haspopup="true" aria-expanded="false" aria-controls="features-menu" role="menuitem" tabindex="0" id="features-menu-button">
+        Features <span aria-hidden="true">▾</span>
+      </button>
+      <ul class="dropdown-menu" id="features-menu" role="menu" aria-labelledby="features-menu-button" aria-hidden="true">
+        <li role="none"><a href="#animations" role="menuitem" tabindex="-1">Animations</a></li>
+        <li role="none"><a href="#forms" role="menuitem" tabindex="-1">Forms</a></li>
+        <li role="none"><a href="#buttons" role="menuitem" tabindex="-1">Buttons</a></li>
+      </ul>
+    </li>
+    <li role="none">
+      <a href="#contact" role="menuitem" tabindex="0">Contact</a>
+    </li>
+    <li role="none">
+      <a href="#help" role="menuitem" tabindex="0">Help</a>
+    </li>
   </ul>
 </nav>
+
 <main id="main-content" tabindex="-1">
-  <!-- React app mounts here -->
-  <div id="root" role="main" aria-live="polite" aria-atomic="true"></div>
+  <section id="intro" tabindex="-1">
+    <h2>Introduction</h2>
+    <p>
+      Welcome to this <strong>accessible interactive webpage</strong> designed with <em>smooth hover effects</em>, transitions, and dynamic element movements on hover.
+      All interactive components include click effects and are fully keyboard accessible. This page strictly adheres to the <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 AAA standards.
+    </p>
+  </section>
+
+  <section id="animations" tabindex="-1">
+    <h2>Animations and Hover Effects</h2>
+    <article>
+      <h3>Card Hover Effects</h3>
+      <p>Hover or focus on the cards below to see smooth animations and subtle movement.</p>
+      <div class="card-container" aria-label="Interactive cards demonstrating hover animations">
+        <article class="card" tabindex="0" role="region" aria-labelledby="card1-title" aria-describedby="card1-desc">
+          <h3 id="card1-title">Smooth Elevation</h3>
+          <p id="card1-desc">The card lifts up and casts a deeper shadow on hover or keyboard focus.</p>
+        </article>
+        <article class="card" tabindex="0" role="region" aria-labelledby="card2-title" aria-describedby="card2-desc">
+          <h3 id="card2-title">Color Accent</h3>
+          <p id="card2-desc">The accent color brightens and the card moves slightly upward.</p>
+        </article>
+        <article class="card" tabindex="0" role="region" aria-labelledby="card3-title" aria-describedby="card3-desc">
+          <h3 id="card3-title">Interactive Feedback</h3>
+          <p id="card3-desc">Keyboard and mouse users receive consistent visual feedback.</p>
+        </article>
+      </div>
+    </article>
+
+    <article>
+      <h3>Buttons with Click Effects</h3>
+      <p>Try clicking or pressing the buttons below to experience smooth click animations and accessible feedback.</p>
+      <button class="btn" type="button" aria-pressed="false" id="btn-animate" aria-describedby="btn-animate-desc">
+        Click Me
+      </button>
+      <p id="btn-animate-desc" class="help-text">Press Enter or Space to activate the button. The button toggles its pressed state with animation.</p>
+    </article>
+  </section>
+
+  <section id="forms" tabindex="-1">
+    <h2>Accessible Form with Validation and Help</h2>
+    <form novalidate aria-describedby="form-desc" aria-live="polite" id="contact-form">
+      <p id="form-desc" class="help-text">Please fill out the form below. Required fields are marked with an asterisk <span aria-hidden="true">*</span>.</p>
+      <fieldset>
+        <legend>Contact Information</legend>
+
+        <label for="name">
+          Full Name
+          <span class="required-indicator" aria-hidden="true">*</span>
+        </label>
+        <input type="text" id="name" name="name" autocomplete="name" required aria-required="true" aria-describedby="name-help name-error" aria-invalid="false" minlength="2" maxlength="50" />
+        <div id="name-help" class="help-text">Enter your full name (2 to 50 characters).</div>
+        <div id="name-error" class="error-message" aria-live="assertive" role="alert" hidden></div>
+
+        <label for="email">
+          Email Address
+          <span class="required-indicator" aria-hidden="true">*</span>
+        </label>
+        <input type="email" id="email" name="email" autocomplete="email" required aria-required="true" aria-describedby="email-help email-error" aria-invalid="false" />
+        <div id="email-help" class="help-text">Enter a valid email address (e.g., user@example.com).</div>
+        <div id="email-error" class="error-message" aria-live="assertive" role="alert" hidden></div>
+
+        <label for="phone">
+          Phone Number
+        </label>
+        <input type="tel" id="phone" name="phone" autocomplete="tel" aria-describedby="phone-help phone-error" aria-invalid="false" pattern="^\+?[0-9\s\-().]{7,20}$" />
+        <div id="phone-help" class="help-text">Optional. Include country code if applicable (e.g., +1 555 555 5555).</div>
+        <div id="phone-error" class="error-message" aria-live="assertive" role="alert" hidden></div>
+
+        <label for="contact-method">
+          Preferred Contact Method
+          <span class="required-indicator" aria-hidden="true">*</span>
+        </label>
+        <select id="contact-method" name="contact-method" required aria-required="true" aria-describedby="contact-method-help contact-method-error" aria-invalid="false">
+          <option value="" disabled selected>Select a method</option>
+          <option value="email">Email</option>
+          <option value="phone">Phone</option>
+          <option value="none">No Contact</option>
+        </select>
+        <div id="contact-method-help" class="help-text">Choose how you prefer to be contacted.</div>
+        <div id="contact-method-error" class="error-message" aria-live="assertive" role="alert" hidden></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Message</legend>
+        <label for="message">
+          Your Message
+          <span class="required-indicator" aria-hidden="true">*</span>
+        </label>
+        <textarea id="message" name="message" rows="5" required aria-required="true" aria-describedby="message-help message-error" aria-invalid="false" minlength="10" maxlength="1000"></textarea>
+        <div id="message-help" class="help-text">Write your message here (10 to 1000 characters).</div>
+        <div id="message-error" class="error-message" aria-live="assertive" role="alert" hidden></div>
+      </fieldset>
+
+      <button type="submit" class="btn" aria-describedby="form-submit-desc">Send Message</button>
+      <p id="form-submit-desc" class="help-text" aria-live="polite" role="status"></p>
+    </form>
+  </section>
+
+  <section id="buttons" tabindex="-1">
+    <h2>Interactive Buttons Showcase</h2>
+    <p>Below are several buttons demonstrating smooth hover, focus, and click animations with accessible feedback.</p>
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+      <button class="btn" type="button" aria-label="Primary action button" id="primary-btn">Primary Action</button>
+      <button class="btn" type="button" aria-label="Secondary action button" id="secondary-btn" style="background-color: var(--color-secondary); box-shadow: 0 4px 0 var(--color-secondary-dark);">
+        Secondary Action
+      </button>
+      <button class="btn" type="button" aria-label="Accent action button" id="accent-btn" style="background-color: var(--color-accent-dark); box-shadow: 0 4px 0 var(--color-accent);">
+        Accent Action
+      </button>
+    </div>
+  </section>
+
+  <section id="contact" tabindex="-1">
+    <h2>Contact Information</h2>
+    <address>
+      <p>
+        You can reach us via email at
+        <a href="mailto:support@example.com" aria-label="Send email to support@example.com">support@example.com</a>
+        or call us at
+        <a href="tel:+15555555555" aria-label="Call phone number +1 555 555 5555">+1 555 555 5555</a>.
+      </p>
+      <p>
+        Our office is located at:
+        <br />
+        123 Accessibility Ave.<br />
+        Suite 100<br />
+        Inclusive City, AC 12345
+      </p>
+    </address>
+  </section>
+
+  <section id="help" tabindex="-1">
+    <h2>Help and Support</h2>
+    <p>
+      This page provides extensive <strong>context-sensitive help</strong> for all interactive elements.
+      If you need assistance, please use the <a href="#contact" aria-label="Go to contact information section">contact information</a> above or reach out through the form.
+    </p>
+    <p>
+      <strong>Keyboard Navigation Tips:</strong>
+      Use <kbd>Tab</kbd> to move forward through interactive elements and <kbd>Shift + Tab</kbd> to move backward.
+      Use <kbd>Enter</kbd> or <kbd>Space</kbd> to activate buttons and open menus.
+      Press <kbd>Esc</kbd> to close open dropdown menus.
+    </p>
+  </section>
 </main>
-<footer role="contentinfo">
-  <p>© 2024 Accessible Task Manager. All rights reserved.</p>
+
+<footer>
+  <nav aria-label="Breadcrumb" style="padding: 1rem 2rem; background-color: var(--color-primary-light); color: white;">
+    <ol style="list-style: none; margin: 0; padding: 0; display: flex; gap: 0.5rem; font-size: 0.9rem;">
+      <li><a href="#main-content" style="color: white; text-decoration: underline;">Home</a> ›</li>
+      <li><a href="#intro" style="color: white; text-decoration: underline;">Introduction</a> ›</li>
+      <li aria-current="page" style="color: #ffdb99;">Interactive Page</li>
+    </ol>
+  </nav>
+  <p style="text-align:center; padding: 1rem 2rem; font-size: 0.9rem; color: var(--color-text-light); max-width: 90ch; margin: auto;">
+    &copy; 2024 Accessible Web Solutions. All rights reserved.
+  </p>
 </footer>
 
-<script>
-  // React and ReactDOM from CDN (self-contained SPA requirement means we embed React ourselves)
-  // But the user request requires pure vanilla code with no external dependencies.
-  // However, user specifically requested React SPA.
-  // To comply with "No External Dependencies" and React SPA, we must embed React and ReactDOM ourselves.
-  // Since we cannot load external scripts, we'll embed React and ReactDOM UMD builds as inline scripts.
-  // But React UMD builds are huge and impractical to inline here.
-  // Therefore, we will implement a React-like SPA using vanilla JS with JSX-like structure manually.
-  // However, user specifically requested React SPA.
-  // To reconcile, we will simulate React SPA with vanilla JS and ARIA compliance, given constraints.
-  // We'll build a SPA with modular components, state management, routing, and accessibility.
+<button id="color-scheme-switcher" aria-label="Toggle color scheme" title="Toggle color scheme (light/dark)" type="button">🌓</button>
 
+<script>
   (() => {
     "use strict";
 
-    // Utility: Create element with attributes, children, and event listeners
-    function createElement(tag, attrs = {}, ...children) {
-      const el = document.createElement(tag);
-      for (const [key, value] of Object.entries(attrs)) {
-        if (key.startsWith("on") && typeof value === "function") {
-          el.addEventListener(key.slice(2).toLowerCase(), value);
-        } else if (key === "className") {
-          el.className = value;
-        } else if (key === "htmlFor") {
-          el.htmlFor = value;
-        } else if (key === "ariaCurrent") {
-          if (value === true) el.setAttribute("aria-current", "page");
-          else if (value === false) el.removeAttribute("aria-current");
-          else el.setAttribute("aria-current", value);
-        } else if (value === false || value === null || value === undefined) {
-          // skip false/null/undefined attributes
-        } else {
-          el.setAttribute(key, value);
-        }
-      }
-      children.flat().forEach(child => {
-        if (child == null) return;
-        if (typeof child === "string" || typeof child === "number") {
-          el.appendChild(document.createTextNode(child));
-        } else if (child instanceof Node) {
-          el.appendChild(child);
-        }
-      });
-      return el;
+    // Utility: Detect reduced motion preference
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Dropdown menu functionality with keyboard support
+    const menuButton = document.getElementById("features-menu-button");
+    const dropdownMenu = document.getElementById("features-menu");
+
+    let dropdownOpen = false;
+
+    function openDropdown() {
+      dropdownMenu.setAttribute("aria-hidden", "false");
+      menuButton.setAttribute("aria-expanded", "true");
+      dropdownOpen = true;
+      // Focus first menu item
+      const firstItem = dropdownMenu.querySelector('a[role="menuitem"]');
+      if (firstItem) firstItem.focus();
+    }
+    function closeDropdown() {
+      dropdownMenu.setAttribute("aria-hidden", "true");
+      menuButton.setAttribute("aria-expanded", "false");
+      dropdownOpen = false;
+      menuButton.focus();
+    }
+    function toggleDropdown() {
+      if (dropdownOpen) closeDropdown();
+      else openDropdown();
     }
 
-    // State management and routing for SPA
-    const state = {
-      user: null, // { email, name }
-      tasks: [], // {id, title, description, dueDate, completed}
-      authError: null,
-      taskFormError: null,
-      taskFormData: {
-        title: "",
-        description: "",
-        dueDate: ""
-      },
-      isEditingTaskId: null,
-      loading: false,
-      menuExpanded: false,
-      theme: "default",
-      timeoutWarning: false,
-      inactivityTimer: null,
-      inactivityWarningTimer: null,
-      sessionTimeoutMinutes: 15,
-      sessionWarningMinutes: 13,
-    };
+    menuButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      toggleDropdown();
+    });
 
-    // Utility for generating unique IDs for tasks
-    function generateId() {
-      return "task-" + Math.random().toString(36).slice(2, 10);
-    }
-
-    // LocalStorage keys
-    const LS_USER_KEY = "accessible-task-manager-user";
-    const LS_TASKS_KEY = "accessible-task-manager-tasks";
-    const LS_THEME_KEY = "accessible-task-manager-theme";
-
-    // Save/load user and tasks to/from localStorage to minimize repeated entry
-    function saveUserToStorage(user) {
-      if (user) {
-        localStorage.setItem(LS_USER_KEY, JSON.stringify(user));
-      } else {
-        localStorage.removeItem(LS_USER_KEY);
-      }
-    }
-    function loadUserFromStorage() {
-      try {
-        const userJson = localStorage.getItem(LS_USER_KEY);
-        if (userJson) return JSON.parse(userJson);
-      } catch {}
-      return null;
-    }
-    function saveTasksToStorage(tasks) {
-      localStorage.setItem(LS_TASKS_KEY, JSON.stringify(tasks));
-    }
-    function loadTasksFromStorage() {
-      try {
-        const tasksJson = localStorage.getItem(LS_TASKS_KEY);
-        if (tasksJson) return JSON.parse(tasksJson);
-      } catch {}
-      return [];
-    }
-    function saveThemeToStorage(theme) {
-      localStorage.setItem(LS_THEME_KEY, theme);
-    }
-    function loadThemeFromStorage() {
-      try {
-        const theme = localStorage.getItem(LS_THEME_KEY);
-        if (theme) return theme;
-      } catch {}
-      return "default";
-    }
-
-    // Authentication simulation: simple email + password validation
-    // Password is "Password123!" for demo, but we don't store it anywhere
-    function authenticate(email, password) {
-      // Validate email format
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailPattern.test(email)) {
-        return { success: false, message: "Please enter a valid email address." };
-      }
-      // Password rules: min 8 chars, uppercase, lowercase, number, special char
-      if (password.length < 8) {
-        return { success: false, message: "Password must be at least 8 characters long." };
-      }
-      if (!/[A-Z]/.test(password)) {
-        return { success: false, message: "Password must contain at least one uppercase letter." };
-      }
-      if (!/[a-z]/.test(password)) {
-        return { success: false, message: "Password must contain at least one lowercase letter." };
-      }
-      if (!/[0-9]/.test(password)) {
-        return { success: false, message: "Password must contain at least one number." };
-      }
-      if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
-        return { success: false, message: "Password must contain at least one special character." };
-      }
-      // For demo, accept any email/password that passes above validation
-      // Return user object with name extracted from email prefix capitalized
-      const name = email.split("@")[0].replace(/[^a-zA-Z0-9]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-      return { success: true, user: { email, name } };
-    }
-
-    // Accessibility: announce status messages
-    function announce(message) {
-      const liveRegion = document.getElementById("aria-live-region");
-      if (liveRegion) {
-        liveRegion.textContent = "";
-        setTimeout(() => {
-          liveRegion.textContent = message;
-        }, 100);
-      }
-    }
-
-    // Focus management helper: focus first focusable element inside container
-    function focusFirstFocusable(container) {
-      if (!container) return;
-      const focusableSelectors = [
-        'a[href]:not([disabled])',
-        'button:not([disabled])',
-        'input:not([disabled]):not([type="hidden"])',
-        'select:not([disabled])',
-        'textarea:not([disabled])',
-        '[tabindex]:not([tabindex="-1"])',
-      ];
-      const focusable = container.querySelectorAll(focusableSelectors.join(","));
-      if (focusable.length) {
-        focusable[0].focus();
-      }
-    }
-
-    // Keyboard navigation for menu
-    function setupMenuKeyboardNavigation(nav) {
-      const menuToggle = nav.querySelector(".mobile-menu-toggle");
-      const menu = nav.querySelector("ul#primary-menu");
-      const menuItems = menu.querySelectorAll("a, button.menu-button");
-
-      // Toggle menu for mobile
-      menuToggle.addEventListener("click", () => {
-        const expanded = menuToggle.getAttribute("aria-expanded") === "true";
-        menuToggle.setAttribute("aria-expanded", String(!expanded));
-        menu.setAttribute("aria-expanded", String(!expanded));
-        if (!expanded) {
-          menu.style.display = "flex";
-          focusFirstFocusable(menu);
-        } else {
-          menu.style.display = "none";
-          menuToggle.focus();
-        }
-      });
-
-      // Keyboard navigation for submenu (if any)
-      nav.querySelectorAll("li[aria-haspopup='true'] > button.menu-button").forEach(button => {
-        button.addEventListener("keydown", e => {
-          const li = button.parentElement;
-          if (!li) return;
-          const submenu = li.querySelector("ul");
-          if (!submenu) return;
-
-          const expanded = li.getAttribute("aria-expanded") === "true";
-
-          switch (e.key) {
-            case "Enter":
-            case " ":
-              e.preventDefault();
-              if (expanded) {
-                li.setAttribute("aria-expanded", "false");
-                submenu.style.display = "none";
-                button.focus();
-              } else {
-                li.setAttribute("aria-expanded", "true");
-                submenu.style.display = "block";
-                // Focus first submenu item
-                const firstSubItem = submenu.querySelector("a, button");
-                if (firstSubItem) firstSubItem.focus();
-              }
-              break;
-            case "Escape":
-              if (expanded) {
-                e.preventDefault();
-                li.setAttribute("aria-expanded", "false");
-                submenu.style.display = "none";
-                button.focus();
-              }
-              break;
-            case "ArrowDown":
-              e.preventDefault();
-              if (!expanded) {
-                li.setAttribute("aria-expanded", "true");
-                submenu.style.display = "block";
-              }
-              const next = submenu.querySelector("a, button");
-              if (next) next.focus();
-              break;
-            case "ArrowUp":
-              e.preventDefault();
-              if (expanded) {
-                const items = submenu.querySelectorAll("a, button");
-                if (items.length) items[items.length - 1].focus();
-              }
-              break;
-          }
-        });
-      });
-
-      // Close submenus on focusout if focus leaves submenu
-      nav.querySelectorAll("li[aria-haspopup='true']").forEach(li => {
-        const submenu = li.querySelector("ul");
-        if (!submenu) return;
-        li.addEventListener("focusout", e => {
-          setTimeout(() => {
-            if (!li.contains(document.activeElement)) {
-              li.setAttribute("aria-expanded", "false");
-              submenu.style.display = "none";
-            }
-          }, 100);
-        });
-      });
-    }
-
-    // Application root element
-    const root = document.getElementById("root");
-
-    // Render functions for each "page" or component
-
-    // Login form with validation and context-sensitive help
-    function renderLogin() {
-      const container = createElement("section", { id: "login-section", tabindex: "-1", "aria-labelledby": "login-heading" },
-        createElement("h2", { id: "login-heading" }, "User Login"),
-        createElement("form", { id: "login-form", novalidate: true, "aria-describedby": "login-help" },
-          createElement("fieldset", {},
-            createElement("legend", {}, "Login Credentials"),
-            createElement("label", { for: "email" }, "Email address",
-              createElement("span", { className: "required-indicator", "aria-hidden": "true" }, "*")
-            ),
-            createElement("input", {
-              type: "email",
-              id: "email",
-              name: "email",
-              autocomplete: "email",
-              required: true,
-              "aria-required": "true",
-              "aria-describedby": "email-help login-error",
-              "aria-invalid": "false",
-              minlength: "5",
-              maxlength: "254",
-              placeholder: "user@example.com",
-              inputmode: "email"
-            }),
-            createElement("div", { id: "email-help", className: "help-text" }, "Enter your registered email address.")
-          ),
-          createElement("fieldset", {},
-            createElement("legend", {}, "Password"),
-            createElement("label", { for: "password" }, "Password",
-              createElement("span", { className: "required-indicator", "aria-hidden": "true" }, "*")
-            ),
-            createElement("input", {
-              type: "password",
-              id: "password",
-              name: "password",
-              autocomplete: "current-password",
-              required: true,
-              "aria-required": "true",
-              "aria-describedby": "password-help login-error",
-              "aria-invalid": "false",
-              minlength: "8",
-              placeholder: "Your password"
-            }),
-            createElement("div", { id: "password-help", className: "help-text" },
-              "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
-            )
-          ),
-          createElement("div", {
-            id: "login-error",
-            className: "error-message",
-            role: "alert",
-            "aria-live": "assertive"
-          }, state.authError || ""),
-          createElement("button", {
-            type: "submit",
-            "aria-label": "Submit login form",
-            id: "login-submit"
-          }, "Log In")
-        ),
-        createElement("section", { id: "auth-help", "aria-live": "polite", className: "help-text" },
-          createElement("h3", {}, "Need help with login?"),
-          createElement("p", {}, "If you forgot your password, please contact support at "),
-          createElement("a", { href: "mailto:support@accessibletaskmanager.example", rel: "noopener noreferrer" }, "support@accessibletaskmanager.example")
-        )
-      );
-
-      // Event listeners for form
-      const form = container.querySelector("#login-form");
-      const emailInput = container.querySelector("#email");
-      const passwordInput = container.querySelector("#password");
-      const errorDiv = container.querySelector("#login-error");
-
-      function validateField(input) {
-        let valid = true;
-        let message = "";
-        if (input.required && !input.value.trim()) {
-          valid = false;
-          message = "This field is required.";
-        } else if (input.type === "email") {
-          const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-          if (!pattern.test(input.value.trim())) {
-            valid = false;
-            message = "Please enter a valid email address.";
-          }
-        } else if (input.type === "password") {
-          const val = input.value;
-          if (val.length < 8) {
-            valid = false;
-            message = "Password must be at least 8 characters.";
-          } else if (!/[A-Z]/.test(val)) {
-            valid = false;
-            message = "Password must contain an uppercase letter.";
-          } else if (!/[a-z]/.test(val)) {
-            valid = false;
-            message = "Password must contain a lowercase letter.";
-          } else if (!/[0-9]/.test(val)) {
-            valid = false;
-            message = "Password must contain a number.";
-          } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(val)) {
-            valid = false;
-            message = "Password must contain a special character.";
-          }
-        }
-        if (!valid) {
-          input.setAttribute("aria-invalid", "true");
-          input.setAttribute("aria-describedby", input.id + "-help login-error");
-        } else {
-          input.setAttribute("aria-invalid", "false");
-          input.setAttribute("aria-describedby", input.id + "-help");
-        }
-        return { valid, message };
-      }
-
-      emailInput.addEventListener("input", () => {
-        validateField(emailInput);
-        errorDiv.textContent = "";
-        state.authError = null;
-      });
-      passwordInput.addEventListener("input", () => {
-        validateField(passwordInput);
-        errorDiv.textContent = "";
-        state.authError = null;
-      });
-
-      form.addEventListener("submit", e => {
-        e.preventDefault();
-        // Validate inputs
-        const emailValid = validateField(emailInput);
-        const passwordValid = validateField(passwordInput);
-        if (!emailValid.valid) {
-          errorDiv.textContent = emailValid.message;
-          announce(emailValid.message);
-          emailInput.focus();
-          return;
-        }
-        if (!passwordValid.valid) {
-          errorDiv.textContent = passwordValid.message;
-          announce(passwordValid.message);
-          passwordInput.focus();
-          return;
-        }
-        // Authenticate
-        state.loading = true;
-        renderApp();
-        setTimeout(() => {
-          const result = authenticate(emailInput.value.trim(), passwordInput.value);
-          if (result.success) {
-            state.user = result.user;
-            state.authError = null;
-            state.tasks = loadTasksFromStorage();
-            saveUserToStorage(state.user);
-            state.loading = false;
-            // Reset login form data
-            emailInput.value = "";
-            passwordInput.value = "";
-            // Show dashboard link, hide login link
-            document.getElementById("nav-login").hidden = true;
-            document.getElementById("nav-dashboard").hidden = false;
-            navigateTo("dashboard");
-            announce("Login successful. Welcome " + state.user.name + ".");
-            resetInactivityTimer();
-          } else {
-            state.authError = result.message;
-            state.loading = false;
-            announce("Login failed: " + result.message);
-            renderApp();
-            passwordInput.focus();
-          }
-        }, 700);
-      });
-
-      return container;
-    }
-
-    // Task form for adding/editing tasks with validation and help text
-    function renderTaskForm() {
-      const isEditing = state.isEditingTaskId !== null;
-      const taskData = state.taskFormData;
-      const errorMessage = state.taskFormError;
-
-      const container = createElement("section", { "aria-labelledby": "taskform-heading" },
-        createElement("h3", { id: "taskform-heading" }, isEditing ? "Edit Task" : "Add New Task"),
-        createElement("form", { id: "task-form", novalidate: true, "aria-describedby": "taskform-help" },
-          createElement("fieldset", {},
-            createElement("legend", {}, "Task Details"),
-            createElement("label", { for: "task-title" }, "Title",
-              createElement("span", { className: "required-indicator", "aria-hidden": "true" }, "*")
-            ),
-            createElement("input", {
-              type: "text",
-              id: "task-title",
-              name: "title",
-              required: true,
-              "aria-required": "true",
-              "aria-describedby": "title-help taskform-error",
-              "aria-invalid": "false",
-              maxlength: "100",
-              autocomplete: "off",
-              value: taskData.title,
-              placeholder: "Task title"
-            }),
-            createElement("div", { id: "title-help", className: "help-text" }, "Enter a brief, descriptive title for the task.")
-          ),
-          createElement("fieldset", {},
-            createElement("legend", {}, "Description"),
-            createElement("label", { for: "task-desc" }, "Description"),
-            createElement("textarea", {
-              id: "task-desc",
-              name: "description",
-              rows: "3",
-              maxlength: "500",
-              autocomplete: "off",
-              placeholder: "Additional details about the task (optional)"
-            }, taskData.description)
-          ),
-          createElement("fieldset", {},
-            createElement("legend", {}, "Due Date"),
-            createElement("label", { for: "task-due" }, "Due Date",
-              createElement("span", { className: "required-indicator", "aria-hidden": "true" }, "*")
-            ),
-            createElement("input", {
-              type: "date",
-              id: "task-due",
-              name: "dueDate",
-              required: true,
-              "aria-required": "true",
-              "aria-describedby": "due-help taskform-error",
-              "aria-invalid": "false",
-              value: taskData.dueDate
-            }),
-            createElement("div", { id: "due-help", className: "help-text" }, "Select the date by which the task should be completed.")
-          ),
-          createElement("div", {
-            id: "taskform-error",
-            className: "error-message",
-            role: "alert",
-            "aria-live": "assertive"
-          }, errorMessage || ""),
-          createElement("button", {
-            type: "submit",
-            className: "task-action",
-            "aria-label": isEditing ? "Save changes to task" : "Add new task"
-          }, isEditing ? "Save Task" : "Add Task"),
-          createElement("button", {
-            type: "button",
-            className: "task-action",
-            id: "cancel-task-btn",
-            "aria-label": "Cancel task form"
-          }, "Cancel")
-        ),
-        createElement("p", { id: "taskform-help", className: "help-text" }, "Fields marked with * are required.")
-      );
-
-      // Event handlers
-      const form = container.querySelector("#task-form");
-      const titleInput = container.querySelector("#task-title");
-      const descInput = container.querySelector("#task-desc");
-      const dueInput = container.querySelector("#task-due");
-      const errorDiv = container.querySelector("#taskform-error");
-      const cancelBtn = container.querySelector("#cancel-task-btn");
-
-      function validateTaskField(input) {
-        let valid = true;
-        let message = "";
-        if (input.required && !input.value.trim()) {
-          valid = false;
-          message = "This field is required.";
-        } else if (input.id === "task-due") {
-          // Due date must be today or later
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          const dueDate = new Date(input.value);
-          if (dueDate.toString() === "Invalid Date") {
-            valid = false;
-            message = "Please enter a valid date.";
-          } else if (dueDate < today) {
-            valid = false;
-            message = "Due date cannot be in the past.";
-          }
-        }
-        if (!valid) {
-          input.setAttribute("aria-invalid", "true");
-          input.setAttribute("aria-describedby", input.id + "-help taskform-error");
-        } else {
-          input.setAttribute("aria-invalid", "false");
-          input.setAttribute("aria-describedby", input.id + "-help");
-        }
-        return { valid, message };
-      }
-
-      titleInput.addEventListener("input", () => {
-        validateTaskField(titleInput);
-        errorDiv.textContent = "";
-        state.taskFormError = null;
-      });
-      dueInput.addEventListener("input", () => {
-        validateTaskField(dueInput);
-        errorDiv.textContent = "";
-        state.taskFormError = null;
-      });
-
-      form.addEventListener("submit", e => {
-        e.preventDefault();
-        const titleValid = validateTaskField(titleInput);
-        const dueValid = validateTaskField(dueInput);
-        if (!titleValid.valid) {
-          errorDiv.textContent = titleValid.message;
-          announce(titleValid.message);
-          titleInput.focus();
-          return;
-        }
-        if (!dueValid.valid) {
-          errorDiv.textContent = dueValid.message;
-          announce(dueValid.message);
-          dueInput.focus();
-          return;
-        }
-        // Save or update task
-        const newTask = {
-          id: isEditing ? state.isEditingTaskId : generateId(),
-          title: titleInput.value.trim(),
-          description: descInput.value.trim(),
-          dueDate: dueInput.value,
-          completed: false
-        };
-        if (isEditing) {
-          const idx = state.tasks.findIndex(t => t.id === state.isEditingTaskId);
-          if (idx !== -1) {
-            newTask.completed = state.tasks[idx].completed;
-            state.tasks[idx] = newTask;
-          }
-          state.isEditingTaskId = null;
-        } else {
-          state.tasks.push(newTask);
-        }
-        saveTasksToStorage(state.tasks);
-        state.taskFormData = { title: "", description: "", dueDate: "" };
-        state.taskFormError = null;
-        announce(isEditing ? "Task updated successfully." : "Task added successfully.");
-        renderApp();
-        focusFirstFocusable(document.getElementById("task-list"));
-      });
-
-      cancelBtn.addEventListener("click", () => {
-        state.isEditingTaskId = null;
-        state.taskFormData = { title: "", description: "", dueDate: "" };
-        state.taskFormError = null;
-        renderApp();
-        focusFirstFocusable(document.getElementById("task-list"));
-      });
-
-      return container;
-    }
-
-    // Task list table with actions and keyboard accessible controls
-    function renderTaskList() {
-      if (state.tasks.length === 0) {
-        return createElement("p", { id: "no-tasks-message" }, "You have no tasks. Use the form above to add one.");
-      }
-      const table = createElement("table", { role: "grid", "aria-label": "User tasks" },
-        createElement("thead", {},
-          createElement("tr", {},
-            createElement("th", { scope: "col" }, "Title"),
-            createElement("th", { scope: "col" }, "Description"),
-            createElement("th", { scope: "col" }, "Due Date"),
-            createElement("th", { scope: "col" }, "Status"),
-            createElement("th", { scope: "col" }, "Actions")
-          )
-        ),
-        createElement("tbody", {},
-          state.tasks.map(task => {
-            const dueDateFormatted = new Date(task.dueDate).toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "short",
-              day: "numeric"
-            });
-            const row = createElement("tr", { tabindex: "0", role: "row" },
-              createElement("td", { role: "gridcell" },
-                createElement("span", { className: task.completed ? "task-completed" : undefined }, task.title)
-              ),
-              createElement("td", { role: "gridcell" },
-                task.description ? task.description : createElement("em", {}, "No description")
-              ),
-              createElement("td", { role: "gridcell" }, dueDateFormatted),
-              createElement("td", { role: "gridcell" },
-                task.completed
-                  ? createElement("strong", { style: "color:#388e3c;" }, "Completed ✓")
-                  : createElement("span", { style: "color:#d32f2f;" }, "Pending")
-              ),
-              createElement("td", { role: "gridcell" },
-                createElement("div", { className: "task-actions" },
-                  createElement("button", {
-                    type: "button",
-                    className: "task-action",
-                    "aria-label": task.completed ? `Mark task "${task.title}" as pending` : `Mark task "${task.title}" as completed`,
-                    onClick: () => toggleTaskCompleted(task.id)
-                  }, task.completed ? "Mark Pending" : "Mark Done"),
-                  createElement("button", {
-                    type: "button",
-                    className: "task-action",
-                    "aria-label": `Edit task "${task.title}"`,
-                    onClick: () => editTask(task.id)
-                  }, "Edit"),
-                  createElement("button", {
-                    type: "button",
-                    className: "task-action",
-                    "aria-label": `Delete task "${task.title}"`,
-                    onClick: () => confirmDeleteTask(task.id)
-                  }, "Delete")
-                )
-              )
-            );
-            return row;
-          })
-        )
-      );
-      return table;
-    }
-
-    // Confirm deletion modal
-    function renderDeleteModal(task) {
-      const overlay = createElement("div", {
-        className: "modal-overlay active",
-        role: "dialog",
-        "aria-modal": "true",
-        "aria-labelledby": "delete-modal-title",
-        "aria-describedby": "delete-modal-desc",
-        tabIndex: "-1"
-      },
-        createElement("div", { className: "modal" },
-          createElement("h3", { id: "delete-modal-title" }, "Confirm Task Deletion"),
-          createElement("p", { id: "delete-modal-desc" }, `Are you sure you want to delete the task "${task.title}"? This action cannot be undone.`),
-          createElement("div", { style: "margin-top:1rem; display:flex; gap:1rem; justify-content:flex-end;" },
-            createElement("button", {
-              type: "button",
-              id: "confirm-delete-btn",
-              className: "task-action",
-              "aria-label": "Confirm task deletion"
-            }, "Delete"),
-            createElement("button", {
-              type: "button",
-              id: "cancel-delete-btn",
-              className: "task-action",
-              "aria-label": "Cancel task deletion"
-            }, "Cancel")
-          )
-        )
-      );
-      // Focus trap and keyboard handling
-      function trapFocus(e) {
-        const focusableElements = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-        const firstEl = focusableElements[0];
-        const lastEl = focusableElements[focusableElements.length - 1];
-        if (e.key === "Tab") {
-          if (e.shiftKey) {
-            if (document.activeElement === firstEl) {
-              e.preventDefault();
-              lastEl.focus();
-            }
-          } else {
-            if (document.activeElement === lastEl) {
-              e.preventDefault();
-              firstEl.focus();
-            }
-          }
-        } else if (e.key === "Escape") {
+    menuButton.addEventListener("keydown", (e) => {
+      switch (e.key) {
+        case "Enter":
+        case " ":
+        case "ArrowDown":
           e.preventDefault();
-          closeModal();
+          openDropdown();
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          openDropdown();
+          // Focus last item
+          const items = dropdownMenu.querySelectorAll('a[role="menuitem"]');
+          if (items.length) items[items.length - 1].focus();
+          break;
+        case "Escape":
+          if (dropdownOpen) {
+            e.preventDefault();
+            closeDropdown();
+          }
+          break;
+      }
+    });
+
+    dropdownMenu.addEventListener("keydown", (e) => {
+      const items = Array.from(dropdownMenu.querySelectorAll('a[role="menuitem"]'));
+      let index = items.indexOf(document.activeElement);
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          index = (index + 1) % items.length;
+          items[index].focus();
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          index = (index - 1 + items.length) % items.length;
+          items[index].focus();
+          break;
+        case "Home":
+          e.preventDefault();
+          items[0].focus();
+          break;
+        case "End":
+          e.preventDefault();
+          items[items.length - 1].focus();
+          break;
+        case "Escape":
+          e.preventDefault();
+          closeDropdown();
+          break;
+        case "Tab":
+          closeDropdown();
+          break;
+      }
+    });
+
+    // Close dropdown if click outside or focus moves outside
+    document.addEventListener("click", (e) => {
+      if (dropdownOpen && !dropdownMenu.contains(e.target) && e.target !== menuButton) {
+        closeDropdown();
+      }
+    });
+
+    document.addEventListener("focusin", (e) => {
+      if (dropdownOpen && !dropdownMenu.contains(e.target) && e.target !== menuButton) {
+        closeDropdown();
+      }
+    });
+
+    // Button with toggle pressed state and click animation
+    const toggleBtn = document.getElementById("btn-animate");
+    toggleBtn.addEventListener("click", () => {
+      const pressed = toggleBtn.getAttribute("aria-pressed") === "true";
+      toggleBtn.setAttribute("aria-pressed", String(!pressed));
+      toggleBtn.textContent = !pressed ? "Clicked!" : "Click Me";
+      // Animate scale on click
+      toggleBtn.style.transition = "transform 0.15s ease";
+      toggleBtn.style.transform = "scale(0.95)";
+      setTimeout(() => {
+        toggleBtn.style.transform = "scale(1)";
+      }, 150);
+    });
+    toggleBtn.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        toggleBtn.click();
+      }
+    });
+
+    // Form validation and error handling
+    const form = document.getElementById("contact-form");
+    const formStatus = form.querySelector("#form-submit-desc");
+
+    function showError(input, message) {
+      const errorId = input.getAttribute("aria-describedby").split(" ").find(id => id.endsWith("-error"));
+      if (!errorId) return;
+      const errorElem = document.getElementById(errorId);
+      errorElem.textContent = message;
+      errorElem.hidden = false;
+      input.setAttribute("aria-invalid", "true");
+    }
+    function clearError(input) {
+      const errorId = input.getAttribute("aria-describedby").split(" ").find(id => id.endsWith("-error"));
+      if (!errorId) return;
+      const errorElem = document.getElementById(errorId);
+      errorElem.textContent = "";
+      errorElem.hidden = true;
+      input.setAttribute("aria-invalid", "false");
+    }
+    function validateInput(input) {
+      clearError(input);
+      const val = input.value.trim();
+      if (input.hasAttribute("required") && val === "") {
+        showError(input, "This field is required.");
+        return false;
+      }
+      if (input.type === "email" && val !== "") {
+        // Simple email regex validation
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(val)) {
+          showError(input, "Please enter a valid email address.");
+          return false;
         }
       }
-      function closeModal() {
-        overlay.removeEventListener("keydown", trapFocus);
-        overlay.remove();
-        renderApp();
-        focusFirstFocusable(document.getElementById("task-list"));
-      }
-      overlay.addEventListener("keydown", trapFocus);
-      overlay.querySelector("#cancel-delete-btn").addEventListener("click", closeModal);
-      overlay.querySelector("#confirm-delete-btn").addEventListener("click", () => {
-        deleteTask(task.id);
-        closeModal();
-        announce(`Task "${task.title}" deleted.`);
-      });
-      setTimeout(() => {
-        overlay.querySelector("#cancel-delete-btn").focus();
-      }, 100);
-      return overlay;
-    }
-
-    // Help section with multiple ways to find content
-    function renderHelp() {
-      return createElement("section", { id: "help-section", tabindex: "-1", "aria-labelledby": "help-heading" },
-        createElement("h2", { id: "help-heading" }, "Help & Support"),
-        createElement("article", {},
-          createElement("h3", {}, "Navigation"),
-          createElement("p", {}, "Use the main menu to navigate between login, dashboard, and help pages. On mobile, use the hamburger menu button."),
-          createElement("p", {}, "Keyboard users can use Tab, Shift+Tab, Enter, Space, and Arrow keys to navigate menus and controls.")
-        ),
-        createElement("article", {},
-          createElement("h3", {}, "Managing Tasks"),
-          createElement("p", {}, "Add new tasks with a title and due date. You can also provide a description."),
-          createElement("p", {}, "Edit or delete tasks using the buttons in the task list."),
-          createElement("p", {}, "Mark tasks as completed or pending with the toggle button."),
-          createElement("p", {}, "All tasks are saved locally and will persist across sessions.")
-        ),
-        createElement("article", {},
-          createElement("h3", {}, "Accessibility Features"),
-          createElement("ul", {},
-            createElement("li", {}, "High contrast color themes and enhanced focus indicators."),
-            createElement("li", {}, "Keyboard accessible navigation and controls."),
-            createElement("li", {}, "Context-sensitive help and clear error messages."),
-            createElement("li", {}, "Skip link to jump directly to main content."),
-            createElement("li", {}, "Support for reduced motion preferences."),
-            createElement("li", {}, "ARIA roles, labels, and live regions for dynamic content.")
-          )
-        ),
-        createElement("article", {},
-          createElement("h3", {}, "Contact"),
-          createElement("p", {}, "For further assistance, email "),
-          createElement("a", { href: "mailto:support@accessibletaskmanager.example", rel: "noopener noreferrer" }, "support@accessibletaskmanager.example")
-        )
-      );
-    }
-
-    // Welcome section for dashboard
-    function renderWelcome() {
-      return createElement("section", { id: "welcome-section", "aria-labelledby": "welcome-heading" },
-        createElement("h2", { id: "welcome-heading" }, `Welcome, ${state.user.name}`),
-        createElement("p", {}, "Manage your tasks efficiently and accessibly."),
-        createElement("button", {
-          type: "button",
-          id: "logout-btn",
-          "aria-label": "Log out from the application"
-        }, "Log Out")
-      );
-    }
-
-    // Dashboard main content
-    function renderDashboard() {
-      const container = createElement("section", { id: "dashboard-section", tabindex: "-1", "aria-labelledby": "dashboard-heading" },
-        createElement("h2", { id: "dashboard-heading" }, "Your Dashboard"),
-        renderWelcome(),
-        createElement("section", { id: "task-manager", "aria-labelledby": "task-manager-heading" },
-          createElement("h2", { id: "task-manager-heading" }, "Task Manager"),
-          renderTaskForm(),
-          createElement("div", { id: "task-list", tabIndex: "-1" }, renderTaskList())
-        ),
-        createElement("section", { id: "color-theme-controls", "aria-label": "Color theme selection" },
-          createElement("label", { for: "theme-select" }, "Select color theme:"),
-          createElement("select", { id: "theme-select", name: "theme-select", "aria-describedby": "theme-help" },
-            createElement("option", { value: "default", selected: state.theme === "default" }, "Blue Gradient"),
-            createElement("option", { value: "sunset", selected: state.theme === "sunset" }, "Sunset"),
-            createElement("option", { value: "forest", selected: state.theme === "forest" }, "Forest Green")
-          ),
-          createElement("p", { id: "theme-help", className: "help-text" }, "Choose a color theme that suits your preference. Themes meet AAA contrast standards.")
-        )
-      );
-
-      // Event listeners
-      container.querySelector("#logout-btn").addEventListener("click", () => {
-        logout();
-      });
-
-      container.querySelector("#theme-select").addEventListener("change", e => {
-        setTheme(e.target.value);
-      });
-
-      return container;
-    }
-
-    // Main app renderer
-    function renderApp() {
-      root.innerHTML = "";
-      // Clear any modal overlays
-      const existingModal = document.querySelector(".modal-overlay");
-      if (existingModal) existingModal.remove();
-
-      // Navigation link states
-      const navLogin = document.getElementById("nav-login");
-      const navDashboard = document.getElementById("nav-dashboard");
-      const navHelp = document.getElementById("nav-help");
-
-      // Clear aria-current
-      [navLogin, navDashboard, navHelp].forEach(link => {
-        link.setAttribute("aria-current", "false");
-      });
-
-      // Determine page to show
-      let page = currentPage;
-
-      if (!state.user) {
-        page = "login";
-        navLogin.hidden = false;
-        navDashboard.hidden = true;
-        navLogin.setAttribute("aria-current", "page");
-      } else {
-        navLogin.hidden = true;
-        navDashboard.hidden = false;
-        if (page === "login") page = "dashboard";
-        if (page === "dashboard") navDashboard.setAttribute("aria-current", "page");
-        else if (page === "help") navHelp.setAttribute("aria-current", "page");
-      }
-
-      if (state.loading) {
-        const loadingDiv = createElement("div", { role: "status", "aria-live": "polite", style: "padding:2rem; text-align:center;" },
-          createElement("p", {}, "Loading, please wait...")
-        );
-        root.appendChild(loadingDiv);
-        return;
-      }
-
-      if (page === "login") {
-        root.appendChild(renderLogin());
-      } else if (page === "dashboard") {
-        root.appendChild(renderDashboard());
-      } else if (page === "help") {
-        root.appendChild(renderHelp());
-      }
-
-      // If delete modal is active, render it on top
-      if (state.deleteTaskId) {
-        const task = state.tasks.find(t => t.id === state.deleteTaskId);
-        if (task) {
-          const modal = renderDeleteModal(task);
-          document.body.appendChild(modal);
-          modal.focus();
+      if (input.type === "tel" && val !== "") {
+        // Phone pattern from pattern attribute or fallback
+        const pattern = input.getAttribute("pattern");
+        if (pattern) {
+          const regex = new RegExp(pattern);
+          if (!regex.test(val)) {
+            showError(input, "Please enter a valid phone number.");
+            return false;
+          }
         }
       }
-    }
-
-    // Navigation and routing
-    let currentPage = "login";
-
-    function navigateTo(page) {
-      if (page === currentPage) return;
-      currentPage = page;
-      renderApp();
-      // Focus main content after navigation
-      setTimeout(() => {
-        const mainContent = document.getElementById("main-content");
-        if (mainContent) mainContent.focus();
-      }, 100);
-    }
-
-    // Task operations
-    function toggleTaskCompleted(id) {
-      const idx = state.tasks.findIndex(t => t.id === id);
-      if (idx !== -1) {
-        state.tasks[idx].completed = !state.tasks[idx].completed;
-        saveTasksToStorage(state.tasks);
-        announce(`Task "${state.tasks[idx].title}" marked as ${state.tasks[idx].completed ? "completed" : "pending"}.`);
-        renderApp();
+      if (input.tagName.toLowerCase() === "textarea" || input.type === "text") {
+        const min = input.getAttribute("minlength");
+        const max = input.getAttribute("maxlength");
+        if (min && val.length < Number(min)) {
+          showError(input, `Please enter at least ${min} characters.`);
+          return false;
+        }
+        if (max && val.length > Number(max)) {
+          showError(input, `Please enter no more than ${max} characters.`);
+          return false;
+        }
       }
-    }
-    function editTask(id) {
-      const task = state.tasks.find(t => t.id === id);
-      if (task) {
-        state.isEditingTaskId = id;
-        state.taskFormData = {
-          title: task.title,
-          description: task.description,
-          dueDate: task.dueDate
-        };
-        renderApp();
-        setTimeout(() => {
-          const titleInput = document.getElementById("task-title");
-          if (titleInput) titleInput.focus();
-        }, 100);
+      if (input.tagName.toLowerCase() === "select") {
+        if (input.hasAttribute("required") && (val === "" || val === null)) {
+          showError(input, "Please select an option.");
+          return false;
+        }
       }
-    }
-    function confirmDeleteTask(id) {
-      state.deleteTaskId = id;
-      renderApp();
-    }
-    function deleteTask(id) {
-      state.tasks = state.tasks.filter(t => t.id !== id);
-      saveTasksToStorage(state.tasks);
-      state.deleteTaskId = null;
-      renderApp();
+      return true;
     }
 
-    // Logout
-    function logout() {
-      state.user = null;
-      state.tasks = [];
-      state.isEditingTaskId = null;
-      state.taskFormData = { title: "", description: "", dueDate: "" };
-      state.authError = null;
-      state.taskFormError = null;
-      saveUserToStorage(null);
-      renderApp();
-      navigateTo("login");
-      announce("You have been logged out.");
-      clearInactivityTimers();
-    }
-
-    // Theme management
-    function setTheme(theme) {
-      if (!["default", "sunset", "forest"].includes(theme)) theme = "default";
-      document.body.className = "theme-" + theme;
-      state.theme = theme;
-      saveThemeToStorage(theme);
-    }
-
-    // Accessibility live region for announcements
-    function createLiveRegion() {
-      let liveRegion = document.getElementById("aria-live-region");
-      if (!liveRegion) {
-        liveRegion = createElement("div", {
-          id: "aria-live-region",
-          "aria-live": "polite",
-          "aria-atomic": "true",
-          style: "position:absolute; width:1px; height:1px; margin:-1px; border:0; padding:0; overflow:hidden; clip:rect(0 0 0 0); clip-path: inset(50%);"
+    // Validate all inputs on submit
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let valid = true;
+      const inputs = form.querySelectorAll("input, select, textarea");
+      inputs.forEach(input => {
+        if (!validateInput(input)) {
+          valid = false;
+        }
+      });
+      if (valid) {
+        formStatus.textContent = "Form submitted successfully. Thank you!";
+        form.reset();
+        // Reset aria-invalid and error messages
+        inputs.forEach(input => {
+          clearError(input);
         });
-        document.body.appendChild(liveRegion);
-      }
-    }
-
-    // Inactivity timeout warning & session management
-    function resetInactivityTimer() {
-      clearInactivityTimers();
-      if (!state.user) return;
-      state.timeoutWarning = false;
-      state.inactivityTimer = setTimeout(() => {
-        state.timeoutWarning = true;
-        announce("You have been inactive for a while. Your session will expire in 2 minutes. Please interact with the app to continue.");
-        renderTimeoutWarning();
-        state.inactivityWarningTimer = setTimeout(() => {
-          logout();
-          alert("Your session expired due to inactivity. You have been logged out.");
-        }, 2 * 60 * 1000);
-      }, state.sessionWarningMinutes * 60 * 1000);
-    }
-    function clearInactivityTimers() {
-      if (state.inactivityTimer) {
-        clearTimeout(state.inactivityTimer);
-        state.inactivityTimer = null;
-      }
-      if (state.inactivityWarningTimer) {
-        clearTimeout(state.inactivityWarningTimer);
-        state.inactivityWarningTimer = null;
-      }
-      state.timeoutWarning = false;
-      removeTimeoutWarning();
-    }
-    function renderTimeoutWarning() {
-      if (state.timeoutWarning) {
-        if (!document.getElementById("timeout-warning")) {
-          const warning = createElement("div", {
-            id: "timeout-warning",
-            role: "alertdialog",
-            "aria-live": "assertive",
-            "aria-modal": "true",
-            tabIndex: "-1",
-            style: "position:fixed; bottom:1rem; right:1rem; background:#ffbf47; color:#0d47a1; padding:1rem 1.5rem; border-radius:8px; box-shadow: 0 4px 12px rgb(0 0 0 / 0.3); max-width:320px; z-index:1100;"
-          },
-            createElement("p", {}, "Your session will expire in 2 minutes due to inactivity."),
-            createElement("button", {
-              type: "button",
-              id: "extend-session-btn",
-              "aria-label": "Extend session"
-            }, "Continue Session")
-          );
-          document.body.appendChild(warning);
-          warning.querySelector("#extend-session-btn").addEventListener("click", () => {
-            resetInactivityTimer();
-            announce("Session extended.");
-            removeTimeoutWarning();
-          });
-          warning.focus();
-        }
-      }
-    }
-    function removeTimeoutWarning() {
-      const warning = document.getElementById("timeout-warning");
-      if (warning) {
-        warning.remove();
-      }
-    }
-
-    // Event listeners to reset inactivity timer on user interaction
-    function setupInactivityListeners() {
-      ["click", "keydown", "mousemove", "touchstart", "scroll"].forEach(evt => {
-        document.addEventListener(evt, () => {
-          resetInactivityTimer();
-        }, { passive: true });
-      });
-    }
-
-    // Navigation link handlers
-    function setupNavigationHandlers() {
-      document.getElementById("nav-login").addEventListener("click", e => {
-        e.preventDefault();
-        navigateTo("login");
-      });
-      document.getElementById("nav-dashboard").addEventListener("click", e => {
-        e.preventDefault();
-        if (state.user) navigateTo("dashboard");
-      });
-      document.getElementById("nav-help").addEventListener("click", e => {
-        e.preventDefault();
-        navigateTo("help");
-      });
-    }
-
-    // Initialize menu keyboard navigation and mobile toggle
-    function initMenu() {
-      const nav = document.querySelector('nav[aria-label="Primary"]');
-      setupMenuKeyboardNavigation(nav);
-    }
-
-    // Initialization
-    function init() {
-      createLiveRegion();
-      state.user = loadUserFromStorage();
-      state.tasks = loadTasksFromStorage();
-      state.theme = loadThemeFromStorage();
-      setTheme(state.theme);
-      setupNavigationHandlers();
-      initMenu();
-      setupInactivityListeners();
-      if (state.user) {
-        currentPage = "dashboard";
-        resetInactivityTimer();
       } else {
-        currentPage = "login";
+        formStatus.textContent = "Please fix the errors above and try again.";
       }
-      renderApp();
-    }
+    });
 
-    // Start app
-    init();
+    // Real-time validation on blur and input
+    const inputs = form.querySelectorAll("input, select, textarea");
+    inputs.forEach(input => {
+      input.addEventListener("blur", () => validateInput(input));
+      input.addEventListener("input", () => {
+        if (input.getAttribute("aria-invalid") === "true") {
+          validateInput(input);
+        }
+      });
+    });
+
+    // Keyboard accessible focus visible management for dropdown menu items
+    const menuLinks = dropdownMenu.querySelectorAll('a[role="menuitem"]');
+    menuLinks.forEach(link => {
+      link.addEventListener("keydown", (e) => {
+        if (e.key === " " || e.key === "Enter") {
+          e.preventDefault();
+          link.click();
+          closeDropdown();
+        }
+      });
+    });
+
+    // Color scheme toggle (light/dark)
+    const colorSchemeBtn = document.getElementById("color-scheme-switcher");
+    let darkMode = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    function applyColorScheme() {
+      if (darkMode) {
+        document.documentElement.setAttribute("data-theme", "dark");
+        colorSchemeBtn.textContent = "☀️";
+        colorSchemeBtn.setAttribute("aria-label", "Switch to light color scheme");
+        colorSchemeBtn.title = "Switch to light color scheme";
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+        colorSchemeBtn.textContent = "🌓";
+        colorSchemeBtn.setAttribute("aria-label", "Switch to dark color scheme");
+        colorSchemeBtn.title = "Switch to dark color scheme";
+      }
+    }
+    applyColorScheme();
+
+    colorSchemeBtn.addEventListener("click", () => {
+      darkMode = !darkMode;
+      applyColorScheme();
+    });
+    colorSchemeBtn.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        colorSchemeBtn.click();
+      }
+    });
+
+    // Manage focus visibility for keyboard users
+    // Add class 'focus-visible' on keyboard focus
+    function handleFirstTab(e) {
+      if (e.key === "Tab") {
+        document.body.classList.add("user-is-tabbing");
+        window.removeEventListener("keydown", handleFirstTab);
+        window.addEventListener("mousedown", handleMouseDownOnce);
+      }
+    }
+    function handleMouseDownOnce() {
+      document.body.classList.remove("user-is-tabbing");
+      window.removeEventListener("mousedown", handleMouseDownOnce);
+      window.addEventListener("keydown", handleFirstTab);
+    }
+    window.addEventListener("keydown", handleFirstTab);
+
+    // Add focus-visible polyfill style for browsers that don't support :focus-visible
+    // But since we use focus-visible in CSS, this is just a safety net
 
   })();
 </script>
