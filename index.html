@@ -3,32 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GardenShare - A Community for Garden Enthusiasts</title>
+    <title>Accessible Interactive Product Cards - Eco-Friendly Home Products</title>
     <style>
         /* Base Styles with Enhanced Accessibility */
         :root {
-            --primary-color: #2e7d32; /* Dark green with 7:1 contrast ratio against white */
-            --secondary-color: #1b5e20; /* Darker green for enhanced contrast */
-            --accent-color: #558b2f; /* Light green accent */
-            --text-color: #212121; /* Near black for maximum contrast */
-            --background-color: #f9f9f9; /* Off-white background */
-            --error-color: #c62828; /* High contrast red */
-            --success-color: #2e7d32; /* High contrast green */
-            --warning-color: #e65100; /* High contrast orange */
-            --focus-color: #1565c0; /* High contrast blue for focus states */
-            --light-text: #ffffff; /* White text for dark backgrounds */
-            --border-color: #757575; /* Medium gray for borders */
-            --card-background: #ffffff; /* White background for cards */
-            --shadow-color: rgba(0, 0, 0, 0.2); /* Shadow for depth */
+            --primary-color: #0056b3;
+            --primary-dark: #003d7a;
+            --secondary-color: #28a745;
+            --secondary-dark: #1e7e34;
+            --text-color: #212529;
+            --light-text: #f8f9fa;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --border-color: #dee2e6;
+            --focus-color: #ff8800;
+            --focus-outline: 3px solid var(--focus-color);
+            --transition-speed: 0.3s;
         }
 
         /* Respect user's motion preferences */
         @media (prefers-reduced-motion: reduce) {
             * {
-                animation-duration: 0.001ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.001ms !important;
-                scroll-behavior: auto !important;
+                transition: none !important;
+                animation: none !important;
             }
         }
 
@@ -39,491 +36,297 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--background-color);
             padding: 0;
             margin: 0;
-            /* Enhanced text readability per WCAG 2.2 AAA */
-            line-height: 1.8; /* At least 1.5 times font size */
+            /* AAA requirement for line spacing */
+            line-height: 1.8;
         }
 
-        /* Skip link for keyboard users */
+        /* Enhanced focus styles for all interactive elements */
+        a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
+            outline: var(--focus-outline);
+            outline-offset: 3px;
+            box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.4);
+            border-radius: 2px;
+            text-decoration: underline;
+        }
+
+        /* Skip link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background: var(--focus-color);
-            color: var(--light-text);
-            padding: 10px;
-            z-index: 1000;
-            transition: top 0.3s;
-            font-weight: bold;
-            font-size: 1rem;
-            border: 2px solid var(--light-text);
+            background: var(--primary-color);
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.3s ease;
         }
 
         .skip-link:focus {
             top: 0;
-            outline: 3px solid var(--focus-color);
-            outline-offset: 2px;
+            outline: var(--focus-outline);
         }
 
-        /* Enhanced focus styles for all interactive elements */
-        a:focus, button:focus, input:focus, textarea:focus, select:focus, 
-        [tabindex]:focus, .card:focus-within {
-            outline: 3px solid var(--focus-color);
-            outline-offset: 2px;
-            box-shadow: 0 0 0 2px var(--light-text), 0 0 0 4px var(--focus-color);
-            border-radius: 2px;
-            transition: outline 0.2s ease-in-out;
-        }
-
-        /* Container for page content */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header Styles */
+        /* Header styles */
         header {
             background-color: var(--primary-color);
             color: var(--light-text);
-            padding: 1rem 0;
-            box-shadow: 0 2px 5px var(--shadow-color);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo img {
-            height: 50px;
-            width: auto;
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
+        header h1 {
             margin: 0;
+            font-size: 2rem;
         }
 
-        /* Main Navigation */
+        /* Navigation styles */
         nav {
-            padding: 1rem 0;
+            background-color: var(--primary-dark);
+            padding: 1rem;
         }
 
-        .nav-list {
+        nav ul {
             list-style: none;
             display: flex;
-            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .nav-list li a {
+        nav a {
             color: var(--light-text);
             text-decoration: none;
-            font-weight: bold;
-            padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            font-size: 1.1rem;
-        }
-
-        .nav-list li a:hover, 
-        .nav-list li a:focus {
-            background-color: var(--secondary-color);
-            text-decoration: underline;
-        }
-
-        .nav-list li a.active {
-            background-color: var(--secondary-color);
-            text-decoration: underline;
-        }
-
-        /* Main Content Area */
-        main {
-            padding: 2rem 0;
-            min-height: 70vh;
-        }
-
-        /* Section Headings */
-        section {
-            margin-bottom: 2rem;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 1rem;
-            line-height: 1.3;
-            color: var(--primary-color);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            max-width: 80ch; /* Maximum 80 characters per line for readability */
-        }
-
-        /* Button Styles */
-        .btn {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color var(--transition-speed);
+            /* Ensure minimum touch target size (AAA requirement) */
             min-height: 44px;
             min-width: 44px;
-            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .btn:hover, 
-        .btn:focus {
-            background-color: var(--secondary-color);
+        nav a:hover, nav a:focus {
+            background-color: rgba(255, 255, 255, 0.2);
             text-decoration: underline;
         }
 
-        .btn-secondary {
-            background-color: var(--border-color);
+        /* Main content area */
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
         }
 
-        .btn-secondary:hover,
-        .btn-secondary:focus {
-            background-color: #5a5a5a;
+        .intro {
+            margin-bottom: 2rem;
+            /* AAA requirement for paragraph spacing */
+            margin-top: 2.4rem;
         }
 
-        .btn-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 5px;
-            font-size: 1rem;
-            min-height: 44px;
-            background-color: var(--card-background);
-            color: var(--text-color);
-        }
-
-        textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .required-field::after {
-            content: " *";
-            color: var(--error-color);
-            font-weight: bold;
-        }
-
-        .form-help {
-            margin-top: 0.5rem;
-            color: #555;
-            font-size: 0.9rem;
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-weight: bold;
-            margin-top: 0.5rem;
-        }
-
-        /* File Upload Styles */
-        .file-upload {
-            position: relative;
-            display: block;
-            width: 100%;
-            margin-bottom: 1rem;
-        }
-
-        .file-upload-label {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed var(--border-color);
-            border-radius: 5px;
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            background-color: var(--card-background);
-            transition: border-color 0.3s, background-color 0.3s;
-        }
-
-        .file-upload-label:hover,
-        .file-upload-label:focus-within {
-            border-color: var(--primary-color);
-            background-color: rgba(46, 125, 50, 0.05);
-        }
-
-        .file-upload-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+        .intro h2 {
             color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
         }
 
-        .file-upload-text {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+        .intro p {
+            /* AAA requirement for line width */
+            max-width: 80ch;
+            /* AAA requirement for paragraph spacing */
+            margin-bottom: 1.8rem;
         }
 
-        .file-upload-subtext {
-            font-size: 0.9rem;
-            color: #666;
+        /* Filter controls */
+        .filter-controls {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #e9ecef;
+            border-radius: 8px;
         }
 
-        .file-upload input[type="file"] {
-            position: absolute;
-            width: 0.1px;
-            height: 0.1px;
-            opacity: 0;
-            overflow: hidden;
-            z-index: -1;
+        .filter-controls h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
         }
 
-        .file-preview {
-            margin-top: 1rem;
-            text-align: center;
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
         }
 
-        .file-preview img {
-            max-width: 100%;
-            max-height: 300px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px var(--shadow-color);
+        .filter-button {
+            background-color: var(--card-background);
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            /* Ensure minimum touch target size (AAA requirement) */
+            min-height: 44px;
+            min-width: 44px;
         }
 
-        /* Card Styles for Posts */
+        .filter-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .filter-button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Card grid layout */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
+            margin-top: 2rem;
         }
 
+        /* Card styles with enhanced accessibility */
         .card {
             background-color: var(--card-background);
             border-radius: 8px;
-            box-shadow: 0 4px 8px var(--shadow-color);
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 1px solid var(--border-color);
         }
 
-        .card:hover,
-        .card:focus-within {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px var(--shadow-color);
+        /* Interactive card with hover/focus effects */
+        .card:hover, .card:focus-within {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image-container {
+            position: relative;
+            padding-top: 66.67%; /* 3:2 aspect ratio */
+            overflow: hidden;
         }
 
         .card-image {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 200px;
+            height: 100%;
             object-fit: cover;
+            transition: transform var(--transition-speed);
+        }
+
+        .card:hover .card-image, .card:focus-within .card-image {
+            transform: scale(1.05);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 1;
         }
 
         .card-content {
             padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .card-title {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
             color: var(--primary-color);
         }
 
-        .card-text {
-            margin-bottom: 1rem;
-            color: var(--text-color);
+        .card-description {
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
         }
 
         .card-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #666;
+            margin-top: auto;
         }
 
-        .card-author {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-author-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .card-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .card-btn {
-            background: none;
-            border: none;
-            color: var(--primary-color);
+        .card-price {
             font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+
+        .card-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 8px;
-            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color var(--transition-speed);
+            /* Ensure minimum touch target size (AAA requirement) */
             min-height: 44px;
             min-width: 44px;
-            transition: background-color 0.3s;
         }
 
-        .card-btn:hover,
-        .card-btn:focus {
-            background-color: rgba(46, 125, 50, 0.1);
-            text-decoration: underline;
+        .card-button:hover, .card-button:focus {
+            background-color: var(--primary-dark);
         }
 
-        .card-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
-
-        /* Comments Section */
-        .comments-section {
-            margin-top: 2rem;
-            border-top: 1px solid var(--border-color);
-            padding-top: 1rem;
-        }
-
-        .comment {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .comment-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .comment-content {
-            flex: 1;
-        }
-
-        .comment-author {
-            font-weight: bold;
-            margin-bottom: 0.3rem;
-        }
-
-        .comment-text {
-            margin-bottom: 0.5rem;
-        }
-
-        .comment-date {
-            font-size: 0.8rem;
-            color: #777;
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
+        /* Modal styles */
+        .modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
+            padding: 1rem;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal {
+        .modal-content {
             background-color: var(--card-background);
             border-radius: 8px;
             max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
+            width: 100%;
             padding: 2rem;
             position: relative;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            transform: translateY(-20px);
-            transition: transform 0.3s;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-close {
@@ -535,75 +338,88 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--text-color);
+            /* Ensure minimum touch target size (AAA requirement) */
             min-height: 44px;
             min-width: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.3s;
-        }
-
-        .modal-close:hover,
-        .modal-close:focus {
-            background-color: rgba(0, 0, 0, 0.1);
         }
 
         .modal-title {
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--accent-color);
+            margin-bottom: 1rem;
+            color: var(--primary-color);
         }
 
-        /* Alert/Notification Styles */
-        .alert {
-            padding: 1rem;
-            border-radius: 5px;
+        .modal-image {
+            width: 100%;
+            border-radius: 4px;
             margin-bottom: 1.5rem;
-            font-weight: bold;
+        }
+
+        .modal-description {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-features h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-features ul {
+            padding-left: 1.5rem;
+        }
+
+        .modal-actions {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 10px;
         }
 
-        .alert-success {
-            background-color: rgba(46, 125, 50, 0.1);
-            color: var(--success-color);
-            border: 2px solid var(--success-color);
+        .modal-price {
+            font-weight: bold;
+            font-size: 1.4rem;
+            color: var(--secondary-color);
         }
 
-        .alert-error {
-            background-color: rgba(198, 40, 40, 0.1);
-            color: var(--error-color);
-            border: 2px solid var(--error-color);
+        .modal-button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color var(--transition-speed);
+            /* Ensure minimum touch target size (AAA requirement) */
+            min-height: 44px;
+            min-width: 44px;
         }
 
-        .alert-warning {
-            background-color: rgba(230, 81, 0, 0.1);
-            color: var(--warning-color);
-            border: 2px solid var(--warning-color);
+        .modal-button:hover, .modal-button:focus {
+            background-color: var(--secondary-dark);
         }
 
-        .alert-icon {
-            font-size: 1.5rem;
-        }
-
-        /* Footer Styles */
+        /* Footer styles */
         footer {
-            background-color: var(--primary-color);
+            background-color: var(--primary-dark);
             color: var(--light-text);
-            padding: 2rem 0;
-            margin-top: 2rem;
+            padding: 2rem 1.5rem;
+            margin-top: 3rem;
         }
 
-        .footer-container {
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
 
         .footer-section h3 {
-            color: var(--light-text);
             margin-bottom: 1rem;
             font-size: 1.3rem;
         }
@@ -619,740 +435,547 @@
         .footer-links a {
             color: var(--light-text);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: color var(--transition-speed);
+            /* Ensure minimum touch target size (AAA requirement) */
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
         }
 
-        .footer-links a:hover,
-        .footer-links a:focus {
+        .footer-links a:hover, .footer-links a:focus {
+            color: #adb5bd;
             text-decoration: underline;
-            color: #aed581; /* Lighter green for hover state */
         }
 
         .footer-bottom {
+            text-align: center;
             margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Loading state */
+        .loading {
+            display: none;
             text-align: center;
-            font-size: 0.9rem;
+            padding: 2rem;
         }
 
-        /* Utility Classes */
-        .text-center {
-            text-align: center;
-        }
-
-        .mt-1 { margin-top: 0.5rem; }
-        .mt-2 { margin-top: 1rem; }
-        .mt-3 { margin-top: 1.5rem; }
-        .mt-4 { margin-top: 2rem; }
-        .mb-1 { margin-bottom: 0.5rem; }
-        .mb-2 { margin-bottom: 1rem; }
-        .mb-3 { margin-bottom: 1.5rem; }
-        .mb-4 { margin-bottom: 2rem; }
-
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Responsive Styles */
-        @media screen and (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-list {
-                flex-direction: column;
-                width: 100%;
-                margin-top: 1rem;
-            }
-
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* High Contrast Mode */
-        @media (prefers-contrast: more) {
-            :root {
-                --primary-color: #006400;
-                --secondary-color: #004d00;
-                --accent-color: #008000;
-                --text-color: #000000;
-                --background-color: #ffffff;
-                --border-color: #000000;
-                --card-background: #ffffff;
-                --light-text: #ffffff;
-            }
-
-            * {
-                border-color: #000000;
-            }
-
-            .card, .btn, input, textarea, select {
-                border: 2px solid #000000;
-            }
-        }
-
-        /* Loading Spinner */
-        .spinner {
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(46, 125, 50, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--primary-color);
-            animation: spin 1s ease-in-out infinite;
-            margin: 2rem auto;
+            margin: 0 auto 1rem;
+            animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        /* Loading State */
-        .loading-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            text-align: center;
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform var(--transition-speed), opacity var(--transition-speed);
+            z-index: 1000;
         }
 
-        .loading-text {
-            margin-top: 1rem;
-            font-weight: bold;
-            color: var(--primary-color);
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
         }
 
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-            gap: 0.5rem;
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.8rem;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
 
-        .pagination-btn {
-            min-width: 44px;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--card-background);
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            color: var(--text-color);
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .pagination-btn:hover,
-        .pagination-btn:focus {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-        }
-
-        .pagination-btn.active {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-        }
-
-        .pagination-btn.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Post Detail View */
-        .post-detail {
-            background-color: var(--card-background);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px var(--shadow-color);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .post-detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1.5rem;
-        }
-
-        .post-detail-title {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .post-detail-meta {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            color: #666;
-        }
-
-        .post-detail-author {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .post-detail-date {
-            font-style: italic;
-        }
-
-        .post-detail-image {
-            width: 100%;
-            max-height: 500px;
-            object-fit: contain;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-
-        .post-detail-content {
-            margin-bottom: 2rem;
-            line-height: 1.8;
-        }
-
-        .post-detail-actions {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Tab Navigation */
-        .tabs {
-            margin-bottom: 2rem;
-        }
-
-        .tab-list {
-            display: flex;
-            list-style: none;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 1.5rem;
-        }
-
-        .tab-item {
-            margin-right: 0.5rem;
-        }
-
-        .tab-button {
-            padding: 12px 20px;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            font-weight: bold;
-            cursor: pointer;
-            color: var(--text-color);
-            font-size: 1rem;
-            min-height: 44px;
-            min-width: 44px;
-            transition: border-color 0.3s, color 0.3s;
-        }
-
-        .tab-button:hover,
-        .tab-button:focus {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .tab-button.active {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
+        /* High contrast mode support */
+        @media (forced-colors: active) {
+            .card {
+                border: 2px solid CanvasText;
+            }
+            
+            .card-button, .modal-button, .filter-button {
+                border: 2px solid CanvasText;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Skip Link for Keyboard Users -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Header with Navigation -->
     <header>
-        <div class="container header-container">
-            <div class="logo">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBmaWxsPSIjZmZmZmZmIj48cGF0aCBkPSJNNjQgOTZINDQ4djM1MkgzMjBjMC0xNy43LTE0LjMtMzItMzItMzJzLTMyIDE0LjMtMzIgMzJINjRWOTZ6TTI1NiAyNTZjMzUuMyAwIDY0LTI4LjcgNjQtNjRzLTI4LjctNjQtNjQtNjRzLTY0IDI4LjctNjQgNjRzMjguNyA2NCA2NCA2NHpNMTI4IDM4NGMwLTM1LjMgMjguNy02NCA2NC02NGg5NmMzNS4zIDAgNjQgMjguNyA2NCA2NHY2NEgxMjhWMzg0ek01MTIgNjRjMC0zNS4zLTI4LjctNjQtNjQtNjRIMTI4QzU3LjMgMCAwIDU3LjMgMCAxMjhWNDQ4YzAgMzUuMyAyOC43IDY0IDY0IDY0SDQ0OGMzNS4zIDAgNjQtMjguNyA2NC02NFY2NHoiLz48L3N2Zz4=" alt="GardenShare Logo" width="50" height="50">
-                <h1>GardenShare</h1>
-            </div>
-            <nav aria-label="Main Navigation">
-                <ul class="nav-list">
-                    <li><a href="#" class="active" aria-current="page">Home</a></li>
-                    <li><a href="#">Explore</a></li>
-                    <li><a href="#">My Garden</a></li>
-                    <li><a href="#">Community</a></li>
-                    <li><a href="#">About</a></li>
-                </ul>
-            </nav>
-        </div>
+        <h1>Eco-Friendly Home Products</h1>
     </header>
 
-    <!-- Main Content -->
+    <nav aria-label="Main navigation">
+        <ul>
+            <li><a href="#" aria-current="page">Home</a></li>
+            <li><a href="#">Products</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Sustainability</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
     <main id="main-content">
-        <div class="container">
-            <section aria-labelledby="welcome-heading">
-                <h2 id="welcome-heading">Welcome to GardenShare Community</h2>
-                <p>Share your garden journey, get inspired by others, and connect with fellow gardening enthusiasts. Upload photos of your plants, gardens, or gardening projects and engage with a community that shares your passion.</p>
-                
-                <div class="alert alert-success" role="status">
-                    <span class="alert-icon" aria-hidden="true">✓</span>
-                    <span>Welcome to GardenShare! You're now part of our growing community.</span>
+        <section class="intro">
+            <h2>Sustainable Products for a Greener Home</h2>
+            <p>Discover our collection of eco-friendly products designed to help you reduce your environmental footprint while enhancing your living space. Each item is carefully selected for its sustainability, durability, and aesthetic appeal.</p>
+            <p>Our products are made from renewable resources, recycled materials, or designed to minimize waste. We believe that sustainable living shouldn't compromise on quality or style.</p>
+        </section>
+
+        <section class="filter-controls" aria-labelledby="filter-heading">
+            <h3 id="filter-heading">Filter Products</h3>
+            <div class="filter-buttons" role="group" aria-label="Product category filters">
+                <button class="filter-button active" data-category="all" aria-pressed="true">All Products</button>
+                <button class="filter-button" data-category="kitchen" aria-pressed="false">Kitchen</button>
+                <button class="filter-button" data-category="bathroom" aria-pressed="false">Bathroom</button>
+                <button class="filter-button" data-category="living" aria-pressed="false">Living Room</button>
+                <button class="filter-button" data-category="bedroom" aria-pressed="false">Bedroom</button>
+            </div>
+        </section>
+
+        <div class="loading" aria-live="polite" id="loading-indicator">
+            <div class="loading-spinner" aria-hidden="true"></div>
+            <p>Loading products...</p>
+        </div>
+
+        <div class="card-grid" id="product-grid">
+            <!-- Card 1 -->
+            <article class="card" data-category="kitchen">
+                <div class="card-image-container">
+                    <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8a2l0Y2hlbixlY298fHx8fHwxNjk2MzQ2MjQ3&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900" alt="Bamboo kitchen utensil set with wooden spoons, spatulas, and serving tools" class="card-image">
+                    <span class="card-badge">Bestseller</span>
                 </div>
-                
-                <button id="create-post-btn" class="btn btn-icon" aria-haspopup="dialog">
-                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16" fill="currentColor">
-                        <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/>
-                    </svg>
-                    Share Your Garden
-                </button>
-            </section>
-
-            <section aria-labelledby="featured-heading" class="mt-4">
-                <h2 id="featured-heading">Featured Gardens</h2>
-                
-                <div class="tabs" role="tablist">
-                    <ul class="tab-list">
-                        <li class="tab-item">
-                            <button id="tab-recent" class="tab-button active" role="tab" aria-selected="true" aria-controls="recent-content">
-                                Recent Posts
-                            </button>
-                        </li>
-                        <li class="tab-item">
-                            <button id="tab-popular" class="tab-button" role="tab" aria-selected="false" aria-controls="popular-content">
-                                Popular
-                            </button>
-                        </li>
-                        <li class="tab-item">
-                            <button id="tab-following" class="tab-button" role="tab" aria-selected="false" aria-controls="following-content">
-                                Following
-                            </button>
-                        </li>
-                    </ul>
-                    
-                    <div id="recent-content" class="tab-content active" role="tabpanel" aria-labelledby="tab-recent">
-                        <div class="card-grid">
-                            <!-- Garden Post 1 -->
-                            <article class="card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iIzRjYWY1MCIvPjxjaXJjbGUgY3g9IjQwMCIgY3k9IjMwMCIgcj0iMTUwIiBmaWxsPSIjOGJjMzRhIi8+PHBhdGggZD0iTTMwMCA0NTBMNDAwIDMwMEw1MDAgNDUwWiIgZmlsbD0iIzFiNWUyMCIvPjxwYXRoIGQ9Ik0yMDAgNTAwTDMwMCAzNTBMNDAwIDUwMFoiIGZpbGw9IiMxYjVlMjAiLz48cGF0aCBkPSJNNDAwIDUwMEw1MDAgMzUwTDYwMCA1MDBaIiBmaWxsPSIjMWI1ZTIwIi8+PC9zdmc+" 
-                                    alt="Beautiful vegetable garden with rows of tomatoes, peppers, and herbs in raised beds" 
-                                    class="card-image">
-                                <div class="card-content">
-                                    <h3 class="card-title">My Vegetable Garden Journey</h3>
-                                    <p class="card-text">Started my first vegetable garden this spring. So proud of how my tomatoes and peppers are growing in these raised beds!</p>
-                                    <div class="card-meta">
-                                        <div class="card-author">
-                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIgZmlsbD0iIzhlMjRhYSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSI0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik01MCAxNDBDNTAgMTQwIDE1MCAyMDAgMTUwIDE0MFMxNTAgODAgNTAgMTQwWiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" 
-                                                alt="Profile picture of GardenLover123" 
-                                                class="card-author-avatar">
-                                            <span>GardenLover123</span>
-                                        </div>
-                                        <span>2 days ago</span>
-                                    </div>
-                                    <div class="card-actions">
-                                        <button class="card-btn" aria-label="Like this post">
-                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
-                                                <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
-                                            </svg>
-                                            <span>24 Likes</span>
-                                        </button>
-                                        <button class="card-btn" aria-label="Comment on this post">
-                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
-                                                <path d="M256 448c141.4 0 256-93.1 256-208S397.4 32 256 32S0 125.1 0 240c0 45.1 17.7 86.8 47.7 120.9c-1.9 24.5-11.4 46.3-21.4 62.9c-5.5 9.2-11.1 16.6-15.2 21.6c-2.1 2.5-3.7 4.4-4.9 5.7c-.6 .6-1 1.1-1.3 1.4l-.3 .3 0 0 0 0 0 0 0 0c-4.6 4.6-5.9 11.4-3.4 17.4c2.5 6 8.3 9.9 14.8 9.9c28.7 0 57.6-8.9 81.6-19.3c22.9-10 42.4-21.9 54.3-30.6c31.8 11.5 67 17.9 104.1 17.9zM128 208a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm128 0a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm96 32a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
-                                            </svg>
-                                            <span>8 Comments</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <!-- Garden Post 2 -->
-                            <article class="card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iIzgxYzc4NCIvPjxjaXJjbGUgY3g9IjQwMCIgY3k9IjMwMCIgcj0iMTIwIiBmaWxsPSIjZmZjMTA3Ii8+PHBhdGggZD0iTTM4MCAyMDBMNDIwIDIwMEw0MjAgNDAwTDM4MCA0MDBaIiBmaWxsPSIjNGNhZjUwIi8+PHBhdGggZD0iTTM1MCAyMzBDMzUwIDIzMCAzODAgMTgwIDQyMCAyMzBDNDYwIDE4MCA0OTAgMjMwIDQ5MCAyMzBDNDkwIDIzMCA0MjAgMjgwIDM1MCAyMzBaIiBmaWxsPSIjNGNhZjUwIi8+PC9zdmc+" 
-                                    alt="Bright yellow sunflower in full bloom against a green garden background" 
-                                    class="card-image">
-                                <div class="card-content">
-                                    <h3 class="card-title">First Sunflower of the Season</h3>
-                                    <p class="card-text">My sunflowers finally bloomed! This is the first one to open up and it's absolutely stunning. Can't wait for the rest to follow.</p>
-                                    <div class="card-meta">
-                                        <div class="card-author">
-                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIgZmlsbD0iIzQyYTVmNSIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSI0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik01MCAxNDBDNTAgMTQwIDE1MCAyMDAgMTUwIDE0MFMxNTAgODAgNTAgMTQwWiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" 
-                                                alt="Profile picture of SunflowerFan" 
-                                                class="card-author-avatar">
-                                            <span>SunflowerFan</span>
-                                        </div>
-                                        <span>1 week ago</span>
-                                    </div>
-                                    <div class="card-actions">
-                                        <button class="card-btn" aria-label="Like this post">
-                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
-                                                <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
-                                            </svg>
-                                            <span>42 Likes</span>
-                                        </button>
-                                        <button class="card-btn" aria-label="Comment on this post">
-                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
-                                                <path d="M256 448c141.4 0 256-93.1 256-208S397.4 32 256 32S0 125.1 0 240c0 45.1 17.7 86.8 47.7 120.9c-1.9 24.5-11.4 46.3-21.4 62.9c-5.5 9.2-11.1 16.6-15.2 21.6c-2.1 2.5-3.7 4.4-4.9 5.7c-.6 .6-1 1.1-1.3 1.4l-.3 .3 0 0 0 0 0 0 0 0c-4.6 4.6-5.9 11.4-3.4 17.4c2.5 6 8.3 9.9 14.8 9.9c28.7 0 57.6-8.9 81.6-19.3c22.9-10 42.4-21.9 54.3-30.6c31.8 11.5 67 17.9 104.1 17.9zM128 208a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm128 0a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm96 32a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
-                                            </svg>
-                                            <span>15 Comments</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </article>
-
-                            <!-- Garden Post 3 -->
-                            <article class="card">
-                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNjAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iI2U4ZjVlOSIvPjxjaXJjbGUgY3g9IjQwMCIgY3k9IjMwMCIgcj0iMTAwIiBmaWxsPSIjZTkxZTYzIi8+PGNpcmNsZSBjeD0iMjUwIiBjeT0iMjAwIiByPSI4MCIgZmlsbD0iI2U5MWU2MyIvPjxjaXJjbGUgY3g9IjU1MCIgY3k9IjIwMCIgcj0iODAiIGZpbGw9IiNlOTFlNjMiLz48Y2lyY2xlIGN4PSIzMDAiIGN5PSI0MDAiIHI9IjgwIiBmaWxsPSIjZTkxZTYzIi8+PGNpcmNsZSBjeD0iNTAwIiBjeT0iNDAwIiByPSI4MCIgZmlsbD0iI2U5MWU2MyIvPjwvc3ZnPg==" 
-                                    alt="Rose garden with multiple pink rose bushes in full bloom arranged in a circular pattern" 
-                                    class="card-image">
-                                <div class="card-content">
-                                    <h3 class="card-title">Rose Garden Redesign</h3>
-                                    <p class="card-text">Finally finished redesigning my rose garden! I arranged them in a circular pattern for better visual impact and easier maintenance.</p>
-                                    <div class="card-meta">
-                                        <div class="card-author">
-                                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIgZmlsbD0iI2ZmOTgwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSI0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik01MCAxNDBDNTAgMTQwIDE1MCAyMDAgMTUwIDE0MFMxNTAgODAgNTAgMTQwWiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" 
-                                                alt="Profile picture of RoseEnthusiast" 
-                                                class="card-author-avatar">
-                                            <span>RoseEnthusiast</span>
-                                        </div>
-                                        <span>3 days ago</span>
-                                    </div>
-                                    <div class="card-actions">
-                                        <button class="card-btn" aria-label="Like this post">
-                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
-                                                <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
-                                            </svg>
-                                            <span>36 Likes</span>
-                                        </button>
-                                        <button class="card-btn" aria-label="Comment on this post">
-                                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
-                                                <path d="M256 448c141.4 0 256-93.1 256-208S397.4 32 256 32S0 125.1 0 240c0 45.1 17.7 86.8 47.7 120.9c-1.9 24.5-11.4 46.3-21.4 62.9c-5.5 9.2-11.1 16.6-15.2 21.6c-2.1 2.5-3.7 4.4-4.9 5.7c-.6 .6-1 1.1-1.3 1.4l-.3 .3 0 0 0 0 0 0 0 0c-4.6 4.6-5.9 11.4-3.4 17.4c2.5 6 8.3 9.9 14.8 9.9c28.7 0 57.6-8.9 81.6-19.3c22.9-10 42.4-21.9 54.3-30.6c31.8 11.5 67 17.9 104.1 17.9zM128 208a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm128 0a32 32 0 1 1 0 64 32 32 0 1 1 0-64zm96 32a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/>
-                                            </svg>
-                                            <span>12 Comments</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                    
-                    <div id="popular-content" class="tab-content" role="tabpanel" aria-labelledby="tab-popular">
-                        <div class="loading-state">
-                            <div class="spinner" aria-hidden="true"></div>
-                            <p class="loading-text">Loading popular posts...</p>
-                        </div>
-                    </div>
-                    
-                    <div id="following-content" class="tab-content" role="tabpanel" aria-labelledby="tab-following">
-                        <div class="loading-state">
-                            <div class="spinner" aria-hidden="true"></div>
-                            <p class="loading-text">Loading posts from gardeners you follow...</p>
-                        </div>
+                <div class="card-content">
+                    <h3 class="card-title">Bamboo Kitchen Utensil Set</h3>
+                    <p class="card-description">Complete set of durable bamboo kitchen tools, naturally antibacterial and sustainable. Includes 6 essential utensils for all your cooking needs.</p>
+                    <div class="card-meta">
+                        <span class="card-price">$34.99</span>
+                        <button class="card-button" aria-label="View details of Bamboo Kitchen Utensil Set" data-product-id="1">View Details</button>
                     </div>
                 </div>
-                
-                <nav aria-label="Pagination" class="pagination">
-                    <button class="pagination-btn disabled" aria-label="Previous page" aria-disabled="true">
-                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="16" height="16" fill="currentColor">
-                            <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/>
-                        </svg>
-                    </button>
-                    <button class="pagination-btn active" aria-label="Page 1" aria-current="page">1</button>
-                    <button class="pagination-btn" aria-label="Page 2">2</button>
-                    <button class="pagination-btn" aria-label="Page 3">3</button>
-                    <button class="pagination-btn" aria-label="Next page">
-                        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="16" height="16" fill="currentColor">
-                            <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z"/>
-                        </svg>
-                    </button>
-                </nav>
-            </section>
+            </article>
 
-            <section aria-labelledby="post-detail-heading" class="mt-4">
-                <h2 id="post-detail-heading">Featured Post</h2>
-                
-                <article class="post-detail">
-                    <header class="post-detail-header">
-                        <div>
-                            <h3 class="post-detail-title">My Herb Garden Transformation</h3>
-                            <div class="post-detail-meta">
-                                <div class="post-detail-author">
-                                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIgZmlsbD0iIzAwOTY4OCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSI0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik01MCAxNDBDNTAgMTQwIDE1MCAyMDAgMTUwIDE0MFMxNTAgODAgNTAgMTQwWiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" 
-                                        alt="Profile picture of HerbGardener" 
-                                        class="card-author-avatar">
-                                    <span>HerbGardener</span>
-                                </div>
-                                <span class="post-detail-date">Posted 5 days ago</span>
-                            </div>
-                        </div>
-                    </header>
-                    
-                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MDAgNDAwIj48cmVjdCB3aWR0aD0iODAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iI2U4ZjVlOSIvPjxyZWN0IHg9IjUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjYjcxYzFjIi8+PHJlY3QgeD0iMzAwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMWI1ZTIwIi8+PHJlY3QgeD0iNTUwIiB5PSIxMDAiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMDFhYmExIi8+PHRleHQgeD0iMTUwIiB5PSIyMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QmFzaWw8L3RleHQ+PHRleHQgeD0iNDAwIiB5PSIyMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Um9zZW1hcnk8L3RleHQ+PHRleHQgeD0iNjUwIiB5PSIyMDAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWludDwvdGV4dD48L3N2Zz4=" 
-                        alt="Herb garden transformation showing three raised beds with basil, rosemary, and mint plants, each in their own color-coded section" 
-                        class="post-detail-image">
-                    
-                    <div class="post-detail-content">
-                        <p>I've been working on transforming my herb garden for the past month, and I'm finally ready to share the results! I built three raised beds and organized my herbs by watering needs to make maintenance easier.</p>
-                        
-                        <p>In the first bed (red), I planted basil, which loves consistent moisture. The middle bed (green) contains rosemary, which prefers drier conditions. The last bed (blue) has mint, which I contained in its own space to prevent it from spreading everywhere.</p>
-                        
-                        <p>This organization has made caring for my herbs so much easier, and they're all thriving! I'm already harvesting fresh herbs for cooking almost every day.</p>
+            <!-- Card 2 -->
+            <article class="card" data-category="bathroom">
+                <div class="card-image-container">
+                    <img src="https://images.unsplash.com/photo-1620733723572-11c53f73a416?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8YmF0aHJvb20sZWNvfHx8fHx8MTY5NjM0NjMxMQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900" alt="Organic cotton towel set in natural beige color" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Organic Cotton Towel Set</h3>
+                    <p class="card-description">Luxuriously soft towels made from 100% organic cotton. Highly absorbent, quick-drying, and free from harmful chemicals and dyes.</p>
+                    <div class="card-meta">
+                        <span class="card-price">$49.99</span>
+                        <button class="card-button" aria-label="View details of Organic Cotton Towel Set" data-product-id="2">View Details</button>
                     </div>
-                    
-                    <div class="post-detail-actions">
-                        <button class="btn btn-icon" aria-label="Like this post">
-                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
-                                <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
-                            </svg>
-                            Like (52)
-                        </button>
-                        <button class="btn btn-icon" aria-label="Share this post">
-                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="16" height="16">
-                                <path d="M307 34.8c-11.5 5.1-19 16.6-19 29.2v64H176C78.8 128 0 206.8 0 304C0 417.3 81.5 467.9 100.2 478.1c2.5 1.4 5.3 1.9 8.1 1.9c10.9 0 19.7-8.9 19.7-19.7c0-7.5-4.3-14.4-9.8-19.5C108.8 431.9 96 414.4 96 384c0-53 43-96 96-96h96v64c0 12.6 7.4 24.1 19 29.2s25 3 34.4-5.4l160-144c6.7-6.1 10.6-14.7 10.6-23.8s-3.8-17.7-10.6-23.8l-160-144c-9.4-8.5-22.9-10.6-34.4-5.4z"/>
-                            </svg>
-                            Share
-                        </button>
-                        <button class="btn btn-icon" aria-label="Save this post">
-                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" width="16" height="16">
-                                <path d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"/>
-                            </svg>
-                            Save
-                        </button>
+                </div>
+            </article>
+
+            <!-- Card 3 -->
+            <article class="card" data-category="living">
+                <div class="card-image-container">
+                    <img src="https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8bGl2aW5nLHJvb20sZWNvfHx8fHx8MTY5NjM0NjM3Nw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900" alt="Recycled wool throw blanket in earth tones" class="card-image">
+                    <span class="card-badge">New</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Recycled Wool Throw Blanket</h3>
+                    <p class="card-description">Cozy throw blanket made from recycled wool fibers. Perfect for cool evenings, this eco-friendly blanket adds warmth and style to any living space.</p>
+                    <div class="card-meta">
+                        <span class="card-price">$59.99</span>
+                        <button class="card-button" aria-label="View details of Recycled Wool Throw Blanket" data-product-id="3">View Details</button>
                     </div>
-                    
-                    <section class="comments-section" aria-labelledby="comments-heading">
-                        <h4 id="comments-heading">Comments (5)</h4>
-                        
-                        <div class="comment">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIgZmlsbD0iIzY3M2FiNyIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSI0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik01MCAxNDBDNTAgMTQwIDE1MCAyMDAgMTUwIDE0MFMxNTAgODAgNTAgMTQwWiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" 
-                                alt="Profile picture of GardenGuru" 
-                                class="comment-avatar">
-                            <div class="comment-content">
-                                <h5 class="comment-author">GardenGuru</h5>
-                                <p class="comment-text">This is such a smart way to organize herbs! I've been struggling with my mint taking over everything. I'll definitely try this approach.</p>
-                                <span class="comment-date">3 days ago</span>
-                            </div>
-                        </div>
-                        
-                        <div class="comment">
-                            <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjEwMCIgZmlsbD0iI2U2NTEwMCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjgwIiByPSI0MCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik01MCAxNDBDNTAgMTQwIDE1MCAyMDAgMTUwIDE0MFMxNTAgODAgNTAgMTQwWiIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" 
-                                alt="Profile picture of PlantLover" 
-                                class="comment-avatar">
-                            <div class="comment-content">
-                                <h5 class="comment-author">PlantLover</h5>
-                                <p class="comment-text">The color coding is brilliant! Makes it easy to remember which herbs have which watering needs. Do you find the raised beds help with drainage?</p>
-                                <span class="comment-date">2 days ago</span>
-                            </div>
-                        </div>
-                        
-                        <form class="mt-3" aria-labelledby="comment-form-heading">
-                            <h5 id="comment-form-heading">Add a Comment</h5>
-                            <div class="form-group">
-                                <label for="comment-text" class="visually-hidden">Your comment</label>
-                                <textarea id="comment-text" name="comment" placeholder="Share your thoughts..." required aria-required="true"></textarea>
-                            </div>
-                            <button type="submit" class="btn">Post Comment</button>
-                        </form>
-                    </section>
-                </article>
-            </section>
+                </div>
+            </article>
+
+            <!-- Card 4 -->
+            <article class="card" data-category="bedroom">
+                <div class="card-image-container">
+                    <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8YmVkcm9vbSxlY298fHx8fHwxNjk2MzQ2NDI5&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900" alt="Organic linen bedding set in soft sage green" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Organic Linen Bedding Set</h3>
+                    <p class="card-description">Breathable, temperature-regulating bedding made from 100% organic linen. Gets softer with each wash and is perfect for year-round comfort.</p>
+                    <div class="card-meta">
+                        <span class="card-price">$129.99</span>
+                        <button class="card-button" aria-label="View details of Organic Linen Bedding Set" data-product-id="4">View Details</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 5 -->
+            <article class="card" data-category="kitchen">
+                <div class="card-image-container">
+                    <img src="https://images.unsplash.com/photo-1584589167171-541ce45f1eea?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8a2l0Y2hlbixjb21wb3N0fHx8fHx8MTY5NjM0NjQ4Nw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900" alt="Countertop compost bin made of stainless steel" class="card-image">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Countertop Compost Bin</h3>
+                    <p class="card-description">Stylish stainless steel compost bin with charcoal filter to eliminate odors. Perfect for collecting kitchen scraps for composting.</p>
+                    <div class="card-meta">
+                        <span class="card-price">$39.99</span>
+                        <button class="card-button" aria-label="View details of Countertop Compost Bin" data-product-id="5">View Details</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 6 -->
+            <article class="card" data-category="bathroom">
+                <div class="card-image-container">
+                    <img src="https://images.unsplash.com/photo-1618355776464-8666794d2520?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8YmF0aHJvb20sc3VzdGFpbmFibGV8fHx8fHwxNjk2MzQ2NTQ1&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900" alt="Zero waste bathroom kit with bamboo toothbrushes, soap, and cotton rounds" class="card-image">
+                    <span class="card-badge">Popular</span>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Zero Waste Bathroom Kit</h3>
+                    <p class="card-description">Complete set of plastic-free bathroom essentials including bamboo toothbrushes, solid shampoo bar, natural loofah, and reusable cotton rounds.</p>
+                    <div class="card-meta">
+                        <span class="card-price">$45.99</span>
+                        <button class="card-button" aria-label="View details of Zero Waste Bathroom Kit" data-product-id="6">View Details</button>
+                    </div>
+                </div>
+            </article>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-container">
-                <div class="footer-section">
-                    <h3>GardenShare</h3>
-                    <p>Connect with fellow gardeners, share your garden journey, and get inspired by our community of plant enthusiasts.</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Explore</a></li>
-                        <li><a href="#">My Garden</a></li>
-                        <li><a href="#">Community</a></li>
-                        <li><a href="#">About</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Resources</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Gardening Tips</a></li>
-                        <li><a href="#">Plant Identification</a></li>
-                        <li><a href="#">Seasonal Guides</a></li>
-                        <li><a href="#">Pest Control</a></li>
-                        <li><a href="#">Garden Design</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Contact Us</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Report an Issue</a></li>
-                        <li><a href="#">Feedback</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
-                </div>
+    <!-- Product Detail Modal -->
+    <div class="modal" id="product-modal" aria-labelledby="modal-title" aria-modal="true" role="dialog">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close product details" id="modal-close">&times;</button>
+            <h2 id="modal-title">Product Details</h2>
+            <img src="" alt="" class="modal-image" id="modal-image">
+            <div class="modal-description" id="modal-description"></div>
+            <div class="modal-features">
+                <h4>Key Features</h4>
+                <ul id="modal-features"></ul>
             </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2023 GardenShare. All rights reserved.</p>
+            <div class="modal-actions">
+                <span class="modal-price" id="modal-price"></span>
+                <button class="modal-button" id="add-to-cart">Add to Cart</button>
             </div>
-        </div>
-    </footer>
-
-    <!-- Create Post Modal -->
-    <div class="modal-overlay" id="create-post-modal" aria-hidden="true">
-        <div class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
-            <button class="modal-close" aria-label="Close modal" id="close-modal">
-                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" width="24" height="24" fill="currentColor">
-                    <path d="M310.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L160 210.7 54.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L114.7 256 9.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 301.3 265.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L205.3 256 310.6 150.6z"/>
-                </svg>
-            </button>
-            
-            <h3 id="modal-title" class="modal-title">Share Your Garden</h3>
-            
-            <form id="create-post-form">
-                <div class="form-group">
-                    <label for="post-title" class="required-field">Title</label>
-                    <input type="text" id="post-title" name="title" required aria-required="true" placeholder="Give your post a title">
-                    <p id="title-help" class="form-help">Enter a descriptive title for your garden post (max 100 characters)</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="post-description" class="required-field">Description</label>
-                    <textarea id="post-description" name="description" required aria-required="true" placeholder="Tell us about your garden..." aria-describedby="description-help"></textarea>
-                    <p id="description-help" class="form-help">Share details about your plants, gardening techniques, or ask for advice</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="post-image" class="required-field">Upload Image</label>
-                    <div class="file-upload">
-                        <label for="post-image" class="file-upload-label" tabindex="0">
-                            <div class="file-upload-icon" aria-hidden="true">📷</div>
-                            <div class="file-upload-text">Click or drag to upload image</div>
-                            <div class="file-upload-subtext">JPG, PNG or GIF, max 5MB</div>
-                        </label>
-                        <input type="file" id="post-image" name="image" accept="image/*" required aria-required="true" aria-describedby="image-help">
-                        <p id="image-help" class="form-help">Upload a clear photo of your garden, plant, or gardening project</p>
-                    </div>
-                    <div class="file-preview" id="image-preview"></div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="post-category">Category</label>
-                    <select id="post-category" name="category">
-                        <option value="">Select a category</option>
-                        <option value="vegetables">Vegetables</option>
-                        <option value="flowers">Flowers</option>
-                        <option value="herbs">Herbs</option>
-                        <option value="fruits">Fruits</option>
-                        <option value="indoor">Indoor Plants</option>
-                        <option value="landscape">Landscaping</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="post-tags">Tags</label>
-                    <input type="text" id="post-tags" name="tags" placeholder="E.g., roses, organic, beginner" aria-describedby="tags-help">
-                    <p id="tags-help" class="form-help">Add tags separated by commas to help others find your post</p>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="submit" class="btn">Share Post</button>
-                    <button type="button" class="btn btn-secondary" id="cancel-post">Cancel</button>
-                </div>
-            </form>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script>
-        // DOM Elements
-        const createPostBtn = document.getElementById('create-post-btn');
-        const createPostModal = document.getElementById('create-post-modal');
-        const closeModalBtn = document.getElementById('close-modal');
-        const cancelPostBtn = document.getElementById('cancel-post');
-        const createPostForm = document.getElementById('create-post-form');
-        const postImageInput = document.getElementById('post-image');
-        const imagePreview = document.getElementById('image-preview');
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const paginationButtons = document.querySelectorAll('.pagination-btn');
+    <!-- Notification -->
+    <div class="notification" id="notification" role="status" aria-live="polite"></div>
 
-        // Modal Functions
-        function openModal() {
-            createPostModal.classList.add('active');
-            createPostModal.setAttribute('aria-hidden', 'false');
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Us</h3>
+                <p>We're dedicated to providing sustainable products that help reduce environmental impact without compromising on quality or style.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Sustainability Practices</a></li>
+                    <li><a href="#">Product Care</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:info@ecofriendlyhome.com">info@ecofriendlyhome.com</a></li>
+                    <li><a href="tel:+18005551234">1-800-555-1234</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 Eco-Friendly Home Products. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Product data
+        const products = {
+            1: {
+                title: "Bamboo Kitchen Utensil Set",
+                image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8a2l0Y2hlbixlY298fHx8fHwxNjk2MzQ2MjQ3&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900",
+                imageAlt: "Bamboo kitchen utensil set with wooden spoons, spatulas, and serving tools",
+                description: "Our premium bamboo kitchen utensil set includes everything you need for sustainable cooking. Made from 100% organic bamboo, these tools are naturally antibacterial, won't scratch your cookware, and are free from harmful chemicals found in plastic utensils.",
+                features: [
+                    "Made from sustainable, renewable bamboo",
+                    "Naturally antibacterial and odor-resistant",
+                    "Heat-resistant and won't scratch cookware",
+                    "Includes spatula, slotted spoon, mixing spoon, serving spoon, tongs, and pasta server",
+                    "Handcrafted with smooth, splinter-free finish",
+                    "Biodegradable at end of life"
+                ],
+                price: "$34.99",
+                category: "kitchen"
+            },
+            2: {
+                title: "Organic Cotton Towel Set",
+                image: "https://images.unsplash.com/photo-1620733723572-11c53f73a416?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8YmF0aHJvb20sZWNvfHx8fHx8MTY5NjM0NjMxMQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900",
+                imageAlt: "Organic cotton towel set in natural beige color",
+                description: "Experience the luxury of our organic cotton towel set. Made from 100% GOTS-certified organic cotton, these towels are incredibly soft, highly absorbent, and free from harmful chemicals and synthetic dyes. The set includes bath towels, hand towels, and washcloths.",
+                features: [
+                    "100% GOTS-certified organic cotton",
+                    "Free from harmful chemicals and synthetic dyes",
+                    "Highly absorbent and quick-drying",
+                    "Includes 2 bath towels, 2 hand towels, and 4 washcloths",
+                    "Natural, undyed fibers safe for sensitive skin",
+                    "Gets softer with each wash"
+                ],
+                price: "$49.99",
+                category: "bathroom"
+            },
+            3: {
+                title: "Recycled Wool Throw Blanket",
+                image: "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8bGl2aW5nLHJvb20sZWNvfHx8fHx8MTY5NjM0NjM3Nw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900",
+                imageAlt: "Recycled wool throw blanket in earth tones",
+                description: "Add warmth and style to your living space with our recycled wool throw blanket. Made from post-consumer wool fibers that would otherwise end up in landfills, this blanket is both eco-friendly and cozy. Perfect for cool evenings or as a decorative accent.",
+                features: [
+                    "Made from 80% recycled wool and 20% recycled nylon for durability",
+                    "Diverts textile waste from landfills",
+                    "Naturally temperature-regulating properties of wool",
+                    "Measures 50\" x 60\" - perfect for couches and chairs",
+                    "Earth-tone colors created with low-impact dyes",
+                    "Handcrafted by artisans using traditional techniques"
+                ],
+                price: "$59.99",
+                category: "living"
+            },
+            4: {
+                title: "Organic Linen Bedding Set",
+                image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8YmVkcm9vbSxlY298fHx8fHwxNjk2MzQ2NDI5&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900",
+                imageAlt: "Organic linen bedding set in soft sage green",
+                description: "Transform your bedroom with our luxurious organic linen bedding set. Linen is naturally temperature-regulating, keeping you cool in summer and warm in winter. Our linen is grown without pesticides and processed without harmful chemicals, making it better for you and the planet.",
+                features: [
+                    "100% organic linen from flax grown without pesticides",
+                    "Naturally temperature-regulating for year-round comfort",
+                    "Gets softer with each wash while maintaining durability",
+                    "Includes fitted sheet, flat sheet, and 2 pillowcases",
+                    "OEKO-TEX certified - free from harmful substances",
+                    "Available in 6 natural, plant-dyed colors"
+                ],
+                price: "$129.99",
+                category: "bedroom"
+            },
+            5: {
+                title: "Countertop Compost Bin",
+                image: "https://images.unsplash.com/photo-1584589167171-541ce45f1eea?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8a2l0Y2hlbixjb21wb3N0fHx8fHx8MTY5NjM0NjQ4Nw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900",
+                imageAlt: "Countertop compost bin made of stainless steel",
+                description: "Make composting easy with our stylish countertop compost bin. Designed to sit conveniently on your kitchen counter, this stainless steel bin includes a charcoal filter that eliminates odors, allowing you to collect food scraps for days before emptying.",
+                features: [
+                    "Made from durable stainless steel that won't absorb odors",
+                    "Includes 2 replaceable charcoal filters that last up to 6 months",
+                    "1.3-gallon capacity - perfect for daily food scraps",
+                    "Dishwasher-safe for easy cleaning",
+                    "Stylish design complements modern kitchens",
+                    "Helps reduce household waste sent to landfills"
+                ],
+                price: "$39.99",
+                category: "kitchen"
+            },
+            6: {
+                title: "Zero Waste Bathroom Kit",
+                image: "https://images.unsplash.com/photo-1618355776464-8666794d2520?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218MHx8YmF0aHJvb20sc3VzdGFpbmFibGV8fHx8fHwxNjk2MzQ2NTQ1&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=900",
+                imageAlt: "Zero waste bathroom kit with bamboo toothbrushes, soap, and cotton rounds",
+                description: "Transform your bathroom routine with our comprehensive zero waste kit. This set includes everything you need to eliminate plastic from your daily hygiene routine while enjoying high-quality, natural products that are better for you and the environment.",
+                features: [
+                    "4 bamboo toothbrushes with plant-based bristles",
+                    "Solid shampoo and conditioner bars (equivalent to 2-3 bottles each)",
+                    "Natural loofah and cotton washcloth",
+                    "12 reusable organic cotton rounds with mesh washing bag",
+                    "Plastic-free dental floss in refillable glass container",
+                    "Safety razor with 10 replacement blades"
+                ],
+                price: "$45.99",
+                category: "bathroom"
+            }
+        };
+
+        // DOM Elements
+        const productGrid = document.getElementById('product-grid');
+        const modal = document.getElementById('product-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalImage = document.getElementById('modal-image');
+        const modalDescription = document.getElementById('modal-description');
+        const modalFeatures = document.getElementById('modal-features');
+        const modalPrice = document.getElementById('modal-price');
+        const modalClose = document.getElementById('modal-close');
+        const addToCartBtn = document.getElementById('add-to-cart');
+        const notification = document.getElementById('notification');
+        const filterButtons = document.querySelectorAll('.filter-button');
+        const loadingIndicator = document.getElementById('loading-indicator');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to all product cards
+            const productButtons = document.querySelectorAll('.card-button');
+            productButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const productId = this.getAttribute('data-product-id');
+                    openProductModal(productId);
+                });
+            });
+
+            // Close modal when clicking the close button
+            modalClose.addEventListener('click', closeModal);
+
+            // Close modal when pressing Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    closeModal();
+                }
+            });
+
+            // Close modal when clicking outside the modal content
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Add to cart button functionality
+            addToCartBtn.addEventListener('click', function() {
+                const productTitle = modalTitle.textContent;
+                showNotification(`${productTitle} added to your cart!`);
+                closeModal();
+            });
+
+            // Filter buttons functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    filterProducts(category);
+                    
+                    // Update aria-pressed state for all buttons
+                    filterButtons.forEach(btn => {
+                        btn.setAttribute('aria-pressed', 'false');
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Set this button as pressed
+                    this.setAttribute('aria-pressed', 'true');
+                    this.classList.add('active');
+                });
+            });
+        });
+
+        // Function to open product modal
+        function openProductModal(productId) {
+            const product = products[productId];
+            if (!product) return;
             
-            // Set focus to first focusable element in modal
+            // Set modal content
+            modalTitle.textContent = product.title;
+            modalImage.src = product.image;
+            modalImage.alt = product.imageAlt;
+            modalDescription.textContent = product.description;
+            modalPrice.textContent = product.price;
+            
+            // Clear and populate features list
+            modalFeatures.innerHTML = '';
+            product.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                modalFeatures.appendChild(li);
+            });
+            
+            // Show modal
+            modal.style.display = 'flex';
+            
+            // Set focus to close button for accessibility
             setTimeout(() => {
-                const firstInput = createPostModal.querySelector('input, button, textarea, select');
-                if (firstInput) firstInput.focus();
+                modalClose.focus();
             }, 100);
             
-            // Trap focus within modal
-            document.addEventListener('keydown', trapFocus);
-            
-            // Close on escape key
-            document.addEventListener('keydown', closeOnEscape);
+            // Store the button that opened the modal to return focus later
+            modal.dataset.opener = document.activeElement.id || 'unknown';
         }
 
+        // Function to close modal
         function closeModal() {
-            createPostModal.classList.remove('active');
-            createPostModal.setAttribute('aria-hidden', 'true');
+            modal.style.display = 'none';
             
-            // Return focus to the button that opened the modal
-            createPostBtn.focus();
-            
-            // Remove event listeners
-            document.removeEventListener('keydown', trapFocus);
-            document.removeEventListener('keydown', closeOnEscape);
-        }
-
-        function trapFocus(e) {
-            if (e.key !== 'Tab') return;
-            
-            const focusableElements = createPostModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            const firstElement = focusableElements[0];
-            const lastElement = focusableElements[focusableElements.length - 1];
-            
-            if (e.shiftKey) {
-                if (document.activeElement === firstElement) {
-                    lastElement.focus();
-                    e.preventDefault();
-                }
-            } else {
-                if (document.activeElement === lastElement) {
-                    firstElement.focus();
-                    e.preventDefault();
-                }
+            // Return focus to the element that opened the modal
+            const openerId = modal.dataset.opener;
+            if (openerId && openerId !== 'unknown') {
+                const opener = document.getElementById(openerId);
+                if (opener) opener.focus();
             }
         }
+
+        // Function to show notification
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to filter products
+        function filterProducts(category) {
+            // Show loading indicator
+            loadingIndicator.style.display = 'block';
+            productGrid.style.opacity = '0.5';
+            
+            // Simulate loading delay for better user experience
+            setTimeout(() => {
+                const cards = document.querySelectorAll('.card');
+                
+                cards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+                productGrid.style.opacity = '1';
+                
+                // Announce to screen readers that content has been updated
+                const liveRegion = document.createElement('div');
+                liveRegion.setAttribute('aria-live', 'polite');
+                liveRegion.setAttribute('aria-atomic', 'true');
+                liveRegion.classList.add('sr-only');
+                liveRegion.textContent = category === 'all' 
+                    ? 'Showing all products' 
+                    : `Showing ${category} products`;
+                document.body.appendChild(liveRegion);
+                
+                // Remove the live region after announcement
+                setTimeout(() => {
+                    document.body.removeChild(liveRegion);
+                }, 1000);
+                
+            }, 500); // Short delay to show loading state
+        }
+    </script>
+</body>
+</html>
