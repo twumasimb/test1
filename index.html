@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitTrack - Your Personal Fitness Tracker</title>
+    <title>Accessible Music Player - Listen to your favorite tracks</title>
     <style>
         /* CSS Reset and Base Styles */
         *, *::before, *::after {
@@ -12,653 +12,418 @@
             padding: 0;
         }
 
-        /* Variables for consistent theming and enhanced accessibility */
         :root {
-            --color-primary: #2c5282;
-            --color-primary-dark: #1a365d;
-            --color-primary-light: #4299e1;
-            --color-secondary: #38a169;
-            --color-secondary-dark: #276749;
-            --color-secondary-light: #68d391;
-            --color-accent: #d53f8c;
-            --color-accent-dark: #97266d;
-            --color-accent-light: #ed64a6;
-            --color-background: #f7fafc;
-            --color-text: #1a202c;
-            --color-text-light: #4a5568;
-            --color-border: #cbd5e0;
-            --color-error: #e53e3e;
-            --color-success: #38a169;
-            --color-warning: #d69e2e;
-            --color-info: #3182ce;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            --border-radius: 0.375rem;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            /* Color variables with high contrast ratios */
+            --primary-color: #0056b3;
+            --primary-dark: #003a75;
+            --secondary-color: #6c0f8a;
+            --text-color: #121212;
+            --background-color: #f8f9fa;
+            --light-color: #ffffff;
+            --accent-color: #d94e0f;
+            --accent-dark: #a53a0a;
+            --error-color: #c70000;
+            --success-color: #006400;
+            --focus-color: #0056b3;
+            --focus-outline: 3px solid #0056b3;
+            
+            /* Typography */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --font-size-base: 1rem;
+            --line-height: 1.5;
         }
 
-        /* Reduced motion support */
+        /* Respect user's motion preferences */
         @media (prefers-reduced-motion: reduce) {
             * {
-                animation-duration: 0.01ms !important;
+                animation-duration: 0.001ms !important;
                 animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+                transition-duration: 0.001ms !important;
                 scroll-behavior: auto !important;
             }
         }
 
         body {
             font-family: var(--font-family);
-            line-height: 1.6;
-            color: var(--color-text);
-            background-color: var(--color-background);
+            font-size: var(--font-size-base);
+            line-height: var(--line-height);
+            color: var(--text-color);
+            background-color: var(--background-color);
             min-height: 100vh;
-            padding: 0;
-            margin: 0;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Enhanced focus styles for all interactive elements */
-        a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
-            outline: 3px solid var(--color-primary-light);
+        a:focus, button:focus, input:focus, select:focus, [tabindex]:focus {
+            outline: var(--focus-outline);
             outline-offset: 2px;
-            box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(0, 86, 179, 0.25);
+            border-radius: 2px;
+            z-index: 1;
         }
 
-        /* Skip link styling */
+        /* Skip link */
         .skip-link {
             position: absolute;
-            top: -50px;
+            top: -40px;
             left: 0;
-            background: var(--color-primary);
-            color: white;
+            background: var(--primary-color);
+            color: var(--light-color);
             padding: 10px;
             z-index: 100;
-            transition: top 0.3s ease;
+            transition: top 0.3s;
+            border: 2px solid var(--light-color);
+            text-decoration: none;
+            font-weight: bold;
         }
 
         .skip-link:focus {
             top: 0;
-            outline: 3px solid var(--color-primary-light);
+            outline: var(--focus-outline);
         }
 
-        /* Layout */
-        .container {
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-color);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Main content area */
+        main {
+            flex: 1;
+            padding: 2rem;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1.5rem;
+            width: 100%;
         }
 
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Header Styles */
-        header {
-            background-color: var(--color-primary);
-            color: white;
-            padding: 1.5rem 0;
-            box-shadow: var(--box-shadow);
-        }
-
-        .header-content {
+        /* Music player container */
+        .music-player {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .site-title {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .site-title svg {
-            width: 2rem;
-            height: 2rem;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
+            flex-direction: column;
             align-items: center;
         }
 
-        .nav-list {
+        /* Now playing section */
+        .now-playing {
             display: flex;
-            list-style: none;
-            gap: 1.5rem;
-        }
-
-        .nav-link {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 0.75rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-            position: relative;
-        }
-
-        .nav-link:hover, .nav-link:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -0.25rem;
-            left: 0.75rem;
-            right: 0.75rem;
-            height: 3px;
-            background-color: white;
-            border-radius: 3px;
-        }
-
-        /* Main Content */
-        main {
-            padding: 2rem 0;
-            min-height: calc(100vh - 200px);
-        }
-
-        .page-title {
-            font-size: 2.25rem;
-            margin-bottom: 1.5rem;
-            color: var(--color-primary-dark);
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+            width: 100%;
             text-align: center;
         }
 
-        /* Dashboard Layout */
-        .dashboard {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
-
-        @media (min-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .dashboard {
-                grid-template-columns: 1fr 2fr;
-            }
-        }
-
-        /* Card Component */
-        .card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 1.5rem;
-            height: 100%;
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--color-border);
-            padding-bottom: 0.75rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--color-primary-dark);
-            margin: 0;
-        }
-
-        /* Form Styles */
-        .form-group {
+        .album-art {
+            width: 250px;
+            height: 250px;
+            border-radius: 8px;
             margin-bottom: 1.5rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
         }
 
-        .form-label {
-            display: block;
+        .song-info {
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .song-title {
+            font-size: 1.8rem;
+            font-weight: bold;
             margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--color-text);
+            color: var(--text-color);
         }
 
-        .form-input,
-        .form-select,
-        .form-textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--color-border);
-            border-radius: var(--border-radius);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: var(--transition);
-            min-height: 44px;
-        }
-
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
-        }
-
-        .form-help {
-            display: block;
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--color-text-light);
-        }
-
-        .form-error {
-            display: block;
-            margin-top: 0.5rem;
-            font-size: 0.875rem;
-            color: var(--color-error);
-            font-weight: 500;
-        }
-
-        .required-indicator {
-            color: var(--color-error);
-            margin-left: 0.25rem;
-        }
-
-        /* Button Styles */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 44px;
-            min-width: 44px;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: var(--border-radius);
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-            cursor: pointer;
-            transition: var(--transition);
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background-color: var(--color-primary);
-            color: white;
-        }
-
-        .btn-primary:hover, .btn-primary:focus {
-            background-color: var(--color-primary-dark);
-        }
-
-        .btn-secondary {
-            background-color: var(--color-secondary);
-            color: white;
-        }
-
-        .btn-secondary:hover, .btn-secondary:focus {
-            background-color: var(--color-secondary-dark);
-        }
-
-        .btn-accent {
-            background-color: var(--color-accent);
-            color: white;
-        }
-
-        .btn-accent:hover, .btn-accent:focus {
-            background-color: var(--color-accent-dark);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--color-primary);
-            color: var(--color-primary);
-        }
-
-        .btn-outline:hover, .btn-outline:focus {
-            background-color: var(--color-primary);
-            color: white;
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-
-        /* Table Styles */
-        .table-container {
-            overflow-x: auto;
-            margin-bottom: 1.5rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .song-artist {
+            font-size: 1.2rem;
+            color: #555;
             margin-bottom: 1rem;
         }
 
-        th, td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        th {
-            background-color: var(--color-primary-light);
-            color: white;
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: rgba(203, 213, 224, 0.2);
-        }
-
-        /* Chart Styles */
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin-bottom: 1.5rem;
-        }
-
-        .chart-legend {
+        /* Controls section */
+        .controls {
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
-        }
-
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 4px;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            width: 100%;
             margin-bottom: 2rem;
         }
 
-        .stat-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            padding: 1.25rem;
-            text-align: center;
-            border-top: 4px solid var(--color-primary);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--color-primary-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--color-text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        /* Tabs */
-        .tabs {
-            margin-bottom: 1.5rem;
-        }
-
-        .tab-list {
+        .playback-controls {
             display: flex;
-            list-style: none;
-            border-bottom: 2px solid var(--color-border);
-            margin-bottom: 1rem;
-            overflow-x: auto;
-            scrollbar-width: thin;
-        }
-
-        .tab-button {
-            padding: 0.75rem 1.25rem;
-            background: none;
-            border: none;
-            border-bottom: 3px solid transparent;
-            font-family: inherit;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--color-text-light);
-            cursor: pointer;
-            transition: var(--transition);
-            min-height: 44px;
-            min-width: 44px;
-        }
-
-        .tab-button:hover, .tab-button:focus {
-            color: var(--color-primary);
-        }
-
-        .tab-button[aria-selected="true"] {
-            color: var(--color-primary);
-            border-bottom-color: var(--color-primary);
-        }
-
-        .tab-panel {
-            display: none;
-            padding: 1rem 0;
-        }
-
-        .tab-panel[aria-hidden="false"] {
-            display: block;
-        }
-
-        /* Alert/Notification Styles */
-        .alert {
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .alert-success {
-            background-color: rgba(56, 161, 105, 0.2);
-            border-left: 4px solid var(--color-success);
-            color: var(--color-success);
-        }
-
-        .alert-error {
-            background-color: rgba(229, 62, 62, 0.2);
-            border-left: 4px solid var(--color-error);
-            color: var(--color-error);
-        }
-
-        .alert-warning {
-            background-color: rgba(214, 158, 46, 0.2);
-            border-left: 4px solid var(--color-warning);
-            color: var(--color-warning);
-        }
-
-        .alert-info {
-            background-color: rgba(49, 130, 206, 0.2);
-            border-left: 4px solid var(--color-info);
-            color: var(--color-info);
-        }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
             justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 1.5rem;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
+        .control-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 1.5rem;
         }
 
-        .modal {
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            transform: translateY(-20px);
-            transition: var(--transition);
+        .control-btn:hover {
+            background-color: var(--primary-dark);
         }
 
-        .modal-overlay.active .modal {
-            transform: translateY(0);
+        .control-btn.play-pause {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
         }
 
-        .modal-header {
+        .control-btn svg {
+            fill: currentColor;
+            width: 24px;
+            height: 24px;
+        }
+
+        .control-btn.play-pause svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 1rem;
+        }
+
+        .progress-info {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #555;
         }
 
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin: 0;
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
         }
 
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-bar-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
             cursor: pointer;
-            color: var(--color-text-light);
-            min-height: 44px;
-            min-width: 44px;
+            z-index: 2;
+        }
+
+        /* Volume control */
+        .volume-container {
             display: flex;
             align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover, .modal-close:focus {
-            background-color: rgba(0, 0, 0, 0.1);
-            color: var(--color-text);
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-        }
-
-        .modal-footer {
-            padding: 1.25rem 1.5rem;
-            border-top: 1px solid var(--color-border);
-            display: flex;
-            justify-content: flex-end;
+            width: 100%;
+            max-width: 300px;
             gap: 1rem;
         }
 
-        /* Footer Styles */
-        footer {
-            background-color: var(--color-primary-dark);
-            color: white;
-            padding: 2rem 0;
-            margin-top: 2rem;
+        .volume-icon {
+            color: var(--text-color);
+            font-size: 1.5rem;
         }
 
-        .footer-content {
+        .volume-slider {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #e0e0e0;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+        }
+
+        .volume-slider:focus {
+            outline: var(--focus-outline);
+        }
+
+        .volume-percentage {
+            min-width: 40px;
+            text-align: right;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* Playlist section */
+        .playlist-section {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+        }
+
+        .playlist-header {
             display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
         }
 
-        @media (min-width: 768px) {
-            .footer-content {
-                flex-direction: row;
-                justify-content: space-between;
-            }
+        .playlist-title {
+            font-size: 1.8rem;
+            color: var(--text-color);
         }
 
-        .footer-section {
+        .playlist {
+            list-style: none;
+            width: 100%;
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .playlist-item:hover, .playlist-item:focus {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .playlist-item.active {
+            background-color: rgba(0, 86, 179, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .playlist-item-number {
+            font-weight: bold;
+            margin-right: 1rem;
+            color: #777;
+            min-width: 30px;
+        }
+
+        .playlist-item-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            margin-right: 1rem;
+            object-fit: cover;
+        }
+
+        .playlist-item-info {
             flex: 1;
         }
 
-        .footer-title {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            position: relative;
-            padding-bottom: 0.5rem;
+        .playlist-item-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            color: var(--text-color);
         }
 
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background-color: var(--color-accent);
+        .playlist-item-artist {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .playlist-item-duration {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--light-color);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
         }
 
         .footer-links {
-            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .footer-link {
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-link a {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--light-color);
             text-decoration: none;
-            transition: var(--transition);
+            font-weight: bold;
+            transition: color 0.2s;
         }
 
-        .footer-link a:hover, .footer-link a:focus {
-            color: white;
+        .footer-link:hover, .footer-link:focus {
+            color: #b3d7ff;
             text-decoration: underline;
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            margin-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Accessibility Enhancements */
+        /* Accessibility features */
         .sr-only {
             position: absolute;
             width: 1px;
@@ -671,1056 +436,764 @@
             border-width: 0;
         }
 
-        /* Progress Bar */
-        .progress {
-            height: 20px;
-            background-color: #e2e8f0;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background-color: var(--color-primary);
-            border-radius: var(--border-radius);
-            transition: width 0.5s ease;
-            position: relative;
-        }
-
-        .progress-label {
-            position: absolute;
-            right: 5px;
-            color: white;
-            font-weight: bold;
-            font-size: 0.75rem;
-            line-height: 20px;
-        }
-
-        /* Calendar View */
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .calendar-header {
-            grid-column: span 7;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .calendar-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .calendar-nav {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .calendar-day-names {
-            display: contents;
-        }
-
-        .calendar-day-name {
-            text-align: center;
-            font-weight: 600;
-            padding: 0.5rem;
-            background-color: var(--color-primary-light);
-            color: white;
-            border-radius: var(--border-radius);
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            padding: 0.5rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .calendar-day:hover, .calendar-day:focus {
-            background-color: rgba(66, 153, 225, 0.1);
-            border-color: var(--color-primary);
-        }
-
-        .calendar-day.active {
-            background-color: var(--color-primary);
-            color: white;
-            border-color: var(--color-primary);
-        }
-
-        .calendar-day.has-workout {
-            position: relative;
-        }
-
-        .calendar-day.has-workout::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            width: 6px;
-            height: 6px;
-            background-color: var(--color-accent);
-            border-radius: 50%;
-        }
-
-        .calendar-day.active.has-workout::after {
-            background-color: white;
-        }
-
-        /* Responsive adjustments */
+        /* Responsive design */
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
+            .album-art {
+                width: 200px;
+                height: 200px;
             }
 
-            .nav-list {
-                flex-direction: column;
-                gap: 0.5rem;
+            .song-title {
+                font-size: 1.5rem;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .song-artist {
+                font-size: 1rem;
             }
 
-            .tab-list {
-                flex-wrap: wrap;
+            .control-btn {
+                width: 50px;
+                height: 50px;
             }
 
-            .calendar {
-                grid-template-columns: repeat(4, 1fr);
+            .control-btn.play-pause {
+                width: 70px;
+                height: 70px;
             }
 
-            .calendar-day-name:nth-child(n+5) {
-                display: none;
-            }
-
-            .calendar-day:nth-child(n+29) {
-                display: none;
+            .playlist-item {
+                padding: 0.75rem;
             }
         }
 
-        /* High contrast mode support */
-        @media (forced-colors: active) {
-            :root {
-                --color-primary: CanvasText;
-                --color-primary-dark: CanvasText;
-                --color-primary-light: CanvasText;
-                --color-secondary: CanvasText;
-                --color-secondary-dark: CanvasText;
-                --color-secondary-light: CanvasText;
-                --color-accent: CanvasText;
-                --color-accent-dark: CanvasText;
-                --color-accent-light: CanvasText;
-                --color-background: Canvas;
-                --color-text: CanvasText;
-                --color-text-light: CanvasText;
-                --color-border: CanvasText;
+        @media (max-width: 480px) {
+            main {
+                padding: 1rem;
             }
 
-            .btn, .card, .stat-card, .progress, .calendar-day {
-                border: 1px solid CanvasText;
+            .music-player, .playlist-section {
+                padding: 1.5rem;
             }
 
-            a:focus, button:focus, input:focus, select:focus, textarea:focus, [tabindex]:focus {
-                outline: 2px solid CanvasText;
+            .album-art {
+                width: 150px;
+                height: 150px;
             }
+
+            .playback-controls {
+                gap: 1rem;
+            }
+
+            .control-btn {
+                width: 45px;
+                height: 45px;
+            }
+
+            .control-btn.play-pause {
+                width: 60px;
+                height: 60px;
+            }
+
+            .playlist-item-img {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Animation for loading state */
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Visually hidden but accessible to screen readers */
+        .visually-hidden:not(:focus):not(:active) {
+            clip: rect(0 0 0 0);
+            clip-path: inset(50%);
+            height: 1px;
+            overflow: hidden;
+            position: absolute;
+            white-space: nowrap;
+            width: 1px;
         }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-
+    
     <header>
-        <div class="container header-content">
-            <h1 class="site-title">
-                <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
-                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
-                    <line x1="6" y1="1" x2="6" y2="4"></line>
-                    <line x1="10" y1="1" x2="10" y2="4"></line>
-                    <line x1="14" y1="1" x2="14" y2="4"></line>
-                </svg>
-                FitTrack
-            </h1>
-            <nav aria-label="Main navigation">
-                <ul class="nav-list">
-                    <li><a href="#" class="nav-link active" aria-current="page">Dashboard</a></li>
-                    <li><a href="#" class="nav-link">Workouts</a></li>
-                    <li><a href="#" class="nav-link">Progress</a></li>
-                    <li><a href="#" class="nav-link">Settings</a></li>
-                </ul>
-            </nav>
-        </div>
+        <h1>Accessible Music Player</h1>
+        <p>Listen to your favorite tracks with our fully accessible music player</p>
     </header>
-
+    
     <main id="main-content">
-        <div class="container">
-            <h2 class="page-title">Fitness Dashboard</h2>
-
-            <!-- Notification area for messages -->
-            <div id="notification-area" aria-live="polite"></div>
-
-            <!-- Stats Overview -->
-            <section aria-labelledby="stats-heading">
-                <h3 id="stats-heading" class="visually-hidden">Fitness Statistics</h3>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value" id="total-workouts">12</div>
-                        <div class="stat-label">Total Workouts</div>
+        <section class="music-player" aria-labelledby="player-title">
+            <h2 id="player-title" class="visually-hidden">Music Player Controls</h2>
+            
+            <div class="now-playing">
+                <img id="album-art" class="album-art" src="https://placehold.co/250x250/0056b3/ffffff?text=Album+Art" alt="Album artwork for the currently playing song" />
+                
+                <div class="song-info">
+                    <h3 id="song-title" class="song-title">Select a song to play</h3>
+                    <p id="song-artist" class="song-artist">Artist name will appear here</p>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <div class="playback-controls">
+                    <button id="prev-btn" class="control-btn" aria-label="Previous song">
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
+                        </svg>
+                    </button>
+                    
+                    <button id="play-pause-btn" class="control-btn play-pause" aria-label="Play">
+                        <svg id="play-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                        <svg id="pause-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" style="display: none;">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
+                        </svg>
+                    </button>
+                    
+                    <button id="next-btn" class="control-btn" aria-label="Next song">
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-info">
+                        <span id="current-time">0:00</span>
+                        <span id="duration">0:00</span>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="total-minutes">320</div>
-                        <div class="stat-label">Total Minutes</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="calories-burned">4,250</div>
-                        <div class="stat-label">Calories Burned</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="active-streak">5</div>
-                        <div class="stat-label">Day Streak</div>
+                    <div class="progress-bar">
+                        <div id="progress" class="progress"></div>
+                        <input 
+                            type="range" 
+                            id="seek-slider" 
+                            class="progress-bar-input" 
+                            min="0" 
+                            max="100" 
+                            value="0" 
+                            step="0.1"
+                            aria-label="Seek time in track"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                            aria-valuenow="0"
+                            aria-valuetext="0:00 of 0:00"
+                        />
                     </div>
                 </div>
-            </section>
-
-            <!-- Main Dashboard Content -->
-            <div class="dashboard">
-                <!-- Left Column - Add Workout Form -->
-                <section aria-labelledby="add-workout-heading" class="card">
-                    <div class="card-header">
-                        <h3 id="add-workout-heading" class="card-title">Log New Workout</h3>
-                    </div>
-                    <form id="workout-form" aria-describedby="form-description">
-                        <p id="form-description" class="form-help">Fill out the form below to log your workout activity.</p>
-                        
-                        <div class="form-group">
-                            <label for="workout-date" class="form-label">
-                                Date <span class="required-indicator" aria-hidden="true">*</span>
-                                <span class="sr-only">(required)</span>
-                            </label>
-                            <input type="date" id="workout-date" name="workout-date" class="form-input" required aria-required="true">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="workout-type" class="form-label">
-                                Exercise Type <span class="required-indicator" aria-hidden="true">*</span>
-                                <span class="sr-only">(required)</span>
-                            </label>
-                            <select id="workout-type" name="workout-type" class="form-select" required aria-required="true">
-                                <option value="">Select exercise type</option>
-                                <option value="running">Running</option>
-                                <option value="cycling">Cycling</option>
-                                <option value="swimming">Swimming</option>
-                                <option value="walking">Walking</option>
-                                <option value="hiking">Hiking</option>
-                                <option value="strength">Strength Training</option>
-                                <option value="yoga">Yoga</option>
-                                <option value="pilates">Pilates</option>
-                                <option value="hiit">HIIT</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="workout-duration" class="form-label">
-                                Duration (minutes) <span class="required-indicator" aria-hidden="true">*</span>
-                                <span class="sr-only">(required)</span>
-                            </label>
-                            <input type="number" id="workout-duration" name="workout-duration" min="1" max="1440" class="form-input" required aria-required="true">
-                            <span id="duration-help" class="form-help">Enter workout duration in minutes (1-1440)</span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="workout-intensity" class="form-label">Intensity Level</label>
-                            <select id="workout-intensity" name="workout-intensity" class="form-select">
-                                <option value="low">Low</option>
-                                <option value="moderate" selected>Moderate</option>
-                                <option value="high">High</option>
-                                <option value="very-high">Very High</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="calories-burned" class="form-label">Calories Burned</label>
-                            <input type="number" id="calories-burned-input" name="calories-burned" min="0" class="form-input">
-                            <span id="calories-help" class="form-help">Estimated calories will be calculated if left blank</span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="workout-notes" class="form-label">Notes</label>
-                            <textarea id="workout-notes" name="workout-notes" class="form-textarea" rows="3" placeholder="Add any additional notes about your workout"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary btn-block" id="save-workout">
-                                <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                    <polyline points="7 3 7 8 15 8"></polyline>
-                                </svg>
-                                Save Workout
-                            </button>
-                        </div>
-                    </form>
-                </section>
-
-                <!-- Right Column - Workout Data & Charts -->
-                <section aria-labelledby="workout-data-heading">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 id="workout-data-heading" class="card-title">Workout Progress</h3>
-                            <div class="card-actions">
-                                <button class="btn btn-outline" id="view-all-workouts" aria-label="View all workouts">
-                                    View All
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Tabs for different views -->
-                        <div class="tabs" role="tablist" aria-label="Workout data views">
-                            <div class="tab-list" role="tablist">
-                                <button id="tab-chart" class="tab-button" role="tab" aria-selected="true" aria-controls="panel-chart">
-                                    Progress Chart
-                                </button>
-                                <button id="tab-calendar" class="tab-button" role="tab" aria-selected="false" aria-controls="panel-calendar">
-                                    Calendar
-                                </button>
-                                <button id="tab-recent" class="tab-button" role="tab" aria-selected="false" aria-controls="panel-recent">
-                                    Recent Workouts
-                                </button>
-                            </div>
-
-                            <!-- Chart Tab Panel -->
-                            <div id="panel-chart" class="tab-panel" role="tabpanel" aria-labelledby="tab-chart" aria-hidden="false">
-                                <h4>Weekly Activity Summary</h4>
-                                <div class="chart-container">
-                                    <canvas id="workout-chart" aria-label="Weekly workout activity chart" role="img"></canvas>
-                                    <div id="chart-fallback" class="visually-hidden">
-                                        <p>Weekly workout data: Monday - 30 minutes, Tuesday - 45 minutes, Wednesday - 0 minutes, Thursday - 60 minutes, Friday - 30 minutes, Saturday - 90 minutes, Sunday - 45 minutes.</p>
-                                    </div>
-                                </div>
-                                <div class="chart-legend" aria-hidden="true">
-                                    <div class="legend-item">
-                                        <span class="legend-color" style="background-color: rgba(66, 153, 225, 0.8);"></span>
-                                        <span>Duration (minutes)</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-color" style="background-color: rgba(213, 63, 140, 0.8);"></span>
-                                        <span>Calories (x10)</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Calendar Tab Panel -->
-                            <div id="panel-calendar" class="tab-panel" role="tabpanel" aria-labelledby="tab-calendar" aria-hidden="true">
-                                <div class="calendar-header">
-                                    <h4 class="calendar-title">June 2023</h4>
-                                    <div class="calendar-nav">
-                                        <button class="btn btn-outline" aria-label="Previous month">
-                                            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="15 18 9 12 15 6"></polyline>
-                                            </svg>
-                                        </button>
-                                        <button class="btn btn-outline" aria-label="Next month">
-                                            <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polyline points="9 18 15 12 9 6"></polyline>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="calendar" aria-label="Workout calendar for June 2023">
-                                    <div class="calendar-day-names">
-                                        <div class="calendar-day-name">Sun</div>
-                                        <div class="calendar-day-name">Mon</div>
-                                        <div class="calendar-day-name">Tue</div>
-                                        <div class="calendar-day-name">Wed</div>
-                                        <div class="calendar-day-name">Thu</div>
-                                        <div class="calendar-day-name">Fri</div>
-                                        <div class="calendar-day-name">Sat</div>
-                                    </div>
-                                    <!-- Calendar days will be generated by JavaScript -->
-                                </div>
-                            </div>
-
-                            <!-- Recent Workouts Tab Panel -->
-                            <div id="panel-recent" class="tab-panel" role="tabpanel" aria-labelledby="tab-recent" aria-hidden="true">
-                                <div class="table-container">
-                                    <table aria-label="Recent workouts">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Exercise</th>
-                                                <th scope="col">Duration</th>
-                                                <th scope="col">Calories</th>
-                                                <th scope="col">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="recent-workouts-table">
-                                            <tr>
-                                                <td>Jun 15, 2023</td>
-                                                <td>Running</td>
-                                                <td>45 min</td>
-                                                <td>450</td>
-                                                <td>
-                                                    <button class="btn btn-outline" aria-label="Edit running workout from June 15">
-                                                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                        </svg>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jun 13, 2023</td>
-                                                <td>Cycling</td>
-                                                <td>60 min</td>
-                                                <td>500</td>
-                                                <td>
-                                                    <button class="btn btn-outline" aria-label="Edit cycling workout from June 13">
-                                                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                        </svg>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jun 12, 2023</td>
-                                                <td>Strength Training</td>
-                                                <td>45 min</td>
-                                                <td>350</td>
-                                                <td>
-                                                    <button class="btn btn-outline" aria-label="Edit strength training workout from June 12">
-                                                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                        </svg>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jun 10, 2023</td>
-                                                <td>Swimming</td>
-                                                <td>30 min</td>
-                                                <td>300</td>
-                                                <td>
-                                                    <button class="btn btn-outline" aria-label="Edit swimming workout from June 10">
-                                                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                        </svg>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Jun 8, 2023</td>
-                                                <td>Yoga</td>
-                                                <td>60 min</td>
-                                                <td>250</td>
-                                                <td>
-                                                    <button class="btn btn-outline" aria-label="Edit yoga workout from June 8">
-                                                        <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                                                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                                                        </svg>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Weekly Goal Progress -->
-                    <div class="card" style="margin-top: 1.5rem;">
-                        <div class="card-header">
-                            <h3 class="card-title">Weekly Goals</h3>
-                        </div>
-                        <div class="card-content">
-                            <div class="form-group">
-                                <label for="minutes-goal" class="form-label">Weekly Exercise Minutes</label>
-                                <div class="progress" aria-labelledby="minutes-goal-label">
-                                    <div class="progress-bar" style="width: 75%;" role="progressbar" aria-valuenow="180" aria-valuemin="0" aria-valuemax="240">
-                                        <span class="progress-label">180/240 min</span>
-                                    </div>
-                                </div>
-                                <span id="minutes-goal-label" class="form-help">75% of your weekly goal completed</span>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="calories-goal" class="form-label">Weekly Calories Burned</label>
-                                <div class="progress" aria-labelledby="calories-goal-label">
-                                    <div class="progress-bar" style="width: 60%; background-color: var(--color-accent);" role="progressbar" aria-valuenow="1500" aria-valuemin="0" aria-valuemax="2500">
-                                        <span class="progress-label">1500/2500 cal</span>
-                                    </div>
-                                </div>
-                                <span id="calories-goal-label" class="form-help">60% of your weekly calorie goal completed</span>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="workouts-goal" class="form-label">Weekly Workout Sessions</label>
-                                <div class="progress" aria-labelledby="workouts-goal-label">
-                                    <div class="progress-bar" style="width: 80%; background-color: var(--color-secondary);" role="progressbar" aria-valuenow="4" aria-valuemin="0" aria-valuemax="5">
-                                        <span class="progress-label">4/5 workouts</span>
-                                    </div>
-                                </div>
-                                <span id="workouts-goal-label" class="form-help">80% of your weekly workout goal completed</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                
+                <div class="volume-container">
+                    <button id="mute-btn" class="volume-icon" aria-label="Mute">
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
+                        </svg>
+                    </button>
+                    <input 
+                        type="range" 
+                        id="volume-slider" 
+                        class="volume-slider" 
+                        min="0" 
+                        max="100" 
+                        value="80" 
+                        step="1"
+                        aria-label="Volume"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="80"
+                        aria-valuetext="Volume 80%"
+                    />
+                    <span id="volume-percentage" class="volume-percentage">80%</span>
+                </div>
             </div>
-        </div>
+        </section>
+        
+        <section class="playlist-section" aria-labelledby="playlist-title">
+            <div class="playlist-header">
+                <h2 id="playlist-title" class="playlist-title">Playlist</h2>
+            </div>
+            
+            <ul id="playlist" class="playlist" aria-label="Song playlist">
+                <!-- Playlist items will be generated by JavaScript -->
+            </ul>
+        </section>
     </main>
-
-    <!-- Modal for workout details -->
-    <div class="modal-overlay" id="workout-detail-modal" aria-hidden="true">
-        <div class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
-            <div class="modal-header">
-                <h3 id="modal-title" class="modal-title">Workout Details</h3>
-                <button class="modal-close" aria-label="Close modal" id="close-modal">
-                    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="workout-detail-content">
-                    <!-- Workout details will be populated here -->
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline" id="close-detail-btn">Close</button>
-                <button class="btn btn-primary" id="edit-workout-btn">Edit Workout</button>
-            </div>
-        </div>
-    </div>
-
+    
     <footer>
-        <div class="container footer-content">
-            <div class="footer-section">
-                <h4 class="footer-title">FitTrack</h4>
-                <p>Track your fitness journey with our easy-to-use workout logger. Set goals, monitor progress, and achieve results.</p>
-            </div>
-            <div class="footer-section">
-                <h4 class="footer-title">Quick Links</h4>
-                <ul class="footer-links">
-                    <li class="footer-link"><a href="#">Dashboard</a></li>
-                    <li class="footer-link"><a href="#">Workout Library</a></li>
-                    <li class="footer-link"><a href="#">Progress Reports</a></li>
-                    <li class="footer-link"><a href="#">Account Settings</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4 class="footer-title">Support</h4>
-                <ul class="footer-links">
-                    <li class="footer-link"><a href="#">Help Center</a></li>
-                    <li class="footer-link"><a href="#">Contact Us</a></li>
-                    <li class="footer-link"><a href="#">Privacy Policy</a></li>
-                    <li class="footer-link"><a href="#">Terms of Service</a></li>
-                </ul>
-            </div>
+        <p>Accessible Music Player - Designed with accessibility in mind</p>
+        <div class="footer-links">
+            <a href="#" class="footer-link">About</a>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Contact Us</a>
         </div>
-        <div class="container footer-bottom">
-            <p>&copy; 2023 FitTrack. All rights reserved.</p>
-        </div>
+        <p>&copy; 2023 Accessible Music Player. All rights reserved.</p>
     </footer>
-
+    
+    <div id="notification" class="notification" role="status" aria-live="polite"></div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize date input with current date
-            const today = new Date();
-            const formattedDate = today.toISOString().split('T')[0];
-            document.getElementById('workout-date').value = formattedDate;
+            // Audio element
+            const audioElement = new Audio();
             
-            // Sample workout data
-            const workoutData = [
-                { date: '2023-06-15', type: 'Running', duration: 45, calories: 450, intensity: 'high' },
-                { date: '2023-06-13', type: 'Cycling', duration: 60, calories: 500, intensity: 'moderate' },
-                { date: '2023-06-12', type: 'Strength Training', duration: 45, calories: 350, intensity: 'high' },
-                { date: '2023-06-10', type: 'Swimming', duration: 30, calories: 300, intensity: 'moderate' },
-                { date: '2023-06-08', type: 'Yoga', duration: 60, calories: 250, intensity: 'low' }
+            // DOM elements
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const muteBtn = document.getElementById('mute-btn');
+            const volumeSlider = document.getElementById('volume-slider');
+            const volumePercentage = document.getElementById('volume-percentage');
+            const seekSlider = document.getElementById('seek-slider');
+            const currentTimeElement = document.getElementById('current-time');
+            const durationElement = document.getElementById('duration');
+            const progressElement = document.getElementById('progress');
+            const playlistElement = document.getElementById('playlist');
+            const albumArt = document.getElementById('album-art');
+            const songTitle = document.getElementById('song-title');
+            const songArtist = document.getElementById('song-artist');
+            const playIcon = document.getElementById('play-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+            const notification = document.getElementById('notification');
+            
+            // State variables
+            let currentSongIndex = 0;
+            let isPlaying = false;
+            let isMuted = false;
+            let updateTimer;
+            
+            // Sample playlist data
+            const playlist = [
+                {
+                    title: "Acoustic Sunrise",
+                    artist: "Sarah Johnson",
+                    duration: 245, // in seconds
+                    cover: "https://placehold.co/250x250/6c0f8a/ffffff?text=Acoustic+Sunrise",
+                    audioSrc: "https://example.com/audio1.mp3" // This would be a real audio file in production
+                },
+                {
+                    title: "Electric Dreams",
+                    artist: "The Voltage Band",
+                    duration: 198,
+                    cover: "https://placehold.co/250x250/d94e0f/ffffff?text=Electric+Dreams",
+                    audioSrc: "https://example.com/audio2.mp3"
+                },
+                {
+                    title: "Ocean Waves",
+                    artist: "Coastal Sounds",
+                    duration: 312,
+                    cover: "https://placehold.co/250x250/0056b3/ffffff?text=Ocean+Waves",
+                    audioSrc: "https://example.com/audio3.mp3"
+                },
+                {
+                    title: "Mountain High",
+                    artist: "Alpine Echoes",
+                    duration: 274,
+                    cover: "https://placehold.co/250x250/006400/ffffff?text=Mountain+High",
+                    audioSrc: "https://example.com/audio4.mp3"
+                },
+                {
+                    title: "Urban Jungle",
+                    artist: "City Beats",
+                    duration: 183,
+                    cover: "https://placehold.co/250x250/a53a0a/ffffff?text=Urban+Jungle",
+                    audioSrc: "https://example.com/audio5.mp3"
+                }
             ];
             
-            // Chart initialization
-            const ctx = document.getElementById('workout-chart').getContext('2d');
+            // Initialize the player
+            function initPlayer() {
+                // Set initial volume
+                audioElement.volume = 0.8;
+                
+                // Generate playlist items
+                generatePlaylist();
+                
+                // Add event listeners
+                setupEventListeners();
+                
+                // Since we don't have real audio files, we'll simulate audio behavior
+                simulateAudio();
+                
+                // Show a notification
+                showNotification("Music player loaded successfully. Select a song to begin playback.");
+            }
             
-            // Accessible chart with proper ARIA attributes
-            const chart = {
-                type: 'bar',
-                data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    datasets: [
-                        {
-                            label: 'Duration (minutes)',
-                            data: [30, 45, 0, 60, 30, 90, 45],
-                            backgroundColor: 'rgba(66, 153, 225, 0.8)',
-                            borderColor: 'rgba(66, 153, 225, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Calories (x10)',
-                            data: [25, 40, 0, 55, 25, 80, 40],
-                            backgroundColor: 'rgba(213, 63, 140, 0.8)',
-                            borderColor: 'rgba(213, 63, 140, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Minutes / Calories (x10)'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Day of Week'
-                            }
-                        }
-                    },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        if (context.datasetIndex === 1) {
-                                            label += (context.parsed.y * 10) + ' calories';
-                                        } else {
-                                            label += context.parsed.y + ' minutes';
-                                        }
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
-                }
-            };
-            
-            // We're not actually rendering the chart since we don't have Chart.js,
-            // but in a real implementation, you would use:
-            // new Chart(ctx, chart);
-            
-            // Tabs functionality
-            const tabButtons = document.querySelectorAll('[role="tab"]');
-            const tabPanels = document.querySelectorAll('[role="tabpanel"]');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Deactivate all tabs
-                    tabButtons.forEach(btn => {
-                        btn.setAttribute('aria-selected', 'false');
+            // Generate playlist HTML
+            function generatePlaylist() {
+                playlistElement.innerHTML = '';
+                
+                playlist.forEach((song, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'playlist-item';
+                    li.tabIndex = 0;
+                    li.setAttribute('role', 'button');
+                    li.setAttribute('aria-label', `Play ${song.title} by ${song.artist}, Duration: ${formatTime(song.duration)}`);
+                    
+                    li.innerHTML = `
+                        <span class="playlist-item-number">${index + 1}</span>
+                        <img class="playlist-item-img" src="${song.cover}" alt="Album art for ${song.title}" />
+                        <div class="playlist-item-info">
+                            <div class="playlist-item-title">${song.title}</div>
+                            <div class="playlist-item-artist">${song.artist}</div>
+                        </div>
+                        <span class="playlist-item-duration">${formatTime(song.duration)}</span>
+                    `;
+                    
+                    li.addEventListener('click', () => {
+                        loadSong(index);
+                        playSong();
                     });
                     
-                    tabPanels.forEach(panel => {
-                        panel.setAttribute('aria-hidden', 'true');
-                    });
-                    
-                    // Activate clicked tab
-                    button.setAttribute('aria-selected', 'true');
-                    const panelId = button.getAttribute('aria-controls');
-                    const panel = document.getElementById(panelId);
-                    panel.setAttribute('aria-hidden', 'false');
-                });
-                
-                // Keyboard navigation for tabs
-                button.addEventListener('keydown', (e) => {
-                    const tabs = Array.from(tabButtons);
-                    const index = tabs.indexOf(button);
-                    
-                    // Handle arrow keys
-                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                        e.preventDefault();
-                        const nextTab = tabs[(index + 1) % tabs.length];
-                        nextTab.focus();
-                        nextTab.click();
-                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                        e.preventDefault();
-                        const prevTab = tabs[(index - 1 + tabs.length) % tabs.length];
-                        prevTab.focus();
-                        prevTab.click();
-                    } else if (e.key === 'Home') {
-                        e.preventDefault();
-                        tabs[0].focus();
-                        tabs[0].click();
-                    } else if (e.key === 'End') {
-                        e.preventDefault();
-                        tabs[tabs.length - 1].focus();
-                        tabs[tabs.length - 1].click();
-                    }
-                });
-            });
-            
-            // Generate calendar days
-            function generateCalendar() {
-                const calendarContainer = document.querySelector('.calendar');
-                const dayNames = document.querySelectorAll('.calendar-day-name');
-                
-                // Clear existing calendar days (except day names)
-                const existingDays = document.querySelectorAll('.calendar-day');
-                existingDays.forEach(day => day.remove());
-                
-                // Generate days for the current month (June 2023 in this example)
-                const daysInMonth = 30; // June has 30 days
-                const firstDayOfMonth = 4; // June 1, 2023 is a Thursday (index 4)
-                
-                // Add empty cells for days before the 1st of the month
-                for (let i = 0; i < firstDayOfMonth; i++) {
-                    const emptyDay = document.createElement('div');
-                    emptyDay.className = 'calendar-day';
-                    emptyDay.style.visibility = 'hidden';
-                    calendarContainer.appendChild(emptyDay);
-                }
-                
-                // Add days of the month
-                for (let day = 1; day <= daysInMonth; day++) {
-                    const dayElement = document.createElement('div');
-                    dayElement.className = 'calendar-day';
-                    dayElement.setAttribute('tabindex', '0');
-                    dayElement.setAttribute('role', 'button');
-                    dayElement.setAttribute('aria-label', `June ${day}, 2023`);
-                    
-                    // Check if this day has a workout
-                    const dateString = `2023-06-${day.toString().padStart(2, '0')}`;
-                    const hasWorkout = workoutData.some(workout => workout.date === dateString);
-                    
-                    if (hasWorkout) {
-                        dayElement.classList.add('has-workout');
-                        dayElement.setAttribute('aria-label', `June ${day}, 2023. Has workout.`);
-                    }
-                    
-                    // Mark today
-                    if (day === today.getDate() && today.getMonth() === 5) { // June is month 5 (0-indexed)
-                        dayElement.classList.add('active');
-                        dayElement.setAttribute('aria-current', 'date');
-                    }
-                    
-                    dayElement.textContent = day;
-                    
-                    // Add click event to show workout details
-                    dayElement.addEventListener('click', () => {
-                        if (hasWorkout) {
-                            const workout = workoutData.find(w => w.date === dateString);
-                            showWorkoutDetails(workout);
-                        }
-                    });
-                    
-                    // Keyboard accessibility
-                    dayElement.addEventListener('keydown', (e) => {
+                    li.addEventListener('keydown', (e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
-                            dayElement.click();
+                            loadSong(index);
+                            playSong();
                         }
                     });
                     
-                    calendarContainer.appendChild(dayElement);
+                    playlistElement.appendChild(li);
+                });
+            }
+            
+            // Set up event listeners
+            function setupEventListeners() {
+                // Play/Pause button
+                playPauseBtn.addEventListener('click', togglePlayPause);
+                
+                // Previous button
+                prevBtn.addEventListener('click', () => {
+                    prevSong();
+                    showNotification(`Playing previous song: ${playlist[currentSongIndex].title}`);
+                });
+                
+                // Next button
+                nextBtn.addEventListener('click', () => {
+                    nextSong();
+                    showNotification(`Playing next song: ${playlist[currentSongIndex].title}`);
+                });
+                
+                // Mute button
+                muteBtn.addEventListener('click', toggleMute);
+                
+                // Volume slider
+                volumeSlider.addEventListener('input', (e) => {
+                    setVolume(e.target.value);
+                });
+                
+                // Seek slider
+                seekSlider.addEventListener('input', (e) => {
+                    seekTo(e.target.value);
+                });
+                
+                // Audio element events
+                audioElement.addEventListener('timeupdate', updateProgress);
+                audioElement.addEventListener('ended', () => {
+                    nextSong();
+                });
+                
+                // Keyboard shortcuts
+                document.addEventListener('keydown', handleKeyboardShortcuts);
+            }
+            
+            // Load a song
+            function loadSong(index) {
+                clearInterval(updateTimer);
+                resetProgress();
+                
+                currentSongIndex = index;
+                const currentSong = playlist[currentSongIndex];
+                
+                // Update UI
+                albumArt.src = currentSong.cover;
+                albumArt.alt = `Album artwork for ${currentSong.title} by ${currentSong.artist}`;
+                songTitle.textContent = currentSong.title;
+                songArtist.textContent = currentSong.artist;
+                
+                // In a real player, we would set the audio source
+                // audioElement.src = currentSong.audioSrc;
+                // audioElement.load();
+                
+                // Update playlist highlighting
+                updatePlaylistHighlight();
+                
+                // Update duration display
+                durationElement.textContent = formatTime(currentSong.duration);
+                
+                // Set aria-valuemax for seek slider
+                seekSlider.setAttribute('aria-valuemax', currentSong.duration);
+                
+                // Announce to screen readers
+                const announcement = `Now playing: ${currentSong.title} by ${currentSong.artist}`;
+                announceToScreenReader(announcement);
+            }
+            
+            // Play the current song
+            function playSong() {
+                isPlaying = true;
+                
+                // In a real player, we would play the audio
+                // audioElement.play();
+                
+                // Update UI
+                playPauseBtn.setAttribute('aria-label', 'Pause');
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'block';
+                
+                // Start progress simulation for demo
+                startProgressSimulation();
+            }
+            
+            // Pause the current song
+            function pauseSong() {
+                isPlaying = false;
+                
+                // In a real player, we would pause the audio
+                // audioElement.pause();
+                
+                // Update UI
+                playPauseBtn.setAttribute('aria-label', 'Play');
+                playIcon.style.display = 'block';
+                pauseIcon.style.display = 'none';
+                
+                // Stop progress simulation
+                clearInterval(updateTimer);
+            }
+            
+            // Toggle play/pause
+            function togglePlayPause() {
+                if (songTitle.textContent === 'Select a song to play') {
+                    // If no song is selected, load the first one
+                    loadSong(0);
+                }
+                
+                if (isPlaying) {
+                    pauseSong();
+                    showNotification("Playback paused");
+                } else {
+                    playSong();
+                    showNotification(`Playing: ${playlist[currentSongIndex].title}`);
                 }
             }
             
-            generateCalendar();
+            // Go to previous song
+            function prevSong() {
+                currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+                loadSong(currentSongIndex);
+                if (isPlaying) {
+                    playSong();
+                }
+            }
             
-            // Form submission handling
-            const workoutForm = document.getElementById('workout-form');
-            workoutForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+            // Go to next song
+            function nextSong() {
+                currentSongIndex = (currentSongIndex + 1) % playlist.length;
+                loadSong(currentSongIndex);
+                if (isPlaying) {
+                    playSong();
+                }
+            }
+            
+            // Toggle mute
+            function toggleMute() {
+                isMuted = !isMuted;
                 
-                // Validate form
-                const workoutType = document.getElementById('workout-type').value;
-                const workoutDuration = document.getElementById('workout-duration').value;
+                // In a real player, we would mute/unmute the audio
+                // audioElement.muted = isMuted;
                 
-                if (!workoutType || !workoutDuration) {
-                    showNotification('Please fill in all required fields.', 'error');
+                // Update UI
+                if (isMuted) {
+                    muteBtn.innerHTML = `
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"></path>
+                        </svg>
+                    `;
+                    muteBtn.setAttribute('aria-label', 'Unmute');
+                    volumeSlider.setAttribute('aria-valuetext', 'Volume muted');
+                    showNotification("Volume muted");
+                } else {
+                    muteBtn.innerHTML = `
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
+                        </svg>
+                    `;
+                    muteBtn.setAttribute('aria-label', 'Mute');
+                    const volumeValue = volumeSlider.value;
+                    volumeSlider.setAttribute('aria-valuetext', `Volume ${volumeValue}%`);
+                    showNotification(`Volume unmuted: ${volumeValue}%`);
+                }
+            }
+            
+            // Set volume
+            function setVolume(value) {
+                const volume = value / 100;
+                
+                // In a real player, we would set the audio volume
+                // audioElement.volume = volume;
+                
+                // Update UI
+                volumePercentage.textContent = `${value}%`;
+                volumeSlider.setAttribute('aria-valuenow', value);
+                volumeSlider.setAttribute('aria-valuetext', `Volume ${value}%`);
+                
+                // If volume is set to 0, update mute button
+                if (volume === 0) {
+                    isMuted = true;
+                    muteBtn.innerHTML = `
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"></path>
+                        </svg>
+                    `;
+                    muteBtn.setAttribute('aria-label', 'Unmute');
+                } else if (isMuted) {
+                    isMuted = false;
+                    muteBtn.innerHTML = `
+                        <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
+                        </svg>
+                    `;
+                    muteBtn.setAttribute('aria-label', 'Mute');
+                }
+            }
+            
+            // Seek to a specific position
+            function seekTo(value) {
+                // Calculate the seek position
+                const currentSong = playlist[currentSongIndex];
+                const seekPosition = (value / 100) * currentSong.duration;
+                
+                // In a real player, we would set the current time
+                // audioElement.currentTime = seekPosition;
+                
+                // Update UI
+                currentTimeElement.textContent = formatTime(seekPosition);
+                progressElement.style.width = `${value}%`;
+                
+                // Update ARIA attributes
+                seekSlider.setAttribute('aria-valuenow', seekPosition);
+                seekSlider.setAttribute('aria-valuetext', `${formatTime(seekPosition)} of ${formatTime(currentSong.duration)}`);
+                
+                // For demo purposes, update the simulated current time
+                simulatedCurrentTime = seekPosition;
+            }
+            
+            // Update progress bar and time display
+            function updateProgress() {
+                if (!isPlaying) return;
+                
+                const currentSong = playlist[currentSongIndex];
+                const currentTime = audioElement.currentTime;
+                const duration = currentSong.duration;
+                
+                // Calculate progress percentage
+                const progressPercent = (currentTime / duration) * 100;
+                
+                // Update UI
+                progressElement.style.width = `${progressPercent}%`;
+                currentTimeElement.textContent = formatTime(currentTime);
+                seekSlider.value = progressPercent;
+                
+                // Update ARIA attributes
+                seekSlider.setAttribute('aria-valuenow', currentTime);
+                seekSlider.setAttribute('aria-valuetext', `${formatTime(currentTime)} of ${formatTime(duration)}`);
+            }
+            
+            // Reset progress
+            function resetProgress() {
+                progressElement.style.width = '0%';
+                currentTimeElement.textContent = '0:00';
+                seekSlider.value = 0;
+                seekSlider.setAttribute('aria-valuenow', 0);
+                seekSlider.setAttribute('aria-valuetext', '0:00 of 0:00');
+            }
+            
+            // Update playlist highlight
+            function updatePlaylistHighlight() {
+                const playlistItems = document.querySelectorAll('.playlist-item');
+                
+                playlistItems.forEach((item, index) => {
+                    if (index === currentSongIndex) {
+                        item.classList.add('active');
+                        item.setAttribute('aria-current', 'true');
+                    } else {
+                        item.classList.remove('active');
+                        item.removeAttribute('aria-current');
+                    }
+                });
+            }
+            
+            // Format time in seconds to MM:SS
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+            }
+            
+            // Handle keyboard shortcuts
+            function handleKeyboardShortcuts(e) {
+                // Only handle shortcuts if not in an input field
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
                     return;
                 }
                 
-                // Process form data
-                const formData = {
-                    date: document.getElementById('workout-date').value,
-                    type: workoutType,
-                    duration: parseInt(workoutDuration),
-                    intensity: document.getElementById('workout-intensity').value,
-                    calories: document.getElementById('calories-burned-input').value || calculateCalories(workoutType, workoutDuration, document.getElementById('workout-intensity').value),
-                    notes: document.getElementById('workout-notes').value
-                };
-                
-                // In a real app, you would save this data to a database or localStorage
-                console.log('Workout saved:', formData);
-                
-                // Show success message
-                showNotification('Workout successfully logged!', 'success');
-                
-                // Reset form
-                workoutForm.reset();
-                
-                // Set date to today again
-                document.getElementById('workout-date').value = formattedDate;
-            });
-            
-            // Helper function to calculate calories based on workout type and duration
-            function calculateCalories(type, duration, intensity) {
-                // This is a simplified calculation
-                let baseRate;
-                
-                switch (type) {
-                    case 'running':
-                        baseRate = 10;
+                switch (e.key) {
+                    case ' ':
+                        // Space - Play/Pause
+                        if (e.target !== playPauseBtn && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
+                            e.preventDefault();
+                            togglePlayPause();
+                        }
                         break;
-                    case 'cycling':
-                        baseRate = 8;
+                    case 'ArrowLeft':
+                        // Left Arrow - Rewind 5 seconds
+                        e.preventDefault();
+                        seekTo(Math.max(0, (seekSlider.value - 5)));
+                        showNotification("Rewinding 5 seconds");
                         break;
-                    case 'swimming':
-                        baseRate = 9;
+                    case 'ArrowRight':
+                        // Right Arrow - Forward 5 seconds
+                        e.preventDefault();
+                        seekTo(Math.min(100, (parseFloat(seekSlider.value) + 5)));
+                        showNotification("Fast forwarding 5 seconds");
                         break;
-                    case 'walking':
-                        baseRate = 5;
+                    case 'ArrowUp':
+                        // Up Arrow - Volume Up
+                        e.preventDefault();
+                        setVolume(Math.min(100, parseInt(volumeSlider.value) + 5));
+                        showNotification(`Volume: ${volumeSlider.value}%`);
                         break;
-                    case 'hiking':
-                        baseRate = 7;
+                    case 'ArrowDown':
+                        // Down Arrow - Volume Down
+                        e.preventDefault();
+                        setVolume(Math.max(0, parseInt(volumeSlider.value) - 5));
+                        showNotification(`Volume: ${volumeSlider.value}%`);
                         break;
-                    case 'strength':
-                        baseRate = 6;
+                    case 'm':
+                    case 'M':
+                        // M - Mute/Unmute
+                        toggleMute();
                         break;
-                    case 'yoga':
-                        baseRate = 4;
+                    case 'p':
+                    case 'P':
+                        // P - Previous Track
+                        prevSong();
+                        showNotification(`Playing previous song: ${playlist[currentSongIndex].title}`);
                         break;
-                    case 'pilates':
-                        baseRate = 4.5;
+                    case 'n':
+                    case 'N':
+                        // N - Next Track
+                        nextSong();
+                        showNotification(`Playing next song: ${playlist[currentSongIndex].title}`);
                         break;
-                    case 'hiit':
-                        baseRate = 12;
-                        break;
-                    default:
-                        baseRate = 6;
                 }
-                
-                // Adjust for intensity
-                let intensityMultiplier;
-                switch (intensity) {
-                    case 'low':
-                        intensityMultiplier = 0.8;
-                        break;
-                    case 'moderate':
-                        intensityMultiplier = 1;
-                        break;
-                    case 'high':
-                        intensityMultiplier = 1.2;
-                        break;
-                    case 'very-high':
-                        intensityMultiplier = 1.4;
-                        break;
-                    default:
-                        intensityMultiplier = 1;
-                }
-                
-                return Math.round(baseRate * intensityMultiplier * duration);
             }
             
-            // Notification system
-            function showNotification(message, type = 'info') {
-                const notificationArea = document.getElementById('notification-area');
-                const notification = document.createElement('div');
-                notification.className = `alert alert-${type}`;
-                notification.setAttribute('role', type === 'error' ? 'alert' : 'status');
+            // Show notification
+            function showNotification(message) {
+                notification.textContent = message;
+                notification.classList.add('show');
                 
-                // Add icon based on notification type
-                let icon = '';
-                switch (type) {
-                    case 'success':
-                        icon = '<svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>';
-                        break;
-                    case 'error':
-                        icon = '<svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
-                        break;
-                    case 'warning':
-                        icon = '<svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
-                        break;
-                    default:
-                        icon = '<svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
-                }
-                
-                notification.innerHTML = `${icon} <span>${message}</span>`;
-                
-                // Add close button
-                const closeButton = document.createElement('button');
-                closeButton.className = 'btn';
-                closeButton.style.marginLeft = 'auto';
-                closeButton.style.padding = '0';
-                closeButton.style.minWidth = '44px';
-                closeButton.style.minHeight = '44px';
-                closeButton.innerHTML = '<svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-                closeButton.setAttribute('aria-label', 'Dismiss notification');
-                
-                closeButton.addEventListener('click', () => {
-                    notification.remove();
-                });
-                
-                notification.appendChild(closeButton);
-                notificationArea.appendChild(notification);
-                
-                // Auto-dismiss after 5 seconds
                 setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.remove();
-                    }
-                }, 5000);
+                    notification.classList.remove('show');
+                }, 3000);
             }
             
-            // Modal functionality
-            const modal = document.getElementById('workout-detail-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-            const closeDetailBtn = document.getElementById('close-detail-btn');
-            const editWorkoutBtn = document.getElementById('edit-workout-btn');
-            
-            function showWorkoutDetails(workout) {
-                const modalContent = document.getElementById('workout-detail-content');
+            // Announce to screen reader using aria-live
+            function announceToScreenReader(message) {
+                // Create a temporary element for screen reader announcement
+                const announcer = document.createElement('div');
+                announcer.setAttribute('aria-live', 'assertive');
+                announcer.classList.add('sr-only');
+                document.body.appendChild(announcer);
                 
-                // Format date for display
-                const workoutDate = new Date(workout.date);
-                const formattedDate = workoutDate.toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                });
-                
-                // Create content for the modal
-                modalContent.innerHTML = `
-                    <div class="form-group">
-                        <label class="form-label">Date</label>
-                        <p>${formattedDate}</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Exercise Type</label>
-                        <p>${workout.type}</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Duration</label>
-                        <p>${workout.duration} minutes</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Intensity</label>
-                        <p>${workout.intensity.charAt(0).toUpperCase() + workout.intensity.slice(1)}</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Calories Burned</label>
-                        <p>${workout.calories}</p>
-                    </div>
-                `;
-                
-                // Show the modal
-                modal.classList.add('active');
-                modal.setAttribute('aria-hidden', 'false');
-                
-                // Set focus to the modal
+                // Set the message after a small delay to ensure it's read
                 setTimeout(() => {
-                    closeModalBtn.focus();
+                    announcer.textContent = message;
+                    
+                    // Remove the element after it's been read
+                    setTimeout(() => {
+                        document.body.removeChild(announcer);
+                    }, 1000);
                 }, 100);
-                
-                // Store last active element to return focus when modal closes
-                modal.lastActiveElement = document.activeElement;
             }
             
-            function closeModal() {
-                modal.classList.remove('active');
-                modal.setAttribute('aria-hidden', 'true');
-                
-                // Return focus to the element that was active before the modal opened
-                if (modal.lastActiveElement) {
-                    modal.lastActiveElement.focus();
-                }
+            // Simulate audio behavior for demo purposes
+            let simulatedCurrentTime = 0;
+            
+            function simulateAudio() {
+                // Simulate the timeupdate event
+                audioElement.addEventListener = function(event, callback) {
+                    if (event === 'timeupdate') {
+                        updateTimer = setInterval(() => {
+                            if (isPlaying) {
+                                audioElement.currentTime = simulatedCurrentTime;
+                                callback();
+                            }
+                        }, 1000);
+                    } else if (event === 'ended') {
+                        // We'll handle this in the progress simulation
+                    }
+                };
             }
             
-            // Close modal with buttons
-            closeModalBtn.addEventListener('click', closeModal);
-            closeDetailBtn.addEventListener('click', closeModal);
-            
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeModal();
-                }
-            });
-            
-            // Close modal when clicking outside
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-            
-            // Edit workout button (in a real app, this would open an edit form)
-            editWorkoutBtn.addEventListener('click', function() {
-                showNotification('Edit functionality would open here in a real application.', 'info');
-                closeModal();
-            });
-            
-            // View all workouts button
-            document.getElementById('view-all-workouts').addEventListener('click', function() {
-                // Switch to the Recent Workouts tab
-                document.getElementById('tab-recent').click();
-            });
-            
-            // Make sure the page is accessible with keyboard navigation
-            // This ensures that all interactive elements can be reached with Tab key
-            const focusableElements = document.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            focusableElements.forEach(el => {
-                if (!el.hasAttribute('tabindex')) {
-                    el.setAttribute('tabindex', '0');
-                }
-            });
-            
-            // Ensure proper focus management for the modal
-            // Trap focus within modal when it's open
-            function trapFocus(element) {
-                const focusableElements = element.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                const firstFocusableElement = focusableElements[0];
-                const lastFocusableElement = focusableElements[focusableElements.length - 1];
+            function startProgressSimulation() {
+                clearInterval(updateTimer);
                 
-                element.addEventListener('keydown', function(e) {
-                    if (e.key === 'Tab') {
-                        // If Shift+Tab and on first element, wrap to last
-                        if (e.shiftKey && document.activeElement === firstFocusableElement) {
-                            e.preventDefault();
-                            lastFocusableElement.focus();
-                        }
-                        // If Tab and on last element, wrap to first
-                        else if (!e.shiftKey && document.activeElement === lastFocusableElement) {
-                            e.preventDefault();
-                            firstFocusableElement.focus();
+                const currentSong = playlist[currentSongIndex];
+                
+                updateTimer = setInterval(() => {
+                    if (isPlaying) {
+                        simulatedCurrentTime += 1;
+                        
+                        // Update the audio element's current time
+                        audioElement.currentTime = simulatedCurrentTime;
+                        
+                        // Update progress
+                        updateProgress();
+                        
+                        // Check if song has ended
+                        if (simulatedCurrentTime >= currentSong.duration) {
+                            clearInterval(updateTimer);
+                            simulatedCurrentTime = 0;
+                            nextSong();
                         }
                     }
-                });
+                }, 1000);
             }
             
-            trapFocus(document.querySelector('.modal'));
-            
-            // Initialize with a welcome message
-            showNotification('Welcome to FitTrack! Start logging your workouts to track your fitness journey.', 'info');
+            // Initialize the player
+            initPlayer();
         });
     </script>
 </body>
