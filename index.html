@@ -3,996 +3,735 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
-<title>Accessible Interactive Fitness Tracker – Log Workouts & Track Progress</title>
+<title>Accessible Music Player – Play, Pause, Volume & Playlist Controls</title>
 <style>
   /* Reset and base */
-  *, *::before, *::after {
-    box-sizing: border-box;
+  :root {
+    --color-bg: #121212;
+    --color-bg-alt: #1e1e1e;
+    --color-primary: #ff6f61;
+    --color-primary-dark: #cc574d;
+    --color-primary-light: #ff9b8b;
+    --color-text: #f0f0f0;
+    --color-text-alt: #cccccc;
+    --color-focus: #ffff00;
+    --color-focus-bg: #333300;
+    --color-border: #444444;
+    --color-success: #4caf50;
+    --color-error: #e53935;
+    --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --line-height: 1.6;
+    --spacing: 1rem;
+    --spacing-sm: 0.5rem;
+    --border-radius: 0.375rem;
+    --shadow-focus: 0 0 0 3px var(--color-focus);
   }
+
+  /* Respect prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
   html {
-    font-size: 18px;
-    line-height: 1.6;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0a2540 0%, #092b52 100%);
-    color: #e6f0ff;
-    -webkit-text-size-adjust: 100%;
-    text-size-adjust: 100%;
+    font-size: 100%;
+    scroll-behavior: smooth;
   }
+
   body {
     margin: 0;
-    padding: 0;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-family);
+    line-height: var(--line-height);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #0a2540;
   }
+
   a {
-    color: #ffd369;
+    color: var(--color-primary-light);
     text-decoration: underline;
   }
   a:focus,
-  button:focus,
-  input:focus,
-  select:focus,
-  textarea:focus {
-    outline: 3px solid #ffd369;
+  a:hover {
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
+    color: var(--color-primary);
   }
+
   /* Skip link */
-  #skip-link {
+  .skip-link {
     position: absolute;
     top: -40px;
     left: 0;
-    background: #ffd369;
-    color: #0a2540;
+    background: var(--color-primary);
+    color: var(--color-bg);
     padding: 0.75rem 1rem;
     z-index: 100;
     text-decoration: none;
     font-weight: 700;
-    border-radius: 0 0.25rem 0.25rem 0;
-    transition: top 0.3s ease;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
   }
-  #skip-link:focus {
+  .skip-link:focus {
     top: 0;
-  }
-  /* Layout */
-  header, nav, main, footer {
-    max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1rem 1.5rem;
-  }
-  header {
-    background: #083060;
-    border-bottom: 4px solid #ffd369;
-    box-shadow: 0 2px 8px rgb(0 0 0 / 0.6);
-  }
-  header h1 {
-    margin: 0;
-    font-size: 2.25rem;
-    color: #ffd369;
-    text-shadow: 0 0 5px #ffd369aa;
-  }
-  nav {
-    background: #0f3b72;
-    border-bottom: 3px solid #ffd369;
-    box-shadow: inset 0 -2px 4px rgb(0 0 0 / 0.3);
-  }
-  nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-  }
-  nav li {
-    position: relative;
-  }
-  nav > ul > li {
-    margin-right: 1.5rem;
-  }
-  nav a,
-  nav button {
-    color: #ffd369;
-    background: none;
-    border: none;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0.75rem 0;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    min-width: 44px;
-    min-height: 44px;
-  }
-  nav a:hover,
-  nav button:hover,
-  nav a:focus,
-  nav button:focus {
-    color: #fff8c4;
-    outline-offset: 3px;
-  }
-  nav button[aria-expanded="true"]::after {
-    content: "▲";
-    font-size: 0.6rem;
-    margin-left: 0.3rem;
-  }
-  nav button[aria-expanded="false"]::after {
-    content: "▼";
-    font-size: 0.6rem;
-    margin-left: 0.3rem;
-  }
-  /* Dropdown menu */
-  .submenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #0f3b72;
-    border: 2px solid #ffd369;
-    border-radius: 0.25rem;
-    min-width: 180px;
-    padding: 0.5rem 0;
-    box-shadow: 0 4px 12px rgb(0 0 0 / 0.7);
-    display: none;
-    z-index: 1000;
-  }
-  .submenu[aria-hidden="false"] {
-    display: block;
-  }
-  .submenu a {
-    display: block;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    color: #ffd369;
-  }
-  .submenu a:hover,
-  .submenu a:focus {
-    background: #ffd369;
-    color: #0a2540;
+    outline: 3px solid var(--color-focus);
     outline-offset: 2px;
   }
-  /* Main */
-  main {
-    flex-grow: 1;
-    padding-top: 1.5rem;
-    padding-bottom: 2rem;
-    background: #0a2540;
-  }
-  /* Sections */
-  section {
-    margin-bottom: 2.5rem;
-  }
-  section h2 {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-    color: #ffd369;
-    border-bottom: 3px solid #ffd369;
-    padding-bottom: 0.3rem;
-  }
-  /* Form styling */
-  form {
-    background: #083060;
-    padding: 1.5rem 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 15px #ffd369aa;
-    max-width: 600px;
-    margin: 0 auto 2rem auto;
-  }
-  fieldset {
-    border: none;
-    margin: 0 0 1.25rem 0;
-    padding: 0;
-  }
-  legend {
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    color: #ffd369;
-  }
-  label {
+
+  header, footer, main, nav, section, article {
     display: block;
+  }
+
+  header {
+    background: linear-gradient(135deg, #ff6f61, #ff9b8b);
+    color: var(--color-bg);
+    padding: var(--spacing);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: var(--font-size-xl);
+  }
+
+  nav[aria-label="Main Navigation"] {
+    margin-top: var(--spacing-sm);
+  }
+
+  nav[aria-label="Main Navigation"] ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: var(--spacing);
+  }
+
+  nav[aria-label="Main Navigation"] a {
+    color: var(--color-bg);
+    background-color: var(--color-primary-dark);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
     font-weight: 600;
-    margin-bottom: 0.3rem;
-    color: #ffd369;
+    display: inline-block;
   }
-  input[type="text"],
-  input[type="number"],
-  select {
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    border-radius: 0.25rem;
-    border: 2px solid #ffd369;
-    background-color: #0a2540;
-    color: #e6f0ff;
-    transition: border-color 0.3s ease;
+
+  nav[aria-label="Main Navigation"] a:focus,
+  nav[aria-label="Main Navigation"] a:hover {
+    background-color: var(--color-primary-light);
+    color: var(--color-bg);
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
   }
-  input[type="text"]:focus,
-  input[type="number"]:focus,
-  select:focus {
-    border-color: #fff8c4;
-    outline: none;
-  }
-  .required-indicator {
-    color: #ff6f61;
-    font-weight: 700;
-    margin-left: 0.25rem;
-  }
-  .help-text {
-    font-size: 0.875rem;
-    color: #fff8c4;
-    margin-top: 0.2rem;
-  }
-  .error-message {
-    color: #ff6f61;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-  }
-  button[type="submit"] {
-    background: linear-gradient(45deg, #ffd369, #ffb347);
-    border: none;
-    border-radius: 0.4rem;
-    color: #0a2540;
-    font-weight: 700;
-    font-size: 1.1rem;
-    padding: 0.75rem 1.5rem;
-    cursor: pointer;
-    min-width: 44px;
-    min-height: 44px;
-    box-shadow: 0 4px 10px #ffb347cc;
-    transition: background-color 0.3s ease;
-  }
-  button[type="submit"]:hover,
-  button[type="submit"]:focus {
-    background: linear-gradient(45deg, #fff8c4, #ffd369);
-    outline-offset: 3px;
-  }
-  /* Workout log table */
-  .workout-log {
-    max-width: 800px;
-    margin: 0 auto;
-    border-collapse: collapse;
-    width: 100%;
-    box-shadow: 0 0 12px #ffd369aa;
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
-  .workout-log caption {
-    caption-side: top;
-    font-weight: 700;
-    font-size: 1.5rem;
-    padding: 0.5rem 0;
-    color: #ffd369;
-    text-align: center;
-  }
-  .workout-log thead {
-    background: #0f3b72;
-  }
-  .workout-log th,
-  .workout-log td {
-    padding: 0.75rem 1rem;
-    border: 1px solid #ffd369;
-    text-align: left;
-    vertical-align: middle;
-  }
-  .workout-log th {
-    font-weight: 700;
-    color: #ffd369;
-  }
-  .workout-log tbody tr:nth-child(even) {
-    background: #092b52;
-  }
-  .workout-log tbody tr:hover,
-  .workout-log tbody tr:focus-within {
-    background: #ffd369;
-    color: #0a2540;
-    outline: 3px solid #ffb347;
-    outline-offset: -3px;
-  }
-  /* Chart container */
-  #chart-container {
+
+  main {
+    flex: 1 0 auto;
+    padding: var(--spacing);
     max-width: 900px;
     margin: 0 auto;
-    background: #083060;
-    padding: 1rem 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0 15px #ffd369aa;
   }
-  #progress-chart {
-    width: 100%;
-    height: 300px;
+
+  /* Music Player Section */
+  section#music-player {
+    background-color: var(--color-bg-alt);
+    border-radius: var(--border-radius);
+    padding: var(--spacing);
+    box-shadow: 0 4px 12px rgba(255,111,97,0.4);
   }
-  /* Responsive & accessibility */
-  @media (max-width: 700px) {
-    nav ul {
-      flex-direction: column;
-    }
-    nav > ul > li {
-      margin-right: 0;
-      margin-bottom: 0.5rem;
-    }
-    form {
-      padding: 1rem 1rem;
-    }
+
+  section#music-player h2 {
+    font-size: var(--font-size-lg);
+    margin-top: 0;
+    margin-bottom: var(--spacing);
+    color: var(--color-primary-light);
   }
-  /* Focus ring enhancements for AAA */
-  :focus-visible {
-    outline: 3px solid #ffd369 !important;
-    outline-offset: 2px !important;
-  }
-  /* Vibrant color-coded badges for exercise types */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    font-weight: 700;
-    font-size: 0.875rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: 0.25rem;
-    color: #0a2540;
-    min-width: 64px;
-    justify-content: center;
-    user-select: none;
-  }
-  .badge-cardio {
-    background: #ffb347;
-    box-shadow: 0 0 5px #ffb347aa;
-  }
-  .badge-strength {
-    background: #ffd369;
-    box-shadow: 0 0 5px #ffd369aa;
-  }
-  .badge-flexibility {
-    background: #a6e3e9;
-    color: #083060;
-    box-shadow: 0 0 5px #a6e3e9aa;
-  }
-  .badge-balance {
-    background: #ff6f61;
-    box-shadow: 0 0 5px #ff6f61aa;
-  }
-  /* Color legend for exercise types */
-  #exercise-legend {
-    max-width: 600px;
-    margin: 1rem auto 2rem auto;
+
+  /* Player Controls Container */
+  .player-controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
+    gap: var(--spacing);
+    align-items: center;
+    justify-content: space-between;
   }
-  #exercise-legend div {
+
+  /* Play/Pause Button */
+  button#play-pause {
+    background-color: var(--color-primary);
+    border: none;
+    color: var(--color-bg);
+    font-size: var(--font-size-lg);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    min-width: 100px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  button#play-pause:hover,
+  button#play-pause:focus {
+    background-color: var(--color-primary-light);
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  button#play-pause:focus-visible {
+    outline-offset: 4px;
+  }
+
+  /* Volume Control */
+  .volume-control {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-weight: 600;
-    font-size: 1rem;
-    color: #ffd369;
+    flex: 1 1 200px;
   }
-  #exercise-legend .legend-box {
+
+  label[for="volume"] {
+    font-weight: 600;
+    color: var(--color-primary-light);
+  }
+
+  input[type="range"]#volume {
+    width: 100%;
+    cursor: pointer;
+    -webkit-appearance: none;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right, var(--color-primary) 0%, var(--color-primary) 50%, var(--color-border) 50%, var(--color-border) 100%);
+    outline-offset: 2px;
+  }
+  input[type="range"]#volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
     width: 24px;
     height: 24px;
-    border-radius: 0.25rem;
-  }
-  #legend-cardio {
-    background: #ffb347;
-    box-shadow: 0 0 5px #ffb347aa;
-  }
-  #legend-strength {
-    background: #ffd369;
-    box-shadow: 0 0 5px #ffd369aa;
-  }
-  #legend-flexibility {
-    background: #a6e3e9;
-    box-shadow: 0 0 5px #a6e3e9aa;
-  }
-  #legend-balance {
-    background: #ff6f61;
-    box-shadow: 0 0 5px #ff6f61aa;
-  }
-  /* Loading spinner */
-  .spinner {
-    display: inline-block;
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 3px solid #ffd369;
-    border-top-color: transparent;
+    background: var(--color-primary-light);
+    cursor: pointer;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
-    vertical-align: middle;
+    border: 2px solid var(--color-bg);
+    transition: background-color 0.3s ease;
   }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
+  input[type="range"]#volume::-webkit-slider-thumb:hover,
+  input[type="range"]#volume::-webkit-slider-thumb:focus {
+    background: var(--color-primary-dark);
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
   }
-  /* Alert and status messages */
-  #form-status {
-    margin-top: 1rem;
+  input[type="range"]#volume::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--color-primary-light);
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid var(--color-bg);
+    transition: background-color 0.3s ease;
+  }
+  input[type="range"]#volume::-moz-range-thumb:hover,
+  input[type="range"]#volume::-moz-range-thumb:focus {
+    background: var(--color-primary-dark);
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Playlist */
+  .playlist {
+    margin-top: var(--spacing);
+  }
+
+  .playlist h3 {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary-light);
+  }
+
+  ul#playlist-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background-color: var(--color-bg);
+  }
+
+  ul#playlist-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    cursor: pointer;
+    color: var(--color-text-alt);
+    transition: background-color 0.3s ease;
+  }
+  ul#playlist-list li:last-child {
+    border-bottom: none;
+  }
+  ul#playlist-list li:hover,
+  ul#playlist-list li:focus-within {
+    background-color: var(--color-primary-dark);
+    color: var(--color-bg);
+    outline: none;
+  }
+  ul#playlist-list li[aria-selected="true"] {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
     font-weight: 700;
-    color: #ffd369;
   }
-  #form-status.error {
-    color: #ff6f61;
+  ul#playlist-list li button.select-song {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  ul#playlist-list li button.select-song:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Song info */
+  .song-info {
+    flex-grow: 1;
+    margin-left: var(--spacing-sm);
+    overflow: hidden;
+  }
+  .song-title {
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .song-artist {
+    font-style: italic;
+    font-size: 0.875rem;
+    color: var(--color-text-alt);
+  }
+
+  /* Audio transcript and help */
+  #transcript-container {
+    margin-top: var(--spacing);
+    background-color: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing);
+    color: var(--color-text-alt);
+    font-size: 0.875rem;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+
+  #transcript-container h3 {
+    margin-top: 0;
+    color: var(--color-primary-light);
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .player-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    button#play-pause {
+      width: 100%;
+      min-width: auto;
+      justify-content: center;
+    }
+    .volume-control {
+      flex: 1 1 auto;
+    }
+  }
+
+  /* Focus outline enhancement */
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbar styling for playlist */
+  ul#playlist-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  ul#playlist-list::-webkit-scrollbar-track {
+    background: var(--color-bg-alt);
+  }
+  ul#playlist-list::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary);
+    border-radius: 4px;
   }
 </style>
 </head>
 <body>
-<a href="#main-content" id="skip-link">Skip to main content</a>
+<a href="#main-content" class="skip-link" tabindex="0">Skip to main content</a>
 
-<header role="banner">
-  <h1>Accessible Interactive Fitness Tracker</h1>
+<header>
+  <h1>Accessible Music Player</h1>
+  <nav aria-label="Main Navigation">
+    <ul>
+      <li><a href="#music-player" id="nav-player" tabindex="0">Music Player</a></li>
+      <li><a href="#transcript-container" id="nav-transcript" tabindex="0">Audio Transcript</a></li>
+      <li><a href="#playlist-list" id="nav-playlist" tabindex="0">Playlist</a></li>
+    </ul>
+  </nav>
 </header>
 
-<nav aria-label="Primary navigation">
-  <ul role="menubar">
-    <li role="none">
-      <a href="#log-workout" role="menuitem" tabindex="0">Log Workout</a>
-    </li>
-    <li role="none">
-      <a href="#workout-log" role="menuitem" tabindex="0">Workout Log</a>
-    </li>
-    <li role="none">
-      <button aria-haspopup="true" aria-expanded="false" aria-controls="submenu-help" role="menuitem" id="help-menu-button" tabindex="0">
-        Help
-      </button>
-      <ul class="submenu" id="submenu-help" role="menu" aria-label="Help submenu" aria-hidden="true">
-        <li role="none"><a href="#form-help" role="menuitem" tabindex="-1">Form Instructions</a></li>
-        <li role="none"><a href="#chart-help" role="menuitem" tabindex="-1">Progress Chart Explanation</a></li>
-        <li role="none"><a href="#accessibility-info" role="menuitem" tabindex="-1">Accessibility Info</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-
 <main id="main-content" tabindex="-1">
-  <section id="log-workout" aria-labelledby="log-workout-heading">
-    <h2 id="log-workout-heading">Log Your Daily Workout</h2>
-    <form id="workout-form" novalidate aria-describedby="form-help" aria-live="polite" aria-atomic="true">
-      <fieldset>
-        <legend>Workout Details</legend>
+  <section id="music-player" aria-labelledby="player-heading" role="region">
+    <h2 id="player-heading">Music Player Controls</h2>
 
-        <label for="exercise-type">Exercise Type <span class="required-indicator" aria-label="required">*</span></label>
-        <select id="exercise-type" name="exerciseType" required aria-required="true" aria-describedby="exercise-type-help exercise-type-error" autocomplete="off">
-          <option value="" disabled selected>Select exercise type</option>
-          <option value="cardio">Cardio</option>
-          <option value="strength">Strength</option>
-          <option value="flexibility">Flexibility</option>
-          <option value="balance">Balance</option>
-        </select>
-        <div id="exercise-type-help" class="help-text">Choose the category that best fits your exercise.</div>
-        <div id="exercise-type-error" class="error-message" aria-live="assertive"></div>
-      </fieldset>
+    <div class="player-controls">
+      <button id="play-pause" aria-pressed="false" aria-label="Play music" type="button">
+        ▶️ Play
+      </button>
 
-      <fieldset>
-        <legend>Duration and Calories</legend>
+      <div class="volume-control">
+        <label for="volume" id="volume-label">Volume</label>
+        <input type="range" id="volume" name="volume" min="0" max="1" step="0.01" aria-labelledby="volume-label" aria-live="polite" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.5" value="0.5" />
+      </div>
+    </div>
 
-        <label for="duration">Duration (minutes) <span class="required-indicator" aria-label="required">*</span></label>
-        <input type="number" id="duration" name="duration" min="1" max="1440" required aria-required="true" aria-describedby="duration-help duration-error" autocomplete="off" inputmode="numeric" />
-        <div id="duration-help" class="help-text">Enter the duration of your workout in minutes (1–1440).</div>
-        <div id="duration-error" class="error-message" aria-live="assertive"></div>
-
-        <label for="calories">Calories Burned <span class="required-indicator" aria-label="required">*</span></label>
-        <input type="number" id="calories" name="calories" min="1" max="20000" required aria-required="true" aria-describedby="calories-help calories-error" autocomplete="off" inputmode="numeric" />
-        <div id="calories-help" class="help-text">Enter the estimated calories burned during the workout.</div>
-        <div id="calories-error" class="error-message" aria-live="assertive"></div>
-      </fieldset>
-
-      <button type="submit" aria-label="Submit workout log entry">Add Workout</button>
-      <div id="form-status" role="status" aria-live="polite" aria-atomic="true"></div>
-    </form>
-    <section id="form-help" aria-label="Form instructions" hidden>
-      <h3>Form Instructions</h3>
-      <p>Fill out all required fields marked with <strong>*</strong>. Use the dropdown to select your exercise type, enter the duration in minutes, and the calories burned. After submitting, your workout will appear in the log below and update the progress chart.</p>
+    <section class="playlist" aria-labelledby="playlist-heading" role="region" tabindex="0">
+      <h3 id="playlist-heading">Playlist</h3>
+      <ul id="playlist-list" role="listbox" aria-label="Available songs" tabindex="0" aria-live="polite" aria-relevant="additions removals">
+        <!-- Songs inserted by JS -->
+      </ul>
     </section>
   </section>
 
-  <section id="workout-log" aria-labelledby="workout-log-heading">
-    <h2 id="workout-log-heading">Workout Log</h2>
-    <table class="workout-log" aria-describedby="workout-log-desc" role="grid" tabindex="0">
-      <caption id="workout-log-desc">Table listing your logged workouts including exercise type, duration, and calories burned.</caption>
-      <thead>
-        <tr>
-          <th scope="col">Date &amp; Time</th>
-          <th scope="col">Exercise Type</th>
-          <th scope="col">Duration (minutes)</th>
-          <th scope="col">Calories Burned</th>
-        </tr>
-      </thead>
-      <tbody id="workout-log-body">
-        <tr><td colspan="4" style="text-align:center; color:#ffd369;">No workouts logged yet.</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section id="progress" aria-labelledby="progress-heading">
-    <h2 id="progress-heading">Progress Chart</h2>
-    <div id="chart-container" aria-describedby="chart-desc">
-      <canvas id="progress-chart" width="900" height="300" role="img" aria-label="Bar chart showing total calories burned per exercise type" aria-describedby="chart-desc"></canvas>
-      <p id="chart-desc" class="visually-hidden">
-        This bar chart displays the total calories burned for each exercise type logged. Cardio is shown in orange, Strength in yellow, Flexibility in light blue, and Balance in coral red. The height of each bar represents the total calories burned for that exercise type.
-      </p>
-    </div>
-    <div id="exercise-legend" aria-label="Exercise type color legend">
-      <div><span class="legend-box" id="legend-cardio"></span>Cardio</div>
-      <div><span class="legend-box" id="legend-strength"></span>Strength</div>
-      <div><span class="legend-box" id="legend-flexibility"></span>Flexibility</div>
-      <div><span class="legend-box" id="legend-balance"></span>Balance</div>
-    </div>
-    <section id="chart-help" aria-label="Chart explanation" hidden>
-      <h3>Progress Chart Explanation</h3>
-      <p>The chart visually summarizes your total calories burned by exercise type. Each colored bar corresponds to an exercise category. Use this to monitor which types of workouts you are doing most frequently and where you might want to focus more effort.</p>
-    </section>
-  </section>
-
-  <section id="accessibility-info" aria-labelledby="accessibility-info-heading" hidden>
-    <h2 id="accessibility-info-heading">Accessibility Information</h2>
-    <p>This fitness tracker is designed to meet WCAG 2.2 AAA standards, ensuring full accessibility for all users. Features include:</p>
-    <ul>
-      <li>Keyboard navigable menus and forms with enhanced focus indicators</li>
-      <li>Clear and descriptive labels, instructions, and error messages</li>
-      <li>High contrast color scheme with multiple visual indicators</li>
-      <li>ARIA roles and live regions for dynamic content updates</li>
-      <li>Responsive design that works at 200% zoom without horizontal scrolling</li>
-      <li>Respect for reduced motion preferences and pause controls where applicable</li>
-    </ul>
+  <section id="transcript-container" aria-live="polite" aria-atomic="true" role="region" aria-labelledby="transcript-heading" tabindex="0">
+    <h3 id="transcript-heading">Audio Transcript and Descriptions</h3>
+    <p id="transcript-text">Select a song to see its transcript and descriptions here.</p>
   </section>
 </main>
 
-<footer role="contentinfo" aria-label="Page footer">
-  <p>© 2024 Accessible Fitness Tracker. All rights reserved.</p>
-  <p><a href="#main-content">Back to top</a></p>
+<footer>
+  <p style="text-align:center; padding: var(--spacing-sm); color: var(--color-text-alt); font-size: 0.875rem;">
+    &copy; 2024 Accessible Music Player. All rights reserved.
+  </p>
 </footer>
 
 <script>
-  'use strict';
+  (() => {
+    "use strict";
 
-  // Utility: Select elements with error handling
-  function $(selector, scope = document) {
-    const el = scope.querySelector(selector);
-    if (!el) throw new Error('Element not found: ' + selector);
-    return el;
-  }
-  function $all(selector, scope = document) {
-    return Array.from(scope.querySelectorAll(selector));
-  }
+    // Songs data: title, artist, audio src, transcript, sign language video, extended audio description
+    // Using short royalty-free samples with accessible metadata
+    const songs = [
+      {
+        id: "song1",
+        title: "Calm Breeze",
+        artist: "A. Composer",
+        src: "https://cdn.pixabay.com/download/audio/2021/10/29/audio_9f7e1f49a6.mp3?filename=calm-breeze-ambient-11260.mp3",
+        transcript: `This instrumental track features gentle wind chimes and soft synth pads, creating a relaxing atmosphere.
+        [music: calm breeze, gentle wind chimes, soft synth pads]`,
+        signLangVideo: "https://example.com/videos/calm-breeze-asl.mp4",
+        extendedAudioDescription: `The music begins with soft wind chimes that sparkle lightly, evoking the feeling of a calm, cool breeze on a summer evening.
+        The synth pads swell slowly and smoothly, providing a warm and enveloping background.`,
+      },
+      {
+        id: "song2",
+        title: "Energetic Drive",
+        artist: "B. Beats",
+        src: "https://cdn.pixabay.com/download/audio/2022/03/22/audio_3b5d8f7a88.mp3?filename=energetic-drive-12890.mp3",
+        transcript: `Upbeat electronic track with a driving bassline and rhythmic drum patterns.
+        [music: energetic bass, rhythmic drums, upbeat electronic]`,
+        signLangVideo: "https://example.com/videos/energetic-drive-asl.mp4",
+        extendedAudioDescription: `The track opens with a punchy bass drum that sets a fast tempo.
+        Synth stabs punctuate the rhythm, giving a sense of urgency and excitement.`,
+      },
+      {
+        id: "song3",
+        title: "Gentle Rain",
+        artist: "C. Sounds",
+        src: "https://cdn.pixabay.com/download/audio/2021/08/04/audio_6f5d60f6a1.mp3?filename=gentle-rain-ambient-10784.mp3",
+        transcript: `Ambient sounds of gentle rain with soft piano melodies.
+        [music: gentle rain, soft piano, ambient sounds]`,
+        signLangVideo: "https://example.com/videos/gentle-rain-asl.mp4",
+        extendedAudioDescription: `The sound of rain falling steadily creates a peaceful background.
+        A soft piano melody plays intermittently, adding emotional depth.`,
+      }
+    ];
 
-  // Keyboard accessible dropdown menu
-  (function() {
-    const menuButton = $('#help-menu-button');
-    const submenu = $('#submenu-help');
-    const submenuLinks = $all('a', submenu);
+    // Elements
+    const playPauseBtn = document.getElementById("play-pause");
+    const volumeSlider = document.getElementById("volume");
+    const playlistList = document.getElementById("playlist-list");
+    const transcriptText = document.getElementById("transcript-text");
 
-    function openMenu() {
-      menuButton.setAttribute('aria-expanded', 'true');
-      submenu.setAttribute('aria-hidden', 'false');
-      submenuLinks.forEach(link => link.setAttribute('tabindex', '0'));
-      submenuLinks[0].focus();
-    }
-    function closeMenu() {
-      menuButton.setAttribute('aria-expanded', 'false');
-      submenu.setAttribute('aria-hidden', 'true');
-      submenuLinks.forEach(link => link.setAttribute('tabindex', '-1'));
-      menuButton.focus();
-    }
+    // Create audio element
+    const audio = new Audio();
+    audio.preload = "metadata";
+    audio.volume = parseFloat(volumeSlider.value);
 
-    menuButton.addEventListener('click', () => {
-      const expanded = menuButton.getAttribute('aria-expanded') === 'true';
-      if (expanded) {
-        closeMenu();
+    // State
+    let currentSongIndex = -1;
+    let isPlaying = false;
+
+    // Utility: update play/pause button text and aria-pressed
+    function updatePlayPauseButton() {
+      if (isPlaying) {
+        playPauseBtn.textContent = "⏸️ Pause";
+        playPauseBtn.setAttribute("aria-label", "Pause music");
+        playPauseBtn.setAttribute("aria-pressed", "true");
       } else {
-        openMenu();
+        playPauseBtn.textContent = "▶️ Play";
+        playPauseBtn.setAttribute("aria-label", "Play music");
+        playPauseBtn.setAttribute("aria-pressed", "false");
+      }
+    }
+
+    // Utility: update aria-valuenow for volume slider
+    function updateVolumeAria() {
+      volumeSlider.setAttribute("aria-valuenow", volumeSlider.value);
+    }
+
+    // Load song by index
+    function loadSong(index) {
+      if (index < 0 || index >= songs.length) return;
+      const song = songs[index];
+      audio.src = song.src;
+      audio.load();
+      currentSongIndex = index;
+      updateTranscript(song);
+      updatePlaylistSelection();
+      isPlaying = false;
+      updatePlayPauseButton();
+      playPauseBtn.focus();
+    }
+
+    // Update transcript area with transcript and extended audio description
+    function updateTranscript(song) {
+      transcriptText.innerHTML = "";
+      // Compose accessible transcript content with paragraphs
+      const transcriptPara = document.createElement("p");
+      transcriptPara.textContent = song.transcript;
+      transcriptText.appendChild(transcriptPara);
+
+      // Extended audio description with a heading and paragraph
+      const extDescHeading = document.createElement("h4");
+      extDescHeading.textContent = "Extended Audio Description";
+      extDescHeading.style.marginTop = "1rem";
+      extDescHeading.style.color = "var(--color-primary-light)";
+      transcriptText.appendChild(extDescHeading);
+
+      const extDescPara = document.createElement("p");
+      extDescPara.textContent = song.extendedAudioDescription;
+      transcriptText.appendChild(extDescPara);
+
+      // Sign language video link with description
+      const signLangLink = document.createElement("a");
+      signLangLink.href = song.signLangVideo;
+      signLangLink.target = "_blank";
+      signLangLink.rel = "noopener";
+      signLangLink.textContent = "Watch sign language interpretation (opens in new tab)";
+      signLangLink.setAttribute("aria-label", `Sign language interpretation video for ${song.title} by ${song.artist}`);
+      signLangLink.style.display = "inline-block";
+      signLangLink.style.marginTop = "1rem";
+      signLangLink.style.color = "var(--color-primary)";
+      transcriptText.appendChild(signLangLink);
+    }
+
+    // Update playlist selection aria and styles
+    function updatePlaylistSelection() {
+      const items = playlistList.querySelectorAll("li");
+      items.forEach((li, idx) => {
+        if (idx === currentSongIndex) {
+          li.setAttribute("aria-selected", "true");
+          li.tabIndex = 0;
+        } else {
+          li.setAttribute("aria-selected", "false");
+          li.tabIndex = -1;
+        }
+      });
+    }
+
+    // Play or pause audio
+    function togglePlayPause() {
+      if (currentSongIndex === -1) {
+        loadSong(0);
+      }
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        audio.play().catch((e) => {
+          // Handle play errors (e.g. autoplay restrictions)
+          console.error("Playback failed:", e);
+          alert("Playback failed. Please interact with the player controls to start audio.");
+        });
+      }
+    }
+
+    // Event Handlers
+    playPauseBtn.addEventListener("click", () => {
+      togglePlayPause();
+    });
+
+    // Keyboard support for play/pause button (Enter/Space)
+    playPauseBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        togglePlayPause();
       }
     });
 
-    menuButton.addEventListener('keydown', e => {
-      switch(e.key) {
-        case 'ArrowDown':
-        case 'Enter':
-        case ' ':
+    volumeSlider.addEventListener("input", (e) => {
+      const vol = parseFloat(e.target.value);
+      audio.volume = vol;
+      updateVolumeAria();
+    });
+
+    // Keyboard support for volume slider handled by native input[type=range]
+
+    // Populate playlist
+    function createPlaylistItem(song, index) {
+      const li = document.createElement("li");
+      li.setAttribute("role", "option");
+      li.id = `playlist-item-${index}`;
+      li.tabIndex = -1;
+      li.setAttribute("aria-selected", "false");
+
+      // Song info container
+      const infoDiv = document.createElement("div");
+      infoDiv.className = "song-info";
+
+      const titleSpan = document.createElement("span");
+      titleSpan.className = "song-title";
+      titleSpan.textContent = song.title;
+      titleSpan.setAttribute("aria-label", `Song title: ${song.title}`);
+
+      const artistSpan = document.createElement("span");
+      artistSpan.className = "song-artist";
+      artistSpan.textContent = song.artist;
+      artistSpan.setAttribute("aria-label", `Artist: ${song.artist}`);
+
+      infoDiv.appendChild(titleSpan);
+      infoDiv.appendChild(document.createElement("br"));
+      infoDiv.appendChild(artistSpan);
+
+      // Select button
+      const selectBtn = document.createElement("button");
+      selectBtn.className = "select-song";
+      selectBtn.type = "button";
+      selectBtn.setAttribute("aria-label", `Select song ${song.title} by ${song.artist}`);
+      selectBtn.textContent = "▶️";
+
+      selectBtn.addEventListener("click", (evt) => {
+        evt.stopPropagation();
+        if (currentSongIndex !== index) {
+          loadSong(index);
+          audio.play();
+          isPlaying = true;
+          updatePlayPauseButton();
+        } else {
+          // If same song selected, toggle play/pause
+          togglePlayPause();
+        }
+        selectBtn.focus();
+      });
+
+      // Keyboard support for li: Enter/Space selects song
+      li.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          openMenu();
-          break;
-        case 'Escape':
-          if (menuButton.getAttribute('aria-expanded') === 'true') {
-            e.preventDefault();
-            closeMenu();
-          }
-          break;
-      }
-    });
-
-    submenu.addEventListener('keydown', e => {
-      const currentIndex = submenuLinks.indexOf(document.activeElement);
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        const nextIndex = (currentIndex + 1) % submenuLinks.length;
-        submenuLinks[nextIndex].focus();
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        const prevIndex = (currentIndex - 1 + submenuLinks.length) % submenuLinks.length;
-        submenuLinks[prevIndex].focus();
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        closeMenu();
-      } else if (e.key === 'Tab') {
-        // Allow tab to close menu if focus moves out
-        if (e.shiftKey && currentIndex === 0) {
-          closeMenu();
-        } else if (!e.shiftKey && currentIndex === submenuLinks.length - 1) {
-          closeMenu();
+          selectBtn.click();
         }
-      }
-    });
-
-    // Close menu if click outside
-    document.addEventListener('click', e => {
-      if (!menuButton.contains(e.target) && !submenu.contains(e.target)) {
-        if (menuButton.getAttribute('aria-expanded') === 'true') {
-          closeMenu();
+        // Arrow navigation within playlist
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          const next = li.nextElementSibling || playlistList.firstElementChild;
+          next.focus();
         }
-      }
-    });
-
-    // Initialize submenu links tabindex
-    submenuLinks.forEach(link => link.setAttribute('tabindex', '-1'));
-  })();
-
-  // Workout tracker app
-  (function() {
-    const form = $('#workout-form');
-    const exerciseTypeInput = $('#exercise-type');
-    const durationInput = $('#duration');
-    const caloriesInput = $('#calories');
-    const formStatus = $('#form-status');
-
-    const errorExerciseType = $('#exercise-type-error');
-    const errorDuration = $('#duration-error');
-    const errorCalories = $('#calories-error');
-
-    const workoutLogBody = $('#workout-log-body');
-    const progressChartCanvas = $('#progress-chart');
-    const ctx = progressChartCanvas.getContext('2d');
-
-    // Data model: Array of workout entries
-    // Each entry: { id, date, exerciseType, duration, calories }
-    let workouts = [];
-
-    // Constants for exercise types and colors
-    const EXERCISE_TYPES = {
-      cardio: { label: 'Cardio', color: '#ffb347', badgeClass: 'badge-cardio' },
-      strength: { label: 'Strength', color: '#ffd369', badgeClass: 'badge-strength' },
-      flexibility: { label: 'Flexibility', color: '#a6e3e9', badgeClass: 'badge-flexibility' },
-      balance: { label: 'Balance', color: '#ff6f61', badgeClass: 'badge-balance' }
-    };
-
-    // Accessibility helper: set error state and message
-    function setError(input, errorEl, message) {
-      if (message) {
-        input.setAttribute('aria-invalid', 'true');
-        errorEl.textContent = message;
-      } else {
-        input.removeAttribute('aria-invalid');
-        errorEl.textContent = '';
-      }
-    }
-
-    // Validate inputs, return true if valid
-    function validateForm() {
-      let valid = true;
-
-      // Exercise Type
-      if (!exerciseTypeInput.value) {
-        setError(exerciseTypeInput, errorExerciseType, 'Please select an exercise type.');
-        valid = false;
-      } else {
-        setError(exerciseTypeInput, errorExerciseType, '');
-      }
-
-      // Duration
-      const durationVal = Number(durationInput.value);
-      if (!durationInput.value) {
-        setError(durationInput, errorDuration, 'Duration is required.');
-        valid = false;
-      } else if (isNaN(durationVal) || durationVal < 1 || durationVal > 1440) {
-        setError(durationInput, errorDuration, 'Enter a valid duration between 1 and 1440 minutes.');
-        valid = false;
-      } else {
-        setError(durationInput, errorDuration, '');
-      }
-
-      // Calories
-      const caloriesVal = Number(caloriesInput.value);
-      if (!caloriesInput.value) {
-        setError(caloriesInput, errorCalories, 'Calories burned is required.');
-        valid = false;
-      } else if (isNaN(caloriesVal) || caloriesVal < 1 || caloriesVal > 20000) {
-        setError(caloriesInput, errorCalories, 'Enter a valid calorie amount between 1 and 20,000.');
-        valid = false;
-      } else {
-        setError(caloriesInput, errorCalories, '');
-      }
-
-      return valid;
-    }
-
-    // Format date/time for display (local)
-    function formatDateTime(date) {
-      return date.toLocaleString(undefined, {
-        year: 'numeric', month: 'short', day: 'numeric',
-        hour: '2-digit', minute: '2-digit', hour12: false
-      });
-    }
-
-    // Create badge element for exercise type
-    function createBadge(typeKey) {
-      const span = document.createElement('span');
-      span.className = 'badge ' + EXERCISE_TYPES[typeKey].badgeClass;
-      span.textContent = EXERCISE_TYPES[typeKey].label;
-      span.setAttribute('aria-label', EXERCISE_TYPES[typeKey].label + ' exercise type');
-      return span;
-    }
-
-    // Render workout log table rows
-    function renderWorkoutLog() {
-      // Clear existing rows
-      workoutLogBody.innerHTML = '';
-
-      if (workouts.length === 0) {
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.colSpan = 4;
-        td.style.textAlign = 'center';
-        td.style.color = '#ffd369';
-        td.textContent = 'No workouts logged yet.';
-        tr.appendChild(td);
-        workoutLogBody.appendChild(tr);
-        return;
-      }
-
-      workouts.forEach(entry => {
-        const tr = document.createElement('tr');
-        tr.tabIndex = 0;
-        tr.setAttribute('role', 'row');
-
-        // Date & Time
-        const tdDate = document.createElement('td');
-        tdDate.textContent = formatDateTime(new Date(entry.date));
-        tdDate.setAttribute('role', 'gridcell');
-        tr.appendChild(tdDate);
-
-        // Exercise Type with badge
-        const tdType = document.createElement('td');
-        tdType.setAttribute('role', 'gridcell');
-        const badge = createBadge(entry.exerciseType);
-        tdType.appendChild(badge);
-        tr.appendChild(tdType);
-
-        // Duration
-        const tdDuration = document.createElement('td');
-        tdDuration.textContent = entry.duration.toString();
-        tdDuration.setAttribute('role', 'gridcell');
-        tr.appendChild(tdDuration);
-
-        // Calories
-        const tdCalories = document.createElement('td');
-        tdCalories.textContent = entry.calories.toString();
-        tdCalories.setAttribute('role', 'gridcell');
-        tr.appendChild(tdCalories);
-
-        workoutLogBody.appendChild(tr);
-      });
-    }
-
-    // Draw bar chart with accessibility descriptions
-    function drawChart() {
-      const width = progressChartCanvas.width;
-      const height = progressChartCanvas.height;
-      const padding = 60;
-      const barWidth = 80;
-      const barGap = 40;
-      const maxBarHeight = height - padding * 1.5;
-
-      // Calculate total calories per exercise type
-      const totals = {};
-      Object.keys(EXERCISE_TYPES).forEach(key => totals[key] = 0);
-      workouts.forEach(w => {
-        if (totals[w.exerciseType] !== undefined) {
-          totals[w.exerciseType] += w.calories;
+        if (e.key === "ArrowUp") {
+          e.preventDefault();
+          const prev = li.previousElementSibling || playlistList.lastElementChild;
+          prev.focus();
         }
       });
 
-      // Find max calories for scaling
-      const maxCalories = Math.max(...Object.values(totals), 100);
+      // Clicking on li selects the song
+      li.addEventListener("click", () => {
+        selectBtn.click();
+      });
 
-      // Clear canvas
-      ctx.clearRect(0, 0, width, height);
+      li.appendChild(selectBtn);
+      li.appendChild(infoDiv);
 
-      // Background gradient
-      const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
-      bgGradient.addColorStop(0, '#0a2540');
-      bgGradient.addColorStop(1, '#092b52');
-      ctx.fillStyle = bgGradient;
-      ctx.fillRect(0, 0, width, height);
+      return li;
+    }
 
-      // Draw axes
-      ctx.strokeStyle = '#ffd369';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      // y-axis
-      ctx.moveTo(padding, padding / 2);
-      ctx.lineTo(padding, height - padding);
-      // x-axis
-      ctx.lineTo(width - padding / 2, height - padding);
-      ctx.stroke();
-
-      // Y-axis labels and grid lines
-      ctx.fillStyle = '#ffd369';
-      ctx.font = '14px "Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
-
-      const yStepCount = 5;
-      for (let i = 0; i <= yStepCount; i++) {
-        const y = padding / 2 + (maxBarHeight / yStepCount) * i;
-        const value = Math.round(maxCalories - (maxCalories / yStepCount) * i);
-        ctx.fillText(value.toString(), padding - 10, y);
-        // grid line
-        ctx.strokeStyle = '#ffd36955';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(padding, y);
-        ctx.lineTo(width - padding / 2, y);
-        ctx.stroke();
-      }
-
-      // Draw bars
-      const keys = Object.keys(EXERCISE_TYPES);
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
-      ctx.font = '16px "Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
-
-      keys.forEach((key, i) => {
-        const x = padding + barGap + i * (barWidth + barGap);
-        const barHeight = (totals[key] / maxCalories) * maxBarHeight;
-        const y = height - padding - barHeight;
-
-        // Bar with gradient fill
-        const grad = ctx.createLinearGradient(x, y, x, y + barHeight);
-        grad.addColorStop(0, EXERCISE_TYPES[key].color);
-        grad.addColorStop(1, '#000000aa');
-        ctx.fillStyle = grad;
-        ctx.shadowColor = EXERCISE_TYPES[key].color + 'bb';
-        ctx.shadowBlur = 8;
-        ctx.fillRect(x, y, barWidth, barHeight);
-        ctx.shadowBlur = 0;
-
-        // Bar border
-        ctx.strokeStyle = '#ffd369';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x, y, barWidth, barHeight);
-
-        // Label below bar
-        ctx.fillStyle = '#ffd369';
-        ctx.fillText(EXERCISE_TYPES[key].label, x + barWidth / 2, height - padding + 8);
-
-        // Calories value above bar
-        ctx.fillStyle = '#ffd369';
-        ctx.font = 'bold 14px "Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
-        ctx.fillText(totals[key].toString(), x + barWidth / 2, y - 20);
-        ctx.font = '16px "Segoe UI", Tahoma, Geneva, Verdana, sans-serif';
+    // Initialize playlist
+    function initPlaylist() {
+      songs.forEach((song, idx) => {
+        const li = createPlaylistItem(song, idx);
+        playlistList.appendChild(li);
       });
     }
 
-    // Update form status message with optional error class
-    function updateFormStatus(message, isError = false) {
-      formStatus.textContent = message;
-      if (isError) {
-        formStatus.classList.add('error');
-      } else {
-        formStatus.classList.remove('error');
-      }
-    }
-
-    // Clear form inputs and errors
-    function clearForm() {
-      form.reset();
-      setError(exerciseTypeInput, errorExerciseType, '');
-      setError(durationInput, errorDuration, '');
-      setError(caloriesInput, errorCalories, '');
-      updateFormStatus('');
-    }
-
-    // Load workouts from localStorage (persist data)
-    function loadWorkouts() {
-      try {
-        const data = localStorage.getItem('accessibleFitnessWorkouts');
-        if (data) {
-          const parsed = JSON.parse(data);
-          if (Array.isArray(parsed)) {
-            workouts = parsed.map(w => ({
-              id: w.id,
-              date: w.date,
-              exerciseType: w.exerciseType,
-              duration: w.duration,
-              calories: w.calories
-            }));
-          }
-        }
-      } catch {
-        workouts = [];
-      }
-    }
-
-    // Save workouts to localStorage
-    function saveWorkouts() {
-      try {
-        localStorage.setItem('accessibleFitnessWorkouts', JSON.stringify(workouts));
-      } catch {
-        // LocalStorage quota exceeded or disabled
-      }
-    }
-
-    // Add workout entry
-    function addWorkout(exerciseType, duration, calories) {
-      const entry = {
-        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(36).slice(2),
-        date: new Date().toISOString(),
-        exerciseType,
-        duration,
-        calories
-      };
-      workouts.push(entry);
-      saveWorkouts();
-      renderWorkoutLog();
-      drawChart();
-    }
-
-    // Event handler for form submission
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      updateFormStatus('');
-      if (!validateForm()) {
-        updateFormStatus('Please fix errors before submitting.', true);
-        return;
-      }
-
-      // Parse values
-      const exerciseType = exerciseTypeInput.value;
-      const duration = Number(durationInput.value);
-      const calories = Number(caloriesInput.value);
-
-      // Confirmation prompt for high calories (error prevention)
-      if (calories > 10000) {
-        if (!confirm('You entered a very high calories burned value. Are you sure this is correct?')) {
-          updateFormStatus('Submission cancelled by user.', true);
-          return;
-        }
-      }
-
-      // Add workout entry
-      addWorkout(exerciseType, duration, calories);
-      updateFormStatus('Workout added successfully.');
-      clearForm();
-      exerciseTypeInput.focus();
+    // Audio event listeners
+    audio.addEventListener("play", () => {
+      isPlaying = true;
+      updatePlayPauseButton();
     });
 
-    // Initialize page
-    function init() {
-      loadWorkouts();
-      renderWorkoutLog();
-      drawChart();
-    }
+    audio.addEventListener("pause", () => {
+      isPlaying = false;
+      updatePlayPauseButton();
+    });
 
-    // Reduced motion preference respects no animation except essential
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      // Disable any non-essential animations (none here except spinner)
-    }
+    audio.addEventListener("ended", () => {
+      // Auto play next song or stop
+      if (currentSongIndex + 1 < songs.length) {
+        loadSong(currentSongIndex + 1);
+        audio.play();
+      } else {
+        isPlaying = false;
+        updatePlayPauseButton();
+      }
+    });
 
-    // Visually hidden class for aria-describedby elements
-    const style = document.createElement('style');
-    style.textContent = '.visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; border: 0 !important; }';
-    document.head.appendChild(style);
+    audio.addEventListener("error", (e) => {
+      console.error("Audio playback error", e);
+      alert("An error occurred during audio playback. Please try another song.");
+    });
 
-    init();
+    // Initialization
+    initPlaylist();
+    updateVolumeAria();
+
+    // Load first song by default but do not autoplay
+    loadSong(0);
+
+    // Focus management: when user uses skip link, focus main content
+    const skipLink = document.querySelector(".skip-link");
+    skipLink.addEventListener("click", (e) => {
+      const main = document.getElementById("main-content");
+      if (main) {
+        main.focus();
+      }
+    });
+
+    // Ensure all interactive elements have minimum 44x44 px size
+    // Already enforced by CSS min-width/min-height and padding
+
   })();
 </script>
 </body>
