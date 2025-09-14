@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Personal Blog | Read Articles and Share Thoughts</title>
-    <meta name="description" content="An accessible personal blog featuring articles, comments, and search functionality">
+    <title>Accessible User Profile | Interactive Profile Page</title>
     <style>
-        /* Reset and Base Styles */
+        /* Base Styles */
         :root {
-            --primary-color: #0056b3;
-            --primary-dark: #003d7a;
-            --secondary-color: #6c757d;
-            --success-color: #28a745;
-            --danger-color: #dc3545;
-            --light-color: #f8f9fa;
-            --dark-color: #343a40;
-            --text-color: #212529;
+            --primary-color: #3a86ff;
+            --primary-dark: #2667cc;
+            --secondary-color: #8338ec;
+            --accent-color: #ff006e;
+            --text-color: #1a1a1a;
             --text-light: #f8f9fa;
-            --border-radius: 0.25rem;
-            --box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            --bg-color: #ffffff;
+            --gray-light: #e9ecef;
+            --gray-medium: #adb5bd;
+            --gray-dark: #495057;
+            --success-color: #38b000;
+            --error-color: #e63946;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
-            --focus-outline: 0 0 0 0.25rem rgba(0, 123, 255, 0.5);
         }
 
         * {
@@ -30,486 +31,293 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: #fff;
+            background-color: var(--bg-color);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 1rem;
-            line-height: 1.2;
-            color: var(--primary-dark);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-        }
-
-        h2 {
-            font-size: 2rem;
-        }
-
-        h3 {
-            font-size: 1.75rem;
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        a {
-            color: var(--primary-color);
-            text-decoration: underline;
-            transition: var(--transition);
-        }
-
-        a:hover, a:focus {
-            color: var(--primary-dark);
-            text-decoration: none;
-        }
-
-        /* Focus Styles */
-        :focus-visible {
-            outline: 3px solid var(--primary-color);
-            outline-offset: 2px;
-            box-shadow: var(--focus-outline);
         }
 
         /* Skip Link */
         .skip-link {
             position: absolute;
-            left: -9999px;
-            top: 0;
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            padding: 1rem;
+            top: -40px;
+            left: 0;
+            background: var(--primary-color);
+            color: white;
+            padding: 8px;
             z-index: 100;
-            text-decoration: none;
+            transition: top 0.3s;
         }
 
         .skip-link:focus {
-            left: 0;
-            right: auto;
-        }
-
-        /* Layout */
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
+            top: 0;
         }
 
         /* Header */
         header {
             background-color: var(--primary-color);
             color: var(--text-light);
-            padding: 1rem 0;
+            padding: 1rem 2rem;
             box-shadow: var(--box-shadow);
         }
 
-        .header-content {
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
         }
 
         .logo {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: var(--text-light);
-            text-decoration: none;
-        }
-
-        .logo:hover, .logo:focus {
-            text-decoration: underline;
         }
 
         /* Navigation */
         nav {
-            position: relative;
+            display: flex;
         }
 
-        .nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            margin-left: auto;
-        }
-
-        .nav-toggle:focus {
-            outline: 3px solid var(--text-light);
-        }
-
-        .nav-menu {
+        .nav-list {
             display: flex;
             list-style: none;
         }
 
-        .nav-menu li {
+        .nav-item {
             margin-left: 1.5rem;
         }
 
-        .nav-menu a {
+        .nav-link {
             color: var(--text-light);
             text-decoration: none;
+            font-weight: 500;
             padding: 0.5rem;
             border-radius: var(--border-radius);
-            display: block;
+            transition: var(--transition);
         }
 
-        .nav-menu a:hover, .nav-menu a:focus {
+        .nav-link:hover,
+        .nav-link:focus {
             background-color: rgba(255, 255, 255, 0.2);
-            text-decoration: underline;
-        }
-
-        .nav-menu a[aria-current="page"] {
-            background-color: rgba(255, 255, 255, 0.3);
-            font-weight: bold;
+            outline: 2px solid white;
         }
 
         /* Main Content */
         main {
             flex: 1;
-            padding: 2rem 0;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
         }
 
-        /* Hero Section */
-        .hero {
-            background-color: var(--light-color);
-            padding: 3rem 0;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .hero h1 {
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
             color: var(--primary-color);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--secondary-color);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 1rem 0;
+            color: var(--primary-dark);
+        }
+
+        p {
             margin-bottom: 1rem;
         }
 
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 800px;
-            margin: 0 auto 1.5rem;
-        }
-
-        /* Search Form */
-        .search-form {
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .search-form label {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        .search-form input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--secondary-color);
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-        }
-
-        .search-form input:focus {
-            border-color: var(--primary-color);
-            box-shadow: var(--focus-outline);
-        }
-
-        .search-form button {
-            position: absolute;
-            right: 0;
-            top: 0;
-            height: 100%;
-            padding: 0 1rem;
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            border: none;
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .search-form button:hover, .search-form button:focus {
-            background-color: var(--primary-dark);
-        }
-
-        /* Blog Posts */
-        .blog-posts {
+        /* Profile Section */
+        .profile-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: 1fr 2fr;
             gap: 2rem;
             margin-bottom: 3rem;
         }
 
-        .post-card {
-            background-color: var(--light-color);
+        @media (max-width: 768px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background-color: var(--gray-light);
             border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-            transition: var(--transition);
-        }
-
-        .post-card:hover, .post-card:focus-within {
-            box-shadow: var(--box-shadow);
-            transform: translateY(-0.25rem);
-        }
-
-        .post-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .post-content {
-            padding: 1.5rem;
-        }
-
-        .post-content h2 {
-            margin-bottom: 0.75rem;
-        }
-
-        .post-meta {
-            color: var(--secondary-color);
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-        }
-
-        .post-excerpt {
-            margin-bottom: 1.5rem;
-        }
-
-        .read-more {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .read-more:hover, .read-more:focus {
-            background-color: var(--primary-dark);
-            text-decoration: none;
-        }
-
-        /* Featured Post */
-        .featured-post {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .featured-post .post-image {
-            height: 100%;
-        }
-
-        .featured-post .post-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        /* Comments Section */
-        .comments-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--secondary-color);
-        }
-
-        .comments-list {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .comment {
-            background-color: var(--light-color);
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 1.5rem;
-        }
-
-        .comment-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            font-size: 0.875rem;
-            color: var(--secondary-color);
-        }
-
-        .comment-author {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .comment-form {
-            background-color: var(--light-color);
             padding: 2rem;
-            border-radius: var(--border-radius);
-        }
-
-        .comment-form h3 {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--secondary-color);
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: var(--focus-outline);
-        }
-
-        textarea.form-control {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            border: none;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .btn:hover, .btn:focus {
-            background-color: var(--primary-dark);
-            text-decoration: none;
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            margin-top: 2rem;
-        }
-
-        .sidebar-section {
-            background-color: var(--light-color);
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 2rem;
-        }
-
-        .sidebar-section h3 {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        .categories-list, .tags-list {
-            list-style: none;
-        }
-
-        .categories-list li, .tags-list li {
-            margin-bottom: 0.5rem;
-        }
-
-        .categories-list a, .tags-list a {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            font-size: 0.875rem;
-        }
-
-        .categories-list a:hover, .categories-list a:focus,
-        .tags-list a:hover, .tags-list a:focus {
-            background-color: var(--primary-dark);
-            text-decoration: underline;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--dark-color);
-            color: var(--text-light);
-            padding: 2rem 0;
+            box-shadow: var(--box-shadow);
             text-align: center;
         }
 
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary-color);
+            margin: 0 auto 1rem;
         }
 
+        .profile-name {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-title {
+            color: var(--gray-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Follow Button */
+        .follow-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+            min-width: 150px;
+            min-height: 44px;
+        }
+
+        .follow-btn:hover,
+        .follow-btn:focus {
+            background-color: var(--primary-dark);
+            outline: 3px solid var(--accent-color);
+        }
+
+        .follow-btn:active {
+            transform: scale(0.98);
+        }
+
+        .follow-btn.following {
+            background-color: var(--success-color);
+        }
+
+        /* Social Links */
         .social-links {
             display: flex;
-            list-style: none;
-            margin-bottom: 1.5rem;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .social-links li {
-            margin: 0 0.5rem;
-        }
-
-        .social-links a {
+        .social-link {
             display: flex;
             align-items: center;
             justify-content: center;
             width: 44px;
             height: 44px;
-            background-color: var(--secondary-color);
-            color: var(--text-light);
+            background-color: var(--bg-color);
             border-radius: 50%;
+            color: var(--primary-color);
             text-decoration: none;
             transition: var(--transition);
         }
 
-        .social-links a:hover, .social-links a:focus {
+        .social-link:hover,
+        .social-link:focus {
             background-color: var(--primary-color);
-            transform: translateY(-0.25rem);
+            color: white;
+            outline: 2px solid var(--accent-color);
         }
 
-        .copyright {
-            font-size: 0.875rem;
-            color: rgba(255, 255, 255, 0.7);
+        .social-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Profile Bio */
+        .profile-bio {
+            background-color: var(--gray-light);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .bio-text {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        /* Avatar Gallery */
+        .avatar-gallery {
+            margin: 3rem 0;
+        }
+
+        .gallery-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-nav {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .gallery-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-btn:hover,
+        .gallery-btn:focus {
+            background-color: var(--primary-dark);
+            outline: 2px solid var(--accent-color);
+        }
+
+        .gallery-btn:disabled {
+            background-color: var(--gray-medium);
+            cursor: not-allowed;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-img,
+        .gallery-item:focus .gallery-img {
+            transform: scale(1.05);
         }
 
         /* Modal */
@@ -519,7 +327,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.8);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -529,126 +337,130 @@
             transition: var(--transition);
         }
 
-        .modal.show {
+        .modal.open {
             opacity: 1;
             visibility: visible;
         }
 
         .modal-content {
-            background-color: #fff;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
+            background-color: var(--bg-color);
             border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            overflow-y: auto;
-            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow: auto;
             position: relative;
+            padding: 2rem;
+        }
+
+        .modal-img {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: var(--border-radius);
         }
 
         .modal-close {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: none;
+            background-color: var(--error-color);
+            color: white;
             border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .modal-close:focus {
-            outline: 3px solid var(--primary-color);
-        }
-
-        /* Loading Indicator */
-        .loading {
-            display: inline-block;
-            width: 2rem;
-            height: 2rem;
-            border: 0.25rem solid rgba(0, 86, 179, 0.2);
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            border-top-color: var(--primary-color);
-            animation: spin 1s ease-in-out infinite;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .modal-close:hover,
+        .modal-close:focus {
+            background-color: #c1121f;
+            outline: 2px solid var(--accent-color);
         }
 
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .featured-post {
-                grid-template-columns: 1fr;
-            }
+        /* Stats Section */
+        .stats-section {
+            margin: 3rem 0;
         }
 
-        @media (max-width: 768px) {
-            .nav-toggle {
-                display: block;
-            }
-
-            .nav-menu {
-                position: absolute;
-                top: 100%;
-                right: 0;
-                background-color: var(--primary-dark);
-                flex-direction: column;
-                width: 100%;
-                max-width: 300px;
-                padding: 1rem;
-                border-radius: 0 0 var(--border-radius) var(--border-radius);
-                box-shadow: var(--box-shadow);
-                opacity: 0;
-                visibility: hidden;
-                transform: translateY(-10px);
-                transition: var(--transition);
-            }
-
-            .nav-menu.show {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-
-            .nav-menu li {
-                margin: 0;
-                margin-bottom: 0.5rem;
-            }
-
-            .nav-menu a {
-                padding: 0.75rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            h2 {
-                font-size: 1.75rem;
-            }
-
-            h3 {
-                font-size: 1.5rem;
-            }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
         }
 
-        @media (max-width: 576px) {
-            .blog-posts {
-                grid-template-columns: 1fr;
-            }
+        .stat-card {
+            background-color: var(--gray-light);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+        }
 
-            .hero {
-                padding: 2rem 0;
-            }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
 
-            .hero h1 {
-                font-size: 1.75rem;
-            }
+        .stat-label {
+            color: var(--gray-dark);
+            font-size: 1.1rem;
+        }
 
-            .hero p {
-                font-size: 1rem;
-            }
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover,
+        .footer-link:focus {
+            text-decoration: underline;
+            outline: none;
+        }
+
+        .copyright {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Focus Styles */
+        a:focus,
+        button:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 3px solid var(--accent-color);
+            outline-offset: 2px;
         }
 
         /* Reduced Motion */
@@ -659,13 +471,33 @@
                 transition-duration: 0.01ms !important;
                 scroll-behavior: auto !important;
             }
+        }
 
-            .post-card:hover, .post-card:focus-within {
-                transform: none;
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
             }
 
-            .social-links a:hover, .social-links a:focus {
-                transform: none;
+            nav {
+                margin-top: 1rem;
+            }
+
+            .nav-list {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-item {
+                margin: 0.5rem 0;
+            }
+
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
         }
     </style>
@@ -676,20 +508,14 @@
 
     <!-- Header -->
     <header>
-        <div class="container header-content">
-            <a href="#" class="logo">Accessible Blog</a>
-            
-            <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="Toggle navigation">
-                ☰
-            </button>
-            
-            <nav>
-                <ul class="nav-menu" id="nav-menu">
-                    <li><a href="#" aria-current="page">Home</a></li>
-                    <li><a href="#">Articles</a></li>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">About</a></li>
-                    <li><a href="#">Contact</a></li>
+        <div class="header-container">
+            <div class="logo">Accessible Profiles</div>
+            <nav aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Explore</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -697,376 +523,345 @@
 
     <!-- Main Content -->
     <main id="main-content">
-        <div class="container">
-            <!-- Hero Section -->
-            <section class="hero" aria-labelledby="hero-heading">
-                <h1 id="hero-heading">Welcome to My Accessible Blog</h1>
-                <p>Discover insightful articles on web accessibility, development, and design.</p>
+        <h1>User Profile</h1>
+        
+        <div class="profile-container">
+            <!-- Profile Card -->
+            <section class="profile-card" aria-labelledby="profile-heading">
+                <h2 id="profile-heading" class="visually-hidden">Profile Information</h2>
+                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Profile photo of Jane Smith" class="profile-avatar">
+                <h3 class="profile-name">Jane Smith</h3>
+                <p class="profile-title">UX Designer & Accessibility Specialist</p>
                 
-                <!-- Search Form -->
-                <form class="search-form" role="search">
-                    <label for="search-input">Search articles</label>
-                    <input type="search" id="search-input" placeholder="Search articles..." aria-label="Search articles">
-                    <button type="submit" aria-label="Submit search">
-                        <span aria-hidden="true">🔍</span>
-                    </button>
-                </form>
-            </section>
-
-            <!-- Featured Post -->
-            <section aria-labelledby="featured-post-heading">
-                <h2 id="featured-post-heading" class="sr-only">Featured Post</h2>
-                <div class="blog-posts">
-                    <article class="post-card featured-post">
-                        <img src="https://source.unsplash.com/random/800x400/?accessibility" alt="A person using a screen reader to browse the web" class="post-image">
-                        <div class="post-content">
-                            <h3><a href="#">The Importance of Web Accessibility in Modern Development</a></h3>
-                            <div class="post-meta">
-                                <span>Published on <time datetime="2023-05-15">May 15, 2023</time></span>
-                                <span>by <a href="#" aria-label="Post by John Doe">John Doe</a></span>
-                            </div>
-                            <p class="post-excerpt">Explore why web accessibility should be a priority for all developers and how implementing accessible practices benefits everyone.</p>
-                            <a href="#" class="read-more">Read Full Article</a>
-                        </div>
-                    </article>
+                <button class="follow-btn" id="followButton" aria-live="polite">
+                    Follow
+                </button>
+                
+                <div class="social-links">
+                    <a href="#" class="social-link" aria-label="Twitter profile">
+                        <span class="social-icon" aria-hidden="true">🐦</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn profile">
+                        <span class="social-icon" aria-hidden="true">🔗</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="GitHub profile">
+                        <span class="social-icon" aria-hidden="true">💻</span>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram profile">
+                        <span class="social-icon" aria-hidden="true">📷</span>
+                    </a>
                 </div>
             </section>
-
-            <!-- Recent Posts -->
-            <section aria-labelledby="recent-posts-heading">
-                <h2 id="recent-posts-heading">Recent Articles</h2>
-                <div class="blog-posts">
-                    <!-- Post 1 -->
-                    <article class="post-card">
-                        <img src="https://source.unsplash.com/random/400x300/?javascript" alt="JavaScript code on a computer screen" class="post-image">
-                        <div class="post-content">
-                            <h3><a href="#">Building Accessible JavaScript Components</a></h3>
-                            <div class="post-meta">
-                                <span>Published on <time datetime="2023-05-10">May 10, 2023</time></span>
-                                <span>by <a href="#" aria-label="Post by Jane Smith">Jane Smith</a></span>
-                            </div>
-                            <p class="post-excerpt">Learn how to create interactive components that work for all users, including those using assistive technologies.</p>
-                            <a href="#" class="read-more">Read More</a>
-                        </div>
-                    </article>
-
-                    <!-- Post 2 -->
-                    <article class="post-card">
-                        <img src="https://source.unsplash.com/random/400x300/?design" alt="Colorful design elements on a table" class="post-image">
-                        <div class="post-content">
-                            <h3><a href="#">Color Contrast and Accessibility</a></h3>
-                            <div class="post-meta">
-                                <span>Published on <time datetime="2023-05-05">May 5, 2023</time></span>
-                                <span>by <a href="#" aria-label="Post by Alex Johnson">Alex Johnson</a></span>
-                            </div>
-                            <p class="post-excerpt">Understanding WCAG color contrast requirements and how to implement them in your designs.</p>
-                            <a href="#" class="read-more">Read More</a>
-                        </div>
-                    </article>
-
-                    <!-- Post 3 -->
-                    <article class="post-card">
-                        <img src="https://source.unsplash.com/random/400x300/?testing" alt="Hands typing on a keyboard with testing tools on screen" class="post-image">
-                        <div class="post-content">
-                            <h3><a href="#">Testing for Accessibility</a></h3>
-                            <div class="post-meta">
-                                <span>Published on <time datetime="2023-04-28">April 28, 2023</time></span>
-                                <span>by <a href="#" aria-label="Post by Sarah Williams">Sarah Williams</a></span>
-                            </div>
-                            <p class="post-excerpt">A comprehensive guide to accessibility testing tools and techniques for developers and QA teams.</p>
-                            <a href="#" class="read-more">Read More</a>
-                        </div>
-                    </article>
+            
+            <!-- Profile Bio -->
+            <section class="profile-bio" aria-labelledby="bio-heading">
+                <h2 id="bio-heading">About Me</h2>
+                <div class="bio-text">
+                    <p>Hello! I'm Jane, a passionate UX designer with over 8 years of experience creating accessible digital experiences. I specialize in inclusive design and accessibility compliance, helping organizations build products that everyone can use.</p>
+                    <p>My journey in design began when I realized how many digital products excluded people with disabilities. Since then, I've made it my mission to advocate for accessibility in every project I work on.</p>
+                    <p>When I'm not designing, you can find me hiking in the mountains, reading science fiction, or experimenting with new recipes in the kitchen.</p>
                 </div>
-            </section>
-
-            <!-- Comments Section -->
-            <section class="comments-section" aria-labelledby="comments-heading">
-                <h2 id="comments-heading">Comments</h2>
                 
-                <!-- Comments List -->
-                <ul class="comments-list">
-                    <li class="comment">
-                        <div class="comment-header">
-                            <span class="comment-author">Michael Brown</span>
-                            <time datetime="2023-05-12T14:30">May 12, 2023 at 2:30 PM</time>
-                        </div>
-                        <div class="comment-body">
-                            <p>Great article! I've been implementing these techniques in my projects and have seen significant improvements in accessibility testing results.</p>
-                        </div>
-                    </li>
-                    
-                    <li class="comment">
-                        <div class="comment-header">
-                            <span class="comment-author">Emily Chen</span>
-                            <time datetime="2023-05-10T09:15">May 10, 2023 at 9:15 AM</time>
-                        </div>
-                        <div class="comment-body">
-                            <p>Could you provide more examples of accessible modal dialogs? I'm particularly interested in the focus management aspects.</p>
-                        </div>
-                    </li>
+                <h3>Skills</h3>
+                <ul>
+                    <li>Accessibility Auditing (WCAG 2.2, Section 508)</li>
+                    <li>User Research & Testing</li>
+                    <li>UI/UX Design</li>
+                    <li>HTML/CSS/JavaScript</li>
+                    <li>Assistive Technology Expertise</li>
                 </ul>
-                
-                <!-- Comment Form -->
-                <div class="comment-form" aria-labelledby="comment-form-heading">
-                    <h3 id="comment-form-heading">Leave a Comment</h3>
-                    <form id="commentForm">
-                        <div class="form-group">
-                            <label for="comment-name">Name <span class="required">*</span></label>
-                            <input type="text" id="comment-name" class="form-control" required aria-required="true">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="comment-email">Email <span class="required">*</span></label>
-                            <input type="email" id="comment-email" class="form-control" required aria-required="true">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="comment-text">Comment <span class="required">*</span></label>
-                            <textarea id="comment-text" class="form-control" required aria-required="true"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-block">Post Comment</button>
-                    </form>
-                </div>
             </section>
-
-            <!-- Sidebar -->
-            <aside class="sidebar" aria-labelledby="sidebar-heading">
-                <h2 id="sidebar-heading" class="sr-only">Sidebar</h2>
-                
-                <!-- Categories -->
-                <div class="sidebar-section" aria-labelledby="categories-heading">
-                    <h3 id="categories-heading">Categories</h3>
-                    <ul class="categories-list">
-                        <li><a href="#" aria-label="View all articles in Accessibility">Accessibility</a></li>
-                        <li><a href="#" aria-label="View all articles in Development">Development</a></li>
-                        <li><a href="#" aria-label="View all articles in Design">Design</a></li>
-                        <li><a href="#" aria-label="View all articles in Testing">Testing</a></li>
-                        <li><a href="#" aria-label="View all articles in Tools">Tools</a></li>
-                    </ul>
+        </div>
+        
+        <!-- Avatar Gallery -->
+        <section class="avatar-gallery" aria-labelledby="gallery-heading">
+            <div class="gallery-title">
+                <h2 id="gallery-heading">Avatar Gallery</h2>
+                <div class="gallery-nav">
+                    <button class="gallery-btn prev-btn" aria-label="Previous image" disabled>
+                        &lt;
+                    </button>
+                    <button class="gallery-btn next-btn" aria-label="Next image">
+                        &gt;
+                    </button>
                 </div>
-                
-                <!-- Tags -->
-                <div class="sidebar-section" aria-labelledby="tags-heading">
-                    <h3 id="tags-heading">Popular Tags</h3>
-                    <ul class="tags-list">
-                        <li><a href="#" aria-label="View articles tagged WCAG">WCAG</a></li>
-                        <li><a href="#" aria-label="View articles tagged ARIA">ARIA</a></li>
-                        <li><a href="#" aria-label="View articles tagged JavaScript">JavaScript</a></li>
-                        <li><a href="#" aria-label="View articles tagged CSS">CSS</a></li>
-                        <li><a href="#" aria-label="View articles tagged HTML">HTML</a></li>
-                        <li><a href="#" aria-label="View articles tagged Screen Readers">Screen Readers</a></li>
-                    </ul>
+            </div>
+            
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Images will be added via JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Stats Section -->
+        <section class="stats-section" aria-labelledby="stats-heading">
+            <h2 id="stats-heading">Profile Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="projectsCount">47</div>
+                    <div class="stat-label">Projects</div>
                 </div>
-                
-                <!-- Newsletter -->
-                <div class="sidebar-section" aria-labelledby="newsletter-heading">
-                    <h3 id="newsletter-heading">Newsletter</h3>
-                    <p>Subscribe to receive updates on new articles and accessibility tips.</p>
-                    <form class="newsletter-form">
-                        <div class="form-group">
-                            <label for="newsletter-email" class="sr-only">Email address</label>
-                            <input type="email" id="newsletter-email" class="form-control" placeholder="Your email" required aria-required="true">
-                        </div>
-                        <button type="submit" class="btn btn-block">Subscribe</button>
-                    </form>
+                <div class="stat-card">
+                    <div class="stat-number" id="followersCount">1.2k</div>
+                    <div class="stat-label">Followers</div>
                 </div>
-            </aside>
+                <div class="stat-card">
+                    <div class="stat-number" id="followingCount">356</div>
+                    <div class="stat-label">Following</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="yearsExp">8</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Modal -->
+        <div class="modal" id="imageModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
+            <div class="modal-content">
+                <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+                <h2 id="modalTitle" class="visually-hidden">Image Viewer</h2>
+                <img src="" alt="" class="modal-img" id="modalImage">
+            </div>
         </div>
     </main>
-
+    
     <!-- Footer -->
     <footer>
-        <div class="container footer-content">
-            <ul class="social-links">
-                <li><a href="#" aria-label="Follow us on Twitter"><span aria-hidden="true">🐦</span></a></li>
-                <li><a href="#" aria-label="Follow us on Facebook"><span aria-hidden="true">📘</span></a></li>
-                <li><a href="#" aria-label="Follow us on LinkedIn"><span aria-hidden="true">🔗</span></a></li>
-                <li><a href="#" aria-label="Follow us on GitHub"><span aria-hidden="true">💻</span></a></li>
-            </ul>
-            
+        <div class="footer-content">
+            <p>Accessible Profiles - Making the web inclusive for everyone</p>
             <nav aria-label="Footer navigation">
-                <ul style="display: flex; justify-content: center; list-style: none; margin-bottom: 1.5rem;">
-                    <li style="margin: 0 1rem;"><a href="#" style="color: var(--text-light);">Privacy Policy</a></li>
-                    <li style="margin: 0 1rem;"><a href="#" style="color: var(--text-light);">Terms of Service</a></li>
-                    <li style="margin: 0 1rem;"><a href="#" style="color: var(--text-light);">Accessibility Statement</a></li>
-                    <li style="margin: 0 1rem;"><a href="#" style="color: var(--text-light);">Contact</a></li>
-                </ul>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms of Service</a>
+                    <a href="#" class="footer-link">Accessibility Statement</a>
+                    <a href="#" class="footer-link">Contact Us</a>
+                </div>
             </nav>
-            
-            <p class="copyright">&copy; 2023 Accessible Blog. All rights reserved.</p>
+            <p class="copyright">&copy; 2023 Accessible Profiles. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Modal -->
-    <div class="modal" id="searchModal" aria-hidden="true" aria-labelledby="searchModalHeading">
-        <div class="modal-content" role="document">
-            <button class="modal-close" aria-label="Close search modal">&times;</button>
-            <h2 id="searchModalHeading">Search Results</h2>
-            <div id="searchResults">
-                <!-- Search results will be inserted here -->
-                <p>No search results found.</p>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Document Ready
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile Navigation Toggle
-            const navToggle = document.querySelector('.nav-toggle');
-            const navMenu = document.querySelector('.nav-menu');
+            // Follow Button Functionality
+            const followButton = document.getElementById('followButton');
+            let isFollowing = false;
             
-            navToggle.addEventListener('click', function() {
-                const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                this.setAttribute('aria-expanded', !isExpanded);
-                navMenu.classList.toggle('show');
-            });
-            
-            // Close mobile menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
-                    navToggle.setAttribute('aria-expanded', 'false');
-                    navMenu.classList.remove('show');
+            followButton.addEventListener('click', function() {
+                isFollowing = !isFollowing;
+                if (isFollowing) {
+                    followButton.textContent = 'Following';
+                    followButton.classList.add('following');
+                    followButton.setAttribute('aria-label', 'Unfollow Jane Smith');
+                } else {
+                    followButton.textContent = 'Follow';
+                    followButton.classList.remove('following');
+                    followButton.setAttribute('aria-label', 'Follow Jane Smith');
                 }
             });
             
-            // Search Form Submission
-            const searchForm = document.querySelector('.search-form');
-            const searchModal = document.getElementById('searchModal');
-            const searchModalClose = document.querySelector('.modal-close');
+            // Avatar Gallery
+            const galleryImages = [
+                { src: 'https://randomuser.me/api/portraits/women/65.jpg', alt: 'Jane Smith professional headshot' },
+                { src: 'https://randomuser.me/api/portraits/women/65.jpg?1', alt: 'Jane Smith at a conference speaking' },
+                { src: 'https://randomuser.me/api/portraits/women/65.jpg?2', alt: 'Jane Smith working on a laptop' },
+                { src: 'https://randomuser.me/api/portraits/women/65.jpg?3', alt: 'Jane Smith hiking in the mountains' },
+                { src: 'https://randomuser.me/api/portraits/women/65.jpg?4', alt: 'Jane Smith at a design workshop' },
+                { src: 'https://randomuser.me/api/portraits/women/65.jpg?5', alt: 'Jane Smith with her dog in the park' }
+            ];
             
-            searchForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const searchInput = document.getElementById('search-input');
-                const searchTerm = searchInput.value.trim();
+            const galleryGrid = document.getElementById('galleryGrid');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalClose = document.getElementById('modalClose');
+            
+            let currentImageIndex = 0;
+            
+            // Populate gallery
+            galleryImages.forEach((image, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.tabIndex = 0;
+                galleryItem.setAttribute('role', 'button');
+                galleryItem.setAttribute('aria-label', `View ${image.alt}`);
                 
-                if (searchTerm) {
-                    // In a real app, this would fetch search results
-                    const searchResults = document.getElementById('searchResults');
-                    searchResults.innerHTML = `
-                        <p>Search results for: <strong>${searchTerm}</strong></p>
-                        <ul>
-                            <li><a href="#">The Importance of Web Accessibility in Modern Development</a></li>
-                            <li><a href="#">Building Accessible JavaScript Components</a></li>
-                            <li><a href="#">Color Contrast and Accessibility</a></li>
-                        </ul>
-                    `;
-                    
-                    // Show modal
-                    searchModal.classList.add('show');
-                    searchModal.setAttribute('aria-hidden', 'false');
-                    
-                    // Focus on first result when modal opens
-                    setTimeout(() => {
-                        const firstResult = searchResults.querySelector('a');
-                        if (firstResult) {
-                            firstResult.focus();
-                        }
-                    }, 100);
-                }
-            });
-            
-            // Close modal
-            searchModalClose.addEventListener('click', function() {
-                searchModal.classList.remove('show');
-                searchModal.setAttribute('aria-hidden', 'true');
-            });
-            
-            // Close modal when clicking outside content
-            searchModal.addEventListener('click', function(e) {
-                if (e.target === searchModal) {
-                    searchModal.classList.remove('show');
-                    searchModal.setAttribute('aria-hidden', 'true');
-                }
-            });
-            
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && searchModal.classList.contains('show')) {
-                    searchModal.classList.remove('show');
-                    searchModal.setAttribute('aria-hidden', 'true');
-                }
-            });
-            
-            // Comment Form Submission
-            const commentForm = document.getElementById('commentForm');
-            
-            commentForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+                const img = document.createElement('img');
+                img.src = image.src;
+                img.alt = image.alt;
+                img.className = 'gallery-img';
                 
-                const name = document.getElementById('comment-name').value.trim();
-                const email = document.getElementById('comment-email').value.trim();
-                const comment = document.getElementById('comment-text').value.trim();
+                galleryItem.appendChild(img);
+                galleryGrid.appendChild(galleryItem);
                 
-                // Simple validation
-                if (!name || !email || !comment) {
-                    alert('Please fill in all required fields.');
-                    return;
-                }
-                
-                // In a real app, this would send the comment to a server
-                const commentsList = document.querySelector('.comments-list');
-                const newComment = document.createElement('li');
-                newComment.className = 'comment';
-                newComment.innerHTML = `
-                    <div class="comment-header">
-                        <span class="comment-author">${name}</span>
-                        <time datetime="${new Date().toISOString()}">${new Date().toLocaleString()}</time>
-                    </div>
-                    <div class="comment-body">
-                        <p>${comment}</p>
-                    </div>
-                `;
-                
-                commentsList.prepend(newComment);
-                
-                // Reset form
-                commentForm.reset();
-                
-                // Announce success to screen readers
-                const status = document.createElement('div');
-                status.setAttribute('role', 'status');
-                status.setAttribute('aria-live', 'polite');
-                status.className = 'sr-only';
-                status.textContent = 'Your comment has been posted successfully.';
-                document.body.appendChild(status);
-                setTimeout(() => status.remove(), 5000);
-            });
-            
-            // Newsletter Form Submission
-            const newsletterForm = document.querySelector('.newsletter-form');
-            
-            newsletterForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('newsletter-email').value.trim();
-                
-                if (!email) {
-                    alert('Please enter your email address.');
-                    return;
-                }
-                
-                // In a real app, this would subscribe the user
-                alert(`Thank you for subscribing with ${email}! You'll receive our next newsletter.`);
-                newsletterForm.reset();
-            });
-            
-            // Lazy loading for images (would be more robust in a real app)
-            const lazyImages = document.querySelectorAll('img[data-src]');
-            
-            const lazyLoad = function() {
-                lazyImages.forEach(img => {
-                    if (img.getBoundingClientRect().top < window.innerHeight + 100) {
-                        img.src = img.getAttribute('data-src');
-                        img.removeAttribute('data-src');
+                // Click handler for gallery items
+                galleryItem.addEventListener('click', () => openModal(index));
+                galleryItem.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openModal(index);
                     }
                 });
-            };
+            });
             
-            window.addEventListener('load', lazyLoad);
-            window.addEventListener('scroll', lazyLoad);
-            window.addEventListener('resize', lazyLoad);
+            // Modal functions
+            function openModal(index) {
+                currentImageIndex = index;
+                modalImage.src = galleryImages[index].src;
+                modalImage.alt = galleryImages[index].alt;
+                modal.classList.add('open');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                
+                // Focus trap for modal
+                modalClose.focus();
+            }
+            
+            function closeModal() {
+                modal.classList.remove('open');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                
+                // Return focus to the gallery item that opened the modal
+                const galleryItems = document.querySelectorAll('.gallery-item');
+                if (galleryItems[currentImageIndex]) {
+                    galleryItems[currentImageIndex].focus();
+                }
+            }
+            
+            function navigateGallery(direction) {
+                if (direction === 'prev' && currentImageIndex > 0) {
+                    currentImageIndex--;
+                } else if (direction === 'next' && currentImageIndex < galleryImages.length - 1) {
+                    currentImageIndex++;
+                }
+                
+                modalImage.src = galleryImages[currentImageIndex].src;
+                modalImage.alt = galleryImages[currentImageIndex].alt;
+                
+                // Update button states
+                prevBtn.disabled = currentImageIndex === 0;
+                nextBtn.disabled = currentImageIndex === galleryImages.length - 1;
+            }
+            
+            // Event listeners
+            modalClose.addEventListener('click', closeModal);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (modal.classList.contains('open')) {
+                    if (e.key === 'Escape') {
+                        closeModal();
+                    } else if (e.key === 'ArrowLeft') {
+                        navigateGallery('prev');
+                    } else if (e.key === 'ArrowRight') {
+                        navigateGallery('next');
+                    }
+                }
+            });
+            
+            // Gallery navigation buttons
+            prevBtn.addEventListener('click', () => {
+                if (currentImageIndex > 0) {
+                    currentImageIndex--;
+                    const galleryItems = document.querySelectorAll('.gallery-item');
+                    galleryItems[currentImageIndex].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                    
+                    // Update button states
+                    prevBtn.disabled = currentImageIndex === 0;
+                    nextBtn.disabled = false;
+                }
+            });
+            
+            nextBtn.addEventListener('click', () => {
+                if (currentImageIndex < galleryImages.length - 1) {
+                    currentImageIndex++;
+                    const galleryItems = document.querySelectorAll('.gallery-item');
+                    galleryItems[currentImageIndex].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                    
+                    // Update button states
+                    nextBtn.disabled = currentImageIndex === galleryImages.length - 1;
+                    prevBtn.disabled = false;
+                }
+            });
+            
+            // Animate stats
+            function animateStats() {
+                const projectsCount = document.getElementById('projectsCount');
+                const followersCount = document.getElementById('followersCount');
+                const followingCount = document.getElementById('followingCount');
+                const yearsExp = document.getElementById('yearsExp');
+                
+                animateValue(projectsCount, 0, 47, 2000);
+                animateValue(followersCount, 0, 1200, 2000);
+                animateValue(followingCount, 0, 356, 2000);
+                animateValue(yearsExp, 0, 8, 2000);
+            }
+            
+            function animateValue(element, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const value = Math.floor(progress * (end - start) + start);
+                    
+                    if (element === followersCount) {
+                        element.textContent = value >= 1000 ? (value/1000).toFixed(1) + 'k' : value;
+                    } else {
+                        element.textContent = value;
+                    }
+                    
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+            
+            // Initialize animations when stats section is in view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateStats();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(document.querySelector('.stats-section'));
+            
+            // Helper function for visually hidden elements
+            function createVisuallyHidden() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .visually-hidden {
+                        position: absolute;
+                        width: 1px;
+                        height: 1px;
+                        padding: 0;
+                        margin: -1px;
+                        overflow: hidden;
+                        clip: rect(0, 0, 0, 0);
+                        white-space: nowrap;
+                        border: 0;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            createVisuallyHidden();
         });
     </script>
 </body>
