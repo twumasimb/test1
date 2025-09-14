@@ -1,1237 +1,2196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Accessible Product Cards Showcase – Interactive, Colorful, and WCAG 2.2 AAA Compliant</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Accessibility: User can override colors via their own stylesheets -->
-  <meta name="color-scheme" content="light dark">
-  <style>
-    :root {
-      /* Color palette: Vibrant, high-contrast, meets 7:1+ ratios */
-      --bg-main: #fff;
-      --bg-alt: #f7f7fa;
-      --primary: #0548a8; /* deep blue, #fff contrast 9:1 */
-      --secondary: #e03616; /* strong red, #fff contrast 8.1:1 */
-      --accent: #0ca678; /* teal, #fff contrast 8.2:1 */
-      --focus: #ffd600; /* bright yellow, #0548a8 contrast 9.7:1 */
-      --text-main: #101820; /* near-black, on white 17:1 */
-      --text-inverse: #fff;
-      --card-bg: #ffffff;
-      --card-shadow: rgba(5,72,168,0.10);
-      --border-radius: 1.25rem;
-      --card-border: #0ca678;
-      --card-border-hover: #e03616;
-      --icon-bg: #0548a8;
-      --icon-fg: #ffd600;
-      --focus-outline: 3px solid var(--focus);
-      --skip-link-bg: #0548a8;
-      --skip-link-fg: #ffd600;
-      --skip-link-focus-bg: #ffd600;
-      --skip-link-focus-fg: #0548a8;
-      --link-hover: #0ca678;
-      --nav-bg: #0ca678;
-      --nav-link-fg: #fff;
-      --nav-link-hover-bg: #e03616;
-      --nav-link-hover-fg: #fff;
-      --footer-bg: #0548a8;
-      --footer-fg: #fff;
-      --focus-indicator-thickness: 3px;
-      --min-touch: 44px;
-      --line-height: 1.6;
-      --para-spacing: 2.4em;
-      --font-size-base: 1.125rem;
-      --font-size-large: 1.375rem;
-      --font-size-small: 1rem;
-      --max-content-width: 68ch;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskReward - Create, Organize, and Track Your Daily Tasks</title>
+    <style>
+        /* CSS Reset and Base Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg-main: #101820;
-        --bg-alt: #1a2330;
-        --primary: #ffd600;
-        --secondary: #ff8a65;
-        --accent: #4dd0e1;
-        --focus: #0ca678;
-        --text-main: #fff;
-        --text-inverse: #101820;
-        --card-bg: #232b38;
-        --card-shadow: rgba(12,166,120,0.10);
-        --card-border: #ffd600;
-        --card-border-hover: #e03616;
-        --icon-bg: #ffd600;
-        --icon-fg: #101820;
-        --skip-link-bg: #ffd600;
-        --skip-link-fg: #101820;
-        --skip-link-focus-bg: #101820;
-        --skip-link-focus-fg: #ffd600;
-        --link-hover: #4dd0e1;
-        --nav-bg: #0548a8;
-        --nav-link-fg: #ffd600;
-        --nav-link-hover-bg: #e03616;
-        --nav-link-hover-fg: #fff;
-        --footer-bg: #232b38;
-        --footer-fg: #ffd600;
-      }
-    }
+        /* Enhanced Focus Styles - AAA Compliance */
+        :focus {
+            outline: 3px solid #0066CC;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px #FFFFFF;
+        }
 
-    html {
-      font-size: 100%;
-      background: var(--bg-main);
-      color: var(--text-main);
-      scroll-behavior: smooth;
-      line-height: var(--line-height);
-    }
+        /* Respect user's motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      font-size: var(--font-size-base);
-      background: var(--bg-main);
-      color: var(--text-main);
-      min-width: 320px;
-    }
+        html {
+            font-size: 100%;
+            scroll-behavior: smooth;
+        }
 
-    /* Skip Link */
-    .skip-link {
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: var(--skip-link-bg);
-      color: var(--skip-link-fg);
-      padding: 0.75em 1.25em;
-      z-index: 1000;
-      transform: translateY(-120%);
-      transition: transform 0.2s;
-      border-radius: 0 0 1em 1em;
-      font-weight: bold;
-      text-decoration: none;
-      outline: none;
-      font-size: 1.125em;
-    }
-    .skip-link:focus, .skip-link:active {
-      transform: translateY(0);
-      background: var(--skip-link-focus-bg);
-      color: var(--skip-link-focus-fg);
-      box-shadow: 0 0 0 4px var(--focus);
-    }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.6;
+            color: #121212;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            /* AAA compliance for text presentation */
+            line-height: 1.5;
+            letter-spacing: 0.12px;
+            word-spacing: 0.16px;
+        }
 
-    /* Header and Navigation */
-    header {
-      background: linear-gradient(90deg, var(--primary) 70%, var(--accent) 100%);
-      color: var(--text-inverse);
-      padding: 0;
-    }
-    .header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.5em 1em 0.5em 1em;
-      display: flex;
-      flex-direction: column;
-      gap: 1em;
-    }
-    .site-title {
-      font-size: 2.25rem;
-      margin: 0;
-      font-weight: bold;
-      letter-spacing: 0.03em;
-      color: var(--text-inverse);
-      line-height: 1.1;
-    }
-    .site-desc {
-      font-size: 1.125rem;
-      margin: 0 0 0.5em 0;
-      color: var(--text-inverse);
-      max-width: 45ch;
-    }
-    nav[aria-label] {
-      background: var(--nav-bg);
-      border-radius: 0 0 1.5em 1.5em;
-      margin-top: 0.5em;
-    }
-    .main-nav-list {
-      list-style: none;
-      margin: 0;
-      padding: 0.5em 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5em;
-      justify-content: flex-start;
-    }
-    .main-nav-list li {
-      margin: 0;
-    }
-    .main-nav-link {
-      display: inline-block;
-      min-width: var(--min-touch);
-      min-height: var(--min-touch);
-      padding: 0.5em 1.25em;
-      color: var(--nav-link-fg);
-      background: none;
-      border: none;
-      font-size: 1.125em;
-      font-weight: 600;
-      border-radius: 0.75em;
-      text-decoration: none;
-      transition: background 0.2s, color 0.2s;
-      outline: none;
-      cursor: pointer;
-      position: relative;
-    }
-    .main-nav-link:focus-visible {
-      outline: var(--focus-outline);
-      outline-offset: 2px;
-      z-index: 2;
-    }
-    .main-nav-link[aria-current="page"], .main-nav-link.active {
-      background: var(--nav-link-hover-bg);
-      color: var(--nav-link-hover-fg);
-      text-decoration: underline;
-    }
-    .main-nav-link:hover, .main-nav-link:active {
-      background: var(--nav-link-hover-bg);
-      color: var(--nav-link-hover-fg);
-    }
+        p {
+            margin-bottom: 1.5em;
+            max-width: 80ch; /* AAA compliance - no more than 80 characters per line */
+        }
 
-    /* Breadcrumbs */
-    nav[aria-label="Breadcrumb"] {
-      background: var(--bg-alt);
-      padding: 0.5em 1em;
-      margin: 0;
-      font-size: 1rem;
-      border-bottom: 2px solid var(--accent);
-    }
-    .breadcrumb-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5em;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      align-items: center;
-    }
-    .breadcrumb-list li {
-      display: flex;
-      align-items: center;
-      gap: 0.25em;
-    }
-    .breadcrumb-list li:not(:last-child)::after {
-      content: "›";
-      margin: 0 0.5em;
-      color: var(--accent);
-      font-size: 1.2em;
-      font-weight: bold;
-    }
-    .breadcrumb-link {
-      color: var(--primary);
-      text-decoration: underline;
-      background: none;
-      border: none;
-      font-size: 1em;
-      min-width: var(--min-touch);
-      min-height: var(--min-touch);
-      border-radius: 0.5em;
-      padding: 0.25em 0.5em;
-      transition: background 0.2s, color 0.2s;
-      outline: none;
-    }
-    .breadcrumb-link:focus-visible {
-      outline: var(--focus-outline);
-      outline-offset: 2px;
-      background: var(--focus);
-      color: var(--primary);
-    }
-    .breadcrumb-current {
-      font-weight: bold;
-      color: var(--secondary);
-      text-decoration: none;
-      background: none;
-      border: none;
-      font-size: 1em;
-      min-width: var(--min-touch);
-      min-height: var(--min-touch);
-      border-radius: 0.5em;
-      padding: 0.25em 0.5em;
-    }
+        /* Skip link for keyboard users */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #0066CC;
+            color: white;
+            padding: 8px;
+            z-index: 100;
+            transition: top 0.2s ease;
+        }
 
-    /* Main Content Layout */
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2em 1em 2em 1em;
-      background: var(--bg-main);
-      min-height: 60vh;
-      display: flex;
-      flex-direction: row;
-      gap: 2em;
-    }
-    .main-content {
-      flex: 3 1 0;
-      max-width: 900px;
-    }
-    aside {
-      flex: 1 1 0;
-      background: var(--bg-alt);
-      border-radius: var(--border-radius);
-      padding: 1.5em 1em;
-      margin-top: 0.5em;
-      min-width: 260px;
-      max-width: 340px;
-      align-self: flex-start;
-      font-size: 1rem;
-    }
+        .skip-link:focus {
+            top: 0;
+        }
 
-    /* Section Headings */
-    section {
-      margin-bottom: 2.5em;
-      max-width: 100%;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      font-family: inherit;
-      color: var(--primary);
-      margin-top: 0;
-      margin-bottom: 0.7em;
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: 0.01em;
-      text-align: left;
-      max-width: 100%;
-    }
-    h1 {
-      font-size: 2rem;
-      color: var(--secondary);
-    }
-    h2 {
-      font-size: 1.5rem;
-      color: var(--primary);
-    }
-    h3 {
-      font-size: 1.2rem;
-      color: var(--accent);
-    }
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #4A00E0, #8E2DE2);
+            color: white;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    /* Product Card Grid */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-      gap: 2em;
-      margin: 1.5em 0 0 0;
-      padding: 0;
-      list-style: none;
-    }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-    /* Product Card */
-    .product-card {
-      background: var(--card-bg);
-      border: 3px solid var(--card-border);
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 16px var(--card-shadow);
-      transition: transform 0.3s cubic-bezier(.19,1,.22,1), border-color 0.3s, box-shadow 0.3s;
-      display: flex;
-      flex-direction: column;
-      min-height: 440px;
-      max-width: 100%;
-      position: relative;
-      overflow: visible;
-      outline: none;
-      min-width: 0;
-      cursor: pointer;
-      /* Touch target */
-      min-width: var(--min-touch);
-      min-height: var(--min-touch);
-    }
-    .product-card:hover,
-    .product-card:focus-visible {
-      transform: scale(1.035);
-      border-color: var(--card-border-hover);
-      box-shadow: 0 8px 32px rgba(224,54,22,0.18);
-      z-index: 2;
-    }
-    .product-card:focus-visible {
-      outline: var(--focus-outline);
-      outline-offset: 2px;
-    }
-    .product-card[aria-pressed="true"] {
-      box-shadow: 0 0 0 6px var(--focus);
-    }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
 
-    /* Card Image */
-    .card-img-wrapper {
-      width: 100%;
-      height: 180px;
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
-      overflow: hidden;
-      background: var(--bg-alt);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 2px solid var(--accent);
-      position: relative;
-    }
-    .card-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      border: none;
-    }
+        .logo-icon {
+            margin-right: 0.5rem;
+            font-size: 2rem;
+        }
 
-    /* Card Content */
-    .card-content {
-      padding: 1.25em 1.25em 1em 1.25em;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75em;
-      flex: 1 1 0;
-    }
-    .card-title {
-      font-size: var(--font-size-large);
-      color: var(--primary);
-      margin: 0 0 0.25em 0;
-      font-weight: bold;
-      line-height: 1.15;
-    }
-    .card-desc {
-      font-size: 1.05em;
-      color: var(--text-main);
-      margin: 0 0 0.5em 0;
-      line-height: var(--line-height);
-      max-width: 45ch;
-    }
-    .card-feature-list {
-      list-style: disc inside;
-      margin: 0.5em 0 0.5em 0;
-      padding: 0 0 0 1em;
-      font-size: 1em;
-      color: var(--accent);
-    }
-    .card-feature-list li {
-      color: var(--text-main);
-      margin-bottom: 0.25em;
-      line-height: 1.3;
-    }
+        /* Navigation Styles */
+        nav {
+            display: flex;
+            align-items: center;
+        }
 
-    /* Card Actions */
-    .card-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5em;
-      margin-top: auto;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    .card-action-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: var(--min-touch);
-      min-height: var(--min-touch);
-      padding: 0.5em 1.25em;
-      font-size: 1.125em;
-      font-weight: 600;
-      border-radius: 0.75em;
-      border: none;
-      background: var(--secondary);
-      color: var(--text-inverse);
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(5,72,168,0.08);
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      outline: none;
-      position: relative;
-    }
-    .card-action-btn:focus-visible {
-      outline: var(--focus-outline);
-      outline-offset: 2px;
-      background: var(--focus);
-      color: var(--primary);
-      z-index: 2;
-    }
-    .card-action-btn:hover, .card-action-btn:active {
-      background: var(--accent);
-      color: var(--text-inverse);
-    }
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
 
-    /* Card Price Tag */
-    .card-price {
-      font-size: 1.15em;
-      font-weight: bold;
-      color: var(--accent);
-      background: var(--bg-alt);
-      border-radius: 0.5em;
-      padding: 0.3em 0.8em;
-      margin-left: auto;
-      margin-right: 0;
-      border: 2px solid var(--accent);
-      min-width: 60px;
-      text-align: right;
-      letter-spacing: 0.01em;
-      margin-top: 0.25em;
-    }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem;
+            border-radius: 4px;
+            position: relative;
+        }
 
-    /* Responsive */
-    @media (max-width: 900px) {
-      main {
-        flex-direction: column;
-        gap: 1.5em;
-      }
-      aside {
-        max-width: 100%;
-        min-width: 0;
-        margin-top: 0;
-      }
-    }
-    @media (max-width: 650px) {
-      .header-inner {
-        padding: 1em 0.5em 0.5em 0.5em;
-      }
-      main {
-        padding: 1em 0.5em 1em 0.5em;
-      }
-      .card-grid {
-        gap: 1em;
-      }
-    }
+        .nav-link:hover, .nav-link:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
 
-    /* Enhanced Focus Indicator for All Interactive Elements */
-    a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
-      outline: var(--focus-outline);
-      outline-offset: 2px;
-      z-index: 3;
-    }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-radius: 3px;
+        }
 
-    /* List Spacing */
-    ul, ol {
-      margin-bottom: 1.2em;
-      margin-top: 0.7em;
-      padding-left: 2em;
-      line-height: var(--line-height);
-    }
-    li {
-      margin-bottom: 0.2em;
-      max-width: 70ch;
-    }
+        /* Main Content Styles */
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
 
-    /* Footer */
-    footer {
-      background: var(--footer-bg);
-      color: var(--footer-fg);
-      padding: 2em 1em 1em 1em;
-      text-align: left;
-      font-size: 1rem;
-      margin-top: 2em;
-    }
-    .footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: row;
-      gap: 2em;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-    }
-    .footer-section {
-      min-width: 180px;
-      flex: 1 1 0;
-      margin-bottom: 1em;
-    }
-    .footer-section h2 {
-      color: var(--accent);
-      font-size: 1.1em;
-      margin-bottom: 0.5em;
-    }
-    .footer-link {
-      color: var(--footer-fg);
-      text-decoration: underline;
-      font-size: 1em;
-      border-radius: 0.5em;
-      min-width: var(--min-touch);
-      min-height: var(--min-touch);
-      display: inline-block;
-      padding: 0.2em 0.5em;
-      transition: background 0.2s, color 0.2s;
-    }
-    .footer-link:focus-visible {
-      outline: var(--focus-outline);
-      outline-offset: 2px;
-      background: var(--focus);
-      color: var(--footer-bg);
-    }
-    .footer-link:hover, .footer-link:active {
-      color: var(--accent);
-      background: var(--bg-alt);
-    }
+        .app-container {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+        }
 
-    /* Color Picker Controls */
-    .color-controls {
-      display: flex;
-      gap: 1em;
-      align-items: center;
-      margin-top: 1em;
-      flex-wrap: wrap;
-    }
-    .color-controls label {
-      font-size: 1em;
-      color: var(--primary);
-      font-weight: 600;
-      margin-right: 0.5em;
-    }
-    .color-controls input[type="color"] {
-      width: 2.2em;
-      height: 2.2em;
-      border: none;
-      border-radius: 0.5em;
-      cursor: pointer;
-      margin-right: 0.8em;
-      background: var(--bg-alt);
-      min-width: var(--min-touch);
-      min-height: var(--min-touch);
-      outline: none;
-      box-shadow: 0 0 0 2px var(--accent);
-      transition: box-shadow 0.2s;
-    }
-    .color-controls input[type="color"]:focus-visible {
-      box-shadow: 0 0 0 4px var(--focus);
-    }
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+        }
 
-    /* Line height, paragraph spacing, max width, etc. */
-    p {
-      line-height: var(--line-height);
-      margin-bottom: var(--para-spacing);
-      max-width: var(--max-content-width);
-    }
-    .help-text, .definition, .pronunciation {
-      font-size: 0.97em;
-      color: var(--accent);
-      background: var(--bg-alt);
-      border-radius: 0.5em;
-      padding: 0.3em 0.8em;
-      margin: 0.3em 0 0.6em 0;
-      display: block;
-    }
-    /* Micro-interactions for focus/hover */
-    .visually-hidden {
-      position: absolute !important;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden; clip: rect(0,0,0,0);
-      white-space: nowrap; border: 0;
-    }
-    /* Hide outline when not focused for mouse users, but always visible for keyboard users */
-    :focus:not(:focus-visible) {
-      outline: none;
-    }
-    /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        transition: none !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-      }
-    }
-    /* Ensure 200% zoom works with no horizontal scroll */
-    @media (max-width: 480px) {
-      html {
-        font-size: 115%;
-      }
-      .card-grid {
-        grid-template-columns: 1fr;
-      }
-      main {
-        padding: 0.5em 0.2em;
-      }
-    }
-  </style>
+        /* Dashboard Header */
+        .dashboard-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .user-greeting {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        /* Task Form Styles */
+        .task-form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-title {
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input, 
+        .form-select, 
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus, 
+        .form-select:focus, 
+        .form-textarea:focus {
+            border-color: #4A00E0;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-help {
+            display: block;
+            margin-top: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            color: #d9000d;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .form-input.error, 
+        .form-select.error, 
+        .form-textarea.error {
+            border-color: #d9000d;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-icon {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: #4A00E0;
+            color: white;
+        }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #3900b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover, .btn-secondary:focus {
+            background-color: #5a6268;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover, .btn-success:focus {
+            background-color: #218838;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover, .btn-danger:focus {
+            background-color: #c82333;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Task List Styles */
+        .task-list-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .task-list-title {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .task-filter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            border: 1px solid #eee;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-right: 1rem;
+        }
+
+        .task-priority {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background-color: #ffcccc;
+            color: #cc0000;
+        }
+
+        .priority-medium {
+            background-color: #fff2cc;
+            color: #e69900;
+        }
+
+        .priority-low {
+            background-color: #e6f7ff;
+            color: #0066cc;
+        }
+
+        .task-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-description {
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .task-category {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            background-color: #f0f0f0;
+            color: #333;
+            margin-right: 0.5rem;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .task-btn {
+            min-width: 44px;
+            min-height: 44px;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            background-color: #f0f0f0;
+            color: #333;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .task-btn:hover, .task-btn:focus {
+            background-color: #e0e0e0;
+        }
+
+        .task-btn-complete {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .task-btn-complete:hover, .task-btn-complete:focus {
+            background-color: #218838;
+        }
+
+        .task-btn-edit {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .task-btn-edit:hover, .task-btn-edit:focus {
+            background-color: #0069d9;
+        }
+
+        .task-btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .task-btn-delete:hover, .task-btn-delete:focus {
+            background-color: #c82333;
+        }
+
+        .task-checkbox {
+            min-width: 24px;
+            min-height: 24px;
+            margin-right: 1rem;
+        }
+
+        .task-item.completed {
+            opacity: 0.7;
+            border-left: 4px solid #28a745;
+        }
+
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            color: #666;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-container {
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            color: #4A00E0;
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .categories-list {
+            list-style: none;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            background-color: #f8f9fa;
+            transition: background-color 0.2s;
+        }
+
+        .category-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .category-count {
+            background-color: #4A00E0;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Rewards Section */
+        .rewards-container {
+            margin-top: 2rem;
+        }
+
+        .rewards-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .rewards-progress {
+            background-color: #f0f0f0;
+            height: 20px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #4A00E0, #8E2DE2);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 600;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .rewards-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+            color: #999;
+            font-size: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .badge.earned {
+            background: linear-gradient(135deg, #4A00E0, #8E2DE2);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge-tooltip {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 10;
+        }
+
+        .badge:hover .badge-tooltip,
+        .badge:focus .badge-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover, .modal-close:focus {
+            color: #333;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+            max-width: 400px;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            border-left: 4px solid #4A00E0;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #333;
+        }
+
+        .toast-message {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #666;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast-success {
+            border-left-color: #28a745;
+        }
+
+        .toast-success .toast-icon {
+            color: #28a745;
+        }
+
+        .toast-error {
+            border-left-color: #dc3545;
+        }
+
+        .toast-error .toast-icon {
+            color: #dc3545;
+        }
+
+        .toast-warning {
+            border-left-color: #ffc107;
+        }
+
+        .toast-warning .toast-icon {
+            color: #ffc107;
+        }
+
+        .toast-info {
+            border-left-color: #17a2b8;
+        }
+
+        .toast-info .toast-icon {
+            color: #17a2b8;
+        }
+
+        /* Empty State Styles */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-text {
+            margin-bottom: 1.5rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #4A00E0;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link a:hover, .footer-link a:focus {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #444;
+            color: #ccc;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .app-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .task-list-container {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .nav-list {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .task-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .task-actions {
+                flex-wrap: wrap;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* High Contrast Mode */
+        @media (prefers-contrast: more) {
+            body {
+                background-color: white;
+                color: black;
+            }
+            
+            header {
+                background: black;
+                color: white;
+            }
+            
+            .btn-primary {
+                background-color: black;
+                color: white;
+                border: 2px solid black;
+            }
+            
+            .task-item {
+                border: 2px solid black;
+            }
+            
+            .task-priority {
+                border: 1px solid black;
+            }
+            
+            .progress-bar {
+                background: black;
+            }
+        }
+
+        /* Accessibility Enhancements */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Task completion animation */
+        @keyframes taskComplete {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .task-complete-animation {
+            animation: taskComplete 0.5s ease;
+        }
+
+        /* Reward unlocked animation */
+        @keyframes rewardUnlocked {
+            0% { transform: scale(1) rotate(0); }
+            25% { transform: scale(1.2) rotate(-5deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            75% { transform: scale(1.2) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0); }
+        }
+
+        .reward-unlocked-animation {
+            animation: rewardUnlocked 1s ease;
+        }
+    </style>
 </head>
 <body>
-  <!-- Skip to Main Content Link -->
-  <a href="#main-content" class="skip-link" id="skip-link">Skip to main content</a>
-
-  <!-- Header with Navigation -->
-  <header>
-    <div class="header-inner">
-      <h1 class="site-title" id="site-title">Accessible Product Cards Showcase</h1>
-      <p class="site-desc">Explore our range of products and services. Each card is fully accessible, interactive, and visually engaging. <span class="definition" id="definition-accessible">Accessible: Designed so everyone, including people with disabilities, can use and understand the content.</span></p>
-      <nav aria-label="Main navigation" id="main-nav">
-        <ul class="main-nav-list">
-          <li><a href="#main-content" class="main-nav-link" aria-current="page">Products</a></li>
-          <li><a href="#services" class="main-nav-link">Services</a></li>
-          <li><a href="#about" class="main-nav-link">About Us</a></li>
-          <li><a href="#contact" class="main-nav-link">Contact</a></li>
-          <li><a href="#sitemap" class="main-nav-link">Sitemap</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Breadcrumb Navigation -->
-  <nav aria-label="Breadcrumb">
-    <ol class="breadcrumb-list">
-      <li><a href="/" class="breadcrumb-link">Home</a></li>
-      <li><span class="breadcrumb-current" aria-current="page">Products</span></li>
-    </ol>
-  </nav>
-
-  <!-- Main Content -->
-  <main id="main-content" tabindex="-1">
-    <div class="main-content">
-      <!-- Section: Products -->
-      <section aria-labelledby="products-heading">
-        <h2 id="products-heading">Featured Products</h2>
-        <p>Browse our handpicked selection of accessible, high-quality products. All cards are interactive, keyboard accessible, and include helpful information and controls.</p>
-        <!-- Product Card Grid -->
-        <ul class="card-grid" role="list">
-          <!-- Card 1 -->
-          <li>
-            <article class="product-card" tabindex="0" aria-labelledby="card1-title" aria-describedby="card1-desc card1-features" role="region">
-              <div class="card-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80"
-                     alt="Ergonomic wireless keyboard with a curved design and large keys"
-                     class="card-img"
-                     width="400" height="180"
-                     />
-              </div>
-              <div class="card-content">
-                <h3 id="card1-title" class="card-title">ErgoType Wireless Keyboard</h3>
-                <p id="card1-desc" class="card-desc">A comfortable, ergonomic wireless keyboard designed for all-day productivity. Its split layout and tactile keys reduce strain and support accessibility for users with limited dexterity.</p>
-                <ul id="card1-features" class="card-feature-list">
-                  <li>Bluetooth &amp; USB connectivity</li>
-                  <li>High-contrast keycaps</li>
-                  <li>Rechargeable battery (6 months)</li>
-                  <li>One-touch assistive shortcuts</li>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <header role="banner">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon" aria-hidden="true">✓</span>
+                <span>TaskReward</span>
+            </div>
+            
+            <nav aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li><a href="#" class="nav-link active" aria-current="page">Dashboard</a></li>
+                    <li><a href="#" class="nav-link">Tasks</a></li>
+                    <li><a href="#" class="nav-link">Rewards</a></li>
+                    <li><a href="#" class="nav-link">Settings</a></li>
+                    <li><a href="#" class="nav-link">Help</a></li>
                 </ul>
-                <div class="card-actions">
-                  <button class="card-action-btn" type="button" aria-label="View details about ErgoType Wireless Keyboard" data-card="1">View Details</button>
-                  <button class="card-action-btn" type="button" aria-label="Add ErgoType Wireless Keyboard to cart" data-card="1">Add to Cart</button>
-                  <span class="card-price" aria-label="Price: $99">$99</span>
+            </nav>
+        </div>
+    </header>
+    
+    <main id="main-content" role="main">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">My Task Dashboard</h1>
+            <p class="user-greeting">Welcome back! Today is <span id="current-date">Monday, January 1, 2023</span></p>
+        </div>
+        
+        <div class="app-container">
+            <aside class="sidebar" aria-labelledby="sidebar-title">
+                <h2 id="sidebar-title" class="sidebar-title">Task Overview</h2>
+                
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-icon" aria-hidden="true">📋</span>
+                        <div class="stat-info">
+                            <div class="stat-value" id="total-tasks">0</div>
+                            <div class="stat-label">Total Tasks</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-icon" aria-hidden="true">✅</span>
+                        <div class="stat-info">
+                            <div class="stat-value" id="completed-tasks">0</div>
+                            <div class="stat-label">Completed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <span class="stat-icon" aria-hidden="true">⏰</span>
+                        <div class="stat-info">
+                            <div class="stat-value" id="pending-tasks">0</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </article>
-          </li>
-          <!-- Card 2 -->
-          <li>
-            <article class="product-card" tabindex="0" aria-labelledby="card2-title" aria-describedby="card2-desc card2-features" role="region">
-              <div class="card-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80"
-                     alt="Portable smart speaker with tactile buttons and voice control"
-                     class="card-img"
-                     width="400" height="180"
-                     />
-              </div>
-              <div class="card-content">
-                <h3 id="card2-title" class="card-title">SoundMate Smart Speaker</h3>
-                <p id="card2-desc" class="card-desc">A portable, voice-activated smart speaker with tactile controls and high-contrast indicators. Designed for clear audio and ease of use by everyone, including people with visual impairments.</p>
-                <ul id="card2-features" class="card-feature-list">
-                  <li>Voice control &amp; screen reader support</li>
-                  <li>10-hour battery life</li>
-                  <li>Large, tactile volume buttons</li>
-                  <li>360° sound, noise reduction</li>
+                
+                <h3 class="sidebar-title">Categories</h3>
+                <ul class="categories-list" id="categories-list">
+                    <li class="category-item">
+                        <span class="category-name">Work</span>
+                        <span class="category-count">0</span>
+                    </li>
+                    <li class="category-item">
+                        <span class="category-name">Personal</span>
+                        <span class="category-count">0</span>
+                    </li>
+                    <li class="category-item">
+                        <span class="category-name">Health</span>
+                        <span class="category-count">0</span>
+                    </li>
+                    <li class="category-item">
+                        <span class="category-name">Education</span>
+                        <span class="category-count">0</span>
+                    </li>
                 </ul>
-                <div class="card-actions">
-                  <button class="card-action-btn" type="button" aria-label="View details about SoundMate Smart Speaker" data-card="2">View Details</button>
-                  <button class="card-action-btn" type="button" aria-label="Add SoundMate Smart Speaker to cart" data-card="2">Add to Cart</button>
-                  <span class="card-price" aria-label="Price: $59">$59</span>
+                
+                <div class="rewards-container">
+                    <h3 class="rewards-title">Rewards Progress</h3>
+                    <div class="rewards-progress" aria-labelledby="progress-label">
+                        <div class="progress-bar" id="rewards-progress-bar" style="width: 0%"></div>
+                        <div class="progress-text" id="rewards-progress-text">0%</div>
+                    </div>
+                    <p id="progress-label">Complete tasks to earn rewards</p>
+                    
+                    <div class="rewards-badges" aria-label="Earned badges">
+                        <div class="badge" tabindex="0" aria-label="Beginner badge: Complete 5 tasks">
+                            <span aria-hidden="true">🥉</span>
+                            <span class="badge-tooltip">Beginner: Complete 5 tasks</span>
+                        </div>
+                        <div class="badge" tabindex="0" aria-label="Intermediate badge: Complete 15 tasks">
+                            <span aria-hidden="true">🥈</span>
+                            <span class="badge-tooltip">Intermediate: Complete 15 tasks</span>
+                        </div>
+                        <div class="badge" tabindex="0" aria-label="Advanced badge: Complete 30 tasks">
+                            <span aria-hidden="true">🥇</span>
+                            <span class="badge-tooltip">Advanced: Complete 30 tasks</span>
+                        </div>
+                        <div class="badge" tabindex="0" aria-label="Master badge: Complete 50 tasks">
+                            <span aria-hidden="true">🏆</span>
+                            <span class="badge-tooltip">Master: Complete 50 tasks</span>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </article>
-          </li>
-          <!-- Card 3 -->
-          <li>
-            <article class="product-card" tabindex="0" aria-labelledby="card3-title" aria-describedby="card3-desc card3-features" role="region">
-              <div class="card-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"
-                     alt="Adjustable desk lamp with touch controls and high-contrast markings"
-                     class="card-img"
-                     width="400" height="180"
-                     />
-              </div>
-              <div class="card-content">
-                <h3 id="card3-title" class="card-title">FlexiLight Desk Lamp</h3>
-                <p id="card3-desc" class="card-desc">A fully adjustable LED desk lamp with accessible touch controls, high-contrast settings, and a flexible arm. Perfect for reading, working, or relaxing in any environment.</p>
-                <ul id="card3-features" class="card-feature-list">
-                  <li>5 brightness levels, color temperature control</li>
-                  <li>Touch controls with audio feedback</li>
-                  <li>Energy-efficient LEDs</li>
-                  <li>Anti-glare, flicker-free design</li>
+            </aside>
+            
+            <section class="main-content">
+                <div class="task-form-container">
+                    <h2 class="form-title">Create New Task</h2>
+                    <form id="task-form" aria-labelledby="form-title">
+                        <div class="form-group">
+                            <label for="task-title" class="form-label">Task Title <span aria-hidden="true">*</span></label>
+                            <input type="text" id="task-title" name="task-title" class="form-input" required aria-required="true" aria-describedby="title-help">
+                            <span id="title-help" class="form-help">Enter a clear, concise title for your task</span>
+                            <div id="title-error" class="error-message" role="alert"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="task-description" class="form-label">Description</label>
+                            <textarea id="task-description" name="task-description" class="form-textarea" aria-describedby="description-help"></textarea>
+                            <span id="description-help" class="form-help">Provide details about what needs to be done</span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="task-category" class="form-label">Category <span aria-hidden="true">*</span></label>
+                            <select id="task-category" name="task-category" class="form-select" required aria-required="true">
+                                <option value="">Select a category</option>
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Health">Health</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div id="category-error" class="error-message" role="alert"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="task-priority" class="form-label">Priority</label>
+                            <select id="task-priority" name="task-priority" class="form-select">
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="task-due-date" class="form-label">Due Date</label>
+                            <input type="date" id="task-due-date" name="task-due-date" class="form-input" aria-describedby="date-help">
+                            <span id="date-help" class="form-help">When does this task need to be completed?</span>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary" aria-label="Add task">
+                                <span class="btn-icon" aria-hidden="true">+</span>
+                                Add Task
+                            </button>
+                            <button type="reset" class="btn btn-secondary" aria-label="Clear form">
+                                <span class="btn-icon" aria-hidden="true">↺</span>
+                                Clear
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="task-list-container">
+                    <div class="task-list-header">
+                        <h2 class="task-list-title">My Tasks</h2>
+                        <div class="task-filter">
+                            <label for="filter-tasks" class="filter-label">Filter:</label>
+                            <select id="filter-tasks" class="form-select" aria-label="Filter tasks by status">
+                                <option value="all">All Tasks</option>
+                                <option value="pending">Pending</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <ul id="task-list" class="task-list" aria-label="Task list">
+                        <!-- Tasks will be added here dynamically -->
+                        <li class="empty-state" id="empty-tasks">
+                            <div class="empty-state-icon" aria-hidden="true">📝</div>
+                            <h3 class="empty-state-title">No Tasks Yet</h3>
+                            <p class="empty-state-text">Create your first task using the form above to get started.</p>
+                            <button class="btn btn-primary" id="create-sample-tasks">
+                                <span class="btn-icon" aria-hidden="true">✨</span>
+                                Create Sample Tasks
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <footer role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3 class="footer-title">About TaskReward</h3>
+                <p>TaskReward helps you organize your daily tasks while earning rewards for completing them. Stay productive and motivated!</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Quick Links</h3>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">Home</a></li>
+                    <li class="footer-link"><a href="#">Features</a></li>
+                    <li class="footer-link"><a href="#">Pricing</a></li>
+                    <li class="footer-link"><a href="#">FAQ</a></li>
+                    <li class="footer-link"><a href="#">Contact Us</a></li>
                 </ul>
-                <div class="card-actions">
-                  <button class="card-action-btn" type="button" aria-label="View details about FlexiLight Desk Lamp" data-card="3">View Details</button>
-                  <button class="card-action-btn" type="button" aria-label="Add FlexiLight Desk Lamp to cart" data-card="3">Add to Cart</button>
-                  <span class="card-price" aria-label="Price: $42">$42</span>
-                </div>
-              </div>
-            </article>
-          </li>
-        </ul>
-      </section>
-
-      <!-- Section: Services -->
-      <section aria-labelledby="services-heading" id="services">
-        <h2 id="services-heading">Our Services</h2>
-        <p>We offer a range of services to support your accessibility journey. <span class="help-text" id="help-services">Need help choosing the right product? Contact our accessibility specialists for free advice.</span></p>
-        <ul>
-          <li><strong>Accessibility Audits</strong>: In-depth evaluation of your digital products for WCAG 2.2 AAA compliance.</li>
-          <li><strong>Assistive Technology Training</strong>: Personalized training for screen readers, magnifiers, and more.</li>
-          <li><strong>Custom Adaptations</strong>: Tailored modifications for products and environments.</li>
-        </ul>
-      </section>
-
-      <!-- Section: About Us -->
-      <section aria-labelledby="about-heading" id="about">
-        <h2 id="about-heading">About Us</h2>
-        <p>We are dedicated to creating accessible, inclusive products for everyone. Our team includes people with lived experience of disability, ensuring authentic design and support. <span class="pronunciation" id="pronunciation-accessible">Pronunciation of "accessible": /əkˈsɛs.ə.bəl/</span></p>
-      </section>
-
-      <!-- Section: Contact -->
-      <section aria-labelledby="contact-heading" id="contact">
-        <h2 id="contact-heading">Contact</h2>
-        <form id="contact-form" aria-labelledby="contact-heading" novalidate>
-          <fieldset>
-            <legend>Contact Form</legend>
-            <div>
-              <label for="name">Name <span aria-hidden="true" style="color: var(--secondary);">*</span></label>
-              <input type="text" id="name" name="name" autocomplete="name" required aria-required="true" aria-describedby="name-help" minlength="2" maxlength="40" style="width: 100%; min-width: var(--min-touch); min-height: var(--min-touch);" />
-              <span id="name-help" class="help-text">Enter your full name.</span>
             </div>
-            <div>
-              <label for="email">Email <span aria-hidden="true" style="color: var(--secondary);">*</span></label>
-              <input type="email" id="email" name="email" autocomplete="email" required aria-required="true" aria-describedby="email-help" style="width: 100%; min-width: var(--min-touch); min-height: var(--min-touch);" />
-              <span id="email-help" class="help-text">We'll never share your email.</span>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Help & Support</h3>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">User Guide</a></li>
+                    <li class="footer-link"><a href="#">Tutorial Videos</a></li>
+                    <li class="footer-link"><a href="#">Knowledge Base</a></li>
+                    <li class="footer-link"><a href="#">Community Forum</a></li>
+                    <li class="footer-link"><a href="#">Submit a Ticket</a></li>
+                </ul>
             </div>
-            <div>
-              <label for="message">Message <span aria-hidden="true" style="color: var(--secondary);">*</span></label>
-              <textarea id="message" name="message" autocomplete="off" required aria-required="true" aria-describedby="message-help" rows="4" style="width: 100%; min-width: var(--min-touch); min-height: 88px;"></textarea>
-              <span id="message-help" class="help-text">How can we assist you?</span>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Legal</h3>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">Terms of Service</a></li>
+                    <li class="footer-link"><a href="#">Privacy Policy</a></li>
+                    <li class="footer-link"><a href="#">Cookie Policy</a></li>
+                    <li class="footer-link"><a href="#">Accessibility Statement</a></li>
+                </ul>
             </div>
-            <div>
-              <button type="submit" id="contact-submit" class="card-action-btn" aria-label="Send message">Send Message</button>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 TaskReward. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Modal Template -->
+    <div class="modal-overlay" id="task-modal" role="dialog" aria-labelledby="modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Edit Task</h2>
+                <button class="modal-close" aria-label="Close modal" id="modal-close">&times;</button>
             </div>
-            <div id="contact-form-status" role="status" aria-live="polite" style="margin-top: 1em;"></div>
-          </fieldset>
-        </form>
-      </section>
+            <div class="modal-body">
+                <form id="edit-task-form">
+                    <input type="hidden" id="edit-task-id">
+                    <div class="form-group">
+                        <label for="edit-task-title" class="form-label">Task Title <span aria-hidden="true">*</span></label>
+                        <input type="text" id="edit-task-title" name="edit-task-title" class="form-input" required aria-required="true">
+                        <div id="edit-title-error" class="error-message" role="alert"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-task-description" class="form-label">Description</label>
+                        <textarea id="edit-task-description" name="edit-task-description" class="form-textarea"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-task-category" class="form-label">Category <span aria-hidden="true">*</span></label>
+                        <select id="edit-task-category" name="edit-task-category" class="form-select" required aria-required="true">
+                            <option value="">Select a category</option>
+                            <option value="Work">Work</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Health">Health</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div id="edit-category-error" class="error-message" role="alert"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-task-priority" class="form-label">Priority</label>
+                        <select id="edit-task-priority" name="edit-task-priority" class="form-select">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="edit-task-due-date" class="form-label">Due Date</label>
+                        <input type="date" id="edit-task-due-date" name="edit-task-due-date" class="form-input">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                <button class="btn btn-primary" id="modal-save">Save Changes</button>
+            </div>
+        </div>
     </div>
-    <!-- Sidebar: Multiple Ways to Find Content -->
-    <aside aria-labelledby="sidebar-heading">
-      <h2 id="sidebar-heading">Quick Access</h2>
-      <nav aria-label="Quick links">
-        <ul>
-          <li><a href="#main-content" class="footer-link">Featured Products</a></li>
-          <li><a href="#services" class="footer-link">Our Services</a></li>
-          <li><a href="#about" class="footer-link">About Us</a></li>
-          <li><a href="#contact" class="footer-link">Contact</a></li>
-          <li><a href="#sitemap" class="footer-link">Sitemap</a></li>
-        </ul>
-      </nav>
-      <form id="sidebar-search" role="search" aria-label="Site search" style="margin-top: 2em;">
-        <label for="site-search">Search site:</label>
-        <input type="search" id="site-search" name="q" autocomplete="off" aria-describedby="search-help" style="width: 100%; min-width: var(--min-touch); min-height: var(--min-touch);" />
-        <span id="search-help" class="help-text">Type keywords to find products or services.</span>
-        <button type="submit" class="card-action-btn" aria-label="Search site">Search</button>
-        <div id="search-results" role="status" aria-live="polite" style="margin-top: 0.8em;"></div>
-      </form>
-      <!-- Color controls for user-selectable foreground/background -->
-      <div class="color-controls" aria-labelledby="color-controls-heading">
-        <span id="color-controls-heading" class="visually-hidden">Color Preferences</span>
-        <label for="fg-color-picker">Text color:</label>
-        <input type="color" id="fg-color-picker" name="fg-color" value="#101820" aria-label="Select text color" />
-        <label for="bg-color-picker">Background color:</label>
-        <input type="color" id="bg-color-picker" name="bg-color" value="#ffffff" aria-label="Select background color" />
-        <button type="button" id="reset-colors" class="card-action-btn" aria-label="Reset colors to default">Reset</button>
-      </div>
-    </aside>
-  </main>
-
-  <!-- Footer -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-section">
-        <h2>Help &amp; Resources</h2>
-        <ul>
-          <li><a href="#help-services" class="footer-link">Accessibility Help</a></li>
-          <li><a href="#definition-accessible" class="footer-link">What does "Accessible" mean?</a></li>
-          <li><a href="#pronunciation-accessible" class="footer-link">Pronunciation Guide</a></li>
-          <li><a href="#sitemap" class="footer-link">Sitemap</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h2>Contact</h2>
-        <address>
-          <ul>
-            <li>Email: <a href="mailto:access@productcards.com" class="footer-link">access@productcards.com</a></li>
-            <li>Phone: <a href="tel:+18005551234" class="footer-link">+1 800 555 1234</a></li>
-          </ul>
-        </address>
-      </div>
-      <div class="footer-section">
-        <h2>Follow Us</h2>
-        <ul>
-          <li><a href="https://twitter.com/" class="footer-link" rel="noopener" target="_blank" aria-label="Follow us on Twitter">Twitter</a></li>
-          <li><a href="https://facebook.com/" class="footer-link" rel="noopener" target="_blank" aria-label="Follow us on Facebook">Facebook</a></li>
-        </ul>
-      </div>
+    
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="confirm-modal" role="dialog" aria-labelledby="confirm-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="confirm-modal-title">Confirm Delete</h2>
+                <button class="modal-close" aria-label="Close modal" id="confirm-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-modal-message">Are you sure you want to delete this task? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="confirm-modal-cancel">Cancel</button>
+                <button class="btn btn-danger" id="confirm-modal-confirm">Delete</button>
+            </div>
+        </div>
     </div>
-    <div style="margin-top:1em; font-size:0.95em;">
-      &copy; <span id="year"></span> Accessible Product Cards Showcase. All rights reserved.
+    
+    <!-- Reward Modal -->
+    <div class="modal-overlay" id="reward-modal" role="dialog" aria-labelledby="reward-modal-title" aria-modal="true" tabindex="-1">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="reward-modal-title">Congratulations!</h2>
+                <button class="modal-close" aria-label="Close modal" id="reward-modal-close">&times;</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <div id="reward-icon" style="font-size: 4rem; margin-bottom: 1rem;">🏆</div>
+                <h3 id="reward-name" style="margin-bottom: 1rem;">New Badge Unlocked!</h3>
+                <p id="reward-description">You've earned a new badge for your hard work.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="reward-modal-ok">Awesome!</button>
+            </div>
+        </div>
     </div>
-  </footer>
-
-  <!-- Sitemap (hidden section for multiple ways to find content) -->
-  <section id="sitemap" aria-labelledby="sitemap-heading" style="position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden;">
-    <h2 id="sitemap-heading">Sitemap</h2>
-    <ul>
-      <li><a href="#main-content">Featured Products</a></li>
-      <li><a href="#services">Our Services</a></li>
-      <li><a href="#about">About Us</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="#help-services">Accessibility Help</a></li>
-    </ul>
-  </section>
-
-  <!-- Accessible Modal for Product Details (hidden until triggered) -->
-  <div id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" tabindex="-1" hidden style="display:none; position:fixed; z-index:2000; left:0; top:0; width:100vw; height:100vh; background:rgba(16,24,32,0.92);">
-    <div style="max-width: 540px; margin: 5vh auto; background: var(--card-bg); border-radius: var(--border-radius); box-shadow: 0 6px 48px rgba(5,72,168,0.22); padding: 2em 1.5em; position:relative;">
-      <button id="modal-close" class="card-action-btn" aria-label="Close product details" style="position:absolute; top:1em; right:1em; min-width:44px; min-height:44px;">&times;</button>
-      <h2 id="modal-title">Product Details</h2>
-      <div id="modal-desc"></div>
-    </div>
-  </div>
-
-  <!-- Status region for live announcements -->
-  <div id="live-region" role="status" aria-live="polite" class="visually-hidden"></div>
-
-  <script>
-    // Utility: Update copyright year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Keyboard focus for skip link
-    document.getElementById('skip-link').addEventListener('click', function(e) {
-      var main = document.getElementById('main-content');
-      if (main) {
-        main.setAttribute('tabindex', '-1');
-        main.focus();
-      }
-    });
-
-    // Enhanced navigation: set aria-current
-    (function() {
-      var navLinks = document.querySelectorAll('.main-nav-link');
-      var loc = window.location.hash || '#main-content';
-      navLinks.forEach(function(link) {
-        if (link.getAttribute('href') === loc) {
-          link.setAttribute('aria-current', 'page');
-        } else {
-          link.removeAttribute('aria-current');
+    
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
+    
+    <script>
+        // DOM Elements
+        const taskForm = document.getElementById('task-form');
+        const taskList = document.getElementById('task-list');
+        const emptyTasks = document.getElementById('empty-tasks');
+        const createSampleTasksBtn = document.getElementById('create-sample-tasks');
+        const filterTasks = document.getElementById('filter-tasks');
+        const totalTasksEl = document.getElementById('total-tasks');
+        const completedTasksEl = document.getElementById('completed-tasks');
+        const pendingTasksEl = document.getElementById('pending-tasks');
+        const categoriesList = document.getElementById('categories-list');
+        const rewardsProgressBar = document.getElementById('rewards-progress-bar');
+        const rewardsProgressText = document.getElementById('rewards-progress-text');
+        const currentDateEl = document.getElementById('current-date');
+        
+        // Modal Elements
+        const taskModal = document.getElementById('task-modal');
+        const modalClose = document.getElementById('modal-close');
+        const modalCancel = document.getElementById('modal-cancel');
+        const modalSave = document.getElementById('modal-save');
+        const editTaskForm = document.getElementById('edit-task-form');
+        
+        // Confirmation Modal Elements
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmModalClose = document.getElementById('confirm-modal-close');
+        const confirmModalCancel = document.getElementById('confirm-modal-cancel');
+        const confirmModalConfirm = document.getElementById('confirm-modal-confirm');
+        
+        // Reward Modal Elements
+        const rewardModal = document.getElementById('reward-modal');
+        const rewardModalClose = document.getElementById('reward-modal-close');
+        const rewardModalOk = document.getElementById('reward-modal-ok');
+        
+        // Toast Container
+        const toastContainer = document.getElementById('toast-container');
+        
+        // Application State
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let completedCount = JSON.parse(localStorage.getItem('completedCount')) || 0;
+        let currentTaskId = null;
+        
+        // Badge thresholds
+        const badges = [
+            { id: 0, name: 'Beginner', icon: '🥉', threshold: 5, description: 'Completed 5 tasks' },
+            { id: 1, name: 'Intermediate', icon: '🥈', threshold: 15, description: 'Completed 15 tasks' },
+            { id: 2, name: 'Advanced', icon: '🥇', threshold: 30, description: 'Completed 30 tasks' },
+            { id: 3, name: 'Master', icon: '🏆', threshold: 50, description: 'Completed 50 tasks' }
+        ];
+        
+        // Initialize the application
+        function init() {
+            // Set current date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            currentDateEl.textContent = new Date().toLocaleDateString('en-US', options);
+            
+            // Render tasks
+            renderTasks();
+            updateStats();
+            updateRewardsProgress();
+            
+            // Event listeners
+            taskForm.addEventListener('submit', handleAddTask);
+            taskList.addEventListener('click', handleTaskActions);
+            filterTasks.addEventListener('change', renderTasks);
+            createSampleTasksBtn.addEventListener('click', createSampleTasks);
+            
+            // Modal event listeners
+            modalClose.addEventListener('click', closeTaskModal);
+            modalCancel.addEventListener('click', closeTaskModal);
+            modalSave.addEventListener('click', saveTaskEdit);
+            
+            // Confirmation modal event listeners
+            confirmModalClose.addEventListener('click', closeConfirmModal);
+            confirmModalCancel.addEventListener('click', closeConfirmModal);
+            confirmModalConfirm.addEventListener('click', confirmDelete);
+            
+            // Reward modal event listeners
+            rewardModalClose.addEventListener('click', closeRewardModal);
+            rewardModalOk.addEventListener('click', closeRewardModal);
+            
+            // Keyboard event listeners for modals
+            taskModal.addEventListener('keydown', handleModalKeydown);
+            confirmModal.addEventListener('keydown', handleModalKeydown);
+            rewardModal.addEventListener('keydown', handleModalKeydown);
+            
+            // Check for empty state
+            checkEmptyState();
         }
-      });
-    })();
-
-    // Product Card Keyboard and Modal
-    (function() {
-      // Card focus/hover/activation
-      var cards = document.querySelectorAll('.product-card');
-      cards.forEach(function(card) {
-        // Allow Enter/Space to activate (open modal)
-        card.addEventListener('keydown', function(e) {
-          if ((e.key === 'Enter' || e.key === ' ') && !e.target.classList.contains('card-action-btn')) {
+        
+        // Handle adding a new task
+        function handleAddTask(e) {
             e.preventDefault();
-            showProductModal(card);
-          }
-        });
-        // Pointer activation (click on card, not button)
-        card.addEventListener('click', function(e) {
-          if (!e.target.classList.contains('card-action-btn')) {
-            showProductModal(card);
-          }
-        });
-      });
-
-      // Modal logic
-      var modal = document.getElementById('product-modal');
-      var modalTitle = document.getElementById('modal-title');
-      var modalDesc = document.getElementById('modal-desc');
-      var modalClose = document.getElementById('modal-close');
-      var lastFocusedElement = null;
-
-      function showProductModal(card) {
-        var title = card.querySelector('.card-title').textContent;
-        var desc = card.querySelector('.card-desc').textContent;
-        var features = card.querySelector('.card-feature-list').cloneNode(true);
-        var price = card.querySelector('.card-price').textContent;
-        modalTitle.textContent = title;
-        modalDesc.innerHTML = '<p>' + desc + '</p>';
-        modalDesc.appendChild(features);
-        modalDesc.innerHTML += '<p><strong>Price:</strong> ' + price + '</p>';
-        modal.style.display = 'block';
-        modal.hidden = false;
-        lastFocusedElement = document.activeElement;
-        modal.setAttribute('tabindex', '-1');
-        modal.focus();
-        document.body.style.overflow = 'hidden';
-        // Trap focus
-        trapFocus(modal);
-      }
-
-      function closeProductModal() {
-        modal.hidden = true;
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-        if (lastFocusedElement) lastFocusedElement.focus();
-      }
-
-      modalClose.addEventListener('click', function() {
-        closeProductModal();
-      });
-      modalClose.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          closeProductModal();
-        }
-      });
-      modal.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          closeProductModal();
-        }
-      });
-      // Trap focus within modal
-      function trapFocus(element) {
-        var focusable = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-        var first = focusable[0];
-        var last = focusable[focusable.length - 1];
-        element.addEventListener('keydown', function(e) {
-          if (e.key === 'Tab') {
-            if (e.shiftKey) {
-              if (document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-              }
+            
+            // Get form values
+            const title = document.getElementById('task-title').value.trim();
+            const description = document.getElementById('task-description').value.trim();
+            const category = document.getElementById('task-category').value;
+            const priority = document.getElementById('task-priority').value;
+            const dueDate = document.getElementById('task-due-date').value;
+            
+            // Validate form
+            let isValid = true;
+            
+            if (!title) {
+                showError('title-error', 'Task title is required');
+                isValid = false;
             } else {
-              if (document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
-              }
+                hideError('title-error');
             }
-          }
-        });
-      }
-      // Dismiss modal on background click
-      modal.addEventListener('mousedown', function(e) {
-        if (e.target === modal) closeProductModal();
-      });
-    })();
-
-    // Card action buttons: Live region announcement
-    (function() {
-      var live = document.getElementById('live-region');
-      var btns = document.querySelectorAll('.card-action-btn');
-      btns.forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-          var action = btn.textContent.trim();
-          var card = btn.closest('.product-card');
-          var title = card.querySelector('.card-title').textContent;
-          live.textContent = action + ' for ' + title + ' activated.';
-          setTimeout(function() { live.textContent = ''; }, 4000);
-        });
-        // Keyboard support (already button, but add pointer cancellation)
-        btn.addEventListener('pointerdown', function(e) {
-          // Only activate on pointerup for pointer cancellation
-          e.preventDefault();
-        });
-        btn.addEventListener('pointerup', function(e) {
-          btn.click();
-        });
-      });
-    })();
-
-    // Contact Form Validation (AAA: clear errors, correction, aria-describedby, etc.)
-    (function() {
-      var form = document.getElementById('contact-form');
-      var status = document.getElementById('contact-form-status');
-      var fields = ['name', 'email', 'message'];
-      var fieldEls = {};
-      fields.forEach(function(f) {
-        fieldEls[f] = document.getElementById(f);
-      });
-
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Clear previous errors
-        fields.forEach(function(f) {
-          fieldEls[f].setAttribute('aria-invalid', 'false');
-          var err = document.getElementById(f + '-error');
-          if (err) err.remove();
-        });
-        status.textContent = '';
-        var valid = true;
-        // Name
-        if (!fieldEls.name.value.trim() || fieldEls.name.value.trim().length < 2) {
-          showError('name', 'Please enter your full name (at least 2 characters).');
-          valid = false;
-        }
-        // Email
-        if (!fieldEls.email.value.trim() || !/^[^@]+@[^@]+\.[^@]+$/.test(fieldEls.email.value.trim())) {
-          showError('email', 'Please enter a valid email address.');
-          valid = false;
-        }
-        // Message
-        if (!fieldEls.message.value.trim() || fieldEls.message.value.trim().length < 5) {
-          showError('message', 'Please enter a message (at least 5 characters).');
-          valid = false;
-        }
-        if (!valid) {
-          status.textContent = 'Please correct the highlighted errors and try again.';
-          status.setAttribute('role', 'alert');
-          return;
-        }
-        // Simulate success (no real backend)
-        status.textContent = 'Your message has been sent! We will reply soon.';
-        status.setAttribute('role', 'status');
-        form.reset();
-      });
-
-      function showError(field, msg) {
-        var input = fieldEls[field];
-        input.setAttribute('aria-invalid', 'true');
-        var err = document.createElement('span');
-        err.id = field + '-error';
-        err.className = 'help-text';
-        err.setAttribute('role', 'alert');
-        err.textContent = msg;
-        input.insertAdjacentElement('afterend', err);
-        input.setAttribute('aria-describedby', input.getAttribute('aria-describedby') + ' ' + err.id);
-      }
-    })();
-
-    // Sidebar Search (simulate results)
-    (function() {
-      var searchForm = document.getElementById('sidebar-search');
-      var searchInput = document.getElementById('site-search');
-      var results = document.getElementById('search-results');
-      var products = [
-        'ErgoType Wireless Keyboard',
-        'SoundMate Smart Speaker',
-        'FlexiLight Desk Lamp'
-      ];
-      searchForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var q = searchInput.value.trim().toLowerCase();
-        results.textContent = '';
-        if (!q) {
-          results.textContent = 'Please enter a search term.';
-          return;
-        }
-        var found = products.filter(function(p) {
-          return p.toLowerCase().includes(q);
-        });
-        if (found.length) {
-          results.innerHTML = 'Found: <ul>' + found.map(function(f) {
-            return '<li>' + f + '</li>';
-          }).join('') + '</ul>';
-        } else {
-          results.textContent = 'No results found.';
-        }
-      });
-    })();
-
-    // Color Picker Controls (user-selectable fg/bg)
-    (function() {
-      var fgPicker = document.getElementById('fg-color-picker');
-      var bgPicker = document.getElementById('bg-color-picker');
-      var resetBtn = document.getElementById('reset-colors');
-      // Set initial colors from root
-      fgPicker.value = rgb2hex(getComputedStyle(document.documentElement).getPropertyValue('--text-main'));
-      bgPicker.value = rgb2hex(getComputedStyle(document.documentElement).getPropertyValue('--bg-main'));
-      fgPicker.addEventListener('input', function() {
-        document.documentElement.style.setProperty('--text-main', fgPicker.value);
-        document.body.style.color = fgPicker.value;
-      });
-      bgPicker.addEventListener('input', function() {
-        document.documentElement.style.setProperty('--bg-main', bgPicker.value);
-        document.body.style.background = bgPicker.value;
-      });
-      resetBtn.addEventListener('click', function() {
-        document.documentElement.style.setProperty('--text-main', '#101820');
-        document.documentElement.style.setProperty('--bg-main', '#ffffff');
-        document.body.style.color = '';
-        document.body.style.background = '';
-        fgPicker.value = '#101820';
-        bgPicker.value = '#ffffff';
-      });
-      function rgb2hex(rgb) {
-        // Converts 'rgb(16,24,32)' to '#101820'
-        var m = rgb.match(/\d+/g);
-        if (!m) return '#101820';
-        return '#' + m.map(function(x) {
-          var h = parseInt(x).toString(16);
-          return h.length == 1 ? '0' + h : h;
-        }).join('');
-      }
-    })();
-
-    // Enhanced keyboard navigation for nav and breadcrumbs
-    (function() {
-      // Keyboard nav for main nav (arrow keys)
-      var nav = document.getElementById('main-nav');
-      var links = nav.querySelectorAll('.main-nav-link');
-      links.forEach(function(link, idx) {
-        link.addEventListener('keydown', function(e) {
-          if (e.key === 'ArrowRight') {
-            e.preventDefault();
-            links[(idx + 1) % links.length].focus();
-          } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            links[(idx - 1 + links.length) % links.length].focus();
-          }
-        });
-      });
-      // Breadcrumbs: no dropdown, but ensure focus indicator
-      var bcrumbs = document.querySelectorAll('.breadcrumb-link');
-      bcrumbs.forEach(function(link) {
-        link.addEventListener('keydown', function(e) {
-          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-            // Focus next/prev breadcrumb
-            var items = Array.from(bcrumbs);
-            var idx = items.indexOf(link);
-            if (e.key === 'ArrowRight' && idx < items.length - 1) {
-              items[idx + 1].focus();
-              e.preventDefault();
-            } else if (e.key === 'ArrowLeft' && idx > 0) {
-              items[idx - 1].focus();
-              e.preventDefault();
+            
+            if (!category) {
+                showError('category-error', 'Please select a category');
+                isValid = false;
+            } else {
+                hideError('category-error');
             }
-          }
-        });
-      });
-    })();
-
-    // Reduced motion: Allow user to disable card scale animation
-    (function() {
-      var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReducedMotion) {
-        var style = document.createElement('style');
-        style.textContent = '.product-card { transition: none !important; }';
-        document.head.appendChild(style);
-      }
-    })();
-
-    // Tooltip for abbreviations (AAA)
-    (function() {
-      // Example: add definition for "WCAG"
-      var abbrs = document.querySelectorAll('abbr[title]');
-      abbrs.forEach(function(abbr) {
-        abbr.setAttribute('tabindex', '0');
-        abbr.addEventListener('focus', function() {
-          var live = document.getElementById('live-region');
-          live.textContent = abbr.getAttribute('title');
-        });
-        abbr.addEventListener('blur', function() {
-          var live = document.getElementById('live-region');
-          live.textContent = '';
-        });
-      });
-    })();
-  </script>
+            
+            if (!isValid) return;
+            
+            // Create new task object
+            const newTask = {
+                id: Date.now().toString(),
+                title,
+                description,
+                category,
+                priority,
+                dueDate,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add task to array
+            tasks.push(newTask);
+            
+            // Save to localStorage
+            saveTasks();
+            
+            // Reset form
+            taskForm.reset();
+            
+            // Show success message
+            showToast('Task Added', 'Your task has been added successfully.', 'success');
+            
+            // Render tasks
+            renderTasks();
+            updateStats();
+            checkEmptyState();
+        }
+        
+        // Render tasks based on filter
+        function renderTasks() {
+            // Get filter value
+            const filter = filterTasks.value;
+            
+            // Filter tasks
+            let filteredTasks = [...tasks];
+            
+            if (filter === 'pending') {
+                filteredTasks = tasks.filter(task => !task.completed);
+            } else if (filter === 'completed') {
+                filteredTasks = tasks.filter(task => task.completed);
+            }
+            
+            // Clear task list (except empty state)
+            const taskItems = taskList.querySelectorAll('.task-item');
+            taskItems.forEach(item => item.remove());
+            
+            // Check if there are tasks to display
+            if (filteredTasks.length === 0) {
+                if (tasks.length === 0) {
+                    emptyTasks.style.display = 'block';
+                } else {
+                    emptyTasks.style.display = 'none';
+                    
+                    // Show filtered empty state
+                    const emptyFilteredEl = document.createElement('li');
+                    emptyFilteredEl.className = 'empty-state';
+                    emptyFilteredEl.innerHTML = `
+                        <div class="empty-state-icon" aria-hidden="true">🔍</div>
+                        <h3 class="empty-state-title">No ${filter} tasks found</h3>
+                        <p class="empty-state-text">Try changing your filter to see more tasks.</p>
+                    `;
+                    taskList.appendChild(emptyFilteredEl);
+                }
+                return;
+            }
+            
+            // Hide empty state
+            emptyTasks.style.display = 'none';
+            
+            // Sort tasks by creation date (newest first)
+            filteredTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            // Render each task
+            filteredTasks.forEach(task => {
+                const taskEl = createTaskElement(task);
+                taskList.appendChild(taskEl);
+            });
+        }
+        
+        // Create a task element
+        function createTaskElement(task) {
+            const taskEl = document.createElement('li');
+            taskEl.className = `task-item ${task.completed ? 'completed' : ''}`;
+            taskEl.setAttribute('data-id', task.id);
+            
+            // Format due date if exists
+            let formattedDate = '';
+            if (task.dueDate) {
+                const date = new Date(task.dueDate);
+                formattedDate = date.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric' 
+                });
+            }
+            
+            // Create task HTML
+            taskEl.innerHTML = `
+                <div class="task-header">
+                    <h3 class="task-title">${escapeHTML(task.title)}</h3>
+                    <span class="task-priority priority-${task.priority.toLowerCase()}" aria-label="Priority: ${task.priority}">${task.priority}</span>
+                </div>
+                ${task.dueDate ? `<div class="task-date" aria-label="Due date: ${formattedDate}">📅 Due: ${formattedDate}</div>` : ''}
+                ${task.description ? `<p class="task-description">${escapeHTML(task.description)}</p>` : ''}
+                <div>
+                    <span class="task-category" aria-label="Category: ${task.category}">${task.category}</span>
+                </div>
+                <div class="task-actions">
+                    <button class="task-btn task-btn-complete" aria-label="${task.completed ? 'Mark as incomplete' : 'Mark as complete'}">
+                        ${task.completed ? '↩️' : '✓'}
+                    </button>
+                    <button class="task-btn task-btn-edit" aria-label="Edit task">
+                        ✏️
+                    </button>
+                    <button class="task-btn task-btn-delete" aria-label="Delete task">
+                        🗑️
+                    </button>
+                </div>
+            `;
+            
+            return taskEl;
+        }
+        
+        // Handle task actions (complete, edit, delete)
+        function handleTaskActions(e) {
+            const target = e.target;
+            
+            // Find the task item
+            const taskItem = target.closest('.task-item');
+            if (!taskItem) return;
+            
+            const taskId = taskItem.dataset.id;
+            const taskIndex = tasks.findIndex(task => task.id === taskId);
+            
+            if (taskIndex === -1) return;
+            
+            // Handle complete button
+            if (target.classList.contains('task-btn-complete')) {
+                toggleTaskComplete(taskItem, taskIndex);
+            }
+            
+            // Handle edit button
+            if (target.classList.contains('task-btn-edit')) {
+                openEditModal(taskIndex);
+            }
+            
+            // Handle delete button
+            if (target.classList.contains('task-btn-delete')) {
+                openDeleteConfirmation(taskIndex);
+            }
+        }
+        
+        // Toggle task complete status
+        function toggleTaskComplete(taskItem, taskIndex) {
+            const task = tasks[taskIndex];
+            
+            // Toggle completed status
+            task.completed = !task.completed;
+            
+            // Update UI
+            if (task.completed) {
+                taskItem.classList.add('completed');
+                taskItem.classList.add('task-complete-animation');
+                
+                // Increment completed count
+                completedCount++;
+                localStorage.setItem('completedCount', completedCount);
+                
+                // Check for rewards
+                checkForRewards();
+                
+                // Show success message
+                showToast('Task Completed', 'Great job! You completed a task.', 'success');
+            } else {
+                taskItem.classList.remove('completed');
+                
+                // Decrement completed count
+                completedCount--;
+                if (completedCount < 0) completedCount = 0;
+                localStorage.setItem('completedCount', completedCount);
+                
+                // Update rewards progress
+                updateRewardsProgress();
+            }
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                taskItem.classList.remove('task-complete-animation');
+            }, 500);
+            
+            // Save tasks
+            saveTasks();
+            
+            // Update stats
+            updateStats();
+        }
+        
+        // Open edit modal
+        function openEditModal(taskIndex) {
+            const task = tasks[taskIndex];
+            currentTaskId = task.id;
+            
+            // Set form values
+            document.getElementById('edit-task-id').value = task.id;
+            document.getElementById('edit-task-title').value = task.title;
+            document.getElementById('edit-task-description').value = task.description || '';
+            document.getElementById('edit-task-category').value = task.category;
+            document.getElementById('edit-task-priority').value = task.priority;
+            document.getElementById('edit-task-due-date').value = task.dueDate || '';
+            
+            // Show modal
+            taskModal.classList.add('active');
+            
+            // Set focus to first form field
+            setTimeout(() => {
+                document.getElementById('edit-task-title').focus();
+            }, 100);
+            
+            // Save previous active element to restore focus later
+            taskModal.previousActiveElement = document.activeElement;
+        }
+        
+        // Close edit modal
+        function closeTaskModal() {
+            taskModal.classList.remove('active');
+            
+            // Clear form errors
+            hideError('edit-title-error');
+            hideError('edit-category-error');
+            
+            // Restore focus
+            if (taskModal.previousActiveElement) {
+                taskModal.previousActiveElement.focus();
+            }
+        }
+        
+        // Save task edit
+        function saveTaskEdit() {
+            // Get form values
+            const taskId = document.getElementById('edit-task-id').value;
+            const title = document.getElementById('edit-task-title').value.trim();
+            const description = document.getElementById('edit-task-description').value.trim();
+            const category = document.getElementById('edit-task-category').value;
+            const priority = document.getElementById('edit-task-priority').value;
+            const dueDate = document.getElementById('edit-task-due-date').value;
+            
+            // Validate form
+            let isValid = true;
+            
+            if (!title) {
+                showError('edit-title-error', 'Task title is required');
+                isValid = false;
+            } else {
+                hideError('edit-title-error');
+            }
+            
+            if (!category) {
+                showError('edit-category-error', 'Please select a category');
+                isValid = false;
+            } else {
+                hideError('edit-category-error');
+            }
+            
+            if (!isValid) return;
+            
+            // Find task index
+            const taskIndex = tasks.findIndex(task => task.id === taskId);
+            
+            if (taskIndex !== -1) {
+                // Update task
+                tasks[taskIndex] = {
+                    ...tasks[taskIndex],
+                    title,
+                    description,
+                    category,
+                    priority,
+                    dueDate
+                };
+                
+                // Save tasks
+                saveTasks();
+                
+                // Close modal
+                closeTaskModal();
+                
+                // Show success message
+                showToast('Task Updated', 'Your task has been updated successfully.', 'success');
+                
+                // Render tasks
+                renderTasks();
+                updateStats();
+            }
+        }
+        
+        // Open delete confirmation
+        function openDeleteConfirmation(taskIndex) {
+            const task = tasks[taskIndex];
+            currentTaskId = task.id;
+            
+            // Set confirmation message
+            document.getElementById('confirm-modal-message').textContent = 
+                `Are you sure you want to delete the task "${task.title}"? This action cannot be undone.`;
+            
+            // Show modal
+            confirmModal.classList.add('active');
+            
+            // Set focus to cancel button
+            setTimeout(() => {
+                document.getElementById('confirm-modal-cancel').focus();
+            }, 100);
+            
+            // Save previous active element to restore focus later
+            confirmModal.previousActiveElement = document.activeElement;
+        }
+        
+        // Close confirmation modal
+        function closeConfirmModal() {
+            confirmModal.classList.remove('active');
+            
+            // Restore focus
+            if (confirmModal.previousActiveElement) {
+                confirmModal.previousActiveElement.focus();
+            }
+        }
+        
+        // Confirm delete
+        function confirmDelete() {
+            if (!currentTaskId) return;
+            
+            // Find task index
+            const taskIndex = tasks.findIndex(task => task.id === currentTaskId);
+            
+            if (taskIndex !== -1) {
+                // Check if task was completed
+                if (tasks[taskIndex].completed) {
+                    completedCount--;
+                    if (completedCount < 0) completedCount = 0;
+                    localStorage.setItem('completedCount', completedCount);
+                }
+                
+                // Remove task
+                tasks.splice(taskIndex, 1);
+                
+                // Save tasks
+                saveTasks();
+                
+                // Close modal
+                closeConfirmModal();
+                
+                // Show success message
+                showToast('Task Deleted', 'Your task has been deleted.', 'info');
+                
+                // Render tasks
+                renderTasks();
+                updateStats();
+                updateRewardsProgress();
+                checkEmptyState();
+            }
+        }
+        
+        // Check for rewards
+        function checkForRewards() {
+            // Find the next badge to earn
+            const earnedBadges = badges.filter(badge => completedCount >= badge.threshold);
+            const badgeElements = document.querySelectorAll('.badge');
+            
+            // Update badge UI
+            badges.forEach((badge, index) => {
+                if (completedCount >= badge.threshold) {
+                    if (!badgeElements[index].classList.contains('earned')) {
+                        // Badge newly earned
+                        badgeElements[index].classList.add('earned');
+                        badgeElements[index].classList.add('reward-unlocked-animation');
+                        
+                        // Show reward modal
+                        showRewardModal(badge);
+                        
+                        // Remove animation class after animation completes
+                        setTimeout(() => {
+                            badgeElements[index].classList.remove('reward-unlocked-animation');
+                        }, 1000);
+                    }
+                }
+            });
+            
+            // Update rewards progress
+            updateRewardsProgress();
+        }
+        
+        // Show reward modal
+        function showRewardModal(badge) {
+            document.getElementById('reward-icon').textContent = badge.icon;
+            document.getElementById('reward-name').textContent = `${badge.name} Badge Unlocked!`;
+            document.getElementById('reward-description').textContent = badge.description;
+            
+            // Show modal
+            rewardModal.classList.add('active');
+            
+            // Set focus to OK button
+            setTimeout(() => {
+                document.getElementById('reward-modal-ok').focus();
+            }, 100);
+            
+            // Save previous active element to restore focus later
+            rewardModal.previousActiveElement = document.activeElement;
+        }
+        
+        // Close reward modal
+        function closeRewardModal() {
+            rewardModal.classList.remove('active');
+            
+            // Restore focus
+            if (rewardModal.previousActiveElement) {
+                rewardModal.previousActiveElement.focus();
+            }
+        }
+        
+        // Update rewards progress
+        function updateRewardsProgress() {
+            // Calculate progress percentage
+            const nextBadgeIndex = badges.findIndex(badge => completedCount < badge.threshold);
+            
+            if (nextBadgeIndex === -1) {
+                // All badges earned
+                rewardsProgressBar.style.width = '100%';
+                rewardsProgressText.textContent = '100%';
+                return;
+            }
+            
+            const currentBadge = nextBadgeIndex > 0 ? badges[nextBadgeIndex - 1] : { threshold: 0 };
+            const nextBadge = badges[nextBadgeIndex];
+            
+            const totalNeeded = nextBadge.threshold - currentBadge.threshold;
+            const currentProgress = completedCount - currentBadge.threshold;
+            
+            const percentage = Math.floor((currentProgress / totalNeeded) * 100);
+            
+            rewardsProgressBar.style.width = `${percentage}%`;
+            rewardsProgressText.textContent = `${percentage}%`;
+        }
+        
+        // Update statistics
+        function updateStats() {
+            const totalTasks = tasks.length;
+            const completedTasks = tasks.filter(task => task.completed).length;
+            const pendingTasks = totalTasks - completedTasks;
+            
+            totalTasksEl.textContent = totalTasks;
+            completedTasksEl.textContent = completedTasks;
+            pendingTasksEl.textContent = pendingTasks;
+            
+            // Update category counts
+            updateCategoryCounts();
+        }
+        
+        // Update category counts
+        function updateCategoryCounts() {
+            // Get unique categories
+            const categories = {};
+            
+            tasks.forEach(task => {
+                if (!categories[task.category]) {
+                    categories[task.category] = 0;
+                }
+                categories[task.category]++;
+            });
+            
+            // Update category list
+            const categoryItems = categoriesList.querySelectorAll('.category-item');
+            
+            categoryItems.forEach(item => {
+                const categoryName = item.querySelector('.category-name').textContent;
+                const countEl = item.querySelector('.category-count');
+                
+                countEl.textContent = categories[categoryName] || 0;
+            });
+        }
+        
+        // Check empty state
+        function checkEmptyState() {
+            if (tasks.length === 0) {
+                emptyTasks.style.display = 'block';
+            } else {
+                emptyTasks.style.display = 'none';
+            }
+        }
+        
+        // Create sample tasks
+        function createSampleTasks() {
+            const sampleTasks = [
+                {
+                    id: 'sample1',
+                    title: 'Complete project proposal',
+                    description: 'Finish the draft and send it to the team for review.',
+                    category: 'Work',
+                    priority: 'High',
+                    dueDate: getTomorrowDate(),
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'sample2',
+                    title: 'Go for a 30-minute walk',
+                    description: 'Take a break and get some fresh air.',
+                    category: 'Health',
+                    priority: 'Medium',
+                    dueDate: getTodayDate(),
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'sample3',
+                    title: 'Read chapter 5 of textbook',
+                    description: 'Take notes on key concepts for upcoming exam.',
+                    category: 'Education',
+                    priority: 'Medium',
+                    dueDate: getNextWeekDate(),
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'sample4',
+                    title: 'Call mom',
+                    description: 'Check in and catch up on family news.',
+                    category: 'Personal',
+                    priority: 'Low',
+                    dueDate: getTodayDate(),
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                }
+            ];
+            
+            // Add sample tasks to tasks array
+            tasks = [...tasks, ...sampleTasks];
+            
+            // Save tasks
+            saveTasks();
+            
+            // Render tasks
+            renderTasks();
+            updateStats();
+            checkEmptyState();
+            
+            // Show success message
+            showToast('Sample Tasks Created', 'Sample tasks have been added to your list.', 'info');
+        }
+        
+        // Save tasks to localStorage
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+        
+        // Show error message
+        function showError(elementId, message) {
+            const errorEl = document.getElementById(elementId);
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+            
+            // Add error class to input
+            const inputId = elementId.replace('-error', '');
+            const inputEl = document.getElementById(inputId);
+            if (inputEl) {
+                inputEl.classList.add('error');
+                inputEl.setAttribute('aria-invalid', 'true');
+            }
+        }
+        
+        // Hide error message
+        function hideError(elementId) {
+            const errorEl = document.getElementById(elementId);
+            errorEl.textContent = '';
+            errorEl.style.display = 'none';
+            
+            // Remove error class from input
+            const inputId = elementId.replace('-error', '');
+            const inputEl = document.getElementById(inputId);
+            if (inputEl) {
+                inputEl.classList.remove('error');
+                inputEl.removeAttribute('aria-invalid');
+            }
+        }
+        
+        // Show toast notification
+        function showToast(title, message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'polite');
+            
+            let icon = '📝';
+            if (type === 'success') icon = '✅';
+            if (type === 'error') icon = '❌';
+            if (type === 'warning') icon = '⚠️';
+            
+            toast.innerHTML = `
+                <div class="toast-icon" aria-hidden="true">${icon}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" aria-label="Close notification">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 10);
+            
+            // Add close event
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.addEventListener('click', () => {
+                closeToast(toast);
+            });
+            
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                closeToast(toast);
+            }, 5000);
+        }
+        
+        // Close toast notification
+        function closeToast(toast) {
+            toast.classList.remove('show');
+            
+            // Remove from DOM after animation
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }
+        
+        // Handle modal keydown events
+        function handleModalKeydown(e) {
+            // Close on Escape key
+            if (e.key === 'Escape') {
+                if (this.id === 'task-modal') {
+                    closeTaskModal();
+                } else if (this.id === 'confirm-modal') {
+                    closeConfirmModal();
+                } else if (this.id === 'reward-modal') {
+                    closeRewardModal();
+                }
+            }
+            
+            // Trap focus within modal
+            if (e.key === 'Tab') {
+                const focusableElements = this.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+                
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            }
+        }
+        
+        // Helper function to get today's date in YYYY-MM-DD format
+        function getTodayDate() {
+            const today = new Date();
+            return today.toISOString().split('T')[0];
+        }
+        
+        // Helper function to get tomorrow's date in YYYY-MM-DD format
+        function getTomorrowDate() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow.toISOString().split('T')[0];
+        }
+        
+        // Helper function to get next week's date in YYYY-MM-DD format
+        function getNextWeekDate() {
+            const nextWeek = new Date();
+            nextWeek.setDate(nextWeek.getDate() + 7);
+            return nextWeek.toISOString().split('T')[0];
+        }
+        
+        // Helper function to escape HTML
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag]));
+        }
+        
+        // Initialize the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
