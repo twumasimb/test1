@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Annual Community Gathering - RSVP Form</title>
+    <title>Accessible To-Do List Application</title>
     <style>
         /* CSS Reset and Base Styles */
         *, *::before, *::after {
@@ -12,39 +12,14 @@
             padding: 0;
         }
 
-        /* Root Variables for Consistent Theming */
-        :root {
-            /* Color Palette with 7:1+ contrast ratios */
-            --primary-color: #0056b3;
-            --primary-dark: #003a75;
-            --primary-light: #4d8edb;
-            --secondary-color: #6a3093;
-            --accent-color: #005e20;
-            --background-color: #ffffff;
-            --background-alt: #f8f9fa;
-            --text-color: #121212;
-            --text-light: #333333;
-            --error-color: #a50000;
-            --success-color: #005e20;
-            --warning-color: #7d4200;
-            --border-color: #595959;
-            --focus-color: #ff8c00;
-            
-            /* Spacing */
-            --spacing-xs: 0.25rem;
-            --spacing-sm: 0.5rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-xl: 2rem;
-            --spacing-xxl: 3rem;
-            
-            /* Typography */
-            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            --font-size-base: 1rem;
-            --line-height-base: 1.5;
+        /* Enhanced Focus Indicators */
+        :focus {
+            outline: 3px solid #0078d7;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px white;
         }
 
-        /* Reduced Motion Preference */
+        /* Respect user's motion preferences */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.001ms !important;
@@ -55,20 +30,20 @@
         }
 
         body {
-            font-family: var(--font-family);
-            font-size: var(--font-size-base);
-            line-height: var(--line-height-base);
-            color: var(--text-color);
-            background-color: var(--background-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
             padding: 0;
             margin: 0;
             min-height: 100vh;
         }
 
-        /* Enhanced Focus Styles */
-        :focus {
-            outline: 3px solid var(--focus-color);
-            outline-offset: 2px;
+        /* Visual Presentation Requirements (WCAG 2.2 AAA: 1.4.8) */
+        p, li, label, input, button, select, textarea {
+            font-size: 1rem;
+            line-height: 1.5;
+            max-width: 80ch; /* No more than 80 characters per line */
         }
 
         /* Skip Link */
@@ -76,303 +51,454 @@
             position: absolute;
             top: -40px;
             left: 0;
-            background: var(--primary-color);
+            background: #0078d7;
             color: white;
-            padding: var(--spacing-md);
+            padding: 8px;
             z-index: 100;
-            transition: top 0.2s ease;
+            transition: top 0.3s;
         }
 
         .skip-link:focus {
             top: 0;
         }
 
-        /* Typography */
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: var(--spacing-md);
-            line-height: 1.2;
-            color: var(--text-color);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        h2 {
-            font-size: 2rem;
-            margin-top: var(--spacing-xl);
-            margin-bottom: var(--spacing-md);
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            margin-top: var(--spacing-lg);
-            margin-bottom: var(--spacing-md);
-        }
-
-        p, ul, ol {
-            margin-bottom: var(--spacing-md);
-            max-width: 80ch; /* Maximum 80 characters per line */
-        }
-
-        /* Layout */
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: var(--spacing-md);
-        }
-
-        /* Header */
-        .site-header {
-            background-color: var(--primary-color);
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, #4a148c 0%, #7b1fa2 100%);
             color: white;
-            padding: var(--spacing-lg) 0;
+            padding: 1.5rem;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .site-header h1 {
-            margin-bottom: var(--spacing-sm);
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .site-header p {
+        .app-description {
+            font-size: 1.1rem;
+            max-width: 600px;
             margin: 0 auto;
-            max-width: 800px;
-        }
-
-        /* Navigation */
-        .main-nav {
-            background-color: var(--primary-dark);
-            padding: var(--spacing-md) 0;
-        }
-
-        .nav-list {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-
-        .nav-list li {
-            margin: 0 var(--spacing-md);
-        }
-
-        .nav-list a {
-            color: white;
-            text-decoration: none;
-            padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: 4px;
-            display: inline-block;
-            min-height: 44px;
-            min-width: 44px;
-            line-height: 44px;
-            text-align: center;
-            transition: background-color 0.2s ease;
-        }
-
-        .nav-list a:hover,
-        .nav-list a:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            text-decoration: underline;
         }
 
         /* Main Content */
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--spacing-xl);
-            padding: var(--spacing-xl) 0;
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
-        @media (min-width: 768px) {
-            .main-content {
-                grid-template-columns: 2fr 1fr;
-            }
+        /* Theme Toggle */
+        .theme-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1.5rem;
         }
 
-        /* RSVP Form */
-        .rsvp-form {
-            background-color: var(--background-alt);
-            padding: var(--spacing-lg);
+        .theme-toggle {
+            background: #7b1fa2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .theme-toggle:hover {
+            background: #4a148c;
+        }
+
+        /* Form Styles */
+        .task-form {
+            background-color: white;
+            padding: 1.5rem;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .form-title {
+            color: #4a148c;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
         }
 
         .form-group {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 1.5rem;
         }
 
-        .form-group label {
+        label {
             display: block;
-            margin-bottom: var(--spacing-sm);
+            margin-bottom: 0.5rem;
             font-weight: bold;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: var(--spacing-md);
-            border: 2px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-            line-height: 1.5;
-            min-height: 44px;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-color);
-        }
-
-        .form-control.error {
-            border-color: var(--error-color);
-        }
-
-        .form-help {
-            display: block;
-            margin-top: var(--spacing-xs);
-            font-size: 0.875rem;
-            color: var(--text-light);
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-weight: bold;
-            margin-top: var(--spacing-xs);
-            display: none;
-        }
-
-        .error-message.visible {
-            display: block;
+            color: #333;
         }
 
         .required-field::after {
             content: " *";
-            color: var(--error-color);
+            color: #d32f2f;
         }
 
-        .checkbox-group {
-            margin-top: var(--spacing-sm);
-        }
-
-        .checkbox-group label {
-            display: flex;
-            align-items: center;
-            font-weight: normal;
-            cursor: pointer;
-            min-height: 44px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            margin-right: var(--spacing-sm);
-            min-width: 22px;
-            min-height: 22px;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            min-width: 44px;
-            min-height: 44px;
-            padding: var(--spacing-md) var(--spacing-lg);
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
+        input[type="text"],
+        select,
+        textarea,
+        input[type="date"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ccc;
             border-radius: 4px;
             font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.2s ease;
+            min-height: 44px;
         }
 
-        .btn:hover,
-        .btn:focus {
-            background-color: var(--primary-dark);
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus,
+        input[type="date"]:focus {
+            border-color: #7b1fa2;
+        }
+
+        .help-text {
+            display: block;
+            margin-top: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1 1 300px;
+            margin-bottom: 0;
+        }
+
+        .priority-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .priority-option {
+            position: relative;
+            flex: 1 1 100px;
+        }
+
+        .priority-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .priority-option label {
+            display: block;
+            background: #f5f5f5;
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .priority-option input[type="radio"]:checked + label {
+            border-color: #7b1fa2;
+            background-color: #f3e5f5;
+            font-weight: bold;
+        }
+
+        .priority-option input[type="radio"]:focus + label {
+            outline: 3px solid #0078d7;
+            outline-offset: 2px;
+        }
+
+        .priority-low label {
+            color: #2e7d32;
+        }
+
+        .priority-medium label {
+            color: #f57c00;
+        }
+
+        .priority-high label {
+            color: #d32f2f;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            min-height: 44px;
+            min-width: 44px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #7b1fa2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #6a1b9a;
         }
 
         .btn-secondary {
-            background-color: var(--secondary-color);
+            background-color: #e0e0e0;
+            color: #333;
         }
 
-        .btn-secondary:hover,
-        .btn-secondary:focus {
-            background-color: #552677;
+        .btn-secondary:hover {
+            background-color: #d5d5d5;
         }
 
-        .btn-success {
-            background-color: var(--success-color);
-        }
-
-        .btn-success:hover,
-        .btn-success:focus {
-            background-color: #004518;
-        }
-
-        /* Attendee List */
-        .attendee-list {
-            background-color: var(--background-alt);
-            padding: var(--spacing-lg);
+        /* Task List Styles */
+        .tasks-container {
+            background-color: white;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
         }
 
-        .attendee-list h2 {
-            margin-top: 0;
-        }
-
-        .attendees {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .attendee-item {
-            padding: var(--spacing-md);
-            border-bottom: 1px solid #ddd;
+        .tasks-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .attendee-item:last-child {
+        .tasks-title {
+            color: #4a148c;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            min-height: 44px;
+            min-width: 44px;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-item {
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .task-item:last-child {
             border-bottom: none;
         }
 
-        .attendee-name {
-            font-weight: bold;
+        .task-checkbox {
+            min-width: 24px;
+            min-height: 24px;
+            margin-top: 0.25rem;
         }
 
-        .attendee-details {
-            color: var(--text-light);
+        .task-checkbox input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .task-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+
+        .task-completed .task-title {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-priority,
+        .task-due-date {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
             font-size: 0.9rem;
+        }
+
+        .priority-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .priority-badge-low {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .priority-badge-medium {
+            background-color: #fff3e0;
+            color: #f57c00;
+        }
+
+        .priority-badge-high {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        .task-description {
+            margin: 0;
+            color: #555;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .task-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #7b1fa2;
+            padding: 0.5rem;
+            border-radius: 4px;
+            min-height: 44px;
+            min-width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .task-btn:hover {
+            background-color: #f3e5f5;
+        }
+
+        .task-btn-delete {
+            color: #d32f2f;
+        }
+
+        .task-btn-delete:hover {
+            background-color: #ffebee;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #bbb;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .empty-state-text {
+            margin-bottom: 1.5rem;
         }
 
         /* Status Messages */
         .status-message {
-            padding: var(--spacing-md);
-            margin-bottom: var(--spacing-lg);
+            padding: 1rem;
             border-radius: 4px;
-            font-weight: bold;
-            display: none;
+            margin-bottom: 1.5rem;
         }
 
-        .status-message.success {
-            background-color: rgba(0, 94, 32, 0.1);
-            color: var(--success-color);
-            border: 1px solid var(--success-color);
-            display: block;
+        .status-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
         }
 
-        .status-message.error {
-            background-color: rgba(165, 0, 0, 0.1);
-            color: var(--error-color);
-            border: 1px solid var(--error-color);
-            display: block;
+        .status-error {
+            background-color: #ffebee;
+            color: #d32f2f;
+            border-left: 4px solid #d32f2f;
         }
 
-        /* Modal */
+        /* Error Styles */
+        .error-message {
+            color: #d32f2f;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        input.error,
+        select.error,
+        textarea.error {
+            border-color: #d32f2f;
+        }
+
+        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -384,1131 +510,994 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
+            padding: 1rem;
         }
 
         .modal {
             background-color: white;
             border-radius: 8px;
             max-width: 500px;
-            width: 90%;
-            padding: var(--spacing-lg);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             position: relative;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0);
         }
 
         .modal-header {
-            margin-bottom: var(--spacing-md);
+            margin-bottom: 1.5rem;
         }
 
         .modal-title {
+            font-size: 1.5rem;
+            color: #4a148c;
             margin: 0;
         }
 
         .modal-body {
-            margin-bottom: var(--spacing-lg);
+            margin-bottom: 1.5rem;
         }
 
         .modal-footer {
             display: flex;
             justify-content: flex-end;
-            gap: var(--spacing-md);
+            gap: 1rem;
         }
 
-        .close-modal {
+        .modal-close {
             position: absolute;
-            top: var(--spacing-md);
-            right: var(--spacing-md);
+            top: 1rem;
+            right: 1rem;
             background: none;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            min-width: 44px;
+            color: #666;
             min-height: 44px;
+            min-width: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-color);
         }
 
-        /* Tabs */
-        .tabs {
-            margin-bottom: var(--spacing-lg);
+        .modal-close:hover {
+            color: #333;
         }
 
-        .tab-list {
-            display: flex;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .tab {
-            padding: var(--spacing-md) var(--spacing-lg);
-            cursor: pointer;
-            min-height: 44px;
-            min-width: 44px;
-            text-align: center;
-            background-color: transparent;
-            border: none;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px;
-            font-weight: bold;
-            color: var(--text-light);
-        }
-
-        .tab[aria-selected="true"] {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-        }
-
-        .tab:hover,
-        .tab:focus {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .tab-panel {
-            display: none;
-            padding: var(--spacing-lg) 0;
-        }
-
-        .tab-panel[aria-hidden="false"] {
-            display: block;
-        }
-
-        /* Accordion */
-        .accordion {
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .accordion-item {
-            border: 1px solid #ddd;
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .accordion-header {
-            padding: 0;
-            width: 100%;
-            text-align: left;
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: var(--spacing-md);
-        }
-
-        .accordion-header:hover,
-        .accordion-header:focus {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        .accordion-icon {
-            transition: transform 0.3s ease;
-        }
-
-        .accordion-header[aria-expanded="true"] .accordion-icon {
-            transform: rotate(180deg);
-        }
-
-        .accordion-panel {
-            padding: 0 var(--spacing-md);
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-        }
-
-        .accordion-panel[aria-hidden="false"] {
-            max-height: 500px;
-            padding: var(--spacing-md);
-        }
-
-        /* Footer */
-        .site-footer {
-            background-color: var(--primary-dark);
+        /* Footer Styles */
+        footer {
+            background-color: #4a148c;
             color: white;
-            padding: var(--spacing-xl) 0;
-            margin-top: var(--spacing-xxl);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
         }
 
         .footer-content {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: var(--spacing-lg);
-        }
-
-        @media (min-width: 768px) {
-            .footer-content {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-
-        .footer-section h3 {
-            margin-top: 0;
-            color: white;
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .footer-links a {
-            color: white;
-            text-decoration: none;
-            display: inline-block;
-            min-height: 44px;
-            line-height: 44px;
-        }
-
-        .footer-links a:hover,
-        .footer-links a:focus {
-            text-decoration: underline;
-        }
-
-        .copyright {
-            text-align: center;
-            margin-top: var(--spacing-xl);
-            padding-top: var(--spacing-md);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 767px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .attendee-list {
-                margin-top: var(--spacing-xl);
-            }
-            
-            .nav-list {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .nav-list li {
-                margin: var(--spacing-xs) 0;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            h2 {
-                font-size: 1.75rem;
-            }
-            
-            .tab-list {
-                flex-direction: column;
-            }
-            
-            .tab {
-                width: 100%;
-                text-align: left;
-            }
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            border-top-color: var(--primary-color);
-            animation: spin 1s ease-in-out infinite;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
         }
 
-        .loading-container {
-            display: none;
-            text-align: center;
-            padding: var(--spacing-lg);
-        }
-
-        .loading-container.visible {
-            display: block;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip-icon {
-            display: inline-flex;
-            align-items: center;
+        .footer-links {
+            display: flex;
             justify-content: center;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
             color: white;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-left: var(--spacing-xs);
+            text-decoration: none;
         }
 
-        .tooltip-text {
-            visibility: hidden;
-            width: 200px;
-            background-color: var(--text-color);
-            color: white;
-            text-align: center;
-            border-radius: 6px;
-            padding: var(--spacing-md);
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            transition: opacity 0.3s;
+        .footer-link:hover {
+            text-decoration: underline;
         }
 
-        .tooltip-text::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: var(--text-color) transparent transparent transparent;
+        .footer-copyright {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
         }
 
-        .tooltip:hover .tooltip-text,
-        .tooltip:focus-within .tooltip-text,
-        .tooltip-icon:focus + .tooltip-text {
-            visibility: visible;
-            opacity: 1;
+        /* Dark Theme */
+        .dark-theme {
+            background-color: #121212;
+            color: #e0e0e0;
         }
 
-        /* Print Styles */
-        @media print {
-            .site-header, .main-nav, .site-footer, .btn, .tabs, .modal-overlay {
-                display: none;
+        .dark-theme header {
+            background: linear-gradient(135deg, #311b92 0%, #4a148c 100%);
+        }
+
+        .dark-theme .task-form,
+        .dark-theme .tasks-container,
+        .dark-theme .modal {
+            background-color: #1e1e1e;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark-theme .form-title,
+        .dark-theme .tasks-title,
+        .dark-theme .modal-title {
+            color: #bb86fc;
+        }
+
+        .dark-theme label {
+            color: #e0e0e0;
+        }
+
+        .dark-theme input[type="text"],
+        .dark-theme select,
+        .dark-theme textarea,
+        .dark-theme input[type="date"],
+        .dark-theme .filter-select {
+            background-color: #2d2d2d;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .priority-option label {
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .priority-option input[type="radio"]:checked + label {
+            background-color: #3f2f70;
+            border-color: #bb86fc;
+        }
+
+        .dark-theme .priority-low label {
+            color: #81c784;
+        }
+
+        .dark-theme .priority-medium label {
+            color: #ffb74d;
+        }
+
+        .dark-theme .priority-high label {
+            color: #e57373;
+        }
+
+        .dark-theme .btn-secondary {
+            background-color: #424242;
+            color: #e0e0e0;
+        }
+
+        .dark-theme .btn-secondary:hover {
+            background-color: #505050;
+        }
+
+        .dark-theme .task-item {
+            border-bottom-color: #333;
+        }
+
+        .dark-theme .task-title {
+            color: #e0e0e0;
+        }
+
+        .dark-theme .task-completed .task-title {
+            color: #757575;
+        }
+
+        .dark-theme .task-description {
+            color: #b0b0b0;
+        }
+
+        .dark-theme .priority-badge-low {
+            background-color: #1b5e20;
+            color: #a5d6a7;
+        }
+
+        .dark-theme .priority-badge-medium {
+            background-color: #e65100;
+            color: #ffcc80;
+        }
+
+        .dark-theme .priority-badge-high {
+            background-color: #b71c1c;
+            color: #ef9a9a;
+        }
+
+        .dark-theme .task-btn {
+            color: #bb86fc;
+        }
+
+        .dark-theme .task-btn:hover {
+            background-color: #3f2f70;
+        }
+
+        .dark-theme .task-btn-delete {
+            color: #e57373;
+        }
+
+        .dark-theme .task-btn-delete:hover {
+            background-color: #4f1f1f;
+        }
+
+        .dark-theme .empty-state {
+            color: #b0b0b0;
+        }
+
+        .dark-theme .empty-state-icon {
+            color: #616161;
+        }
+
+        .dark-theme .empty-state-title {
+            color: #e0e0e0;
+        }
+
+        .dark-theme .status-success {
+            background-color: #1b5e20;
+            color: #a5d6a7;
+        }
+
+        .dark-theme .status-error {
+            background-color: #b71c1c;
+            color: #ef9a9a;
+        }
+
+        .dark-theme .modal-close {
+            color: #b0b0b0;
+        }
+
+        .dark-theme .modal-close:hover {
+            color: #e0e0e0;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
             }
-            
-            body, .container, .main-content {
-                width: 100%;
-                margin: 0;
-                padding: 0;
+
+            h1 {
+                font-size: 2rem;
             }
-            
-            .main-content {
-                display: block;
+
+            main {
+                padding: 1rem;
             }
-            
-            .rsvp-form, .attendee-list {
-                box-shadow: none;
-                border: 1px solid #ddd;
-                page-break-inside: avoid;
+
+            .form-row {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .form-row .form-group {
+                flex: 1 1 100%;
+            }
+
+            .task-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .task-actions {
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* High Contrast Mode */
+        @media (forced-colors: active) {
+            .btn-primary,
+            .btn-secondary,
+            .task-btn,
+            .theme-toggle {
+                border: 2px solid currentColor;
+            }
+
+            .priority-badge {
+                border: 1px solid currentColor;
+            }
+
+            .task-item {
+                border-bottom: 1px solid currentColor;
             }
         }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    
-    <header class="site-header">
-        <div class="container">
-            <h1>Annual Community Gathering</h1>
-            <p>Join us for a day of connection, learning, and celebration on September 15, 2023, at Community Center Plaza</p>
-        </div>
+
+    <header>
+        <h1>Task Manager</h1>
+        <p class="app-description">An accessible to-do list application to help you organize your tasks with priority levels and due dates.</p>
     </header>
-    
-    <nav class="main-nav" aria-label="Main navigation">
-        <div class="container">
-            <ul class="nav-list">
-                <li><a href="#event-details">Event Details</a></li>
-                <li><a href="#rsvp-form">RSVP Form</a></li>
-                <li><a href="#attendees">Attendees</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#contact">Contact Us</a></li>
-            </ul>
+
+    <main id="main-content">
+        <div class="theme-controls">
+            <button type="button" class="theme-toggle" id="theme-toggle" aria-pressed="false">
+                <span aria-hidden="true">🌙</span>
+                <span id="theme-text">Dark Mode</span>
+            </button>
         </div>
-    </nav>
-    
-    <main id="main-content" class="container">
-        <div class="main-content">
-            <section class="rsvp-section">
-                <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
-                
-                <div class="tabs" role="tablist" aria-label="Event information">
-                    <div class="tab-list" role="tablist">
-                        <button id="tab-details" class="tab" role="tab" aria-selected="true" aria-controls="panel-details">Event Details</button>
-                        <button id="tab-rsvp" class="tab" role="tab" aria-selected="false" aria-controls="panel-rsvp">RSVP Form</button>
-                        <button id="tab-faq" class="tab" role="tab" aria-selected="false" aria-controls="panel-faq">FAQ</button>
+
+        <div id="status-container" aria-live="polite"></div>
+
+        <section class="task-form" aria-labelledby="form-title">
+            <h2 id="form-title" class="form-title">Add New Task</h2>
+            <form id="add-task-form">
+                <div class="form-group">
+                    <label for="task-title" class="required-field">Task Title</label>
+                    <input 
+                        type="text" 
+                        id="task-title" 
+                        name="task-title" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="title-help title-error"
+                        autocomplete="off">
+                    <span id="title-help" class="help-text">Enter a clear, concise title for your task</span>
+                    <div id="title-error" class="error-message" aria-live="polite"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task-description">Description (Optional)</label>
+                    <textarea 
+                        id="task-description" 
+                        name="task-description" 
+                        rows="3"
+                        aria-describedby="description-help"
+                        autocomplete="off"></textarea>
+                    <span id="description-help" class="help-text">Add any additional details about the task</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <fieldset>
+                            <legend class="required-field">Priority Level</legend>
+                            <div class="priority-options">
+                                <div class="priority-option priority-low">
+                                    <input 
+                                        type="radio" 
+                                        id="priority-low" 
+                                        name="priority" 
+                                        value="low"
+                                        required
+                                        aria-required="true"
+                                        checked>
+                                    <label for="priority-low">Low</label>
+                                </div>
+                                <div class="priority-option priority-medium">
+                                    <input 
+                                        type="radio" 
+                                        id="priority-medium" 
+                                        name="priority" 
+                                        value="medium"
+                                        required
+                                        aria-required="true">
+                                    <label for="priority-medium">Medium</label>
+                                </div>
+                                <div class="priority-option priority-high">
+                                    <input 
+                                        type="radio" 
+                                        id="priority-high" 
+                                        name="priority" 
+                                        value="high"
+                                        required
+                                        aria-required="true">
+                                    <label for="priority-high">High</label>
+                                </div>
+                            </div>
+                        </fieldset>
                     </div>
-                    
-                    <div id="panel-details" class="tab-panel" role="tabpanel" aria-labelledby="tab-details" aria-hidden="false">
-                        <h2 id="event-details">Event Details</h2>
-                        <p>Join us for our Annual Community Gathering, a celebration of community spirit and connection. This year's event promises to be our best yet, with activities for all ages, inspiring speakers, and delicious food.</p>
-                        
-                        <h3>When and Where</h3>
-                        <p>Date: September 15, 2023<br>
-                        Time: 10:00 AM - 4:00 PM<br>
-                        Location: Community Center Plaza, 123 Main Street</p>
-                        
-                        <h3>What to Expect</h3>
-                        <ul>
-                            <li>Interactive workshops on community building</li>
-                            <li>Local food vendors showcasing regional cuisine</li>
-                            <li>Live music and cultural performances</li>
-                            <li>Children's activities and family-friendly entertainment</li>
-                            <li>Networking opportunities with community leaders</li>
-                        </ul>
-                        
-                        <h3>Accessibility Information</h3>
-                        <p>Our venue is fully wheelchair accessible with ramps and elevators. We will have sign language interpreters for main presentations, accessible restrooms, and designated quiet spaces. If you have specific accessibility needs, please indicate them in the RSVP form.</p>
-                        
-                        <button class="btn" id="open-rsvp-tab">RSVP Now</button>
-                    </div>
-                    
-                    <div id="panel-rsvp" class="tab-panel" role="tabpanel" aria-labelledby="tab-rsvp" aria-hidden="true">
-                        <h2 id="rsvp-form">RSVP Form</h2>
-                        <p>Please fill out the form below to confirm your attendance. All fields marked with an asterisk (*) are required.</p>
-                        
-                        <form id="rsvp-form" class="rsvp-form" novalidate>
-                            <div class="form-group">
-                                <label for="full-name" class="required-field">Full Name</label>
-                                <input type="text" id="full-name" name="full-name" class="form-control" required aria-required="true" aria-describedby="name-help">
-                                <span id="name-help" class="form-help">Please enter your first and last name</span>
-                                <div id="name-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="email" class="required-field">Email Address</label>
-                                <input type="email" id="email" name="email" class="form-control" required aria-required="true" aria-describedby="email-help" autocomplete="email">
-                                <span id="email-help" class="form-help">We'll send your confirmation to this address</span>
-                                <div id="email-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="phone" class="required-field">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" class="form-control" required aria-required="true" aria-describedby="phone-help" autocomplete="tel">
-                                <span id="phone-help" class="form-help">Format: (123) 456-7890</span>
-                                <div id="phone-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="guests">Number of Guests (including yourself)</label>
-                                <div class="tooltip">
-                                    <button type="button" class="tooltip-icon" aria-label="More information about guest limits" tabindex="0">?</button>
-                                    <span class="tooltip-text">Maximum 4 guests per RSVP</span>
-                                </div>
-                                <input type="number" id="guests" name="guests" class="form-control" min="1" max="4" value="1" aria-describedby="guests-help">
-                                <span id="guests-help" class="form-help">Maximum 4 guests per RSVP</span>
-                                <div id="guests-error" class="error-message" aria-live="polite"></div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <fieldset>
-                                    <legend>Dietary Preferences</legend>
-                                    <div class="checkbox-group">
-                                        <label for="vegetarian">
-                                            <input type="checkbox" id="vegetarian" name="dietary" value="vegetarian">
-                                            Vegetarian
-                                        </label>
-                                    </div>
-                                    <div class="checkbox-group">
-                                        <label for="vegan">
-                                            <input type="checkbox" id="vegan" name="dietary" value="vegan">
-                                            Vegan
-                                        </label>
-                                    </div>
-                                    <div class="checkbox-group">
-                                        <label for="gluten-free">
-                                            <input type="checkbox" id="gluten-free" name="dietary" value="gluten-free">
-                                            Gluten-Free
-                                        </label>
-                                    </div>
-                                    <div class="checkbox-group">
-                                        <label for="no-restrictions">
-                                            <input type="checkbox" id="no-restrictions" name="dietary" value="none">
-                                            No Dietary Restrictions
-                                        </label>
-                                    </div>
-                                </fieldset>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="accessibility-needs">Accessibility Needs</label>
-                                <textarea id="accessibility-needs" name="accessibility-needs" class="form-control" rows="3" aria-describedby="accessibility-help"></textarea>
-                                <span id="accessibility-help" class="form-help">Please let us know if you have any specific accessibility requirements</span>
-                            </div>
-                            
-                            <div class="form-group">
-                                <fieldset>
-                                    <legend class="required-field">Will you attend the evening reception?</legend>
-                                    <div class="checkbox-group">
-                                        <label for="reception-yes">
-                                            <input type="radio" id="reception-yes" name="reception" value="yes" required aria-required="true">
-                                            Yes, I will attend
-                                        </label>
-                                    </div>
-                                    <div class="checkbox-group">
-                                        <label for="reception-no">
-                                            <input type="radio" id="reception-no" name="reception" value="no" required aria-required="true">
-                                            No, I cannot attend
-                                        </label>
-                                    </div>
-                                    <div id="reception-error" class="error-message" aria-live="polite"></div>
-                                </fieldset>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="checkbox-group">
-                                    <label for="terms" class="required-field">
-                                        <input type="checkbox" id="terms" name="terms" required aria-required="true">
-                                        I agree to the <button type="button" class="btn-link" id="open-terms-modal">terms and conditions</button>
-                                    </label>
-                                    <div id="terms-error" class="error-message" aria-live="polite"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success" id="submit-rsvp">Submit RSVP</button>
-                                <button type="reset" class="btn">Clear Form</button>
-                            </div>
-                        </form>
-                        
-                        <div id="loading-container" class="loading-container" aria-live="polite">
-                            <div class="spinner" aria-hidden="true"></div>
-                            <p>Processing your RSVP...</p>
-                        </div>
-                    </div>
-                    
-                    <div id="panel-faq" class="tab-panel" role="tabpanel" aria-labelledby="tab-faq" aria-hidden="true">
-                        <h2 id="faq">Frequently Asked Questions</h2>
-                        
-                        <div class="accordion">
-                            <div class="accordion-item">
-                                <button id="accordion1" class="accordion-header" aria-expanded="false" aria-controls="panel1">
-                                    <span>Is there a cost to attend?</span>
-                                    <span class="accordion-icon" aria-hidden="true">▼</span>
-                                </button>
-                                <div id="panel1" class="accordion-panel" aria-labelledby="accordion1" aria-hidden="true">
-                                    <p>No, the event is completely free to attend. We welcome donations to support our community initiatives, but they are not required.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item">
-                                <button id="accordion2" class="accordion-header" aria-expanded="false" aria-controls="panel2">
-                                    <span>What should I bring?</span>
-                                    <span class="accordion-icon" aria-hidden="true">▼</span>
-                                </button>
-                                <div id="panel2" class="accordion-panel" aria-labelledby="accordion2" aria-hidden="true">
-                                    <p>We recommend bringing a reusable water bottle, comfortable shoes, and weather-appropriate clothing. All activities and materials will be provided.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item">
-                                <button id="accordion3" class="accordion-header" aria-expanded="false" aria-controls="panel3">
-                                    <span>Is parking available?</span>
-                                    <span class="accordion-icon" aria-hidden="true">▼</span>
-                                </button>
-                                <div id="panel3" class="accordion-panel" aria-labelledby="accordion3" aria-hidden="true">
-                                    <p>Yes, free parking is available at the Community Center garage. We also encourage carpooling or using public transportation when possible.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="accordion-item">
-                                <button id="accordion4" class="accordion-header" aria-expanded="false" aria-controls="panel4">
-                                    <span>Can I update my RSVP after submitting?</span>
-                                    <span class="accordion-icon" aria-hidden="true">▼</span>
-                                </button>
-                                <div id="panel4" class="accordion-panel" aria-labelledby="accordion4" aria-hidden="true">
-                                    <p>Yes, you can update your RSVP by contacting our event coordinator at events@community.org or by calling (555) 123-4567.</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <h3 id="contact">Contact Information</h3>
-                        <p>If you have any questions that aren't answered above, please contact us:</p>
-                        <p>Email: events@community.org<br>
-                        Phone: (555) 123-4567<br>
-                        Hours: Monday-Friday, 9:00 AM - 5:00 PM</p>
+
+                    <div class="form-group">
+                        <label for="due-date">Due Date (Optional)</label>
+                        <input 
+                            type="date" 
+                            id="due-date" 
+                            name="due-date"
+                            aria-describedby="date-help">
+                        <span id="date-help" class="help-text">Select a target completion date</span>
                     </div>
                 </div>
-            </section>
-            
-            <aside class="attendee-list">
-                <h2 id="attendees">Current Attendees</h2>
-                <p>Join these community members who have already RSVP'd to the event:</p>
-                
-                <ul class="attendees" id="attendee-list" aria-live="polite">
-                    <li class="attendee-item">
-                        <div>
-                            <span class="attendee-name">Sarah Johnson</span>
-                            <div class="attendee-details">Guests: 2 | Dietary: Vegetarian</div>
-                        </div>
-                    </li>
-                    <li class="attendee-item">
-                        <div>
-                            <span class="attendee-name">Michael Chen</span>
-                            <div class="attendee-details">Guests: 1 | Dietary: None</div>
-                        </div>
-                    </li>
-                    <li class="attendee-item">
-                        <div>
-                            <span class="attendee-name">Aisha Patel</span>
-                            <div class="attendee-details">Guests: 3 | Dietary: Gluten-Free</div>
-                        </div>
-                    </li>
-                    <li class="attendee-item">
-                        <div>
-                            <span class="attendee-name">Robert Garcia</span>
-                            <div class="attendee-details">Guests: 2 | Dietary: None</div>
-                        </div>
-                    </li>
-                    <li class="attendee-item">
-                        <div>
-                            <span class="attendee-name">Emma Wilson</span>
-                            <div class="attendee-details">Guests: 1 | Dietary: Vegan</div>
-                        </div>
-                    </li>
-                </ul>
-                
-                <p>Total attendees so far: <span id="attendee-count">9</span></p>
-                
-                <button class="btn btn-secondary" id="refresh-attendees">Refresh List</button>
-            </aside>
-        </div>
+
+                <div class="form-actions">
+                    <button type="button" id="reset-form" class="btn btn-secondary">Clear Form</button>
+                    <button type="submit" class="btn btn-primary">Add Task</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="tasks-container" aria-labelledby="tasks-title">
+            <div class="tasks-header">
+                <h2 id="tasks-title" class="tasks-title">Your Tasks</h2>
+                <div class="filter-container">
+                    <label for="filter-tasks" class="filter-label">Filter:</label>
+                    <select id="filter-tasks" class="filter-select" aria-label="Filter tasks by status">
+                        <option value="all">All Tasks</option>
+                        <option value="active">Active Tasks</option>
+                        <option value="completed">Completed Tasks</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="task-list-container">
+                <!-- Task list will be populated here -->
+                <div class="empty-state">
+                    <div class="empty-state-icon" aria-hidden="true">📋</div>
+                    <h3 class="empty-state-title">No Tasks Yet</h3>
+                    <p class="empty-state-text">Add your first task using the form above.</p>
+                    <button type="button" class="btn btn-primary" id="add-sample-tasks">Add Sample Tasks</button>
+                </div>
+            </div>
+        </section>
     </main>
-    
-    <div class="modal-overlay" id="terms-modal" aria-hidden="true">
-        <div class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
-            <button class="close-modal" aria-label="Close modal" id="close-modal">&times;</button>
-            
+
+    <div id="delete-modal" class="modal-overlay" style="display: none;">
+        <div class="modal" role="dialog" aria-labelledby="delete-modal-title" aria-describedby="delete-modal-description">
+            <button type="button" class="modal-close" aria-label="Close modal" id="close-modal">×</button>
             <div class="modal-header">
-                <h2 id="modal-title">Terms and Conditions</h2>
+                <h2 id="delete-modal-title" class="modal-title">Confirm Deletion</h2>
             </div>
-            
             <div class="modal-body">
-                <h3>Event Participation Agreement</h3>
-                <p>By registering for the Annual Community Gathering, you agree to the following terms:</p>
-                
-                <ol>
-                    <li>Your contact information will only be used for event-related communications.</li>
-                    <li>Photographs and videos may be taken during the event for promotional purposes.</li>
-                    <li>You agree to follow all venue safety guidelines and protocols.</li>
-                    <li>Cancellations should be made at least 48 hours before the event.</li>
-                    <li>The organizers reserve the right to modify the event schedule if necessary.</li>
-                </ol>
-                
-                <h3>Privacy Policy</h3>
-                <p>We respect your privacy and will not share your personal information with third parties without your consent. Your email will only be used to send event confirmations and updates.</p>
+                <p id="delete-modal-description">Are you sure you want to delete this task? This action cannot be undone.</p>
             </div>
-            
             <div class="modal-footer">
-                <button class="btn" id="accept-terms">I Accept</button>
-                <button class="btn" id="decline-terms">I Decline</button>
+                <button type="button" class="btn btn-secondary" id="cancel-delete">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirm-delete">Delete Task</button>
             </div>
         </div>
     </div>
-    
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>About Us</h3>
-                    <p>The Annual Community Gathering is organized by the Community Connection Coalition, a non-profit dedicated to building stronger, more inclusive communities through events and initiatives.</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="#event-details">Event Details</a></li>
-                        <li><a href="#rsvp-form">RSVP Form</a></li>
-                        <li><a href="#attendees">Attendees</a></li>
-                        <li><a href="#faq">FAQ</a></li>
-                        <li><a href="#contact">Contact Us</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>Connect With Us</h3>
-                    <ul class="footer-links">
-                        <li><a href="#" aria-label="Visit our Facebook page">Facebook</a></li>
-                        <li><a href="#" aria-label="Visit our Twitter page">Twitter</a></li>
-                        <li><a href="#" aria-label="Visit our Instagram page">Instagram</a></li>
-                        <li><a href="#" aria-label="Subscribe to our newsletter">Newsletter</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="copyright">
-                <p>&copy; 2023 Community Connection Coalition. All rights reserved.</p>
-            </div>
+
+    <footer>
+        <div class="footer-content">
+            <h2 class="footer-title">Task Manager - Accessible To-Do List</h2>
+            <nav aria-label="Footer Navigation">
+                <ul class="footer-links">
+                    <li><a href="#" class="footer-link">Help & Support</a></li>
+                    <li><a href="#" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="#" class="footer-link">Terms of Use</a></li>
+                    <li><a href="#" class="footer-link">Accessibility Statement</a></li>
+                </ul>
+            </nav>
+            <p class="footer-copyright">© <span id="current-year">2023</span> Task Manager. All rights reserved.</p>
         </div>
     </footer>
-    
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Tab functionality
-            const tabs = document.querySelectorAll('.tab');
-            const tabPanels = document.querySelectorAll('.tab-panel');
-            
-            function setActiveTab(tabId) {
-                // Update tab states
-                tabs.forEach(tab => {
-                    const isSelected = tab.id === tabId;
-                    tab.setAttribute('aria-selected', isSelected);
-                    
-                    // Update panel visibility
-                    const panelId = tab.getAttribute('aria-controls');
-                    const panel = document.getElementById(panelId);
-                    panel.setAttribute('aria-hidden', !isSelected);
-                });
-            }
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    setActiveTab(this.id);
-                });
+            // DOM Elements
+            const addTaskForm = document.getElementById('add-task-form');
+            const taskTitleInput = document.getElementById('task-title');
+            const taskDescriptionInput = document.getElementById('task-description');
+            const dueDateInput = document.getElementById('due-date');
+            const resetFormButton = document.getElementById('reset-form');
+            const taskListContainer = document.getElementById('task-list-container');
+            const filterTasksSelect = document.getElementById('filter-tasks');
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeText = document.getElementById('theme-text');
+            const statusContainer = document.getElementById('status-container');
+            const addSampleTasksButton = document.getElementById('add-sample-tasks');
+            const deleteModal = document.getElementById('delete-modal');
+            const closeModalButton = document.getElementById('close-modal');
+            const cancelDeleteButton = document.getElementById('cancel-delete');
+            const confirmDeleteButton = document.getElementById('confirm-delete');
+            const currentYearElement = document.getElementById('current-year');
+
+            // Set current year in footer
+            currentYearElement.textContent = new Date().getFullYear();
+
+            // Initialize tasks array from localStorage or empty array
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            let taskToDeleteId = null;
+            let lastFocusedElementBeforeModal = null;
+
+            // Initialize the application
+            init();
+
+            // Initialize the application
+            function init() {
+                // Load saved theme preference
+                loadThemePreference();
                 
-                tab.addEventListener('keydown', function(e) {
-                    // Handle keyboard navigation
-                    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                        e.preventDefault();
-                        
-                        const tabList = Array.from(tabs);
-                        const currentIndex = tabList.indexOf(this);
-                        let newIndex;
-                        
-                        if (e.key === 'ArrowLeft') {
-                            newIndex = currentIndex === 0 ? tabList.length - 1 : currentIndex - 1;
-                        } else {
-                            newIndex = currentIndex === tabList.length - 1 ? 0 : currentIndex + 1;
-                        }
-                        
-                        tabList[newIndex].focus();
-                        setActiveTab(tabList[newIndex].id);
+                // Render tasks
+                renderTasks();
+                
+                // Add event listeners
+                addEventListeners();
+            }
+
+            // Add all event listeners
+            function addEventListeners() {
+                // Form submission
+                addTaskForm.addEventListener('submit', handleAddTask);
+                
+                // Reset form button
+                resetFormButton.addEventListener('click', resetForm);
+                
+                // Filter tasks
+                filterTasksSelect.addEventListener('change', renderTasks);
+                
+                // Theme toggle
+                themeToggle.addEventListener('click', toggleTheme);
+                
+                // Add sample tasks
+                addSampleTasksButton.addEventListener('click', addSampleTasks);
+                
+                // Modal events
+                closeModalButton.addEventListener('click', closeDeleteModal);
+                cancelDeleteButton.addEventListener('click', closeDeleteModal);
+                confirmDeleteButton.addEventListener('click', confirmDeleteTask);
+                
+                // Close modal on escape key
+                document.addEventListener('keydown', function(event) {
+                    if (event.key === 'Escape' && deleteModal.style.display !== 'none') {
+                        closeDeleteModal();
                     }
                 });
-            });
-            
-            // Open RSVP tab button
-            document.getElementById('open-rsvp-tab').addEventListener('click', function() {
-                setActiveTab('tab-rsvp');
-                document.getElementById('tab-rsvp').focus();
-            });
-            
-            // Accordion functionality
-            const accordionHeaders = document.querySelectorAll('.accordion-header');
-            
-            accordionHeaders.forEach(header => {
-                header.addEventListener('click', function() {
-                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                    this.setAttribute('aria-expanded', !isExpanded);
-                    
-                    const panelId = this.getAttribute('aria-controls');
-                    const panel = document.getElementById(panelId);
-                    panel.setAttribute('aria-hidden', isExpanded);
-                });
-            });
-            
-            // Modal functionality
-            const modalOverlay = document.getElementById('terms-modal');
-            const openModalBtn = document.getElementById('open-terms-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-            const acceptTermsBtn = document.getElementById('accept-terms');
-            const declineTermsBtn = document.getElementById('decline-terms');
-            const termsCheckbox = document.getElementById('terms');
-            
-            function openModal() {
-                modalOverlay.classList.add('active');
-                modalOverlay.setAttribute('aria-hidden', 'false');
                 
-                // Set focus to the modal
-                document.querySelector('.modal').focus();
-                
-                // Store the element that had focus before opening the modal
-                openModal.lastFocus = document.activeElement;
-                
-                // Trap focus in modal
-                document.addEventListener('keydown', trapFocus);
+                // Trap focus in modal when open
+                deleteModal.addEventListener('keydown', trapFocusInModal);
             }
-            
-            function closeModal() {
-                modalOverlay.classList.remove('active');
-                modalOverlay.setAttribute('aria-hidden', 'true');
+
+            // Handle form submission
+            function handleAddTask(event) {
+                event.preventDefault();
                 
-                // Return focus to the element that had focus before opening the modal
-                if (openModal.lastFocus) {
-                    openModal.lastFocus.focus();
-                }
-                
-                // Remove focus trap
-                document.removeEventListener('keydown', trapFocus);
-            }
-            
-            function trapFocus(e) {
-                // If Escape key is pressed, close the modal
-                if (e.key === 'Escape') {
-                    closeModal();
+                // Validate form
+                if (!validateForm()) {
                     return;
                 }
                 
-                // Only trap focus if Tab key is pressed
-                if (e.key !== 'Tab') return;
+                // Get form values
+                const title = taskTitleInput.value.trim();
+                const description = taskDescriptionInput.value.trim();
+                const priority = document.querySelector('input[name="priority"]:checked').value;
+                const dueDate = dueDateInput.value;
                 
-                // Get all focusable elements in the modal
-                const focusableElements = modalOverlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-                const firstElement = focusableElements[0];
-                const lastElement = focusableElements[focusableElements.length - 1];
+                // Create new task object
+                const newTask = {
+                    id: Date.now().toString(),
+                    title,
+                    description,
+                    priority,
+                    dueDate,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
                 
-                // If Shift+Tab and focus is on first element, move to last element
-                if (e.shiftKey && document.activeElement === firstElement) {
-                    e.preventDefault();
-                    lastElement.focus();
-                }
-                // If Tab and focus is on last element, move to first element
-                else if (!e.shiftKey && document.activeElement === lastElement) {
-                    e.preventDefault();
-                    firstElement.focus();
-                }
+                // Add task to array
+                tasks.unshift(newTask);
+                
+                // Save to localStorage
+                saveTasks();
+                
+                // Show success message
+                showStatusMessage('Task added successfully!', 'success');
+                
+                // Reset form
+                resetForm();
+                
+                // Render tasks
+                renderTasks();
+                
+                // Set focus to task title input
+                taskTitleInput.focus();
             }
-            
-            openModalBtn.addEventListener('click', openModal);
-            closeModalBtn.addEventListener('click', closeModal);
-            
-            acceptTermsBtn.addEventListener('click', function() {
-                termsCheckbox.checked = true;
-                closeModal();
-                // Clear any previous error message
-                document.getElementById('terms-error').textContent = '';
-                document.getElementById('terms-error').classList.remove('visible');
-            });
-            
-            declineTermsBtn.addEventListener('click', function() {
-                termsCheckbox.checked = false;
-                closeModal();
-            });
-            
-            // Close modal when clicking outside
-            modalOverlay.addEventListener('click', function(e) {
-                if (e.target === modalOverlay) {
-                    closeModal();
-                }
-            });
-            
-            // Form validation
-            const rsvpForm = document.getElementById('rsvp-form');
-            const fullNameInput = document.getElementById('full-name');
-            const emailInput = document.getElementById('email');
-            const phoneInput = document.getElementById('phone');
-            const guestsInput = document.getElementById('guests');
-            const receptionRadios = document.querySelectorAll('input[name="reception"]');
-            const statusMessage = document.getElementById('status-message');
-            const loadingContainer = document.getElementById('loading-container');
-            
+
+            // Validate form inputs
             function validateForm() {
                 let isValid = true;
+                const titleError = document.getElementById('title-error');
                 
-                // Validate name
-                if (!fullNameInput.value.trim()) {
-                    showError('name-error', 'Please enter your full name');
+                // Reset error messages
+                titleError.textContent = '';
+                taskTitleInput.classList.remove('error');
+                
+                // Validate title
+                if (taskTitleInput.value.trim() === '') {
+                    titleError.textContent = 'Task title is required';
+                    taskTitleInput.classList.add('error');
+                    taskTitleInput.setAttribute('aria-invalid', 'true');
                     isValid = false;
                 } else {
-                    clearError('name-error');
-                }
-                
-                // Validate email
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailInput.value.trim()) {
-                    showError('email-error', 'Please enter your email address');
-                    isValid = false;
-                } else if (!emailPattern.test(emailInput.value.trim())) {
-                    showError('email-error', 'Please enter a valid email address');
-                    isValid = false;
-                } else {
-                    clearError('email-error');
-                }
-                
-                // Validate phone
-                const phonePattern = /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
-                if (!phoneInput.value.trim()) {
-                    showError('phone-error', 'Please enter your phone number');
-                    isValid = false;
-                } else if (!phonePattern.test(phoneInput.value.trim())) {
-                    showError('phone-error', 'Please enter a valid phone number: (123) 456-7890');
-                    isValid = false;
-                } else {
-                    clearError('phone-error');
-                }
-                
-                // Validate guests
-                const guestsValue = parseInt(guestsInput.value);
-                if (isNaN(guestsValue) || guestsValue < 1 || guestsValue > 4) {
-                    showError('guests-error', 'Please enter a number between 1 and 4');
-                    isValid = false;
-                } else {
-                    clearError('guests-error');
-                }
-                
-                // Validate reception attendance
-                let receptionSelected = false;
-                receptionRadios.forEach(radio => {
-                    if (radio.checked) {
-                        receptionSelected = true;
-                    }
-                });
-                
-                if (!receptionSelected) {
-                    showError('reception-error', 'Please indicate whether you will attend the reception');
-                    isValid = false;
-                } else {
-                    clearError('reception-error');
-                }
-                
-                // Validate terms
-                if (!termsCheckbox.checked) {
-                    showError('terms-error', 'You must accept the terms and conditions');
-                    isValid = false;
-                } else {
-                    clearError('terms-error');
+                    taskTitleInput.setAttribute('aria-invalid', 'false');
                 }
                 
                 return isValid;
             }
-            
-            function showError(elementId, message) {
-                const errorElement = document.getElementById(elementId);
-                errorElement.textContent = message;
-                errorElement.classList.add('visible');
+
+            // Reset form fields
+            function resetForm() {
+                addTaskForm.reset();
                 
-                // Also add error class to the related input
-                const inputId = elementId.replace('-error', '');
-                const inputElement = document.getElementById(inputId);
-                if (inputElement) {
-                    inputElement.classList.add('error');
-                    inputElement.setAttribute('aria-invalid', 'true');
-                }
+                // Clear error messages
+                document.getElementById('title-error').textContent = '';
+                taskTitleInput.classList.remove('error');
+                taskTitleInput.setAttribute('aria-invalid', 'false');
+                
+                // Set default priority to low
+                document.getElementById('priority-low').checked = true;
             }
-            
-            function clearError(elementId) {
-                const errorElement = document.getElementById(elementId);
-                errorElement.textContent = '';
-                errorElement.classList.remove('visible');
+
+            // Render tasks based on filter
+            function renderTasks() {
+                const filter = filterTasksSelect.value;
                 
-                // Remove error class from the related input
-                const inputId = elementId.replace('-error', '');
-                const inputElement = document.getElementById(inputId);
-                if (inputElement) {
-                    inputElement.classList.remove('error');
-                    inputElement.setAttribute('aria-invalid', 'false');
-                }
-            }
-            
-            function showStatusMessage(type, message) {
-                statusMessage.textContent = message;
-                statusMessage.className = 'status-message ' + type;
-                
-                // Ensure the message is visible
-                statusMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                
-                // Auto-hide after 5 seconds
-                setTimeout(() => {
-                    statusMessage.className = 'status-message';
-                }, 5000);
-            }
-            
-            // Form submission
-            rsvpForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                if (validateForm()) {
-                    // Show loading indicator
-                    loadingContainer.classList.add('visible');
-                    
-                    // Simulate form submission (would be an API call in a real app)
-                    setTimeout(() => {
-                        loadingContainer.classList.remove('visible');
-                        
-                        // Add the new attendee to the list
-                        addAttendee();
-                        
-                        // Show success message
-                        showStatusMessage('success', 'Thank you! Your RSVP has been successfully submitted.');
-                        
-                        // Reset the form
-                        rsvpForm.reset();
-                        
-                        // Switch back to the details tab
-                        setActiveTab('tab-details');
-                    }, 1500);
-                }
-            });
-            
-            // Add new attendee to the list
-            function addAttendee() {
-                const attendeeList = document.getElementById('attendee-list');
-                const attendeeCount = document.getElementById('attendee-count');
-                
-                // Get dietary preferences
-                const dietaryPreferences = [];
-                document.querySelectorAll('input[name="dietary"]:checked').forEach(checkbox => {
-                    dietaryPreferences.push(checkbox.value);
+                // Filter tasks based on selected filter
+                const filteredTasks = tasks.filter(task => {
+                    if (filter === 'all') return true;
+                    if (filter === 'active') return !task.completed;
+                    if (filter === 'completed') return task.completed;
+                    return true;
                 });
                 
-                const dietaryText = dietaryPreferences.length > 0 ? dietaryPreferences.join(', ') : 'None';
+                // Check if there are tasks to display
+                if (filteredTasks.length === 0) {
+                    // Show empty state
+                    taskListContainer.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon" aria-hidden="true">📋</div>
+                            <h3 class="empty-state-title">No ${filter !== 'all' ? filter : ''} Tasks Found</h3>
+                            <p class="empty-state-text">${getEmptyStateMessage(filter)}</p>
+                            ${tasks.length === 0 ? '<button type="button" class="btn btn-primary" id="add-sample-tasks">Add Sample Tasks</button>' : ''}
+                        </div>
+                    `;
+                    
+                    // Re-add event listener for sample tasks button if needed
+                    const sampleTasksBtn = document.getElementById('add-sample-tasks');
+                    if (sampleTasksBtn) {
+                        sampleTasksBtn.addEventListener('click', addSampleTasks);
+                    }
+                    
+                    return;
+                }
                 
-                // Create new attendee item
-                const newAttendee = document.createElement('li');
-                newAttendee.className = 'attendee-item fade-in';
-                
-                newAttendee.innerHTML = `
-                    <div>
-                        <span class="attendee-name">${fullNameInput.value}</span>
-                        <div class="attendee-details">Guests: ${guestsInput.value} | Dietary: ${dietaryText}</div>
-                    </div>
+                // Create task list
+                let taskListHTML = `
+                    <ul class="task-list" aria-label="Task list">
                 `;
                 
-                // Add to the beginning of the list
-                attendeeList.insertBefore(newAttendee, attendeeList.firstChild);
+                // Generate HTML for each task
+                filteredTasks.forEach(task => {
+                    taskListHTML += createTaskItemHTML(task);
+                });
                 
-                // Update the count
-                const currentCount = parseInt(attendeeCount.textContent);
-                const newCount = currentCount + parseInt(guestsInput.value);
-                attendeeCount.textContent = newCount;
+                taskListHTML += `</ul>`;
+                
+                // Update task list container
+                taskListContainer.innerHTML = taskListHTML;
+                
+                // Add event listeners to task items
+                addTaskItemEventListeners();
+            }
+
+            // Create HTML for a task item
+            function createTaskItemHTML(task) {
+                const priorityLabel = {
+                    'low': 'Low Priority',
+                    'medium': 'Medium Priority',
+                    'high': 'High Priority'
+                };
+                
+                const formattedDate = task.dueDate ? formatDate(task.dueDate) : 'No due date';
+                
+                return `
+                    <li class="task-item ${task.completed ? 'task-completed' : ''}" data-id="${task.id}">
+                        <div class="task-checkbox">
+                            <input 
+                                type="checkbox" 
+                                id="task-${task.id}" 
+                                ${task.completed ? 'checked' : ''} 
+                                aria-label="Mark task as ${task.completed ? 'incomplete' : 'complete'}: ${task.title}">
+                        </div>
+                        <div class="task-content">
+                            <div class="task-header">
+                                <h3 class="task-title">${escapeHTML(task.title)}</h3>
+                                <div class="task-actions">
+                                    <button type="button" class="task-btn task-btn-delete" aria-label="Delete task: ${task.title}">
+                                        <span aria-hidden="true">🗑️</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="task-meta">
+                                <div class="task-priority">
+                                    <span class="priority-badge priority-badge-${task.priority}" aria-label="${priorityLabel[task.priority]}">${capitalizeFirstLetter(task.priority)}</span>
+                                </div>
+                                <div class="task-due-date">
+                                    <span aria-label="Due date">📅</span> ${formattedDate}
+                                </div>
+                            </div>
+                            ${task.description ? `<p class="task-description">${escapeHTML(task.description)}</p>` : ''}
+                        </div>
+                    </li>
+                `;
+            }
+
+            // Add event listeners to task items
+            function addTaskItemEventListeners() {
+                // Checkbox event listeners
+                document.querySelectorAll('.task-checkbox input').forEach(checkbox => {
+                    checkbox.addEventListener('change', toggleTaskCompletion);
+                });
+                
+                // Delete button event listeners
+                document.querySelectorAll('.task-btn-delete').forEach(button => {
+                    button.addEventListener('click', openDeleteModal);
+                });
+            }
+
+            // Toggle task completion status
+            function toggleTaskCompletion(event) {
+                const taskId = event.target.closest('.task-item').dataset.id;
+                const taskIndex = tasks.findIndex(task => task.id === taskId);
+                
+                if (taskIndex !== -1) {
+                    // Toggle completed status
+                    tasks[taskIndex].completed = !tasks[taskIndex].completed;
+                    
+                    // Update aria-label
+                    event.target.setAttribute(
+                        'aria-label', 
+                        `Mark task as ${tasks[taskIndex].completed ? 'incomplete' : 'complete'}: ${tasks[taskIndex].title}`
+                    );
+                    
+                    // Save to localStorage
+                    saveTasks();
+                    
+                    // Render tasks
+                    renderTasks();
+                    
+                    // Show status message
+                    const status = tasks[taskIndex].completed ? 'completed' : 'marked as active';
+                    showStatusMessage(`Task ${status}`, 'success');
+                }
+            }
+
+            // Open delete confirmation modal
+            function openDeleteModal(event) {
+                const taskItem = event.target.closest('.task-item');
+                taskToDeleteId = taskItem.dataset.id;
+                
+                // Store last focused element
+                lastFocusedElementBeforeModal = document.activeElement;
+                
+                // Show modal
+                deleteModal.style.display = 'flex';
+                
+                // Set focus to close button
+                closeModalButton.focus();
+                
+                // Add aria-modal attribute
+                deleteModal.querySelector('.modal').setAttribute('aria-modal', 'true');
+                
+                // Hide main content from screen readers
+                document.getElementById('main-content').setAttribute('aria-hidden', 'true');
+            }
+
+            // Close delete confirmation modal
+            function closeDeleteModal() {
+                // Hide modal
+                deleteModal.style.display = 'none';
+                
+                // Remove aria-modal attribute
+                deleteModal.querySelector('.modal').removeAttribute('aria-modal');
+                
+                // Show main content to screen readers
+                document.getElementById('main-content').removeAttribute('aria-hidden');
+                
+                // Restore focus
+                if (lastFocusedElementBeforeModal) {
+                    lastFocusedElementBeforeModal.focus();
+                }
+                
+                // Reset taskToDeleteId
+                taskToDeleteId = null;
+            }
+
+            // Confirm task deletion
+            function confirmDeleteTask() {
+                if (taskToDeleteId) {
+                    // Find task index
+                    const taskIndex = tasks.findIndex(task => task.id === taskToDeleteId);
+                    
+                    if (taskIndex !== -1) {
+                        // Get task title for status message
+                        const taskTitle = tasks[taskIndex].title;
+                        
+                        // Remove task from array
+                        tasks.splice(taskIndex, 1);
+                        
+                        // Save to localStorage
+                        saveTasks();
+                        
+                        // Close modal
+                        closeDeleteModal();
+                        
+                        // Render tasks
+                        renderTasks();
+                        
+                        // Show status message
+                        showStatusMessage(`Task "${taskTitle}" deleted`, 'success');
+                    }
+                }
+            }
+
+            // Trap focus within modal
+            function trapFocusInModal(event) {
+                if (event.key !== 'Tab') return;
+                
+                const focusableElements = deleteModal.querySelectorAll('button');
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+                
+                if (event.shiftKey) {
+                    // If shift + tab and focus is on first element, move to last element
+                    if (document.activeElement === firstElement) {
+                        event.preventDefault();
+                        lastElement.focus();
+                    }
+                } else {
+                    // If tab and focus is on last element, move to first element
+                    if (document.activeElement === lastElement) {
+                        event.preventDefault();
+                        firstElement.focus();
+                    }
+                }
+            }
+
+            // Toggle theme between light and dark
+            function toggleTheme() {
+                const isDarkMode = document.body.classList.toggle('dark-theme');
+                
+                // Update button text and icon
+                themeText.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
+                themeToggle.querySelector('span[aria-hidden="true"]').textContent = isDarkMode ? '☀️' : '🌙';
+                
+                // Update aria-pressed attribute
+                themeToggle.setAttribute('aria-pressed', isDarkMode);
+                
+                // Save preference to localStorage
+                localStorage.setItem('darkMode', isDarkMode);
+                
+                // Show status message
+                showStatusMessage(`Switched to ${isDarkMode ? 'dark' : 'light'} mode`, 'success');
+            }
+
+            // Load theme preference from localStorage
+            function loadThemePreference() {
+                const darkMode = localStorage.getItem('darkMode') === 'true';
+                
+                if (darkMode) {
+                    document.body.classList.add('dark-theme');
+                    themeText.textContent = 'Light Mode';
+                    themeToggle.querySelector('span[aria-hidden="true"]').textContent = '☀️';
+                    themeToggle.setAttribute('aria-pressed', 'true');
+                }
+            }
+
+            // Add sample tasks for demonstration
+            function addSampleTasks() {
+                const sampleTasks = [
+                    {
+                        id: 'sample1',
+                        title: 'Complete project proposal',
+                        description: 'Finish the draft and send it to the team for review.',
+                        priority: 'high',
+                        dueDate: getTomorrowDate(),
+                        completed: false,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'sample2',
+                        title: 'Schedule team meeting',
+                        description: 'Coordinate with team members to find a suitable time.',
+                        priority: 'medium',
+                        dueDate: getDateInDays(3),
+                        completed: false,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'sample3',
+                        title: 'Read article on accessibility',
+                        description: 'Learn about the latest WCAG guidelines and best practices.',
+                        priority: 'low',
+                        dueDate: getDateInDays(5),
+                        completed: false,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                
+                // Add sample tasks to tasks array
+                tasks = [...sampleTasks, ...tasks];
+                
+                // Save to localStorage
+                saveTasks();
+                
+                // Render tasks
+                renderTasks();
+                
+                // Show status message
+                showStatusMessage('Sample tasks added', 'success');
+            }
+
+            // Save tasks to localStorage
+            function saveTasks() {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+
+            // Show status message
+            function showStatusMessage(message, type) {
+                // Create status message element
+                const statusMessage = document.createElement('div');
+                statusMessage.className = `status-message status-${type}`;
+                statusMessage.textContent = message;
+                
+                // Clear existing messages
+                statusContainer.innerHTML = '';
+                
+                // Add message to container
+                statusContainer.appendChild(statusMessage);
+                
+                // Remove message after 3 seconds
+                setTimeout(() => {
+                    statusMessage.style.opacity = '0';
+                    statusMessage.style.transition = 'opacity 0.5s';
+                    
+                    setTimeout(() => {
+                        statusContainer.innerHTML = '';
+                    }, 500);
+                }, 3000);
+            }
+
+            // Helper Functions
+            
+            // Format date to readable format
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString(undefined, options);
             }
             
-            // Refresh attendees button
-            document.getElementById('refresh-attendees').addEventListener('click', function() {
-                const attendeeList = document.getElementById('attendee-list');
-                
-                // Show loading indicator
-                this.disabled = true;
-                this.textContent = 'Refreshing...';
-                
-                // Simulate API call
-                setTimeout(() => {
-                    // Re-enable button
-                    this.disabled = false;
-                    this.textContent = 'Refresh List';
-                    
-                    // Show success message
-                    showStatusMessage('success', 'Attendee list has been refreshed.');
-                }, 1000);
-            });
+            // Get tomorrow's date in YYYY-MM-DD format
+            function getTomorrowDate() {
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                return tomorrow.toISOString().split('T')[0];
+            }
             
-            // Input validation on blur
-            fullNameInput.addEventListener('blur', function() {
-                if (!this.value.trim()) {
-                    showError('name-error', 'Please enter your full name');
-                } else {
-                    clearError('name-error');
+            // Get date in X days in YYYY-MM-DD format
+            function getDateInDays(days) {
+                const date = new Date();
+                date.setDate(date.getDate() + days);
+                return date.toISOString().split('T')[0];
+            }
+            
+            // Capitalize first letter of string
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+            
+            // Get empty state message based on filter
+            function getEmptyStateMessage(filter) {
+                switch (filter) {
+                    case 'active':
+                        return 'All tasks are completed. Great job!';
+                    case 'completed':
+                        return 'No completed tasks yet.';
+                    default:
+                        return 'Add your first task using the form above.';
                 }
-            });
+            }
             
-            emailInput.addEventListener('blur', function() {
-                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!this.value.trim()) {
-                    showError('email-error', 'Please enter your email address');
-                } else if (!emailPattern.test(this.value.trim())) {
-                    showError('email-error', 'Please enter a valid email address');
-                } else {
-                    clearError('email-error');
-                }
-            });
-            
-            phoneInput.addEventListener('blur', function() {
-                const phonePattern = /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
-                if (!this.value.trim()) {
-                    showError('phone-error', 'Please enter your phone number');
-                } else if (!phonePattern.test(this.value.trim())) {
-                    showError('phone-error', 'Please enter a valid phone number: (123) 456-7890');
-                } else {
-                    clearError('phone-error');
-                }
-            });
-            
-            guestsInput.addEventListener('blur', function() {
-                const guestsValue = parseInt(this.value);
-                if (isNaN(guestsValue) || guestsValue < 1 || guestsValue > 4) {
-                    showError('guests-error', 'Please enter a number between 1 and 4');
-                } else {
-                    clearError('guests-error');
-                }
-            });
-            
-            // Format phone number as user types
-            phoneInput.addEventListener('input', function() {
-                let value = this.value.replace(/\D/g, ''); // Remove non-digits
-                
-                if (value.length > 0) {
-                    if (value.length <= 3) {
-                        this.value = `(${value}`;
-                    } else if (value.length <= 6) {
-                        this.value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
-                    } else {
-                        this.value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
-                    }
-                }
-            });
-            
-            // Ensure only one dietary checkbox can be checked if "No Restrictions" is selected
-            const dietaryCheckboxes = document.querySelectorAll('input[name="dietary"]');
-            const noRestrictionsCheckbox = document.getElementById('no-restrictions');
-            
-            dietaryCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
-                    if (this.id === 'no-restrictions' && this.checked) {
-                        // Uncheck all other options
-                        dietaryCheckboxes.forEach(cb => {
-                            if (cb.id !== 'no-restrictions') {
-                                cb.checked = false;
-                            }
-                        });
-                    } else if (this.checked && noRestrictionsCheckbox.checked) {
-                        // Uncheck "No Restrictions" if another option is selected
-                        noRestrictionsCheckbox.checked = false;
-                    }
+            // Escape HTML to prevent XSS
+            function escapeHTML(str) {
+                return str.replace(/[&<>"']/g, function(match) {
+                    return {
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        '"': '&quot;',
+                        "'": '&#39;'
+                    }[match];
                 });
-            });
+            }
         });
     </script>
 </body>
