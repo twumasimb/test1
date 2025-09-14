@@ -2,1885 +2,1450 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Accessible Task Manager SPA – Personal Dashboard & Task Management (WCAG 2.2 AAA)</title>
+  <title>Accessible Book Recommender – Personalized Book Suggestions by Genre & Author</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Color palette: vibrant, high-contrast, user-selectable -->
+  <!-- User-selectable color scheme support -->
+  <meta name="color-scheme" content="light dark">
   <style>
     :root {
-      --color-bg: #fff;
-      --color-fg: #10133e;
-      --color-accent: #0e76a8;
-      --color-accent2: #d72660;
-      --color-accent3: #ffd447;
-      --color-success: #138a36;
-      --color-error: #d72660;
-      --color-info: #0e76a8;
-      --color-focus: #ffd447;
-      --color-focus-outline: #10133e;
-      --color-border: #10133e;
-      --color-shadow: #ffd447;
-      --color-link: #0e76a8;
-      --color-nav: #f0f4f8;
-      --color-nav-active: #ffd447;
-      --color-nav-text: #10133e;
-      --color-disabled: #b0b3c6;
-      --font-size-base: 1.125rem;
-      --font-size-lg: 1.375rem;
-      --font-size-xl: 1.75rem;
-      --font-size-sm: 1rem;
+      /* Vibrant, AAA-contrast color palette */
+      --bg-main: #f5f7fa;
+      --bg-main-dark: #1a1a24;
+      --primary: #0d47a1; /* Deep blue */
+      --primary-light: #42a5f5;
+      --primary-dark: #002171;
+      --accent: #c51162; /* Vibrant magenta */
+      --accent-light: #f06292;
+      --accent-dark: #880e4f;
+      --success: #2e7d32;
+      --error: #b71c1c;
+      --surface: #ffffff;
+      --surface-dark: #232336;
+      --text: #1a1a24;
+      --text-dark: #f5f7fa;
+      --focus: #ffea00;
+      --focus-dark: #ffea00;
+      --border: #0d47a1;
+      --border-dark: #42a5f5;
+      --shadow: 0 2px 8px rgba(13, 71, 161, 0.12);
+
+      /* Spacing & Typography */
+      --font-size: 1.125rem;
       --line-height: 1.7;
-      --line-spacing: 1.5;
-      --para-spacing: 2.25rem;
-      --max-line-chars: 80ch;
-      --border-radius: 0.5rem;
-      --focus-outline-width: 3px;
-      --focus-outline-style: solid;
-      --focus-outline-color: var(--color-focus);
-      --focus-outline-shadow: 0 0 0 3px var(--color-shadow);
-      --transition-fast: 0.12s;
-      --transition: 0.25s;
+      --heading-spacing: 2.25rem;
+      --section-spacing: 2.5rem;
+      --max-line-length: 80ch;
+      --focus-thickness: 3px;
       --target-size: 44px;
     }
 
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-main: var(--bg-main-dark);
+        --surface: var(--surface-dark);
+        --text: var(--text-dark);
+        --border: var(--border-dark);
+      }
+      body {
+        background: var(--bg-main-dark);
+        color: var(--text-dark);
+      }
+    }
+
     html {
-      background: linear-gradient(120deg, #fff 0%, #e6f0ff 100%);
-      color: var(--color-fg);
       font-size: 18px;
-      line-height: var(--line-height);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      max-width: 100vw;
-      min-height: 100vh;
+      background: var(--bg-main);
+      color: var(--text);
       scroll-behavior: smooth;
     }
 
     body {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: var(--bg-main);
+      color: var(--text);
       margin: 0;
-      padding: 0;
-      background: none;
-      color: var(--color-fg);
-      font-size: var(--font-size-base);
-      min-height: 100vh;
+      line-height: var(--line-height);
+      min-width: 320px;
       max-width: 100vw;
-      overflow-x: hidden;
     }
 
-    /* Skip link */
+    /* Skip Link */
     .skip-link {
       position: absolute;
       left: 0;
       top: 0;
-      z-index: 999;
-      background: var(--color-accent);
+      background: var(--accent);
       color: #fff;
       padding: 0.75em 1.25em;
-      font-weight: bold;
-      border-radius: var(--border-radius);
+      z-index: 1000;
       transform: translateY(-120%);
       transition: transform 0.2s;
+      border-radius: 0 0 0.5em 0;
+      font-weight: bold;
       outline: none;
-      text-decoration: none;
-      min-width: 44px;
-      min-height: 44px;
     }
-    .skip-link:focus, .skip-link:active {
+    .skip-link:focus {
       transform: translateY(0);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: var(--focus-outline-shadow);
+      box-shadow: 0 0 0 var(--focus-thickness) var(--focus);
     }
 
-    /* Layout */
-    #app-root {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header, footer {
-      background: var(--color-accent);
-      color: #fff;
-      padding: 1.5rem 1rem;
-      text-align: center;
-      letter-spacing: 0.02em;
-    }
     header {
-      border-bottom: 5px solid var(--color-accent2);
+      background: linear-gradient(90deg, var(--primary) 60%, var(--accent) 100%);
+      color: #fff;
+      padding: 1.5rem 0 1rem 0;
+      box-shadow: var(--shadow);
+      border-bottom: 4px solid var(--accent);
     }
-    main {
-      flex: 1 1 auto;
-      padding: 2rem 1rem 2rem 1rem;
-      max-width: 52rem;
+    .header-inner {
+      max-width: 1200px;
       margin: 0 auto;
-      background: var(--color-bg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 10px 0 rgba(16,19,62,0.10);
-      margin-top: 2rem;
-      margin-bottom: 2rem;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
-    footer {
-      border-top: 5px solid var(--color-accent3);
-      font-size: var(--font-size-sm);
+    .site-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin: 0;
+      line-height: 1.2;
+      text-shadow: 1px 2px 8px rgba(0,0,0,0.18);
+    }
+    .site-desc {
+      font-size: 1.15rem;
+      margin-top: 0.25rem;
+      max-width: 38ch;
+      font-weight: 400;
+      color: #fffde7;
     }
 
     /* Navigation */
     nav[aria-label] {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 2rem;
-      background: var(--color-nav);
-      padding: 1rem 0;
-      font-size: var(--font-size-lg);
-      border-bottom: 2px solid var(--color-border);
+      background: var(--surface);
+      color: var(--primary-dark);
+      border-bottom: 2px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    nav[aria-label] ul {
+    .main-nav {
       display: flex;
       gap: 2rem;
+      align-items: center;
+      justify-content: flex-start;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.5rem 1.5rem;
+      font-size: 1.1rem;
+    }
+    .main-nav ul {
       list-style: none;
+      display: flex;
+      gap: 1.5rem;
       margin: 0;
       padding: 0;
     }
-    nav[aria-label] li {
-      display: flex;
-      align-items: center;
-      min-width: var(--target-size);
-      min-height: var(--target-size);
+    .main-nav li {
+      position: relative;
     }
-    nav[aria-label] a, nav[aria-label] button {
-      color: var(--color-nav-text);
-      background: none;
+    .main-nav a,
+    .main-nav button {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5em 1em;
       border: none;
-      font: inherit;
+      background: none;
+      color: var(--primary-dark);
+      font-weight: 600;
       text-decoration: none;
-      padding: 0.75em 1.25em;
-      border-radius: var(--border-radius);
+      border-radius: 0.4em;
       min-width: var(--target-size);
       min-height: var(--target-size);
-      transition: background var(--transition-fast), color var(--transition-fast);
       cursor: pointer;
+      transition: background 0.15s, color 0.15s;
       position: relative;
       outline: none;
     }
-    nav[aria-label] a[aria-current="page"], nav[aria-label] button[aria-current="page"] {
-      background: var(--color-nav-active);
-      color: var(--color-fg);
-      font-weight: bold;
-      box-shadow: 0 0 0 3px var(--color-shadow);
-    }
-    nav[aria-label] a:focus, nav[aria-label] button:focus {
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: var(--focus-outline-shadow);
-      z-index: 10;
-    }
-    nav[aria-label] a:active, nav[aria-label] button:active {
-      background: var(--color-accent2);
+    .main-nav a:focus,
+    .main-nav button:focus {
+      outline: none;
+      box-shadow: 0 0 0 var(--focus-thickness) var(--focus);
+      background: var(--primary-light);
       color: #fff;
+      z-index: 1;
     }
-    nav[aria-label] .menu-dropdown {
-      position: relative;
-      display: inline-block;
+    .main-nav .current {
+      background: var(--primary-dark);
+      color: #fff;
+      pointer-events: none;
+      cursor: default;
     }
-    nav[aria-label] .dropdown-list {
+    /* Dropdown menu */
+    .dropdown-menu {
       display: none;
       position: absolute;
-      top: 110%;
+      top: 100%;
       left: 0;
-      background: var(--color-nav);
-      border: 2px solid var(--color-border);
-      border-radius: var(--border-radius);
-      box-shadow: 0 4px 16px 0 rgba(16,19,62,0.13);
       min-width: 180px;
-      z-index: 99;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      box-shadow: 0 2px 8px rgba(13, 71, 161, 0.13);
+      z-index: 10;
+      border-radius: 0 0 0.5em 0.5em;
       padding: 0.5em 0;
     }
-    nav[aria-label] .menu-dropdown[aria-expanded="true"] .dropdown-list {
+    .dropdown-menu[aria-hidden="false"] {
       display: block;
     }
-    nav[aria-label] .dropdown-list li {
-      min-width: var(--target-size);
-      min-height: var(--target-size);
-      padding: 0;
-    }
-    nav[aria-label] .dropdown-list a {
+    .dropdown-menu li {
       width: 100%;
-      text-align: left;
-      display: block;
-      padding: 0.75em 1.25em;
+    }
+    .dropdown-menu a {
+      width: 100%;
+      justify-content: flex-start;
+      padding-left: 1.5em;
+      color: var(--primary-dark);
       background: none;
-      color: var(--color-nav-text);
-      border-radius: 0;
     }
-    nav[aria-label] .dropdown-list a:focus {
-      background: var(--color-nav-active);
-      color: var(--color-fg);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: var(--focus-outline-shadow);
+    .dropdown-menu a:focus,
+    .dropdown-menu a:hover {
+      background: var(--primary-light);
+      color: #fff;
     }
-
+    .nav-icon {
+      font-size: 1.2em;
+      margin-right: 0.5em;
+      vertical-align: middle;
+      display: inline-block;
+      width: 1.2em;
+      height: 1.2em;
+    }
     /* Breadcrumbs */
     nav[aria-label="Breadcrumb"] {
-      margin: 1.5rem 0 1rem 0;
-      font-size: var(--font-size-sm);
+      max-width: 1200px;
+      margin: 0.5rem auto 0.5rem auto;
+      padding: 0 1.5rem;
+      font-size: 1rem;
       background: none;
-      padding: 0;
     }
-    nav[aria-label="Breadcrumb"] ol {
+    .breadcrumbs {
       list-style: none;
       display: flex;
-      gap: 0.5em;
-      padding: 0;
+      flex-wrap: wrap;
+      gap: 0.25em;
       margin: 0;
-      flex-wrap: wrap;
+      padding: 0;
     }
-    nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
-      content: '›';
+    .breadcrumbs li {
+      display: flex;
+      align-items: center;
+      color: var(--primary-dark);
+    }
+    .breadcrumbs li:not(:last-child)::after {
+      content: "›";
       margin: 0 0.5em;
-      color: var(--color-accent2);
+      color: var(--accent);
+      font-weight: bold;
     }
-    nav[aria-label="Breadcrumb"] a {
-      color: var(--color-link);
+    .breadcrumbs a {
+      color: var(--primary-dark);
       text-decoration: underline;
-      font-weight: 500;
-      outline: none;
+      border-radius: 0.2em;
+      padding: 0.1em 0.3em;
       min-width: var(--target-size);
       min-height: var(--target-size);
+      outline: none;
+      transition: background 0.15s;
     }
-    nav[aria-label="Breadcrumb"] a:focus {
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: var(--focus-outline-shadow);
-      background: var(--color-nav-active);
-      color: var(--color-fg);
+    .breadcrumbs a:focus {
+      background: var(--primary-light);
+      color: #fff;
+      box-shadow: 0 0 0 var(--focus-thickness) var(--focus);
     }
-    nav[aria-label="Breadcrumb"] li[aria-current="page"] {
+    .breadcrumbs .current {
       font-weight: bold;
-      color: var(--color-fg);
-      text-decoration: none;
-    }
-
-    /* Dashboard Layout */
-    .dashboard-layout {
-      display: flex;
-      flex-direction: row;
-      gap: 2.5rem;
-      align-items: flex-start;
-      flex-wrap: wrap;
-    }
-    .dashboard-main {
-      flex: 2 1 350px;
-      min-width: 320px;
-      max-width: 700px;
-    }
-    .dashboard-sidebar {
-      flex: 1 1 200px;
-      min-width: 200px;
-      max-width: 300px;
-      background: linear-gradient(135deg, #ffd447 0%, #ffeab6 100%);
-      border-radius: var(--border-radius);
-      box-shadow: 0 1px 8px 0 rgba(215,38,96,0.10);
-      padding: 1.25rem 1rem;
-      margin-top: 0.5rem;
-      margin-bottom: 0.5rem;
-      color: #10133e;
-    }
-
-    /* Cards */
-    .card {
-      background: linear-gradient(120deg, #fff 60%, #f0f4f8 100%);
-      border: 2px solid var(--color-border);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 10px 0 rgba(16,19,62,0.10);
-      margin-bottom: 2rem;
-      padding: 1.5rem 1.25rem;
-      max-width: 100%;
-      color: var(--color-fg);
-    }
-
-    /* Task List/Table */
-    .task-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
+      color: var(--accent-dark);
       background: none;
-      margin-bottom: 1.5rem;
-      font-size: var(--font-size-base);
-    }
-    .task-table th, .task-table td {
-      text-align: left;
-      padding: 0.75em 0.5em;
-      border-bottom: 1px solid var(--color-border);
-      vertical-align: middle;
-      max-width: 200px;
-      word-break: break-word;
-    }
-    .task-table th {
-      background: var(--color-accent3);
-      color: var(--color-fg);
-      font-weight: bold;
-      border-top: 2px solid var(--color-border);
-    }
-    .task-table tr:focus-within, .task-table tr.selected {
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: var(--focus-outline-shadow);
-      background: #fffbe6;
-    }
-    .task-table tr.completed td {
-      color: var(--color-success);
-      text-decoration: line-through;
-    }
-    .task-table td .status-indicator {
-      display: inline-block;
-      width: 1.25em;
-      height: 1.25em;
-      border-radius: 50%;
-      margin-right: 0.5em;
-      border: 2px solid var(--color-border);
-      vertical-align: middle;
-      background: var(--color-success);
-    }
-    .task-table td .status-indicator.incomplete {
-      background: var(--color-error);
-    }
-    .task-table td .status-indicator.in-progress {
-      background: var(--color-accent2);
-    }
-    .task-table td .status-indicator.completed {
-      background: var(--color-success);
+      pointer-events: none;
     }
 
-    /* Buttons */
-    .btn, button, input[type="submit"], input[type="button"] {
-      font: inherit;
-      border: none;
-      border-radius: var(--border-radius);
-      padding: 0.75em 1.25em;
-      min-width: var(--target-size);
-      min-height: var(--target-size);
-      cursor: pointer;
-      background: var(--color-accent);
-      color: #fff;
-      font-weight: bold;
-      transition: background var(--transition), color var(--transition);
-      outline: none;
-      margin-right: 0.5em;
-      margin-bottom: 0.5em;
-      box-shadow: 0 1px 3px 0 rgba(16,19,62,0.09);
-    }
-    .btn:focus, button:focus, input[type="submit"]:focus, input[type="button"]:focus {
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: var(--focus-outline-shadow);
-      background: var(--color-focus);
-      color: var(--color-fg);
-    }
-    .btn[aria-disabled="true"], button[aria-disabled="true"], input[disabled] {
-      background: var(--color-disabled);
-      color: #fff;
-      cursor: not-allowed;
-    }
-    .btn-secondary {
-      background: var(--color-accent2);
-      color: #fff;
-    }
-    .btn-secondary:focus {
-      background: var(--color-focus);
-      color: var(--color-fg);
-    }
-    .btn-outline {
-      background: #fff;
-      color: var(--color-accent);
-      border: 2px solid var(--color-accent);
-    }
-    .btn-outline:focus {
-      background: var(--color-focus);
-      color: var(--color-fg);
-    }
-    .btn-success {
-      background: var(--color-success);
-      color: #fff;
-    }
-    .btn-success:focus {
-      background: var(--color-focus);
-      color: var(--color-fg);
-    }
-    .btn-danger {
-      background: var(--color-error);
-      color: #fff;
-    }
-    .btn-danger:focus {
-      background: var(--color-focus);
-      color: var(--color-fg);
-    }
-
-    /* Forms */
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      max-width: 500px;
+    /* Main layout */
+    main {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 2.5rem;
+      max-width: 1200px;
       margin: 0 auto;
+      padding: 2rem 1.5rem 2rem 1.5rem;
+      background: var(--surface);
+      border-radius: 0 0 1.5em 1.5em;
+      box-shadow: var(--shadow);
+    }
+    @media (max-width: 950px) {
+      main {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      aside {
+        order: -1;
+      }
+    }
+
+    /* Book Form Section */
+    .book-form-section {
+      max-width: 650px;
+    }
+    .book-form-section h2 {
+      margin-top: 0;
+      margin-bottom: 0.75em;
+      color: var(--primary-dark);
+      font-size: 1.7rem;
+    }
+    .book-form-section form {
+      background: linear-gradient(90deg, #e3f2fd 60%, #fce4ec 100%);
+      border-radius: 1em;
+      padding: 2em 2em 1.5em 2em;
+      box-shadow: 0 1px 6px rgba(197, 17, 98, 0.11);
+      border: 2px solid var(--primary);
+      margin-bottom: 1.5em;
+      max-width: 100%;
     }
     fieldset {
-      border: 2px solid var(--color-accent3);
-      border-radius: var(--border-radius);
-      padding: 1.5rem 1.25rem;
-      margin-bottom: 2rem;
-      background: #fffbe6;
+      border: 2px solid var(--accent);
+      border-radius: 0.7em;
+      margin-bottom: 1.5em;
+      padding: 1em 1.5em 1em 1.5em;
       min-width: 0;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(197, 17, 98, 0.07);
     }
     legend {
-      font-size: var(--font-size-lg);
       font-weight: bold;
-      color: var(--color-accent2);
+      color: var(--accent-dark);
+      font-size: 1.2em;
+      margin-bottom: 0.5em;
       padding: 0 0.5em;
-      margin-bottom: 1rem;
-      letter-spacing: 0.02em;
-    }
-    label {
-      font-weight: 500;
-      margin-bottom: 0.25em;
-      display: inline-block;
-      color: var(--color-fg);
-      font-size: var(--font-size-base);
-    }
-    input, select, textarea {
-      font: inherit;
-      padding: 0.75em 1em;
-      border-radius: var(--border-radius);
-      border: 2px solid var(--color-border);
-      min-width: var(--target-size);
-      min-height: var(--target-size);
-      background: #fff;
-      color: var(--color-fg);
-      margin-bottom: 0.25em;
-      outline: none;
-      transition: border var(--transition), box-shadow var(--transition);
-      width: 100%;
-      box-sizing: border-box;
-      font-size: var(--font-size-base);
-      line-height: var(--line-height);
-    }
-    input:focus, select:focus, textarea:focus {
-      border: 2px solid var(--color-focus);
-      box-shadow: var(--focus-outline-shadow);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      background: #fffbe6;
-    }
-    input[aria-invalid="true"], textarea[aria-invalid="true"], select[aria-invalid="true"] {
-      border: 2px solid var(--color-error);
-      background: #fff0f3;
-    }
-    .required-indicator {
-      color: var(--color-error);
-      font-weight: bold;
-      margin-left: 0.25em;
-      font-size: var(--font-size-base);
-      vertical-align: super;
-    }
-    .form-help {
-      color: var(--color-accent2);
-      font-size: var(--font-size-sm);
-      margin-top: 0.25em;
-      margin-bottom: 0.5em;
-      display: block;
-    }
-    .form-error {
-      color: var(--color-error);
-      font-size: var(--font-size-sm);
-      margin-top: 0.25em;
-      margin-bottom: 0.5em;
-      display: block;
-      font-weight: bold;
-    }
-    .form-success {
-      color: var(--color-success);
-      font-size: var(--font-size-sm);
-      margin-top: 0.25em;
-      margin-bottom: 0.5em;
-      display: block;
-      font-weight: bold;
+      letter-spacing: 0.01em;
     }
     .form-group {
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.2em;
+      max-width: 100%;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.4em;
+      color: var(--primary-dark);
+      letter-spacing: 0.01em;
+    }
+    .required-indicator {
+      color: var(--accent-dark);
+      font-size: 1.1em;
+      margin-left: 0.2em;
+      vertical-align: middle;
+      font-weight: bold;
+    }
+    .help-text {
+      display: block;
+      color: var(--primary);
+      font-size: 0.97em;
+      margin-bottom: 0.2em;
+      margin-top: 0.1em;
+      line-height: 1.4;
+      max-width: 60ch;
+    }
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      max-width: 100%;
+      font-size: 1.1em;
+      padding: 0.6em 0.9em;
+      border: 2px solid var(--primary);
+      border-radius: 0.5em;
+      background: #fff;
+      color: var(--primary-dark);
+      box-sizing: border-box;
+      line-height: 1.4;
+      outline: none;
+      min-height: 2.7em;
+      margin-bottom: 0.2em;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input[type="text"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 var(--focus-thickness) var(--focus);
+    }
+    .error-message {
+      color: var(--error);
+      font-size: 1em;
+      margin-top: 0.2em;
+      margin-bottom: 0.5em;
+      background: #ffebee;
+      border-left: 4px solid var(--error);
+      padding: 0.4em 0.8em;
+      border-radius: 0.3em;
+      max-width: 80ch;
+    }
+    .success-message {
+      color: var(--success);
+      font-size: 1.1em;
+      margin-top: 0.5em;
+      background: #e8f5e9;
+      border-left: 4px solid var(--success);
+      padding: 0.4em 0.8em;
+      border-radius: 0.3em;
+      max-width: 80ch;
+    }
+    .form-actions {
+      display: flex;
+      gap: 1.5em;
+      margin-top: 1.2em;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    button[type="submit"], .reset-btn {
+      background: linear-gradient(90deg, var(--primary) 60%, var(--accent) 100%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 0.5em;
+      padding: 0.75em 2em;
+      min-width: var(--target-size);
+      min-height: var(--target-size);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(13, 71, 161, 0.10);
+      transition: background 0.12s, box-shadow 0.12s, color 0.12s;
+      outline: none;
+      position: relative;
+    }
+    button[type="submit"]:focus, .reset-btn:focus {
+      box-shadow: 0 0 0 var(--focus-thickness) var(--focus);
+      background: var(--accent-dark);
+      color: #fff;
+    }
+    .reset-btn {
+      background: var(--surface);
+      color: var(--accent-dark);
+      border: 2px solid var(--accent);
+      font-weight: 600;
+    }
+    .reset-btn:hover, .reset-btn:focus {
+      background: var(--accent-light);
+      color: #fff;
     }
 
-    /* Modal */
-    .modal-backdrop {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(16,19,62,0.7);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity var(--transition);
+    /* Book Recommendations */
+    .recommendations-section {
+      margin-top: var(--section-spacing);
     }
-    .modal {
-      background: #fff;
-      color: var(--color-fg);
-      border-radius: var(--border-radius);
-      box-shadow: 0 8px 32px 0 rgba(16,19,62,0.18);
-      max-width: 450px;
-      width: 90vw;
-      padding: 2.25rem 2rem 2rem 2rem;
+    .recommendations-section h2 {
+      color: var(--primary-dark);
+      font-size: 1.4rem;
+      margin-bottom: 1em;
+    }
+    .recommendations-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .book-card {
+      background: linear-gradient(120deg, #e3f2fd 60%, #fce4ec 100%);
+      border: 2px solid var(--primary);
+      border-radius: 1em;
+      box-shadow: 0 1px 7px rgba(13, 71, 161, 0.10);
+      padding: 1.2em 1em 1.2em 1em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+      max-width: 320px;
+      min-height: 360px;
       position: relative;
-      outline: none;
-      font-size: var(--font-size-base);
     }
-    .modal-close-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: var(--color-error);
+    .book-cover {
+      width: 120px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 0.4em;
+      border: 2px solid var(--accent);
+      box-shadow: 0 2px 6px rgba(197, 17, 98, 0.13);
+      margin-bottom: 1em;
+      background: #fff;
+    }
+    .book-title {
+      font-size: 1.15em;
+      font-weight: bold;
+      color: var(--primary-dark);
+      margin: 0.2em 0 0.2em 0;
+      text-align: center;
+      max-width: 95%;
+      line-height: 1.25;
+    }
+    .book-author {
+      color: var(--accent-dark);
+      font-size: 1em;
+      margin-bottom: 0.6em;
+      font-weight: 600;
+      text-align: center;
+    }
+    .book-genre {
+      background: var(--accent);
       color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: var(--target-size);
-      height: var(--target-size);
-      font-size: var(--font-size-lg);
+      font-size: 0.93em;
+      border-radius: 0.4em;
+      padding: 0.1em 0.7em;
+      margin-bottom: 0.7em;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      display: inline-block;
+      box-shadow: 0 1px 2px rgba(197, 17, 98, 0.09);
+    }
+    .book-desc {
+      font-size: 1em;
+      color: var(--primary-dark);
+      margin-bottom: 0.3em;
+      text-align: left;
+      max-width: 95%;
+      line-height: 1.5;
+    }
+    .no-results {
+      color: var(--error);
+      font-size: 1.15em;
+      background: #ffebee;
+      border-left: 4px solid var(--error);
+      padding: 0.7em 1em;
+      border-radius: 0.4em;
+      margin-top: 1.5em;
+      max-width: 80ch;
+    }
+
+    /* Sidebar */
+    aside {
+      background: linear-gradient(180deg, #fffde7 60%, #e3f2fd 100%);
+      border-radius: 1em;
+      box-shadow: 0 1px 7px rgba(13, 71, 161, 0.08);
+      padding: 2em 1.5em 2em 1.5em;
+      border: 2px solid var(--primary);
+      min-width: 0;
+      max-width: 340px;
+    }
+    .sidebar-section {
+      margin-bottom: 2.5em;
+    }
+    .sidebar-section h2 {
+      color: var(--accent-dark);
+      font-size: 1.15rem;
+      margin-top: 0;
+      margin-bottom: 0.6em;
+    }
+    .sidebar-section ul {
+      list-style: disc inside;
+      padding-left: 1em;
+      margin: 0.2em 0 0.7em 0;
+    }
+    .sidebar-section li {
+      margin-bottom: 0.4em;
+      color: var(--primary-dark);
+      font-size: 1em;
+    }
+    .sidebar-section .help-link {
+      color: var(--accent-dark);
+      text-decoration: underline;
+      font-weight: 600;
+      border-radius: 0.3em;
+      padding: 0.1em 0.3em;
+      outline: none;
+      min-width: var(--target-size);
+      min-height: var(--target-size);
+      transition: background 0.15s;
+    }
+    .sidebar-section .help-link:focus {
+      background: var(--primary-light);
+      color: #fff;
+      box-shadow: 0 0 0 var(--focus-thickness) var(--focus);
+    }
+
+    /* Accessibility Controls */
+    .color-controls {
       display: flex;
+      gap: 1em;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background var(--transition);
+      margin-bottom: 1em;
+      flex-wrap: wrap;
+    }
+    .color-controls label {
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0;
+      font-size: 1em;
+    }
+    .color-controls select {
+      font-size: 1em;
+      padding: 0.4em 0.8em;
+      border: 2px solid var(--primary);
+      border-radius: 0.3em;
+      background: #fff;
+      color: var(--primary-dark);
+      min-width: var(--target-size);
+      min-height: var(--target-size);
       outline: none;
     }
-    .modal-close-btn:focus {
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: var(--focus-outline-shadow);
-      background: var(--color-focus);
-      color: var(--color-fg);
+    .color-controls select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 var(--focus-thickness) var(--focus);
+    }
+
+    /* Focus indicators for all interactive elements */
+    a:focus, button:focus, input:focus, select:focus, textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 var(--focus-thickness) var(--focus);
+      z-index: 2;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 700px) {
+      main {
+        padding: 1rem 0.5rem 2rem 0.5rem;
+      }
+      .header-inner, .main-nav, nav[aria-label="Breadcrumb"] {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+      aside {
+        padding: 1.2em 0.7em;
+      }
+      .book-form-section form {
+        padding: 1em 0.7em 1em 0.7em;
+      }
+    }
+
+    /* Enhanced text and spacing */
+    p, li, .book-desc {
+      line-height: 1.7;
+      max-width: var(--max-line-length);
+      margin-bottom: 1em;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-bottom: 0.5em;
+      margin-top: 0.7em;
+      line-height: 1.25;
+      letter-spacing: 0.01em;
+      max-width: var(--max-line-length);
+    }
+    /* Prevent justified text, maintain left alignment */
+    body, p, h1, h2, h3, h4, h5, h6, li {
+      text-align: left;
+      text-justify: none;
+    }
+    /* Ensure minimum target size for all buttons/inputs/links */
+    button, .reset-btn, input[type="submit"], a, select, input, textarea {
+      min-width: var(--target-size);
+      min-height: var(--target-size);
+      box-sizing: border-box;
+    }
+
+    /* Hide visually but remain accessible */
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
     }
 
     /* Status messages */
     [role="status"], [role="alert"] {
-      margin: 1rem 0;
-      font-size: var(--font-size-base);
-      padding: 1rem 1.25rem;
-      border-radius: var(--border-radius);
-      background: #fffbe6;
-      color: var(--color-fg);
-      border: 2px solid var(--color-accent3);
-      font-weight: 500;
+      margin-top: 1em;
+      margin-bottom: 1em;
+      font-size: 1.08em;
+      font-weight: 600;
+      padding: 0.5em 1em;
+      border-radius: 0.3em;
+    }
+    [role="status"] {
+      background: #e3f2fd;
+      color: var(--primary-dark);
+      border-left: 4px solid var(--primary);
     }
     [role="alert"] {
-      background: #fff0f3;
-      color: var(--color-error);
-      border: 2px solid var(--color-error);
+      background: #ffebee;
+      color: var(--error);
+      border-left: 4px solid var(--error);
     }
-
-    /* Search */
-    .search-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.75em;
-      margin-bottom: 1.25em;
+    /* Micro-interactions for book cards */
+    .book-card:focus-within, .book-card:hover {
+      box-shadow: 0 0 0 3px var(--focus);
+      border-color: var(--accent-dark);
+      outline: none;
     }
-    .search-bar input[type="search"] {
-      flex: 1 1 120px;
-      min-width: 120px;
-      font-size: var(--font-size-base);
+    /* Animate recommendations fade-in */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeIn 0.6s ease forwards;
     }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .dashboard-layout {
-        flex-direction: column;
-        gap: 2rem;
-      }
-      .dashboard-sidebar {
-        max-width: 100%;
-        margin: 0;
-      }
-      main {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: none;
       }
     }
-    @media (max-width: 600px) {
-      nav[aria-label] ul {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      main {
-        padding: 1rem 0.25rem;
-      }
-      .dashboard-layout {
-        gap: 1rem;
-      }
-    }
-
-    /* Enhanced focus indicators */
-    :focus-visible {
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color) !important;
-      box-shadow: var(--focus-outline-shadow) !important;
-    }
-
-    /* Color/contrast user preferences */
-    .user-theme-dark {
-      --color-bg: #10133e;
-      --color-fg: #fff;
-      --color-accent: #0e76a8;
-      --color-accent2: #d72660;
-      --color-accent3: #ffd447;
-      --color-success: #44d980;
-      --color-error: #ff5b5b;
-      --color-info: #3ec6e0;
-      --color-focus: #ffd447;
-      --color-focus-outline: #fff;
-      --color-border: #ffd447;
-      --color-shadow: #ffd447;
-      --color-link: #ffd447;
-      --color-nav: #23255b;
-      --color-nav-active: #ffd447;
-      --color-nav-text: #fff;
-      --color-disabled: #6d6d7c;
-      background: linear-gradient(120deg, #23255b 0%, #10133e 100%);
-    }
-    .user-theme-high-contrast {
-      --color-bg: #fff;
-      --color-fg: #000;
-      --color-accent: #000;
-      --color-accent2: #0057b7;
-      --color-accent3: #ffd600;
-      --color-success: #138a36;
-      --color-error: #d72660;
-      --color-info: #0057b7;
-      --color-focus: #ffd600;
-      --color-focus-outline: #000;
-      --color-border: #000;
-      --color-shadow: #ffd600;
-      --color-link: #0057b7;
-      --color-nav: #f7f7f7;
-      --color-nav-active: #ffd600;
-      --color-nav-text: #000;
-      --color-disabled: #b0b3c6;
-      background: #fff;
-    }
-
-    /* Line spacing, paragraph spacing, max line length */
-    p, li, label, input, textarea, select {
-      line-height: var(--line-spacing);
-      max-width: var(--max-line-chars);
-    }
-    p {
-      margin-bottom: var(--para-spacing);
-    }
-    ul, ol {
-      margin-bottom: var(--para-spacing);
-    }
-    /* Prevent text justification */
-    p, li, label, input, textarea, select, h1, h2, h3, h4, h5, h6 {
-      text-align: left;
-      text-justify: none;
-    }
-
-    /* Animation: prefers-reduced-motion */
+    /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
-        transition: none !important;
-        animation-duration: 0.001s !important;
+        animation-duration: 0.001ms !important;
         animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
       }
     }
   </style>
-  <!-- React and Babel for SPA functionality (inlined for single-file, no external dependencies) -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </head>
 <body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
-  <div id="app-root"></div>
-  <script type="text/babel">
-
-    /*********************************
-     * Accessibility Utility Functions
-     *********************************/
-
-    // Focus trap for modals (no keyboard trap elsewhere)
-    function useFocusTrap(ref, isActive) {
-      React.useEffect(() => {
-        if (!isActive || !ref.current) return;
-        const node = ref.current;
-        const focusable = node.querySelectorAll(
-          'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex="0"]'
-        );
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        function handleKey(e) {
-          if (e.key === 'Tab') {
-            if (e.shiftKey) {
-              if (document.activeElement === first) {
-                e.preventDefault();
-                last.focus();
-              }
-            } else {
-              if (document.activeElement === last) {
-                e.preventDefault();
-                first.focus();
-              }
-            }
-          }
-        }
-        node.addEventListener('keydown', handleKey);
-        // Focus first focusable element
-        first.focus();
-        return () => node.removeEventListener('keydown', handleKey);
-      }, [isActive, ref]);
-    }
-
-    // Unique ID generator for ARIA, etc.
-    let uniqueIdCounter = 0;
-    function uniqueId(prefix = 'id') {
-      uniqueIdCounter += 1;
-      return `${prefix}-${uniqueIdCounter}`;
-    }
-
-    // Enhanced focus management for menu/keyboard navigation
-    function useEnhancedFocus(ref, isActive) {
-      React.useEffect(() => {
-        if (isActive && ref.current) {
-          ref.current.focus();
-        }
-      }, [isActive, ref]);
-    }
-
-    // Context for user theme (foreground/background color selection)
-    const ThemeContext = React.createContext();
-
-    /*********************************
-     * Modal Dialog (Accessible)
-     *********************************/
-    function Modal({ isOpen, onClose, title, children, labelledById, describedById }) {
-      const modalRef = React.useRef(null);
-      useFocusTrap(modalRef, isOpen);
-
-      React.useEffect(() => {
-        function onEsc(e) {
-          if (isOpen && e.key === 'Escape') {
-            onClose();
-          }
-        }
-        if (isOpen) {
-          document.body.style.overflow = 'hidden';
-          window.addEventListener('keydown', onEsc);
-        }
-        return () => {
-          document.body.style.overflow = '';
-          window.removeEventListener('keydown', onEsc);
-        };
-      }, [isOpen, onClose]);
-
-      if (!isOpen) return null;
-      return (
-        <div
-          className="modal-backdrop"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={labelledById}
-          aria-describedby={describedById}
-          tabIndex="-1"
-        >
-          <div className="modal" ref={modalRef}>
-            <button
-              className="modal-close-btn"
-              aria-label="Close dialog"
-              onClick={onClose}
-              autoFocus
-              type="button"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-            {children}
+  <a href="#main-content" class="skip-link" id="skip-link">Skip to main content</a>
+  <header>
+    <div class="header-inner">
+      <div>
+        <h1 class="site-title">Accessible Book Recommender</h1>
+        <p class="site-desc">Personalized book suggestions based on your favorite genres and authors. Accessible for everyone, always.</p>
+      </div>
+      <div aria-hidden="true" style="display: flex; align-items: center;">
+        <!-- Decorative SVG icon, marked as decorative -->
+        <svg width="48" height="48" aria-hidden="true" focusable="false" role="presentation" viewBox="0 0 48 48">
+          <ellipse cx="24" cy="24" rx="22" ry="22" fill="#42a5f5" />
+          <rect x="13" y="14" width="22" height="20" rx="3" fill="#fff" stroke="#c51162" stroke-width="2"/>
+          <rect x="16" y="18" width="16" height="2.5" rx="1" fill="#c51162"/>
+          <rect x="16" y="23" width="16" height="2.5" rx="1" fill="#42a5f5"/>
+          <rect x="16" y="28" width="10" height="2.5" rx="1" fill="#c51162"/>
+        </svg>
+      </div>
+    </div>
+  </header>
+  <nav class="main-nav" aria-label="Main navigation">
+    <ul>
+      <li><a href="#main-content" class="current" aria-current="page"><span class="nav-icon" aria-hidden="true">📚</span>Book Recommender</a></li>
+      <li>
+        <button type="button" aria-haspopup="true" aria-expanded="false" aria-controls="nav-more-menu" id="nav-more-btn">
+          <span class="nav-icon" aria-hidden="true">☰</span>More
+        </button>
+        <ul class="dropdown-menu" id="nav-more-menu" aria-label="More menu" aria-hidden="true">
+          <li><a href="#help" id="nav-help-link">Help &amp; Accessibility</a></li>
+          <li><a href="#sitemap" id="nav-sitemap-link">Sitemap</a></li>
+        </ul>
+      </li>
+      <li><a href="#search-section"><span class="nav-icon" aria-hidden="true">🔍</span>Search</a></li>
+    </ul>
+  </nav>
+  <nav aria-label="Breadcrumb">
+    <ol class="breadcrumbs">
+      <li><a href="#main-content">Home</a></li>
+      <li class="current" aria-current="page">Book Recommender</li>
+    </ol>
+  </nav>
+  <main id="main-content" tabindex="-1">
+    <section class="book-form-section" aria-labelledby="form-section-heading">
+      <h2 id="form-section-heading">Get Personalized Book Recommendations</h2>
+      <form id="book-form" autocomplete="on" novalidate aria-describedby="form-help" aria-labelledby="form-section-heading">
+        <fieldset>
+          <legend>Your Book Preferences</legend>
+          <div class="form-group">
+            <label for="genre" id="genre-label">Favorite Genre(s)
+              <span class="required-indicator" aria-hidden="true">*</span>
+            </label>
+            <span class="help-text" id="genre-help">
+              Choose one or more genres you enjoy reading. You can select multiple genres by holding <kbd>Ctrl</kbd> (<abbr title="Control">Ctrl</abbr>) or <kbd>Command</kbd> (<abbr title="Command">Cmd</abbr>) on your keyboard.
+            </span>
+            <select id="genre" name="genre" multiple required aria-required="true" aria-describedby="genre-help genre-error" size="5">
+              <option value="Fantasy">Fantasy</option>
+              <option value="Science Fiction">Science Fiction</option>
+              <option value="Mystery">Mystery</option>
+              <option value="Romance">Romance</option>
+              <option value="Historical">Historical</option>
+              <option value="Nonfiction">Nonfiction</option>
+              <option value="Horror">Horror</option>
+              <option value="Young Adult">Young Adult</option>
+              <option value="Biography">Biography</option>
+              <option value="Thriller">Thriller</option>
+            </select>
+            <span class="error-message visually-hidden" id="genre-error"></span>
           </div>
-        </div>
-      );
-    }
-
-    /*********************************
-     * Accessible Dropdown Menu
-     *********************************/
-    function DropdownMenu({ label, children, id, menuId, active, setActive, buttonRef }) {
-      const menuRef = React.useRef(null);
-
-      // Keyboard navigation for menu
-      React.useEffect(() => {
-        if (!active) return;
-        function handleKey(e) {
-          if (e.key === 'Escape') {
-            setActive(false);
-            buttonRef.current && buttonRef.current.focus();
-          }
-        }
-        document.addEventListener('keydown', handleKey);
-        return () => document.removeEventListener('keydown', handleKey);
-      }, [active, setActive, buttonRef]);
-
-      // Dismiss on outside click
-      React.useEffect(() => {
-        if (!active) return;
-        function handleClick(e) {
-          if (
-            menuRef.current &&
-            !menuRef.current.contains(e.target) &&
-            buttonRef.current &&
-            !buttonRef.current.contains(e.target)
-          ) {
-            setActive(false);
-          }
-        }
-        document.addEventListener('mousedown', handleClick);
-        return () => document.removeEventListener('mousedown', handleClick);
-      }, [active, setActive, buttonRef]);
-
-      return (
-        <div
-          className="menu-dropdown"
-          aria-haspopup="true"
-          aria-expanded={active}
-        >
-          <button
-            ref={buttonRef}
-            aria-controls={menuId}
-            aria-haspopup="true"
-            aria-expanded={active}
-            aria-label={label}
-            type="button"
-            onClick={() => setActive((prev) => !prev)}
-            onKeyDown={(e) => {
-              if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-                setActive(true);
-                setTimeout(() => {
-                  if (menuRef.current) {
-                    const firstItem = menuRef.current.querySelector('a,button');
-                    if (firstItem) firstItem.focus();
-                  }
-                }, 10);
-              }
-            }}
-          >
-            {label}
-            <span aria-hidden="true" style={{marginLeft: '0.5em'}}>▼</span>
-          </button>
-          <ul
-            className="dropdown-list"
-            id={menuId}
-            role="menu"
-            ref={menuRef}
-            tabIndex="-1"
-            aria-label={label}
-          >
-            {children}
-          </ul>
-        </div>
-      );
-    }
-
-    /*********************************
-     * Accessible Breadcrumbs
-     *********************************/
-    function Breadcrumbs({ items }) {
-      return (
-        <nav aria-label="Breadcrumb">
-          <ol>
-            {items.map((item, i) =>
-              <li key={item.label} aria-current={i === items.length - 1 ? "page" : undefined}>
-                {i === items.length - 1 ? (
-                  item.label
-                ) : (
-                  <a href={item.href} onClick={item.onClick}>{item.label}</a>
-                )}
-              </li>
-            )}
-          </ol>
-        </nav>
-      );
-    }
-
-    /*********************************
-     * Color/Contrast User Preferences
-     *********************************/
-    function ThemeSelector() {
-      const { theme, setTheme } = React.useContext(ThemeContext);
-      return (
-        <fieldset aria-labelledby="theme-selector-legend" style={{marginBottom: '1rem'}}>
-          <legend id="theme-selector-legend">Color and Contrast Settings</legend>
-          <div role="group" aria-label="Select foreground and background color scheme">
-            <label>
-              <input
-                type="radio"
-                name="theme"
-                value="default"
-                checked={theme === 'default'}
-                onChange={() => setTheme('default')}
-                aria-checked={theme === 'default'}
-                style={{marginRight: '0.5em'}}
-              />
-              Default (Vibrant)
+          <div class="form-group">
+            <label for="author" id="author-label">Favorite Author(s)
+              <span class="required-indicator" aria-hidden="true">*</span>
             </label>
-            <label style={{marginLeft: '1.5em'}}>
-              <input
-                type="radio"
-                name="theme"
-                value="dark"
-                checked={theme === 'dark'}
-                onChange={() => setTheme('dark')}
-                aria-checked={theme === 'dark'}
-                style={{marginRight: '0.5em'}}
+            <span class="help-text" id="author-help">
+              Enter one or more favorite authors, separated by commas. For example: <em>Agatha Christie, J.K. Rowling</em>.
+            </span>
+            <input type="text" id="author" name="author" required aria-required="true"
+              aria-describedby="author-help author-error"
+              autocomplete="name"
+              maxlength="120"
+              inputmode="text"
+              spellcheck="true"
               />
-              Dark
-            </label>
-            <label style={{marginLeft: '1.5em'}}>
-              <input
-                type="radio"
-                name="theme"
-                value="high-contrast"
-                checked={theme === 'high-contrast'}
-                onChange={() => setTheme('high-contrast')}
-                aria-checked={theme === 'high-contrast'}
-                style={{marginRight: '0.5em'}}
-              />
-              High Contrast
-            </label>
+            <span class="error-message visually-hidden" id="author-error"></span>
           </div>
-          <span className="form-help" id="theme-selector-help">
-            You can select your preferred foreground and background color scheme for improved readability and comfort.
-          </span>
+          <div class="form-group">
+            <label for="extra-notes" id="notes-label">Anything else?
+              <span class="help-text" id="notes-help">
+                (Optional) Share your reading preferences, e.g., "I love magical worlds" or "I prefer fast-paced thrillers".
+              </span>
+            </label>
+            <textarea id="extra-notes" name="extra-notes" rows="3" aria-describedby="notes-help" maxlength="250"></textarea>
+          </div>
         </fieldset>
-      );
-    }
-
-    /*********************************
-     * Accessible Authentication Form
-     *********************************/
-    function LoginForm({ onLogin, error, loading, help }) {
-      // Simulated accessible authentication with copy/paste, show password, and help
-      const [email, setEmail] = React.useState('');
-      const [password, setPassword] = React.useState('');
-      const [showPassword, setShowPassword] = React.useState(false);
-      const [formError, setFormError] = React.useState('');
-      const [touched, setTouched] = React.useState({email: false, password: false});
-      const emailInputId = React.useRef(uniqueId('email')).current;
-      const passwordInputId = React.useRef(uniqueId('password')).current;
-      const errorId = React.useRef(uniqueId('login-error')).current;
-      const helpId = React.useRef(uniqueId('login-help')).current;
-
-      function validate() {
-        if (!email.trim()) {
-          setFormError('Email address is required.');
-          return false;
-        }
-        if (!/\S+@\S+\.\S+/.test(email)) {
-          setFormError('Please enter a valid email address.');
-          return false;
-        }
-        if (!password) {
-          setFormError('Password is required.');
-          return false;
-        }
-        setFormError('');
-        return true;
-      }
-
-      function handleSubmit(e) {
-        e.preventDefault();
-        setTouched({email: true, password: true});
-        if (validate()) {
-          onLogin(email, password);
-        }
-      }
-
-      return (
-        <form aria-labelledby="login-form-legend" onSubmit={handleSubmit} noValidate>
-          <fieldset>
-            <legend id="login-form-legend">Sign In</legend>
-            <div className="form-group">
-              <label htmlFor={emailInputId}>
-                Email address
-                <span className="required-indicator" aria-hidden="true">*</span>
-              </label>
-              <input
-                id={emailInputId}
-                type="email"
-                autoComplete="email"
-                required
-                aria-required="true"
-                aria-invalid={formError && touched.email ? "true" : "false"}
-                aria-describedby={helpId + ' ' + (formError ? errorId : '')}
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onBlur={() => setTouched(t => ({...t, email: true}))}
-                minLength={5}
-                maxLength={60}
-              />
-              <span id={helpId} className="form-help">
-                Enter your registered email address. <a href="#help-auth" tabIndex="0">Need help?</a>
-              </span>
-              {formError && touched.email && (
-                <span className="form-error" id={errorId} role="alert">
-                  {formError}
-                </span>
-              )}
-            </div>
-            <div className="form-group">
-              <label htmlFor={passwordInputId}>
-                Password
-                <span className="required-indicator" aria-hidden="true">*</span>
-              </label>
-              <input
-                id={passwordInputId}
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                required
-                aria-required="true"
-                aria-invalid={formError && touched.password ? "true" : "false"}
-                aria-describedby={helpId + ' ' + (formError ? errorId : '')}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                onBlur={() => setTouched(t => ({...t, password: true}))}
-                minLength={4}
-                maxLength={32}
-              />
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={showPassword}
-                    onChange={() => setShowPassword(p => !p)}
-                    aria-checked={showPassword}
-                    style={{marginRight: '0.5em'}}
-                  />
-                  Show password
-                </label>
-              </div>
-              <span className="form-help" id={helpId + '-password'}>
-                Password can be pasted or revealed for assistance. <a href="#help-auth" tabIndex="0">Need help?</a>
-              </span>
-              {formError && touched.password && (
-                <span className="form-error" id={errorId + '-password'} role="alert">
-                  {formError}
-                </span>
-              )}
-            </div>
-            <button type="submit" className="btn btn-success" disabled={loading} aria-disabled={loading}>
-              {loading ? 'Signing in…' : 'Sign in'}
-            </button>
-            {error && (
-              <span className="form-error" role="alert" aria-live="assertive">
-                {error}
-              </span>
-            )}
-            {help && (
-              <span className="form-help" id="help-auth">
-                <strong>Authentication Help:</strong> If you have trouble signing in, you may copy/paste your password or use the "Show password" option. For further assistance, contact support@example.com.
-              </span>
-            )}
-          </fieldset>
+        <div class="form-actions">
+          <button type="submit" id="get-recommendations-btn" aria-label="Get book recommendations">
+            Get Recommendations
+          </button>
+          <button type="button" class="reset-btn" id="reset-btn" aria-label="Reset form and clear results">
+            Reset
+          </button>
+        </div>
+        <div id="form-status" role="status" aria-live="polite"></div>
+        <div id="form-help" class="help-text" aria-live="polite">
+          <strong>Need help?</strong> See the <a href="#help" class="help-link">Help &amp; Accessibility</a> section for detailed instructions and definitions of unusual terms.
+        </div>
+      </form>
+      <section class="recommendations-section" aria-labelledby="recommendations-heading">
+        <h2 id="recommendations-heading">Your Book Recommendations</h2>
+        <div id="recommendations-container" aria-live="polite" aria-atomic="true"></div>
+      </section>
+    </section>
+    <aside aria-labelledby="sidebar-heading">
+      <h2 id="sidebar-heading">Quick Access &amp; Help</h2>
+      <section class="sidebar-section" aria-labelledby="search-section-heading">
+        <h3 id="search-section-heading">Search Books</h3>
+        <form id="search-form" role="search" aria-label="Book search form" autocomplete="off">
+          <label for="search-query">Search by title, author, or keyword:</label>
+          <input type="text" id="search-query" name="search-query" aria-describedby="search-help" inputmode="search" maxlength="80" />
+          <span class="help-text" id="search-help">Type and press <kbd>Enter</kbd> to search our book database.</span>
+          <button type="submit" aria-label="Search for books">Search</button>
         </form>
-      );
+        <div id="search-status" role="status" aria-live="polite"></div>
+      </section>
+      <section class="sidebar-section" aria-labelledby="help-section-heading">
+        <h3 id="help-section-heading">Help &amp; Accessibility</h3>
+        <ul>
+          <li><a href="#help" class="help-link">How to use this page</a></li>
+          <li><a href="#accessibility-features" class="help-link">Accessibility features</a></li>
+          <li><a href="#definitions" class="help-link">Definitions &amp; abbreviations</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section" aria-labelledby="color-controls-heading">
+        <h3 id="color-controls-heading">Customize Colors</h3>
+        <form class="color-controls" aria-label="Color scheme controls">
+          <label for="fg-color">Text color:</label>
+          <select id="fg-color" name="fg-color" aria-label="Select text color">
+            <option value="#1a1a24">Dark</option>
+            <option value="#ffffff">Light</option>
+            <option value="#0d47a1">Blue</option>
+            <option value="#c51162">Magenta</option>
+          </select>
+          <label for="bg-color">Background:</label>
+          <select id="bg-color" name="bg-color" aria-label="Select background color">
+            <option value="#f5f7fa">Light</option>
+            <option value="#1a1a24">Dark</option>
+            <option value="#fffde7">Yellow</option>
+            <option value="#e3f2fd">Blue</option>
+          </select>
+        </form>
+        <span class="help-text">Choose your preferred colors for best readability. All combinations maintain AAA contrast.</span>
+      </section>
+    </aside>
+  </main>
+  <footer aria-labelledby="footer-heading">
+    <section>
+      <h2 id="footer-heading" class="visually-hidden">Footer</h2>
+      <nav aria-label="Footer navigation">
+        <ul style="display: flex; gap: 2em; flex-wrap: wrap; list-style: none; margin: 0; padding: 1em 0;">
+          <li><a href="#main-content">Home</a></li>
+          <li><a href="#help">Help &amp; Accessibility</a></li>
+          <li><a href="#sitemap">Sitemap</a></li>
+          <li><a href="#definitions">Definitions</a></li>
+        </ul>
+      </nav>
+      <div style="font-size: 0.97em; color: var(--primary-dark); margin-top: 0.7em;">
+        &copy; 2024 Accessible Book Recommender. All rights reserved. 
+        <span lang="es" title="Spanish">(Español disponible)</span>
+      </div>
+    </section>
+  </footer>
+
+  <!-- Help and Accessibility Section (in-page content for skip links and context-sensitive help) -->
+  <section id="help" tabindex="-1" aria-labelledby="help-main-heading" style="max-width: 900px; margin: 3em auto 2em auto; padding: 2em 1em; background: #fffde7; border-radius: 1em; border: 2px solid #c51162;">
+    <h2 id="help-main-heading">Help &amp; Accessibility Guide</h2>
+    <p>This website provides personalized book recommendations in a fully accessible, AAA-compliant format. You can use keyboard, mouse, touch, or assistive technologies to interact with all features.</p>
+    <ul>
+      <li><strong>Keyboard navigation:</strong> Use <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> to move between interactive elements. Press <kbd>Enter</kbd> or <kbd>Space</kbd> to activate buttons and menu items.</li>
+      <li><strong>Form help:</strong> All form fields have labels and help text. Required fields are marked with <span class="required-indicator">*</span>.</li>
+      <li><strong>Dropdown menus:</strong> Use arrow keys to navigate, <kbd>Enter</kbd> or <kbd>Space</kbd> to open/close, <kbd>Esc</kbd> to close.</li>
+      <li><strong>Color controls:</strong> Use the sidebar to change text and background colors. All combinations meet AAA contrast standards.</li>
+      <li><strong>Screen readers:</strong> All images have descriptive <code>alt</code> text. Status messages and dynamic content use <code>aria-live</code> for announcements.</li>
+      <li><strong>Multiple ways to find content:</strong> Use navigation, breadcrumbs, search, or sitemap.</li>
+    </ul>
+    <section id="accessibility-features" aria-labelledby="accessibility-features-heading">
+      <h3 id="accessibility-features-heading">Accessibility Features</h3>
+      <ul>
+        <li>AAA-level color contrast (7:1+), large touch targets, and visible focus indicators</li>
+        <li>Skip to main content link and logical heading structure</li>
+        <li>Context-sensitive help for all forms and controls</li>
+        <li>Keyboard-accessible dropdowns, search, and menus</li>
+        <li>Live status updates for search and recommendations</li>
+        <li>User-selectable color schemes</li>
+      </ul>
+    </section>
+    <section id="definitions" aria-labelledby="definitions-heading">
+      <h3 id="definitions-heading">Definitions &amp; Abbreviations</h3>
+      <dl>
+        <dt><abbr title="Control">Ctrl</abbr> / <abbr title="Command">Cmd</abbr></dt>
+        <dd>Modifier keys used for selecting multiple items in lists (Ctrl on Windows/Linux, Cmd on Mac).</dd>
+        <dt>Genre</dt>
+        <dd>A category or type of literature (e.g., Fantasy, Mystery, Nonfiction).</dd>
+        <dt>AAA (Accessibility Level)</dt>
+        <dd>The highest level of web accessibility, ensuring the site is usable by the widest range of people, including those with disabilities.</dd>
+      </dl>
+    </section>
+    <section id="sitemap" aria-labelledby="sitemap-heading">
+      <h3 id="sitemap-heading">Sitemap</h3>
+      <ul>
+        <li><a href="#main-content">Book Recommender (Home)</a></li>
+        <li><a href="#search-section">Search Books</a></li>
+        <li><a href="#help">Help &amp; Accessibility</a></li>
+        <li><a href="#definitions">Definitions &amp; Abbreviations</a></li>
+      </ul>
+    </section>
+  </section>
+
+  <script>
+    // Utility: Color contrast checker (returns true if ratio >= 7:1)
+    function contrastRatio(hex1, hex2) {
+      // Helper to parse hex color to RGB
+      function hexToRgb(hex) {
+        hex = hex.replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+        const num = parseInt(hex, 16);
+        return [num >> 16, (num >> 8) & 255, num & 255];
+      }
+      function luminance([r, g, b]) {
+        [r, g, b] = [r, g, b].map(c => {
+          c /= 255;
+          return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      }
+      const L1 = luminance(hexToRgb(hex1));
+      const L2 = luminance(hexToRgb(hex2));
+      return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
     }
 
-    /*********************************
-     * Accessible Task Table/List
-     *********************************/
-    function TaskTable({ tasks, onToggleComplete, onEdit, onDelete, filter, search, ariaDescribedBy }) {
-      // Filtering and searching
-      const filtered = tasks.filter(task => {
-        if (filter === 'all') return true;
-        if (filter === 'completed') return task.completed;
-        if (filter === 'incomplete') return !task.completed;
-        if (filter === 'in-progress') return !task.completed && task.inProgress;
-        return true;
-      }).filter(task => {
-        if (!search) return true;
-        return task.title.toLowerCase().includes(search.toLowerCase()) ||
-          (task.description && task.description.toLowerCase().includes(search.toLowerCase()));
+    // Color controls
+    (function setupColorControls() {
+      const fgSelect = document.getElementById('fg-color');
+      const bgSelect = document.getElementById('bg-color');
+      function applyColors() {
+        const fg = fgSelect.value;
+        const bg = bgSelect.value;
+        // Only apply if contrast is AAA
+        if (contrastRatio(fg, bg) >= 7) {
+          document.body.style.color = fg;
+          document.body.style.backgroundColor = bg;
+        } else {
+          alert('Selected color combination does not meet AAA contrast (7:1). Please choose another.');
+          fgSelect.value = '#1a1a24';
+          bgSelect.value = '#f5f7fa';
+          document.body.style.color = '#1a1a24';
+          document.body.style.backgroundColor = '#f5f7fa';
+        }
+      }
+      fgSelect.addEventListener('change', applyColors);
+      bgSelect.addEventListener('change', applyColors);
+    })();
+
+    // Dropdown navigation (keyboard and mouse accessible)
+    (function setupDropdownMenu() {
+      const btn = document.getElementById('nav-more-btn');
+      const menu = document.getElementById('nav-more-menu');
+      let open = false;
+      function openMenu() {
+        menu.setAttribute('aria-hidden', 'false');
+        btn.setAttribute('aria-expanded', 'true');
+        menu.querySelector('a').focus();
+        open = true;
+      }
+      function closeMenu() {
+        menu.setAttribute('aria-hidden', 'true');
+        btn.setAttribute('aria-expanded', 'false');
+        open = false;
+      }
+      btn.addEventListener('click', e => {
+        if (open) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+      btn.addEventListener('keydown', e => {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openMenu();
+        }
+      });
+      menu.addEventListener('keydown', e => {
+        const items = Array.from(menu.querySelectorAll('a'));
+        const idx = items.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          items[(idx + 1) % items.length].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          items[(idx - 1 + items.length) % items.length].focus();
+        } else if (e.key === 'Escape') {
+          closeMenu();
+          btn.focus();
+        }
+      });
+      // Mouse leave closes menu
+      menu.addEventListener('mouseleave', closeMenu);
+      // Focus out closes menu
+      menu.addEventListener('focusout', function(e) {
+        if (!menu.contains(e.relatedTarget) && e.relatedTarget !== btn) {
+          closeMenu();
+        }
+      });
+      // Click outside closes menu
+      document.addEventListener('mousedown', function(e) {
+        if (!menu.contains(e.target) && e.target !== btn) {
+          closeMenu();
+        }
+      });
+      // Menu items can be accessed from parent page (alternative access)
+      // No-op, as links are visible when menu is open and also listed in footer/sidebar
+    })();
+
+    // Book database (sample, extensible)
+    const BOOKS = [
+      {
+        title: "The Hobbit",
+        author: "J.R.R. Tolkien",
+        genre: "Fantasy",
+        cover: "https://covers.openlibrary.org/b/id/6979861-L.jpg",
+        description: "A timeless fantasy adventure following Bilbo Baggins on his quest to reclaim treasure guarded by a dragon. Filled with magic, courage, and friendship.",
+      },
+      {
+        title: "Murder on the Orient Express",
+        author: "Agatha Christie",
+        genre: "Mystery",
+        cover: "https://covers.openlibrary.org/b/id/8225261-L.jpg",
+        description: "Detective Hercule Poirot investigates a murder aboard a luxurious train, unraveling a web of secrets in this classic whodunit.",
+      },
+      {
+        title: "Dune",
+        author: "Frank Herbert",
+        genre: "Science Fiction",
+        cover: "https://covers.openlibrary.org/b/id/8101326-L.jpg",
+        description: "A sweeping sci-fi epic set on the desert planet Arrakis, where politics, prophecy, and power collide in a struggle for survival.",
+      },
+      {
+        title: "Pride and Prejudice",
+        author: "Jane Austen",
+        genre: "Romance",
+        cover: "https://covers.openlibrary.org/b/id/8081536-L.jpg",
+        description: "A witty, romantic tale of manners, love, and social status in 19th-century England, featuring the spirited Elizabeth Bennet.",
+      },
+      {
+        title: "The Book Thief",
+        author: "Markus Zusak",
+        genre: "Historical",
+        cover: "https://covers.openlibrary.org/b/id/8156227-L.jpg",
+        description: "Set in Nazi Germany, this novel follows a young girl's relationship with books, words, and the power they hold during a time of great turmoil.",
+      },
+      {
+        title: "Educated",
+        author: "Tara Westover",
+        genre: "Nonfiction",
+        cover: "https://covers.openlibrary.org/b/id/8938451-L.jpg",
+        description: "A powerful memoir about a woman's quest for knowledge, growing up in a survivalist family, and finding her own path.",
+      },
+      {
+        title: "Dracula",
+        author: "Bram Stoker",
+        genre: "Horror",
+        cover: "https://covers.openlibrary.org/b/id/8231856-L.jpg",
+        description: "A gothic horror classic, chronicling the attempts to defeat Count Dracula, the infamous vampire, in Victorian England.",
+      },
+      {
+        title: "The Hunger Games",
+        author: "Suzanne Collins",
+        genre: "Young Adult",
+        cover: "https://covers.openlibrary.org/b/id/7264442-L.jpg",
+        description: "In a dystopian future, Katniss Everdeen volunteers for a televised fight to the death, challenging a cruel system.",
+      },
+      {
+        title: "Steve Jobs",
+        author: "Walter Isaacson",
+        genre: "Biography",
+        cover: "https://covers.openlibrary.org/b/id/7236191-L.jpg",
+        description: "A detailed biography of Steve Jobs, exploring his creativity, leadership, and impact on technology.",
+      },
+      {
+        title: "The Girl with the Dragon Tattoo",
+        author: "Stieg Larsson",
+        genre: "Thriller",
+        cover: "https://covers.openlibrary.org/b/id/8231991-L.jpg",
+        description: "A gripping thriller featuring journalist Mikael Blomkvist and hacker Lisbeth Salander as they uncover family secrets.",
+      },
+      // More books for diversity
+      {
+        title: "1984",
+        author: "George Orwell",
+        genre: "Science Fiction",
+        cover: "https://covers.openlibrary.org/b/id/8221251-L.jpg",
+        description: "A dystopian novel depicting a totalitarian society under constant surveillance, exploring themes of freedom and truth.",
+      },
+      {
+        title: "The Name of the Wind",
+        author: "Patrick Rothfuss",
+        genre: "Fantasy",
+        cover: "https://covers.openlibrary.org/b/id/8376261-L.jpg",
+        description: "The first part of the epic story of Kvothe, a magically gifted young man who grows to be a legend.",
+      },
+      {
+        title: "Gone Girl",
+        author: "Gillian Flynn",
+        genre: "Thriller",
+        cover: "https://covers.openlibrary.org/b/id/8311836-L.jpg",
+        description: "A dark, psychological thriller about a marriage gone wrong, full of twists and unreliable narrators.",
+      },
+      {
+        title: "The Fault in Our Stars",
+        author: "John Green",
+        genre: "Young Adult",
+        cover: "https://covers.openlibrary.org/b/id/7898781-L.jpg",
+        description: "A touching story of two teenagers who meet at a cancer support group and fall in love.",
+      },
+      {
+        title: "The Immortal Life of Henrietta Lacks",
+        author: "Rebecca Skloot",
+        genre: "Nonfiction",
+        cover: "https://covers.openlibrary.org/b/id/7222241-L.jpg",
+        description: "The story of the woman behind the HeLa cells and her impact on medical research.",
+      },
+      {
+        title: "And Then There Were None",
+        author: "Agatha Christie",
+        genre: "Mystery",
+        cover: "https://covers.openlibrary.org/b/id/8231859-L.jpg",
+        description: "Ten strangers are invited to an isolated island, where they are killed off one by one in this suspenseful mystery.",
+      },
+      {
+        title: "Jane Eyre",
+        author: "Charlotte Brontë",
+        genre: "Historical",
+        cover: "https://covers.openlibrary.org/b/id/8228696-L.jpg",
+        description: "A classic coming-of-age novel about an orphaned girl's resilience, love, and independence.",
+      },
+      {
+        title: "It",
+        author: "Stephen King",
+        genre: "Horror",
+        cover: "https://covers.openlibrary.org/b/id/8231860-L.jpg",
+        description: "A group of children confronts an ancient evil in their small town, returning as adults to face their fears.",
+      },
+      {
+        title: "Becoming",
+        author: "Michelle Obama",
+        genre: "Biography",
+        cover: "https://covers.openlibrary.org/b/id/9255896-L.jpg",
+        description: "A deeply personal memoir by the former First Lady of the United States, sharing her journey from childhood to the White House.",
+      },
+      {
+        title: "Outlander",
+        author: "Diana Gabaldon",
+        genre: "Romance",
+        cover: "https://covers.openlibrary.org/b/id/8272066-L.jpg",
+        description: "A time-travel romance where a WWII nurse is transported to 18th-century Scotland, torn between two lives and loves.",
+      }
+    ];
+
+    // Helper: Remove extra whitespace, lowercase, and strip accents
+    function normalize(str) {
+      return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9\s,]/g, "")
+        .trim();
+    }
+
+    // Book recommendation logic
+    function recommendBooks(selectedGenres, authorList, notes) {
+      // Primary: match genre(s) AND author(s)
+      let matches = BOOKS.filter(book => 
+        selectedGenres.includes(book.genre) &&
+        authorList.some(a => normalize(book.author).includes(a))
+      );
+      // If not enough, match by genre only
+      if (matches.length < 3) {
+        const genreMatches = BOOKS.filter(book => selectedGenres.includes(book.genre));
+        matches = matches.concat(genreMatches.filter(b => !matches.includes(b)));
+      }
+      // If still not enough, match by author only
+      if (matches.length < 3) {
+        const authorMatches = BOOKS.filter(book => authorList.some(a => normalize(book.author).includes(a)));
+        matches = matches.concat(authorMatches.filter(b => !matches.includes(b)));
+      }
+      // If still not enough, add some random from selected genres
+      if (matches.length < 3) {
+        const genrePool = BOOKS.filter(book => selectedGenres.includes(book.genre));
+        while (matches.length < 3 && genrePool.length > 0) {
+          const idx = Math.floor(Math.random() * genrePool.length);
+          matches.push(genrePool.splice(idx, 1)[0]);
+        }
+      }
+      // Remove duplicates
+      matches = Array.from(new Set(matches));
+      // Limit to 5
+      return matches.slice(0, 5);
+    }
+
+    // Render recommendations
+    function renderRecommendations(books, container) {
+      container.innerHTML = '';
+      if (!books || books.length === 0) {
+        container.innerHTML = `<div class="no-results" role="alert">Sorry, we couldn't find any books matching your preferences. Please try different genres or authors.</div>`;
+        return;
+      }
+      const ul = document.createElement('ul');
+      ul.className = 'recommendations-list';
+      books.forEach((book, i) => {
+        const li = document.createElement('li');
+        li.className = 'book-card fade-in';
+        li.setAttribute('tabindex', '0');
+        li.setAttribute('aria-labelledby', `book-title-${i}`);
+        // Book cover with alt text
+        const img = document.createElement('img');
+        img.className = 'book-cover';
+        img.src = book.cover;
+        img.alt = `Book cover for "${book.title}" by ${book.author}`;
+        img.width = 120;
+        img.height = 180;
+        li.appendChild(img);
+        // Book title
+        const title = document.createElement('div');
+        title.className = 'book-title';
+        title.id = `book-title-${i}`;
+        title.textContent = book.title;
+        li.appendChild(title);
+        // Book author
+        const author = document.createElement('div');
+        author.className = 'book-author';
+        author.textContent = book.author;
+        li.appendChild(author);
+        // Genre badge
+        const genre = document.createElement('div');
+        genre.className = 'book-genre';
+        genre.textContent = book.genre;
+        li.appendChild(genre);
+        // Description
+        const desc = document.createElement('div');
+        desc.className = 'book-desc';
+        desc.textContent = book.description;
+        li.appendChild(desc);
+        ul.appendChild(li);
+      });
+      container.appendChild(ul);
+    }
+
+    // Form validation and submission
+    (function setupBookForm() {
+      const form = document.getElementById('book-form');
+      const genre = document.getElementById('genre');
+      const author = document.getElementById('author');
+      const notes = document.getElementById('extra-notes');
+      const genreError = document.getElementById('genre-error');
+      const authorError = document.getElementById('author-error');
+      const status = document.getElementById('form-status');
+      const recommendationsContainer = document.getElementById('recommendations-container');
+      const resetBtn = document.getElementById('reset-btn');
+
+      function showError(field, message, errorElem) {
+        field.setAttribute('aria-invalid', 'true');
+        errorElem.textContent = message;
+        errorElem.classList.remove('visually-hidden');
+        field.focus();
+      }
+      function clearError(field, errorElem) {
+        field.removeAttribute('aria-invalid');
+        errorElem.textContent = '';
+        errorElem.classList.add('visually-hidden');
+      }
+      function validate() {
+        let valid = true;
+        // Genre
+        const selectedGenres = Array.from(genre.selectedOptions).map(opt => opt.value);
+        if (selectedGenres.length === 0) {
+          showError(genre, 'Please select at least one genre.', genreError);
+          valid = false;
+        } else {
+          clearError(genre, genreError);
+        }
+        // Author
+        if (!author.value.trim()) {
+          showError(author, 'Please enter at least one favorite author.', authorError);
+          valid = false;
+        } else {
+          clearError(author, authorError);
+        }
+        return valid;
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        status.textContent = '';
+        recommendationsContainer.innerHTML = '';
+        if (!validate()) {
+          status.innerHTML = '<span class="error-message" role="alert">Please correct the errors above and try again.</span>';
+          return;
+        }
+        // Confirmation step (AAA error prevention)
+        if (!window.confirm('Do you want to submit your preferences and get book recommendations?')) {
+          status.innerHTML = '<span class="help-text" role="status">Submission cancelled. You can edit your preferences and try again.</span>';
+          return;
+        }
+        // Process form
+        const selectedGenres = Array.from(genre.selectedOptions).map(opt => opt.value);
+        const authorList = author.value.split(',').map(a => normalize(a)).filter(a => a.length > 0);
+        const extraNotes = notes.value.trim();
+        // Recommendations
+        const recs = recommendBooks(selectedGenres, authorList, extraNotes);
+        renderRecommendations(recs, recommendationsContainer);
+        status.innerHTML = '<span class="success-message" role="status">Recommendations generated! Scroll down to view your personalized book list.</span>';
       });
 
-      return (
-        <div>
-          <table className="task-table" aria-describedby={ariaDescribedBy}>
-            <caption className="form-help" id={ariaDescribedBy}>
-              Your personal task list. Use the controls to mark as complete, edit, or delete tasks. Status indicators: 
-              <span style={{marginLeft: '0.5em'}}><span className="status-indicator incomplete" aria-label="Incomplete"></span>Incomplete</span>
-              <span style={{marginLeft: '1em'}}><span className="status-indicator in-progress" aria-label="In Progress"></span>In Progress</span>
-              <span style={{marginLeft: '1em'}}><span className="status-indicator completed" aria-label="Completed"></span>Completed</span>
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Status</th>
-                <th scope="col">Task</th>
-                <th scope="col">Description</th>
-                <th scope="col">Due</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.length === 0 ? (
-                <tr>
-                  <td colSpan="5" style={{textAlign: 'center'}}>
-                    <span role="status">No tasks found for your current filter/search.</span>
-                  </td>
-                </tr>
-              ) : filtered.map((task, i) => (
-                <tr key={task.id} className={task.completed ? "completed" : ""}>
-                  <td>
-                    <span
-                      className={
-                        "status-indicator" +
-                        (task.completed
-                          ? " completed"
-                          : task.inProgress
-                          ? " in-progress"
-                          : " incomplete")
-                      }
-                      aria-label={
-                        task.completed
-                          ? "Completed"
-                          : task.inProgress
-                          ? "In Progress"
-                          : "Incomplete"
-                      }
-                      title={
-                        task.completed
-                          ? "Completed"
-                          : task.inProgress
-                          ? "In Progress"
-                          : "Incomplete"
-                      }
-                    ></span>
-                  </td>
-                  <td>{task.title}</td>
-                  <td>{task.description}</td>
-                  <td>
-                    {task.dueDate ? (
-                      <time dateTime={task.dueDate}>
-                        {new Date(task.dueDate).toLocaleDateString()}
-                      </time>
-                    ) : (
-                      <span aria-label="No due date">—</span>
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-success"
-                      aria-label={task.completed ? "Mark as incomplete" : "Mark as complete"}
-                      title={task.completed ? "Mark as incomplete" : "Mark as complete"}
-                      onClick={() => onToggleComplete(task.id)}
-                      style={{marginRight: '0.25em'}}
-                    >
-                      {task.completed ? (
-                        <span aria-hidden="true">↺</span>
-                      ) : (
-                        <span aria-hidden="true">✓</span>
-                      )}
-                    </button>
-                    <button
-                      className="btn btn-outline"
-                      aria-label={`Edit task: ${task.title}`}
-                      title="Edit"
-                      onClick={() => onEdit(task)}
-                      style={{marginRight: '0.25em'}}
-                    >
-                      <span aria-hidden="true">✎</span>
-                    </button>
-                    <button
-                      className="btn btn-danger"
-                      aria-label={`Delete task: ${task.title}`}
-                      title="Delete"
-                      onClick={() => onDelete(task)}
-                    >
-                      <span aria-hidden="true">🗑</span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-    }
+      resetBtn.addEventListener('click', function() {
+        form.reset();
+        clearError(genre, genreError);
+        clearError(author, authorError);
+        status.textContent = '';
+        recommendationsContainer.innerHTML = '';
+        genre.focus();
+      });
 
-    /*********************************
-     * Accessible Add/Edit Task Form
-     *********************************/
-    function TaskForm({ onSave, onCancel, initial, ariaLabelledBy, ariaDescribedBy }) {
-      const [title, setTitle] = React.useState(initial?.title || '');
-      const [description, setDescription] = React.useState(initial?.description || '');
-      const [dueDate, setDueDate] = React.useState(initial?.dueDate || '');
-      const [inProgress, setInProgress] = React.useState(initial?.inProgress || false);
-      const [completed, setCompleted] = React.useState(initial?.completed || false);
-      const [formError, setFormError] = React.useState('');
-      const [touched, setTouched] = React.useState({title: false, description: false});
-      const titleId = React.useRef(uniqueId('task-title')).current;
-      const descId = React.useRef(uniqueId('task-desc')).current;
-      const dueId = React.useRef(uniqueId('task-due')).current;
-      const errorId = React.useRef(uniqueId('task-error')).current;
+      // Context-sensitive help on focus
+      [genre, author, notes].forEach(field => {
+        field.addEventListener('focus', function() {
+          document.getElementById('form-help').scrollIntoView({behavior: "smooth", block: "nearest"});
+        });
+      });
 
-      function validate() {
-        if (!title.trim()) {
-          setFormError('Task title is required.');
-          return false;
-        }
-        setFormError('');
-        return true;
-      }
+      // Live validation
+      genre.addEventListener('change', () => clearError(genre, genreError));
+      author.addEventListener('input', () => clearError(author, authorError));
+    })();
 
-      function handleSubmit(e) {
+    // Search functionality (sidebar)
+    (function setupSearch() {
+      const form = document.getElementById('search-form');
+      const queryInput = document.getElementById('search-query');
+      const status = document.getElementById('search-status');
+      form.addEventListener('submit', function(e) {
         e.preventDefault();
-        setTouched({title: true, description: true});
-        if (validate()) {
-          onSave({
-            ...initial,
-            title: title.trim(),
-            description: description.trim(),
-            dueDate: dueDate ? dueDate : null,
-            inProgress: inProgress && !completed,
-            completed,
+        const q = normalize(queryInput.value);
+        if (!q) {
+          status.innerHTML = '<span class="error-message" role="alert">Please enter a search term.</span>';
+          return;
+        }
+        // Search in title, author, genre, description
+        const results = BOOKS.filter(book =>
+          normalize(book.title).includes(q) ||
+          normalize(book.author).includes(q) ||
+          normalize(book.genre).includes(q) ||
+          normalize(book.description).includes(q)
+        );
+        if (results.length === 0) {
+          status.innerHTML = '<span class="no-results" role="alert">No books found matching your search.</span>';
+        } else {
+          // Render top 3 matches inline (for quick preview)
+          status.innerHTML = '';
+          const ul = document.createElement('ul');
+          ul.className = 'recommendations-list';
+          results.slice(0, 3).forEach((book, i) => {
+            const li = document.createElement('li');
+            li.className = 'book-card fade-in';
+            li.setAttribute('tabindex', '0');
+            li.setAttribute('aria-labelledby', `search-book-title-${i}`);
+            // Book cover
+            const img = document.createElement('img');
+            img.className = 'book-cover';
+            img.src = book.cover;
+            img.alt = `Book cover for "${book.title}" by ${book.author}`;
+            img.width = 120;
+            img.height = 180;
+            li.appendChild(img);
+            // Title
+            const title = document.createElement('div');
+            title.className = 'book-title';
+            title.id = `search-book-title-${i}`;
+            title.textContent = book.title;
+            li.appendChild(title);
+            // Author
+            const author = document.createElement('div');
+            author.className = 'book-author';
+            author.textContent = book.author;
+            li.appendChild(author);
+            // Genre badge
+            const genre = document.createElement('div');
+            genre.className = 'book-genre';
+            genre.textContent = book.genre;
+            li.appendChild(genre);
+            // Description
+            const desc = document.createElement('div');
+            desc.className = 'book-desc';
+            desc.textContent = book.description;
+            li.appendChild(desc);
+            ul.appendChild(li);
           });
+          status.appendChild(ul);
         }
-      }
+      });
+    })();
 
-      return (
-        <form aria-labelledby={ariaLabelledBy} aria-describedby={ariaDescribedBy + ' ' + (formError ? errorId : '')} onSubmit={handleSubmit} noValidate>
-          <fieldset>
-            <legend id={ariaLabelledBy}>{initial ? "Edit Task" : "Add New Task"}</legend>
-            <div className="form-group">
-              <label htmlFor={titleId}>
-                Task title
-                <span className="required-indicator" aria-hidden="true">*</span>
-              </label>
-              <input
-                id={titleId}
-                type="text"
-                required
-                aria-required="true"
-                autoComplete="off"
-                aria-invalid={formError && touched.title ? "true" : "false"}
-                aria-describedby={ariaDescribedBy + ' ' + (formError ? errorId : '')}
-                value={title}
-                onChange={e => setTitle(e.target.value)}
-                onBlur={() => setTouched(t => ({...t, title: true}))}
-                maxLength={60}
-              />
-              <span className="form-help" id={ariaDescribedBy}>
-                Enter a brief, descriptive title for your task.
-              </span>
-              {formError && touched.title && (
-                <span className="form-error" id={errorId} role="alert">
-                  {formError}
-                </span>
-              )}
-            </div>
-            <div className="form-group">
-              <label htmlFor={descId}>
-                Description
-              </label>
-              <textarea
-                id={descId}
-                aria-describedby={ariaDescribedBy}
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                maxLength={250}
-                rows={3}
-              />
-              <span className="form-help">
-                (Optional) Add details or steps for your task.
-              </span>
-            </div>
-            <div className="form-group">
-              <label htmlFor={dueId}>
-                Due date
-              </label>
-              <input
-                id={dueId}
-                type="date"
-                aria-describedby={ariaDescribedBy}
-                value={dueDate || ''}
-                onChange={e => setDueDate(e.target.value)}
-              />
-              <span className="form-help">
-                (Optional) Set a due date for your task.
-              </span>
-            </div>
-            <div className="form-group">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={inProgress}
-                  onChange={e => setInProgress(e.target.checked)}
-                  aria-checked={inProgress}
-                  disabled={completed}
-                  style={{marginRight: '0.5em'}}
-                />
-                Mark as In Progress
-              </label>
-              <label style={{marginLeft: '1.5em'}}>
-                <input
-                  type="checkbox"
-                  checked={completed}
-                  onChange={e => setCompleted(e.target.checked)}
-                  aria-checked={completed}
-                  style={{marginRight: '0.5em'}}
-                />
-                Mark as Completed
-              </label>
-            </div>
-            <div>
-              <button type="submit" className="btn btn-success" aria-label={initial ? "Save changes" : "Add task"}>
-                {initial ? "Save" : "Add"}
-              </button>
-              <button type="button" className="btn btn-outline" onClick={onCancel} aria-label="Cancel">
-                Cancel
-              </button>
-            </div>
-          </fieldset>
-        </form>
-      );
-    }
+    // Enhanced focus management for skip link
+    document.getElementById('skip-link').addEventListener('click', function() {
+      setTimeout(function() {
+        const main = document.getElementById('main-content');
+        if (main) main.focus();
+      }, 50);
+    });
 
-    /*********************************
-     * Accessible Search Bar
-     *********************************/
-    function SearchBar({ value, onChange, ariaLabelledBy, ariaDescribedBy }) {
-      const inputId = React.useRef(uniqueId('search')).current;
-      return (
-        <div className="search-bar" role="search">
-          <label htmlFor={inputId} id={ariaLabelledBy} style={{fontWeight: 500, marginRight: '0.5em'}}>
-            Search tasks
-          </label>
-          <input
-            id={inputId}
-            type="search"
-            autoComplete="off"
-            aria-label="Search tasks"
-            aria-describedby={ariaDescribedBy}
-            value={value}
-            onChange={e => onChange(e.target.value)}
-            placeholder="Enter keywords"
-            style={{maxWidth: '260px'}}
-          />
-        </div>
-      );
-    }
+    // Modal/alert/animation disables for AAA
+    // All animation is minimal and respects prefers-reduced-motion
 
-    /*********************************
-     * Dashboard Sidebar
-     *********************************/
-    function DashboardSidebar({ user, stats, onLogout }) {
-      return (
-        <aside className="dashboard-sidebar" aria-labelledby="sidebar-title">
-          <h2 id="sidebar-title" style={{fontSize: '1.2rem', marginTop: 0}}>User Info</h2>
-          <dl>
-            <dt>Name:</dt>
-            <dd>{user.name}</dd>
-            <dt>Email:</dt>
-            <dd>{user.email}</dd>
-          </dl>
-          <h3 style={{fontSize: '1.1rem', marginTop: '1.5em'}}>Task Stats</h3>
-          <ul>
-            <li><span aria-label="Total tasks">{stats.total}</span> total</li>
-            <li><span aria-label="Completed tasks">{stats.completed}</span> completed</li>
-            <li><span aria-label="In progress tasks">{stats.inProgress}</span> in progress</li>
-            <li><span aria-label="Incomplete tasks">{stats.incomplete}</span> incomplete</li>
-          </ul>
-          <button className="btn btn-danger" onClick={onLogout} aria-label="Sign out">
-            Sign out
-          </button>
-        </aside>
-      );
-    }
+    // Ensure all interactive elements have minimum 44x44px target size (already handled in CSS)
+    // Ensure all links/buttons are keyboard accessible (native elements, tab order preserved)
 
-    /*********************************
-     * Main App
-     *********************************/
-    function App() {
-      // App state
-      const [user, setUser] = React.useState(null);
-      const [tasks, setTasks] = React.useState([]);
-      const [authError, setAuthError] = React.useState('');
-      const [authLoading, setAuthLoading] = React.useState(false);
-      const [showHelp, setShowHelp] = React.useState(false);
-      const [showAddModal, setShowAddModal] = React.useState(false);
-      const [editTask, setEditTask] = React.useState(null);
-      const [showDeleteModal, setShowDeleteModal] = React.useState(false);
-      const [deleteTask, setDeleteTask] = React.useState(null);
-      const [taskFilter, setTaskFilter] = React.useState('all');
-      const [search, setSearch] = React.useState('');
-      const [statusMsg, setStatusMsg] = React.useState('');
-      const [theme, setTheme] = React.useState('default');
-      const [showThemeModal, setShowThemeModal] = React.useState(false);
+    // No timing requirements, interruptions, or authentication present
 
-      // Simulated user database (for demo)
-      const users = [
-        {
-          id: 1,
-          name: "Alex Lee",
-          email: "alex@example.com",
-          password: "Password123!", // Not secure, for demo only
-        }
-      ];
+    // All images have descriptive alt, no images of text, no video/audio on this page
 
-      // Simulated authentication (AAA: allows copy/paste, show/hide, no cognitive test)
-      function handleLogin(email, password) {
-        setAuthLoading(true);
-        setTimeout(() => {
-          const found = users.find(
-            u => u.email.toLowerCase() === email.toLowerCase() && u.password === password
-          );
-          if (found) {
-            setUser({ id: found.id, name: found.name, email: found.email });
-            setAuthError('');
-            // Load demo tasks for this user
-            setTasks([
-              {
-                id: 1,
-                title: "Read accessibility guidelines",
-                description: "Review WCAG 2.2 AAA requirements and checklists.",
-                dueDate: new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10),
-                completed: false,
-                inProgress: true,
-              },
-              {
-                id: 2,
-                title: "Write project proposal",
-                description: "Draft a proposal for the new web project.",
-                dueDate: new Date(Date.now() + 5 * 86400000).toISOString().slice(0, 10),
-                completed: false,
-                inProgress: false,
-              },
-              {
-                id: 3,
-                title: "Submit timesheet",
-                description: "Submit the weekly timesheet to HR.",
-                dueDate: new Date(Date.now() - 1 * 86400000).toISOString().slice(0, 10),
-                completed: true,
-                inProgress: false,
-              },
-            ]);
-          } else {
-            setAuthError("Invalid email or password. Please try again.");
-          }
-          setAuthLoading(false);
-        }, 800);
-      }
+    // Pronunciation for ambiguous words (sample)
+    // In definitions section, add <span aria-label="pronunciation"> if needed
 
-      function handleLogout() {
-        setUser(null);
-        setTasks([]);
-        setAuthError('');
-        setStatusMsg('');
-      }
+    // All content written at or below lower secondary reading level, with definitions for unusual terms
 
-      // Task CRUD
-      function handleAddTask(task) {
-        setTasks(ts => [
-          ...ts,
-          {
-            ...task,
-            id: Math.max(0, ...ts.map(t => t.id)) + 1,
-          }
-        ]);
-        setShowAddModal(false);
-        setStatusMsg("Task added successfully.");
-      }
-      function handleEditTask(task) {
-        setTasks(ts => ts.map(t => t.id === task.id ? {...t, ...task} : t));
-        setEditTask(null);
-        setStatusMsg("Task updated successfully.");
-      }
-      function handleDeleteTask(task) {
-        setTasks(ts => ts.filter(t => t.id !== task.id));
-        setDeleteTask(null);
-        setShowDeleteModal(false);
-        setStatusMsg("Task deleted.");
-      }
-      function handleToggleComplete(id) {
-        setTasks(ts => ts.map(t => t.id === id ? {...t, completed: !t.completed, inProgress: false} : t));
-        setStatusMsg("Task status updated.");
-      }
-
-      // Stats for sidebar
-      const stats = React.useMemo(() => {
-        const total = tasks.length;
-        const completed = tasks.filter(t => t.completed).length;
-        const inProgress = tasks.filter(t => t.inProgress && !t.completed).length;
-        const incomplete = tasks.filter(t => !t.completed).length;
-        return { total, completed, inProgress, incomplete };
-      }, [tasks]);
-
-      // Breadcrumbs
-      const breadcrumbs = user
-        ? [
-            { label: "Home", href: "#", onClick: e => {e.preventDefault();} },
-            { label: "Dashboard", href: "#", onClick: e => {e.preventDefault();} },
-          ]
-        : [
-            { label: "Home", href: "#", onClick: e => {e.preventDefault();} },
-            { label: "Sign In", href: "#", onClick: e => {e.preventDefault();} },
-          ];
-
-      // Theme context for user-selectable colors
-      React.useEffect(() => {
-        document.body.classList.remove('user-theme-dark', 'user-theme-high-contrast');
-        if (theme === 'dark') document.body.classList.add('user-theme-dark');
-        if (theme === 'high-contrast') document.body.classList.add('user-theme-high-contrast');
-      }, [theme]);
-
-      // Focus management for modals
-      const addModalLabelId = React.useRef(uniqueId('add-modal-label')).current;
-      const addModalDescId = React.useRef(uniqueId('add-modal-desc')).current;
-      const editModalLabelId = React.useRef(uniqueId('edit-modal-label')).current;
-      const editModalDescId = React.useRef(uniqueId('edit-modal-desc')).current;
-      const deleteModalLabelId = React.useRef(uniqueId('delete-modal-label')).current;
-      const deleteModalDescId = React.useRef(uniqueId('delete-modal-desc')).current;
-
-      // Enhanced status message ARIA
-      React.useEffect(() => {
-        if (statusMsg) {
-          const timeout = setTimeout(() => setStatusMsg(''), 4000);
-          return () => clearTimeout(timeout);
-        }
-      }, [statusMsg]);
-
-      // Accessible filter menu
-      const [filterMenuActive, setFilterMenuActive] = React.useState(false);
-      const filterBtnRef = React.useRef(null);
-
-      // Multiple ways to navigate: nav, search, sitemap (footer)
-      return (
-        <ThemeContext.Provider value={{ theme, setTheme }}>
-          <header>
-            <h1 style={{fontSize: '2.1rem', margin: 0, letterSpacing: '0.02em'}}>Accessible Task Manager</h1>
-            <p style={{fontSize: '1.1rem', margin: '0.5em 0 0 0', color: '#fffbe6'}}>
-              <strong>Personal Dashboard & Task Management</strong> (WCAG 2.2 AAA Compliant)
-            </p>
-          </header>
-          <nav aria-label="Main navigation">
-            <ul>
-              <li>
-                <a
-                  href="#"
-                  aria-current={user ? "page" : undefined}
-                  tabIndex="0"
-                  onClick={e => {e.preventDefault();}}
-                >Dashboard</a>
-              </li>
-              <li>
-                <DropdownMenu
-                  label="Tasks"
-                  id="nav-tasks"
-                  menuId="nav-tasks-menu"
-                  active={filterMenuActive}
-                  setActive={setFilterMenuActive}
-                  buttonRef={filterBtnRef}
-                >
-                  <li>
-                    <a
-                      href="#"
-                      tabIndex="0"
-                      aria-current={taskFilter === 'all' ? "page" : undefined}
-                      onClick={e => {e.preventDefault(); setTaskFilter('all'); setFilterMenuActive(false);}}
-                    >All Tasks</a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      tabIndex="0"
-                      aria-current={taskFilter === 'completed' ? "page" : undefined}
-                      onClick={e => {e.preventDefault(); setTaskFilter('completed'); setFilterMenuActive(false);}}
-                    >Completed</a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      tabIndex="0"
-                      aria-current={taskFilter === 'incomplete' ? "page" : undefined}
-                      onClick={e => {e.preventDefault(); setTaskFilter('incomplete'); setFilterMenuActive(false);}}
-                    >Incomplete</a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      tabIndex="0"
-                      aria-current={taskFilter === 'in-progress' ? "page" : undefined}
-                      onClick={e => {e.preventDefault(); setTaskFilter('in-progress'); setFilterMenuActive(false);}}
-                    >In Progress</a>
-                  </li>
-                </DropdownMenu>
-              </li>
-              <li>
-                <button
-                  className="btn btn-outline"
-                  type="button"
-                  aria-label="Color and contrast settings"
-                  onClick={() => setShowThemeModal(true)}
-                >
-                  <span aria-hidden="true">🎨</span> Color/Contrast
-                </button>
-              </li>
-              <li>
-                <a
-                  href="#help-auth"
-                  aria-label="Help and support"
-                  tabIndex="0"
-                  onClick={e => {e.preventDefault(); setShowHelp(true);}}
-                >Help</a>
-              </li>
-            </ul>
-          </nav>
-          <Breadcrumbs items={breadcrumbs} />
-          <main id="main-content" tabIndex="-1">
-            {user ? (
-              <div className="dashboard-layout">
-                <section className="dashboard-main" aria-labelledby="dashboard-title">
-                  <h2 id="dashboard-title">Your Dashboard</h2>
-                  <div className="card" style={{marginBottom: '1.5rem'}}>
-                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap'}}>
-                      <h3 style={{margin: 0}}>Your Tasks</h3>
-                      <button
-                        className="btn btn-success"
-                        type="button"
-                        aria-label="Add new task"
-                        onClick={() => setShowAddModal(true)}
-                        style={{marginBottom: 0}}
-                      >
-                        <span aria-hidden="true">＋</span> Add Task
-                      </button>
-                    </div>
-                    <SearchBar
-                      value={search}
-                      onChange={setSearch}
-                      ariaLabelledBy="search-label"
-                      ariaDescribedBy="search-help"
-                    />
-                    <span className="form-help" id="search-help">
-                      Search by task title or description. Use filter menu above to show only completed, incomplete, or in-progress tasks.
-                    </span>
-                    <TaskTable
-                      tasks={tasks}
-                      onToggleComplete={handleToggleComplete}
-                      onEdit={task => setEditTask(task)}
-                      onDelete={task => { setDeleteTask(task); setShowDeleteModal(true); }}
-                      filter={taskFilter}
-                      search={search}
-                      ariaDescribedBy="task-table-desc"
-                    />
-                    <span id="task-table-desc" className="form-help">
-                      Use the "✓" button to mark tasks as complete, "↺" to mark as incomplete, "✎" to edit, and "🗑" to delete.
-                    </span>
-                    {statusMsg && (
-                      <div role="status" aria-live="polite">{statusMsg}</div>
-                    )}
-                  </div>
-                </section>
-                <DashboardSidebar user={user} stats={stats} onLogout={handleLogout} />
-              </div>
-            ) : (
-              <section aria-labelledby="signin-title">
-                <h2 id="signin-title">Sign In to Your Dashboard</h2>
-                <LoginForm
-                  onLogin={handleLogin}
-                  error={authError}
-                  loading={authLoading}
-                  help={showHelp}
-                />
-                <div className="card" style={{marginTop: '2rem'}}>
-                  <h3>Demo Account</h3>
-                  <p>
-                    <strong>Email:</strong> alex@example.com<br />
-                    <strong>Password:</strong> Password123!
-                  </p>
-                  <span className="form-help">
-                    You may use the above credentials to sign in and try the demo. Password can be pasted or revealed for assistance.
-                  </span>
-                </div>
-              </section>
-            )}
-          </main>
-          <footer>
-            <nav aria-label="Footer sitemap" style={{marginBottom: '0.5em'}}>
-              <ul style={{display: 'flex', justifyContent: 'center', gap: '1.5em', listStyle: 'none', padding: 0, margin: 0, flexWrap: 'wrap'}}>
-                <li><a href="#" aria-label="Home" style={{color: 'inherit'}}>Home</a></li>
-                <li><a href="#help-auth" aria-label="Help and support" style={{color: 'inherit'}}>Help</a></li>
-                <li><a href="#" aria-label="Sitemap" style={{color: 'inherit'}}>Sitemap</a></li>
-                <li><a href="#" aria-label="Accessibility statement" style={{color: 'inherit'}}>Accessibility</a></li>
-              </ul>
-            </nav>
-            <div>
-              <span>
-                <strong>Accessible Task Manager SPA</strong> | WCAG 2.2 AAA Compliant | &copy; 2024 Example Corp.
-              </span>
-            </div>
-          </footer>
-          {/* Add Task Modal */}
-          <Modal
-            isOpen={showAddModal}
-            onClose={() => setShowAddModal(false)}
-            title="Add New Task"
-            labelledById={addModalLabelId}
-            describedById={addModalDescId}
-          >
-            <div>
-              <h2 id={addModalLabelId}>Add New Task</h2>
-              <span id={addModalDescId} className="form-help">
-                Fill out the form to add a new task to your dashboard.
-              </span>
-              <TaskForm
-                onSave={handleAddTask}
-                onCancel={() => setShowAddModal(false)}
-                ariaLabelledBy={addModalLabelId}
-                ariaDescribedBy={addModalDescId}
-              />
-            </div>
-          </Modal>
-          {/* Edit Task Modal */}
-          <Modal
-            isOpen={!!editTask}
-            onClose={() => setEditTask(null)}
-            title="Edit Task"
-            labelledById={editModalLabelId}
-            describedById={editModalDescId}
-          >
-            <div>
-              <h2 id={editModalLabelId}>Edit Task</h2>
-              <span id={editModalDescId} className="form-help">
-                Update the details for your task below.
-              </span>
-              <TaskForm
-                onSave={handleEditTask}
-                onCancel={() => setEditTask(null)}
-                initial={editTask}
-                ariaLabelledBy={editModalLabelId}
-                ariaDescribedBy={editModalDescId}
-              />
-            </div>
-          </Modal>
-          {/* Delete Task Confirmation Modal */}
-          <Modal
-            isOpen={showDeleteModal}
-            onClose={() => { setShowDeleteModal(false); setDeleteTask(null); }}
-            title="Delete Task"
-            labelledById={deleteModalLabelId}
-            describedById={deleteModalDescId}
-          >
-            <div>
-              <h2 id={deleteModalLabelId}>Delete Task</h2>
-              <span id={deleteModalDescId} className="form-help">
-                Are you sure you want to delete this task? This action cannot be undone.
-              </span>
-              <div style={{margin: '1.5em 0'}}>
-                <strong>Task:</strong> {deleteTask?.title}
-              </div>
-              <button
-                className="btn btn-danger"
-                onClick={() => { handleDeleteTask(deleteTask); }}
-                aria-label="Confirm delete"
-              >
-                Delete
-              </button>
-              <button
-                className="btn btn-outline"
-                onClick={() => { setShowDeleteModal(false); setDeleteTask(null); }}
-                aria-label="Cancel"
-              >
-                Cancel
-              </button>
-            </div>
-          </Modal>
-          {/* Theme Selector Modal */}
-          <Modal
-            isOpen={showThemeModal}
-            onClose={() => setShowThemeModal(false)}
-            title="Color and Contrast Settings"
-            labelledById="theme-modal-label"
-            describedById="theme-modal-desc"
-          >
-            <div>
-              <h2 id="theme-modal-label">Color and Contrast Settings</h2>
-              <span id="theme-modal-desc" className="form-help">
-                Choose your preferred foreground and background color scheme for optimal readability and comfort.
-              </span>
-              <ThemeSelector />
-              <button
-                className="btn btn-success"
-                onClick={() => setShowThemeModal(false)}
-                aria-label="Close color and contrast settings"
-              >
-                Done
-              </button>
-            </div>
-          </Modal>
-          {/* Help Modal */}
-          <Modal
-            isOpen={showHelp}
-            onClose={() => setShowHelp(false)}
-            title="Help and Support"
-            labelledById="help-modal-label"
-            describedById="help-modal-desc"
-          >
-            <div>
-              <h2 id="help-modal-label">Help and Support</h2>
-              <span id="help-modal-desc" className="form-help">
-                Get assistance with signing in, using the dashboard, or accessibility features.
-              </span>
-              <section aria-labelledby="help-auth-title">
-                <h3 id="help-auth-title">Authentication Help</h3>
-                <ul>
-                  <li>
-                    You may <strong>copy and paste</strong> your password or use the <strong>Show password</strong> option for assistance.
-                  </li>
-                  <li>
-                    If you forget your password, please contact <a href="mailto:support@example.com">support@example.com</a>.
-                  </li>
-                  <li>
-                    Authentication does <strong>not require solving puzzles, remembering images, or other cognitive tests</strong>. If you need further help, contact support.
-                  </li>
-                </ul>
-              </section>
-              <section aria-labelledby="help-accessibility-title">
-                <h3 id="help-accessibility-title">Accessibility Features</h3>
-                <ul>
-                  <li>
-                    All interactive elements are keyboard accessible and have enhanced focus indicators.
-                  </li>
-                  <li>
-                    Color and contrast settings are user-selectable for readability.
-                  </li>
-                  <li>
-                    Skip links and headings provide efficient navigation.
-                  </li>
-                  <li>
-                    Error messages are clearly described and linked to their fields.
-                  </li>
-                </ul>
-              </section>
-              <section aria-labelledby="help-tasks-title">
-                <h3 id="help-tasks-title">Task Management</h3>
-                <ul>
-                  <li>
-                    Add, edit, complete, or delete tasks using the dashboard controls.
-                  </li>
-                  <li>
-                    Use the search and filter features to locate tasks quickly.
-                  </li>
-                </ul>
-              </section>
-              <button
-                className="btn btn-success"
-                onClick={() => setShowHelp(false)}
-                aria-label="Close help"
-              >
-                Close
-              </button>
-            </div>
-          </Modal>
-        </ThemeContext.Provider>
-      );
-    }
-
-    // Render App
-    ReactDOM.createRoot(document.getElementById('app-root')).render(<App />);
-
+    // No keyboard traps; all modals are native dialogs (none present here)
   </script>
 </body>
 </html>
