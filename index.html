@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Showcase - Share Your Furry Friends</title>
+    <title>Interactive Knowledge Quiz | Test Your Skills</title>
     <style>
         /* CSS Reset and Base Styles */
         :root {
-            --primary-color: #4a6fa5;
-            --secondary-color: #ff7e5f;
-            --accent-color: #6b8c42;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
             --text-color: #333;
-            --light-bg: #f9f9f9;
-            --white: #ffffff;
-            --black: #000000;
-            --focus-outline: 3px solid var(--secondary-color);
+            --text-light: #fff;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --border-radius: 8px;
-            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
         }
 
@@ -27,10 +29,10 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: var(--font-main);
             line-height: 1.6;
             color: var(--text-color);
-            background-color: var(--light-bg);
+            background-color: var(--light-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -42,7 +44,7 @@
             top: -40px;
             left: 0;
             background: var(--primary-color);
-            color: var(--white);
+            color: var(--text-light);
             padding: 8px;
             z-index: 100;
             transition: var(--transition);
@@ -50,92 +52,20 @@
 
         .skip-link:focus {
             top: 0;
-            outline: var(--focus-outline);
         }
 
         /* Header */
         header {
             background-color: var(--primary-color);
-            color: var(--white);
-            padding: 1rem 2rem;
+            color: var(--text-light);
+            padding: 1.5rem;
+            text-align: center;
             box-shadow: var(--box-shadow);
         }
 
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            text-decoration: none;
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .logo:focus {
-            outline: var(--focus-outline);
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            fill: currentColor;
-        }
-
-        /* Navigation */
-        nav {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-list {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-        }
-
-        .nav-link {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem;
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-        }
-
-        .nav-link:hover,
-        .nav-link:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            outline: var(--focus-outline);
-        }
-
-        .nav-link.current {
-            background-color: var(--secondary-color);
-        }
-
-        /* Mobile Menu Button */
-        .menu-button {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: var(--border-radius);
-        }
-
-        .menu-button:focus {
-            outline: var(--focus-outline);
-            background-color: rgba(255, 255, 255, 0.2);
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
         }
 
         /* Main Content */
@@ -147,603 +77,734 @@
             width: 100%;
         }
 
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 2.2rem;
+        /* Quiz Container */
+        .quiz-container {
+            background-color: var(--text-light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: var(--transition);
         }
 
-        h2 {
-            color: var(--accent-color);
-            margin: 1.5rem 0 1rem;
+        /* Quiz Intro */
+        .quiz-intro {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .quiz-intro h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
             font-size: 1.8rem;
         }
 
-        h3 {
-            color: var(--primary-color);
-            margin: 1rem 0;
-            font-size: 1.4rem;
+        .quiz-intro p {
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Pet Showcase Section */
-        .pet-showcase {
-            margin: 2rem 0;
-        }
-
-        .pet-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+        /* Quiz Controls */
+        .quiz-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
             margin-top: 1.5rem;
         }
 
-        .pet-card {
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-        }
-
-        .pet-card:focus-within {
-            outline: var(--focus-outline);
-            transform: translateY(-5px);
-        }
-
-        .pet-image-container {
-            position: relative;
-            height: 250px;
-            overflow: hidden;
-        }
-
-        .pet-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .pet-details {
-            padding: 1.5rem;
-        }
-
-        .pet-name {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-
-        .pet-breed {
-            font-weight: bold;
-            color: var(--accent-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .pet-age {
-            margin-bottom: 0.5rem;
-        }
-
-        .pet-fact {
-            font-style: italic;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
-        }
-
-        /* Add Pet Form */
-        .add-pet-form {
-            background-color: var(--white);
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            margin-top: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .required-field::after {
-            content: " *";
-            color: var(--secondary-color);
-        }
-
-        input[type="text"],
-        input[type="number"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        select:focus,
-        textarea:focus {
-            border-color: var(--primary-color);
-            outline: var(--focus-outline);
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .file-label {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background-color: var(--primary-color);
-            color: var(--white);
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .file-label:hover,
-        .file-label:focus {
-            background-color: #3a5a8f;
-            outline: var(--focus-outline);
-        }
-
-        .file-name {
-            margin-left: 1rem;
-            font-style: italic;
-        }
-
-        .submit-button {
+        /* Buttons */
+        button {
             background-color: var(--secondary-color);
-            color: var(--white);
+            color: var(--text-light);
             border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: bold;
+            padding: 0.8rem 1.5rem;
             border-radius: var(--border-radius);
             cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
             transition: var(--transition);
             min-width: 120px;
             min-height: 44px;
         }
 
-        .submit-button:hover,
-        .submit-button:focus {
-            background-color: #e66b4d;
-            outline: var(--focus-outline);
-        }
-
-        .error-message {
-            color: #d32f2f;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: var(--white);
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-color);
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-close:hover,
-        .modal-close:focus {
-            color: var(--secondary-color);
-            outline: var(--focus-outline);
-        }
-
-        /* Footer */
-        footer {
+        button:hover, button:focus {
             background-color: var(--primary-color);
-            color: var(--white);
-            padding: 2rem;
-            text-align: center;
-            margin-top: 2rem;
+            outline: 3px solid var(--accent-color);
+            outline-offset: 2px;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        button:active {
+            transform: scale(0.98);
         }
 
-        .footer-links {
+        button[disabled] {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .btn-start {
+            background-color: var(--success-color);
+        }
+
+        .btn-next {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-submit {
+            background-color: var(--accent-color);
+        }
+
+        .btn-restart {
+            background-color: var(--warning-color);
+        }
+
+        /* Question Container */
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question-header {
+            margin-bottom: 1.5rem;
             display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 1rem 0;
-            list-style: none;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .footer-link {
-            color: var(--white);
-            text-decoration: none;
+        .question-number {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.2rem;
         }
 
-        .footer-link:hover,
-        .footer-link:focus {
-            text-decoration: underline;
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        /* Options */
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option {
+            background-color: var(--light-color);
+            border: 2px solid #bdc3c7;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover, .option:focus {
+            border-color: var(--secondary-color);
             outline: none;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        .option.selected {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border-color: var(--secondary-color);
+        }
 
-            .menu-button {
-                display: block;
-                position: absolute;
-                top: 1rem;
-                right: 1rem;
-            }
+        .option.correct {
+            background-color: var(--success-color);
+            color: var(--text-light);
+            border-color: var(--success-color);
+        }
 
-            nav {
-                width: 100%;
-                display: none;
-                margin-top: 1rem;
-            }
+        .option.incorrect {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            border-color: var(--accent-color);
+        }
 
-            .nav-list {
-                flex-direction: column;
-                gap: 0.5rem;
-                width: 100%;
-            }
+        .option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
+        }
 
-            .nav-link {
-                display: block;
-                padding: 0.75rem;
-            }
+        .option-label {
+            margin-left: 1rem;
+            cursor: pointer;
+            flex-grow: 1;
+        }
 
-            .nav-active {
-                display: flex;
-            }
+        /* Feedback */
+        .feedback {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
 
-            .pet-grid {
-                grid-template-columns: 1fr;
-            }
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background-color: rgba(39, 174, 96, 0.2);
+            border-left: 4px solid var(--success-color);
+        }
+
+        .feedback.incorrect {
+            background-color: rgba(231, 76, 60, 0.2);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .feedback-text {
+            font-weight: bold;
+        }
+
+        .explanation {
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        /* Progress */
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: var(--border-radius);
+            background-color: var(--secondary-color);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* Results */
+        .results-container {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .results-score {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .results-message {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .results-details {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .results-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .results-list {
+            list-style-type: none;
+        }
+
+        .results-list li {
+            padding: 0.8rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .results-list li.correct {
+            color: var(--success-color);
+        }
+
+        .results-list li.incorrect {
+            color: var(--accent-color);
+        }
+
+        /* Accessibility Features */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
         }
 
         /* Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
             * {
-                transition: none !important;
                 animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                padding: 1rem;
+            }
+
+            .quiz-container {
+                padding: 1rem;
+            }
+
+            .quiz-intro {
+                padding: 1rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .quiz-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Skip Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- Header -->
+    
     <header>
-        <div class="header-container">
-            <a href="#" class="logo">
-                <svg class="logo-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M19.5,12c0,0.3-0.2,0.5-0.5,0.5h-1.7c-0.4,1.8-2,3.1-3.9,3.1c-1.1,0-2.1-0.5-2.8-1.2c-0.7,0.8-1.8,1.2-2.9,1.2 c-2.1,0-3.8-1.7-3.8-3.8c0-0.3,0.2-0.5,0.5-0.5h15C19.3,11.5,19.5,11.7,19.5,12z M12,6.5c0.3,0,0.5-0.2,0.5-0.5V4.5 c0-0.3-0.2-0.5-0.5-0.5S11.5,4.2,11.5,4.5V6C11.5,6.3,11.7,6.5,12,6.5z M6.5,8C6.8,8,7,7.8,7,7.5V6.2c0-0.3-0.2-0.5-0.5-0.5 S6,5.9,6,6.2v1.3C6,7.8,6.2,8,6.5,8z M17.5,8c0.3,0,0.5-0.2,0.5-0.5V6.2c0-0.3-0.2-0.5-0.5-0.5S17,5.9,17,6.2v1.3 C17,7.8,17.2,8,17.5,8z M8.9,6.5c0.3,0,0.5-0.2,0.5-0.5v-1c0-0.3-0.2-0.5-0.5-0.5S8.4,4.7,8.4,5v1C8.4,6.3,8.6,6.5,8.9,6.5z M15.1,6.5c0.3,0,0.5-0.2,0.5-0.5v-1c0-0.3-0.2-0.5-0.5-0.5s-0.5,0.2-0.5,0.5v1C14.6,6.3,14.8,6.5,15.1,6.5z"></path>
-                </svg>
-                Pet Showcase
-            </a>
-
-            <button class="menu-button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
-                ☰
-            </button>
-
-            <nav id="main-nav">
-                <ul class="nav-list">
-                    <li><a href="#" class="nav-link current">Home</a></li>
-                    <li><a href="#" class="nav-link">About</a></li>
-                    <li><a href="#" class="nav-link">Services</a></li>
-                    <li><a href="#" class="nav-link">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
+        <h1>Knowledge Challenge Quiz</h1>
+        <p>Test your skills across various topics</p>
     </header>
 
-    <!-- Main Content -->
     <main id="main-content">
-        <h1>Welcome to Pet Showcase</h1>
-        <p>Share your beloved pets with the world! Browse through our collection of adorable pets or add your own furry friend to the showcase.</p>
-
-        <!-- Featured Pets Section -->
-        <section class="pet-showcase" aria-labelledby="featured-pets-heading">
-            <h2 id="featured-pets-heading">Featured Pets</h2>
-            <div class="pet-grid">
-                <!-- Pet Card 1 -->
-                <article class="pet-card" tabindex="0">
-                    <div class="pet-image-container">
-                        <img src="https://images.unsplash.com/photo-1586671267731-da2cf3ceeb80?w=500&auto=format" alt="Golden Retriever playing in the park" class="pet-image">
-                    </div>
-                    <div class="pet-details">
-                        <h3 class="pet-name">Buddy</h3>
-                        <p class="pet-breed">Golden Retriever</p>
-                        <p class="pet-age">3 years old</p>
-                        <p class="pet-fact">Buddy loves playing fetch and swimming in the lake. His favorite toy is a bright orange frisbee.</p>
-                    </div>
-                </article>
-
-                <!-- Pet Card 2 -->
-                <article class="pet-card" tabindex="0">
-                    <div class="pet-image-container">
-                        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500&auto=format" alt="Gray tabby cat looking at the camera" class="pet-image">
-                    </div>
-                    <div class="pet-details">
-                        <h3 class="pet-name">Whiskers</h3>
-                        <p class="pet-breed">Tabby Cat</p>
-                        <p class="pet-age">5 years old</p>
-                        <p class="pet-fact">Whiskers enjoys sunbathing by the window and chasing laser pointers. She's an expert at knocking things off tables.</p>
-                    </div>
-                </article>
-
-                <!-- Pet Card 3 -->
-                <article class="pet-card" tabindex="0">
-                    <div class="pet-image-container">
-                        <img src="https://images.unsplash.com/photo-1555169062-013468b47731?w=500&auto=format" alt="Small brown rabbit sitting in the grass" class="pet-image">
-                    </div>
-                    <div class="pet-details">
-                        <h3 class="pet-name">Thumper</h3>
-                        <p class="pet-breed">Mini Rex Rabbit</p>
-                        <p class="pet-age">2 years old</p>
-                        <p class="pet-fact">Thumper loves fresh vegetables and will do little jumps when he's excited. His favorite food is cilantro.</p>
-                    </div>
-                </article>
+        <div class="quiz-container">
+            <!-- Quiz Introduction -->
+            <div class="quiz-intro" id="quiz-intro">
+                <h2>Welcome to the Knowledge Challenge!</h2>
+                <p>This quiz will test your knowledge across various topics including science, history, and general knowledge. You'll have 10 questions to answer, with immediate feedback after each response.</p>
+                <p>Good luck and have fun!</p>
+                <div class="quiz-controls">
+                    <button class="btn-start" id="start-btn">Start Quiz</button>
+                </div>
             </div>
-        </section>
 
-        <!-- Add Pet Form Section -->
-        <section class="add-pet-form" aria-labelledby="add-pet-heading">
-            <h2 id="add-pet-heading">Add Your Pet</h2>
-            <p>Share your pet's information with our community. All fields marked with * are required.</p>
+            <!-- Quiz Progress -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
 
-            <form id="pet-form" novalidate>
-                <div class="form-group">
-                    <label for="pet-name" class="required-field">Pet Name</label>
-                    <input type="text" id="pet-name" name="pet-name" required aria-required="true">
-                    <div id="pet-name-error" class="error-message" role="alert">Please enter your pet's name</div>
+            <!-- Question Container -->
+            <div class="question-container" id="question-container">
+                <div class="question-header">
+                    <span class="question-number" id="question-number">Question 1 of 10</span>
+                </div>
+                <h2 class="question-text" id="question-text">What is the capital of France?</h2>
+                
+                <div class="options-container" id="options-container" role="radiogroup" aria-labelledby="question-text">
+                    <!-- Options will be inserted here by JavaScript -->
                 </div>
 
-                <div class="form-group">
-                    <label for="pet-breed" class="required-field">Breed</label>
-                    <input type="text" id="pet-breed" name="pet-breed" required aria-required="true">
-                    <div id="pet-breed-error" class="error-message" role="alert">Please enter your pet's breed</div>
+                <div class="feedback" id="feedback">
+                    <p class="feedback-text" id="feedback-text"></p>
+                    <p class="explanation" id="explanation"></p>
                 </div>
 
-                <div class="form-group">
-                    <label for="pet-age" class="required-field">Age</label>
-                    <input type="number" id="pet-age" name="pet-age" min="0" max="30" required aria-required="true">
-                    <div id="pet-age-error" class="error-message" role="alert">Please enter a valid age between 0 and 30</div>
+                <div class="quiz-controls">
+                    <button class="btn-next" id="next-btn" disabled>Next Question</button>
+                </div>
+            </div>
+
+            <!-- Results Container -->
+            <div class="results-container" id="results-container">
+                <h2>Quiz Completed!</h2>
+                <div class="results-score" id="results-score">Your Score: 8/10</div>
+                <p class="results-message" id="results-message">Great job! You know your stuff.</p>
+                
+                <div class="results-details">
+                    <h3>Quiz Summary</h3>
+                    <ul class="results-list" id="results-list">
+                        <!-- Results will be inserted here by JavaScript -->
+                    </ul>
                 </div>
 
-                <div class="form-group">
-                    <label for="pet-type">Type of Pet</label>
-                    <select id="pet-type" name="pet-type">
-                        <option value="dog">Dog</option>
-                        <option value="cat">Cat</option>
-                        <option value="rabbit">Rabbit</option>
-                        <option value="bird">Bird</option>
-                        <option value="fish">Fish</option>
-                        <option value="other">Other</option>
-                    </select>
+                <div class="quiz-controls">
+                    <button class="btn-restart" id="restart-btn">Restart Quiz</button>
                 </div>
-
-                <div class="form-group">
-                    <label for="pet-fact" class="required-field">Fun Fact About Your Pet</label>
-                    <textarea id="pet-fact" name="pet-fact" rows="3" required aria-required="true"></textarea>
-                    <div id="pet-fact-error" class="error-message" role="alert">Please share a fun fact about your pet</div>
-                </div>
-
-                <div class="form-group">
-                    <label for="pet-photo">Pet Photo</label>
-                    <input type="file" id="pet-photo" name="pet-photo" accept="image/*" class="file-input">
-                    <label for="pet-photo" class="file-label">Choose File</label>
-                    <span id="file-name" class="file-name">No file chosen</span>
-                </div>
-
-                <button type="submit" class="submit-button">Add Pet</button>
-            </form>
-        </section>
+            </div>
+        </div>
     </main>
 
-    <!-- Modal -->
-    <div id="success-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description">
-        <div class="modal-content">
-            <button class="modal-close" aria-label="Close modal">×</button>
-            <h2 id="modal-title">Success!</h2>
-            <p id="modal-description">Your pet has been added to our showcase. Thank you for sharing!</p>
-            <button id="modal-close-button" class="submit-button">Close</button>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <p>© 2023 Pet Showcase. All rights reserved.</p>
-            <ul class="footer-links">
-                <li><a href="#" class="footer-link">Privacy Policy</a></li>
-                <li><a href="#" class="footer-link">Terms of Service</a></li>
-                <li><a href="#" class="footer-link">Accessibility Statement</a></li>
-                <li><a href="#" class="footer-link">Contact Us</a></li>
-            </ul>
-        </div>
-    </footer>
-
     <script>
-        // Mobile Menu Toggle
-        const menuButton = document.querySelector('.menu-button');
-        const nav = document.querySelector('nav');
-
-        menuButton.addEventListener('click', () => {
-            const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
-            menuButton.setAttribute('aria-expanded', !isExpanded);
-            nav.classList.toggle('nav-active');
-        });
-
-        // Form Validation
-        const form = document.getElementById('pet-form');
-        const petName = document.getElementById('pet-name');
-        const petBreed = document.getElementById('pet-breed');
-        const petAge = document.getElementById('pet-age');
-        const petFact = document.getElementById('pet-fact');
-        const petPhoto = document.getElementById('pet-photo');
-        const fileName = document.getElementById('file-name');
-
-        // Show file name when file is selected
-        petPhoto.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                fileName.textContent = e.target.files[0].name;
-            } else {
-                fileName.textContent = 'No file chosen';
+        // Quiz Questions Data
+        const quizQuestions = [
+            {
+                question: "What is the capital of France?",
+                options: ["London", "Berlin", "Paris", "Madrid"],
+                correctAnswer: 2,
+                explanation: "Paris is the capital and most populous city of France. It has been one of Europe's major centers of finance, diplomacy, commerce, fashion, science, and arts."
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Venus", "Mars", "Jupiter", "Saturn"],
+                correctAnswer: 1,
+                explanation: "Mars is often called the 'Red Planet' because iron minerals in the Martian soil oxidize, or rust, causing the soil and atmosphere to look red."
+            },
+            {
+                question: "Who painted the Mona Lisa?",
+                options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
+                correctAnswer: 2,
+                explanation: "Leonardo da Vinci painted the Mona Lisa between 1503 and 1506. It's considered an archetypal masterpiece of the Italian Renaissance."
+            },
+            {
+                question: "What is the largest ocean on Earth?",
+                options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+                correctAnswer: 3,
+                explanation: "The Pacific Ocean is the largest and deepest of Earth's oceanic divisions. It extends from the Arctic Ocean in the north to the Southern Ocean in the south."
+            },
+            {
+                question: "Which element has the chemical symbol 'O'?",
+                options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
+                correctAnswer: 1,
+                explanation: "Oxygen is a chemical element with symbol O and atomic number 8. It's a member of the chalcogen group in the periodic table."
+            },
+            {
+                question: "In which year did World War II end?",
+                options: ["1943", "1945", "1947", "1950"],
+                correctAnswer: 1,
+                explanation: "World War II ended in 1945 with the unconditional surrender of the Axis powers. The war in Europe ended with Germany's surrender on May 8, 1945, and in the Pacific with Japan's surrender on September 2, 1945."
+            },
+            {
+                question: "What is the largest mammal in the world?",
+                options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
+                correctAnswer: 1,
+                explanation: "The blue whale is the largest animal known to have ever existed. They can reach lengths of up to 100 feet (30 meters) and weigh up to 200 tons."
+            },
+            {
+                question: "Which country is home to the kangaroo?",
+                options: ["New Zealand", "South Africa", "Australia", "Brazil"],
+                correctAnswer: 2,
+                explanation: "Kangaroos are marsupials native to Australia. They are known for their powerful hind legs, large feet, and long muscular tails for balance."
+            },
+            {
+                question: "What is the hardest natural substance on Earth?",
+                options: ["Gold", "Iron", "Diamond", "Quartz"],
+                correctAnswer: 2,
+                explanation: "Diamond is the hardest known natural material on Earth. It scores 10 on the Mohs scale of mineral hardness."
+            },
+            {
+                question: "Who wrote 'Romeo and Juliet'?",
+                options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
+                correctAnswer: 1,
+                explanation: "William Shakespeare wrote the tragedy 'Romeo and Juliet' between 1591 and 1595. It's one of his most popular and frequently performed plays."
             }
-        });
+        ];
 
-        // Form submission
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            let isValid = true;
+        // DOM Elements
+        const quizIntro = document.getElementById('quiz-intro');
+        const questionContainer = document.getElementById('question-container');
+        const resultsContainer = document.getElementById('results-container');
+        const questionNumberElement = document.getElementById('question-number');
+        const questionTextElement = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackElement = document.getElementById('feedback');
+        const feedbackTextElement = document.getElementById('feedback-text');
+        const explanationElement = document.getElementById('explanation');
+        const progressBar = document.getElementById('progress-bar');
+        const startBtn = document.getElementById('start-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const resultsScoreElement = document.getElementById('results-score');
+        const resultsMessageElement = document.getElementById('results-message');
+        const resultsListElement = document.getElementById('results-list');
 
-            // Validate pet name
-            if (!petName.value.trim()) {
-                document.getElementById('pet-name-error').style.display = 'block';
-                petName.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                document.getElementById('pet-name-error').style.display = 'none';
-                petName.setAttribute('aria-invalid', 'false');
-            }
+        // Quiz State Variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedOption = null;
+        let quizCompleted = false;
+        let userAnswers = [];
 
-            // Validate pet breed
-            if (!petBreed.value.trim()) {
-                document.getElementById('pet-breed-error').style.display = 'block';
-                petBreed.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                document.getElementById('pet-breed-error').style.display = 'none';
-                petBreed.setAttribute('aria-invalid', 'false');
-            }
-
-            // Validate pet age
-            if (!petAge.value || isNaN(petAge.value) || petAge.value < 0 || petAge.value > 30) {
-                document.getElementById('pet-age-error').style.display = 'block';
-                petAge.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                document.getElementById('pet-age-error').style.display = 'none';
-                petAge.setAttribute('aria-invalid', 'false');
-            }
-
-            // Validate pet fact
-            if (!petFact.value.trim()) {
-                document.getElementById('pet-fact-error').style.display = 'block';
-                petFact.setAttribute('aria-invalid', 'true');
-                isValid = false;
-            } else {
-                document.getElementById('pet-fact-error').style.display = 'none';
-                petFact.setAttribute('aria-invalid', 'false');
-            }
-
-            if (isValid) {
-                // In a real app, you would send the data to a server here
-                // For this demo, we'll just show a success message
-                showSuccessModal();
-                form.reset();
-                fileName.textContent = 'No file chosen';
-            } else {
-                // Focus on the first invalid field
-                const firstInvalid = form.querySelector('[aria-invalid="true"]');
-                if (firstInvalid) {
-                    firstInvalid.focus();
-                }
-            }
-        });
-
-        // Modal functionality
-        const modal = document.getElementById('success-modal');
-        const modalClose = document.querySelector('.modal-close');
-        const modalCloseButton = document.getElementById('modal-close-button');
-
-        function showSuccessModal() {
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            modalCloseButton.focus();
+        // Initialize the quiz
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            quizCompleted = false;
+            userAnswers = [];
+            updateProgressBar();
+            
+            quizIntro.style.display = 'block';
+            questionContainer.style.display = 'none';
+            resultsContainer.style.display = 'none';
         }
 
-        function closeModal() {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
+        // Start the quiz
+        function startQuiz() {
+            quizIntro.style.display = 'none';
+            questionContainer.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            loadQuestion(currentQuestionIndex);
         }
 
-        modalClose.addEventListener('click', closeModal);
-        modalCloseButton.addEventListener('click', closeModal);
-
-        // Close modal when clicking outside content
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal();
+        // Load a question
+        function loadQuestion(index) {
+            if (index >= quizQuestions.length) {
+                showResults();
+                return;
             }
-        });
 
-        // Close modal with Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.style.display === 'flex') {
-                closeModal();
-            }
-        });
+            const question = quizQuestions[index];
+            selectedOption = null;
+            
+            // Update question number and text
+            questionNumberElement.textContent = `Question ${index + 1} of ${quizQuestions.length}`;
+            questionTextElement.textContent = question.question;
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            
+            // Create new options
+            question.options.forEach((option, i) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.tabIndex = 0;
+                optionElement.setAttribute('role', 'radio');
+                optionElement.setAttribute('aria-checked', 'false');
+                
+                const radioInput = document.createElement('input');
+                radioInput.type = 'radio';
+                radioInput.id = `option-${i}`;
+                radioInput.name = 'quiz-option';
+                radioInput.value = i;
+                
+                const optionLabel = document.createElement('label');
+                optionLabel.className = 'option-label';
+                optionLabel.htmlFor = `option-${i}`;
+                optionLabel.textContent = option;
+                
+                optionElement.appendChild(radioInput);
+                optionElement.appendChild(optionLabel);
+                
+                // Add event listeners
+                optionElement.addEventListener('click', () => selectOption(i));
+                optionElement.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectOption(i);
+                    }
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Reset feedback and next button
+            feedbackElement.className = 'feedback';
+            feedbackElement.style.display = 'none';
+            nextBtn.disabled = true;
+            
+            // Update progress bar
+            updateProgressBar();
+        }
 
-        // Focus management for pet cards
-        const petCards = document.querySelectorAll('.pet-card');
-        petCards.forEach(card => {
-            card.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    card.click();
+        // Select an option
+        function selectOption(optionIndex) {
+            // Deselect all options
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, i) => {
+                option.classList.remove('selected');
+                option.setAttribute('aria-checked', 'false');
+                if (i === optionIndex) {
+                    option.focus();
                 }
             });
+            
+            // Select the clicked option
+            selectedOption = optionIndex;
+            options[optionIndex].classList.add('selected');
+            options[optionIndex].setAttribute('aria-checked', 'true');
+            
+            // Enable the next button
+            nextBtn.disabled = false;
+        }
+
+        // Show feedback for the selected answer
+        function showFeedback() {
+            if (selectedOption === null) return;
+            
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+            const isCorrect = selectedOption === currentQuestion.correctAnswer;
+            
+            // Update score and store user answer
+            if (isCorrect) {
+                score++;
+            }
+            userAnswers.push({
+                question: currentQuestion.question,
+                userAnswer: currentQuestion.options[selectedOption],
+                correctAnswer: currentQuestion.options[currentQuestion.correctAnswer],
+                isCorrect: isCorrect
+            });
+            
+            // Show feedback
+            feedbackElement.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedbackTextElement.textContent = isCorrect ? 'Correct! Well done!' : 'Incorrect. The correct answer is:';
+            explanationElement.textContent = currentQuestion.explanation;
+            
+            // Highlight correct and incorrect answers
+            const options = document.querySelectorAll('.option');
+            options.forEach((option, i) => {
+                if (i === currentQuestion.correctAnswer) {
+                    option.classList.add('correct');
+                } else if (i === selectedOption && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            // Disable all options
+            optionsContainer.querySelectorAll('input').forEach(input => {
+                input.disabled = true;
+            });
+        }
+
+        // Move to the next question
+        function nextQuestion() {
+            showFeedback();
+            
+            // Wait a moment before moving to next question
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < quizQuestions.length) {
+                    loadQuestion(currentQuestionIndex);
+                } else {
+                    showResults();
+                }
+            }, 1500);
+        }
+
+        // Show the quiz results
+        function showResults() {
+            quizCompleted = true;
+            questionContainer.style.display = 'none';
+            resultsContainer.className = 'results-container show';
+            
+            // Calculate score percentage
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            
+            // Update results display
+            resultsScoreElement.textContent = `Your Score: ${score}/${quizQuestions.length} (${percentage}%)`;
+            
+            // Set results message based on score
+            if (percentage >= 90) {
+                resultsMessageElement.textContent = "Excellent! You're a true expert!";
+            } else if (percentage >= 70) {
+                resultsMessageElement.textContent = "Great job! You know your stuff.";
+            } else if (percentage >= 50) {
+                resultsMessageElement.textContent = "Good effort! You might want to brush up on a few topics.";
+            } else {
+                resultsMessageElement.textContent = "Keep learning! You'll do better next time.";
+            }
+            
+            // Populate results list
+            resultsListElement.innerHTML = '';
+            userAnswers.forEach((answer, index) => {
+                const li = document.createElement('li');
+                li.className = answer.isCorrect ? 'correct' : 'incorrect';
+                
+                const questionSpan = document.createElement('span');
+                questionSpan.textContent = `${index + 1}. ${answer.question}`;
+                
+                const answerSpan = document.createElement('span');
+                answerSpan.textContent = answer.isCorrect ? '✓' : `✗ (Correct: ${answer.correctAnswer})`;
+                
+                li.appendChild(questionSpan);
+                li.appendChild(answerSpan);
+                resultsListElement.appendChild(li);
+            });
+            
+            // Update progress bar to 100%
+            progressBar.style.width = '100%';
+            progressBar.setAttribute('aria-valuenow', '100');
+        }
+
+        // Update the progress bar
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex) / quizQuestions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', progress);
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startQuiz);
+        nextBtn.addEventListener('click', nextQuestion);
+        restartBtn.addEventListener('click', initQuiz);
+
+        // Keyboard navigation for options
+        optionsContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                moveFocus(-1);
+            } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                moveFocus(1);
+            }
         });
+
+        // Move focus between options
+        function moveFocus(direction) {
+            const options = Array.from(document.querySelectorAll('.option'));
+            const currentIndex = options.findIndex(opt => opt === document.activeElement);
+            
+            let newIndex = currentIndex + direction;
+            if (newIndex < 0) newIndex = options.length - 1;
+            if (newIndex >= options.length) newIndex = 0;
+            
+            options[newIndex].focus();
+        }
+
+        // Initialize the quiz when the page loads
+        document.addEventListener('DOMContentLoaded', initQuiz);
     </script>
 </body>
 </html>
