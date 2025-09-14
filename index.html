@@ -3,48 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible Weather Dashboard - Get Current Conditions and Forecasts</title>
-    <meta name="description" content="Interactive weather dashboard showing current conditions and 24-hour forecasts for any city with full accessibility support">
+    <title>InnovateX - Next-Gen Digital Solutions</title>
     <style>
+        /* CSS Variables for Theme Switching */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --text-color: #2c3e50;
-            --light-text: #ecf0f1;
-            --bg-color: #f9f9f9;
-            --card-bg: #ffffff;
-            --error-color: #e74c3c;
-            --success-color: #2ecc71;
-            --warning-color: #f39c12;
-            --border-radius: 8px;
-            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --focus-outline: 3px solid var(--secondary-color);
+            --primary-color: #2563eb;
+            --secondary-color: #7c3aed;
+            --text-color: #1e293b;
+            --bg-color: #ffffff;
+            --card-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --heading-font: 'Segoe UI', system-ui, sans-serif;
+            --body-font: 'Segoe UI', system-ui, sans-serif;
         }
 
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --secondary-color: #a78bfa;
+            --text-color: #f8fafc;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Base Styles */
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            font-family: var(--body-font);
             color: var(--text-color);
             background-color: var(--bg-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            line-height: 1.6;
+            transition: var(--transition);
         }
 
-        /* Skip link */
+        h1, h2, h3, h4 {
+            font-family: var(--heading-font);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Skip Link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
             background: var(--primary-color);
-            color: var(--light-text);
+            color: white;
             padding: 8px;
             z-index: 100;
             transition: top 0.3s;
@@ -52,591 +91,753 @@
 
         .skip-link:focus {
             top: 0;
-            outline: var(--focus-outline);
         }
 
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--light-text);
-            padding: 1rem 2rem;
-            text-align: center;
-            box-shadow: var(--box-shadow);
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        nav {
-            background-color: var(--primary-color);
-            padding: 0.5rem 2rem;
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-
-        nav li {
-            margin: 0 1rem;
-        }
-
-        nav a {
-            color: var(--light-text);
-            text-decoration: none;
-            font-weight: bold;
-            padding: 0.5rem;
-            border-radius: var(--border-radius);
-            display: inline-block;
-            min-width: 44px;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        nav a:hover, nav a:focus {
-            background-color: var(--secondary-color);
-            outline: var(--focus-outline);
-        }
-
-        main {
-            flex: 1;
-            padding: 2rem;
+        /* Container */
+        .container {
+            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 1rem 0;
+            position: fixed;
             width: 100%;
+            top: 0;
+            left: 0;
+            background-color: var(--bg-color);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            transition: var(--transition);
         }
 
-        .search-section {
-            background-color: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            margin-bottom: 2rem;
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        h2 {
+        .logo {
             font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-weight: 700;
             color: var(--primary-color);
         }
 
-        .search-form {
+        /* Navigation */
+        nav ul {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: center;
+            list-style: none;
         }
 
-        .form-group {
-            flex: 1;
-            min-width: 200px;
+        nav ul li {
+            margin-left: 2rem;
         }
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
+        nav ul li a {
+            font-weight: 500;
+            padding: 0.5rem 0;
+            position: relative;
         }
 
-        input[type="text"] {
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a:focus::after {
             width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
         }
 
-        input[type="text"]:focus {
-            border-color: var(--secondary-color);
-            outline: var(--focus-outline);
-        }
-
-        button {
-            background-color: var(--secondary-color);
-            color: var(--light-text);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
+        /* Theme Toggle */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            margin-left: 2rem;
             cursor: pointer;
-            font-weight: bold;
+        }
+
+        .theme-toggle input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .theme-toggle-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 24px;
+            background-color: var(--border-color);
+            border-radius: 12px;
+            position: relative;
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-toggle input:checked + .theme-toggle-label .toggle-switch {
+            background-color: var(--primary-color);
+        }
+
+        .theme-toggle input:checked + .theme-toggle-label .toggle-switch::before {
+            transform: translateX(26px);
+        }
+
+        .theme-toggle-text {
+            font-size: 0.9rem;
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 4rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
             min-width: 44px;
             min-height: 44px;
-            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        button:hover, button:focus {
-            background-color: #2980b9;
-            outline: var(--focus-outline);
+        .btn-primary {
+            background-color: white;
+            color: var(--primary-color);
         }
 
-        .error-message {
-            color: var(--error-color);
-            margin-top: 0.5rem;
-            font-weight: bold;
+        .btn-primary:hover,
+        .btn-primary:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
 
-        .weather-display {
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover,
+        .btn-secondary:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
-        @media (min-width: 768px) {
-            .weather-display {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .current-weather, .hourly-forecast {
+        .feature-card {
             background-color: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
         }
 
-        .weather-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 4rem 0;
+            background-color: var(--card-bg);
             text-align: center;
-            padding: 1rem;
         }
 
-        .weather-icon {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 1rem;
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        .temperature {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+        .cta h2 {
+            margin-bottom: 1.5rem;
         }
 
-        .weather-description {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            text-transform: capitalize;
+        .cta p {
+            margin-bottom: 2rem;
         }
 
-        .weather-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+        .signup-form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            flex: 1 1 300px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
             width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .form-group .error-message {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .form-group.error input {
+            border-color: #dc2626;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--card-bg);
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-column ul li a {
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .footer-column ul li a:hover,
+        .footer-column ul li a:focus {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
             margin-top: 1rem;
         }
 
-        .detail-item {
+        .social-links a {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 0.5rem;
-            background-color: rgba(52, 152, 219, 0.1);
-            border-radius: var(--border-radius);
-        }
-
-        .detail-label {
-            font-size: 0.875rem;
-            color: #7f8c8d;
-        }
-
-        .detail-value {
-            font-weight: bold;
-            font-size: 1.125rem;
-        }
-
-        .hourly-forecast-container {
-            display: flex;
-            overflow-x: auto;
-            gap: 1rem;
-            padding: 1rem 0;
-            scrollbar-width: thin;
-            scrollbar-color: var(--secondary-color) #f1f1f1;
-        }
-
-        .hourly-forecast-container::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .hourly-forecast-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-
-        .hourly-forecast-container::-webkit-scrollbar-thumb {
-            background-color: var(--secondary-color);
-            border-radius: 10px;
-        }
-
-        .hourly-item {
-            min-width: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem;
-            background-color: rgba(52, 152, 219, 0.1);
-            border-radius: var(--border-radius);
-            flex-shrink: 0;
-        }
-
-        .hourly-time {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .hourly-icon {
-            width: 50px;
-            height: 50px;
-            margin: 0.5rem 0;
-        }
-
-        .hourly-temp {
-            font-weight: bold;
-        }
-
-        .loading {
-            display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 2rem;
-        }
-
-        .spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(52, 152, 219, 0.2);
             border-radius: 50%;
-            border-top-color: var(--secondary-color);
-            animation: spin 1s ease-in-out infinite;
+            background-color: var(--border-color);
+            color: var(--text-color);
+            transition: var(--transition);
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        footer {
+        .social-links a:hover,
+        .social-links a:focus {
             background-color: var(--primary-color);
-            color: var(--light-text);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .copyright {
             text-align: center;
-            padding: 1.5rem;
-            margin-top: 2rem;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
         }
 
-        footer p {
-            margin-bottom: 0.5rem;
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        footer a {
-            color: var(--light-text);
-            text-decoration: underline;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+            }
+
+            nav {
+                order: 3;
+                width: 100%;
+                margin-top: 1rem;
+                display: none;
+            }
+
+            nav.active {
+                display: block;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            nav ul li {
+                margin-left: 0;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .theme-toggle {
+                margin-left: auto;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
         }
 
-        footer a:hover, footer a:focus {
-            color: var(--secondary-color);
-            outline: var(--focus-outline);
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        /* Reduced motion preference */
+        /* Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
             * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-
-            .spinner {
-                animation: none;
-                border: 4px solid var(--secondary-color);
-                border-right-color: transparent;
-                border-radius: 50%;
-            }
-        }
-
-        /* High contrast mode */
-        @media (forced-colors: active) {
-            :root {
-                --primary-color: ButtonText;
-                --secondary-color: Highlight;
-                --accent-color: LinkText;
-                --text-color: ButtonText;
-                --light-text: Canvas;
-                --bg-color: Canvas;
-                --card-bg: Canvas;
-                --error-color: Mark;
-                --success-color: ButtonText;
-                --warning-color: ButtonText;
-            }
-
-            body {
-                forced-color-adjust: none;
-            }
-
-            button, input, select, textarea {
-                forced-color-adjust: none;
+                animation: none !important;
+                transition: none !important;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Skip Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    
+
+    <!-- Header -->
     <header>
-        <h1>Accessible Weather Dashboard</h1>
-        <p>Get current conditions and hourly forecasts for any location</p>
+        <div class="container header-container">
+            <a href="#" class="logo">InnovateX</a>
+            
+            <button class="mobile-menu-btn" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="menu-icon">☰</span>
+            </button>
+
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#solutions">Solutions</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="theme-toggle">
+                <input type="checkbox" id="theme-switch" aria-label="Toggle dark mode">
+                <label for="theme-switch" class="theme-toggle-label">
+                    <span class="toggle-switch"></span>
+                    <span class="theme-toggle-text">Dark Mode</span>
+                </label>
+            </div>
+        </div>
     </header>
 
-    <nav aria-label="Main navigation">
-        <ul>
-            <li><a href="#main-content">Home</a></li>
-            <li><a href="#" aria-current="page">Weather</a></li>
-            <li><a href="#">Maps</a></li>
-            <li><a href="#">Alerts</a></li>
-            <li><a href="#">Settings</a></li>
-        </ul>
-    </nav>
-
+    <!-- Main Content -->
     <main id="main-content">
-        <section class="search-section" aria-labelledby="search-heading">
-            <h2 id="search-heading">Search for Weather Information</h2>
-            <form class="search-form" id="weather-form">
-                <div class="form-group">
-                    <label for="city-input">City Name</label>
-                    <input type="text" id="city-input" placeholder="Enter city name" aria-required="true" required>
-                    <div id="city-error" class="error-message" role="alert" aria-live="assertive"></div>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Transform Your Digital Experience</h1>
+                <p>InnovateX delivers cutting-edge solutions that empower businesses to thrive in the digital landscape. Our platform combines innovation with simplicity for maximum impact.</p>
+                <div class="hero-buttons">
+                    <a href="#signup" class="btn btn-primary">Get Started</a>
+                    <a href="#demo" class="btn btn-secondary">View Demo</a>
                 </div>
-                <div class="form-group">
-                    <label for="country-input">Country (Optional)</label>
-                    <input type="text" id="country-input" placeholder="Enter country code (e.g., US)">
-                </div>
-                <button type="submit" id="search-button">
-                    <span class="visually-hidden">Search</span>
-                    <span aria-hidden="true">🔍</span> Get Weather
-                </button>
-            </form>
+            </div>
         </section>
 
-        <div class="weather-display">
-            <section class="current-weather" aria-labelledby="current-weather-heading">
-                <h2 id="current-weather-heading">Current Weather</h2>
-                <div id="current-weather-content">
-                    <div class="weather-card">
-                        <p>Enter a city name to see current weather conditions</p>
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Powerful Features</h2>
+                    <p>Discover what makes InnovateX the platform of choice for forward-thinking businesses</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card" tabindex="0">
+                        <div class="feature-icon" aria-hidden="true">⚡</div>
+                        <h3>Lightning Fast</h3>
+                        <p>Our optimized architecture delivers unmatched performance with sub-second response times, even at scale.</p>
+                    </div>
+                    <div class="feature-card" tabindex="0">
+                        <div class="feature-icon" aria-hidden="true">🔒</div>
+                        <h3>Enterprise Security</h3>
+                        <p>End-to-end encryption and compliance with industry standards keep your data protected at all times.</p>
+                    </div>
+                    <div class="feature-card" tabindex="0">
+                        <div class="feature-icon" aria-hidden="true">🔄</div>
+                        <h3>Seamless Integration</h3>
+                        <p>Connect with your existing tools and workflows through our extensive API ecosystem.</p>
+                    </div>
+                    <div class="feature-card" tabindex="0">
+                        <div class="feature-icon" aria-hidden="true">📊</div>
+                        <h3>Advanced Analytics</h3>
+                        <p>Gain actionable insights with our powerful data visualization and reporting tools.</p>
+                    </div>
+                    <div class="feature-card" tabindex="0">
+                        <div class="feature-icon" aria-hidden="true">🌐</div>
+                        <h3>Global Infrastructure</h3>
+                        <p>Our worldwide network ensures low latency and high availability wherever your users are.</p>
+                    </div>
+                    <div class="feature-card" tabindex="0">
+                        <div class="feature-icon" aria-hidden="true">🛠️</div>
+                        <h3>Custom Solutions</h3>
+                        <p>Tailor the platform to your exact needs with our flexible customization options.</p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="hourly-forecast" aria-labelledby="hourly-forecast-heading">
-                <h2 id="hourly-forecast-heading">24-Hour Forecast</h2>
-                <div id="hourly-forecast-content">
-                    <p>Hourly forecast will appear here after searching for a location</p>
+        <!-- CTA Section -->
+        <section id="signup" class="cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Ready to Get Started?</h2>
+                    <p>Join thousands of businesses that trust InnovateX for their digital transformation. Sign up today for a 14-day free trial with no credit card required.</p>
+                    <form class="signup-form" id="signupForm">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required aria-required="true">
+                            <div class="error-message" id="name-error">Please enter your full name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required aria-required="true">
+                            <div class="error-message" id="email-error">Please enter a valid email address</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 1.5rem;">Sign Up Now</button>
+                    </form>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
     </main>
 
+    <!-- Footer -->
     <footer>
-        <p>© 2023 Accessible Weather Dashboard</p>
-        <p><a href="#">Privacy Policy</a> | <a href="#">Accessibility Statement</a> | <a href="#">Contact Us</a></p>
-        <p>Weather data provided by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a></p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>InnovateX</h3>
+                    <p>Empowering businesses through innovative digital solutions since 2015.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><span aria-hidden="true">f</span></a>
+                        <a href="#" aria-label="Twitter"><span aria-hidden="true">t</span></a>
+                        <a href="#" aria-label="LinkedIn"><span aria-hidden="true">in</span></a>
+                        <a href="#" aria-label="Instagram"><span aria-hidden="true">ig</span></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Product</h3>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Integrations</a></li>
+                        <li><a href="#">Updates</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 InnovateX. All rights reserved. <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Form submission
-            const weatherForm = document.getElementById('weather-form');
-            const cityInput = document.getElementById('city-input');
-            const countryInput = document.getElementById('country-input');
-            const cityError = document.getElementById('city-error');
-            const currentWeatherContent = document.getElementById('current-weather-content');
-            const hourlyForecastContent = document.getElementById('hourly-forecast-content');
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('theme-switch');
+        const currentTheme = localStorage.getItem('theme') || 'light';
 
-            // Sample weather icons mapping
-            const weatherIcons = {
-                '01d': '☀️',
-                '01n': '🌙',
-                '02d': '⛅',
-                '02n': '⛅',
-                '03d': '☁️',
-                '03n': '☁️',
-                '04d': '☁️',
-                '04n': '☁️',
-                '09d': '🌧️',
-                '09n': '🌧️',
-                '10d': '🌦️',
-                '10n': '🌦️',
-                '11d': '⛈️',
-                '11n': '⛈️',
-                '13d': '❄️',
-                '13n': '❄️',
-                '50d': '🌫️',
-                '50n': '🌫️'
-            };
+        // Apply the saved theme
+        if (currentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.checked = true;
+        }
 
-            weatherForm.addEventListener('submit', function(e) {
+        // Theme toggle event listener
+        themeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('nav');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', !isExpanded);
+            nav.classList.toggle('active');
+        });
+
+        // Form Validation
+        const signupForm = document.getElementById('signupForm');
+        
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            
+            // Validate name
+            const nameInput = document.getElementById('name');
+            const nameError = document.getElementById('name-error');
+            if (nameInput.value.trim() === '') {
+                nameInput.parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                nameInput.parentElement.classList.remove('error');
+            }
+            
+            // Validate email
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('email-error');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                emailInput.parentElement.classList.add('error');
+                isValid = false;
+            } else {
+                emailInput.parentElement.classList.remove('error');
+            }
+            
+            if (isValid) {
+                // In a real app, you would submit the form here
+                alert('Thank you for signing up! We will be in touch soon.');
+                signupForm.reset();
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                // Reset errors
-                cityError.textContent = '';
-                cityInput.setAttribute('aria-invalid', 'false');
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
                 
-                // Validate input
-                if (!cityInput.value.trim()) {
-                    cityError.textContent = 'Please enter a city name';
-                    cityInput.setAttribute('aria-invalid', 'true');
-                    cityInput.focus();
-                    return;
-                }
-
-                // Show loading state
-                currentWeatherContent.innerHTML = '<div class="loading"><div class="spinner" aria-hidden="true"></div><span class="visually-hidden">Loading weather data...</span></div>';
-                hourlyForecastContent.innerHTML = '<div class="loading"><div class="spinner" aria-hidden="true"></div><span class="visually-hidden">Loading forecast data...</span></div>';
-
-                // In a real app, you would fetch from a weather API here
-                // For this demo, we'll use mock data
-                setTimeout(() => {
-                    const city = cityInput.value.trim();
-                    const country = countryInput.value.trim();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
                     
-                    // Generate mock current weather data
-                    const currentWeatherData = {
-                        city: city,
-                        country: country || 'N/A',
-                        temp: Math.round(Math.random() * 30) - 5, // Random temp between -5°C and 25°C
-                        feels_like: Math.round(Math.random() * 30) - 5,
-                        humidity: Math.floor(Math.random() * 100),
-                        wind_speed: (Math.random() * 20).toFixed(1),
-                        pressure: Math.floor(Math.random() * 50) + 950,
-                        visibility: Math.floor(Math.random() * 10) + 1,
-                        description: ['Clear sky', 'Partly cloudy', 'Cloudy', 'Rain', 'Snow', 'Thunderstorm'][Math.floor(Math.random() * 6)],
-                        icon: Object.keys(weatherIcons)[Math.floor(Math.random() * Object.keys(weatherIcons).length)],
-                        sunrise: '06:' + Math.floor(Math.random() * 60).toString().padStart(2, '0'),
-                        sunset: '18:' + Math.floor(Math.random() * 60).toString().padStart(2, '0')
-                    };
-
-                    // Generate mock hourly forecast
-                    const hourlyForecastData = [];
-                    const now = new Date();
-                    for (let i = 0; i < 24; i++) {
-                        const hour = new Date(now.getTime() + i * 60 * 60 * 1000);
-                        hourlyForecastData.push({
-                            time: hour.getHours().toString().padStart(2, '0') + ':00',
-                            temp: Math.round(currentWeatherData.temp + (Math.random() * 6 - 3)),
-                            icon: Object.keys(weatherIcons)[Math.floor(Math.random() * Object.keys(weatherIcons).length)],
-                            description: ['Clear', 'Partly cloudy', 'Cloudy', 'Rain', 'Snow', 'Thunderstorm'][Math.floor(Math.random() * 6)]
-                        });
-                    }
-
-                    // Update UI with mock data
-                    displayCurrentWeather(currentWeatherData);
-                    displayHourlyForecast(hourlyForecastData);
-                }, 1000);
-            });
-
-            function displayCurrentWeather(data) {
-                const location = data.country === 'N/A' ? data.city : `${data.city}, ${data.country}`;
-                
-                currentWeatherContent.innerHTML = `
-                    <div class="weather-card">
-                        <h3 class="location">${location}</h3>
-                        <div class="weather-icon" aria-hidden="true">${weatherIcons[data.icon]}</div>
-                        <div class="temperature">${data.temp}°C</div>
-                        <p class="weather-description">${data.description}</p>
-                        <p class="feels-like">Feels like: ${data.feels_like}°C</p>
-                        
-                        <div class="weather-details">
-                            <div class="detail-item">
-                                <span class="detail-label">Humidity</span>
-                                <span class="detail-value">${data.humidity}%</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Wind</span>
-                                <span class="detail-value">${data.wind_speed} km/h</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Pressure</span>
-                                <span class="detail-value">${data.pressure} hPa</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Visibility</span>
-                                <span class="detail-value">${data.visibility} km</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Sunrise</span>
-                                <span class="detail-value">${data.sunrise}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">Sunset</span>
-                                <span class="detail-value">${data.sunset}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            function displayHourlyForecast(data) {
-                let hourlyItems = '';
-                
-                data.forEach(hour => {
-                    hourlyItems += `
-                        <div class="hourly-item">
-                            <div class="hourly-time">${hour.time}</div>
-                            <div class="hourly-icon" aria-hidden="true">${weatherIcons[hour.icon]}</div>
-                            <div class="hourly-temp">${hour.temp}°C</div>
-                            <div class="hourly-desc" aria-hidden="true">${hour.description}</div>
-                            <span class="visually-hidden">${hour.description} with temperature of ${hour.temp} degrees Celsius</span>
-                        </div>
-                    `;
-                });
-                
-                hourlyForecastContent.innerHTML = `
-                    <div class="hourly-forecast-container" tabindex="0" aria-label="24-hour weather forecast scrollable list">
-                        ${hourlyItems}
-                    </div>
-                `;
-            }
-
-            // Keyboard navigation for the hourly forecast
-            document.addEventListener('keydown', function(e) {
-                const forecastContainer = document.querySelector('.hourly-forecast-container');
-                if (!forecastContainer || !forecastContainer.contains(document.activeElement)) return;
-                
-                if (e.key === 'ArrowLeft') {
-                    forecastContainer.scrollBy({ left: -100, behavior: 'smooth' });
-                    e.preventDefault();
-                } else if (e.key === 'ArrowRight') {
-                    forecastContainer.scrollBy({ left: 100, behavior: 'smooth' });
-                    e.preventDefault();
+                    // Update URL without page jump
+                    history.pushState(null, null, targetId);
                 }
             });
         });
 
-        // Helper for visually hidden text
-        document.addEventListener('DOMContentLoaded', function() {
-            const style = document.createElement('style');
-            style.textContent = `
-                .visually-hidden {
-                    position: absolute;
-                    width: 1px;
-                    height: 1px;
-                    padding: 0;
-                    margin: -1px;
-                    overflow: hidden;
-                    clip: rect(0, 0, 0, 0);
-                    white-space: nowrap;
-                    border: 0;
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    nav.classList.remove('active');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
                 }
-            `;
-            document.head.appendChild(style);
+            });
         });
+
+        // Focus management for accessibility
+        document.addEventListener('keydown', function(e) {
+            // Trap focus in mobile menu when open
+            if (nav.classList.contains('active') && e.key === 'Tab') {
+                const focusableElements = nav.querySelectorAll('a, button, [tabindex="0"]');
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+                
+                if (e.shiftKey && document.activeElement === firstElement) {
+                    lastElement.focus();
+                    e.preventDefault();
+                } else if (!e.shiftKey && document.activeElement === lastElement) {
+                    firstElement.focus();
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Lazy loading for images (would be implemented in a real app)
+        if ('loading' in HTMLImageElement.prototype) {
+            // Native lazy loading is supported
+            document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+                img.loading = 'lazy';
+            });
+        } else {
+            // Fallback for browsers without native lazy loading
+            // Would implement Intersection Observer here in a real app
+        }
     </script>
 </body>
 </html>
