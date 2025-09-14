@@ -2,470 +2,869 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Accessible Interactive Registration Form – WCAG 2.2 AAA Example</title>
+  <title>Accessibly Yours: A Personal Blog - View, Search, and Comment (WCAG 2.2 AAA Compliant)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Enhanced contrast, vibrant, accessible color palette; user-selectable colors via CSS variables -->
+  <meta name="description" content="A colorful, accessible, and interactive personal blog. View posts, leave comments, and search articles. Fully WCAG 2.2 AAA compliant.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' aria-hidden='true' viewBox='0 0 32 32'><circle fill='%233b6cf6' cx='16' cy='16' r='16'/><text x='16' y='22' font-size='16' text-anchor='middle' fill='white'>B</text></svg>">
   <style>
     :root {
-      /* User-selectable colors with high contrast */
-      --color-bg: #fff;
-      --color-fg: #10102b;
-      --color-primary: #0068a5;
-      --color-secondary: #a81e61;
-      --color-accent: #ffb900;
-      --color-success: #007a3d;
-      --color-error: #b00020;
-      --color-info: #26547c;
-      --color-focus: #ffb900;
-      --color-form-bg: #f6faff;
-      --color-border: #1d3557;
-      --color-input-bg: #fff;
-      --color-input-disabled: #f0f0f0;
-      --color-shadow: rgba(38,84,124,0.12);
-      --color-link: #0052cc;
-      --color-link-visited: #6a1b9a;
-      --color-help-bg: #e5f6ff;
-      --color-help-border: #0e76a8;
-      --color-required: #a81e61;
-      --color-valid: #007a3d;
-      --color-invalid: #b00020;
-      --color-status: #0068a5;
-      --color-warning: #e65100;
-      --color-highlight: #ffb900;
-      --color-breadcrumb-bg: #eaf4ff;
-      --color-breadcrumb-current: #0068a5;
+      --color-bg: #f6f8fa;
+      --color-bg-dark: #1a1a2e;
+      --color-primary: #3b6cf6;
+      --color-primary-dark: #2747b0;
+      --color-accent: #f63b6c;
+      --color-accent-dark: #b02747;
+      --color-secondary: #32c69a;
+      --color-secondary-dark: #238a6a;
+      --color-surface: #fff;
+      --color-surface-dark: #22223b;
+      --color-border: #e1e4e8;
+      --color-border-dark: #393959;
+      --color-text: #1a1a2e;
+      --color-text-dark: #f6f8fa;
+      --color-focus: #ffbf47;
+      --color-focus-dark: #ffbf47;
+      --color-error: #c92a2a;
+      --color-success: #2b8a3e;
+      --font-size-base: 1.125rem;
+      --font-size-large: 1.375rem;
+      --font-size-xlarge: 2rem;
+      --line-height: 1.6;
+      --line-spacing: 1.5em;
+      --paragraph-spacing: 2.25em;
+      --max-line-length: 80ch;
+      --focus-outline-width: 4px;
+      --focus-outline-offset: 2px;
+      --border-radius: 0.75em;
+      --transition-fast: 0.15s cubic-bezier(.4,0,.2,1);
+      --transition-slow: 0.35s cubic-bezier(.4,0,.2,1);
+      --min-target-size: 44px;
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --color-bg: #10102b;
-        --color-fg: #f6faff;
-        --color-form-bg: #232345;
-        --color-input-bg: #18183a;
-        --color-border: #8ecae6;
-        --color-help-bg: #23395d;
-        --color-link: #7ad7f0;
-        --color-link-visited: #d3aaff;
+        --color-bg: var(--color-bg-dark);
+        --color-surface: var(--color-surface-dark);
+        --color-border: var(--color-border-dark);
+        --color-text: var(--color-text-dark);
+      }
+      body {
+        background: var(--color-bg-dark);
+        color: var(--color-text-dark);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
       }
     }
     html {
-      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-      min-height: 100%;
-      font-size: 18px;
+      font-size: 100%;
+      background: var(--color-bg);
+      color: var(--color-text);
       scroll-behavior: smooth;
     }
     body {
+      margin: 0;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-size: var(--font-size-base);
+      line-height: var(--line-height);
       background: var(--color-bg);
-      color: var(--color-fg);
-      margin: 0;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      line-height: 1.7;
+      color: var(--color-text);
+      max-width: 100vw;
       min-height: 100vh;
-      transition: background 0.2s, color 0.2s;
-    }
-    header, nav, main, footer, section, aside {
-      display: block;
-    }
-    header {
-      background: linear-gradient(90deg, var(--color-primary) 60%, var(--color-secondary) 100%);
-      color: var(--color-bg);
-      padding: 1.5rem 0 1rem 0;
-      text-align: center;
-      box-shadow: 0 2px 8px var(--color-shadow);
-    }
-    header h1 {
-      margin: 0 0 0.5rem 0;
-      font-size: 2.2rem;
-      letter-spacing: 1px;
-      font-weight: 700;
-      text-shadow: 1px 1px 0 var(--color-border);
-    }
-    header p {
-      margin: 0;
-      font-size: 1.15rem;
-      font-weight: 400;
-      color: #eaf4ff;
-    }
-    nav[aria-label] {
-      background: var(--color-breadcrumb-bg);
-      padding: 0.5rem 0;
-      border-bottom: 2px solid var(--color-border);
-    }
-    .breadcrumb {
-      margin: 0 auto;
-      max-width: 720px;
-      padding: 0 1rem;
-      font-size: 1rem;
-      list-style: none;
       display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .breadcrumb li {
-      display: flex;
-      align-items: center;
-    }
-    .breadcrumb li:not(:last-child)::after {
-      content: "›";
-      color: var(--color-secondary);
-      margin: 0 0.5em;
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-    .breadcrumb a {
-      color: var(--color-link);
-      text-decoration: underline;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    .breadcrumb a:focus, .breadcrumb a:hover {
-      outline: 2px solid var(--color-focus);
-      outline-offset: 2px;
-      background: var(--color-highlight);
-      color: var(--color-fg);
-      border-radius: 6px;
-    }
-    .breadcrumb .current {
-      color: var(--color-breadcrumb-current);
-      font-weight: bold;
-      pointer-events: none;
-      cursor: default;
-      text-decoration: none;
+      flex-direction: column;
     }
     /* Skip Link */
     .skip-link {
       position: absolute;
-      left: 8px;
-      top: 8px;
-      background: var(--color-highlight);
-      color: var(--color-fg);
+      top: 0;
+      left: 0;
+      background: var(--color-primary);
+      color: #fff;
       padding: 0.5em 1em;
-      border-radius: 6px;
-      z-index: 1000;
-      font-weight: 700;
-      font-size: 1.05em;
-      box-shadow: 0 2px 6px var(--color-shadow);
-      transition: transform 0.2s, opacity 0.2s;
-      opacity: 0;
-      pointer-events: none;
+      z-index: 999;
+      transform: translateY(-120%);
+      transition: transform 0.2s;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1em;
+      outline: none;
+      border: 2px solid var(--color-primary-dark);
     }
     .skip-link:focus {
-      opacity: 1;
-      pointer-events: auto;
       transform: translateY(0);
-      outline: 3px solid var(--color-focus);
+      outline: 4px solid var(--color-focus);
       outline-offset: 2px;
     }
-    /* Main Content Layout */
-    main {
+    /* Header */
+    header {
+      background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      color: #fff;
+      padding: 1.5em 0 1em 0;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(59, 108, 246, 0.15);
+    }
+    header h1 {
+      font-size: var(--font-size-xlarge);
+      margin: 0 0 0.25em 0;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      max-width: var(--max-line-length);
+      margin-left: auto;
+      margin-right: auto;
+    }
+    header p {
+      margin: 0;
+      font-size: var(--font-size-large);
+      line-height: 1.4;
+      max-width: var(--max-line-length);
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /* Navigation */
+    nav[aria-label] {
+      background: var(--color-surface);
+      border-bottom: 3px solid var(--color-border);
       display: flex;
-      flex-direction: row;
-      max-width: 900px;
-      margin: 2.5rem auto 2rem auto;
-      background: var(--color-form-bg);
-      border-radius: 18px;
-      box-shadow: 0 4px 24px var(--color-shadow);
-      padding: 2.5rem 2rem 2rem 2rem;
-      gap: 2.5rem;
-      min-height: 540px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5em;
+      padding: 0.5em 0;
+      font-size: 1.1em;
     }
-    @media (max-width: 900px) {
-      main {
-        flex-direction: column;
-        padding: 1.2rem 0.6rem;
-        gap: 1.2rem;
-      }
+    nav[aria-label] ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
     }
-    /* Sidebar */
-    aside {
-      flex: 1 1 220px;
-      min-width: 220px;
-      max-width: 320px;
-      background: var(--color-help-bg);
-      border: 2px solid var(--color-help-border);
-      border-radius: 12px;
-      padding: 1.2rem 1rem;
-      margin-bottom: 1rem;
-      font-size: 1.05rem;
-      color: var(--color-fg);
-      box-shadow: 0 2px 8px var(--color-shadow);
+    nav[aria-label] li {
+      position: relative;
+      display: flex;
+      align-items: center;
     }
-    aside h2 {
-      font-size: 1.2rem;
-      margin-top: 0;
-      margin-bottom: 0.7em;
-      color: var(--color-primary);
+    nav[aria-label] a, nav[aria-label] button {
+      background: none;
+      border: none;
+      color: var(--color-primary-dark);
+      text-decoration: none;
+      padding: 0.5em 1.25em;
+      border-radius: var(--border-radius);
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      outline: none;
+      position: relative;
+      z-index: 1;
     }
-    aside ul {
-      padding-left: 1.2em;
-      margin-top: 0.6em;
-      margin-bottom: 0.6em;
+    nav[aria-label] a[aria-current="page"],
+    nav[aria-label] button[aria-current="page"] {
+      background: var(--color-primary);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(59, 108, 246, 0.08);
     }
-    aside li {
-      margin-bottom: 0.4em;
+    nav[aria-label] a:focus, nav[aria-label] button:focus {
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+      background: var(--color-accent);
+      color: #fff;
     }
-    aside abbr[title] {
-      border-bottom: 1px dotted var(--color-secondary);
-      cursor: help;
+    nav[aria-label] .submenu-toggle[aria-haspopup="true"]::after {
+      content: " ▼";
+      font-size: 0.8em;
+      margin-left: 0.2em;
+      display: inline-block;
+    }
+    /* Dropdown Menu */
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: var(--color-surface);
+      border: 2px solid var(--color-border);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px rgba(59, 108, 246, 0.08);
+      min-width: 180px;
+      z-index: 10;
+      margin-top: 0.2em;
+      padding: 0.25em 0;
+    }
+    .submenu[aria-hidden="false"] {
+      display: block;
+      animation: fadeIn 0.25s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .submenu li {
+      width: 100%;
+    }
+    .submenu a {
+      display: block;
+      width: 100%;
+      text-align: left;
+      color: var(--color-primary-dark);
+      background: none;
+      border: none;
+      padding: 0.75em 1.5em;
+      border-radius: 0;
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      outline: none;
+    }
+    .submenu a:focus,
+    .submenu a:hover {
+      background: var(--color-accent);
+      color: #fff;
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+    /* Breadcrumbs */
+    nav[aria-label="Breadcrumb"] {
+      padding: 0.5em 1em;
+      background: var(--color-bg);
+      font-size: 1em;
+      border-bottom: 2px solid var(--color-border);
+    }
+    nav[aria-label="Breadcrumb"] ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25em;
+      align-items: center;
+    }
+    nav[aria-label="Breadcrumb"] li {
+      display: flex;
+      align-items: center;
+      color: var(--color-primary-dark);
+    }
+    nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
+      content: "›";
+      color: var(--color-accent-dark);
+      margin: 0 0.5em;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    nav[aria-label="Breadcrumb"] a {
+      color: var(--color-primary-dark);
+      text-decoration: underline;
+      font-weight: 500;
+      background: none;
+      border: none;
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      border-radius: var(--border-radius);
+      padding: 0.25em 0.5em;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      outline: none;
+    }
+    nav[aria-label="Breadcrumb"] a:focus {
+      background: var(--color-accent);
+      color: #fff;
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+    nav[aria-label="Breadcrumb"] li[aria-current="page"] {
+      color: var(--color-accent-dark);
+      font-weight: bold;
       text-decoration: none;
     }
-    /* Form Section */
-    section[aria-labelledby="form-title"] {
-      flex: 2 1 350px;
-      min-width: 320px;
-      max-width: 540px;
+    /* Layout */
+    .container {
+      display: flex;
+      flex-direction: row;
+      gap: 2em;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 2em 1em 2em 1em;
+      box-sizing: border-box;
+    }
+    main {
+      flex: 2 1 0;
+      max-width: 800px;
+      background: var(--color-surface);
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 18px rgba(59, 108, 246, 0.09);
+      padding: 2em;
+      min-width: 0;
+      margin-bottom: 2em;
+    }
+    aside {
+      flex: 1 1 300px;
+      min-width: 270px;
+      max-width: 340px;
+      background: var(--color-surface);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 10px rgba(59, 108, 246, 0.07);
+      padding: 1.5em 1.25em;
+      margin-bottom: 2em;
       display: flex;
       flex-direction: column;
+      gap: 2em;
+      align-self: flex-start;
     }
-    .form-wrapper {
-      background: var(--color-input-bg);
-      border-radius: 14px;
-      padding: 1.5rem 1.2rem;
-      box-shadow: 0 2px 12px var(--color-shadow);
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        gap: 1.5em;
+        padding: 1em 0.5em;
+      }
+      main, aside {
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 1.5em;
+      }
+      aside {
+        order: -1;
+      }
+    }
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 1.4em;
+      }
+      .container {
+        padding: 0.5em 0.1em;
+      }
+      main, aside {
+        padding: 1em 0.5em;
+      }
+    }
+    /* Blog Post List */
+    .post-list {
+      margin: 0 0 2em 0;
+      padding: 0;
+      list-style: none;
+    }
+    .post-list li {
+      margin-bottom: 2.5em;
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 2em;
+      max-width: var(--max-line-length);
+    }
+    .post-list li:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    .post-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75em;
+      background: linear-gradient(90deg, #f6f8fa 0%, #e6eaff 100%);
+      border-radius: var(--border-radius);
+      padding: 1.5em 1.25em;
+      box-shadow: 0 2px 8px rgba(59, 108, 246, 0.06);
+      transition: box-shadow var(--transition-fast);
       border: 2px solid var(--color-border);
     }
-    .form-wrapper h2 {
-      margin-top: 0;
-      color: var(--color-secondary);
-      font-size: 1.4rem;
-      margin-bottom: 0.5em;
+    .post-card:focus-within {
+      box-shadow: 0 0 0 4px var(--color-focus);
+      border-color: var(--color-focus);
     }
-    form {
+    .post-card h2 {
+      font-size: 1.35em;
+      margin: 0 0 0.2em 0;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .post-card .meta {
+      font-size: 1em;
+      color: var(--color-secondary-dark);
+      margin-bottom: 0.5em;
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    .post-card .tags {
+      display: flex;
+      gap: 0.3em;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .tag {
+      background: var(--color-secondary);
+      color: #fff;
+      border-radius: 0.5em;
+      padding: 0.1em 0.7em;
+      font-size: 0.95em;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      display: inline-flex;
+      align-items: center;
+      border: 2px solid var(--color-secondary-dark);
+      margin-right: 0.15em;
+    }
+    .post-card .excerpt {
+      font-size: 1.1em;
+      margin: 0.4em 0 0.6em 0;
+      color: var(--color-text);
+    }
+    .post-card .read-more {
+      align-self: flex-start;
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.6em 1.4em;
+      font-size: 1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      outline: none;
+      box-shadow: 0 1px 3px rgba(59, 108, 246, 0.10);
+      margin-top: 0.3em;
+    }
+    .post-card .read-more:focus {
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+      background: var(--color-accent);
+      color: #fff;
+    }
+    /* Single Post */
+    .single-post {
+      background: linear-gradient(90deg, #fff 0%, #f6f8fa 100%);
+      border-radius: var(--border-radius);
+      padding: 2em 1.5em;
+      box-shadow: 0 4px 20px rgba(59, 108, 246, 0.09);
+      border: 2px solid var(--color-border);
+      max-width: var(--max-line-length);
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
       gap: 1.2em;
     }
-    fieldset {
+    .single-post h2 {
+      font-size: 1.5em;
+      margin: 0 0 0.3em 0;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .single-post .meta {
+      font-size: 1em;
+      color: var(--color-secondary-dark);
+      margin-bottom: 0.7em;
+      display: flex;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    .single-post .tags {
+      display: flex;
+      gap: 0.3em;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .single-post .content {
+      font-size: 1.13em;
+      color: var(--color-text);
+      margin-bottom: 0.6em;
+      line-height: var(--line-height);
+      word-break: break-word;
+    }
+    .single-post .post-image {
+      width: 100%;
+      max-width: 420px;
+      border-radius: var(--border-radius);
+      margin: 1em 0;
+      border: 3px solid var(--color-secondary);
+      box-shadow: 0 2px 8px rgba(50, 198, 154, 0.11);
+      display: block;
+    }
+    /* Comments Section */
+    .comments-section {
+      margin-top: 2em;
+      background: #f1f8f6;
+      border-radius: var(--border-radius);
+      padding: 1.5em 1em;
+      border: 2px solid var(--color-secondary);
+      box-shadow: 0 2px 8px rgba(50, 198, 154, 0.10);
+      max-width: 100%;
+    }
+    .comments-section h3 {
+      font-size: 1.15em;
+      margin: 0 0 1em 0;
+      color: var(--color-secondary-dark);
+      font-weight: 700;
+    }
+    .comments-list {
+      list-style: none;
+      margin: 0 0 1.2em 0;
+      padding: 0;
+      max-width: 100%;
+    }
+    .comments-list li {
+      margin-bottom: 1.1em;
+      padding-bottom: 0.8em;
+      border-bottom: 1px dashed var(--color-border);
+      max-width: 100%;
+    }
+    .comments-list li:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .comment-author {
+      font-weight: 600;
+      color: var(--color-primary-dark);
+      font-size: 1em;
+    }
+    .comment-date {
+      font-size: 0.98em;
+      color: var(--color-secondary-dark);
+      margin-left: 0.8em;
+    }
+    .comment-text {
+      margin: 0.4em 0 0 0;
+      font-size: 1.07em;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+    /* Comment Form */
+    .comment-form {
+      margin-top: 1.2em;
+      background: #fff;
+      border-radius: var(--border-radius);
+      padding: 1.2em 1em 1em 1em;
+      border: 2px solid var(--color-primary);
+      box-shadow: 0 2px 8px rgba(59, 108, 246, 0.06);
+      max-width: 100%;
+    }
+    .comment-form fieldset {
       border: none;
       padding: 0;
       margin: 0;
-      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
     }
-    legend {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--color-primary);
-      margin-bottom: 0.7em;
-      padding-left: 0.2em;
+    .comment-form legend {
+      font-size: 1.07em;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      margin-bottom: 0.4em;
     }
     .form-group {
       display: flex;
       flex-direction: column;
       gap: 0.25em;
-      margin-bottom: 0.4em;
       position: relative;
     }
-    label {
+    .form-group label {
       font-weight: 600;
-      color: var(--color-fg);
-      margin-bottom: 0.05em;
-      letter-spacing: 0.02em;
-      cursor: pointer;
-    }
-    .required-indicator {
-      color: var(--color-required);
-      margin-left: 0.25em;
-      font-weight: bold;
-      font-size: 1.1em;
-      vertical-align: middle;
-    }
-    input[type="text"], input[type="email"], input[type="password"], input[type="tel"] {
-      font-size: 1.08em;
-      padding: 0.75em 1em;
-      border-radius: 8px;
-      border: 2px solid var(--color-border);
-      background: var(--color-input-bg);
-      color: var(--color-fg);
-      outline: none;
-      box-shadow: none;
-      transition: border 0.15s, box-shadow 0.15s;
-      min-width: 0;
-      width: 100%;
-      line-height: 1.4;
-      margin-bottom: 0.05em;
-      box-sizing: border-box;
-      min-height: 44px;
-    }
-    input:focus {
-      border: 2px solid var(--color-focus);
-      box-shadow: 0 0 0 3px var(--color-highlight);
-      outline: none;
-    }
-    input[aria-invalid="true"] {
-      border-color: var(--color-error);
-      background: #fff0f2;
-      color: var(--color-error);
-    }
-    input[aria-invalid="false"]:not(:focus):not(:disabled) {
-      border-color: var(--color-valid);
-      background: #f0fff4;
-      color: var(--color-success);
-    }
-    input:disabled {
-      background: var(--color-input-disabled);
-      color: #888;
-      cursor: not-allowed;
-      border-style: dashed;
-    }
-    .input-help {
-      font-size: 0.99em;
-      color: var(--color-info);
-      margin-top: 0.12em;
-      background: var(--color-help-bg);
-      border-left: 4px solid var(--color-help-border);
-      padding: 0.2em 0.7em;
-      border-radius: 6px;
+      color: var(--color-primary-dark);
       margin-bottom: 0.1em;
+      font-size: 1em;
+      line-height: 1.3;
+    }
+    .form-group input,
+    .form-group textarea {
+      font-size: 1em;
+      padding: 0.7em 1em;
+      border-radius: var(--border-radius);
+      border: 2px solid var(--color-border);
+      background: #f6f8fa;
+      color: var(--color-text);
+      outline: none;
+      transition: border var(--transition-fast), box-shadow var(--transition-fast);
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      max-width: 100%;
+      resize: vertical;
+      line-height: 1.5;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--color-focus);
+      box-shadow: 0 0 0 4px var(--color-focus);
+      outline: none;
+    }
+    .form-group input[aria-invalid="true"],
+    .form-group textarea[aria-invalid="true"] {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 4px var(--color-error);
+    }
+    .form-group .error-message {
+      color: var(--color-error);
+      font-size: 0.98em;
+      margin-top: 0.2em;
+      font-weight: 500;
+      line-height: 1.3;
       max-width: 90%;
     }
-    .error-message, .valid-message {
-      font-size: 1em;
+    .form-group .help-text {
+      color: var(--color-secondary-dark);
+      font-size: 0.97em;
       margin-top: 0.1em;
-      margin-bottom: 0.1em;
-      display: flex;
-      align-items: center;
-      gap: 0.4em;
-      min-height: 1.3em;
-      line-height: 1.4;
-      padding-left: 0.3em;
+      line-height: 1.3;
+      max-width: 90%;
     }
-    .error-message {
-      color: var(--color-error);
-      background: #fff0f2;
-      border-left: 4px solid var(--color-error);
-      border-radius: 6px;
-      font-weight: 600;
-    }
-    .valid-message {
-      color: var(--color-valid);
-      background: #f0fff4;
-      border-left: 4px solid var(--color-valid);
-      border-radius: 6px;
-      font-weight: 600;
-    }
-    .error-icon,
-    .valid-icon {
+    .required-indicator {
+      color: var(--color-accent-dark);
+      margin-left: 0.15em;
       font-size: 1.15em;
-      display: inline-block;
-      width: 1.2em;
-      height: 1.2em;
       vertical-align: middle;
-      line-height: 1;
     }
-    .error-icon {
-      color: var(--color-error);
-    }
-    .valid-icon {
-      color: var(--color-valid);
-    }
-    /* Submission Button */
-    .form-actions {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 1.2em;
-      margin-top: 0.7em;
-    }
-    button[type="submit"] {
+    .comment-form button[type="submit"] {
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.7em 2em;
       font-size: 1.1em;
       font-weight: 700;
-      background: linear-gradient(90deg, var(--color-primary) 60%, var(--color-secondary) 100%);
-      color: var(--color-bg);
-      border: none;
-      border-radius: 10px;
-      padding: 0.9em 2.2em;
-      box-shadow: 0 2px 8px var(--color-shadow);
       cursor: pointer;
-      min-width: 44px;
-      min-height: 44px;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
       outline: none;
-      transition: background 0.2s, box-shadow 0.2s, color 0.2s;
-      position: relative;
-      z-index: 1;
-      letter-spacing: 0.03em;
+      margin-top: 0.5em;
+      box-shadow: 0 1px 4px rgba(59, 108, 246, 0.10);
     }
-    button[type="submit"]:hover, button[type="submit"]:focus {
-      background: linear-gradient(90deg, var(--color-secondary) 60%, var(--color-primary) 100%);
-      color: var(--color-bg);
-      outline: 3px solid var(--color-focus);
-      outline-offset: 2px;
-    }
-    button[disabled] {
-      opacity: 0.7;
-      background: #b0b0b0;
+    .comment-form button[type="submit"]:focus {
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+      background: var(--color-accent);
       color: #fff;
-      cursor: not-allowed;
-      box-shadow: none;
     }
-    /* Submission Indicator */
-    .submission-indicator {
-      display: flex;
-      align-items: center;
-      gap: 0.7em;
-      font-size: 1.08em;
-      color: var(--color-status);
-      min-height: 1.7em;
-      margin-top: 0.4em;
-    }
-    .spinner {
-      display: inline-block;
-      width: 1.4em;
-      height: 1.4em;
-      border: 3px solid var(--color-accent);
-      border-top: 3px solid var(--color-status);
-      border-radius: 50%;
-      animation: spin 1.2s linear infinite;
-      margin-right: 0.4em;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .spinner {
-        animation: none;
-      }
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    /* Submission Success */
-    .submission-success {
+    /* Status messages */
+    .status-message {
+      margin-top: 1em;
+      font-size: 1.07em;
+      font-weight: 600;
       color: var(--color-success);
+      background: #e7fbe7;
+      border-radius: var(--border-radius);
+      padding: 0.6em 1em;
+      border: 2px solid var(--color-success);
+      box-shadow: 0 1px 3px rgba(43, 138, 62, 0.09);
+      max-width: 100%;
+    }
+    .status-message[role="alert"] {
+      color: var(--color-error);
+      background: #fbe7e7;
+      border: 2px solid var(--color-error);
+      box-shadow: 0 1px 3px rgba(201, 42, 42, 0.09);
+    }
+    /* Search Bar */
+    .search-section {
+      margin-bottom: 2em;
+      background: #f0f4ff;
+      border-radius: var(--border-radius);
+      padding: 1.5em 1em 1em 1em;
+      border: 2px solid var(--color-primary);
+      box-shadow: 0 2px 8px rgba(59, 108, 246, 0.08);
+      max-width: 100%;
+    }
+    .search-section h2 {
       font-size: 1.13em;
       font-weight: 700;
-      background: #f0fff4;
-      border-left: 5px solid var(--color-success);
-      border-radius: 8px;
-      padding: 0.7em 1em;
-      margin-top: 1em;
+      color: var(--color-primary-dark);
+      margin-bottom: 0.7em;
+    }
+    .search-form {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 0.7em;
+      max-width: 100%;
     }
-    .success-icon {
-      font-size: 1.5em;
-      color: var(--color-success);
+    .search-form label {
+      font-weight: 600;
+      color: var(--color-primary-dark);
+      font-size: 1em;
     }
-    /* Responsive Enhancements */
-    @media (max-width: 700px) {
-      main {
-        padding: 0.4rem 0.1rem;
+    .search-form input[type="search"] {
+      font-size: 1em;
+      padding: 0.7em 1em;
+      border-radius: var(--border-radius);
+      border: 2px solid var(--color-border);
+      background: #fff;
+      color: var(--color-text);
+      outline: none;
+      transition: border var(--transition-fast), box-shadow var(--transition-fast);
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      max-width: 100%;
+    }
+    .search-form input[type="search"]:focus {
+      border-color: var(--color-focus);
+      box-shadow: 0 0 0 4px var(--color-focus);
+    }
+    .search-form button[type="submit"] {
+      background: var(--color-secondary);
+      color: #fff;
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.7em 2em;
+      font-size: 1.05em;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background var(--transition-fast), color var(--transition-fast);
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      outline: none;
+      margin-top: 0.2em;
+      box-shadow: 0 1px 4px rgba(50, 198, 154, 0.09);
+    }
+    .search-form button[type="submit"]:focus {
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+      background: var(--color-accent);
+      color: #fff;
+    }
+    /* Sidebar */
+    .sidebar-section {
+      margin-bottom: 2em;
+    }
+    .sidebar-section h2 {
+      font-size: 1.07em;
+      font-weight: 700;
+      color: var(--color-primary-dark);
+      margin-bottom: 0.5em;
+    }
+    .sidebar-section ul,
+    .sidebar-section ol {
+      padding-left: 1.2em;
+      margin: 0 0 0.7em 0;
+    }
+    .sidebar-section li {
+      margin-bottom: 0.4em;
+      font-size: 1em;
+      color: var(--color-secondary-dark);
+    }
+    .sidebar-section a {
+      color: var(--color-primary-dark);
+      text-decoration: underline;
+      font-weight: 500;
+      border-radius: var(--border-radius);
+      padding: 0.15em 0.5em;
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      outline: none;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+    .sidebar-section a:focus {
+      background: var(--color-accent);
+      color: #fff;
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+    /* Color Controls */
+    .color-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7em;
+      margin-top: 1.5em;
+      margin-bottom: 1.5em;
+    }
+    .color-controls label {
+      font-weight: 600;
+      color: var(--color-primary-dark);
+      font-size: 1em;
+      margin-bottom: 0.2em;
+    }
+    .color-controls input[type="color"] {
+      width: 48px;
+      height: 48px;
+      border: 2px solid var(--color-border);
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      outline: none;
+      margin-right: 0.5em;
+      min-width: 44px;
+      min-height: 44px;
+      vertical-align: middle;
+    }
+    .color-controls input[type="color"]:focus {
+      border-color: var(--color-focus);
+      box-shadow: 0 0 0 4px var(--color-focus);
+    }
+    /* Footer */
+    footer {
+      background: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+      color: #fff;
+      padding: 2em 1em 1.5em 1em;
+      text-align: center;
+      border-top: 3px solid var(--color-border);
+      font-size: 1em;
+      letter-spacing: 0.02em;
+      margin-top: auto;
+    }
+    footer nav {
+      margin-bottom: 1em;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: underline;
+      font-weight: 500;
+      border-radius: var(--border-radius);
+      padding: 0.15em 0.5em;
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      outline: none;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+    footer a:focus {
+      background: var(--color-focus);
+      color: var(--color-text);
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+    /* Focus indicators for all interactive elements */
+    a:focus, button:focus, input:focus, textarea:focus, select:focus {
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
+      z-index: 10;
+    }
+    /* Line spacing and paragraph spacing */
+    p, ul, ol, li, .content, .excerpt, .comment-text {
+      line-height: var(--line-spacing);
+      margin-bottom: 0.75em;
+      max-width: var(--max-line-length);
+      text-align: left;
+    }
+    p {
+      margin-bottom: var(--paragraph-spacing);
+    }
+    /* Misc */
+    [hidden] {
+      display: none !important;
+    }
+    /* Enhanced touch targets */
+    button, a, input[type="button"], input[type="submit"] {
+      min-width: var(--min-target-size);
+      min-height: var(--min-target-size);
+      touch-action: manipulation;
+    }
+    /* Responsive text resizing */
+    html {
+      font-size: 100%;
+    }
+    @media (max-width: 400px) {
+      html {
+        font-size: 90%;
       }
-      aside {
-        min-width: 0;
-        max-width: 100%;
-      }
-      section[aria-labelledby="form-title"] {
-        min-width: 0;
-        max-width: 100%;
-      }
     }
-    /* Enhanced Focus Indicator for All Interactive Elements */
-    a:focus, button:focus, input:focus, select:focus, textarea:focus {
-      outline: 3px solid var(--color-focus) !important;
-      outline-offset: 2px !important;
-      box-shadow: 0 0 0 4px var(--color-highlight);
-      background: #fffbe6;
-      color: var(--color-fg);
-      z-index: 2;
-    }
-    /* Utility for visually-hidden (for screen readers only) */
+    /* Utility for visually-hidden (for screen reader text) */
     .sr-only {
       position: absolute !important;
       width: 1px !important;
@@ -473,509 +872,807 @@
       padding: 0 !important;
       margin: -1px !important;
       overflow: hidden !important;
-      clip: rect(0, 0, 0, 0) !important;
-      border: 0 !important;
+      clip: rect(0,0,0,0) !important;
       white-space: nowrap !important;
+      border: 0 !important;
     }
-    /* User-selectable colors control */
-    .color-controls {
-      display: flex;
-      gap: 1.2em;
-      align-items: center;
-      margin: 0.8em 0 0.2em 0;
-      font-size: 1em;
-      flex-wrap: wrap;
-    }
-    .color-controls label {
-      font-weight: 600;
-      color: var(--color-fg);
-      margin-right: 0.4em;
-    }
-    .color-swatch {
-      width: 36px;
-      height: 36px;
-      border-radius: 6px;
-      border: 2px solid var(--color-border);
-      cursor: pointer;
-      margin-right: 0.5em;
-      box-shadow: 0 2px 4px var(--color-shadow);
+    /* Help icon */
+    .help-icon {
       display: inline-block;
+      width: 1.2em;
+      height: 1.2em;
+      border-radius: 50%;
+      background: var(--color-accent);
+      color: #fff;
+      font-size: 1em;
+      text-align: center;
+      line-height: 1.2em;
+      margin-left: 0.2em;
+      cursor: pointer;
+      font-weight: bold;
       vertical-align: middle;
+      border: 2px solid var(--color-accent-dark);
       outline: none;
     }
-    .color-swatch:focus {
-      outline: 3px solid var(--color-focus);
-      outline-offset: 2px;
+    .help-icon:focus {
+      background: var(--color-focus);
+      color: var(--color-text);
+      outline: var(--focus-outline-width) solid var(--color-focus);
+      outline-offset: var(--focus-outline-offset);
     }
-    /* Table for Sitemap */
-    .sitemap-table {
-      width: 100%;
-      border-collapse: collapse;
+    .help-tooltip {
+      display: none;
+      position: absolute;
+      left: 110%;
+      top: 0;
+      z-index: 20;
+      background: #fff;
+      color: var(--color-text);
+      border: 2px solid var(--color-accent-dark);
+      border-radius: var(--border-radius);
+      padding: 0.6em 1em;
+      min-width: 220px;
+      max-width: 350px;
       font-size: 1em;
-      margin-top: 1em;
+      line-height: 1.4;
+      box-shadow: 0 2px 8px rgba(246, 59, 108, 0.10);
     }
-    .sitemap-table th, .sitemap-table td {
-      border: 1px solid var(--color-border);
-      padding: 0.6em 0.8em;
-      text-align: left;
-      background: var(--color-form-bg);
-      color: var(--color-fg);
+    .help-icon:focus + .help-tooltip,
+    .help-icon:hover + .help-tooltip {
+      display: block;
     }
-    .sitemap-table th {
-      background: var(--color-primary);
-      color: var(--color-bg);
-      font-weight: 700;
+    /* Status region for dynamic updates */
+    #aria-status {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
     }
-    .sitemap-table tr:focus-within {
-      outline: 3px solid var(--color-focus);
-      outline-offset: 2px;
+    /* Animation controls */
+    .motion-toggle {
+      margin-top: 1.2em;
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      font-size: 1em;
+      color: var(--color-primary-dark);
     }
-    /* Responsive Table */
-    @media (max-width: 700px) {
-      .sitemap-table, .sitemap-table th, .sitemap-table td {
-        font-size: 0.96em;
-      }
+    .motion-toggle input[type="checkbox"] {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      min-height: 28px;
+      margin-right: 0.3em;
+      accent-color: var(--color-primary);
+    }
+    .motion-toggle label {
+      font-weight: 600;
+      color: var(--color-primary-dark);
+    }
+    /* Animation for micro-interactions (e.g., comment success) */
+    .fade-in {
+      animation: fadeIn2 0.5s;
+    }
+    @keyframes fadeIn2 {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <a href="#main-content" class="skip-link" tabindex="0">Skip to main content</a>
+  <a href="#main-content" class="skip-link" id="skip-link">Skip to main content</a>
   <header>
-    <h1 id="site-title">Accessible Interactive Registration Form</h1>
-    <p>
-      <strong>Demonstration of a colorful, fully accessible form with real-time validation (WCAG 2.2 AAA compliant).</strong>
-    </p>
+    <h1 id="site-title">Accessibly Yours: A Personal Blog</h1>
+    <p>Your colorful, accessible, and interactive blog for everyone. <span lang="es" title="Spanish">¡Bienvenidos!</span></p>
   </header>
-  <nav aria-label="Breadcrumb">
-    <ol class="breadcrumb" aria-label="Breadcrumb">
-      <li><a href="#site-title">Home</a></li>
-      <li><a href="#form-title">Forms</a></li>
-      <li class="current" aria-current="page">Registration</li>
+  <nav aria-label="Main navigation" id="main-nav">
+    <ul>
+      <li>
+        <a href="#home" id="nav-home" aria-current="page">Home</a>
+      </li>
+      <li>
+        <button class="submenu-toggle" id="nav-categories" aria-haspopup="true" aria-expanded="false" aria-controls="categories-menu">
+          Categories
+        </button>
+        <ul class="submenu" id="categories-menu" aria-label="Categories" aria-hidden="true">
+          <li><a href="#category-accessibility">Accessibility</a></li>
+          <li><a href="#category-webdev">Web Development</a></li>
+          <li><a href="#category-life">Life</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#about" id="nav-about">About</a>
+      </li>
+      <li>
+        <a href="#contact" id="nav-contact">Contact</a>
+      </li>
+      <li>
+        <a href="#sitemap" id="nav-sitemap">Sitemap</a>
+      </li>
+    </ul>
+  </nav>
+  <nav aria-label="Breadcrumb" id="breadcrumb-nav">
+    <ol>
+      <li><a href="#home" id="breadcrumb-home">Home</a></li>
+      <li id="breadcrumb-current" aria-current="page">Blog</li>
     </ol>
   </nav>
-  <!-- Multiple ways to locate content: navigation, search, sitemap below -->
-  <nav aria-label="Main navigation" style="display:none;">
-    <!-- Example: Could contain full site nav if this were a multi-page site -->
-  </nav>
-  <div class="color-controls" aria-label="Color scheme controls">
-    <label for="fg-color-picker">Text color:</label>
-    <input id="fg-color-picker" type="color" aria-label="Select text color" class="color-swatch" value="#10102b" tabindex="0">
-    <label for="bg-color-picker">Background color:</label>
-    <input id="bg-color-picker" type="color" aria-label="Select background color" class="color-swatch" value="#ffffff" tabindex="0">
-  </div>
-  <main id="main-content" tabindex="-1">
-    <aside aria-labelledby="help-title">
-      <h2 id="help-title">Form Guidance &amp; Help</h2>
-      <p>
-        <strong>How to complete the form:</strong>
-      </p>
-      <ul>
-        <li>
-          All <span class="required-indicator" aria-hidden="true">*</span> fields are <strong>required</strong>.
-        </li>
-        <li>
-          <strong>Name:</strong> Enter your full name (letters, spaces, and hyphens only).
-        </li>
-        <li>
-          <strong>Email:</strong> Use a valid email address (e.g., <em>alex@example.com</em>).
-        </li>
-        <li>
-          <strong>Password:</strong> Minimum 8 characters, including a number, uppercase, lowercase, and symbol.
-        </li>
-        <li>
-          <strong>Phone:</strong> Enter a valid phone number. Format: <em>(123) 456-7890</em> or <em>+1 234-567-8901</em>.
-        </li>
-      </ul>
-      <p>
-        <strong>Accessibility Features:</strong>
-        <ul>
-          <li>Enhanced color contrast and large touch targets</li>
-          <li>Keyboard and screen reader support</li>
-          <li>Clear error messages and validation feedback</li>
-        </ul>
-      </p>
-      <p>
-        <strong>Abbreviations:</strong> <abbr title="World Wide Web Consortium">W3C</abbr>, <abbr title="Web Content Accessibility Guidelines">WCAG</abbr>
-      </p>
-      <p>
-        <strong>Reading Level:</strong> This help is written at a lower secondary education level. If you need a simpler explanation, <a href="#simple-help" id="simple-help-link">click here for a simplified version</a>.
-      </p>
-      <div id="simple-help" class="sr-only" aria-live="polite">
-        <strong>Simplified Help:</strong>
-        <ul>
-          <li>Fill in all the boxes with your information.</li>
-          <li>Use your real email and phone number.</li>
-          <li>Pick a strong password you can remember.</li>
-        </ul>
-      </div>
-    </aside>
-    <section aria-labelledby="form-title">
-      <div class="form-wrapper" role="form" aria-labelledby="form-title">
-        <h2 id="form-title">Registration Form</h2>
-        <form id="registration-form" novalidate autocomplete="on" aria-describedby="form-help" spellcheck="false">
-          <fieldset>
-            <legend>Personal Information</legend>
-            <div class="form-group">
-              <label for="name" id="label-name">
-                Name <span class="required-indicator" aria-hidden="true">*</span>
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                aria-required="true"
-                aria-describedby="name-help name-error"
-                aria-invalid="false"
-                autocomplete="name"
-                minlength="2"
-                maxlength="50"
-                pattern="^[A-Za-zÀ-ÿ' -]+$"
-                inputmode="text"
-                spellcheck="false"
-              >
-              <div id="name-help" class="input-help">
-                Enter your full name (letters, spaces, hyphens only).
-              </div>
-              <div id="name-error" class="error-message" aria-live="polite"></div>
-            </div>
-            <div class="form-group">
-              <label for="email" id="label-email">
-                Email <span class="required-indicator" aria-hidden="true">*</span>
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                aria-required="true"
-                aria-describedby="email-help email-error"
-                aria-invalid="false"
-                autocomplete="email"
-                inputmode="email"
-                spellcheck="false"
-              >
-              <div id="email-help" class="input-help">
-                Example: <kbd>alex@example.com</kbd>
-              </div>
-              <div id="email-error" class="error-message" aria-live="polite"></div>
-            </div>
-            <div class="form-group">
-              <label for="password" id="label-password">
-                Password <span class="required-indicator" aria-hidden="true">*</span>
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                aria-required="true"
-                aria-describedby="password-help password-error"
-                aria-invalid="false"
-                autocomplete="new-password"
-                minlength="8"
-                maxlength="64"
-                inputmode="text"
-                spellcheck="false"
-              >
-              <div id="password-help" class="input-help">
-                Minimum 8 characters, at least one uppercase, one lowercase, one number, and one symbol.
-              </div>
-              <div id="password-error" class="error-message" aria-live="polite"></div>
-            </div>
-            <div class="form-group">
-              <label for="phone" id="label-phone">
-                Phone Number <span class="required-indicator" aria-hidden="true">*</span>
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="tel"
-                required
-                aria-required="true"
-                aria-describedby="phone-help phone-error"
-                aria-invalid="false"
-                autocomplete="tel"
-                inputmode="tel"
-                minlength="8"
-                maxlength="20"
-                pattern="^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4,6}$"
-                spellcheck="false"
-              >
-              <div id="phone-help" class="input-help">
-                Format: <kbd>(123) 456-7890</kbd> or <kbd>+1 234-567-8901</kbd>
-              </div>
-              <div id="phone-error" class="error-message" aria-live="polite"></div>
-            </div>
-          </fieldset>
-          <div class="form-actions">
-            <button type="submit" id="submit-btn" aria-label="Submit registration form">
-              Register
-            </button>
-            <div id="submission-indicator" class="submission-indicator" aria-live="polite" role="status"></div>
-          </div>
+  <div class="container">
+    <main id="main-content" tabindex="-1">
+      <!-- Search Section -->
+      <section class="search-section" aria-labelledby="search-section-title">
+        <h2 id="search-section-title">Search Articles</h2>
+        <form class="search-form" id="search-form" autocomplete="off" role="search" aria-describedby="search-help">
+          <label for="search-input">Search blog posts by title or content:</label>
+          <input type="search" id="search-input" name="search" aria-describedby="search-help" aria-label="Search blog posts" maxlength="80" required aria-required="true" />
+          <span id="search-help" class="help-text">Type keywords and press Enter or tap "Search".</span>
+          <button type="submit" id="search-btn">Search</button>
         </form>
-        <div id="submission-success" class="submission-success" role="status" aria-live="polite" style="display:none;">
-          <span class="success-icon" aria-hidden="true">✔️</span>
-          Registration successful! Thank you for signing up.
+        <div id="search-status" role="status" aria-live="polite" class="status-message" hidden></div>
+      </section>
+      <!-- Blog Posts List (Dynamic) -->
+      <section id="posts-section" aria-labelledby="posts-section-title">
+        <h2 id="posts-section-title">Latest Blog Posts</h2>
+        <ul class="post-list" id="post-list" aria-live="polite" aria-relevant="additions removals"></ul>
+        <div id="no-results" role="status" aria-live="polite" class="status-message" hidden>
+          No posts match your search. Try different keywords or <a href="#home">view all posts</a>.
         </div>
-      </div>
-      <div id="form-help" class="input-help" style="margin-top:1.2em;">
-        <strong>Need help?</strong> <a href="#help-title">See the help section on the left</a>.
-      </div>
-      <nav aria-label="Page Sitemap" style="margin-top:2.5em;">
-        <h3 id="sitemap-title">Sitemap</h3>
-        <table class="sitemap-table" aria-describedby="sitemap-desc">
-          <caption id="sitemap-desc" class="sr-only">Table listing sections and navigation for this page.</caption>
-          <thead>
-            <tr>
-              <th scope="col">Section</th>
-              <th scope="col">Purpose</th>
-              <th scope="col">Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Home</td>
-              <td>Go to top of page</td>
-              <td><a href="#site-title">Home</a></td>
-            </tr>
-            <tr>
-              <td>Form Help</td>
-              <td>Instructions and guidance</td>
-              <td><a href="#help-title">Help</a></td>
-            </tr>
-            <tr>
-              <td>Registration Form</td>
-              <td>Fill out and submit form</td>
-              <td><a href="#form-title">Form</a></td>
-            </tr>
-            <tr>
-              <td>Sitemap</td>
-              <td>Page navigation overview</td>
-              <td><a href="#sitemap-title">Sitemap</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </nav>
-    </section>
-  </main>
+      </section>
+      <!-- Single Post View (Dynamic) -->
+      <section id="single-post-section" aria-labelledby="single-post-title" hidden>
+        <!-- Populated by JS -->
+      </section>
+    </main>
+    <aside aria-labelledby="sidebar-title">
+      <h2 id="sidebar-title" class="sr-only">Sidebar</h2>
+      <section class="sidebar-section" aria-labelledby="recent-posts-title">
+        <h2 id="recent-posts-title">Recent Posts</h2>
+        <ul id="recent-posts-list"></ul>
+      </section>
+      <section class="sidebar-section" aria-labelledby="categories-title">
+        <h2 id="categories-title">Categories</h2>
+        <ul>
+          <li><a href="#category-accessibility">Accessibility</a></li>
+          <li><a href="#category-webdev">Web Development</a></li>
+          <li><a href="#category-life">Life</a></li>
+        </ul>
+      </section>
+      <section class="sidebar-section" aria-labelledby="sitemap-title">
+        <h2 id="sitemap-title">Sitemap</h2>
+        <ol>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#sitemap">Sitemap</a></li>
+        </ol>
+      </section>
+      <section class="sidebar-section" aria-labelledby="color-controls-title">
+        <h2 id="color-controls-title">Customize Colors</h2>
+        <form class="color-controls" id="color-controls-form" autocomplete="off">
+          <label for="color-fg">Text Color:</label>
+          <input type="color" id="color-fg" name="color-fg" value="#1a1a2e" aria-label="Select text color" />
+          <label for="color-bg">Background Color:</label>
+          <input type="color" id="color-bg" name="color-bg" value="#f6f8fa" aria-label="Select background color" />
+        </form>
+      </section>
+      <section class="sidebar-section" aria-labelledby="motion-controls-title">
+        <h2 id="motion-controls-title">Motion &amp; Animation</h2>
+        <div class="motion-toggle">
+          <input type="checkbox" id="motion-toggle-checkbox" aria-checked="false" aria-label="Disable animations" />
+          <label for="motion-toggle-checkbox">Disable Animations</label>
+          <button class="help-icon" tabindex="0" aria-label="Help: Motion controls" aria-describedby="motion-help">?</button>
+          <span class="help-tooltip" id="motion-help" role="tooltip">
+            If animations or motion effects are uncomfortable, you can disable them here. This setting respects your system's "prefers-reduced-motion" preference as well.
+          </span>
+        </div>
+      </section>
+    </aside>
+  </div>
   <footer>
-    <section aria-labelledby="footer-title" style="background: linear-gradient(90deg, var(--color-secondary) 60%, var(--color-primary) 100%); color: var(--color-bg); padding: 1.5rem 0 1.2rem 0; text-align: center;">
-      <h2 id="footer-title" class="sr-only">Footer</h2>
-      <p>
-        <strong>Accessible Registration Form Example</strong> &mdash; <span lang="fr" title="French">Exemple de formulaire accessible</span>
-      </p>
-      <p>
-        <a href="#site-title" style="color: var(--color-accent); text-decoration: underline;">Back to top</a>
-        &nbsp;|&nbsp;
-        <a href="#form-title" style="color: var(--color-accent); text-decoration: underline;">Go to form</a>
-      </p>
-      <p style="font-size: 0.98em;">
-        <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 AAA Demonstration &copy; 2024
-      </p>
-    </section>
+    <nav aria-label="Footer navigation">
+      <a href="#home">Home</a> |
+      <a href="#about">About</a> |
+      <a href="#contact">Contact</a> |
+      <a href="#sitemap">Sitemap</a>
+    </nav>
+    <p>
+      <strong>Accessibly Yours</strong> &mdash; A blog designed for everyone.<br>
+      <span lang="fr" title="French">Conçu pour tous.</span>
+    </p>
+    <p>
+      <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 AAA Compliant.
+      <span class="sr-only">This site meets the highest web accessibility standards.</span>
+    </p>
   </footer>
+  <!-- ARIA Live Status for JS -->
+  <div id="aria-status" role="status" aria-live="polite" aria-atomic="true"></div>
   <script>
-    // Utility: Color picker for user-selectable foreground/background
-    function setColorScheme(fg, bg) {
-      document.documentElement.style.setProperty('--color-fg', fg);
-      document.documentElement.style.setProperty('--color-bg', bg);
+    // --- Accessibility & State ---
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let motionDisabled = prefersReducedMotion;
+    // Utility: Announce status to screen readers
+    function announceStatus(message) {
+      const status = document.getElementById('aria-status');
+      status.textContent = '';
+      setTimeout(() => { status.textContent = message; }, 10);
     }
-    const fgPicker = document.getElementById('fg-color-picker');
-    const bgPicker = document.getElementById('bg-color-picker');
-    fgPicker.addEventListener('input', function() {
-      setColorScheme(fgPicker.value, bgPicker.value);
-    });
-    bgPicker.addEventListener('input', function() {
-      setColorScheme(fgPicker.value, bgPicker.value);
-    });
-
-    // Focus management for skip link
-    document.querySelector('.skip-link').addEventListener('click', function(e) {
-      document.getElementById('main-content').focus();
-    });
-
-    // Simple help toggle for cognitive accessibility
-    document.getElementById('simple-help-link').addEventListener('click', function(e) {
-      e.preventDefault();
-      const simpleHelp = document.getElementById('simple-help');
-      if (simpleHelp.classList.contains('sr-only')) {
-        simpleHelp.classList.remove('sr-only');
-        simpleHelp.setAttribute('tabindex', '-1');
-        simpleHelp.focus();
-      } else {
-        simpleHelp.classList.add('sr-only');
+    // --- Blog Data (Sample) ---
+    const posts = [
+      {
+        id: '1',
+        title: 'Making the Web Truly Accessible',
+        date: '2024-06-20',
+        author: 'Alex Lee',
+        category: 'Accessibility',
+        tags: ['Accessibility', 'WCAG', 'Inclusive'],
+        excerpt: 'Discover how to make your websites accessible to all users, including those with disabilities. We explore practical steps for AAA compliance.',
+        content: `<p>Web accessibility ensures everyone, including people with disabilities, can use the web. <strong>WCAG 2.2 AAA</strong> is the gold standard for accessibility.</p>
+        <p>To achieve AAA compliance, you must:</p>
+        <ul>
+          <li>Use semantic HTML for structure.</li>
+          <li>Provide text alternatives for all images and media.</li>
+          <li>Ensure keyboard and screen reader navigation.</li>
+          <li>Meet enhanced color contrast ratios.</li>
+        </ul>
+        <p>For more, see the <a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" rel="noopener" aria-label="Read WCAG guidelines (opens in new tab)">WCAG guidelines</a>.</p>`,
+        image: {
+          src: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80',
+          alt: 'A diverse group of people collaborating on laptops and tablets at a bright table, symbolizing web accessibility and inclusion.'
+        },
+        comments: [
+          {
+            name: 'Jamie',
+            email: 'jamie@example.com',
+            date: '2024-06-21T10:20:00Z',
+            text: 'This is an excellent summary! Thanks for emphasizing the importance of semantic HTML.'
+          }
+        ]
+      },
+      {
+        id: '2',
+        title: 'Colorful Design, Maximum Contrast',
+        date: '2024-06-18',
+        author: 'Taylor Kim',
+        category: 'Web Development',
+        tags: ['Design', 'Contrast', 'Color'],
+        excerpt: 'Learn how to create vibrant, colorful sites while maintaining AAA-level contrast ratios for accessibility.',
+        content: `<p>Design doesn’t have to be boring to be accessible! Use high-contrast color palettes and visual cues beyond color alone.</p>
+        <p>Tips:</p>
+        <ul>
+          <li>Check all color pairs for at least <strong>7:1 contrast</strong>.</li>
+          <li>Use icons or patterns in addition to color to convey meaning.</li>
+          <li>Test your design at 200% zoom.</li>
+        </ul>`,
+        image: {
+          src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
+          alt: 'A colorful palette of paint swatches and a contrast checker device on a designer’s desk.'
+        },
+        comments: [
+          {
+            name: 'Morgan',
+            email: 'morgan@example.com',
+            date: '2024-06-19T13:45:00Z',
+            text: 'Great reminders! Color contrast is too often overlooked.'
+          }
+        ]
+      },
+      {
+        id: '3',
+        title: 'Commenting Systems: Accessible by Design',
+        date: '2024-06-14',
+        author: 'Jordan Smith',
+        category: 'Web Development',
+        tags: ['Forms', 'Comments', 'Usability'],
+        excerpt: 'Building an accessible commenting system means more than adding labels. Learn the best practices for forms and error handling.',
+        content: `<p>Accessible forms require clear labels, error prevention, and context-sensitive help. Use <code>aria-describedby</code> for help text and error messages.</p>
+        <p>Also, make sure:</p>
+        <ul>
+          <li>Required fields are marked visually and with <code>aria-required</code>.</li>
+          <li>Error messages are specific and actionable.</li>
+          <li>Keyboard navigation is logical and predictable.</li>
+        </ul>`,
+        image: {
+          src: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80',
+          alt: 'A web developer reviewing form fields on a laptop, with a checklist for accessibility best practices.'
+        },
+        comments: []
       }
-    });
-
-    // Form validation logic
-    const form = document.getElementById('registration-form');
-    const fields = {
-      name: {
-        input: document.getElementById('name'),
-        error: document.getElementById('name-error'),
-        help: document.getElementById('name-help'),
-        validate: value => {
-          if (!value.trim()) return 'Name is required.';
-          if (value.length < 2) return 'Name must be at least 2 characters.';
-          if (!/^[A-Za-zÀ-ÿ' -]+$/.test(value)) return 'Name may only contain letters, spaces, apostrophes, or hyphens.';
-          return '';
-        }
-      },
-      email: {
-        input: document.getElementById('email'),
-        error: document.getElementById('email-error'),
-        help: document.getElementById('email-help'),
-        validate: value => {
-          if (!value.trim()) return 'Email is required.';
-          // Simple email regex, not exhaustive but accessible
-          if (!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(value)) return 'Enter a valid email address (e.g., alex@example.com).';
-          return '';
-        }
-      },
-      password: {
-        input: document.getElementById('password'),
-        error: document.getElementById('password-error'),
-        help: document.getElementById('password-help'),
-        validate: value => {
-          if (!value) return 'Password is required.';
-          if (value.length < 8) return 'Password must be at least 8 characters.';
-          if (!/[A-Z]/.test(value)) return 'Include at least one uppercase letter.';
-          if (!/[a-z]/.test(value)) return 'Include at least one lowercase letter.';
-          if (!/[0-9]/.test(value)) return 'Include at least one number.';
-          if (!/[^A-Za-z0-9]/.test(value)) return 'Include at least one symbol (e.g., !@#$%).';
-          return '';
-        }
-      },
-      phone: {
-        input: document.getElementById('phone'),
-        error: document.getElementById('phone-error'),
-        help: document.getElementById('phone-help'),
-        validate: value => {
-          if (!value.trim()) return 'Phone number is required.';
-          // Accepts (123) 456-7890, 123-456-7890, +1 234-567-8901, etc.
-          if (!/^(\+?\d{1,3}[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4,6}$/.test(value)) return 'Enter a valid phone number (e.g., (123) 456-7890).';
-          return '';
-        }
-      }
-    };
-
-    // Helper: Show error or valid message
-    function showFieldFeedback(field, errorMsg) {
-      if (errorMsg) {
-        field.input.setAttribute('aria-invalid', 'true');
-        field.error.innerHTML = `<span class="error-icon" aria-hidden="true">⚠️</span> ${errorMsg}`;
-        field.input.classList.remove('valid');
-        field.input.classList.add('invalid');
-        field.input.setAttribute('aria-describedby', field.help.id + ' ' + field.error.id);
+    ];
+    // --- State ---
+    let filteredPosts = [...posts];
+    let currentView = 'list'; // 'list' or 'single'
+    let currentPostId = null;
+    // --- Utility Functions ---
+    function escapeHTML(str) {
+      return str.replace(/[&<>"']/g, function (m) {
+        return ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;'
+        })[m];
+      });
+    }
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
+      });
+    }
+    function formatDateTime(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+    function updateBreadcrumb(post) {
+      const breadcrumb = document.getElementById('breadcrumb-nav');
+      const ol = breadcrumb.querySelector('ol');
+      ol.innerHTML = '';
+      ol.appendChild(createBreadcrumbItem('Home', '#home', 'breadcrumb-home'));
+      if (post) {
+        ol.appendChild(createBreadcrumbItem('Blog', '#posts-section', 'breadcrumb-blog'));
+        const li = document.createElement('li');
+        li.id = 'breadcrumb-current';
+        li.setAttribute('aria-current', 'page');
+        li.textContent = post.title;
+        ol.appendChild(li);
       } else {
-        field.input.setAttribute('aria-invalid', 'false');
-        field.error.innerHTML = `<span class="valid-icon" aria-hidden="true">✔️</span> Looks good.`;
-        field.input.classList.remove('invalid');
-        field.input.classList.add('valid');
-        field.input.setAttribute('aria-describedby', field.help.id + ' ' + field.error.id);
+        const li = document.createElement('li');
+        li.id = 'breadcrumb-current';
+        li.setAttribute('aria-current', 'page');
+        li.textContent = 'Blog';
+        ol.appendChild(li);
       }
     }
-
-    // Real-time validation
-    Object.values(fields).forEach(field => {
-      field.input.addEventListener('input', function() {
-        const errorMsg = field.validate(field.input.value);
-        showFieldFeedback(field, errorMsg);
+    function createBreadcrumbItem(label, href, id) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = href;
+      a.id = id;
+      a.textContent = label;
+      li.appendChild(a);
+      return li;
+    }
+    function scrollToMain() {
+      const main = document.getElementById('main-content');
+      main.focus();
+    }
+    // --- Render Functions ---
+    function renderPostList(postsToRender) {
+      currentView = 'list';
+      currentPostId = null;
+      document.getElementById('single-post-section').hidden = true;
+      document.getElementById('posts-section').hidden = false;
+      updateBreadcrumb(null);
+      const list = document.getElementById('post-list');
+      list.innerHTML = '';
+      if (!postsToRender.length) {
+        document.getElementById('no-results').hidden = false;
+        return;
+      }
+      document.getElementById('no-results').hidden = true;
+      postsToRender.forEach(post => {
+        const li = document.createElement('li');
+        li.setAttribute('tabindex', '-1');
+        li.className = 'post-list-item';
+        const card = document.createElement('article');
+        card.className = 'post-card';
+        card.setAttribute('aria-labelledby', `post-title-${post.id}`);
+        card.innerHTML = `
+          <h2 id="post-title-${post.id}">${escapeHTML(post.title)}</h2>
+          <div class="meta">
+            <span>By <span lang="en" class="author">${escapeHTML(post.author)}</span></span>
+            <span>${formatDate(post.date)}</span>
+            <span class="tags" aria-label="Tags">${post.tags.map(tag => `<span class="tag">${escapeHTML(tag)}</span>`).join(' ')}</span>
+          </div>
+          <div class="excerpt">${escapeHTML(post.excerpt)}</div>
+          <button class="read-more" aria-label="Read full post: ${escapeHTML(post.title)}" data-postid="${post.id}">Read More</button>
+        `;
+        li.appendChild(card);
+        list.appendChild(li);
       });
-      field.input.addEventListener('blur', function() {
-        const errorMsg = field.validate(field.input.value);
-        showFieldFeedback(field, errorMsg);
+      updateRecentPosts();
+    }
+    function renderSinglePost(post) {
+      currentView = 'single';
+      currentPostId = post.id;
+      document.getElementById('posts-section').hidden = true;
+      const section = document.getElementById('single-post-section');
+      section.hidden = false;
+      section.innerHTML = `
+        <article class="single-post" aria-labelledby="single-post-title">
+          <h2 id="single-post-title">${escapeHTML(post.title)}</h2>
+          <div class="meta">
+            <span>By <span lang="en" class="author">${escapeHTML(post.author)}</span></span>
+            <span>${formatDate(post.date)}</span>
+            <span class="tags" aria-label="Tags">${post.tags.map(tag => `<span class="tag">${escapeHTML(tag)}</span>`).join(' ')}</span>
+          </div>
+          <img class="post-image" src="${escapeHTML(post.image.src)}" alt="${escapeHTML(post.image.alt)}" width="420" height="240" />
+          <div class="content">${post.content}</div>
+        </article>
+        <section class="comments-section" aria-labelledby="comments-title">
+          <h3 id="comments-title">Comments</h3>
+          <ul class="comments-list" id="comments-list">
+            ${post.comments.length ? post.comments.map(comment => `
+              <li>
+                <span class="comment-author">${escapeHTML(comment.name)}</span>
+                <span class="comment-date">${formatDateTime(comment.date)}</span>
+                <div class="comment-text">${escapeHTML(comment.text)}</div>
+              </li>
+            `).join('') : `<li>No comments yet. Be the first to comment!</li>`}
+          </ul>
+          <form class="comment-form" id="comment-form" autocomplete="off" novalidate aria-labelledby="comment-form-legend">
+            <fieldset>
+              <legend id="comment-form-legend">Leave a Comment</legend>
+              <div class="form-group">
+                <label for="comment-name">Name <span class="required-indicator" aria-hidden="true">*</span></label>
+                <input type="text" id="comment-name" name="name" required aria-required="true" maxlength="40"
+                  aria-describedby="name-help" autocomplete="name" />
+                <span id="name-help" class="help-text">Enter your preferred display name.</span>
+                <span class="error-message" id="name-error" aria-live="assertive"></span>
+              </div>
+              <div class="form-group">
+                <label for="comment-email">Email <span class="required-indicator" aria-hidden="true">*</span></label>
+                <input type="email" id="comment-email" name="email" required aria-required="true" maxlength="50"
+                  aria-describedby="email-help" autocomplete="email" />
+                <span id="email-help" class="help-text">Your email will not be published.</span>
+                <span class="error-message" id="email-error" aria-live="assertive"></span>
+              </div>
+              <div class="form-group">
+                <label for="comment-text">Comment <span class="required-indicator" aria-hidden="true">*</span></label>
+                <textarea id="comment-text" name="comment" required aria-required="true" rows="4" maxlength="400"
+                  aria-describedby="comment-help" autocomplete="off"></textarea>
+                <span id="comment-help" class="help-text">Share your thoughts. Max 400 characters.</span>
+                <span class="error-message" id="comment-error" aria-live="assertive"></span>
+              </div>
+              <button type="submit" id="comment-submit">Post Comment</button>
+            </fieldset>
+            <div id="comment-status" role="status" aria-live="polite" class="status-message" hidden></div>
+          </form>
+        </section>
+      `;
+      updateBreadcrumb(post);
+      updateRecentPosts();
+      // Focus on post title for screen reader users
+      setTimeout(() => {
+        const title = document.getElementById('single-post-title');
+        if (title) title.focus();
+      }, 100);
+      // Add comment form handler
+      setupCommentForm(post.id);
+    }
+    function updateRecentPosts() {
+      const recent = document.getElementById('recent-posts-list');
+      recent.innerHTML = '';
+      posts.slice(0, 3).forEach(post => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = post.title;
+        a.setAttribute('data-postid', post.id);
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          showSinglePost(post.id);
+        });
+        li.appendChild(a);
+        recent.appendChild(li);
       });
-    });
-
-    // Enhanced keyboard accessibility for help links and color pickers
-    document.querySelectorAll('.color-swatch').forEach(swatch => {
-      swatch.addEventListener('keydown', function(e) {
+    }
+    // --- Search ---
+    function setupSearch() {
+      const form = document.getElementById('search-form');
+      const input = document.getElementById('search-input');
+      const status = document.getElementById('search-status');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const query = input.value.trim().toLowerCase();
+        if (!query) {
+          filteredPosts = [...posts];
+          renderPostList(filteredPosts);
+          status.hidden = true;
+          return;
+        }
+        filteredPosts = posts.filter(post =>
+          post.title.toLowerCase().includes(query) ||
+          post.content.toLowerCase().includes(query) ||
+          post.excerpt.toLowerCase().includes(query) ||
+          post.tags.some(tag => tag.toLowerCase().includes(query))
+        );
+        renderPostList(filteredPosts);
+        if (filteredPosts.length) {
+          status.textContent = `${filteredPosts.length} post${filteredPosts.length > 1 ? 's' : ''} found for "${query}".`;
+          status.hidden = false;
+        } else {
+          status.textContent = `No posts found for "${query}".`;
+          status.hidden = false;
+        }
+        announceStatus(status.textContent);
+      });
+    }
+    // --- Post Navigation ---
+    function setupPostNavigation() {
+      document.getElementById('post-list').addEventListener('click', function (e) {
+        if (e.target.classList.contains('read-more')) {
+          const postId = e.target.getAttribute('data-postid');
+          showSinglePost(postId);
+        }
+      });
+    }
+    function showSinglePost(postId) {
+      const post = posts.find(p => p.id === postId);
+      if (!post) return;
+      renderSinglePost(post);
+      window.location.hash = '#post-' + postId;
+    }
+    // --- Comment Form ---
+    function setupCommentForm(postId) {
+      const form = document.getElementById('comment-form');
+      if (!form) return;
+      const nameInput = document.getElementById('comment-name');
+      const emailInput = document.getElementById('comment-email');
+      const commentInput = document.getElementById('comment-text');
+      const nameError = document.getElementById('name-error');
+      const emailError = document.getElementById('email-error');
+      const commentError = document.getElementById('comment-error');
+      const status = document.getElementById('comment-status');
+      // Error prevention: Save form state
+      let formState = { name: '', email: '', comment: '' };
+      [nameInput, emailInput, commentInput].forEach(input => {
+        input.value = formState[input.name] || '';
+        input.addEventListener('input', () => {
+          formState[input.name] = input.value;
+        });
+      });
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        let valid = true;
+        // Name validation
+        if (!nameInput.value.trim()) {
+          nameInput.setAttribute('aria-invalid', 'true');
+          nameError.textContent = 'Name is required.';
+          valid = false;
+        } else if (nameInput.value.trim().length > 40) {
+          nameInput.setAttribute('aria-invalid', 'true');
+          nameError.textContent = 'Name must be under 40 characters.';
+          valid = false;
+        } else {
+          nameInput.removeAttribute('aria-invalid');
+          nameError.textContent = '';
+        }
+        // Email validation
+        if (!emailInput.value.trim()) {
+          emailInput.setAttribute('aria-invalid', 'true');
+          emailError.textContent = 'Email is required.';
+          valid = false;
+        } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emailInput.value.trim())) {
+          emailInput.setAttribute('aria-invalid', 'true');
+          emailError.textContent = 'Please enter a valid email address.';
+          valid = false;
+        } else {
+          emailInput.removeAttribute('aria-invalid');
+          emailError.textContent = '';
+        }
+        // Comment validation
+        if (!commentInput.value.trim()) {
+          commentInput.setAttribute('aria-invalid', 'true');
+          commentError.textContent = 'Comment is required.';
+          valid = false;
+        } else if (commentInput.value.trim().length > 400) {
+          commentInput.setAttribute('aria-invalid', 'true');
+          commentError.textContent = 'Comment must be under 400 characters.';
+          valid = false;
+        } else {
+          commentInput.removeAttribute('aria-invalid');
+          commentError.textContent = '';
+        }
+        if (!valid) {
+          status.textContent = 'Please correct the errors above.';
+          status.setAttribute('role', 'alert');
+          status.hidden = false;
+          announceStatus('Form submission failed. Please fix errors.');
+          return;
+        }
+        // Confirmation dialog for error prevention (AAA)
+        if (!confirm('Are you sure you want to submit this comment?')) {
+          status.textContent = 'Comment submission cancelled.';
+          status.setAttribute('role', 'status');
+          status.hidden = false;
+          announceStatus('Comment submission cancelled.');
+          return;
+        }
+        // Simulate comment save
+        const post = posts.find(p => p.id === postId);
+        const newComment = {
+          name: nameInput.value.trim(),
+          email: emailInput.value.trim(),
+          date: new Date().toISOString(),
+          text: commentInput.value.trim()
+        };
+        post.comments.push(newComment);
+        renderSinglePost(post);
+        // Clear form state
+        formState = { name: '', email: '', comment: '' };
+        status.textContent = 'Comment posted successfully!';
+        status.setAttribute('role', 'status');
+        status.hidden = false;
+        status.classList.add('fade-in');
+        announceStatus('Comment posted successfully.');
+        // Focus on status message
+        status.focus();
+        setTimeout(() => {
+          status.classList.remove('fade-in');
+        }, motionDisabled ? 0 : 700);
+      });
+      // Context-sensitive help on focus
+      [nameInput, emailInput, commentInput].forEach(input => {
+        input.addEventListener('focus', () => {
+          announceStatus(document.getElementById(input.getAttribute('aria-describedby')).textContent);
+        });
+      });
+    }
+    // --- Navigation: Dropdown & Keyboard ---
+    function setupDropdownMenus() {
+      const toggle = document.getElementById('nav-categories');
+      const menu = document.getElementById('categories-menu');
+      let submenuOpen = false;
+      function openMenu() {
+        menu.setAttribute('aria-hidden', 'false');
+        toggle.setAttribute('aria-expanded', 'true');
+        submenuOpen = true;
+        menu.querySelector('a').focus();
+      }
+      function closeMenu() {
+        menu.setAttribute('aria-hidden', 'true');
+        toggle.setAttribute('aria-expanded', 'false');
+        submenuOpen = false;
+        toggle.focus();
+      }
+      toggle.addEventListener('click', function (e) {
+        e.preventDefault();
+        submenuOpen ? closeMenu() : openMenu();
+      });
+      toggle.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          swatch.click();
+          submenuOpen ? closeMenu() : openMenu();
+        }
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          openMenu();
         }
       });
-    });
-
-    // Submission indicator and success message
-    const submitBtn = document.getElementById('submit-btn');
-    const submissionIndicator = document.getElementById('submission-indicator');
-    const submissionSuccess = document.getElementById('submission-success');
-
-    // Error prevention: Confirm before submit, show summary if errors
-    form.addEventListener('submit', function(e) {
+      menu.addEventListener('keydown', function (e) {
+        const links = Array.from(menu.querySelectorAll('a'));
+        const idx = links.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          links[(idx + 1) % links.length].focus();
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          links[(idx - 1 + links.length) % links.length].focus();
+        }
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeMenu();
+        }
+      });
+      // Close on outside click or blur
+      document.addEventListener('mousedown', (e) => {
+        if (!menu.contains(e.target) && e.target !== toggle) closeMenu();
+      });
+      // Ensure mouse hover and keyboard focus match
+      toggle.addEventListener('mouseover', openMenu);
+      toggle.addEventListener('mouseout', closeMenu);
+      menu.addEventListener('mouseover', openMenu);
+      menu.addEventListener('mouseout', closeMenu);
+      // Alternative access: category links in sidebar and sitemap
+      // (No extra code needed, links provided)
+    }
+    // --- Skip Link ---
+    document.getElementById('skip-link').addEventListener('click', function (e) {
       e.preventDefault();
-      let hasError = false;
-      let firstErrorField = null;
-      Object.values(fields).forEach(field => {
-        const errorMsg = field.validate(field.input.value);
-        showFieldFeedback(field, errorMsg);
-        if (errorMsg && !hasError) {
-          hasError = true;
-          firstErrorField = field.input;
-        }
-      });
-      if (hasError) {
-        // Move focus to first error
-        firstErrorField.focus();
-        submissionIndicator.innerHTML = `<span class="error-icon" aria-hidden="true">⚠️</span> Please correct the errors above.`;
-        return;
-      }
-      // Confirmation dialog (AAA error prevention)
-      if (!window.confirm('Do you want to submit the form with the entered information?')) {
-        submissionIndicator.innerHTML = `<span class="error-icon" aria-hidden="true">⚠️</span> Submission cancelled.`;
-        return;
-      }
-      // Simulate submission
-      submitBtn.disabled = true;
-      submissionIndicator.innerHTML = `<span class="spinner" aria-hidden="true"></span> Submitting...`;
-      // Announce loading state
-      submissionIndicator.setAttribute('aria-live', 'assertive');
-      setTimeout(function() {
-        submitBtn.disabled = false;
-        submissionIndicator.innerHTML = '';
-        submissionSuccess.style.display = 'flex';
-        submissionSuccess.focus();
-        // Reset form after short delay
-        setTimeout(function() {
-          form.reset();
-          Object.values(fields).forEach(field => {
-            field.input.setAttribute('aria-invalid', 'false');
-            field.error.innerHTML = '';
-            field.input.classList.remove('valid', 'invalid');
-          });
-          submissionSuccess.style.display = 'none';
-        }, 4500);
-      }, 1800);
+      scrollToMain();
     });
-
-    // Touch target fix: Enlarge input and button clickable area
-    function ensureTouchTargets() {
-      // All inputs and buttons already min-height:44px via CSS
-      // But we can add role="button" for color swatches for screen readers
-      document.querySelectorAll('.color-swatch').forEach(swatch => {
-        swatch.setAttribute('role', 'button');
-        swatch.setAttribute('tabindex', '0');
+    // --- Color Customization ---
+    function setupColorControls() {
+      const fgInput = document.getElementById('color-fg');
+      const bgInput = document.getElementById('color-bg');
+      function setColors() {
+        document.body.style.color = fgInput.value;
+        document.body.style.background = bgInput.value;
+        // Check contrast ratio (AAA: 7:1) and warn if not met
+        const fg = fgInput.value;
+        const bg = bgInput.value;
+        if (!checkContrast(fg, bg, 7)) {
+          announceStatus('Warning: Selected colors may not meet AAA contrast requirements (7:1).');
+        }
+      }
+      fgInput.addEventListener('input', setColors);
+      bgInput.addEventListener('input', setColors);
+    }
+    // --- Motion Controls ---
+    function setupMotionControls() {
+      const motionCheckbox = document.getElementById('motion-toggle-checkbox');
+      motionCheckbox.checked = motionDisabled;
+      motionCheckbox.setAttribute('aria-checked', motionDisabled ? 'true' : 'false');
+      motionCheckbox.addEventListener('change', function () {
+        motionDisabled = motionCheckbox.checked;
+        motionCheckbox.setAttribute('aria-checked', motionDisabled ? 'true' : 'false');
+        if (motionDisabled) {
+          document.body.classList.add('reduced-motion');
+        } else {
+          document.body.classList.remove('reduced-motion');
+        }
+        announceStatus(motionDisabled ? 'Animations disabled.' : 'Animations enabled.');
       });
     }
-    ensureTouchTargets();
-
-    // Responsive design: handle zoom and width
-    function checkZoom() {
-      document.body.style.maxWidth = '100vw';
-      document.body.style.overflowX = 'auto';
+    // --- Touch Target: Pointer Cancellation ---
+    // All pointer actions (e.g., button clicks) complete on pointerup (default for buttons)
+    // --- Contrast Checker (AAA) ---
+    // Uses luminance formula to check contrast
+    function checkContrast(fg, bg, minRatio) {
+      function hexToRgb(hex) {
+        let h = hex.replace('#', '');
+        if (h.length === 3) h = h.split('').map(x => x + x).join('');
+        const num = parseInt(h, 16);
+        return [num >> 16, (num >> 8) & 255, num & 255];
+      }
+      function luminance([r, g, b]) {
+        [r, g, b] = [r, g, b].map(v => {
+          v /= 255;
+          return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      }
+      const l1 = luminance(hexToRgb(fg));
+      const l2 = luminance(hexToRgb(bg));
+      const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+      return ratio >= minRatio;
     }
-    checkZoom();
-
-    // Reduced motion: Only animate spinner if allowed
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.querySelectorAll('.spinner').forEach(spinner => {
-        spinner.style.animation = 'none';
+    // --- Hash Routing for SPA ---
+    function setupHashRouting() {
+      window.addEventListener('hashchange', handleHashChange);
+      handleHashChange();
+    }
+    function handleHashChange() {
+      const hash = window.location.hash;
+      if (hash.startsWith('#post-')) {
+        const postId = hash.replace('#post-', '');
+        showSinglePost(postId);
+      } else {
+        renderPostList(filteredPosts);
+      }
+    }
+    // --- Initial Render ---
+    function init() {
+      setupDropdownMenus();
+      setupSearch();
+      setupPostNavigation();
+      setupColorControls();
+      setupMotionControls();
+      setupHashRouting();
+      renderPostList(filteredPosts);
+      // Help icon: keyboard focus
+      document.querySelectorAll('.help-icon').forEach(icon => {
+        icon.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.nextElementSibling.style.display = 'block';
+          }
+          if (e.key === 'Escape') {
+            this.nextElementSibling.style.display = 'none';
+            this.blur();
+          }
+        });
       });
     }
+    // --- Run on DOMContentLoaded ---
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
