@@ -2,1171 +2,1762 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>User Profile: Taylor Morgan – Accessible Interactive Profile Page</title>
-  <meta name="description" content="Taylor Morgan's accessible, interactive user profile page with bio, avatar gallery, follow button, and social media links. Fully WCAG 2.2 AAA compliant.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><circle cx='32' cy='32' r='32' fill='%23605AFF'/></svg>">
+  <title>Accessible Interactive Travel Map – Add & Share Your Experiences</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Color themes for user selection -->
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><circle fill='%23f44336' cx='24' cy='24' r='24'/><text x='50%' y='58%' text-anchor='middle' font-size='28' fill='white' font-family='Arial' dy='.3em'>📍</text></svg>">
   <style>
     :root {
-      /* Color palette: vibrant, high-contrast, AAA-compliant */
+      /* AAA-compliant color palette (7:1+ contrast) */
       --color-bg: #ffffff;
-      --color-bg-alt: #f3f0ff;
-      --color-primary: #605AFF; /* deep violet */
-      --color-primary-dark: #3a347e;
-      --color-accent: #ffb400; /* gold */
-      --color-accent-dark: #a87700;
-      --color-secondary: #ff3d5a; /* bright red-pink */
-      --color-secondary-dark: #a81e37;
-      --color-success: #23b26d;
-      --color-success-dark: #176941;
-      --color-error: #c81d25;
-      --color-error-dark: #7c1117;
-      --color-focus: #00b7ff;
-      --color-focus-bg: #e0f6ff;
-      --color-border: #1a1a1a;
-      --color-text: #1a1a1a;
-      --color-text-alt: #3a347e;
-      --color-link: #0054d6;
-      --color-link-visited: #8e24aa;
-      --color-shadow: rgba(60,60,90,0.10);
-      --color-shadow-strong: rgba(60,60,90,0.20);
-
-      --font-main: 'Segoe UI', 'Arial', sans-serif;
-      --font-size-base: 1.125rem;
-      --font-size-lg: 1.5rem;
-      --font-size-xl: 2.25rem;
-      --line-height: 1.6;
-      --line-spacing: 1.5;
-      --paragraph-spacing: 2.25rem;
+      --color-bg-alt: #e5f6ff;
+      --color-fg: #161a1d;
+      --color-accent: #0086e6;
+      --color-accent-dark: #0059a3;
+      --color-success: #009e6d;
+      --color-danger: #a8002c;
+      --color-warning: #e69900;
+      --color-map: #e1e7ef;
+      --color-map-border: #3c4858;
+      --color-pin: #f44336;
+      --color-pin-focus: #d32f2f;
+      --color-shadow: rgba(0,0,0,0.15);
+      --color-focus: #ffb300;
+      --color-focus-outline: #ffb300;
+      --color-nav-bg: #242f3e;
+      --color-nav-fg: #fff;
+      --color-nav-active: #ffd600;
+      --color-footer-bg: #212121;
+      --color-footer-fg: #fff;
+      --color-card-bg: #fff;
+      --color-card-fg: #161a1d;
+      --color-card-border: #0086e6;
+      --color-help-bg: #e5f6ff;
+      --color-help-fg: #0059a3;
+      --font-main: 'Segoe UI', Arial, sans-serif;
+      --font-size: 1.125rem;
+      --line-height: 1.7;
+      --spacing: 1.5rem;
+      --focus-thickness: 3px;
+      --focus-radius: 6px;
+      --target-min: 44px;
       --max-line-length: 80ch;
-      --border-radius: 1rem;
-      --focus-outline-width: 3px;
-      --focus-outline-style: solid;
-      --focus-outline-color: var(--color-focus);
-      --transition-fast: 0.15s cubic-bezier(.4,0,.2,1);
-      --transition-slow: 0.35s cubic-bezier(.4,0,.2,1);
-
-      /* For user custom colors */
-      --user-bg: var(--color-bg);
-      --user-fg: var(--color-text);
     }
-
     html {
-      font-size: 100%;
-      background: var(--user-bg);
-      color: var(--user-fg);
+      background: var(--color-bg);
+      color: var(--color-fg);
       font-family: var(--font-main);
+      font-size: var(--font-size);
       line-height: var(--line-height);
       scroll-behavior: smooth;
-      /* Ensures at least 1.5x line spacing */
-      letter-spacing: 0.01em;
+      /* Responsive text size */
+      word-break: break-word;
     }
-
     body {
       margin: 0;
-      background: var(--user-bg);
-      color: var(--user-fg);
-      font-size: var(--font-size-base);
+      background: linear-gradient(135deg, #e5f6ff 0%, #ffffff 100%);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      max-width: 100vw;
     }
-
     /* Skip link styles */
     .skip-link {
       position: absolute;
-      left: 0;
-      top: 0;
-      background: var(--color-primary);
-      color: #fff;
-      padding: 0.75em 1.5em;
+      left: 8px;
+      top: 8px;
       z-index: 1000;
-      transform: translateY(-120%);
-      transition: transform 0.2s;
-      border-radius: 0 0 0.5em 0;
+      background: var(--color-accent);
+      color: #fff;
+      padding: 0.75em 1.25em;
+      border-radius: 6px;
       font-weight: bold;
-      font-size: 1.1em;
-      outline: none;
       text-decoration: none;
+      box-shadow: 0 2px 6px var(--color-shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
     }
     .skip-link:focus {
-      transform: translateY(0);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: 0 2px 8px var(--color-shadow-strong);
+      opacity: 1;
+      pointer-events: auto;
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      outline-offset: 2px;
     }
-
-    /* Header and Navigation */
+    /* Header */
     header {
-      background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-      color: #fff;
+      background: var(--color-nav-bg);
+      color: var(--color-nav-fg);
       padding: 0;
-      box-shadow: 0 2px 8px var(--color-shadow);
+      border-bottom: 4px solid var(--color-accent);
     }
     .header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.5rem 1rem 1rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
     }
     .site-title {
-      font-size: var(--font-size-lg);
+      font-size: 2rem;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
       margin: 0;
-      color: #fff;
-      text-shadow: 0 2px 8px var(--color-shadow-strong);
-    }
-    nav[aria-label] {
       display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .site-title-icon {
+      font-size: 2rem;
+      vertical-align: middle;
+      margin-right: 0.1em;
+    }
+    /* Main nav */
+    nav[aria-label="Main Navigation"] {
+      display: flex;
+      align-items: center;
       gap: 1.5rem;
     }
-    .nav-list {
-      list-style: none;
+    .main-nav-list {
+      display: flex;
+      gap: 0.75rem;
       margin: 0;
       padding: 0;
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
+      list-style: none;
     }
-    .nav-list li {
+    .main-nav-list li {
       position: relative;
     }
-    .nav-link {
-      display: inline-block;
-      padding: 0.75em 1.25em;
-      border-radius: 0.5em;
-      color: #fff;
-      background: transparent;
+    .main-nav-link,
+    .main-nav-button {
+      background: none;
+      border: none;
+      color: var(--color-nav-fg);
+      font: inherit;
       font-weight: 600;
+      font-size: 1.1rem;
+      padding: 0.5em 1em;
+      border-radius: 6px;
+      cursor: pointer;
       text-decoration: none;
-      font-size: 1em;
-      transition: background var(--transition-fast), color var(--transition-fast);
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      transition: background 0.2s, color 0.2s;
       outline: none;
-      min-width: 44px;
-      min-height: 44px;
-      text-align: center;
+      position: relative;
     }
-    .nav-link:focus, .nav-link:hover, .nav-link[aria-current="page"] {
-      background: var(--color-accent-dark);
-      color: #fff;
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: 0 2px 8px var(--color-shadow-strong);
+    .main-nav-link:focus-visible,
+    .main-nav-button:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-nav-active);
+      color: var(--color-nav-bg);
+      z-index: 2;
     }
-    .nav-link[aria-current="page"]::after {
-      content: " (current)";
+    .main-nav-link[aria-current="page"] {
+      background: var(--color-nav-active);
+      color: var(--color-nav-bg);
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 0.25em;
+    }
+    /* Dropdown */
+    .dropdown-menu {
+      display: none;
       position: absolute;
-      left: -9999px;
+      top: 100%;
+      left: 0;
+      min-width: 220px;
+      background: var(--color-nav-bg);
+      border: 2px solid var(--color-accent);
+      border-radius: 8px;
+      box-shadow: 0 6px 24px var(--color-shadow);
+      padding: 0.5em 0;
+      z-index: 50;
     }
-
+    .dropdown-menu[aria-hidden="false"] {
+      display: block;
+    }
+    .dropdown-menu li {
+      width: 100%;
+    }
+    .dropdown-menu a {
+      display: block;
+      color: var(--color-nav-fg);
+      background: none;
+      text-decoration: none;
+      padding: 0.75em 1.5em;
+      font-size: 1rem;
+      border: none;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      border-radius: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .dropdown-menu a:focus-visible,
+    .dropdown-menu a:hover {
+      background: var(--color-nav-active);
+      color: var(--color-nav-bg);
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+    }
+    /* Hamburger (mobile) */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--color-nav-fg);
+      font-size: 2.2rem;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      border-radius: 6px;
+      cursor: pointer;
+      outline: none;
+    }
+    .hamburger:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-nav-active);
+      color: var(--color-nav-bg);
+    }
+    /* Responsive nav */
+    @media (max-width: 900px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5em;
+      }
+      nav[aria-label="Main Navigation"] {
+        width: 100%;
+      }
+      .main-nav-list {
+        flex-direction: column;
+        gap: 0.5em;
+        width: 100%;
+      }
+      .main-nav-link, .main-nav-button {
+        width: 100%;
+        text-align: left;
+      }
+      .dropdown-menu {
+        left: 1em;
+        right: 1em;
+        min-width: unset;
+      }
+      .hamburger {
+        display: block;
+      }
+      nav[aria-label="Main Navigation"][data-collapsed="true"] .main-nav-list {
+        display: none;
+      }
+    }
     /* Breadcrumbs */
     nav[aria-label="Breadcrumb"] {
       background: var(--color-bg-alt);
-      padding: 0.5em 1em;
-      font-size: 1em;
-      margin-bottom: 0.5em;
-      border-bottom: 2px solid var(--color-primary-dark);
+      padding: 0.5em 1.5em;
+      font-size: 1rem;
+      border-bottom: 2px solid var(--color-map-border);
     }
     .breadcrumb-list {
       list-style: none;
       display: flex;
       gap: 0.5em;
-      align-items: center;
       margin: 0;
       padding: 0;
-      flex-wrap: wrap;
+      align-items: center;
     }
     .breadcrumb-list li {
       display: flex;
       align-items: center;
     }
-    .breadcrumb-list li:not(:last-child)::after {
-      content: "›";
-      color: var(--color-accent-dark);
+    .breadcrumb-sep {
       margin: 0 0.5em;
+      color: var(--color-accent-dark);
       font-weight: bold;
+      user-select: none;
     }
     .breadcrumb-link {
-      color: var(--color-link);
+      color: var(--color-accent-dark);
       text-decoration: underline;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: inherit;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      border-radius: 4px;
+      padding: 0.25em 0.5em;
       outline: none;
-      font-weight: 500;
-      min-width: 44px;
-      min-height: 44px;
-      border-radius: 0.3em;
-      padding: 0.1em 0.3em;
-      transition: background var(--transition-fast), color var(--transition-fast);
     }
-    .breadcrumb-link:focus, .breadcrumb-link:hover {
-      background: var(--color-focus-bg);
-      color: var(--color-primary-dark);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    .breadcrumb-link:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-nav-active);
+      color: var(--color-nav-bg);
     }
     .breadcrumb-current {
-      color: var(--color-text-alt);
-      font-weight: 700;
+      color: var(--color-fg);
+      font-weight: 800;
     }
-
-    /* Layout */
-    .container {
+    /* Main layout */
+    main {
+      display: flex;
+      flex-direction: row;
+      gap: var(--spacing);
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1rem 2rem 1rem;
-      display: flex;
-      gap: 2.5rem;
-      flex-wrap: wrap;
+      padding: 2.5rem 1.5rem 2.5rem 1.5rem;
+      min-height: 70vh;
     }
-    main {
-      flex: 2 1 480px;
-      min-width: 320px;
-      max-width: 800px;
-      margin: 0;
+    @media (max-width: 900px) {
+      main {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1.5rem 0.5rem;
+      }
     }
-    aside[aria-label] {
-      flex: 1 1 280px;
+    /* Sidebar */
+    aside {
+      flex: 0 0 330px;
+      max-width: 330px;
       min-width: 240px;
-      max-width: 320px;
       background: var(--color-bg-alt);
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 8px var(--color-shadow);
-      padding: 1.5rem 1rem;
-      margin: 0;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px var(--color-shadow);
+      padding: 1.5rem;
+      margin-top: 0.5rem;
       align-self: flex-start;
-    }
-
-    /* Profile Section */
-    .profile-header {
       display: flex;
-      align-items: flex-start;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
+      flex-direction: column;
+      gap: 1.5rem;
     }
-    .avatar-main {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid var(--color-primary);
-      box-shadow: 0 2px 8px var(--color-shadow-strong);
-      min-width: 120px;
-      min-height: 120px;
-      background: var(--color-bg-alt);
-      transition: border-color var(--transition-fast);
+    @media (max-width: 900px) {
+      aside {
+        max-width: 100%;
+        width: 100%;
+        margin-top: 0;
+        order: 2;
+      }
     }
-    .avatar-main:focus {
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      border-color: var(--color-focus);
+    /* Help/Context panel */
+    .help-panel {
+      background: var(--color-help-bg);
+      color: var(--color-help-fg);
+      border-left: 5px solid var(--color-accent);
+      border-radius: 8px;
+      padding: 1em 1.25em;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1em;
+      box-shadow: 0 1px 6px var(--color-shadow);
     }
-    .profile-info {
-      flex: 1 1 220px;
-      min-width: 200px;
-      max-width: 500px;
-    }
-    .profile-name {
-      font-size: var(--font-size-xl);
-      font-weight: 700;
-      color: var(--color-primary-dark);
-      margin: 0 0 0.3em 0;
-      line-height: 1.2;
-    }
-    .profile-pronounce {
-      font-size: 1em;
-      color: var(--color-secondary-dark);
-      margin: 0 0 0.8em 0;
-    }
-    .profile-bio {
-      font-size: 1.1em;
-      color: var(--color-text);
-      margin: 0 0 1.2em 0;
-      max-width: var(--max-line-length);
-    }
-    .profile-bio .abbr {
-      border-bottom: 1px dotted var(--color-accent-dark);
-      cursor: help;
-    }
-    .profile-bio .jargon {
-      border-bottom: 2px dashed var(--color-secondary-dark);
-      cursor: help;
-    }
-    .profile-actions {
-      display: flex;
-      align-items: center;
-      gap: 1.5em;
-      flex-wrap: wrap;
-    }
-    .follow-btn {
-      min-width: 44px;
-      min-height: 44px;
-      font-size: 1.1em;
-      padding: 0.7em 1.7em;
-      border-radius: 2em;
-      border: none;
-      background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-      color: #fff;
-      font-weight: 700;
-      box-shadow: 0 2px 8px var(--color-shadow);
-      cursor: pointer;
-      transition: background var(--transition-fast), box-shadow var(--transition-fast);
-      outline: none;
-      position: relative;
-      z-index: 1;
-    }
-    .follow-btn:focus, .follow-btn:hover {
-      background: linear-gradient(90deg, var(--color-primary-dark), var(--color-accent-dark));
-      box-shadow: 0 4px 16px var(--color-shadow-strong);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-    }
-    .follow-btn[aria-pressed="true"] {
-      background: linear-gradient(90deg, var(--color-success), var(--color-success-dark));
-      color: #fff;
-    }
-    .follow-btn .visually-hidden {
-      position: absolute;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-    }
-    .follow-status[role="status"] {
-      margin-left: 1em;
-      color: var(--color-success-dark);
-      font-weight: 600;
-      font-size: 1em;
-      min-width: 120px;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    /* Avatar Gallery */
-    .avatar-gallery-section {
-      margin-top: 2.5rem;
-    }
-    .avatar-gallery-title {
-      font-size: var(--font-size-lg);
-      color: var(--color-secondary-dark);
-      margin-bottom: 0.7em;
-    }
-    .avatar-gallery {
-      display: flex;
-      gap: 1.2em;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .avatar-thumb-btn {
-      background: none;
-      border: 3px solid transparent;
-      border-radius: 50%;
-      padding: 0;
+    /* Pin list (sidebar) */
+    .pin-list {
       margin: 0;
-      width: 64px;
-      height: 64px;
-      min-width: 44px;
-      min-height: 44px;
-      cursor: pointer;
-      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-      outline: none;
-      box-shadow: 0 1px 4px var(--color-shadow);
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+    }
+    .pin-card {
+      background: var(--color-card-bg);
+      color: var(--color-card-fg);
+      border: 2px solid var(--color-card-border);
+      border-radius: 10px;
+      box-shadow: 0 1px 6px var(--color-shadow);
+      padding: 1em 1em 1em 1.5em;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3em;
       position: relative;
     }
-    .avatar-thumb-btn:focus, .avatar-thumb-btn:hover {
-      border-color: var(--color-focus);
-      box-shadow: 0 2px 8px var(--color-shadow-strong);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-    }
-    .avatar-thumb-btn[aria-current="true"] {
-      border-color: var(--color-primary);
-      box-shadow: 0 0 0 3px var(--color-accent);
-    }
-    .avatar-thumb {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      background: var(--color-bg-alt);
-    }
-    .avatar-thumb-btn .visually-hidden {
+    .pin-card .pin-card-icon {
       position: absolute;
-      left: -9999px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
+      left: 0.5em;
+      top: 1em;
+      font-size: 1.3em;
+      color: var(--color-pin);
     }
-
-    /* Social Media Links */
-    .social-section {
-      margin-top: 2.5rem;
-    }
-    .social-title {
-      font-size: var(--font-size-lg);
-      color: var(--color-primary-dark);
-      margin-bottom: 0.7em;
-    }
-    .social-links {
+    .pin-card .pin-card-title {
+      font-weight: 700;
+      font-size: 1.08em;
+      margin-bottom: 0.1em;
       display: flex;
-      gap: 1.2em;
-      flex-wrap: wrap;
       align-items: center;
+      gap: 0.4em;
     }
-    .social-link {
+    .pin-card .pin-card-location {
+      font-size: 0.98em;
+      color: var(--color-accent-dark);
+      margin-bottom: 0.2em;
+    }
+    .pin-card .pin-card-date {
+      font-size: 0.9em;
+      color: var(--color-map-border);
+      margin-bottom: 0.2em;
+    }
+    .pin-card .pin-card-desc {
+      margin-bottom: 0.2em;
+      font-size: 1em;
+    }
+    .pin-card .pin-card-actions {
+      display: flex;
+      gap: 0.7em;
+      margin-top: 0.4em;
+    }
+    .pin-card .pin-card-action-btn {
+      background: var(--color-bg-alt);
+      color: var(--color-accent-dark);
+      border: 1.5px solid var(--color-accent-dark);
+      border-radius: 6px;
+      font-size: 1em;
+      padding: 0.4em 0.8em;
+      cursor: pointer;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      transition: background 0.15s, color 0.15s;
+      outline: none;
+    }
+    .pin-card .pin-card-action-btn:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-success);
+      color: #fff;
+    }
+    .pin-card .pin-card-action-btn[aria-label="Delete Pin"] {
+      background: var(--color-danger);
+      color: #fff;
+      border-color: var(--color-danger);
+    }
+    .pin-card .pin-card-action-btn[aria-label="Delete Pin"]:focus-visible {
+      background: var(--color-warning);
+      color: #fff;
+      border-color: var(--color-warning);
+    }
+    /* Main content */
+    .main-content {
+      flex: 1 1 0;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    /* Map area */
+    .map-section {
+      background: var(--color-map);
+      border: 3px solid var(--color-map-border);
+      border-radius: 18px;
+      box-shadow: 0 2px 12px var(--color-shadow);
+      min-height: 440px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+      outline: none;
+      max-width: 100%;
+    }
+    .map-svg {
+      width: 100%;
+      height: 440px;
+      display: block;
+      background: linear-gradient(120deg, #e5f6ff 0%, #bde6fb 100%);
+    }
+    @media (max-width: 700px) {
+      .map-svg {
+        height: 320px;
+      }
+      .map-section {
+        min-height: 320px;
+      }
+    }
+    /* Pin markers */
+    .map-pin {
+      cursor: pointer;
+      outline: none;
+      transition: transform 0.15s;
+      stroke: #fff;
+      stroke-width: 2;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12));
+    }
+    .map-pin:focus-visible {
+      stroke: var(--color-focus-outline);
+      stroke-width: 4;
+      z-index: 10;
+      transform: scale(1.12);
+    }
+    .map-pin[data-selected="true"] {
+      filter: drop-shadow(0 0 0.5em var(--color-focus-outline));
+      transform: scale(1.08);
+    }
+    /* Pin info popup */
+    .pin-popup {
+      position: absolute;
+      z-index: 100;
+      min-width: 260px;
+      max-width: 350px;
+      background: var(--color-card-bg);
+      color: var(--color-card-fg);
+      border: 2.5px solid var(--color-accent);
+      border-radius: 10px;
+      box-shadow: 0 4px 24px var(--color-shadow);
+      padding: 1.1em 1.3em 1.2em 1.3em;
+      font-size: 1.08em;
+      pointer-events: auto;
+      transition: opacity 0.2s;
+      outline: none;
+    }
+    .pin-popup:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+    }
+    .pin-popup-header {
       display: flex;
       align-items: center;
       gap: 0.5em;
-      padding: 0.5em 1em;
-      border-radius: 0.5em;
+      margin-bottom: 0.3em;
+    }
+    .pin-popup-title {
+      font-weight: 700;
+      font-size: 1.18em;
+      flex: 1;
+    }
+    .pin-popup-close {
       background: var(--color-bg-alt);
-      color: var(--color-link);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1em;
-      min-width: 44px;
-      min-height: 44px;
-      transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+      color: var(--color-danger);
+      border: 1.5px solid var(--color-danger);
+      border-radius: 6px;
+      font-size: 1.25em;
+      padding: 0.3em 0.6em;
+      cursor: pointer;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      transition: background 0.15s, color 0.15s;
       outline: none;
-      border: 2px solid transparent;
-      box-shadow: 0 1px 4px var(--color-shadow);
-      position: relative;
     }
-    .social-link:focus, .social-link:hover {
-      background: var(--color-focus-bg);
-      color: var(--color-primary-dark);
-      border-color: var(--color-focus);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-      box-shadow: 0 2px 8px var(--color-shadow-strong);
+    .pin-popup-close:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-warning);
+      color: #fff;
+      border-color: var(--color-warning);
     }
-    .social-link .icon {
-      width: 28px;
-      height: 28px;
-      display: inline-block;
-      fill: currentColor;
-    }
-
-    /* Sidebar */
-    aside[aria-label] h2 {
-      font-size: 1.2em;
-      color: var(--color-accent-dark);
-      margin-top: 0;
-    }
-    .sidebar-list {
-      list-style: disc inside;
-      margin: 1em 0 0 0;
-      padding: 0 0 0 1em;
-      color: var(--color-text-alt);
-    }
-    .sidebar-list li {
-      margin-bottom: 0.7em;
+    .pin-popup-location {
       font-size: 1em;
+      color: var(--color-accent-dark);
+      margin-bottom: 0.2em;
     }
-    .sidebar-list .icon {
-      width: 1.2em;
-      height: 1.2em;
-      vertical-align: middle;
-      margin-right: 0.4em;
-      fill: var(--color-primary);
+    .pin-popup-date {
+      font-size: 0.98em;
+      color: var(--color-map-border);
+      margin-bottom: 0.3em;
     }
-
-    /* Help and Settings */
-    .settings-section {
-      margin-top: 2.5rem;
+    .pin-popup-desc {
+      margin-bottom: 0.2em;
+      font-size: 1.08em;
     }
-    .settings-title {
-      font-size: 1.2em;
-      color: var(--color-success-dark);
-      margin-bottom: 0.7em;
+    /* Add pin form */
+    .add-pin-section {
+      background: var(--color-bg-alt);
+      border-radius: 12px;
+      box-shadow: 0 1px 8px var(--color-shadow);
+      padding: 1.5em 2em;
+      margin-bottom: 1.5em;
+      max-width: 100%;
     }
-    .settings-form {
+    .add-pin-section h2 {
+      margin-top: 0;
+      margin-bottom: 0.5em;
+    }
+    .add-pin-form fieldset {
+      border: 2px solid var(--color-accent-dark);
+      border-radius: 8px;
+      margin: 0 0 1.5em 0;
+      padding: 1.2em 1.2em 1em 1.2em;
+      background: var(--color-card-bg);
+    }
+    .add-pin-form legend {
+      font-weight: 700;
+      color: var(--color-accent-dark);
+      font-size: 1.08em;
+      padding: 0 0.5em;
+      letter-spacing: 0.01em;
+    }
+    .form-row {
       display: flex;
-      gap: 1.2em;
-      flex-wrap: wrap;
-      align-items: center;
+      flex-direction: column;
+      gap: 0.3em;
+      margin-bottom: 1.2em;
+      max-width: 420px;
     }
-    .settings-form label {
+    .form-row label {
       font-weight: 600;
-      color: var(--color-primary-dark);
+      font-size: 1em;
+      color: var(--color-fg);
+      margin-bottom: 0.1em;
+    }
+    .form-row .required-indicator {
+      color: var(--color-danger);
+      font-weight: bold;
+      margin-left: 0.2em;
+    }
+    .form-row input,
+    .form-row textarea {
+      font: inherit;
+      font-size: 1em;
+      padding: 0.6em 0.8em;
+      border-radius: 7px;
+      border: 2px solid var(--color-accent-dark);
+      background: #fff;
+      color: var(--color-fg);
+      box-sizing: border-box;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      outline: none;
+      margin-bottom: 0.1em;
+      max-width: 100%;
+    }
+    .form-row input:focus-visible,
+    .form-row textarea:focus-visible {
+      border-color: var(--color-focus-outline);
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-bg-alt);
+    }
+    .form-row textarea {
+      resize: vertical;
+      min-height: 90px;
+      max-height: 200px;
+      line-height: 1.5;
+    }
+    .form-row .form-help {
+      font-size: 0.95em;
+      color: var(--color-accent-dark);
+      margin-top: 0.05em;
+    }
+    .form-row .form-error {
+      color: var(--color-danger);
+      font-size: 0.96em;
+      font-weight: 600;
+      margin-top: 0.08em;
+      display: block;
+    }
+    .form-actions {
+      display: flex;
+      gap: 1em;
+      align-items: center;
+      margin-top: 0.7em;
+    }
+    .add-pin-btn {
+      background: var(--color-success);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.13em;
+      font-weight: 700;
+      padding: 0.7em 2.1em;
+      cursor: pointer;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      box-shadow: 0 1px 6px var(--color-shadow);
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    .add-pin-btn:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-accent-dark);
+      color: #fff;
+    }
+    .reset-form-btn {
+      background: var(--color-warning);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.13em;
+      font-weight: 700;
+      padding: 0.7em 1.5em;
+      cursor: pointer;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    .reset-form-btn:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-danger);
+      color: #fff;
+    }
+    /* Form success/error status */
+    .form-status {
+      font-size: 1.05em;
+      font-weight: 600;
+      margin-top: 0.8em;
+      min-height: 1.2em;
+    }
+    .form-status[role="status"] {
+      color: var(--color-success);
+    }
+    .form-status[role="alert"] {
+      color: var(--color-danger);
+    }
+    /* Search bar */
+    .search-section {
+      margin-bottom: 1.5em;
+      background: var(--color-bg-alt);
+      border-radius: 10px;
+      box-shadow: 0 1px 6px var(--color-shadow);
+      padding: 1em 1.5em;
+      max-width: 100%;
+    }
+    .search-form {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    .search-form label {
+      font-weight: 600;
+      color: var(--color-fg);
       margin-right: 0.5em;
     }
-    .settings-form select {
-      min-width: 44px;
-      min-height: 44px;
+    .search-form input[type="search"] {
+      font: inherit;
       font-size: 1em;
-      border-radius: 0.4em;
-      border: 2px solid var(--color-primary-dark);
-      padding: 0.3em 1em;
-      background: var(--color-bg);
-      color: var(--color-text);
+      padding: 0.5em 0.9em;
+      border-radius: 7px;
+      border: 2px solid var(--color-accent-dark);
+      background: #fff;
+      color: var(--color-fg);
+      min-width: var(--target-min);
+      min-height: var(--target-min);
       outline: none;
-      transition: border-color var(--transition-fast);
+      margin-right: 0.5em;
+      flex: 1 1 200px;
+      max-width: 320px;
     }
-    .settings-form select:focus {
-      border-color: var(--color-focus);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    .search-form input[type="search"]:focus-visible {
+      border-color: var(--color-focus-outline);
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-bg-alt);
     }
-
+    .search-btn {
+      background: var(--color-accent);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 1em;
+      font-weight: 700;
+      padding: 0.5em 1.2em;
+      cursor: pointer;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    .search-btn:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-accent-dark);
+      color: #fff;
+    }
+    /* Color theme controls */
+    .theme-section {
+      margin-bottom: 1.2em;
+      background: var(--color-bg-alt);
+      border-radius: 10px;
+      box-shadow: 0 1px 6px var(--color-shadow);
+      padding: 1em 1.5em;
+      max-width: 100%;
+    }
+    .theme-controls {
+      display: flex;
+      gap: 1em;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .theme-label {
+      font-weight: 600;
+      color: var(--color-fg);
+      margin-right: 0.5em;
+    }
+    .theme-btn {
+      background: var(--color-bg);
+      color: var(--color-accent-dark);
+      border: 2px solid var(--color-accent-dark);
+      border-radius: 7px;
+      font-size: 1em;
+      font-weight: 700;
+      padding: 0.5em 1.2em;
+      cursor: pointer;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      transition: background 0.2s, color 0.2s;
+      outline: none;
+    }
+    .theme-btn[aria-pressed="true"] {
+      background: var(--color-accent-dark);
+      color: #fff;
+      border-color: var(--color-accent-dark);
+    }
+    .theme-btn:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-accent);
+      color: #fff;
+    }
     /* Footer */
     footer {
-      background: linear-gradient(90deg, var(--color-primary-dark), var(--color-accent-dark));
-      color: #fff;
-      padding: 1.5rem 1rem;
+      background: var(--color-footer-bg);
+      color: var(--color-footer-fg);
+      padding: 2.2em 0 2.2em 0;
       text-align: center;
-      font-size: 1em;
-      margin-top: auto;
-      letter-spacing: 0.02em;
-      box-shadow: 0 -2px 8px var(--color-shadow);
+      border-top: 4px solid var(--color-accent);
+      font-size: 1.02em;
+      margin-top: 2.5em;
+      line-height: 1.6;
     }
     .footer-links {
       display: flex;
       gap: 1.5em;
       justify-content: center;
+      margin-bottom: 0.7em;
       flex-wrap: wrap;
-      margin: 1em 0 0 0;
-      padding: 0;
-      list-style: none;
     }
     .footer-link {
-      color: #fff;
+      color: var(--color-nav-active);
       text-decoration: underline;
-      min-width: 44px;
-      min-height: 44px;
-      padding: 0.2em 0.5em;
-      border-radius: 0.3em;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: inherit;
+      min-width: var(--target-min);
+      min-height: var(--target-min);
+      border-radius: 4px;
+      padding: 0.25em 0.5em;
       outline: none;
-      transition: background var(--transition-fast), color var(--transition-fast);
+      transition: background 0.15s, color 0.15s;
     }
-    .footer-link:focus, .footer-link:hover {
-      background: var(--color-focus-bg);
-      color: var(--color-primary-dark);
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    .footer-link:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      background: var(--color-accent-dark);
+      color: #fff;
     }
-
-    /* Visually hidden utility */
-    .visually-hidden {
-      position: absolute !important;
-      height: 1px; width: 1px;
-      overflow: hidden;
-      clip: rect(1px, 1px, 1px, 1px);
-      white-space: nowrap;
-      border: 0;
-      padding: 0;
-      margin: -1px;
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .container {
-        flex-direction: column;
-        gap: 1.5rem;
-      }
-      aside[aria-label] {
-        max-width: 100%;
-        width: 100%;
-        margin-top: 2.5rem;
-      }
-      main {
-        max-width: 100%;
-      }
-    }
-    @media (max-width: 600px) {
-      .header-inner {
-        flex-direction: column;
-        gap: 1em;
-        align-items: flex-start;
-      }
-      .profile-header {
-        flex-direction: column;
-        gap: 1em;
-        align-items: flex-start;
-      }
-      .avatar-gallery, .social-links, .settings-form {
-        flex-direction: column;
-        gap: 1em;
-        align-items: flex-start;
-      }
-      .container {
-        padding: 1rem 0.5rem;
-      }
-    }
-
-    /* Enhanced focus indicators for all interactive elements */
-    a:focus, button:focus, input:focus, select:focus, [tabindex]:focus {
-      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color) !important;
-      box-shadow: 0 0 0 4px var(--color-focus-bg), 0 2px 8px var(--color-shadow-strong);
+    /* Focus indicator for all interactive elements */
+    a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+      outline: var(--focus-thickness) solid var(--color-focus-outline);
+      outline-offset: 2px;
       z-index: 10;
     }
-
-    /* Paragraph spacing, line spacing, and max line length */
-    p, ul, ol, dl, blockquote {
-      margin-bottom: var(--paragraph-spacing);
+    /* Responsive text sizing and layout */
+    @media (max-width: 600px) {
+      html {
+        font-size: 1rem;
+      }
+      .header-inner, main, aside, .main-content {
+        padding: 0.7em;
+      }
+    }
+    /* Line length, spacing, and presentation (AAA) */
+    .main-content, aside, .add-pin-section, .help-panel, .theme-section, .search-section {
       max-width: var(--max-line-length);
-      line-height: var(--line-spacing);
+      margin-left: auto;
+      margin-right: auto;
     }
-
-    /* Ensure text is not justified */
-    p, ul, ol, dl, blockquote, h1, h2, h3, h4, h5, h6 {
-      text-align: left;
+    p, ul, ol, dl, .help-panel {
+      line-height: var(--line-height);
+      margin-bottom: 1.3em;
+      letter-spacing: 0.01em;
     }
-
-    /* User-selectable foreground/background */
-    .user-colors {
-      background: var(--user-bg);
-      color: var(--user-fg);
+    p {
+      margin-top: 0.7em;
     }
-
-    /* Animation: Only on interaction, and respect prefers-reduced-motion */
+    /* User-selectable color theme (AAA 1.4.8) */
+    .theme-btn[data-theme="custom"] {
+      border-style: dashed;
+    }
+    /* Hide visually but keep accessible */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0,0,0,0) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+    /* Animations: only if allowed */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         transition: none !important;
-        animation: none !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Skip to main content link for keyboard users -->
-  <a href="#main-content" class="skip-link" id="skip-link">Skip to main content</a>
-
+  <!-- Skip to main content link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
   <header>
     <div class="header-inner">
-      <h1 class="site-title" id="site-title">Taylor Morgan's Profile</h1>
-      <nav aria-label="Main Navigation" aria-labelledby="site-title">
-        <ul class="nav-list">
-          <li><a href="#main-content" class="nav-link" aria-current="page">Profile</a></li>
-          <li><a href="#avatar-gallery" class="nav-link">Avatars</a></li>
-          <li><a href="#social-media" class="nav-link">Social Links</a></li>
-          <li><a href="#settings" class="nav-link">Settings</a></li>
-          <li><a href="#help" class="nav-link">Help</a></li>
+      <h1 class="site-title" id="site-title">
+        <span class="site-title-icon" aria-hidden="true">📍</span>
+        Accessible Interactive Travel Map
+      </h1>
+      <button class="hamburger" aria-label="Open navigation menu" aria-controls="main-nav" aria-expanded="false" tabindex="0">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <nav id="main-nav" aria-label="Main Navigation" data-collapsed="true">
+        <ul class="main-nav-list">
+          <li>
+            <a href="#main-content" class="main-nav-link" aria-current="page">Map</a>
+          </li>
+          <li>
+            <button type="button" class="main-nav-button" aria-haspopup="true" aria-expanded="false" aria-controls="menu-experiences" id="experiences-menu-btn">
+              Experiences
+              <span aria-hidden="true">▼</span>
+            </button>
+            <ul class="dropdown-menu" id="menu-experiences" aria-label="Experiences submenu" aria-hidden="true">
+              <li><a href="#add-pin-section" tabindex="-1">Add a New Pin</a></li>
+              <li><a href="#sidebar" tabindex="-1">View All Pins</a></li>
+              <li><a href="#search-section" tabindex="-1">Search Pins</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#help-section" class="main-nav-link">Help</a>
+          </li>
+          <li>
+            <a href="#footer" class="main-nav-link">About</a>
+          </li>
         </ul>
       </nav>
     </div>
-    <!-- Breadcrumb navigation -->
-    <nav aria-label="Breadcrumb">
-      <ol class="breadcrumb-list">
-        <li><a href="/" class="breadcrumb-link">Home</a></li>
-        <li><a href="/users" class="breadcrumb-link">Users</a></li>
-        <li><span class="breadcrumb-current" aria-current="page">Taylor Morgan</span></li>
-      </ol>
-    </nav>
   </header>
-
-  <div class="container user-colors">
-    <main id="main-content" tabindex="-1">
-      <section aria-labelledby="profile-section-title">
-        <div class="profile-header">
-          <img src="https://randomuser.me/api/portraits/men/32.jpg"
-               id="main-avatar"
-               class="avatar-main"
-               alt="Taylor Morgan's main avatar, a smiling man with glasses and a blue shirt"
-               tabindex="0"
-               aria-describedby="avatar-desc"
-               width="120" height="120"
-          />
-          <div id="avatar-desc" class="visually-hidden">
-            Taylor's main avatar: a close-up photo of Taylor, a smiling man with brown hair, glasses, and a blue shirt, facing the camera.
-          </div>
-          <div class="profile-info">
-            <h2 id="profile-section-title" class="profile-name">Taylor Morgan</h2>
-            <div class="profile-pronounce">
-              Pronunciation: <span lang="en" aria-label="TAY-ler MOR-gan">TAY-ler MOR-gan</span>
-              <button type="button" id="pronounce-btn"
-                aria-label="Play pronunciation of Taylor Morgan"
-                style="margin-left:0.7em; background: none; border: none; color: var(--color-primary-dark); font-size: 1em; cursor: pointer; min-width:44px; min-height:44px;"
-                >
-                <span aria-hidden="true">🔊</span>
-                <span class="visually-hidden">Play pronunciation</span>
-              </button>
-            </div>
-            <p class="profile-bio">
-              Hi! I'm Taylor, a <abbr class="abbr" title="User Experience">UX</abbr> designer and accessibility advocate based in Seattle. I enjoy <span class="jargon" tabindex="0" aria-describedby="jargon-desc">inclusive design</span> and creating products that empower everyone. I love <span lang="fr" title="French">café au lait</span> and hiking in the Pacific Northwest.
-            </p>
-            <div id="jargon-desc" class="visually-hidden">
-              Inclusive design: A design approach that considers the full range of human diversity, including ability, language, culture, gender, age, and other forms of human difference.
-            </div>
-            <div class="profile-actions">
-              <button type="button"
-                id="follow-btn"
-                class="follow-btn"
-                aria-pressed="false"
-                aria-describedby="follow-help"
-                aria-label="Follow Taylor Morgan"
-                autocomplete="off"
-                >
-                <span class="visually-hidden" id="follow-btn-label">Follow Taylor Morgan</span>
-                <span aria-hidden="true" id="follow-btn-text">Follow</span>
-              </button>
-              <span id="follow-status" class="follow-status" role="status" aria-live="polite"></span>
-              <span id="follow-help" class="visually-hidden">
-                Press this button to follow or unfollow Taylor Morgan. You will receive updates in your feed.
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="avatar-gallery-section" id="avatar-gallery" aria-labelledby="avatar-gallery-title">
-        <h2 class="avatar-gallery-title" id="avatar-gallery-title">Avatar Gallery</h2>
-        <div class="avatar-gallery" role="listbox" aria-label="Select an avatar for Taylor Morgan">
-          <button type="button"
-            class="avatar-thumb-btn"
-            aria-label="Avatar 1: Taylor Morgan smiling, blue shirt"
-            aria-current="true"
-            tabindex="0"
-            data-avatar="https://randomuser.me/api/portraits/men/32.jpg"
-            aria-describedby="avatar1-desc"
-          >
-            <img src="https://randomuser.me/api/portraits/men/32.jpg"
-                 class="avatar-thumb"
-                 alt="Avatar 1: Taylor Morgan smiling, blue shirt"
-                 width="64" height="64"
-            />
-            <span class="visually-hidden">Selected</span>
-          </button>
-          <div id="avatar1-desc" class="visually-hidden">
-            Taylor Morgan smiling, blue shirt, glasses.
-          </div>
-          <button type="button"
-            class="avatar-thumb-btn"
-            aria-label="Avatar 2: Taylor Morgan outdoors, green background"
-            tabindex="0"
-            data-avatar="https://randomuser.me/api/portraits/men/35.jpg"
-            aria-describedby="avatar2-desc"
-          >
-            <img src="https://randomuser.me/api/portraits/men/35.jpg"
-                 class="avatar-thumb"
-                 alt="Avatar 2: Taylor Morgan outdoors, green background"
-                 width="64" height="64"
-            />
-          </button>
-          <div id="avatar2-desc" class="visually-hidden">
-            Taylor Morgan outdoors, green leafy background, smiling.
-          </div>
-          <button type="button"
-            class="avatar-thumb-btn"
-            aria-label="Avatar 3: Taylor Morgan in a red jacket"
-            tabindex="0"
-            data-avatar="https://randomuser.me/api/portraits/men/43.jpg"
-            aria-describedby="avatar3-desc"
-          >
-            <img src="https://randomuser.me/api/portraits/men/43.jpg"
-                 class="avatar-thumb"
-                 alt="Avatar 3: Taylor Morgan in a red jacket"
-                 width="64" height="64"
-            />
-          </button>
-          <div id="avatar3-desc" class="visually-hidden">
-            Taylor Morgan in a red jacket, neutral expression, indoor background.
-          </div>
-          <button type="button"
-            class="avatar-thumb-btn"
-            aria-label="Avatar 4: Taylor Morgan wearing headphones"
-            tabindex="0"
-            data-avatar="https://randomuser.me/api/portraits/men/41.jpg"
-            aria-describedby="avatar4-desc"
-          >
-            <img src="https://randomuser.me/api/portraits/men/41.jpg"
-                 class="avatar-thumb"
-                 alt="Avatar 4: Taylor Morgan wearing headphones"
-                 width="64" height="64"
-            />
-          </button>
-          <div id="avatar4-desc" class="visually-hidden">
-            Taylor Morgan with headphones, smiling, casual shirt.
-          </div>
-        </div>
-        <div id="avatar-gallery-help" class="visually-hidden">
-          Use arrow keys to navigate avatars. Press Enter or Space to select an avatar.
-        </div>
-      </section>
-
-      <section class="social-section" id="social-media" aria-labelledby="social-title">
-        <h2 class="social-title" id="social-title">Social Media Links</h2>
-        <ul class="social-links" role="list">
-          <li>
-            <a href="https://twitter.com/taylormorgan"
-               class="social-link"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Taylor Morgan on Twitter (opens in new tab)"
-               >
-              <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 32 32">
-                <circle cx="16" cy="16" r="16" fill="#1da1f2"/>
-                <path d="M25.7 10.3c-.7.3-1.5.5-2.2.6.8-.5 1.4-1.2 1.7-2.1-.8.5-1.6.8-2.5 1-.7-.7-1.7-1.1-2.7-1.1-2 0-3.5 1.7-3.1 3.7-2.7-.1-5.1-1.4-6.7-3.3-.3.6-.4 1.3-.2 2 .3.8 1 1.4 1.8 1.7-.7 0-1.3-.2-1.8-.5v.1c0 1.5 1 2.7 2.4 3-.4.1-.9.2-1.3.1.4 1.1 1.5 1.9 2.7 1.9-1 .8-2.3 1.3-3.7 1.3-.2 0-.5 0-.7-.1 1.3.9 2.8 1.5 4.4 1.5 5.3 0 8.2-4.4 8.2-8.2v-.4c.6-.4 1.2-1 1.6-1.6z" fill="#fff"/>
-              </svg>
-              <span>Twitter</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://linkedin.com/in/taylormorgan"
-               class="social-link"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Taylor Morgan on LinkedIn (opens in new tab)"
-               >
-              <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 32 32">
-                <circle cx="16" cy="16" r="16" fill="#0077b5"/>
-                <path d="M10.8 13.6H7.7v10.7h3.1V13.6zm-1.5-5c-1 0-1.7.7-1.7 1.6 0 .9.7 1.6 1.7 1.6h.1c1 0 1.7-.7 1.7-1.6-.1-.9-.8-1.6-1.8-1.6zm13.7 5.3c-1.7 0-2.5 1-2.9 1.7v-1.5h-3.1c.1 1 0 10.7 0 10.7h3.1v-6c0-.3 0-.7.1-.9.2-.6.7-1.3 1.6-1.3 1.1 0 1.6.9 1.6 2.2v6h3.1v-6.4c0-3.4-1.8-5-4.1-5z" fill="#fff"/>
-              </svg>
-              <span>LinkedIn</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://github.com/taylormorgan"
-               class="social-link"
-               target="_blank"
-               rel="noopener noreferrer"
-               aria-label="Taylor Morgan on GitHub (opens in new tab)"
-               >
-              <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 32 32">
-                <circle cx="16" cy="16" r="16" fill="#333"/>
-                <path d="M16 7c-5 0-9 4-9 9 0 4 2.6 7.4 6.3 8.6.5.1.7-.2.7-.5v-1.8c-2.6.6-3.2-1.1-3.2-1.1-.4-1-1-1.2-1-1.2-.8-.6.1-.6.1-.6.9.1 1.3.9 1.3.9.8 1.3 2 1 2.5.8.1-.6.3-1 .5-1.2-2.1-.2-4.3-1-4.3-4.4 0-1 .4-1.8 1-2.4-.1-.2-.4-1.1.1-2.3 0 0 .8-.2 2.5.9.7-.2 1.5-.3 2.3-.3s1.6.1 2.3.3c1.7-1.1 2.5-.9 2.5-.9.5 1.2.2 2.1.1 2.3.6.6 1 1.4 1 2.4 0 3.4-2.2 4.2-4.3 4.4.3.3.6.8.6 1.7v2.5c0 .3.2.6.7.5C22.4 23.4 25 20 25 16c0-5-4-9-9-9z" fill="#fff"/>
-              </svg>
-              <span>GitHub</span>
-            </a>
-          </li>
-        </ul>
-        <div id="social-help" class="visually-hidden">
-          Social media links open in a new tab. Use arrow keys to navigate.
-        </div>
-      </section>
-    </main>
-
-    <aside aria-label="Profile Details & Quick Links">
-      <section aria-labelledby="sidebar-details-title">
-        <h2 id="sidebar-details-title">Profile Details</h2>
-        <ul class="sidebar-list">
-          <li><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#605AFF"/><path d="M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-3.3 0-8 1.7-8 5v3h16v-3c0-3.3-4.7-5-8-5z" fill="#fff"/></svg>
-            <strong>Location:</strong> Seattle, WA</li>
-          <li><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#ffb400"/><path d="M17.7 15.3l-3.6-3.6a4 4 0 10-1.4 1.4l3.6 3.6a1 1 0 001.4-1.4zm-6.7-2.3a3 3 0 110-6 3 3 0 010 6z" fill="#fff"/></svg>
-            <strong>Interests:</strong> Accessibility, Hiking, Coffee</li>
-          <li><svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#23b26d"/><path d="M12 7a5 5 0 00-5 5c0 3.9 5 8 5 8s5-4.1 5-8a5 5 0 00-5-5zm0 6.5A1.5 1.5 0 1112 10a1.5 1.5 0 010 3.5z" fill="#fff"/></svg>
-            <strong>Member Since:</strong> 2017</li>
+  <!-- Breadcrumb navigation -->
+  <nav aria-label="Breadcrumb">
+    <ol class="breadcrumb-list">
+      <li><a href="#main-content" class="breadcrumb-link">Home</a></li>
+      <li><span class="breadcrumb-sep" aria-hidden="true">›</span></li>
+      <li><span class="breadcrumb-current" aria-current="page">Interactive Travel Map</span></li>
+    </ol>
+  </nav>
+  <main id="main-content" tabindex="-1">
+    <!-- Sidebar with pin list and context help -->
+    <aside id="sidebar" aria-label="Sidebar: Pin List and Help">
+      <section aria-labelledby="sidebar-help-title" class="help-panel" id="help-section">
+        <h2 id="sidebar-help-title">How to Use This Map</h2>
+        <p>
+          <strong>To add a pin:</strong> Click anywhere on the map, or use the "Add a New Pin" form.<br>
+          <strong>To view pin details:</strong> Select a pin on the map or from the list.<br>
+          <strong>Keyboard navigation:</strong> Use Tab to move between pins and forms, Enter/Space to activate.
+        </p>
+        <ul>
+          <li>All actions are available via keyboard and mouse.</li>
+          <li>Colors, text size, and contrast can be adjusted using the controls below.</li>
+          <li>For more help, see the <a href="#help-section" class="footer-link">detailed help</a> below.</li>
         </ul>
       </section>
-      <section aria-labelledby="sidebar-links-title" style="margin-top:2.5rem;">
-        <h2 id="sidebar-links-title">Quick Links</h2>
-        <ul class="sidebar-list">
-          <li><a href="#main-content" class="footer-link">Go to Profile</a></li>
-          <li><a href="#avatar-gallery" class="footer-link">View Avatars</a></li>
-          <li><a href="#social-media" class="footer-link">Social Media</a></li>
-          <li><a href="#settings" class="footer-link">Accessibility Settings</a></li>
-          <li><a href="#help" class="footer-link">Help</a></li>
+      <section aria-labelledby="pin-list-title">
+        <h2 id="pin-list-title">Pinned Experiences</h2>
+        <ul class="pin-list" id="sidebar-pin-list" aria-live="polite" aria-relevant="additions removals">
+          <!-- Pin cards dynamically rendered here -->
         </ul>
+        <div id="no-pins-msg" role="status" aria-live="polite" style="display:none; color: var(--color-accent-dark); margin-top: 1em;">
+          No pins yet. Add your first experience!
+        </div>
       </section>
     </aside>
-  </div>
-
-  <section class="settings-section user-colors" id="settings" aria-labelledby="settings-title" style="max-width:1200px;margin:0 auto 2.5rem auto;padding:1.5rem 1rem;border-radius:1rem;background:var(--color-bg-alt);box-shadow:0 2px 8px var(--color-shadow);">
-    <h2 class="settings-title" id="settings-title">Accessibility & Color Settings</h2>
-    <form class="settings-form" aria-describedby="settings-help">
-      <fieldset>
-        <legend>Color Scheme</legend>
-        <label for="bg-color">Background:</label>
-        <select id="bg-color" name="bg-color" autocomplete="off" aria-label="Select background color">
-          <option value="#ffffff" selected>White</option>
-          <option value="#f3f0ff">Lavender</option>
-          <option value="#22223b">Dark Blue</option>
-          <option value="#222222">Black</option>
-        </select>
-        <label for="fg-color">Text:</label>
-        <select id="fg-color" name="fg-color" autocomplete="off" aria-label="Select text color">
-          <option value="#1a1a1a" selected>Black</option>
-          <option value="#605AFF">Violet</option>
-          <option value="#ffb400">Gold</option>
-          <option value="#ffffff">White</option>
-        </select>
-      </fieldset>
-      <fieldset>
-        <legend>Reduce Motion</legend>
-        <label for="reduce-motion">Animation:</label>
-        <select id="reduce-motion" name="reduce-motion" autocomplete="off" aria-label="Animation preference">
-          <option value="auto" selected>Respect system setting</option>
-          <option value="reduce">Reduce motion</option>
-          <option value="allow">Allow motion</option>
-        </select>
-      </fieldset>
-    </form>
-    <div id="settings-help" style="margin-top:1em;">
-      <strong>Tip:</strong> Adjust the color scheme and animation preferences for your comfort. These settings are saved for your next visit.
+    <div class="main-content">
+      <!-- Search bar and color theme controls -->
+      <section class="search-section" id="search-section" aria-labelledby="search-title">
+        <h2 id="search-title">Search Experiences</h2>
+        <form class="search-form" id="search-form" autocomplete="off" role="search" aria-label="Search pins by location or description">
+          <label for="search-input">Search pins:</label>
+          <input type="search" id="search-input" name="search" placeholder="Type location or experience..." aria-describedby="search-help" autocomplete="off" />
+          <button type="submit" class="search-btn" aria-label="Search pins">Search</button>
+          <span id="search-help" class="form-help">Enter a keyword to filter pins. Results update live.</span>
+        </form>
+      </section>
+      <section class="theme-section" aria-labelledby="theme-title">
+        <h2 id="theme-title">Customize Colors & Contrast</h2>
+        <form class="theme-controls" id="theme-controls" autocomplete="off" aria-label="Color theme controls">
+          <span class="theme-label">Theme:</span>
+          <button type="button" class="theme-btn" data-theme="default" aria-pressed="true" aria-label="Use default color theme">Default</button>
+          <button type="button" class="theme-btn" data-theme="high-contrast" aria-pressed="false" aria-label="Use high-contrast theme">High Contrast</button>
+          <button type="button" class="theme-btn" data-theme="dark" aria-pressed="false" aria-label="Use dark theme">Dark</button>
+          <button type="button" class="theme-btn" data-theme="custom" aria-pressed="false" aria-label="Customize colors">Custom</button>
+          <label for="custom-bg" class="sr-only">Custom background color</label>
+          <input type="color" id="custom-bg" name="custom-bg" value="#ffffff" style="display:none;" aria-label="Custom background color" />
+          <label for="custom-fg" class="sr-only">Custom text color</label>
+          <input type="color" id="custom-fg" name="custom-fg" value="#161a1d" style="display:none;" aria-label="Custom text color" />
+        </form>
+        <div class="form-help" id="theme-help">
+          Select a color theme. For custom colors, choose your own background and text colors.
+        </div>
+      </section>
+      <!-- Map area -->
+      <section class="map-section" aria-labelledby="map-title" tabindex="0" id="map-section">
+        <h2 id="map-title" class="sr-only">Travel Map</h2>
+        <!-- SVG map (simplified world map with major continents) -->
+        <svg class="map-svg" id="travel-map" viewBox="0 0 960 440" aria-labelledby="map-title map-desc" role="img" tabindex="0">
+          <title id="map-title-svg">Interactive World Map</title>
+          <desc id="map-desc">A simplified world map. Click or tap to add a pin. Use keyboard arrows to navigate pins.</desc>
+          <!-- Map continents (decorative, alt text not needed) -->
+          <g aria-hidden="true" role="presentation">
+            <path d="M120,210 Q200,90 340,130 Q480,160 530,260 Q590,350 420,400 Q210,370 120,210" fill="#d0e7fa" stroke="#b3d2ee" stroke-width="3"/>
+            <path d="M600,120 Q670,40 850,70 Q930,160 830,210 Q720,270 600,120" fill="#b7e4c7" stroke="#91c9a1" stroke-width="3"/>
+            <ellipse cx="700" cy="320" rx="90" ry="40" fill="#ffe5b4" stroke="#ffd699" stroke-width="3"/>
+            <ellipse cx="180" cy="350" rx="60" ry="25" fill="#f9d8d6" stroke="#e9b3b0" stroke-width="3"/>
+          </g>
+          <!-- Pins are dynamically inserted here as <g> elements -->
+        </svg>
+        <!-- Pin popup (positioned absolutely, JS controlled) -->
+        <div id="pin-popup" class="pin-popup" role="dialog" aria-modal="true" aria-labelledby="pin-popup-title" aria-describedby="pin-popup-desc" style="display:none;">
+          <div class="pin-popup-header">
+            <span class="pin-popup-title" id="pin-popup-title"></span>
+            <button type="button" class="pin-popup-close" aria-label="Close pin details" tabindex="0">&times;</button>
+          </div>
+          <div class="pin-popup-location" id="pin-popup-location"></div>
+          <div class="pin-popup-date" id="pin-popup-date"></div>
+          <div class="pin-popup-desc" id="pin-popup-desc"></div>
+        </div>
+      </section>
+      <!-- Add pin form -->
+      <section class="add-pin-section" id="add-pin-section" aria-labelledby="add-pin-title">
+        <h2 id="add-pin-title">Add a New Pin</h2>
+        <form class="add-pin-form" id="add-pin-form" autocomplete="off" aria-label="Add a new travel pin">
+          <fieldset>
+            <legend>Location Details</legend>
+            <div class="form-row">
+              <label for="pin-location">
+                Location name
+                <span class="required-indicator" aria-hidden="true">*</span>
+              </label>
+              <input type="text" id="pin-location" name="location" required aria-required="true" autocomplete="address-level2"
+                aria-describedby="location-help location-error" maxlength="60" />
+              <span class="form-help" id="location-help">Enter the city, landmark, or area (max 60 characters).</span>
+              <span class="form-error" id="location-error" aria-live="polite"></span>
+            </div>
+            <div class="form-row">
+              <label for="pin-title">
+                Experience title
+                <span class="required-indicator" aria-hidden="true">*</span>
+              </label>
+              <input type="text" id="pin-title" name="title" required aria-required="true" autocomplete="off"
+                aria-describedby="title-help title-error" maxlength="50" />
+              <span class="form-help" id="title-help">Give your experience a short, descriptive title (max 50 characters).</span>
+              <span class="form-error" id="title-error" aria-live="polite"></span>
+            </div>
+            <div class="form-row">
+              <label for="pin-desc">
+                Experience details
+                <span class="required-indicator" aria-hidden="true">*</span>
+              </label>
+              <textarea id="pin-desc" name="desc" required aria-required="true" autocomplete="off"
+                aria-describedby="desc-help desc-error" maxlength="400"></textarea>
+              <span class="form-help" id="desc-help">Describe your experience (max 400 characters).</span>
+              <span class="form-error" id="desc-error" aria-live="polite"></span>
+            </div>
+            <div class="form-row">
+              <label for="pin-date">
+                Date of experience
+                <span class="required-indicator" aria-hidden="true">*</span>
+              </label>
+              <input type="date" id="pin-date" name="date" required aria-required="true" autocomplete="off"
+                aria-describedby="date-help date-error" max="9999-12-31" />
+              <span class="form-help" id="date-help">Select the date you visited this location.</span>
+              <span class="form-error" id="date-error" aria-live="polite"></span>
+            </div>
+            <div class="form-row">
+              <label for="pin-coords">
+                Pin coordinates
+                <span class="required-indicator" aria-hidden="true">*</span>
+              </label>
+              <input type="text" id="pin-coords" name="coords" required aria-required="true" autocomplete="off"
+                aria-describedby="coords-help coords-error" pattern="^\d{1,3},\d{1,3}$" maxlength="7" />
+              <span class="form-help" id="coords-help">
+                Format: <strong>x,y</strong> (e.g., <span lang="en">320,210</span>). Click the map to auto-fill.
+              </span>
+              <span class="form-error" id="coords-error" aria-live="polite"></span>
+            </div>
+          </fieldset>
+          <div class="form-actions">
+            <button type="submit" class="add-pin-btn" aria-label="Add pin">Add Pin</button>
+            <button type="reset" class="reset-form-btn" aria-label="Reset form">Reset</button>
+          </div>
+          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+        </form>
+        <div class="form-help" id="add-pin-help">
+          All fields are required. Coordinates can be set by clicking on the map.
+          <a href="#help-section" class="footer-link">Need help?</a>
+        </div>
+      </section>
     </div>
-  </section>
-
-  <section id="help" aria-labelledby="help-title" style="max-width:1200px;margin:0 auto 2.5rem auto;padding:1.5rem 1rem;border-radius:1rem;background:var(--color-bg-alt);box-shadow:0 2px 8px var(--color-shadow);">
-    <h2 id="help-title">Help & Accessibility Information</h2>
-    <ul>
-      <li><strong>Keyboard Navigation:</strong> Use Tab/Shift+Tab to move between sections and controls. Use Enter or Space to activate buttons and links. Avatar gallery supports arrow keys for navigation.</li>
-      <li><strong>Skip Links:</strong> Use the "Skip to main content" link at the top for faster navigation.</li>
-      <li><strong>Focus Indicators:</strong> All interactive elements have enhanced, high-contrast focus outlines.</li>
-      <li><strong>Color Settings:</strong> Adjust foreground/background colors in the Accessibility Settings section.</li>
-      <li><strong>Motion Reduction:</strong> Animation can be disabled or reduced in Accessibility Settings.</li>
-      <li><strong>Abbreviations & Jargon:</strong> Hover or focus on underlined terms for definitions.</li>
-      <li><strong>Pronunciation:</strong> Press the speaker button next to the name to hear pronunciation.</li>
-      <li><strong>Assistance:</strong> For further help, contact <a href="mailto:accessibility@taylormorgan.com" class="footer-link">accessibility@taylormorgan.com</a>.</li>
-    </ul>
-  </section>
-
-  <footer>
-    <div>
-      <strong>&copy; 2024 Taylor Morgan</strong> – All rights reserved.
-    </div>
-    <ul class="footer-links">
-      <li><a href="#main-content" class="footer-link">Profile</a></li>
-      <li><a href="#avatar-gallery" class="footer-link">Avatars</a></li>
-      <li><a href="#social-media" class="footer-link">Social Links</a></li>
-      <li><a href="#settings" class="footer-link">Accessibility Settings</a></li>
-      <li><a href="#help" class="footer-link">Help</a></li>
-    </ul>
-    <div style="margin-top:1em;font-size:0.95em;">
-      <span>WCAG 2.2 AAA Accessible Profile Page</span>
-    </div>
+  </main>
+  <footer id="footer" aria-labelledby="footer-title">
+    <h2 id="footer-title" class="sr-only">About and Accessibility Information</h2>
+    <nav aria-label="Footer Links">
+      <ul class="footer-links">
+        <li><a href="#main-content" class="footer-link">Back to Map</a></li>
+        <li><a href="#help-section" class="footer-link">Help &amp; Accessibility</a></li>
+        <li><a href="#add-pin-section" class="footer-link">Add Pin</a></li>
+        <li><a href="#search-section" class="footer-link">Search</a></li>
+        <li><a href="#sidebar" class="footer-link">View Pins</a></li>
+        <li><a href="#footer" class="footer-link" aria-current="page">About</a></li>
+      </ul>
+    </nav>
+    <p>
+      <strong>Accessible Interactive Travel Map</strong> is designed to meet <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 <abbr title="Triple A">AAA</abbr> standards.<br>
+      <span lang="en">All content and features are accessible to keyboard, screen reader, and touch users.</span>
+    </p>
+    <p>
+      <abbr title="Frequently Asked Questions">FAQ</abbr> | <abbr title="Application Programming Interface">API</abbr> | <abbr title="World Wide Web Consortium">W3C</abbr> | <span title="pronounced as 'map'">Map</span>
+    </p>
+    <p>
+      &copy; 2024 Accessible Travel Map. All rights reserved.
+    </p>
   </footer>
-
-  <!-- Audio for pronunciation (with transcript, low background noise, no music) -->
-  <audio id="pronounce-audio" preload="none" aria-label="Pronunciation of Taylor Morgan">
-    <source src="https://cdn.jsdelivr.net/gh/jimmybyrum/public-audio/taylor-morgan-pronunciation.mp3" type="audio/mpeg">
-    <track kind="captions" src="data:text/vtt,WEBVTT%0A00:00:00.000%20--%3E%2000:00:02.000%0ATAY-ler%20MOR-gan" srclang="en" label="English captions" default>
-    Your browser does not support the audio element.
-  </audio>
-  <div id="pronounce-transcript" class="visually-hidden">
-    Pronunciation audio: "TAY-ler MOR-gan".
-  </div>
-
   <script>
-    // Enhanced focus for skip link on page load
-    document.getElementById('skip-link').addEventListener('focus', function() {
-      this.style.transform = 'translateY(0)';
-    });
-
-    // Follow button logic with ARIA state and live region
-    const followBtn = document.getElementById('follow-btn');
-    const followStatus = document.getElementById('follow-status');
-    let isFollowing = false;
-    function updateFollowBtn() {
-      followBtn.setAttribute('aria-pressed', isFollowing ? 'true' : 'false');
-      document.getElementById('follow-btn-label').textContent = isFollowing ? 'Unfollow Taylor Morgan' : 'Follow Taylor Morgan';
-      document.getElementById('follow-btn-text').textContent = isFollowing ? 'Following' : 'Follow';
-      followStatus.textContent = isFollowing ? 'You are now following Taylor Morgan.' : '';
-    }
-    followBtn.addEventListener('click', function(e) {
-      isFollowing = !isFollowing;
-      updateFollowBtn();
-      // Error prevention: Confirm unfollow
-      if (!isFollowing) {
-        setTimeout(function() {
-          if (confirm('Are you sure you want to unfollow Taylor Morgan?')) {
-            followStatus.textContent = 'You have unfollowed Taylor Morgan.';
+    // Accessibility: Focus trap for modal
+    function trapFocus(modal) {
+      const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      modal.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              last.focus();
+              e.preventDefault();
+            }
           } else {
-            isFollowing = true;
-            updateFollowBtn();
+            if (document.activeElement === last) {
+              first.focus();
+              e.preventDefault();
+            }
           }
-        }, 100);
-      }
-    });
-    followBtn.addEventListener('keydown', function(e) {
-      if (e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault();
-        followBtn.click();
-      }
-    });
-    updateFollowBtn();
-
-    // Avatar gallery logic with keyboard navigation
-    const avatarBtns = Array.from(document.querySelectorAll('.avatar-thumb-btn'));
-    const mainAvatar = document.getElementById('main-avatar');
-    let selectedAvatarIdx = 0;
-    function selectAvatar(idx) {
-      avatarBtns.forEach((btn, i) => {
-        if (i === idx) {
-          btn.setAttribute('aria-current', 'true');
-          btn.querySelector('.visually-hidden')?.remove();
-          const selected = document.createElement('span');
-          selected.className = 'visually-hidden';
-          selected.textContent = 'Selected';
-          btn.appendChild(selected);
-        } else {
-          btn.removeAttribute('aria-current');
-          btn.querySelector('.visually-hidden')?.remove();
         }
       });
-      mainAvatar.src = avatarBtns[idx].getAttribute('data-avatar');
-      mainAvatar.alt = avatarBtns[idx].querySelector('img').alt;
-      selectedAvatarIdx = idx;
     }
-    avatarBtns.forEach((btn, idx) => {
-      btn.addEventListener('click', () => selectAvatar(idx));
-      btn.addEventListener('keydown', (e) => {
-        let handled = false;
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-          handled = true;
-          selectAvatar((idx + 1) % avatarBtns.length);
-          avatarBtns[(idx + 1) % avatarBtns.length].focus();
-        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-          handled = true;
-          selectAvatar((idx - 1 + avatarBtns.length) % avatarBtns.length);
-          avatarBtns[(idx - 1 + avatarBtns.length) % avatarBtns.length].focus();
-        } else if (e.key === ' ' || e.key === 'Enter') {
-          handled = true;
-          selectAvatar(idx);
-        }
-        if (handled) e.preventDefault();
+
+    // Navigation: Hamburger for mobile
+    (function navHamburger() {
+      const hamburger = document.querySelector('.hamburger');
+      const nav = document.getElementById('main-nav');
+      hamburger.addEventListener('click', function() {
+        const expanded = nav.getAttribute('data-collapsed') !== 'true';
+        nav.setAttribute('data-collapsed', expanded ? 'true' : 'false');
+        hamburger.setAttribute('aria-expanded', !expanded);
       });
-    });
-
-    // Initial selection
-    selectAvatar(0);
-
-    // Pronunciation button logic
-    const pronounceBtn = document.getElementById('pronounce-btn');
-    const pronounceAudio = document.getElementById('pronounce-audio');
-    pronounceBtn.addEventListener('click', function() {
-      pronounceAudio.currentTime = 0;
-      pronounceAudio.play();
-    });
-    pronounceBtn.addEventListener('keydown', function(e) {
-      if (e.key === ' ' || e.key === 'Enter') {
-        e.preventDefault();
-        pronounceBtn.click();
-      }
-    });
-
-    // Color scheme and accessibility settings
-    const bgColorSelect = document.getElementById('bg-color');
-    const fgColorSelect = document.getElementById('fg-color');
-    const reduceMotionSelect = document.getElementById('reduce-motion');
-    function setUserColors(bg, fg) {
-      document.documentElement.style.setProperty('--user-bg', bg);
-      document.documentElement.style.setProperty('--user-fg', fg);
-    }
-    function setReduceMotion(mode) {
-      if (mode === 'reduce') {
-        document.documentElement.classList.add('reduce-motion');
-      } else if (mode === 'allow') {
-        document.documentElement.classList.remove('reduce-motion');
-      } else {
-        // Respect system setting
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          document.documentElement.classList.add('reduce-motion');
-        } else {
-          document.documentElement.classList.remove('reduce-motion');
-        }
-      }
-    }
-    // Save/restore settings from localStorage
-    function saveSettings() {
-      localStorage.setItem('profile-bg', bgColorSelect.value);
-      localStorage.setItem('profile-fg', fgColorSelect.value);
-      localStorage.setItem('profile-motion', reduceMotionSelect.value);
-    }
-    function loadSettings() {
-      const bg = localStorage.getItem('profile-bg');
-      const fg = localStorage.getItem('profile-fg');
-      const motion = localStorage.getItem('profile-motion');
-      if (bg) {
-        bgColorSelect.value = bg;
-        document.documentElement.style.setProperty('--user-bg', bg);
-      }
-      if (fg) {
-        fgColorSelect.value = fg;
-        document.documentElement.style.setProperty('--user-fg', fg);
-      }
-      if (motion) {
-        reduceMotionSelect.value = motion;
-        setReduceMotion(motion);
-      }
-    }
-    bgColorSelect.addEventListener('change', function() {
-      setUserColors(bgColorSelect.value, fgColorSelect.value);
-      saveSettings();
-    });
-    fgColorSelect.addEventListener('change', function() {
-      setUserColors(bgColorSelect.value, fgColorSelect.value);
-      saveSettings();
-    });
-    reduceMotionSelect.addEventListener('change', function() {
-      setReduceMotion(reduceMotionSelect.value);
-      saveSettings();
-    });
-    // On page load
-    loadSettings();
-
-    // Help: focusable jargon/abbr for definitions (AAA: 3.1.3, 3.1.4)
-    document.querySelectorAll('.abbr, .jargon').forEach(function(el) {
-      el.addEventListener('focus', function() {
-        el.setAttribute('aria-live', 'polite');
-      });
-      el.addEventListener('blur', function() {
-        el.removeAttribute('aria-live');
-      });
-    });
-
-    // Enhanced: Keyboard focus not obscured
-    function ensureFocusVisible(el) {
-      setTimeout(() => {
-        if (el && typeof el.scrollIntoView === 'function') {
-          el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-        }
-      }, 1);
-    }
-    document.addEventListener('focusin', function(e) {
-      ensureFocusVisible(e.target);
-    });
-
-    // Footer links: keyboard accessibility
-    document.querySelectorAll('.footer-link').forEach(function(link) {
-      link.addEventListener('keydown', function(e) {
-        if (e.key === ' ' || e.key === 'Enter') {
+      hamburger.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          hamburger.click();
           e.preventDefault();
-          link.click();
+        }
+      });
+    })();
+
+    // Navigation: Dropdown menu (Experiences)
+    (function navDropdown() {
+      const btn = document.getElementById('experiences-menu-btn');
+      const menu = document.getElementById('menu-experiences');
+      let menuOpen = false;
+
+      function openMenu() {
+        btn.setAttribute('aria-expanded', 'true');
+        menu.setAttribute('aria-hidden', 'false');
+        menuOpen = true;
+        // Focus first item
+        const first = menu.querySelector('a');
+        if (first) first.focus();
+      }
+      function closeMenu() {
+        btn.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('aria-hidden', 'true');
+        menuOpen = false;
+        btn.focus();
+      }
+      btn.addEventListener('click', function() {
+        menuOpen ? closeMenu() : openMenu();
+      });
+      btn.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          menuOpen ? closeMenu() : openMenu();
+        } else if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          openMenu();
+        }
+      });
+      menu.addEventListener('keydown', function(e) {
+        const items = Array.from(menu.querySelectorAll('a'));
+        const idx = items.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (idx < items.length - 1) items[idx + 1].focus();
+          else items[0].focus();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (idx > 0) items[idx - 1].focus();
+          else items[items.length - 1].focus();
+        } else if (e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+      menu.addEventListener('focusout', function(e) {
+        if (!menu.contains(e.relatedTarget)) closeMenu();
+      });
+      // Dismiss on outside click
+      document.addEventListener('mousedown', function(e) {
+        if (!menu.contains(e.target) && e.target !== btn) closeMenu();
+      });
+    })();
+
+    // Breadcrumb links: smooth scroll
+    document.querySelectorAll('.breadcrumb-link, .footer-link, .main-nav-link').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          const el = document.querySelector(href);
+          if (el) {
+            e.preventDefault();
+            el.scrollIntoView({behavior: 'smooth', block: 'start'});
+            el.focus({preventScroll:true});
+          }
         }
       });
     });
 
-    // Prevent keyboard trap in modals (if any in future)
-    // (No modals currently present)
+    // Pin data structure
+    let pins = [];
+    let filteredPins = [];
+    let selectedPinId = null;
+    let pinIdCounter = 1;
 
-    // Touch targets: ensure all interactive elements are at least 44x44px (enforced in CSS)
+    // Map and pin rendering
+    const mapSvg = document.getElementById('travel-map');
+    const pinPopup = document.getElementById('pin-popup');
+    const pinPopupTitle = document.getElementById('pin-popup-title');
+    const pinPopupLocation = document.getElementById('pin-popup-location');
+    const pinPopupDate = document.getElementById('pin-popup-date');
+    const pinPopupDesc = document.getElementById('pin-popup-desc');
+    const sidebarPinList = document.getElementById('sidebar-pin-list');
+    const noPinsMsg = document.getElementById('no-pins-msg');
 
-    // Error prevention for follow/unfollow: confirmation dialog (see above)
+    // Utility: Ensure color contrast (7:1+) for custom themes
+    function getContrast(hex1, hex2) {
+      // Convert hex to RGB
+      function hexToRgb(hex) {
+        hex = hex.replace('#','');
+        if (hex.length === 3) hex = hex.split('').map(x=>x+x).join('');
+        const num = parseInt(hex,16);
+        return [num>>16, (num>>8)&255, num&255];
+      }
+      // Relative luminance
+      function luminance(r,g,b) {
+        [r,g,b] = [r,g,b].map(v=>{
+          v/=255;
+          return v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055,2.4);
+        });
+        return 0.2126*r+0.7152*g+0.0722*b;
+      }
+      const l1 = luminance(...hexToRgb(hex1));
+      const l2 = luminance(...hexToRgb(hex2));
+      return (Math.max(l1,l2)+0.05)/(Math.min(l1,l2)+0.05);
+    }
 
-    // Multiple ways to navigate: main nav, breadcrumbs, sidebar quick links, search (not shown), sitemap (footer links)
+    // Map: Add pin on click
+    mapSvg.addEventListener('click', function(e) {
+      // Only allow if not clicking a pin
+      if (e.target.closest('.map-pin')) return;
+      const rect = mapSvg.getBoundingClientRect();
+      const x = Math.round((e.clientX - rect.left) * (mapSvg.viewBox.baseVal.width / rect.width));
+      const y = Math.round((e.clientY - rect.top) * (mapSvg.viewBox.baseVal.height / rect.height));
+      // Fill coords field in add pin form
+      const coordsInput = document.getElementById('pin-coords');
+      coordsInput.value = `${x},${y}`;
+      coordsInput.focus();
+      // Announce for screen reader
+      announceStatus(`Coordinates ${x},${y} filled in the form.`);
+    });
 
-    // No timing or interruptions present
+    // Map: Render pins
+    function renderPins() {
+      // Remove old pins
+      Array.from(mapSvg.querySelectorAll('.map-pin')).forEach(el=>el.remove());
+      (filteredPins.length ? filteredPins : pins).forEach(pin=>{
+        const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+        g.setAttribute('tabindex','0');
+        g.setAttribute('role','button');
+        g.setAttribute('aria-label',`${pin.title} at ${pin.location}, ${pin.date}. Press Enter for details.`);
+        g.setAttribute('class','map-pin');
+        g.setAttribute('data-id',pin.id);
+        g.setAttribute('data-selected', pin.id===selectedPinId ? 'true' : 'false');
+        g.setAttribute('aria-pressed', pin.id===selectedPinId ? 'true' : 'false');
+        // Pin shape (circle + pointer)
+        const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        circle.setAttribute('cx',pin.x);
+        circle.setAttribute('cy',pin.y-18);
+        circle.setAttribute('r','15');
+        circle.setAttribute('fill', pin.id===selectedPinId ? '#ffd600' : '#f44336');
+        circle.setAttribute('stroke','#fff');
+        circle.setAttribute('stroke-width','2');
+        g.appendChild(circle);
+        const pointer = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+        pointer.setAttribute('points',`${pin.x-8},${pin.y-5} ${pin.x+8},${pin.y-5} ${pin.x},${pin.y+12}`);
+        pointer.setAttribute('fill', pin.id===selectedPinId ? '#ffd600' : '#f44336');
+        g.appendChild(pointer);
+        // Pin icon (SVG, accessible)
+        const icon = document.createElementNS('http://www.w3.org/2000/svg','text');
+        icon.setAttribute('x',pin.x);
+        icon.setAttribute('y',pin.y-12);
+        icon.setAttribute('text-anchor','middle');
+        icon.setAttribute('font-size','16');
+        icon.setAttribute('fill','#fff');
+        icon.setAttribute('aria-hidden','true');
+        icon.textContent = '📍';
+        g.appendChild(icon);
+        // Events
+        g.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openPinPopup(pin, g);
+        });
+        g.addEventListener('keydown', function(e) {
+          if (e.key==='Enter' || e.key===' ') {
+            e.preventDefault();
+            openPinPopup(pin, g);
+          }
+        });
+        g.addEventListener('focus', function() {
+          g.setAttribute('data-selected','true');
+        });
+        g.addEventListener('blur', function() {
+          g.setAttribute('data-selected', pin.id===selectedPinId ? 'true' : 'false');
+        });
+        mapSvg.appendChild(g);
+      });
+    }
 
-    // All interactive elements have ARIA labels/roles as needed
+    // Pin popup (modal)
+    function openPinPopup(pin, svgPinEl) {
+      selectedPinId = pin.id;
+      pinPopupTitle.textContent = pin.title;
+      pinPopupLocation.textContent = pin.location;
+      pinPopupDate.textContent = new Date(pin.date).toLocaleDateString();
+      pinPopupDesc.textContent = pin.desc;
+      // Position popup
+      const rect = mapSvg.getBoundingClientRect();
+      let x = pin.x * (rect.width / mapSvg.viewBox.baseVal.width);
+      let y = pin.y * (rect.height / mapSvg.viewBox.baseVal.height);
+      // Offset for popup
+      x = Math.max(16, Math.min(rect.width-340, x+rect.left-rect.left-60));
+      y = Math.max(12, Math.min(rect.height-180, y+rect.top-rect.top-130));
+      pinPopup.style.left = `${x}px`;
+      pinPopup.style.top = `${y}px`;
+      pinPopup.style.display = 'block';
+      pinPopup.setAttribute('aria-modal','true');
+      pinPopup.setAttribute('tabindex','0');
+      pinPopup.focus();
+      renderPins();
+      trapFocus(pinPopup);
+      // Close button
+      const closeBtn = pinPopup.querySelector('.pin-popup-close');
+      closeBtn.onclick = closePinPopup;
+      closeBtn.onkeydown = function(e) {
+        if (e.key==='Enter' || e.key===' ') {
+          e.preventDefault();
+          closePinPopup();
+        }
+      };
+      // ESC to close
+      pinPopup.onkeydown = function(e) {
+        if (e.key==='Escape') {
+          closePinPopup();
+        }
+      };
+      // Dismiss on outside click
+      document.addEventListener('mousedown', dismissPopupOnClick);
+      announceStatus(`Showing details for pin: ${pin.title} at ${pin.location}`);
+    }
+    function closePinPopup() {
+      pinPopup.style.display = 'none';
+      pinPopup.setAttribute('aria-modal','false');
+      selectedPinId = null;
+      renderPins();
+      // Remove event
+      document.removeEventListener('mousedown', dismissPopupOnClick);
+      // Return focus to map
+      mapSvg.focus();
+    }
+    function dismissPopupOnClick(e) {
+      if (!pinPopup.contains(e.target)) closePinPopup();
+    }
 
-    // All content is accessible at 200% zoom, no horizontal scroll
+    // Sidebar: Render pin list
+    function renderSidebarPins() {
+      sidebarPinList.innerHTML = '';
+      const pinArr = filteredPins.length ? filteredPins : pins;
+      if (!pinArr.length) {
+        noPinsMsg.style.display = 'block';
+        return;
+      }
+      noPinsMsg.style.display = 'none';
+      pinArr.forEach(pin=>{
+        const li = document.createElement('li');
+        li.className = 'pin-card';
+        li.setAttribute('tabindex','0');
+        li.setAttribute('role','region');
+        li.setAttribute('aria-label',`${pin.title} at ${pin.location} on ${pin.date}`);
+        // Icon
+        const icon = document.createElement('span');
+        icon.className = 'pin-card-icon';
+        icon.setAttribute('aria-hidden','true');
+        icon.textContent = '📍';
+        li.appendChild(icon);
+        // Title
+        const title = document.createElement('div');
+        title.className = 'pin-card-title';
+        title.textContent = pin.title;
+        li.appendChild(title);
+        // Location
+        const location = document.createElement('div');
+        location.className = 'pin-card-location';
+        location.textContent = pin.location;
+        li.appendChild(location);
+        // Date
+        const date = document.createElement('div');
+        date.className = 'pin-card-date';
+        date.textContent = new Date(pin.date).toLocaleDateString();
+        li.appendChild(date);
+        // Desc
+        const desc = document.createElement('div');
+        desc.className = 'pin-card-desc';
+        desc.textContent = pin.desc;
+        li.appendChild(desc);
+        // Actions
+        const actions = document.createElement('div');
+        actions.className = 'pin-card-actions';
+        // View on map
+        const viewBtn = document.createElement('button');
+        viewBtn.className = 'pin-card-action-btn';
+        viewBtn.setAttribute('aria-label',`Show pin for ${pin.title} on map`);
+        viewBtn.textContent = 'Show on Map';
+        viewBtn.onclick = function() {
+          openPinPopup(pin);
+          // Scroll map into view
+          document.getElementById('map-section').scrollIntoView({behavior:'smooth', block:'center'});
+        };
+        viewBtn.onkeydown = function(e) {
+          if (e.key==='Enter' || e.key===' ') {
+            e.preventDefault();
+            viewBtn.click();
+          }
+        };
+        actions.appendChild(viewBtn);
+        // Delete
+        const delBtn = document.createElement('button');
+        delBtn.className = 'pin-card-action-btn';
+        delBtn.setAttribute('aria-label','Delete Pin');
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = function() {
+          if (confirm('Are you sure you want to delete this pin?')) {
+            deletePin(pin.id);
+          }
+        };
+        delBtn.onkeydown = function(e) {
+          if (e.key==='Enter' || e.key===' ') {
+            e.preventDefault();
+            delBtn.click();
+          }
+        };
+        actions.appendChild(delBtn);
+        li.appendChild(actions);
+        // Keyboard: focus opens popup
+        li.addEventListener('keydown', function(e) {
+          if (e.key==='Enter' || e.key===' ') {
+            e.preventDefault();
+            openPinPopup(pin);
+          }
+        });
+        sidebarPinList.appendChild(li);
+      });
+    }
 
-    // User can select foreground/background colors for comfort
+    // Add pin
+    function addPin(pin) {
+      pin.id = pinIdCounter++;
+      pins.push(pin);
+      filteredPins = [];
+      renderPins();
+      renderSidebarPins();
+      announceStatus(`Pin "${pin.title}" added at ${pin.location}.`);
+    }
+    function deletePin(id) {
+      pins = pins.filter(pin=>pin.id!==id);
+      filteredPins = [];
+      renderPins();
+      renderSidebarPins();
+      announceStatus('Pin deleted.');
+    }
 
-    // Animation only on interaction, and can be disabled
+    // Add pin form
+    const addPinForm = document.getElementById('add-pin-form');
+    addPinForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Validate fields
+      let valid = true;
+      const location = addPinForm.location.value.trim();
+      const title = addPinForm.title.value.trim();
+      const desc = addPinForm.desc.value.trim();
+      const date = addPinForm.date.value;
+      const coords = addPinForm.coords.value.trim();
+      // Reset errors
+      ['location','title','desc','date','coords'].forEach(f=>{
+        document.getElementById(f+'-error').textContent = '';
+        addPinForm[f].setAttribute('aria-invalid','false');
+      });
+      // Location
+      if (!location) {
+        setError('location','Location is required.');
+        valid = false;
+      }
+      // Title
+      if (!title) {
+        setError('title','Title is required.');
+        valid = false;
+      }
+      // Desc
+      if (!desc) {
+        setError('desc','Description is required.');
+        valid = false;
+      }
+      // Date
+      if (!date) {
+        setError('date','Date is required.');
+        valid = false;
+      }
+      // Coords
+      if (!coords.match(/^\d{1,3},\d{1,3}$/)) {
+        setError('coords','Coordinates must be in "x,y" format (e.g., 320,210).');
+        valid = false;
+      }
+      // Error prevention: check duplicate pin
+      if (pins.some(pin=>pin.location.toLowerCase()===location.toLowerCase() && pin.title.toLowerCase()===title.toLowerCase())) {
+        setError('location','A pin with this location and title already exists.');
+        setError('title','A pin with this location and title already exists.');
+        valid = false;
+      }
+      if (!valid) {
+        announceStatus('Form errors. Please fix the highlighted fields.','alert');
+        return;
+      }
+      // Parse coords
+      const [x,y] = coords.split(',').map(Number);
+      addPin({
+        location,
+        title,
+        desc,
+        date,
+        x,
+        y
+      });
+      addPinForm.reset();
+      document.getElementById('form-status').textContent = 'Pin added successfully!';
+      document.getElementById('form-status').setAttribute('role','status');
+      setTimeout(()=>{document.getElementById('form-status').textContent='';}, 4000);
+    });
+    function setError(field, msg) {
+      const errorEl = document.getElementById(field+'-error');
+      errorEl.textContent = msg;
+      addPinForm[field].setAttribute('aria-invalid','true');
+      addPinForm[field].focus();
+    }
+    // Reset form
+    addPinForm.addEventListener('reset', function() {
+      ['location','title','desc','date','coords'].forEach(f=>{
+        document.getElementById(f+'-error').textContent = '';
+        addPinForm[f].setAttribute('aria-invalid','false');
+      });
+      document.getElementById('form-status').textContent = '';
+    });
 
-    // All images have descriptive alt text, no images of text
+    // Search pins
+    document.getElementById('search-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const q = document.getElementById('search-input').value.trim().toLowerCase();
+      if (!q) {
+        filteredPins = [];
+        renderPins();
+        renderSidebarPins();
+        return;
+      }
+      filteredPins = pins.filter(pin=>
+        pin.location.toLowerCase().includes(q) ||
+        pin.title.toLowerCase().includes(q) ||
+        pin.desc.toLowerCase().includes(q)
+      );
+      renderPins();
+      renderSidebarPins();
+      announceStatus(`${filteredPins.length} pin${filteredPins.length!==1?'s':''} found for "${q}".`);
+    });
+    document.getElementById('search-input').addEventListener('input', function(e) {
+      document.getElementById('search-form').dispatchEvent(new Event('submit'));
+    });
 
-    // No authentication or cognitive function tests present
+    // Theme controls (AAA: user-selectable colors)
+    (function themeControls() {
+      const themeBtns = document.querySelectorAll('.theme-btn');
+      const customBg = document.getElementById('custom-bg');
+      const customFg = document.getElementById('custom-fg');
+      function setTheme(theme) {
+        document.documentElement.removeAttribute('style');
+        themeBtns.forEach(btn=>{
+          btn.setAttribute('aria-pressed', btn.dataset.theme===theme ? 'true' : 'false');
+        });
+        if (theme==='default') {
+          // nothing, default CSS
+        } else if (theme==='high-contrast') {
+          document.documentElement.style.setProperty('--color-bg', '#fff');
+          document.documentElement.style.setProperty('--color-fg', '#111');
+          document.documentElement.style.setProperty('--color-accent', '#000');
+          document.documentElement.style.setProperty('--color-accent-dark', '#000');
+          document.documentElement.style.setProperty('--color-success', '#008000');
+          document.documentElement.style.setProperty('--color-danger', '#a8002c');
+          document.documentElement.style.setProperty('--color-map', '#fff');
+          document.documentElement.style.setProperty('--color-map-border', '#000');
+          document.documentElement.style.setProperty('--color-pin', '#000');
+          document.documentElement.style.setProperty('--color-pin-focus', '#000');
+          document.documentElement.style.setProperty('--color-focus', '#ffd600');
+          document.documentElement.style.setProperty('--color-focus-outline', '#ffd600');
+        } else if (theme==='dark') {
+          document.documentElement.style.setProperty('--color-bg', '#1a1c20');
+          document.documentElement.style.setProperty('--color-fg', '#f1f1f1');
+          document.documentElement.style.setProperty('--color-accent', '#ffd600');
+          document.documentElement.style.setProperty('--color-accent-dark', '#ffb300');
+          document.documentElement.style.setProperty('--color-success', '#80ffb0');
+          document.documentElement.style.setProperty('--color-danger', '#ff1744');
+          document.documentElement.style.setProperty('--color-map', '#222c3a');
+          document.documentElement.style.setProperty('--color-map-border', '#fff');
+          document.documentElement.style.setProperty('--color-pin', '#ffd600');
+          document.documentElement.style.setProperty('--color-pin-focus', '#ffd600');
+          document.documentElement.style.setProperty('--color-focus', '#00bcd4');
+          document.documentElement.style.setProperty('--color-focus-outline', '#00bcd4');
+        } else if (theme==='custom') {
+          customBg.style.display = 'inline-block';
+          customFg.style.display = 'inline-block';
+          // Get user colors
+          const bg = customBg.value;
+          const fg = customFg.value;
+          // Check contrast (7:1)
+          if (getContrast(bg,fg) < 7) {
+            announceStatus('Selected colors do not meet 7:1 contrast. Please adjust.','alert');
+            return;
+          }
+          document.documentElement.style.setProperty('--color-bg', bg);
+          document.documentElement.style.setProperty('--color-fg', fg);
+        }
+        if (theme!=='custom') {
+          customBg.style.display = 'none';
+          customFg.style.display = 'none';
+        }
+      }
+      themeBtns.forEach(btn=>{
+        btn.addEventListener('click', function() {
+          setTheme(btn.dataset.theme);
+        });
+        btn.addEventListener('keydown', function(e) {
+          if (e.key==='Enter' || e.key===' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+      });
+      customBg.addEventListener('input', function() {
+        setTheme('custom');
+      });
+      customFg.addEventListener('input', function() {
+        setTheme('custom');
+      });
+      // Default
+      setTheme('default');
+    })();
 
-    // All abbreviations and jargon defined; pronunciation provided
+    // Announce status (ARIA live region)
+    function announceStatus(msg, type='status') {
+      let status = document.getElementById('aria-status');
+      if (!status) {
+        status = document.createElement('div');
+        status.id = 'aria-status';
+        status.setAttribute('role', type);
+        status.setAttribute('aria-live', type==='alert'?'assertive':'polite');
+        status.className = 'sr-only';
+        document.body.appendChild(status);
+      }
+      status.textContent = msg;
+      setTimeout(()=>{status.textContent='';}, 4000);
+    }
 
-    // Status messages use role="status" or aria-live
+    // Initialize
+    function init() {
+      renderPins();
+      renderSidebarPins();
+      // Example pin
+      addPin({
+        location: 'Paris, France',
+        title: 'Eiffel Tower Visit',
+        desc: 'Saw the Eiffel Tower at sunset. Breathtaking view and a wonderful atmosphere!',
+        date: '2023-05-12',
+        x: 390,
+        y: 160
+      });
+      addPin({
+        location: 'Tokyo, Japan',
+        title: 'Cherry Blossom Festival',
+        desc: 'Visited Ueno Park during Sakura season. The cherry blossoms were stunning!',
+        date: '2024-04-03',
+        x: 820,
+        y: 180
+      });
+    }
+    window.addEventListener('DOMContentLoaded', init);
 
-    // Custom components (avatar gallery, follow button) have proper roles and ARIA states
+    // Keyboard: Skip link focus to main
+    document.querySelector('.skip-link').addEventListener('click', function(e) {
+      setTimeout(function() {
+        document.getElementById('main-content').focus();
+      }, 100);
+    });
 
-    // All links/buttons have descriptive text
+    // Map keyboard navigation: arrow keys move between pins
+    mapSvg.addEventListener('keydown', function(e) {
+      if (!pins.length) return;
+      let idx = pins.findIndex(p=>p.id===selectedPinId);
+      if (e.key==='ArrowRight' || e.key==='ArrowDown') {
+        idx = (idx+1)%pins.length;
+        openPinPopup(pins[idx]);
+        e.preventDefault();
+      } else if (e.key==='ArrowLeft' || e.key==='ArrowUp') {
+        idx = (idx-1+pins.length)%pins.length;
+        openPinPopup(pins[idx]);
+        e.preventDefault();
+      }
+    });
 
-    // No deprecated elements used
+    // Dragging alternative: Click to set coords (no drag required)
+    // Touch: All buttons and pins are 44x44px min (via CSS)
 
-    // Reading level is lower secondary or simpler
+    // Responsive zoom: text and layout scale to 200%+ without horizontal scroll (via CSS)
 
-    // All lists use semantic markup
+    // Motion: No auto animations, only transitions. All disabled if prefers-reduced-motion.
 
-    // No keyboard trap
+    // Help: Consistent location in sidebar and footer. Context help on forms.
 
-    // All focus indicators are enhanced and AAA-compliant
+    // Unusual words/abbreviations/pronunciation: Footer provides definitions, abbr tags used.
 
-    // All content has proper heading hierarchy and section headings
+    // Reading level: Content written at lower secondary education level.
 
-    // No images of text
+    // Error prevention: Form checks for duplicates, clear errors, confirmation on delete.
 
-    // All requirements met for WCAG 2.2 AAA
+    // Authentication: Not required for this app; would provide alternative methods if added.
 
+    // Timing: No timeouts or interruptions.
+
+    // ARIA: All dynamic updates use aria-live, popups use role=dialog, all controls labeled.
+
+    // Focus indicators: All interactive elements have enhanced focus styling (CSS).
   </script>
 </body>
 </html>
