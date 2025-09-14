@@ -3,666 +3,771 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Accessible Creative Portfolio - Filter & Explore Projects</title>
+<title>Accessible Interactive Quiz with Immediate Feedback and Animations</title>
 <style>
   /* Reset and base */
-  :root {
-    --color-primary: #004d99;
-    --color-primary-light: #3366cc;
-    --color-primary-dark: #003366;
-    --color-secondary: #e68a00;
-    --color-secondary-light: #ffb84d;
-    --color-secondary-dark: #b36b00;
-    --color-bg: #ffffff;
-    --color-text: #1a1a1a;
-    --color-text-light: #4d4d4d;
-    --color-focus: #ffbf47;
-    --color-error: #cc3300;
-    --color-success: #007a29;
-    --color-muted: #666666;
-    --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    --border-radius: 8px;
-    --transition-time: 0.3s;
-    --min-touch-size: 44px;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-      scroll-behavior: auto !important;
-    }
+  *, *::before, *::after {
+    box-sizing: border-box;
   }
   html {
-    font-size: 100%;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #0b3d91 0%, #1e90ff 100%);
+    color: #f0f8ff;
     scroll-behavior: smooth;
   }
   body {
     margin: 0;
-    font-family: var(--font-family);
-    line-height: 1.6;
-    background: var(--color-bg);
-    color: var(--color-text);
-    max-width: 80ch;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1rem 1.5rem 4rem 1.5rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
   a {
-    color: var(--color-primary);
+    color: #ffdd57;
     text-decoration: underline;
   }
-  a:focus,
-  button:focus,
-  input:focus,
-  select:focus,
-  textarea:focus {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 3px;
+  a:focus, button:focus, input:focus, select:focus, textarea:focus {
+    outline: 3px solid #ffdd57;
+    outline-offset: 2px;
   }
   /* Skip link */
-  .skip-link {
+  #skip-link {
     position: absolute;
     top: -40px;
     left: 1rem;
-    background: var(--color-primary);
-    color: var(--color-bg);
+    background: #ffdd57;
+    color: #0b3d91;
     padding: 0.5rem 1rem;
     z-index: 100;
-    border-radius: var(--border-radius);
+    border-radius: 0.25rem;
     font-weight: 700;
     text-decoration: none;
     transition: top 0.3s ease;
   }
-  .skip-link:focus {
+  #skip-link:focus {
     top: 1rem;
   }
+  /* Layout */
+  header, nav, main, footer {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1rem 1.5rem;
+  }
   header {
-    border-bottom: 3px solid var(--color-primary);
-    margin-bottom: 1.5rem;
+    background: #073763;
+    border-bottom: 3px solid #ffdd57;
+    border-radius: 0 0 0.5rem 0.5rem;
   }
   header h1 {
     font-size: 2rem;
     margin: 0;
-    padding: 0.5rem 0;
-    color: var(--color-primary-dark);
+    color: #ffdd57;
   }
-  nav[aria-label="Primary"] {
-    margin: 1rem 0 2rem 0;
+  nav {
+    background: #1a4fb7;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+  }
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
   }
-  nav[aria-label="Primary"] button {
-    background: var(--color-secondary-light);
-    border: 2px solid var(--color-secondary-dark);
-    border-radius: var(--border-radius);
-    color: var(--color-secondary-dark);
+  nav li {
+    position: relative;
+  }
+  nav > ul > li {
+    flex: 1 1 auto;
+  }
+  nav a, nav button.menu-button {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #f0f8ff;
+    text-decoration: none;
     font-weight: 600;
-    padding: 0.5rem 1rem;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: center;
     cursor: pointer;
-    min-width: var(--min-touch-size);
-    min-height: var(--min-touch-size);
-    transition: background-color var(--transition-time), color var(--transition-time),
-      border-color var(--transition-time);
+    font-size: 1rem;
   }
-  nav[aria-label="Primary"] button[aria-pressed="true"],
-  nav[aria-label="Primary"] button:hover,
-  nav[aria-label="Primary"] button:focus {
-    background: var(--color-secondary-dark);
-    color: var(--color-bg);
-    border-color: var(--color-secondary-light);
+  nav a:hover, nav a:focus, nav button.menu-button:hover, nav button.menu-button:focus {
+    background: #ffdd57;
+    color: #073763;
+    outline-offset: 0;
   }
+  nav button.menu-button {
+    font-family: inherit;
+  }
+  /* Dropdown submenu */
+  nav li ul.submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #0b3d91;
+    border-radius: 0 0 0.5rem 0.5rem;
+    min-width: 180px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 10;
+  }
+  nav li[aria-expanded="true"] > ul.submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  nav li ul.submenu li {
+    width: 100%;
+  }
+  nav li ul.submenu a {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+  }
+  nav li ul.submenu a:hover, nav li ul.submenu a:focus {
+    background: #ffdd57;
+    color: #073763;
+  }
+  /* Responsive nav */
+  @media (max-width: 600px) {
+    nav ul {
+      flex-direction: column;
+    }
+    nav li ul.submenu {
+      position: static;
+      transform: none !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      box-shadow: none;
+      border-radius: 0;
+      background: #1a4fb7;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    nav li[aria-expanded="true"] > ul.submenu {
+      max-height: 1000px;
+      overflow: visible;
+    }
+  }
+
+  /* Main content */
   main {
-    outline: none;
+    background: #073763cc;
+    border-radius: 0.5rem;
+    padding: 2rem 2rem 3rem 2rem;
+    box-shadow: 0 0 15px #000a;
   }
-  section#projects {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  main h2 {
+    font-size: 1.75rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #ffdd57;
+  }
+  /* Quiz container */
+  #quiz-container {
+    display: flex;
+    flex-direction: column;
     gap: 1.5rem;
   }
-  article.project-card {
-    border: 2px solid var(--color-primary-light);
-    border-radius: var(--border-radius);
-    background: var(--color-bg);
-    box-shadow: 0 4px 8px rgba(0, 77, 153, 0.15);
-    display: flex;
-    flex-direction: column;
-    transition: transform var(--transition-time), box-shadow var(--transition-time);
+  /* Question card */
+  .question-card {
+    background: #0b3d91;
+    border-radius: 0.5rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: inset 0 0 10px #002466;
+    animation: fadeIn 0.5s ease forwards;
   }
-  article.project-card:focus-within,
-  article.project-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 16px rgba(0, 77, 153, 0.3);
-    border-color: var(--color-primary-dark);
+  .question-card[aria-live="polite"] {
+    outline: 3px solid #ffdd57;
+    outline-offset: 4px;
   }
-  article.project-card > a {
-    color: inherit;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  article.project-card img {
-    border-top-left-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-  article.project-card h3 {
+  .question-text {
     font-size: 1.25rem;
-    margin: 0.75rem 1rem 0.25rem 1rem;
-    color: var(--color-primary-dark);
-  }
-  article.project-card p.project-summary {
-    margin: 0 1rem 1rem 1rem;
-    color: var(--color-text-light);
-    flex-grow: 1;
-  }
-  article.project-card .project-categories {
-    margin: 0 1rem 1rem 1rem;
-    font-size: 0.875rem;
-    color: var(--color-secondary-dark);
     font-weight: 600;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: #ffdd57;
   }
-  article.project-card .project-categories span {
-    background: var(--color-secondary-light);
-    border-radius: 12px;
-    padding: 0.15rem 0.5rem;
-    color: var(--color-secondary-dark);
-  }
-  /* Hover detail overlay */
-  article.project-card .project-detail {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 77, 153, 0.9);
-    color: var(--color-bg);
-    opacity: 0;
-    pointer-events: none;
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    transition: opacity var(--transition-time);
-    font-size: 0.9rem;
-    line-height: 1.4;
-  }
-  article.project-card:hover .project-detail,
-  article.project-card:focus-within .project-detail {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  article.project-card .project-detail h4 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-    font-size: 1.1rem;
-  }
-  /* Project card wrapper for relative positioning */
-  article.project-card > a {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  /* Search and filter container */
-  #filter-controls {
-    margin-bottom: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  /* Answers list */
+  .answers-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1rem;
   }
-  #filter-controls label {
-    font-weight: 700;
-    color: var(--color-primary-dark);
+  .answers-list li {
+    position: relative;
   }
-  #filter-controls input[type="search"] {
-    border: 2px solid var(--color-primary-light);
-    border-radius: var(--border-radius);
-    padding: 0.5rem 1rem;
+  /* Answer buttons */
+  .answer-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #1a4fb7;
+    border: 3px solid transparent;
+    border-radius: 0.5rem;
+    color: #f0f8ff;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    min-height: 44px;
     font-size: 1rem;
-    color: var(--color-text);
-    min-width: 280px;
-    max-width: 100%;
-    transition: border-color var(--transition-time);
+    user-select: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
-  #filter-controls input[type="search"]:focus {
-    border-color: var(--color-primary-dark);
+  .answer-button:focus-visible {
+    outline: 3px solid #ffdd57;
+    outline-offset: 2px;
   }
-  /* Responsive adjustments */
-  @media (max-width: 600px) {
-    body {
-      padding: 1rem 1rem 3rem 1rem;
-    }
-    nav[aria-label="Primary"] {
-      justify-content: center;
-    }
-    #filter-controls {
-      flex-direction: column;
-      align-items: stretch;
-    }
-    #filter-controls label {
-      margin-bottom: 0.25rem;
-    }
+  .answer-button:hover:not(:disabled),
+  .answer-button:focus-visible:not(:disabled) {
+    background: #ffdd57;
+    color: #073763;
+    border-color: #ffdd57;
   }
-  /* Footer */
-  footer {
-    margin-top: 4rem;
-    border-top: 3px solid var(--color-primary);
-    padding-top: 1rem;
-    font-size: 0.875rem;
-    color: var(--color-text-light);
+  .answer-button[aria-pressed="true"] {
+    border-color: #ffd633;
+    background: #ffd633cc;
+    color: #073763;
+    cursor: default;
+  }
+  .answer-button.correct {
+    border-color: #4caf50;
+    background: #4caf5080;
+    color: #073763;
+  }
+  .answer-button.incorrect {
+    border-color: #e53935;
+    background: #e5393580;
+    color: #f0f8ff;
+  }
+  .answer-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
+  }
+  /* Feedback message */
+  #feedback-message {
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 1.125rem;
+    min-height: 2.25rem;
+    color: #ffdd57;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeInSlide 0.5s ease forwards;
+  }
+  #feedback-message.correct {
+    color: #4caf50;
+  }
+  #feedback-message.incorrect {
+    color: #e53935;
+  }
+  /* Next button */
+  #next-question {
+    margin-top: 1.5rem;
+    align-self: flex-start;
+    background: #ffdd57;
+    color: #073763;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    min-width: 120px;
+    min-height: 44px;
+    box-shadow: 0 0 10px #ffd633aa;
+    transition: background-color 0.3s ease;
+  }
+  #next-question:focus-visible {
+    outline: 3px solid #073763;
+    outline-offset: 3px;
+  }
+  #next-question:hover:not(:disabled),
+  #next-question:focus-visible:not(:disabled) {
+    background: #ffd633;
+  }
+  #next-question:disabled {
+    background: #666;
+    color: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  /* Quiz summary */
+  #quiz-summary {
+    background: #0b3d91;
+    border-radius: 0.5rem;
+    padding: 1.5rem 2rem;
+    box-shadow: inset 0 0 10px #002466;
+    color: #ffdd57;
+    font-weight: 700;
+    font-size: 1.25rem;
     text-align: center;
   }
-  /* Focus styles for keyboard users */
-  button:focus-visible,
-  a:focus-visible {
-    outline-offset: 3px;
-    outline: 3px solid var(--color-focus);
-  }
-  /* Visually hidden (for aria-live regions) */
-  .visually-hidden {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
-  }
-  /* Tooltip icon for categories - additional visual indicator */
-  .project-categories span::before {
-    content: "●";
-    display: inline-block;
-    color: var(--color-secondary-dark);
-    margin-right: 0.3em;
+  #restart-quiz {
+    margin-top: 1.5rem;
+    background: #ffdd57;
+    color: #073763;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
     font-size: 1rem;
-    line-height: 1;
+    cursor: pointer;
+    min-width: 140px;
+    min-height: 44px;
+    box-shadow: 0 0 10px #ffd633aa;
+    transition: background-color 0.3s ease;
+  }
+  #restart-quiz:focus-visible {
+    outline: 3px solid #073763;
+    outline-offset: 3px;
+  }
+  #restart-quiz:hover,
+  #restart-quiz:focus-visible {
+    background: #ffd633;
+  }
+  /* Help text */
+  .help-text {
+    font-size: 0.875rem;
+    color: #d0e6ff;
+    margin-top: 0.25rem;
+    font-style: italic;
+  }
+  /* Animations */
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(10px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+  @keyframes fadeInSlide {
+    from {opacity: 0; transform: translateX(-10px);}
+    to {opacity: 1; transform: translateX(0);}
+  }
+  /* Respect prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0s !important;
+      transition-duration: 0s !important;
+    }
+  }
+  /* Responsive text and spacing */
+  @media (max-width: 480px) {
+    html {
+      font-size: 16px;
+    }
+    main {
+      padding: 1rem 1rem 2rem 1rem;
+    }
+    nav ul {
+      flex-direction: column;
+    }
   }
 </style>
 </head>
 <body>
-<a href="#maincontent" class="skip-link" role="link" aria-label="Skip to main content">Skip to main content</a>
-
-<header>
-  <h1 id="page-title">Accessible Creative Portfolio</h1>
-  <nav aria-label="Primary" role="navigation" id="category-filter">
-    <button type="button" aria-pressed="true" data-category="all" id="filter-all">All Projects</button>
-    <button type="button" aria-pressed="false" data-category="web" id="filter-web">Web Development</button>
-    <button type="button" aria-pressed="false" data-category="design" id="filter-design">Design</button>
-    <button type="button" aria-pressed="false" data-category="photography" id="filter-photography">Photography</button>
-    <button type="button" aria-pressed="false" data-category="writing" id="filter-writing">Writing</button>
-  </nav>
+<a href="#main-content" id="skip-link">Skip to main content</a>
+<header role="banner">
+  <h1>Accessible Interactive Quiz</h1>
 </header>
-
-<main id="maincontent" tabindex="-1" aria-labelledby="page-title">
-  <section aria-labelledby="filter-label" id="filter-controls">
-    <label for="search-projects" id="filter-label">Search Projects:</label>
-    <input 
-      type="search" 
-      id="search-projects" 
-      name="search-projects" 
-      aria-describedby="search-help" 
-      placeholder="Type keywords to filter projects" 
-      autocomplete="off" 
-      inputmode="search" 
-      aria-label="Search projects by keywords"
-    />
-    <p id="search-help" class="visually-hidden">Enter keywords to filter projects by title or description.</p>
-  </section>
-
-  <section id="projects" aria-live="polite" aria-relevant="additions removals" aria-atomic="true" tabindex="0" aria-label="Portfolio projects">
-    <!-- Project cards inserted by JS -->
+<nav aria-label="Primary navigation" role="navigation">
+  <ul>
+    <li><a href="#main-content">Quiz</a></li>
+    <li>
+      <button class="menu-button" aria-haspopup="true" aria-expanded="false" aria-controls="resources-submenu" id="resources-menu">
+        Resources
+      </button>
+      <ul class="submenu" id="resources-submenu" role="menu" aria-labelledby="resources-menu">
+        <li role="none"><a href="https://www.w3.org/WAI/standards-guidelines/wcag/" role="menuitem" target="_blank" rel="noopener noreferrer">WCAG Guidelines</a></li>
+        <li role="none"><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility" role="menuitem" target="_blank" rel="noopener noreferrer">MDN Accessibility</a></li>
+        <li role="none"><a href="https://a11yproject.com/" role="menuitem" target="_blank" rel="noopener noreferrer">The A11Y Project</a></li>
+      </ul>
+    </li>
+    <li><a href="#quiz-summary" id="summary-link">Summary</a></li>
+  </ul>
+</nav>
+<main id="main-content" tabindex="-1" role="main" aria-labelledby="quiz-title">
+  <section aria-labelledby="quiz-title" class="quiz-section">
+    <h2 id="quiz-title">Test Your Knowledge: Interactive Quiz</h2>
+    <form id="quiz-form" aria-describedby="quiz-help" novalidate>
+      <p id="quiz-help" class="help-text">Select the best answer for each question. Immediate feedback will be provided after each selection.</p>
+      <div id="quiz-container" aria-live="polite" aria-atomic="true"></div>
+      <button type="button" id="next-question" disabled aria-disabled="true" aria-label="Go to next question">Next Question</button>
+    </form>
+    <section id="quiz-summary" aria-live="polite" aria-atomic="true" hidden>
+      <p>Your quiz results will appear here.</p>
+      <button id="restart-quiz" aria-label="Restart the quiz">Restart Quiz</button>
+    </section>
   </section>
 </main>
-
-<footer role="contentinfo">
-  <p>© 2024 Accessible Creative Portfolio. All rights reserved.</p>
-  <p>Contact: <a href="mailto:creator@example.com">creator@example.com</a></p>
+<footer role="contentinfo" aria-label="Page footer">
+  <p>© 2024 Accessible Quiz Inc. All rights reserved.</p>
 </footer>
 
 <script>
 (() => {
-  'use strict';
+  "use strict";
 
-  // Data for projects
-  const projects = [
+  // Quiz data: questions, choices, correct answer index, and optional descriptions for aria-describedby
+  const quizData = [
     {
-      id: 'proj1',
-      title: 'Responsive Portfolio Website',
-      summary: 'A fully responsive portfolio website built with HTML5, CSS Grid, and JavaScript, optimized for accessibility and performance.',
-      categories: ['web', 'design'],
-      image: {
-        src: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80',
-        alt: 'Screenshot of a responsive portfolio website homepage showing a clean layout with navigation and project cards.'
-      },
-      details: 'This project showcases advanced CSS Grid layouts, semantic HTML5 structure, and dynamic JavaScript filtering with accessibility best practices.'
+      question: "What is the capital city of Australia?",
+      choices: [
+        "Sydney",
+        "Canberra",
+        "Melbourne",
+        "Brisbane"
+      ],
+      correctIndex: 1,
+      description: "Canberra is the capital city of Australia, not Sydney or Melbourne."
     },
     {
-      id: 'proj2',
-      title: 'Creative Logo Design',
-      summary: 'A vibrant and modern logo design project for a startup brand, focusing on color theory and scalable vector graphics.',
-      categories: ['design'],
-      image: {
-        src: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
-        alt: 'Colorful vector logo design with geometric shapes and gradients.'
-      },
-      details: 'The logo was created using vector graphics software with attention to color contrast and brand identity guidelines.'
+      question: "Which element has the chemical symbol 'O'?",
+      choices: [
+        "Gold",
+        "Oxygen",
+        "Osmium",
+        "Silver"
+      ],
+      correctIndex: 1,
+      description: "Oxygen's chemical symbol is 'O'."
     },
     {
-      id: 'proj3',
-      title: 'Urban Photography Series',
-      summary: 'A collection of high-contrast black and white urban photography capturing architectural details and street life.',
-      categories: ['photography'],
-      image: {
-        src: 'https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=600&q=80',
-        alt: 'Black and white photograph of a city street with dramatic shadows and architectural elements.'
-      },
-      details: 'This series emphasizes light and shadow interplay, composition, and storytelling through urban environments.'
+      question: "What year did the first man land on the Moon?",
+      choices: [
+        "1965",
+        "1969",
+        "1971",
+        "1959"
+      ],
+      correctIndex: 1,
+      description: "Neil Armstrong landed on the Moon in 1969."
     },
     {
-      id: 'proj4',
-      title: 'Technical Writing: Web Accessibility',
-      summary: 'An in-depth article series on web accessibility best practices, focusing on WCAG 2.2 AAA compliance and real-world implementation.',
-      categories: ['writing'],
-      image: {
-        src: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80',
-        alt: 'Open laptop with code and writing notes on a desk, illustrating technical writing.'
-      },
-      details: 'The articles cover guidelines, examples, and testing strategies to create inclusive web experiences.'
+      question: "Which language is primarily spoken in Brazil?",
+      choices: [
+        "Spanish",
+        "Portuguese",
+        "French",
+        "English"
+      ],
+      correctIndex: 1,
+      description: "Portuguese is the official language of Brazil."
     },
     {
-      id: 'proj5',
-      title: 'Interactive Data Visualization',
-      summary: 'A dynamic data visualization dashboard using vanilla JavaScript and SVG, featuring filters, tooltips, and accessible chart descriptions.',
-      categories: ['web', 'design'],
-      image: {
-        src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
-        alt: 'Colorful interactive chart with bars and lines representing data trends.'
-      },
-      details: 'Designed with keyboard navigation and screen reader support, including detailed aria-describedby for complex charts.'
-    },
-    {
-      id: 'proj6',
-      title: 'Nature Photography Portfolio',
-      summary: 'A curated gallery of nature and wildlife photographs with detailed alt text and descriptions for accessibility.',
-      categories: ['photography'],
-      image: {
-        src: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=80',
-        alt: 'Close-up photograph of a butterfly on a vibrant flower in a natural setting.'
-      },
-      details: 'Each photo includes descriptive alt text and extended descriptions for users with visual impairments.'
-    },
-    {
-      id: 'proj7',
-      title: 'Blog Platform UI/UX Design',
-      summary: 'Design and prototyping of a clean, user-friendly blog platform interface emphasizing readability and navigation.',
-      categories: ['design', 'web'],
-      image: {
-        src: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
-        alt: 'User interface design mockup of a blog platform showing article lists and navigation.'
-      },
-      details: 'Focused on typographic scale, color contrast, and intuitive navigation patterns.'
-    },
-    {
-      id: 'proj8',
-      title: 'Creative Writing: Short Stories',
-      summary: 'A collection of original short stories exploring themes of identity, culture, and technology.',
-      categories: ['writing'],
-      image: {
-        src: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80',
-        alt: 'Open notebook with handwritten text and a pen, symbolizing creative writing.'
-      },
-      details: 'Stories are crafted with clear narrative structure and accessible language.'
+      question: "What is the largest planet in our Solar System?",
+      choices: [
+        "Earth",
+        "Saturn",
+        "Jupiter",
+        "Neptune"
+      ],
+      correctIndex: 2,
+      description: "Jupiter is the largest planet in the Solar System."
     }
   ];
 
-  // Elements
-  const categoryNav = document.getElementById('category-filter');
-  const projectsContainer = document.getElementById('projects');
-  const searchInput = document.getElementById('search-projects');
+  // DOM references
+  const quizContainer = document.getElementById("quiz-container");
+  const nextButton = document.getElementById("next-question");
+  const quizForm = document.getElementById("quiz-form");
+  const quizSummary = document.getElementById("quiz-summary");
+  const restartButton = document.getElementById("restart-quiz");
 
-  // State
-  let activeCategory = 'all';
-  let searchTerm = '';
+  // State variables
+  let currentQuestionIndex = 0;
+  let score = 0;
+  let answered = false;
 
-  // Helper: Sanitize text for accessibility (escape HTML)
-  function escapeHTML(str) {
-    return str.replace(/[&<>"']/g, (m) => {
-      switch (m) {
-        case '&': return '&amp;';
-        case '<': return '&lt;';
-        case '>': return '&gt;';
-        case '"': return '&quot;';
-        case "'": return '&#39;';
-        default: return m;
-      }
-    });
+  // SVG icons for correct and incorrect
+  const icons = {
+    correct: `<svg class="answer-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    incorrect: `<svg class="answer-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="#e53935" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+  };
+
+  // Utility: sanitize text for insertion to prevent XSS
+  function sanitize(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
   }
 
-  // Render projects filtered by category and search
-  function renderProjects() {
-    // Filter projects by category and search term
-    const filtered = projects.filter(project => {
-      const matchesCategory = activeCategory === 'all' || project.categories.includes(activeCategory);
-      const searchLower = searchTerm.trim().toLowerCase();
-      const matchesSearch = searchLower === '' || 
-        project.title.toLowerCase().includes(searchLower) ||
-        project.summary.toLowerCase().includes(searchLower) ||
-        project.details.toLowerCase().includes(searchLower);
-      return matchesCategory && matchesSearch;
-    });
+  // Render a question
+  function renderQuestion(index) {
+    const q = quizData[index];
+    quizContainer.innerHTML = "";
 
-    // Clear container
-    projectsContainer.innerHTML = '';
+    // Question container with aria-live for polite updates
+    const questionCard = document.createElement("article");
+    questionCard.className = "question-card";
+    questionCard.setAttribute("aria-live", "polite");
+    questionCard.setAttribute("aria-atomic", "true");
 
-    if (filtered.length === 0) {
-      const noResults = document.createElement('p');
-      noResults.textContent = 'No projects match your filter criteria.';
-      noResults.style.color = 'var(--color-error)';
-      noResults.setAttribute('role', 'alert');
-      projectsContainer.appendChild(noResults);
-      return;
-    }
+    // Question text with aria-describedby for detailed description
+    const questionText = document.createElement("h3");
+    questionText.className = "question-text";
+    questionText.id = "question-text";
+    questionText.textContent = q.question;
+    questionCard.appendChild(questionText);
 
-    filtered.forEach(project => {
-      const article = document.createElement('article');
-      article.className = 'project-card';
-      article.setAttribute('tabindex', '-1');
-      article.setAttribute('aria-labelledby', `${project.id}-title`);
-      article.setAttribute('aria-describedby', `${project.id}-summary`);
+    // Hidden description for screen readers
+    const descId = "question-desc";
+    const questionDesc = document.createElement("p");
+    questionDesc.id = descId;
+    questionDesc.className = "sr-only";
+    questionDesc.textContent = q.description;
+    questionCard.appendChild(questionDesc);
 
-      // Link wrapper
-      const link = document.createElement('a');
-      link.href = `#${project.id}-details`;
-      link.setAttribute('aria-describedby', `${project.id}-details-desc`);
-      link.setAttribute('aria-label', `${project.title} project, click to read more details`);
-      link.tabIndex = 0;
+    // Answers list
+    const answersList = document.createElement("ul");
+    answersList.className = "answers-list";
+    answersList.setAttribute("role", "list");
+    answersList.setAttribute("aria-labelledby", "question-text");
+    questionCard.appendChild(answersList);
 
-      // Image
-      const img = document.createElement('img');
-      img.src = project.image.src;
-      img.alt = project.image.alt;
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      link.appendChild(img);
+    // Create each answer button inside a list item
+    q.choices.forEach((choice, i) => {
+      const li = document.createElement("li");
+      li.setAttribute("role", "none");
 
-      // Title
-      const h3 = document.createElement('h3');
-      h3.id = `${project.id}-title`;
-      h3.textContent = project.title;
-      link.appendChild(h3);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "answer-button";
+      button.id = `answer-${i}`;
+      button.setAttribute("aria-describedby", descId);
+      button.setAttribute("aria-pressed", "false");
+      button.setAttribute("aria-label", `Answer option ${i + 1}: ${choice}`);
+      button.textContent = choice;
+      button.setAttribute("tabindex", "0");
+      button.style.minWidth = "44px";
+      button.style.minHeight = "44px";
 
-      // Summary
-      const summary = document.createElement('p');
-      summary.className = 'project-summary';
-      summary.id = `${project.id}-summary`;
-      summary.textContent = project.summary;
-      link.appendChild(summary);
-
-      // Categories
-      const catContainer = document.createElement('div');
-      catContainer.className = 'project-categories';
-      project.categories.forEach(cat => {
-        const span = document.createElement('span');
-        span.textContent = categoryName(cat);
-        span.setAttribute('aria-label', `Category: ${categoryName(cat)}`);
-        catContainer.appendChild(span);
+      // Keyboard and mouse event handlers
+      button.addEventListener("click", () => handleAnswer(i));
+      button.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+          e.preventDefault();
+          handleAnswer(i);
+        }
       });
-      link.appendChild(catContainer);
 
-      // Detail overlay (visible on hover/focus)
-      const detailOverlay = document.createElement('div');
-      detailOverlay.className = 'project-detail';
-      detailOverlay.setAttribute('aria-hidden', 'true');
-      const detailHeading = document.createElement('h4');
-      detailHeading.textContent = 'Project Details';
-      detailOverlay.appendChild(detailHeading);
-      const detailText = document.createElement('p');
-      detailText.id = `${project.id}-details-desc`;
-      detailText.textContent = project.details;
-      detailOverlay.appendChild(detailText);
-
-      link.appendChild(detailOverlay);
-
-      article.appendChild(link);
-      projectsContainer.appendChild(article);
+      li.appendChild(button);
+      answersList.appendChild(li);
     });
+
+    quizContainer.appendChild(questionCard);
+
+    // Reset state
+    answered = false;
+    nextButton.disabled = true;
+    nextButton.setAttribute("aria-disabled", "true");
+    nextButton.focus();
+
+    // Clear previous feedback message if any
+    updateFeedbackMessage("");
   }
 
-  // Return human-readable category name
-  function categoryName(cat) {
-    switch (cat) {
-      case 'all': return 'All Projects';
-      case 'web': return 'Web Development';
-      case 'design': return 'Design';
-      case 'photography': return 'Photography';
-      case 'writing': return 'Writing';
-      default: return cat;
+  // Update feedback message with live region
+  function updateFeedbackMessage(message, isCorrect = null) {
+    let feedback = document.getElementById("feedback-message");
+    if (!feedback) {
+      feedback = document.createElement("p");
+      feedback.id = "feedback-message";
+      feedback.setAttribute("role", "status");
+      feedback.setAttribute("aria-live", "polite");
+      feedback.setAttribute("aria-atomic", "true");
+      quizContainer.appendChild(feedback);
+    }
+    feedback.textContent = message;
+    feedback.classList.remove("correct", "incorrect");
+    if (isCorrect === true) {
+      feedback.classList.add("correct");
+    } else if (isCorrect === false) {
+      feedback.classList.add("incorrect");
     }
   }
 
-  // Handle category filter button clicks and keyboard
-  function onCategoryClick(event) {
-    const target = event.target;
-    if (target.tagName !== 'BUTTON') return;
+  // Handle answer selection
+  function handleAnswer(selectedIndex) {
+    if (answered) return; // Prevent multiple answers
 
-    const newCategory = target.getAttribute('data-category');
-    if (!newCategory) return;
+    answered = true;
+    const q = quizData[currentQuestionIndex];
+    const buttons = quizContainer.querySelectorAll(".answer-button");
 
-    if (newCategory === activeCategory) return; // no change
-
-    // Update aria-pressed and styles
-    const buttons = categoryNav.querySelectorAll('button');
-    buttons.forEach(btn => {
-      btn.setAttribute('aria-pressed', btn === target ? 'true' : 'false');
+    // Mark all buttons disabled and update aria-pressed
+    buttons.forEach((btn, idx) => {
+      btn.disabled = true;
+      btn.setAttribute("aria-pressed", idx === selectedIndex ? "true" : "false");
+      btn.tabIndex = -1;
     });
 
-    activeCategory = newCategory;
-    renderProjects();
-    // Announce filter change
-    announceLive(`Filtered projects by category: ${categoryName(activeCategory)}.`);
-  }
-
-  // Keyboard navigation for category buttons (Arrow keys)
-  function onCategoryKeyDown(event) {
-    const buttons = Array.from(categoryNav.querySelectorAll('button'));
-    const currentIndex = buttons.indexOf(event.target);
-    if (currentIndex === -1) return;
-
-    switch (event.key) {
-      case 'ArrowRight':
-      case 'ArrowDown':
-        event.preventDefault();
-        const nextIndex = (currentIndex + 1) % buttons.length;
-        buttons[nextIndex].focus();
-        break;
-      case 'ArrowLeft':
-      case 'ArrowUp':
-        event.preventDefault();
-        const prevIndex = (currentIndex - 1 + buttons.length) % buttons.length;
-        buttons[prevIndex].focus();
-        break;
-      case 'Home':
-        event.preventDefault();
-        buttons[0].focus();
-        break;
-      case 'End':
-        event.preventDefault();
-        buttons[buttons.length - 1].focus();
-        break;
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        buttons[currentIndex].click();
-        break;
-      default:
-        break;
+    // Provide feedback and style buttons accordingly
+    if (selectedIndex === q.correctIndex) {
+      buttons[selectedIndex].classList.add("correct");
+      updateFeedbackMessage("Correct! Well done.", true);
+      score++;
+    } else {
+      buttons[selectedIndex].classList.add("incorrect");
+      buttons[q.correctIndex].classList.add("correct");
+      updateFeedbackMessage(`Incorrect. The correct answer is: ${q.choices[q.correctIndex]}.`, false);
     }
+
+    // Enable next button
+    nextButton.disabled = false;
+    nextButton.setAttribute("aria-disabled", "false");
+    nextButton.focus();
   }
 
-  // Announce live region updates for screen readers
-  let liveRegion = null;
-  function createLiveRegion() {
-    liveRegion = document.createElement('div');
-    liveRegion.className = 'visually-hidden';
-    liveRegion.setAttribute('aria-live', 'polite');
-    liveRegion.setAttribute('aria-atomic', 'true');
-    document.body.appendChild(liveRegion);
-  }
-  function announceLive(message) {
-    if (!liveRegion) createLiveRegion();
-    liveRegion.textContent = '';
-    // Delay update to ensure screen readers notice change
-    setTimeout(() => {
-      liveRegion.textContent = message;
-    }, 100);
+  // Show quiz summary
+  function showSummary() {
+    quizForm.hidden = true;
+    quizSummary.hidden = false;
+    quizSummary.innerHTML = `
+      <p>You have completed the quiz!</p>
+      <p>Your score: <strong>${score} out of ${quizData.length}</strong> (${Math.round((score / quizData.length) * 100)}%)</p>
+      <button id="restart-quiz" aria-label="Restart the quiz" type="button">Restart Quiz</button>
+    `;
+    const restartBtn = quizSummary.querySelector("#restart-quiz");
+    restartBtn.addEventListener("click", restartQuiz);
+    restartBtn.focus();
   }
 
-  // Handle search input with debouncing
-  let searchTimeout = null;
-  function onSearchInput(event) {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-      searchTerm = event.target.value;
-      renderProjects();
-      announceLive(`Filtered projects by search term: ${searchTerm || 'none'}.`);
-    }, 300);
+  // Restart quiz
+  function restartQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    quizSummary.hidden = true;
+    quizForm.hidden = false;
+    renderQuestion(currentQuestionIndex);
   }
 
-  // Initialization
-  function init() {
-    // Render all projects initially
-    renderProjects();
+  // Next question handler
+  nextButton.addEventListener("click", () => {
+    if (currentQuestionIndex < quizData.length - 1) {
+      currentQuestionIndex++;
+      renderQuestion(currentQuestionIndex);
+    } else {
+      showSummary();
+    }
+  });
 
-    // Event listeners
-    categoryNav.addEventListener('click', onCategoryClick);
-    categoryNav.addEventListener('keydown', onCategoryKeyDown);
-    searchInput.addEventListener('input', onSearchInput);
+  // Keyboard accessibility for nav menu dropdown
+  const menuButton = document.querySelector("button.menu-button");
+  const submenu = document.getElementById("resources-submenu");
 
-    // Keyboard shortcut: focus search input with Ctrl+F or Cmd+F (overrides browser find)
-    window.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
-        e.preventDefault();
-        searchInput.focus();
-      }
-    });
+  function closeMenu() {
+    menuButton.setAttribute("aria-expanded", "false");
+    submenu.style.visibility = "hidden";
+    submenu.style.opacity = "0";
+    submenu.style.transform = "translateY(-10px)";
+    submenu.setAttribute("aria-hidden", "true");
   }
-
-  // Run init on DOM ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  function openMenu() {
+    menuButton.setAttribute("aria-expanded", "true");
+    submenu.style.visibility = "visible";
+    submenu.style.opacity = "1";
+    submenu.style.transform = "translateY(0)";
+    submenu.setAttribute("aria-hidden", "false");
   }
+  menuButton.addEventListener("click", () => {
+    const expanded = menuButton.getAttribute("aria-expanded") === "true";
+    if (expanded) {
+      closeMenu();
+    } else {
+      openMenu();
+      // Focus first submenu item
+      const firstItem = submenu.querySelector('a[role="menuitem"]');
+      if (firstItem) firstItem.focus();
+    }
+  });
+  menuButton.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown" || e.key === "Down") {
+      e.preventDefault();
+      openMenu();
+      const firstItem = submenu.querySelector('a[role="menuitem"]');
+      if (firstItem) firstItem.focus();
+    }
+    if (e.key === "Escape" || e.key === "Esc") {
+      closeMenu();
+      menuButton.focus();
+    }
+  });
+  submenu.addEventListener("keydown", e => {
+    const focusableItems = Array.from(submenu.querySelectorAll('a[role="menuitem"]'));
+    let index = focusableItems.indexOf(document.activeElement);
+    if (e.key === "ArrowDown" || e.key === "Down") {
+      e.preventDefault();
+      index = (index + 1) % focusableItems.length;
+      focusableItems[index].focus();
+    } else if (e.key === "ArrowUp" || e.key === "Up") {
+      e.preventDefault();
+      index = (index - 1 + focusableItems.length) % focusableItems.length;
+      focusableItems[index].focus();
+    } else if (e.key === "Escape" || e.key === "Esc") {
+      closeMenu();
+      menuButton.focus();
+    }
+  });
+  // Close menu on click outside
+  document.addEventListener("click", e => {
+    if (!menuButton.contains(e.target) && !submenu.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  // Screen reader only styles
+  const style = document.createElement("style");
+  style.textContent = `
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Initialize quiz
+  renderQuestion(currentQuestionIndex);
+
+  // Focus management: move focus to main on load for keyboard users
+  window.addEventListener("load", () => {
+    const main = document.getElementById("main-content");
+    if (main) {
+      main.setAttribute("tabindex", "-1");
+    }
+  });
+
+  // Accessibility: prevent keyboard trap on modal/dialog (no modal here, but good practice)
+  // Focus visible polyfill for better focus outlines handled by CSS :focus-visible
+
+  // Context-sensitive help: quiz help text already provided in #quiz-help
+
+  // Error prevention: disabling next button until answer selected
+
+  // Preserve data on page reload: not implemented (out of scope)
+
+  // No timing requirements or auto advance
+
+  // Animation respect prefers-reduced-motion done in CSS
+
 })();
 </script>
 </body>
