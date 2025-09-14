@@ -3,27 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personalized Book Recommendations - Find Your Next Great Read</title>
+    <title>Annual Community Gathering - RSVP Form</title>
     <style>
-        /* Base Styles with Enhanced Accessibility */
-        :root {
-            --primary-color: #2b4c7e;
-            --primary-dark: #1a3a6e;
-            --secondary-color: #567ebb;
-            --accent-color: #e67e22;
-            --accent-dark: #d35400;
-            --background-color: #f8f9fa;
-            --text-color: #333333;
-            --light-text: #ffffff;
-            --error-color: #c0392b;
-            --success-color: #27ae60;
-            --border-color: #cbd5e0;
-            --focus-outline: 3px solid #4299e1;
-            --card-background: #ffffff;
-            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* CSS Reset and Base Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Respect user preference for reduced motion */
+        /* Root Variables for Consistent Theming */
+        :root {
+            /* Color Palette with 7:1+ contrast ratios */
+            --primary-color: #0056b3;
+            --primary-dark: #003a75;
+            --primary-light: #4d8edb;
+            --secondary-color: #6a3093;
+            --accent-color: #005e20;
+            --background-color: #ffffff;
+            --background-alt: #f8f9fa;
+            --text-color: #121212;
+            --text-light: #333333;
+            --error-color: #a50000;
+            --success-color: #005e20;
+            --warning-color: #7d4200;
+            --border-color: #595959;
+            --focus-color: #ff8c00;
+            
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-xxl: 3rem;
+            
+            /* Typography */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            --font-size-base: 1rem;
+            --line-height-base: 1.5;
+        }
+
+        /* Reduced Motion Preference */
         @media (prefers-reduced-motion: reduce) {
             * {
                 animation-duration: 0.001ms !important;
@@ -33,494 +54,516 @@
             }
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            font-family: var(--font-family);
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-base);
             color: var(--text-color);
             background-color: var(--background-color);
             padding: 0;
             margin: 0;
-            /* Enhanced readability per WCAG 2.2 AAA */
-            line-height: 1.8;
-            max-width: 1200px;
-            margin: 0 auto;
+            min-height: 100vh;
         }
 
-        /* Skip link for keyboard users */
+        /* Enhanced Focus Styles */
+        :focus {
+            outline: 3px solid var(--focus-color);
+            outline-offset: 2px;
+        }
+
+        /* Skip Link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
-            background: var(--accent-color);
-            color: var(--light-text);
-            padding: 8px 16px;
+            background: var(--primary-color);
+            color: white;
+            padding: var(--spacing-md);
             z-index: 100;
-            transition: top 0.3s;
-            border-radius: 0 0 4px 0;
-            text-decoration: none;
-            font-weight: bold;
+            transition: top 0.2s ease;
         }
 
         .skip-link:focus {
             top: 0;
-            outline: var(--focus-outline);
         }
 
-        /* Enhanced focus styles for all interactive elements */
-        a:focus, button:focus, input:focus, select:focus, textarea:focus {
-            outline: var(--focus-outline);
-            outline-offset: 2px;
-            box-shadow: 0 0 0 2px var(--background-color), 0 0 0 4px var(--secondary-color);
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+            color: var(--text-color);
         }
 
-        /* Header Styles */
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-            color: var(--light-text);
-            padding: 1.5rem;
-            text-align: center;
-            border-bottom: 4px solid var(--accent-color);
-        }
-
-        header h1 {
+        h1 {
             font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-lg);
         }
 
-        header p {
-            font-size: 1.2rem;
-            max-width: 800px;
+        h2 {
+            font-size: 2rem;
+            margin-top: var(--spacing-xl);
+            margin-bottom: var(--spacing-md);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-top: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+        }
+
+        p, ul, ol {
+            margin-bottom: var(--spacing-md);
+            max-width: 80ch; /* Maximum 80 characters per line */
+        }
+
+        /* Layout */
+        .container {
+            width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: var(--spacing-md);
+        }
+
+        /* Header */
+        .site-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: var(--spacing-lg) 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .site-header h1 {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .site-header p {
+            margin: 0 auto;
+            max-width: 800px;
         }
 
         /* Navigation */
-        nav {
+        .main-nav {
             background-color: var(--primary-dark);
-            padding: 0.5rem;
+            padding: var(--spacing-md) 0;
         }
 
-        nav ul {
+        .nav-list {
             display: flex;
             justify-content: center;
             list-style: none;
-            gap: 1.5rem;
-            padding: 0;
+            flex-wrap: wrap;
         }
 
-        nav li {
-            margin: 0;
+        .nav-list li {
+            margin: 0 var(--spacing-md);
         }
 
-        nav a {
-            color: var(--light-text);
+        .nav-list a {
+            color: white;
             text-decoration: none;
-            padding: 0.5rem 1rem;
+            padding: var(--spacing-sm) var(--spacing-md);
             border-radius: 4px;
-            font-weight: 500;
             display: inline-block;
-            transition: background-color 0.3s;
+            min-height: 44px;
+            min-width: 44px;
+            line-height: 44px;
+            text-align: center;
+            transition: background-color 0.2s ease;
         }
 
-        nav a:hover, nav a:focus {
+        .nav-list a:hover,
+        .nav-list a:focus {
             background-color: rgba(255, 255, 255, 0.2);
             text-decoration: underline;
         }
 
-        nav a.active {
-            background-color: var(--accent-color);
-            color: var(--light-text);
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-xl);
+            padding: var(--spacing-xl) 0;
         }
 
-        /* Main Content Area */
-        main {
-            padding: 2rem;
-            min-height: 70vh;
+        @media (min-width: 768px) {
+            .main-content {
+                grid-template-columns: 2fr 1fr;
+            }
         }
 
-        section {
-            margin-bottom: 3rem;
-        }
-
-        h2 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
-        }
-
-        h3 {
-            color: var(--primary-dark);
-            margin: 1.5rem 0 1rem;
-            font-size: 1.5rem;
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            max-width: 80ch; /* For optimal readability */
-        }
-
-        /* Form Styles with Enhanced Accessibility */
-        .form-container {
-            background-color: var(--card-background);
-            padding: 2rem;
+        /* RSVP Form */
+        .rsvp-form {
+            background-color: var(--background-alt);
+            padding: var(--spacing-lg);
             border-radius: 8px;
-            box-shadow: var(--card-shadow);
-            margin-bottom: 2rem;
-        }
-
-        .form-intro {
-            margin-bottom: 1.5rem;
-        }
-
-        fieldset {
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        legend {
-            font-weight: bold;
-            color: var(--primary-color);
-            padding: 0 0.5rem;
-            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: var(--spacing-lg);
         }
 
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--primary-dark);
+            margin-bottom: var(--spacing-sm);
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            line-height: 1.5;
+            min-height: 44px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+        }
+
+        .form-control.error {
+            border-color: var(--error-color);
+        }
+
+        .form-help {
+            display: block;
+            margin-top: var(--spacing-xs);
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-weight: bold;
+            margin-top: var(--spacing-xs);
+            display: none;
+        }
+
+        .error-message.visible {
+            display: block;
         }
 
         .required-field::after {
             content: " *";
             color: var(--error-color);
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:hover,
-        input[type="email"]:hover,
-        select:hover,
-        textarea:hover {
-            border-color: var(--secondary-color);
-        }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        select:focus,
-        textarea:focus {
-            border-color: var(--primary-color);
         }
 
         .checkbox-group {
-            margin-top: 0.5rem;
+            margin-top: var(--spacing-sm);
         }
 
-        .checkbox-option {
+        .checkbox-group label {
             display: flex;
             align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .checkbox-option input[type="checkbox"] {
-            margin-right: 0.5rem;
-            width: 20px;
-            height: 20px;
-        }
-
-        .checkbox-option label {
-            margin-bottom: 0;
-            display: inline;
-        }
-
-        .help-text {
-            display: block;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 0.3rem;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: var(--light-text);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            border-radius: 4px;
+            font-weight: normal;
             cursor: pointer;
-            transition: background-color 0.3s;
-            font-weight: 500;
-            min-width: 44px;
             min-height: 44px;
         }
 
-        button:hover, button:focus {
+        .checkbox-group input[type="checkbox"] {
+            margin-right: var(--spacing-sm);
+            min-width: 22px;
+            min-height: 22px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            min-width: 44px;
+            min-height: 44px;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover,
+        .btn:focus {
             background-color: var(--primary-dark);
         }
 
-        button:active {
-            transform: translateY(1px);
-        }
-
-        button.secondary {
-            background-color: #6c757d;
-        }
-
-        button.secondary:hover, button.secondary:focus {
-            background-color: #5a6268;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        /* Error and validation styles */
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.9rem;
-            margin-top: 0.3rem;
-            font-weight: 500;
-        }
-
-        input:invalid, select:invalid, textarea:invalid {
-            border-color: var(--error-color);
-        }
-
-        /* Loading indicator */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            border-radius: 50%;
-            border-top: 4px solid var(--primary-color);
-            width: 40px;
-            height: 40px;
-            margin: 0 auto 1rem;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Results Section */
-        .results-container {
-            display: none;
-        }
-
-        .book-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .book-card {
-            background-color: var(--card-background);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .book-card:hover, .book-card:focus-within {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .book-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-bottom: 3px solid var(--accent-color);
-        }
-
-        .book-info {
-            padding: 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .book-title {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-dark);
-        }
-
-        .book-author {
-            color: var(--secondary-color);
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .book-description {
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-
-        .book-genre {
-            display: inline-block;
+        .btn-secondary {
             background-color: var(--secondary-color);
-            color: var(--light-text);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
         }
 
-        .book-link {
-            display: inline-block;
-            background-color: var(--accent-color);
-            color: var(--light-text);
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            font-weight: 500;
-            margin-top: auto;
-            text-align: center;
-            transition: background-color 0.3s;
+        .btn-secondary:hover,
+        .btn-secondary:focus {
+            background-color: #552677;
         }
 
-        .book-link:hover, .book-link:focus {
-            background-color: var(--accent-dark);
+        .btn-success {
+            background-color: var(--success-color);
         }
 
-        /* No results message */
-        .no-results {
-            text-align: center;
-            padding: 2rem;
-            background-color: var(--card-background);
+        .btn-success:hover,
+        .btn-success:focus {
+            background-color: #004518;
+        }
+
+        /* Attendee List */
+        .attendee-list {
+            background-color: var(--background-alt);
+            padding: var(--spacing-lg);
             border-radius: 8px;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Accordion for FAQ section */
-        .accordion {
-            margin-bottom: 2rem;
+        .attendee-list h2 {
+            margin-top: 0;
         }
 
-        .accordion-item {
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-
-        .accordion-header {
-            background-color: var(--card-background);
-            padding: 0;
+        .attendees {
+            list-style: none;
             margin: 0;
-            border: none;
+            padding: 0;
         }
 
-        .accordion-button {
+        .attendee-item {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid #ddd;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .attendee-item:last-child {
+            border-bottom: none;
+        }
+
+        .attendee-name {
+            font-weight: bold;
+        }
+
+        .attendee-details {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            border-radius: 4px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .status-message.success {
+            background-color: rgba(0, 94, 32, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+            display: block;
+        }
+
+        .status-message.error {
+            background-color: rgba(165, 0, 0, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+            display: block;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            padding: var(--spacing-lg);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .modal-title {
+            margin: 0;
+        }
+
+        .modal-body {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--spacing-md);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+        }
+
+        /* Tabs */
+        .tabs {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .tab-list {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .tab {
+            padding: var(--spacing-md) var(--spacing-lg);
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+            text-align: center;
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            font-weight: bold;
+            color: var(--text-light);
+        }
+
+        .tab[aria-selected="true"] {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab:hover,
+        .tab:focus {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-panel {
+            display: none;
+            padding: var(--spacing-lg) 0;
+        }
+
+        .tab-panel[aria-hidden="false"] {
+            display: block;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .accordion-item {
+            border: 1px solid #ddd;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .accordion-header {
+            padding: 0;
             width: 100%;
             text-align: left;
-            padding: 1rem 1.5rem;
-            background-color: var(--card-background);
-            color: var(--primary-color);
-            font-weight: 600;
-            font-size: 1.1rem;
+            background: none;
             border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-md);
         }
 
-        .accordion-button:hover, .accordion-button:focus {
-            background-color: #f0f4f8;
+        .accordion-header:hover,
+        .accordion-header:focus {
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
-        .accordion-button::after {
-            content: "+";
-            font-size: 1.5rem;
-            font-weight: 700;
+        .accordion-icon {
+            transition: transform 0.3s ease;
         }
 
-        .accordion-button[aria-expanded="true"]::after {
-            content: "−";
+        .accordion-header[aria-expanded="true"] .accordion-icon {
+            transform: rotate(180deg);
         }
 
-        .accordion-content {
-            padding: 0 1.5rem;
+        .accordion-panel {
+            padding: 0 var(--spacing-md);
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background-color: var(--card-background);
+            transition: max-height 0.3s ease, padding 0.3s ease;
         }
 
-        .accordion-content-inner {
-            padding: 1rem 0 1.5rem;
+        .accordion-panel[aria-hidden="false"] {
+            max-height: 500px;
+            padding: var(--spacing-md);
         }
 
-        /* Footer Styles */
-        footer {
+        /* Footer */
+        .site-footer {
             background-color: var(--primary-dark);
-            color: var(--light-text);
-            padding: 2rem;
-            text-align: center;
+            color: white;
+            padding: var(--spacing-xl) 0;
+            margin-top: var(--spacing-xxl);
         }
 
         .footer-content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
         }
 
-        .footer-section {
-            flex: 1;
-            min-width: 250px;
-            margin-bottom: 1.5rem;
-            text-align: left;
-            padding: 0 1rem;
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
         }
 
         .footer-section h3 {
-            color: var(--light-text);
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 0.5rem;
-            display: inline-block;
+            margin-top: 0;
+            color: white;
         }
 
         .footer-links {
@@ -529,728 +572,942 @@
         }
 
         .footer-links li {
-            margin-bottom: 0.5rem;
+            margin-bottom: var(--spacing-sm);
         }
 
         .footer-links a {
-            color: #ccc;
+            color: white;
             text-decoration: none;
-            transition: color 0.3s;
+            display: inline-block;
+            min-height: 44px;
+            line-height: 44px;
         }
 
-        .footer-links a:hover, .footer-links a:focus {
-            color: var(--light-text);
+        .footer-links a:hover,
+        .footer-links a:focus {
             text-decoration: underline;
         }
 
         .copyright {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
+            text-align: center;
+            margin-top: var(--spacing-xl);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background-color: var(--card-background);
-            margin: 10% auto;
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 600px;
-            position: relative;
-            animation: modalFadeIn 0.3s;
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #666;
-            min-width: 44px;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .close-modal:hover, .close-modal:focus {
-            background-color: #f0f0f0;
-            color: var(--error-color);
-        }
-
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            .book-list {
+        /* Responsive Adjustments */
+        @media (max-width: 767px) {
+            .main-content {
                 grid-template-columns: 1fr;
             }
-
-            .footer-content {
+            
+            .attendee-list {
+                margin-top: var(--spacing-xl);
+            }
+            
+            .nav-list {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-list li {
+                margin: var(--spacing-xs) 0;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.75rem;
+            }
+            
+            .tab-list {
                 flex-direction: column;
             }
-
-            .footer-section {
-                margin-bottom: 2rem;
-            }
-
-            .button-group {
-                flex-direction: column;
+            
+            .tab {
+                width: 100%;
+                text-align: left;
             }
         }
 
-        /* Print styles */
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-container {
+            display: none;
+            text-align: center;
+            padding: var(--spacing-lg);
+        }
+
+        .loading-container.visible {
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: var(--spacing-xs);
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--text-color);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: var(--spacing-md);
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--text-color) transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltip-text,
+        .tooltip:focus-within .tooltip-text,
+        .tooltip-icon:focus + .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Print Styles */
         @media print {
-            header, nav, footer, .form-container, button {
+            .site-header, .main-nav, .site-footer, .btn, .tabs, .modal-overlay {
                 display: none;
             }
-
-            body, main {
-                background-color: white;
-                color: black;
-                font-size: 12pt;
+            
+            body, .container, .main-content {
+                width: 100%;
+                margin: 0;
+                padding: 0;
             }
-
-            .results-container {
-                display: block !important;
+            
+            .main-content {
+                display: block;
             }
-
-            .book-card {
-                break-inside: avoid;
-                page-break-inside: avoid;
+            
+            .rsvp-form, .attendee-list {
                 box-shadow: none;
                 border: 1px solid #ddd;
-                margin-bottom: 1rem;
+                page-break-inside: avoid;
             }
         }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <header>
-        <h1>BookMatch: Your Personalized Reading Recommendations</h1>
-        <p>Discover your next favorite book based on your reading preferences and interests</p>
+    
+    <header class="site-header">
+        <div class="container">
+            <h1>Annual Community Gathering</h1>
+            <p>Join us for a day of connection, learning, and celebration on September 15, 2023, at Community Center Plaza</p>
+        </div>
     </header>
-
-    <nav aria-label="Main navigation">
-        <ul>
-            <li><a href="#" class="active" aria-current="page">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Book Categories</a></li>
-            <li><a href="#">Reading Lists</a></li>
-            <li><a href="#">Contact</a></li>
-        </ul>
+    
+    <nav class="main-nav" aria-label="Main navigation">
+        <div class="container">
+            <ul class="nav-list">
+                <li><a href="#event-details">Event Details</a></li>
+                <li><a href="#rsvp-form">RSVP Form</a></li>
+                <li><a href="#attendees">Attendees</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact Us</a></li>
+            </ul>
+        </div>
     </nav>
-
-    <main id="main-content">
-        <section aria-labelledby="intro-heading">
-            <h2 id="intro-heading">Find Your Perfect Book Match</h2>
-            <p>Tell us about your reading preferences, and we'll suggest books tailored just for you. Our recommendation engine analyzes your favorite genres, authors, and reading history to find books you'll love.</p>
-            
-            <div class="form-container">
-                <div class="form-intro">
-                    <h3>Your Reading Preferences</h3>
-                    <p>Fill out the form below to get personalized book recommendations. The more information you provide, the better our suggestions will be!</p>
-                </div>
+    
+    <main id="main-content" class="container">
+        <div class="main-content">
+            <section class="rsvp-section">
+                <div id="status-message" class="status-message" role="status" aria-live="polite"></div>
                 
-                <form id="recommendation-form" aria-labelledby="form-heading">
-                    <h3 id="form-heading" class="visually-hidden">Book Recommendation Form</h3>
+                <div class="tabs" role="tablist" aria-label="Event information">
+                    <div class="tab-list" role="tablist">
+                        <button id="tab-details" class="tab" role="tab" aria-selected="true" aria-controls="panel-details">Event Details</button>
+                        <button id="tab-rsvp" class="tab" role="tab" aria-selected="false" aria-controls="panel-rsvp">RSVP Form</button>
+                        <button id="tab-faq" class="tab" role="tab" aria-selected="false" aria-controls="panel-faq">FAQ</button>
+                    </div>
                     
-                    <fieldset>
-                        <legend>Personal Information</legend>
+                    <div id="panel-details" class="tab-panel" role="tabpanel" aria-labelledby="tab-details" aria-hidden="false">
+                        <h2 id="event-details">Event Details</h2>
+                        <p>Join us for our Annual Community Gathering, a celebration of community spirit and connection. This year's event promises to be our best yet, with activities for all ages, inspiring speakers, and delicious food.</p>
                         
-                        <div class="form-group">
-                            <label for="name" class="required-field">Your Name</label>
-                            <input type="text" id="name" name="name" required aria-required="true" autocomplete="name">
-                            <span id="name-error" class="error-message" aria-live="polite"></span>
-                        </div>
+                        <h3>When and Where</h3>
+                        <p>Date: September 15, 2023<br>
+                        Time: 10:00 AM - 4:00 PM<br>
+                        Location: Community Center Plaza, 123 Main Street</p>
                         
-                        <div class="form-group">
-                            <label for="email">Email Address (optional)</label>
-                            <input type="email" id="email" name="email" autocomplete="email">
-                            <span id="email-help" class="help-text">We'll use this to send your recommendations if you prefer</span>
-                            <span id="email-error" class="error-message" aria-live="polite"></span>
-                        </div>
-                    </fieldset>
+                        <h3>What to Expect</h3>
+                        <ul>
+                            <li>Interactive workshops on community building</li>
+                            <li>Local food vendors showcasing regional cuisine</li>
+                            <li>Live music and cultural performances</li>
+                            <li>Children's activities and family-friendly entertainment</li>
+                            <li>Networking opportunities with community leaders</li>
+                        </ul>
+                        
+                        <h3>Accessibility Information</h3>
+                        <p>Our venue is fully wheelchair accessible with ramps and elevators. We will have sign language interpreters for main presentations, accessible restrooms, and designated quiet spaces. If you have specific accessibility needs, please indicate them in the RSVP form.</p>
+                        
+                        <button class="btn" id="open-rsvp-tab">RSVP Now</button>
+                    </div>
                     
-                    <fieldset>
-                        <legend>Reading Preferences</legend>
+                    <div id="panel-rsvp" class="tab-panel" role="tabpanel" aria-labelledby="tab-rsvp" aria-hidden="true">
+                        <h2 id="rsvp-form">RSVP Form</h2>
+                        <p>Please fill out the form below to confirm your attendance. All fields marked with an asterisk (*) are required.</p>
                         
-                        <div class="form-group">
-                            <label for="favorite-author" class="required-field">Favorite Author</label>
-                            <input type="text" id="favorite-author" name="favorite-author" required aria-required="true">
-                            <span id="author-help" class="help-text">Enter an author whose writing style you enjoy</span>
-                            <span id="author-error" class="error-message" aria-live="polite"></span>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label id="genres-label" class="required-field">Preferred Genres (select at least one)</label>
-                            <div class="checkbox-group" role="group" aria-labelledby="genres-label">
-                                <div class="checkbox-option">
-                                    <input type="checkbox" id="genre-fiction" name="genres" value="fiction">
-                                    <label for="genre-fiction">Fiction</label>
+                        <form id="rsvp-form" class="rsvp-form" novalidate>
+                            <div class="form-group">
+                                <label for="full-name" class="required-field">Full Name</label>
+                                <input type="text" id="full-name" name="full-name" class="form-control" required aria-required="true" aria-describedby="name-help">
+                                <span id="name-help" class="form-help">Please enter your first and last name</span>
+                                <div id="name-error" class="error-message" aria-live="polite"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email" class="required-field">Email Address</label>
+                                <input type="email" id="email" name="email" class="form-control" required aria-required="true" aria-describedby="email-help" autocomplete="email">
+                                <span id="email-help" class="form-help">We'll send your confirmation to this address</span>
+                                <div id="email-error" class="error-message" aria-live="polite"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="required-field">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" class="form-control" required aria-required="true" aria-describedby="phone-help" autocomplete="tel">
+                                <span id="phone-help" class="form-help">Format: (123) 456-7890</span>
+                                <div id="phone-error" class="error-message" aria-live="polite"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="guests">Number of Guests (including yourself)</label>
+                                <div class="tooltip">
+                                    <button type="button" class="tooltip-icon" aria-label="More information about guest limits" tabindex="0">?</button>
+                                    <span class="tooltip-text">Maximum 4 guests per RSVP</span>
                                 </div>
-                                <div class="checkbox-option">
-                                    <input type="checkbox" id="genre-mystery" name="genres" value="mystery">
-                                    <label for="genre-mystery">Mystery & Thriller</label>
-                                </div>
-                                <div class="checkbox-option">
-                                    <input type="checkbox" id="genre-scifi" name="genres" value="scifi">
-                                    <label for="genre-scifi">Science Fiction</label>
-                                </div>
-                                <div class="checkbox-option">
-                                    <input type="checkbox" id="genre-fantasy" name="genres" value="fantasy">
-                                    <label for="genre-fantasy">Fantasy</label>
-                                </div>
-                                <div class="checkbox-option">
-                                    <input type="checkbox" id="genre-romance" name="genres" value="romance">
-                                    <label for="genre-romance">Romance</label>
-                                </div>
-                                <div class="checkbox-option">
-                                    <input type="checkbox" id="genre-nonfiction" name="genres" value="nonfiction">
-                                    <label for="genre-nonfiction">Non-Fiction</label>
-                                </div>
-                                <div class="checkbox-option">
-                                    <input type="checkbox" id="genre-biography" name="genres" value="biography">
-                                    <label for="genre-biography">Biography & Memoir</label>
-                                </div>
-                                <div class="checkbox-option">
-                                    <input type="checkbox" id="genre-history" name="genres" value="history">
-                                    <label for="genre-history">History</label>
+                                <input type="number" id="guests" name="guests" class="form-control" min="1" max="4" value="1" aria-describedby="guests-help">
+                                <span id="guests-help" class="form-help">Maximum 4 guests per RSVP</span>
+                                <div id="guests-error" class="error-message" aria-live="polite"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <fieldset>
+                                    <legend>Dietary Preferences</legend>
+                                    <div class="checkbox-group">
+                                        <label for="vegetarian">
+                                            <input type="checkbox" id="vegetarian" name="dietary" value="vegetarian">
+                                            Vegetarian
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <label for="vegan">
+                                            <input type="checkbox" id="vegan" name="dietary" value="vegan">
+                                            Vegan
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <label for="gluten-free">
+                                            <input type="checkbox" id="gluten-free" name="dietary" value="gluten-free">
+                                            Gluten-Free
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <label for="no-restrictions">
+                                            <input type="checkbox" id="no-restrictions" name="dietary" value="none">
+                                            No Dietary Restrictions
+                                        </label>
+                                    </div>
+                                </fieldset>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="accessibility-needs">Accessibility Needs</label>
+                                <textarea id="accessibility-needs" name="accessibility-needs" class="form-control" rows="3" aria-describedby="accessibility-help"></textarea>
+                                <span id="accessibility-help" class="form-help">Please let us know if you have any specific accessibility requirements</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <fieldset>
+                                    <legend class="required-field">Will you attend the evening reception?</legend>
+                                    <div class="checkbox-group">
+                                        <label for="reception-yes">
+                                            <input type="radio" id="reception-yes" name="reception" value="yes" required aria-required="true">
+                                            Yes, I will attend
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <label for="reception-no">
+                                            <input type="radio" id="reception-no" name="reception" value="no" required aria-required="true">
+                                            No, I cannot attend
+                                        </label>
+                                    </div>
+                                    <div id="reception-error" class="error-message" aria-live="polite"></div>
+                                </fieldset>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="checkbox-group">
+                                    <label for="terms" class="required-field">
+                                        <input type="checkbox" id="terms" name="terms" required aria-required="true">
+                                        I agree to the <button type="button" class="btn-link" id="open-terms-modal">terms and conditions</button>
+                                    </label>
+                                    <div id="terms-error" class="error-message" aria-live="polite"></div>
                                 </div>
                             </div>
-                            <span id="genres-error" class="error-message" aria-live="polite"></span>
-                        </div>
+                            
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success" id="submit-rsvp">Submit RSVP</button>
+                                <button type="reset" class="btn">Clear Form</button>
+                            </div>
+                        </form>
                         
-                        <div class="form-group">
-                            <label for="reading-pace">Reading Pace</label>
-                            <select id="reading-pace" name="reading-pace">
-                                <option value="">Select your typical reading pace</option>
-                                <option value="casual">Casual (1-2 books per month)</option>
-                                <option value="moderate">Moderate (3-5 books per month)</option>
-                                <option value="avid">Avid (6+ books per month)</option>
-                            </select>
+                        <div id="loading-container" class="loading-container" aria-live="polite">
+                            <div class="spinner" aria-hidden="true"></div>
+                            <p>Processing your RSVP...</p>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="additional-info">Additional Information</label>
-                            <textarea id="additional-info" name="additional-info" rows="4" placeholder="Tell us about books you've recently enjoyed or specific themes you're interested in"></textarea>
-                        </div>
-                    </fieldset>
+                    </div>
                     
-                    <div class="button-group">
-                        <button type="submit" id="submit-button">Get Recommendations</button>
-                        <button type="reset" class="secondary">Clear Form</button>
+                    <div id="panel-faq" class="tab-panel" role="tabpanel" aria-labelledby="tab-faq" aria-hidden="true">
+                        <h2 id="faq">Frequently Asked Questions</h2>
+                        
+                        <div class="accordion">
+                            <div class="accordion-item">
+                                <button id="accordion1" class="accordion-header" aria-expanded="false" aria-controls="panel1">
+                                    <span>Is there a cost to attend?</span>
+                                    <span class="accordion-icon" aria-hidden="true">▼</span>
+                                </button>
+                                <div id="panel1" class="accordion-panel" aria-labelledby="accordion1" aria-hidden="true">
+                                    <p>No, the event is completely free to attend. We welcome donations to support our community initiatives, but they are not required.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <button id="accordion2" class="accordion-header" aria-expanded="false" aria-controls="panel2">
+                                    <span>What should I bring?</span>
+                                    <span class="accordion-icon" aria-hidden="true">▼</span>
+                                </button>
+                                <div id="panel2" class="accordion-panel" aria-labelledby="accordion2" aria-hidden="true">
+                                    <p>We recommend bringing a reusable water bottle, comfortable shoes, and weather-appropriate clothing. All activities and materials will be provided.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <button id="accordion3" class="accordion-header" aria-expanded="false" aria-controls="panel3">
+                                    <span>Is parking available?</span>
+                                    <span class="accordion-icon" aria-hidden="true">▼</span>
+                                </button>
+                                <div id="panel3" class="accordion-panel" aria-labelledby="accordion3" aria-hidden="true">
+                                    <p>Yes, free parking is available at the Community Center garage. We also encourage carpooling or using public transportation when possible.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item">
+                                <button id="accordion4" class="accordion-header" aria-expanded="false" aria-controls="panel4">
+                                    <span>Can I update my RSVP after submitting?</span>
+                                    <span class="accordion-icon" aria-hidden="true">▼</span>
+                                </button>
+                                <div id="panel4" class="accordion-panel" aria-labelledby="accordion4" aria-hidden="true">
+                                    <p>Yes, you can update your RSVP by contacting our event coordinator at events@community.org or by calling (555) 123-4567.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3 id="contact">Contact Information</h3>
+                        <p>If you have any questions that aren't answered above, please contact us:</p>
+                        <p>Email: events@community.org<br>
+                        Phone: (555) 123-4567<br>
+                        Hours: Monday-Friday, 9:00 AM - 5:00 PM</p>
                     </div>
-                </form>
-            </div>
-        </section>
-        
-        <div id="loading" class="loading" aria-live="polite">
-            <div class="loading-spinner" aria-hidden="true"></div>
-            <p>Finding the perfect books for you...</p>
+                </div>
+            </section>
+            
+            <aside class="attendee-list">
+                <h2 id="attendees">Current Attendees</h2>
+                <p>Join these community members who have already RSVP'd to the event:</p>
+                
+                <ul class="attendees" id="attendee-list" aria-live="polite">
+                    <li class="attendee-item">
+                        <div>
+                            <span class="attendee-name">Sarah Johnson</span>
+                            <div class="attendee-details">Guests: 2 | Dietary: Vegetarian</div>
+                        </div>
+                    </li>
+                    <li class="attendee-item">
+                        <div>
+                            <span class="attendee-name">Michael Chen</span>
+                            <div class="attendee-details">Guests: 1 | Dietary: None</div>
+                        </div>
+                    </li>
+                    <li class="attendee-item">
+                        <div>
+                            <span class="attendee-name">Aisha Patel</span>
+                            <div class="attendee-details">Guests: 3 | Dietary: Gluten-Free</div>
+                        </div>
+                    </li>
+                    <li class="attendee-item">
+                        <div>
+                            <span class="attendee-name">Robert Garcia</span>
+                            <div class="attendee-details">Guests: 2 | Dietary: None</div>
+                        </div>
+                    </li>
+                    <li class="attendee-item">
+                        <div>
+                            <span class="attendee-name">Emma Wilson</span>
+                            <div class="attendee-details">Guests: 1 | Dietary: Vegan</div>
+                        </div>
+                    </li>
+                </ul>
+                
+                <p>Total attendees so far: <span id="attendee-count">9</span></p>
+                
+                <button class="btn btn-secondary" id="refresh-attendees">Refresh List</button>
+            </aside>
         </div>
-        
-        <section id="results" class="results-container" aria-labelledby="results-heading">
-            <h2 id="results-heading">Your Personalized Book Recommendations</h2>
-            <p id="results-intro">Based on your preferences, we think you'll enjoy these books:</p>
-            
-            <div id="book-list" class="book-list">
-                <!-- Book recommendations will be inserted here by JavaScript -->
-            </div>
-            
-            <div id="no-results" class="no-results" style="display: none;">
-                <h3>No Matches Found</h3>
-                <p>We couldn't find any books matching your specific criteria. Try adjusting your preferences or contact us for personalized assistance.</p>
-            </div>
-        </section>
-        
-        <section aria-labelledby="faq-heading">
-            <h2 id="faq-heading">Frequently Asked Questions</h2>
-            
-            <div class="accordion">
-                <div class="accordion-item">
-                    <h3 class="accordion-header">
-                        <button class="accordion-button" aria-expanded="false" aria-controls="faq1-content">
-                            How does the recommendation system work?
-                        </button>
-                    </h3>
-                    <div id="faq1-content" class="accordion-content" hidden>
-                        <div class="accordion-content-inner">
-                            <p>Our recommendation system analyzes your preferred genres, favorite authors, and reading habits to suggest books you might enjoy. We consider writing style, themes, and narrative elements to find the best matches for your taste.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="accordion-item">
-                    <h3 class="accordion-header">
-                        <button class="accordion-button" aria-expanded="false" aria-controls="faq2-content">
-                            Can I save my recommendations for later?
-                        </button>
-                    </h3>
-                    <div id="faq2-content" class="accordion-content" hidden>
-                        <div class="accordion-content-inner">
-                            <p>Yes! If you provide your email address, we can send your personalized recommendations to you. You can also print your recommendations using your browser's print function or bookmark this page to return later.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="accordion-item">
-                    <h3 class="accordion-header">
-                        <button class="accordion-button" aria-expanded="false" aria-controls="faq3-content">
-                            How often are new books added to the database?
-                        </button>
-                    </h3>
-                    <div id="faq3-content" class="accordion-content" hidden>
-                        <div class="accordion-content-inner">
-                            <p>We update our book database weekly with new releases and classics. Our team of librarians and book enthusiasts constantly reviews and adds books to ensure our recommendations stay current and diverse.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="accordion-item">
-                    <h3 class="accordion-header">
-                        <button class="accordion-button" aria-expanded="false" aria-controls="faq4-content">
-                            What if I don't like the recommendations?
-                        </button>
-                    </h3>
-                    <div id="faq4-content" class="accordion-content" hidden>
-                        <div class="accordion-content-inner">
-                            <p>You can adjust your preferences and try again, or contact our team for personalized assistance. We're always working to improve our recommendation algorithm based on user feedback.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <section aria-labelledby="help-heading">
-            <h2 id="help-heading">Need Help?</h2>
-            <p>If you're looking for specific book recommendations or have questions about using our service, our team of book enthusiasts is here to help!</p>
-            <button id="contact-button" aria-haspopup="dialog">Contact Our Book Experts</button>
-        </section>
     </main>
     
-    <div id="contact-modal" class="modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
-        <div class="modal-content">
-            <h2 id="modal-title">Contact Our Book Experts</h2>
-            <button class="close-modal" aria-label="Close dialog">&times;</button>
+    <div class="modal-overlay" id="terms-modal" aria-hidden="true">
+        <div class="modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+            <button class="close-modal" aria-label="Close modal" id="close-modal">&times;</button>
             
-            <p>Have a specific question about books or need personalized recommendations? Fill out this form and one of our book experts will get back to you within 24 hours.</p>
+            <div class="modal-header">
+                <h2 id="modal-title">Terms and Conditions</h2>
+            </div>
             
-            <form id="contact-form">
-                <div class="form-group">
-                    <label for="contact-name" class="required-field">Your Name</label>
-                    <input type="text" id="contact-name" name="contact-name" required aria-required="true" autocomplete="name">
-                </div>
+            <div class="modal-body">
+                <h3>Event Participation Agreement</h3>
+                <p>By registering for the Annual Community Gathering, you agree to the following terms:</p>
                 
-                <div class="form-group">
-                    <label for="contact-email" class="required-field">Email Address</label>
-                    <input type="email" id="contact-email" name="contact-email" required aria-required="true" autocomplete="email">
-                </div>
+                <ol>
+                    <li>Your contact information will only be used for event-related communications.</li>
+                    <li>Photographs and videos may be taken during the event for promotional purposes.</li>
+                    <li>You agree to follow all venue safety guidelines and protocols.</li>
+                    <li>Cancellations should be made at least 48 hours before the event.</li>
+                    <li>The organizers reserve the right to modify the event schedule if necessary.</li>
+                </ol>
                 
-                <div class="form-group">
-                    <label for="contact-message" class="required-field">Your Question</label>
-                    <textarea id="contact-message" name="contact-message" rows="4" required aria-required="true"></textarea>
-                </div>
-                
-                <button type="submit">Send Message</button>
-            </form>
+                <h3>Privacy Policy</h3>
+                <p>We respect your privacy and will not share your personal information with third parties without your consent. Your email will only be used to send event confirmations and updates.</p>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn" id="accept-terms">I Accept</button>
+                <button class="btn" id="decline-terms">I Decline</button>
+            </div>
         </div>
     </div>
     
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>About BookMatch</h3>
-                <p>BookMatch helps readers discover their next favorite books through personalized recommendations based on reading preferences and interests.</p>
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>The Annual Community Gathering is organized by the Community Connection Coalition, a non-profit dedicated to building stronger, more inclusive communities through events and initiatives.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#event-details">Event Details</a></li>
+                        <li><a href="#rsvp-form">RSVP Form</a></li>
+                        <li><a href="#attendees">Attendees</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#" aria-label="Visit our Facebook page">Facebook</a></li>
+                        <li><a href="#" aria-label="Visit our Twitter page">Twitter</a></li>
+                        <li><a href="#" aria-label="Visit our Instagram page">Instagram</a></li>
+                        <li><a href="#" aria-label="Subscribe to our newsletter">Newsletter</a></li>
+                    </ul>
+                </div>
             </div>
             
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                </ul>
+            <div class="copyright">
+                <p>&copy; 2023 Community Connection Coalition. All rights reserved.</p>
             </div>
-            
-            <div class="footer-section">
-                <h3>Connect With Us</h3>
-                <ul class="footer-links">
-                    <li><a href="#" aria-label="Visit our Facebook page">Facebook</a></li>
-                    <li><a href="#" aria-label="Visit our Twitter page">Twitter</a></li>
-                    <li><a href="#" aria-label="Visit our Instagram page">Instagram</a></li>
-                    <li><a href="#" aria-label="Subscribe to our newsletter">Newsletter</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="copyright">
-            <p>&copy; 2023 BookMatch. All rights reserved.</p>
         </div>
     </footer>
-
+    
     <script>
-        // Wait for DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Form validation and submission
-            const recommendationForm = document.getElementById('recommendation-form');
-            const loadingIndicator = document.getElementById('loading');
-            const resultsSection = document.getElementById('results');
-            const bookList = document.getElementById('book-list');
-            const noResults = document.getElementById('no-results');
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            const tabPanels = document.querySelectorAll('.tab-panel');
             
-            // Sample book data (in a real application, this would come from a database or API)
-            const bookDatabase = [
-                {
-                    title: "The Midnight Library",
-                    author: "Matt Haig",
-                    genres: ["fiction", "fantasy"],
-                    description: "Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived.",
-                    image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
-                    link: "#midnight-library"
-                },
-                {
-                    title: "Project Hail Mary",
-                    author: "Andy Weir",
-                    genres: ["scifi"],
-                    description: "A lone astronaut must save the earth from disaster in this incredible new science-based thriller from the #1 New York Times bestselling author of The Martian.",
-                    image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
-                    link: "#project-hail-mary"
-                },
-                {
-                    title: "The Silent Patient",
-                    author: "Alex Michaelides",
-                    genres: ["mystery", "fiction"],
-                    description: "A woman shoots her husband five times and then never speaks another word. A criminal psychotherapist is determined to get her to talk and unravel the mystery.",
-                    image: "https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
-                    link: "#silent-patient"
-                },
-                {
-                    title: "Educated",
-                    author: "Tara Westover",
-                    genres: ["biography", "nonfiction"],
-                    description: "A memoir about a young girl who, kept out of school, leaves her survivalist family and goes on to earn a PhD from Cambridge University.",
-                    image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
-                    link: "#educated"
-                },
-                {
-                    title: "The House in the Cerulean Sea",
-                    author: "TJ Klune",
-                    genres: ["fantasy", "fiction"],
-                    description: "A magical island. A dangerous task. A burning secret. An enchanting love story, masterfully told, The House in the Cerulean Sea is about the profound experience of discovering an unlikely family.",
-                    image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
-                    link: "#cerulean-sea"
-                },
-                {
-                    title: "Sapiens: A Brief History of Humankind",
-                    author: "Yuval Noah Harari",
-                    genres: ["nonfiction", "history"],
-                    description: "A groundbreaking narrative of humanity's creation and evolution that explores the ways in which biology and history have defined us.",
-                    image: "https://images.unsplash.com/photo-1555116505-38ab61800975?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
-                    link: "#sapiens"
-                },
-                {
-                    title: "The Seven Husbands of Evelyn Hugo",
-                    author: "Taylor Jenkins Reid",
-                    genres: ["fiction", "romance"],
-                    description: "The epic journey of a reclusive Hollywood movie icon who, nearing the end of her life, decides to reveal the truth about her glamorous and scandalous life.",
-                    image: "https://images.unsplash.com/photo-1518744386442-2d48ac47a7eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
-                    link: "#evelyn-hugo"
-                },
-                {
-                    title: "The Thursday Murder Club",
-                    author: "Richard Osman",
-                    genres: ["mystery", "fiction"],
-                    description: "Four septuagenarians with a few tricks up their sleeves, a female cop with her first big case, and a brutal murder. In a peaceful retirement village, four unlikely friends meet weekly to discuss unsolved crimes.",
-                    image: "https://images.unsplash.com/photo-1587876931567-564ce588bfbd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
-                    link: "#thursday-murder"
-                }
-            ];
-            
-            // Form validation
-            recommendationForm.addEventListener('submit', function(event) {
-                event.preventDefault();
-                
-                // Reset error messages
-                document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-                
-                let isValid = true;
-                
-                // Validate name
-                const nameInput = document.getElementById('name');
-                if (!nameInput.value.trim()) {
-                    document.getElementById('name-error').textContent = 'Please enter your name';
-                    isValid = false;
-                }
-                
-                // Validate email format if provided
-                const emailInput = document.getElementById('email');
-                if (emailInput.value.trim() && !isValidEmail(emailInput.value)) {
-                    document.getElementById('email-error').textContent = 'Please enter a valid email address';
-                    isValid = false;
-                }
-                
-                // Validate favorite author
-                const authorInput = document.getElementById('favorite-author');
-                if (!authorInput.value.trim()) {
-                    document.getElementById('author-error').textContent = 'Please enter a favorite author';
-                    isValid = false;
-                }
-                
-                // Validate at least one genre is selected
-                const genreCheckboxes = document.querySelectorAll('input[name="genres"]:checked');
-                if (genreCheckboxes.length === 0) {
-                    document.getElementById('genres-error').textContent = 'Please select at least one genre';
-                    isValid = false;
-                }
-                
-                if (isValid) {
-                    // Show loading indicator
-                    loadingIndicator.style.display = 'block';
+            function setActiveTab(tabId) {
+                // Update tab states
+                tabs.forEach(tab => {
+                    const isSelected = tab.id === tabId;
+                    tab.setAttribute('aria-selected', isSelected);
                     
-                    // Simulate API call delay
-                    setTimeout(function() {
-                        // Process form data and generate recommendations
-                        generateRecommendations();
+                    // Update panel visibility
+                    const panelId = tab.getAttribute('aria-controls');
+                    const panel = document.getElementById(panelId);
+                    panel.setAttribute('aria-hidden', !isSelected);
+                });
+            }
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    setActiveTab(this.id);
+                });
+                
+                tab.addEventListener('keydown', function(e) {
+                    // Handle keyboard navigation
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                        e.preventDefault();
                         
-                        // Hide loading indicator
-                        loadingIndicator.style.display = 'none';
+                        const tabList = Array.from(tabs);
+                        const currentIndex = tabList.indexOf(this);
+                        let newIndex;
                         
-                        // Show results section
-                        resultsSection.style.display = 'block';
+                        if (e.key === 'ArrowLeft') {
+                            newIndex = currentIndex === 0 ? tabList.length - 1 : currentIndex - 1;
+                        } else {
+                            newIndex = currentIndex === tabList.length - 1 ? 0 : currentIndex + 1;
+                        }
                         
-                        // Scroll to results
-                        resultsSection.scrollIntoView({ behavior: 'smooth' });
-                    }, 1500);
-                }
+                        tabList[newIndex].focus();
+                        setActiveTab(tabList[newIndex].id);
+                    }
+                });
             });
             
-            // Email validation helper function
-            function isValidEmail(email) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email);
-            }
-            
-            // Generate book recommendations based on form input
-            function generateRecommendations() {
-                // Get selected genres
-                const selectedGenres = Array.from(document.querySelectorAll('input[name="genres"]:checked')).map(cb => cb.value);
-                
-                // Get favorite author
-                const favoriteAuthor = document.getElementById('favorite-author').value.trim().toLowerCase();
-                
-                // Filter books based on selected genres and author similarity
-                let recommendedBooks = bookDatabase.filter(book => {
-                    // Check if any of the book's genres match the selected genres
-                    const genreMatch = book.genres.some(genre => selectedGenres.includes(genre));
-                    
-                    // For demo purposes, we'll do a simple author name check
-                    // In a real app, this would use more sophisticated author similarity algorithms
-                    const authorMatch = book.author.toLowerCase().includes(favoriteAuthor) || 
-                                        favoriteAuthor.includes(book.author.toLowerCase());
-                    
-                    // Return books that match either genre or author
-                    return genreMatch || authorMatch;
-                });
-                
-                // If no exact matches, return some books from selected genres
-                if (recommendedBooks.length === 0) {
-                    recommendedBooks = bookDatabase.filter(book => {
-                        return book.genres.some(genre => selectedGenres.includes(genre));
-                    });
-                }
-                
-                // Display recommendations
-                displayRecommendations(recommendedBooks);
-            }
-            
-            // Display book recommendations in the results section
-            function displayRecommendations(books) {
-                // Clear previous results
-                bookList.innerHTML = '';
-                
-                if (books.length === 0) {
-                    // Show no results message
-                    noResults.style.display = 'block';
-                    return;
-                }
-                
-                // Hide no results message if showing books
-                noResults.style.display = 'none';
-                
-                // Create and append book cards
-                books.forEach(book => {
-                    const bookCard = document.createElement('div');
-                    bookCard.className = 'book-card';
-                    
-                    const genreHTML = book.genres.map(genre => 
-                        `<span class="book-genre">${genre.charAt(0).toUpperCase() + genre.slice(1)}</span>`
-                    ).join('');
-                    
-                    bookCard.innerHTML = `
-                        <img src="${book.image}" alt="Book cover for ${book.title} by ${book.author}" class="book-image">
-                        <div class="book-info">
-                            <h3 class="book-title">${book.title}</h3>
-                            <p class="book-author">by ${book.author}</p>
-                            <p class="book-description">${book.description}</p>
-                            <div class="book-genres">
-                                ${genreHTML}
-                            </div>
-                            <a href="${book.link}" class="book-link">Learn More</a>
-                        </div>
-                    `;
-                    
-                    bookList.appendChild(bookCard);
-                });
-                
-                // Update results intro text
-                document.getElementById('results-intro').textContent = 
-                    `Based on your preferences, we found ${books.length} book${books.length === 1 ? '' : 's'} you might enjoy:`;
-            }
+            // Open RSVP tab button
+            document.getElementById('open-rsvp-tab').addEventListener('click', function() {
+                setActiveTab('tab-rsvp');
+                document.getElementById('tab-rsvp').focus();
+            });
             
             // Accordion functionality
-            const accordionButtons = document.querySelectorAll('.accordion-button');
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
             
-            accordionButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Toggle aria-expanded attribute
-                    const expanded = this.getAttribute('aria-expanded') === 'true';
-                    this.setAttribute('aria-expanded', !expanded);
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isExpanded);
                     
-                    // Get the content panel
-                    const contentId = this.getAttribute('aria-controls');
-                    const content = document.getElementById(contentId);
-                    
-                    // Toggle hidden attribute
-                    if (expanded) {
-                        content.setAttribute('hidden', '');
-                    } else {
-                        content.removeAttribute('hidden');
-                    }
-                    
-                    // Animate content height
-                    if (!expanded) {
-                        // Opening the accordion
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                    } else {
-                        // Closing the accordion
-                        content.style.maxHeight = '0';
-                    }
+                    const panelId = this.getAttribute('aria-controls');
+                    const panel = document.getElementById(panelId);
+                    panel.setAttribute('aria-hidden', isExpanded);
                 });
             });
             
             // Modal functionality
-            const contactButton = document.getElementById('contact-button');
-            const contactModal = document.getElementById('contact-modal');
-            const closeModal = document.querySelector('.close-modal');
+            const modalOverlay = document.getElementById('terms-modal');
+            const openModalBtn = document.getElementById('open-terms-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const acceptTermsBtn = document.getElementById('accept-terms');
+            const declineTermsBtn = document.getElementById('decline-terms');
+            const termsCheckbox = document.getElementById('terms');
             
-            contactButton.addEventListener('click', function() {
-                // Show modal
-                contactModal.style.display = 'block';
-                contactModal.setAttribute('aria-hidden', 'false');
+            function openModal() {
+                modalOverlay.classList.add('active');
+                modalOverlay.setAttribute('aria-hidden', 'false');
                 
-                // Set focus to first input in modal
-                document.getElementById('contact-name').focus();
+                // Set focus to the modal
+                document.querySelector('.modal').focus();
                 
-                // Save the element that had focus before opening modal
-                this.setAttribute('data-return-focus', 'true');
-            });
-            
-            closeModal.addEventListener('click', function() {
-                closeContactModal();
-            });
-            
-            // Close modal when clicking outside content
-            contactModal.addEventListener('click', function(event) {
-                if (event.target === contactModal) {
-                    closeContactModal();
-                }
-            });
-            
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape' && contactModal.style.display === 'block') {
-                    closeContactModal();
-                }
-            });
-            
-            function closeContactModal() {
-                contactModal.style.display = 'none';
-                contactModal.setAttribute('aria-hidden', 'true');
+                // Store the element that had focus before opening the modal
+                openModal.lastFocus = document.activeElement;
                 
-                // Return focus to the element that opened the modal
-                const returnFocusElement = document.querySelector('[data-return-focus="true"]');
-                if (returnFocusElement) {
-                    returnFocusElement.focus();
-                    returnFocusElement.removeAttribute('data-return-focus');
-                }
+                // Trap focus in modal
+                document.addEventListener('keydown', trapFocus);
             }
             
-            // Trap focus within modal when open
-            contactModal.addEventListener('keydown', function(event) {
-                if (event.key !== 'Tab') return;
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                modalOverlay.setAttribute('aria-hidden', 'true');
                 
-                const focusableElements = contactModal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                // Return focus to the element that had focus before opening the modal
+                if (openModal.lastFocus) {
+                    openModal.lastFocus.focus();
+                }
+                
+                // Remove focus trap
+                document.removeEventListener('keydown', trapFocus);
+            }
+            
+            function trapFocus(e) {
+                // If Escape key is pressed, close the modal
+                if (e.key === 'Escape') {
+                    closeModal();
+                    return;
+                }
+                
+                // Only trap focus if Tab key is pressed
+                if (e.key !== 'Tab') return;
+                
+                // Get all focusable elements in the modal
+                const focusableElements = modalOverlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
                 const firstElement = focusableElements[0];
                 const lastElement = focusableElements[focusableElements.length - 1];
                 
-                // If shift+tab on first element, move to last element
-                if (event.shiftKey && document.activeElement === firstElement) {
-                    event.preventDefault();
+                // If Shift+Tab and focus is on first element, move to last element
+                if (e.shiftKey && document.activeElement === firstElement) {
+                    e.preventDefault();
                     lastElement.focus();
                 }
-                // If tab on last element, move to first element
-                else if (!event.shiftKey && document.activeElement === lastElement) {
-                    event.preventDefault();
+                // If Tab and focus is on last element, move to first element
+                else if (!e.shiftKey && document.activeElement === lastElement) {
+                    e.preventDefault();
                     firstElement.focus();
+                }
+            }
+            
+            openModalBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            
+            acceptTermsBtn.addEventListener('click', function() {
+                termsCheckbox.checked = true;
+                closeModal();
+                // Clear any previous error message
+                document.getElementById('terms-error').textContent = '';
+                document.getElementById('terms-error').classList.remove('visible');
+            });
+            
+            declineTermsBtn.addEventListener('click', function() {
+                termsCheckbox.checked = false;
+                closeModal();
+            });
+            
+            // Close modal when clicking outside
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    closeModal();
                 }
             });
             
-            // Contact form submission
-            const contactForm = document.getElementById('contact-form');
+            // Form validation
+            const rsvpForm = document.getElementById('rsvp-form');
+            const fullNameInput = document.getElementById('full-name');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const guestsInput = document.getElementById('guests');
+            const receptionRadios = document.querySelectorAll('input[name="reception"]');
+            const statusMessage = document.getElementById('status-message');
+            const loadingContainer = document.getElementById('loading-container');
             
-            contactForm.addEventListener('submit', function(event) {
-                event.preventDefault();
+            function validateForm() {
+                let isValid = true;
                 
-                // In a real application, you would send the form data to a server
-                // For this demo, we'll just show a success message and close the modal
+                // Validate name
+                if (!fullNameInput.value.trim()) {
+                    showError('name-error', 'Please enter your full name');
+                    isValid = false;
+                } else {
+                    clearError('name-error');
+                }
                 
-                alert('Thank you for your message! Our book experts will contact you soon.');
-                closeContactModal();
-                contactForm.reset();
+                // Validate email
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailInput.value.trim()) {
+                    showError('email-error', 'Please enter your email address');
+                    isValid = false;
+                } else if (!emailPattern.test(emailInput.value.trim())) {
+                    showError('email-error', 'Please enter a valid email address');
+                    isValid = false;
+                } else {
+                    clearError('email-error');
+                }
+                
+                // Validate phone
+                const phonePattern = /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
+                if (!phoneInput.value.trim()) {
+                    showError('phone-error', 'Please enter your phone number');
+                    isValid = false;
+                } else if (!phonePattern.test(phoneInput.value.trim())) {
+                    showError('phone-error', 'Please enter a valid phone number: (123) 456-7890');
+                    isValid = false;
+                } else {
+                    clearError('phone-error');
+                }
+                
+                // Validate guests
+                const guestsValue = parseInt(guestsInput.value);
+                if (isNaN(guestsValue) || guestsValue < 1 || guestsValue > 4) {
+                    showError('guests-error', 'Please enter a number between 1 and 4');
+                    isValid = false;
+                } else {
+                    clearError('guests-error');
+                }
+                
+                // Validate reception attendance
+                let receptionSelected = false;
+                receptionRadios.forEach(radio => {
+                    if (radio.checked) {
+                        receptionSelected = true;
+                    }
+                });
+                
+                if (!receptionSelected) {
+                    showError('reception-error', 'Please indicate whether you will attend the reception');
+                    isValid = false;
+                } else {
+                    clearError('reception-error');
+                }
+                
+                // Validate terms
+                if (!termsCheckbox.checked) {
+                    showError('terms-error', 'You must accept the terms and conditions');
+                    isValid = false;
+                } else {
+                    clearError('terms-error');
+                }
+                
+                return isValid;
+            }
+            
+            function showError(elementId, message) {
+                const errorElement = document.getElementById(elementId);
+                errorElement.textContent = message;
+                errorElement.classList.add('visible');
+                
+                // Also add error class to the related input
+                const inputId = elementId.replace('-error', '');
+                const inputElement = document.getElementById(inputId);
+                if (inputElement) {
+                    inputElement.classList.add('error');
+                    inputElement.setAttribute('aria-invalid', 'true');
+                }
+            }
+            
+            function clearError(elementId) {
+                const errorElement = document.getElementById(elementId);
+                errorElement.textContent = '';
+                errorElement.classList.remove('visible');
+                
+                // Remove error class from the related input
+                const inputId = elementId.replace('-error', '');
+                const inputElement = document.getElementById(inputId);
+                if (inputElement) {
+                    inputElement.classList.remove('error');
+                    inputElement.setAttribute('aria-invalid', 'false');
+                }
+            }
+            
+            function showStatusMessage(type, message) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                
+                // Ensure the message is visible
+                statusMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // Auto-hide after 5 seconds
+                setTimeout(() => {
+                    statusMessage.className = 'status-message';
+                }, 5000);
+            }
+            
+            // Form submission
+            rsvpForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    // Show loading indicator
+                    loadingContainer.classList.add('visible');
+                    
+                    // Simulate form submission (would be an API call in a real app)
+                    setTimeout(() => {
+                        loadingContainer.classList.remove('visible');
+                        
+                        // Add the new attendee to the list
+                        addAttendee();
+                        
+                        // Show success message
+                        showStatusMessage('success', 'Thank you! Your RSVP has been successfully submitted.');
+                        
+                        // Reset the form
+                        rsvpForm.reset();
+                        
+                        // Switch back to the details tab
+                        setActiveTab('tab-details');
+                    }, 1500);
+                }
+            });
+            
+            // Add new attendee to the list
+            function addAttendee() {
+                const attendeeList = document.getElementById('attendee-list');
+                const attendeeCount = document.getElementById('attendee-count');
+                
+                // Get dietary preferences
+                const dietaryPreferences = [];
+                document.querySelectorAll('input[name="dietary"]:checked').forEach(checkbox => {
+                    dietaryPreferences.push(checkbox.value);
+                });
+                
+                const dietaryText = dietaryPreferences.length > 0 ? dietaryPreferences.join(', ') : 'None';
+                
+                // Create new attendee item
+                const newAttendee = document.createElement('li');
+                newAttendee.className = 'attendee-item fade-in';
+                
+                newAttendee.innerHTML = `
+                    <div>
+                        <span class="attendee-name">${fullNameInput.value}</span>
+                        <div class="attendee-details">Guests: ${guestsInput.value} | Dietary: ${dietaryText}</div>
+                    </div>
+                `;
+                
+                // Add to the beginning of the list
+                attendeeList.insertBefore(newAttendee, attendeeList.firstChild);
+                
+                // Update the count
+                const currentCount = parseInt(attendeeCount.textContent);
+                const newCount = currentCount + parseInt(guestsInput.value);
+                attendeeCount.textContent = newCount;
+            }
+            
+            // Refresh attendees button
+            document.getElementById('refresh-attendees').addEventListener('click', function() {
+                const attendeeList = document.getElementById('attendee-list');
+                
+                // Show loading indicator
+                this.disabled = true;
+                this.textContent = 'Refreshing...';
+                
+                // Simulate API call
+                setTimeout(() => {
+                    // Re-enable button
+                    this.disabled = false;
+                    this.textContent = 'Refresh List';
+                    
+                    // Show success message
+                    showStatusMessage('success', 'Attendee list has been refreshed.');
+                }, 1000);
+            });
+            
+            // Input validation on blur
+            fullNameInput.addEventListener('blur', function() {
+                if (!this.value.trim()) {
+                    showError('name-error', 'Please enter your full name');
+                } else {
+                    clearError('name-error');
+                }
+            });
+            
+            emailInput.addEventListener('blur', function() {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!this.value.trim()) {
+                    showError('email-error', 'Please enter your email address');
+                } else if (!emailPattern.test(this.value.trim())) {
+                    showError('email-error', 'Please enter a valid email address');
+                } else {
+                    clearError('email-error');
+                }
+            });
+            
+            phoneInput.addEventListener('blur', function() {
+                const phonePattern = /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
+                if (!this.value.trim()) {
+                    showError('phone-error', 'Please enter your phone number');
+                } else if (!phonePattern.test(this.value.trim())) {
+                    showError('phone-error', 'Please enter a valid phone number: (123) 456-7890');
+                } else {
+                    clearError('phone-error');
+                }
+            });
+            
+            guestsInput.addEventListener('blur', function() {
+                const guestsValue = parseInt(this.value);
+                if (isNaN(guestsValue) || guestsValue < 1 || guestsValue > 4) {
+                    showError('guests-error', 'Please enter a number between 1 and 4');
+                } else {
+                    clearError('guests-error');
+                }
+            });
+            
+            // Format phone number as user types
+            phoneInput.addEventListener('input', function() {
+                let value = this.value.replace(/\D/g, ''); // Remove non-digits
+                
+                if (value.length > 0) {
+                    if (value.length <= 3) {
+                        this.value = `(${value}`;
+                    } else if (value.length <= 6) {
+                        this.value = `(${value.slice(0, 3)}) ${value.slice(3)}`;
+                    } else {
+                        this.value = `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
+                    }
+                }
+            });
+            
+            // Ensure only one dietary checkbox can be checked if "No Restrictions" is selected
+            const dietaryCheckboxes = document.querySelectorAll('input[name="dietary"]');
+            const noRestrictionsCheckbox = document.getElementById('no-restrictions');
+            
+            dietaryCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.id === 'no-restrictions' && this.checked) {
+                        // Uncheck all other options
+                        dietaryCheckboxes.forEach(cb => {
+                            if (cb.id !== 'no-restrictions') {
+                                cb.checked = false;
+                            }
+                        });
+                    } else if (this.checked && noRestrictionsCheckbox.checked) {
+                        // Uncheck "No Restrictions" if another option is selected
+                        noRestrictionsCheckbox.checked = false;
+                    }
+                });
             });
         });
     </script>
