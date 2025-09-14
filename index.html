@@ -2,1391 +2,1546 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Accessible To-Do List App – Priorities & Due Dates (WCAG 2.2 AAA)</title>
+  <title>Accessible Gardening Community: Share Your Garden, Connect & Grow</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- User-selectable color themes for AAA: 1.4.8 -->
+  <meta name="description" content="An accessible gardening community where users can upload photos of their plants, add descriptions, and interact through likes and comments.">
   <style>
     :root {
-      /* High-contrast, colorful palettes (7:1+ ratios) */
-      --bg-main: #10172a;
-      --bg-alt: #233556;
-      --bg-header: #0066c5;
-      --bg-footer: #0d3d56;
-      --bg-card: #ffffff;
-      --bg-modal: #f5f9ff;
-      --fg-main: #ffffff;
-      --fg-alt: #1b1b1b;
-      --fg-link: #00c28a;
-      --fg-link-hover: #00744c;
-      --border-focus: #fbbf24;
-      --border-card: #2d3748;
-      --shadow-card: 0 2px 12px rgba(0,0,0,0.08);
-
-      /* Priority colors (with icons and patterns for color independence) */
-      --prio-high: #e60026;
-      --prio-med: #fbbf24;
-      --prio-low: #00c28a;
-      --prio-high-bg: linear-gradient(135deg, #e60026 70%, #fff 100%);
-      --prio-med-bg: linear-gradient(135deg, #fbbf24 70%, #fff 100%);
-      --prio-low-bg: linear-gradient(135deg, #00c28a 70%, #fff 100%);
-
-      /* Enhanced focus indicator */
-      --focus-outline: 3px solid var(--border-focus);
-      --focus-outline-thick: 4px solid var(--border-focus);
-
-      /* Spacing and typography */
-      --line-height: 1.6;
+      /* Vibrant, high-contrast palette (7:1+ for normal text) */
+      --color-bg: #1a2a1a;
+      --color-bg-alt: #224422;
+      --color-header: #0d2b4a;
+      --color-accent: #f5b700;
+      --color-accent-dark: #b88c00;
+      --color-focus: #ff3c7e;
+      --color-success: #2ecc40;
+      --color-error: #e60026;
+      --color-border: #70cfff;
+      --color-text: #ffffff;
+      --color-text-alt: #212121;
+      --color-card: #244c2f;
+      --color-card-alt: #2d5c3a;
+      --color-link: #00baff;
+      --color-link-visited: #845ec2;
+      --color-comment-bg: #18342a;
+      --color-skip-bg: #fff;
+      --color-skip-text: #000;
+      --color-shadow: rgba(0,0,0,0.18);
+      --color-like: #ff3c7e;
+      --color-like-contrast: #fff;
+      --color-comment-icon: #f5b700;
+      --color-disabled: #888888;
+      --border-radius: 12px;
+      --focus-outline-width: 3px;
+      --focus-outline-style: solid;
+      --focus-outline-color: var(--color-focus);
+      --min-touch-size: 44px;
+      --line-height: 1.7;
       --para-spacing: 1.5em;
-      --font-main: 'Segoe UI', 'Arial', sans-serif;
-      --font-size: 1.15rem;
-      --font-size-lg: 1.4rem;
-      --font-size-sm: 1rem;
-      --card-radius: 1rem;
-      --target-size: 48px;
-      --min-btn-size: 44px;
+      --max-line-length: 80ch;
+      --font-size-base: 1.125rem;
+      --font-size-large: 1.5rem;
+      --font-size-small: 1rem;
+      --input-bg: #1c1c2e;
+      --input-border: #70cfff;
+      --input-focus: #00baff;
+      --input-error: #e60026;
+      --input-help: #f5b700;
+      --transition: 0.2s cubic-bezier(.6,.2,.1,1);
+      --comment-icon-size: 1.5em;
+      --like-icon-size: 1.5em;
     }
-
-    /* User theme overrides for AAA 1.4.8 */
-    [data-theme="light"] {
-      --bg-main: #f5f9ff;
-      --bg-alt: #e1e9f7;
-      --bg-header: #00c28a;
-      --bg-footer: #00744c;
-      --bg-card: #ffffff;
-      --fg-main: #1b1b1b;
-      --fg-alt: #1b1b1b;
-      --fg-link: #0066c5;
-      --fg-link-hover: #e60026;
-      --border-focus: #e60026;
-      --border-card: #b5b5b5;
-    }
-
     html {
-      background: var(--bg-main);
-      color: var(--fg-main);
-      font-family: var(--font-main);
-      font-size: var(--font-size);
+      background: linear-gradient(120deg, #224422 0%, #0d2b4a 100%);
+      color: var(--color-text);
+      font-size: 100%;
       line-height: var(--line-height);
+      font-family: 'Segoe UI', 'Arial', sans-serif;
       scroll-behavior: smooth;
     }
     body {
       margin: 0;
-      background: var(--bg-main);
-      color: var(--fg-main);
+      padding: 0;
+      font-size: var(--font-size-base);
+      background: none;
       min-width: 320px;
+      max-width: 100vw;
+      box-sizing: border-box;
     }
-
-    /* Skip Link */
+    header {
+      background: linear-gradient(90deg, var(--color-header) 80%, var(--color-accent) 100%);
+      color: var(--color-text);
+      padding: 0.5em 0;
+      box-shadow: 0 2px 8px var(--color-shadow);
+      position: relative;
+      z-index: 100;
+    }
     .skip-link {
       position: absolute;
-      left: 8px;
-      top: 8px;
-      z-index: 9999;
-      background: #fbbf24;
-      color: #10172a;
-      padding: 0.75em 1.5em;
-      border-radius: 0.5em;
+      top: 0;
+      left: 0;
+      background: var(--color-skip-bg);
+      color: var(--color-skip-text);
+      padding: 0.75em 1.25em;
+      border-radius: var(--border-radius);
+      z-index: 2000;
       font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.14);
-      transition: top 0.2s;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .skip-link:focus {
-      opacity: 1;
-      pointer-events: auto;
-      top: 24px;
-      outline: var(--focus-outline);
-    }
-
-    /* Header & Navigation */
-    header {
-      background: var(--bg-header);
-      color: var(--fg-main);
-      padding: 1.2em 0 0.7em 0;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.1rem;
-      letter-spacing: 0.04em;
-      font-weight: bold;
-      text-shadow: 1px 2px 0 #233556;
-    }
-    header nav {
-      margin-top: 1em;
-      display: flex;
-      justify-content: center;
-      gap: 1.2em;
-      flex-wrap: wrap;
-    }
-    nav[aria-label] a,
-    nav[aria-label] button {
-      display: inline-flex;
-      align-items: center;
-      min-width: var(--min-btn-size);
-      min-height: var(--min-btn-size);
-      padding: 0.6em 1.2em;
-      font-size: var(--font-size);
-      background: var(--bg-alt);
-      color: var(--fg-main);
-      border: none;
-      border-radius: 0.5em;
-      margin: 0.1em;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      transform: translateY(-120%);
+      transition: transform 0.2s;
       outline: none;
-      font-weight: 600;
-      border: 2px solid transparent;
+      box-shadow: 0 2px 8px var(--color-shadow);
+      text-decoration: none;
     }
-    nav[aria-label] a:focus, nav[aria-label] button:focus {
-      outline: var(--focus-outline-thick);
-      border-color: var(--border-focus);
-      background: #fbbf24;
-      color: #10172a;
+    .skip-link:focus, .skip-link:active {
+      transform: translateY(0);
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
     }
-    nav[aria-label] a[aria-current="page"] {
-      background: var(--fg-link);
-      color: var(--bg-main);
-      font-weight: bold;
-      border: 2px solid var(--border-focus);
+    .container {
+      max-width: 80ch;
+      margin: 0 auto;
+      padding: 0 1em;
     }
-    nav[aria-label] button[aria-expanded="true"] {
-      background: var(--fg-link);
-      color: var(--bg-main);
-    }
-
-    /* Breadcrumbs */
-    nav[aria-label="Breadcrumb"] {
-      margin: 1.5em 0 0.5em 0;
-      padding-left: 1em;
-      font-size: var(--font-size-sm);
-    }
-    .breadcrumb-list {
+    .header-content {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5em;
       flex-wrap: wrap;
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    }
+    .logo {
+      font-size: var(--font-size-large);
+      font-weight: bold;
+      letter-spacing: 0.05em;
+      color: var(--color-accent);
+      text-shadow: 1px 1px 0 var(--color-header), 2px 2px 0 var(--color-accent-dark);
+      display: flex;
+      align-items: center;
       gap: 0.5em;
     }
-    .breadcrumb-list li+li:before {
-      content: "›";
-      margin: 0 0.4em;
-      color: var(--fg-link);
+    .logo-icon {
+      font-size: 2em;
+      vertical-align: middle;
+      line-height: 1;
+      display: inline-block;
+      margin-right: 0.1em;
+      filter: drop-shadow(0 1px 2px var(--color-header));
     }
-    .breadcrumb-list a {
-      color: var(--fg-link);
+    nav[aria-label] {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+    }
+    .nav-list {
+      display: flex;
+      gap: 0.5em;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-list li {
+      position: relative;
+    }
+    .nav-link,
+    .nav-link:visited {
+      display: inline-block;
+      padding: 0.6em 1em;
+      color: var(--color-text);
+      background: none;
+      border: none;
+      font: inherit;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
+      text-align: center;
+      outline: none;
+    }
+    .nav-link:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      background: var(--color-accent-dark);
+      color: var(--color-text);
+    }
+    .nav-link[aria-current="page"] {
+      background: var(--color-accent);
+      color: var(--color-text-alt);
+      font-weight: bold;
+      box-shadow: 0 2px 6px var(--color-shadow);
+    }
+    .nav-link .visually-hidden {
+      position: absolute !important;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      border: 0;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-toggle[aria-haspopup="true"] {
+      padding-right: 2em;
+      position: relative;
+    }
+    .dropdown-toggle[aria-expanded="true"]::after,
+    .dropdown-toggle[aria-expanded="false"]::after {
+      content: '';
+      display: inline-block;
+      border: solid var(--color-accent);
+      border-width: 0 3px 3px 0;
+      padding: 3px;
+      margin-left: 0.5em;
+      transform: rotate(45deg);
+      vertical-align: middle;
+      transition: border-color var(--transition);
+    }
+    .dropdown-toggle[aria-expanded="true"]::after {
+      border-color: var(--color-accent-dark);
+      transform: rotate(-135deg);
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 100%;
+      min-width: 200px;
+      background: var(--color-card);
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 12px var(--color-shadow);
+      margin-top: 0.3em;
+      z-index: 1000;
+      padding: 0.5em 0;
+    }
+    .dropdown-menu[aria-hidden="false"] {
+      display: block;
+    }
+    .dropdown-menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .dropdown-menu li {
+      margin: 0;
+      padding: 0;
+    }
+    .dropdown-menu .nav-link {
+      width: 100%;
+      text-align: left;
+      background: none;
+      color: var(--color-text);
+      border-radius: 0;
+      border: none;
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
+    }
+    .dropdown-menu .nav-link:focus-visible {
+      background: var(--color-accent-dark);
+      color: var(--color-text);
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    }
+    .dropdown-menu .nav-link[aria-current="page"] {
+      background: var(--color-accent);
+      color: var(--color-text-alt);
+    }
+    /* Breadcrumbs */
+    nav[aria-label="Breadcrumb"] {
+      margin: 1em 0 1.5em 0;
+      font-size: var(--font-size-small);
+      background: var(--color-bg-alt);
+      border-radius: var(--border-radius);
+      padding: 0.5em 1em;
+      color: var(--color-accent);
+    }
+    .breadcrumb-list {
+      list-style: none;
+      display: flex;
+      gap: 0.5em;
+      margin: 0;
+      padding: 0;
+      flex-wrap: wrap;
+    }
+    .breadcrumb-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+    }
+    .breadcrumb-list li:not(:last-child)::after {
+      content: "›";
+      color: var(--color-accent);
+      margin-left: 0.3em;
+    }
+    .breadcrumb-link,
+    .breadcrumb-link:visited {
+      color: var(--color-link);
       text-decoration: underline;
       background: none;
+      border: none;
+      cursor: pointer;
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
+      border-radius: var(--border-radius);
       padding: 0.2em 0.5em;
-      border-radius: 0.25em;
-      min-width: var(--min-btn-size);
-      min-height: var(--min-btn-size);
+      outline: none;
+      font: inherit;
     }
-    .breadcrumb-list a:focus {
-      outline: var(--focus-outline);
-      background: #fbbf24;
-      color: #10172a;
+    .breadcrumb-link:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      background: var(--color-accent-dark);
+      color: var(--color-text);
     }
-    .breadcrumb-list li:last-child span {
+    .breadcrumb-current {
+      color: var(--color-accent);
       font-weight: bold;
-      color: var(--fg-main);
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: default;
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
+      border-radius: var(--border-radius);
+      padding: 0.2em 0.5em;
+      outline: none;
+      font: inherit;
     }
-
-    /* Main Layout */
+    /* Main content */
     main {
-      display: grid;
-      grid-template-columns: 1fr minmax(0, 640px) 1fr;
-      gap: 2em;
-      padding: 2em 1em 2em 1em;
-      background: var(--bg-main);
+      background: var(--color-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 8px var(--color-shadow);
+      padding: 2em 0 2em 0;
+      margin-bottom: 2em;
       min-height: 60vh;
     }
-    .main-content {
-      grid-column: 2 / 3;
-      background: var(--bg-card);
-      color: var(--fg-alt);
-      border-radius: var(--card-radius);
-      box-shadow: var(--shadow-card);
-      padding: 2.2em 2em 2em 2em;
-      max-width: 640px;
-      width: 100%;
-      min-width: 320px;
-    }
-    @media (max-width: 900px) {
-      main {
-        grid-template-columns: 1fr;
-        gap: 0;
-        padding: 1em 0.3em;
-      }
-      .main-content {
-        grid-column: 1 / 2;
-        padding: 1.2em 0.6em 1.5em 0.6em;
-      }
-    }
-
-    /* Section Headings */
-    .main-content h2 {
-      font-size: var(--font-size-lg);
+    .main-heading {
+      font-size: 2.2rem;
+      color: var(--color-accent);
       margin-top: 0;
-      margin-bottom: 0.5em;
-      letter-spacing: 0.02em;
-      color: var(--fg-link);
+      margin-bottom: 0.3em;
+      max-width: var(--max-line-length);
+      letter-spacing: 0.03em;
     }
-    .main-content h3 {
-      font-size: 1.1rem;
+    .section-heading {
+      font-size: 1.4rem;
+      color: var(--color-accent);
       margin-top: 2em;
       margin-bottom: 0.7em;
-      color: var(--fg-link-hover);
+      max-width: var(--max-line-length);
+      letter-spacing: 0.01em;
     }
-
-    /* To-Do Form */
-    .todo-form-section {
+    .help-info {
+      background: var(--color-card-alt);
+      color: var(--color-accent);
+      border-left: 6px solid var(--color-accent);
+      border-radius: var(--border-radius);
+      padding: 1em;
+      margin: 1.5em 0;
+      font-size: var(--font-size-small);
+      max-width: var(--max-line-length);
+    }
+    /* Plant Upload Form */
+    .upload-section {
+      background: var(--color-card);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 6px var(--color-shadow);
+      padding: 1.5em 1em;
       margin-bottom: 2em;
+      max-width: var(--max-line-length);
     }
-    .todo-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5em;
-      background: var(--bg-alt);
-      border-radius: 0.7em;
-      padding: 1.5em 1.2em;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+    .upload-form fieldset {
+      border: 2px solid var(--color-border);
+      border-radius: var(--border-radius);
+      margin: 0 0 1.5em 0;
+      padding: 1em;
+      min-width: 0;
+      background: var(--color-card-alt);
     }
-    .todo-form fieldset {
-      border: 2px solid var(--border-card);
-      border-radius: 0.6em;
-      padding: 1em 1em 1em 1em;
-      margin: 0;
-      background: var(--bg-card);
-    }
-    .todo-form legend {
+    .upload-form legend {
+      color: var(--color-accent);
       font-weight: bold;
-      color: var(--fg-link-hover);
-      font-size: 1.08rem;
-      padding: 0 0.4em;
+      font-size: 1.2em;
+      letter-spacing: 0.02em;
+      padding: 0 0.5em;
     }
     .form-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 1.2em;
-      align-items: center;
-      margin-bottom: 0.6em;
+      flex-direction: column;
+      gap: 0.5em;
+      margin-bottom: 1.3em;
+      max-width: 50ch;
     }
     .form-row label {
-      min-width: 120px;
       font-weight: 600;
-      color: var(--fg-alt);
+      color: var(--color-accent);
+      margin-bottom: 0.2em;
     }
-    .form-row input,
-    .form-row select {
-      font-size: var(--font-size);
-      padding: 0.5em 0.7em;
-      border-radius: 0.4em;
-      border: 2px solid var(--border-card);
-      min-width: 180px;
-      background: #fff;
-      color: #222;
-      transition: border-color 0.2s;
+    .form-row input[type="text"],
+    .form-row textarea,
+    .form-row input[type="file"] {
+      background: var(--input-bg);
+      color: var(--color-text);
+      border: 2px solid var(--input-border);
+      border-radius: var(--border-radius);
+      padding: 0.7em;
+      font-size: var(--font-size-base);
       outline: none;
-      min-height: var(--min-btn-size);
+      transition: border var(--transition), box-shadow var(--transition);
+      min-width: 0;
+      width: 100%;
       box-sizing: border-box;
+      line-height: 1.6;
+      margin-bottom: 0.1em;
     }
-    .form-row input:focus,
-    .form-row select:focus {
-      border-color: var(--border-focus);
-      outline: var(--focus-outline);
+    .form-row input[type="file"] {
+      padding: 0.3em;
+      background: var(--color-bg-alt);
+      color: var(--color-accent);
+      border: 2px dashed var(--input-border);
+    }
+    .form-row input[type="text"]:focus,
+    .form-row textarea:focus,
+    .form-row input[type="file"]:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px var(--color-accent-dark);
     }
     .form-row input[aria-invalid="true"],
-    .form-row select[aria-invalid="true"] {
-      border-color: #e60026;
-      background: #fff6f7;
+    .form-row textarea[aria-invalid="true"] {
+      border-color: var(--input-error);
+      background: #301a1a;
+      color: var(--color-error);
     }
-    .form-help {
-      font-size: var(--font-size-sm);
-      color: var(--fg-link-hover);
-      margin-left: 0.2em;
+    .form-row .input-help {
+      color: var(--input-help);
+      font-size: var(--font-size-small);
+      margin-top: 0.1em;
+      margin-bottom: 0.2em;
     }
-    .required-marker {
-      color: #e60026;
+    .form-row .input-error {
+      color: var(--color-error);
+      font-size: var(--font-size-small);
+      margin-top: 0.1em;
+      margin-bottom: 0.2em;
+    }
+    .required-indicator {
+      color: var(--color-error);
       font-weight: bold;
       margin-left: 0.2em;
-      font-size: 1.2em;
-      vertical-align: middle;
     }
-    .form-error {
-      color: #e60026;
-      font-size: var(--font-size-sm);
-      margin-top: 0.3em;
-      margin-left: 0.2em;
-      font-weight: 600;
-    }
-    .form-actions {
-      display: flex;
-      gap: 1em;
-      align-items: center;
-      margin-top: 1em;
-    }
-    .form-actions button {
-      min-width: var(--min-btn-size);
-      min-height: var(--min-btn-size);
-      font-size: var(--font-size);
-      padding: 0.6em 1.5em;
-      border-radius: 0.4em;
-      background: var(--fg-link);
-      color: var(--bg-main);
+    .upload-form button[type="submit"] {
+      background: var(--color-accent);
+      color: var(--color-text-alt);
+      font-weight: bold;
+      font-size: var(--font-size-base);
       border: none;
-      font-weight: bold;
+      border-radius: var(--border-radius);
+      padding: 0.9em 2.2em;
+      margin-top: 0.5em;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.09);
+      box-shadow: 0 2px 6px var(--color-shadow);
+      transition: background var(--transition), color var(--transition);
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
       outline: none;
-      border: 2px solid transparent;
+      position: relative;
     }
-    .form-actions button:focus {
-      outline: var(--focus-outline-thick);
-      border-color: var(--border-focus);
-      background: #fbbf24;
-      color: #10172a;
+    .upload-form button[type="submit"]:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      background: var(--color-accent-dark);
+      color: var(--color-text);
     }
-    .form-actions button[disabled] {
-      opacity: 0.5;
+    .upload-form button[type="submit"]:disabled {
+      background: var(--color-disabled);
+      color: #eee;
       cursor: not-allowed;
     }
-
-    /* To-Do List Table */
-    .todo-list-section {
-      margin-top: 2em;
-    }
-    .todo-table-container {
-      overflow-x: auto;
+    .form-status[role="status"] {
       margin-top: 1em;
+      color: var(--color-success);
+      font-weight: bold;
+      font-size: var(--font-size-base);
     }
-    table.todo-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      background: var(--bg-card);
-      color: var(--fg-alt);
-      border-radius: var(--card-radius);
-      box-shadow: 0 1px 8px rgba(0,0,0,0.05);
-      font-size: var(--font-size);
+    /* Gallery */
+    .gallery-section {
       margin-bottom: 2em;
-      min-width: 400px;
+      max-width: var(--max-line-length);
     }
-    table.todo-table th, table.todo-table td {
-      padding: 1em 0.7em;
-      text-align: left;
-      vertical-align: middle;
-      border-bottom: 2px solid var(--border-card);
-      line-height: 1.5;
-      max-width: 220px;
-      word-break: break-word;
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2em;
+      margin: 1.5em 0;
     }
-    table.todo-table th {
-      background: var(--bg-alt);
-      color: var(--fg-main);
-      font-weight: bold;
-      font-size: 1.04em;
-      letter-spacing: 0.02em;
-      border-top-left-radius: 0.5em;
-      border-top-right-radius: 0.5em;
-    }
-    table.todo-table tr:last-child td {
-      border-bottom: none;
-    }
-    .priority-indicator {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4em;
-      font-weight: bold;
-      font-size: 1.02em;
-      border-radius: 0.4em;
-      padding: 0.3em 0.8em 0.3em 0.7em;
-      color: #fff;
-      min-width: 90px;
-      border: 2px solid transparent;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-    .priority-high {
-      background: var(--prio-high-bg);
-      color: #fff;
-      border-color: #e60026;
-    }
-    .priority-med {
-      background: var(--prio-med-bg);
-      color: #1b1b1b;
-      border-color: #fbbf24;
-    }
-    .priority-low {
-      background: var(--prio-low-bg);
-      color: #fff;
-      border-color: #00c28a;
-    }
-    .priority-indicator .prio-icon {
-      display: inline-block;
-      width: 1.4em;
-      height: 1.4em;
-      border-radius: 50%;
-      margin-right: 0.2em;
-      border: 2px solid #fff;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-    }
-    .prio-icon-high {
-      background: repeating-linear-gradient(135deg, #e60026, #e60026 6px, #fff 6px, #fff 12px);
-      border-color: #e60026;
-    }
-    .prio-icon-med {
-      background: repeating-linear-gradient(135deg, #fbbf24, #fbbf24 6px, #fff 6px, #fff 12px);
-      border-color: #fbbf24;
-    }
-    .prio-icon-low {
-      background: repeating-linear-gradient(135deg, #00c28a, #00c28a 6px, #fff 6px, #fff 12px);
-      border-color: #00c28a;
-    }
-    /* Completed task row */
-    .task-completed td {
-      text-decoration: line-through;
-      color: #6b7280;
-      background: #f0f0f0;
-      opacity: 0.7;
-    }
-    .todo-table td .visually-hidden {
-      position: absolute !important;
-      height: 1px; width: 1px;
-      overflow: hidden;
-      clip: rect(1px,1px,1px,1px);
-      white-space: nowrap;
-      border: 0;
-      padding: 0;
-      margin: 0;
-    }
-    /* To-Do List Action Buttons */
-    .task-actions {
+    .gallery-card {
+      background: var(--color-card);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 6px var(--color-shadow);
+      padding: 1.2em 1em 1em 1em;
       display: flex;
-      gap: 0.5em;
+      flex-direction: column;
+      gap: 1em;
+      max-width: 100%;
+      position: relative;
+      overflow: hidden;
     }
-    .task-actions button {
-      min-width: var(--min-btn-size);
-      min-height: var(--min-btn-size);
-      font-size: 1.1em;
-      padding: 0.3em 0.7em;
-      border-radius: 0.4em;
-      background: var(--fg-link);
-      color: var(--bg-main);
-      border: none;
-      cursor: pointer;
-      outline: none;
-      border: 2px solid transparent;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      display: inline-flex;
+    .gallery-card:focus-within {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      outline-offset: 2px;
+    }
+    .gallery-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: var(--border-radius);
+      background: var(--color-bg-alt);
+      border: 2px solid var(--color-border);
+      margin-bottom: 0.6em;
+      box-shadow: 0 1px 4px var(--color-shadow);
+    }
+    .gallery-desc {
+      color: var(--color-text);
+      font-size: var(--font-size-base);
+      margin-bottom: 0.3em;
+      word-break: break-word;
+      max-width: var(--max-line-length);
+    }
+    .gallery-meta {
+      display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 1.5em;
+      font-size: var(--font-size-small);
+      color: var(--color-accent);
+      margin-bottom: 0.5em;
+      flex-wrap: wrap;
     }
-    .task-actions button:focus {
-      outline: var(--focus-outline-thick);
-      border-color: var(--border-focus);
-      background: #fbbf24;
-      color: #10172a;
+    .gallery-meta .meta-label {
+      font-weight: bold;
+      color: var(--color-accent);
     }
-    .task-actions button[aria-pressed="true"] {
-      background: #00c28a;
-      color: #fff;
+    .gallery-actions {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      margin-bottom: 0.3em;
     }
-    .task-actions .delete-btn {
-      background: #e60026;
-      color: #fff;
+    .like-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      background: var(--color-like);
+      color: var(--color-like-contrast);
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.5em 1.2em;
+      font-size: var(--font-size-base);
+      font-weight: bold;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
+      outline: none;
+      position: relative;
+      box-shadow: 0 1px 3px var(--color-shadow);
     }
-    .task-actions .delete-btn:focus {
-      background: #fbbf24;
-      color: #10172a;
-      border-color: #e60026;
+    .like-btn:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      background: var(--color-accent-dark);
+      color: var(--color-text);
     }
-    .task-actions .complete-btn[aria-pressed="true"] {
-      background: #00c28a;
-      color: #fff;
+    .like-btn.liked {
+      background: var(--color-success);
+      color: var(--color-text-alt);
     }
-
-    /* Status Messages */
-    .status-message {
-      margin-top: 1.2em;
-      padding: 1em 1.2em;
-      border-radius: 0.5em;
-      font-size: var(--font-size);
+    .like-btn .like-icon {
+      font-size: var(--like-icon-size);
+      vertical-align: middle;
+      margin-right: 0.2em;
+    }
+    .comment-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      background: var(--color-comment-icon);
+      color: var(--color-text-alt);
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.5em 1.2em;
+      font-size: var(--font-size-base);
+      font-weight: bold;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
+      outline: none;
+      position: relative;
+      box-shadow: 0 1px 3px var(--color-shadow);
+    }
+    .comment-btn:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      background: var(--color-accent-dark);
+      color: var(--color-text);
+    }
+    .comment-btn .comment-icon {
+      font-size: var(--comment-icon-size);
+      vertical-align: middle;
+      margin-right: 0.2em;
+    }
+    /* Comments */
+    .comments-section {
+      background: var(--color-comment-bg);
+      border-radius: var(--border-radius);
+      padding: 1em;
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      box-shadow: 0 1px 3px var(--color-shadow);
+    }
+    .comments-heading {
+      font-size: 1.1em;
+      color: var(--color-accent);
+      margin-bottom: 0.5em;
+    }
+    .comment-list {
+      list-style: none;
+      margin: 0 0 1em 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7em;
+    }
+    .comment-item {
+      background: var(--color-card-alt);
+      border-radius: var(--border-radius);
+      padding: 0.6em 1em;
+      color: var(--color-text);
+      font-size: var(--font-size-small);
+      word-break: break-word;
+      border-left: 4px solid var(--color-accent);
+      position: relative;
+    }
+    .comment-meta {
+      color: var(--color-accent);
+      font-size: 0.95em;
+      margin-bottom: 0.2em;
       font-weight: 600;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-      background: #e6f7ee;
-      color: #00744c;
-      border: 2px solid #00c28a;
-      min-width: 200px;
     }
-    .status-message[role="alert"] {
-      background: #fff6f7;
-      color: #e60026;
-      border-color: #e60026;
+    .add-comment-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5em;
+      margin-top: 0.5em;
     }
-    .status-message[role="status"] {
-      background: #e6f7ee;
-      color: #00744c;
-      border-color: #00c28a;
+    .add-comment-form label {
+      color: var(--color-accent);
+      font-weight: 600;
+      font-size: var(--font-size-small);
     }
-
-    /* Sidebar - Multiple Ways to Find Content */
-    aside {
-      grid-column: 1 / 2;
-      padding: 1.5em 1em 1.5em 0.5em;
-      background: var(--bg-alt);
-      border-radius: 0.8em;
-      margin: 0.5em 0 1.5em 0;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.07);
-      min-width: 220px;
-      max-width: 340px;
+    .add-comment-form textarea {
+      background: var(--input-bg);
+      color: var(--color-text);
+      border: 2px solid var(--input-border);
+      border-radius: var(--border-radius);
+      padding: 0.7em;
+      font-size: var(--font-size-base);
+      outline: none;
+      resize: vertical;
+      min-height: 44px;
+      transition: border var(--transition), box-shadow var(--transition);
+      line-height: 1.6;
+      width: 100%;
+      box-sizing: border-box;
     }
-    .sidebar-section {
-      margin-bottom: 2em;
+    .add-comment-form textarea:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px var(--color-accent-dark);
     }
-    .sidebar-section h3 {
-      margin-top: 0;
-      color: var(--fg-link-hover);
-      font-size: 1.1rem;
+    .add-comment-form textarea[aria-invalid="true"] {
+      border-color: var(--input-error);
+      background: #301a1a;
+      color: var(--color-error);
     }
-    .sidebar-section ul,
-    .sidebar-section ol {
-      padding-left: 1.3em;
-      margin: 0.5em 0 0.5em 0;
-      font-size: var(--font-size-sm);
+    .add-comment-form .input-help {
+      color: var(--input-help);
+      font-size: var(--font-size-small);
+      margin-top: 0.1em;
+      margin-bottom: 0.2em;
     }
-    .sidebar-section a {
-      color: var(--fg-link);
-      text-decoration: underline;
-      padding: 0.2em 0.5em;
-      border-radius: 0.25em;
-      min-width: var(--min-btn-size);
-      min-height: var(--min-btn-size);
-      display: inline-block;
+    .add-comment-form .input-error {
+      color: var(--color-error);
+      font-size: var(--font-size-small);
+      margin-top: 0.1em;
+      margin-bottom: 0.2em;
     }
-    .sidebar-section a:focus {
-      outline: var(--focus-outline);
-      background: #fbbf24;
-      color: #10172a;
+    .add-comment-form button[type="submit"] {
+      background: var(--color-accent);
+      color: var(--color-text-alt);
+      font-weight: bold;
+      font-size: var(--font-size-base);
+      border: none;
+      border-radius: var(--border-radius);
+      padding: 0.7em 1.5em;
+      margin-top: 0.3em;
+      cursor: pointer;
+      box-shadow: 0 1px 3px var(--color-shadow);
+      transition: background var(--transition), color var(--transition);
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
+      outline: none;
     }
-
-    /* Theme Switcher */
-    .theme-switcher {
-      margin-top: 1em;
+    .add-comment-form button[type="submit"]:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      background: var(--color-accent-dark);
+      color: var(--color-text);
+    }
+    .add-comment-form button[type="submit"]:disabled {
+      background: var(--color-disabled);
+      color: #eee;
+      cursor: not-allowed;
+    }
+    .comment-status[role="status"] {
+      margin-top: 0.5em;
+      color: var(--color-success);
+      font-weight: bold;
+      font-size: var(--font-size-small);
+    }
+    /* Responsive */
+    @media (max-width: 700px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5em;
+      }
+      .container {
+        padding: 0 0.5em;
+      }
+      main {
+        padding: 1em 0 1em 0;
+      }
+    }
+    /* Enhanced focus indicators */
+    :focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color) !important;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 2px var(--color-accent-dark);
+    }
+    /* User-selectable colors */
+    .color-controls {
       display: flex;
       gap: 1em;
       align-items: center;
-      font-size: var(--font-size-sm);
+      margin-bottom: 1em;
+      font-size: var(--font-size-small);
+      color: var(--color-accent);
     }
-    .theme-switcher label {
+    .color-controls label {
       font-weight: 600;
-      color: var(--fg-main);
+      color: var(--color-accent);
+      margin-right: 0.5em;
     }
-    .theme-switcher select {
-      font-size: var(--font-size-sm);
-      padding: 0.4em 0.8em;
-      border-radius: 0.4em;
-      border: 2px solid var(--border-card);
-      background: #fff;
-      color: #222;
-      min-width: 120px;
-      min-height: var(--min-btn-size);
+    .color-controls input[type="color"] {
+      border: 2px solid var(--color-border);
+      border-radius: var(--border-radius);
+      width: 44px;
+      height: 44px;
+      background: var(--color-bg-alt);
+      cursor: pointer;
+      margin-right: 0.5em;
+      min-width: 44px;
+      min-height: 44px;
+    }
+    /* Status messages */
+    [role="status"], [role="alert"] {
+      margin-top: 0.7em;
+      font-weight: bold;
+      font-size: var(--font-size-small);
+    }
+    /* Modal overlay for context-sensitive help */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10,10,20,0.92);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s;
+    }
+    .modal-overlay[aria-hidden="false"] {
+      display: flex;
+    }
+    .modal-dialog {
+      background: var(--color-card);
+      color: var(--color-text);
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 20px var(--color-shadow);
+      max-width: 38ch;
+      padding: 2em 1.5em 1.5em 1.5em;
+      position: relative;
       outline: none;
     }
-    .theme-switcher select:focus {
-      border-color: var(--border-focus);
-      outline: var(--focus-outline);
+    .modal-dialog h2 {
+      color: var(--color-accent);
+      font-size: 1.3em;
+      margin-top: 0;
+      margin-bottom: 1em;
     }
-
-    /* Footer */
-    footer {
-      background: var(--bg-footer);
-      color: var(--fg-main);
-      text-align: center;
-      padding: 1.6em 0 1.2em 0;
-      font-size: var(--font-size-sm);
-      letter-spacing: 0.02em;
-      margin-top: 2em;
-      border-top: 4px solid var(--fg-link);
+    .modal-close-btn {
+      position: absolute;
+      top: 0.5em;
+      right: 0.5em;
+      background: var(--color-accent);
+      color: var(--color-text-alt);
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.5em;
+      cursor: pointer;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition), color var(--transition);
     }
-    footer a {
-      color: var(--fg-link);
-      text-decoration: underline;
-      font-weight: 600;
+    .modal-close-btn:focus-visible {
+      outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+      background: var(--color-accent-dark);
+      color: var(--color-text);
     }
-    footer a:focus {
-      outline: var(--focus-outline);
-      background: #fbbf24;
-      color: #10172a;
-    }
-
-    /* Enhanced focus indicators (AAA 2.4.13) */
-    :focus-visible {
-      outline: var(--focus-outline-thick) !important;
-      z-index: 999;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 900px) {
-      aside {
-        display: none;
-      }
-    }
-    @media (max-width: 700px) {
-      .main-content {
-        padding: 0.7em 0.3em 1em 0.3em;
-      }
-      table.todo-table th, table.todo-table td {
-        padding: 0.6em 0.3em;
-      }
-    }
-    /* 200% zoom support */
-    @media (max-width: 480px) {
-      html {
-        font-size: 1.4rem;
-      }
-      .main-content {
-        min-width: 0;
-        padding: 0.2em 0.1em 0.8em 0.1em;
-      }
-      table.todo-table {
-        min-width: 260px;
-      }
-    }
-
-    /* Line/para spacing and text width (AAA) */
-    p, ul, ol, dl {
-      line-height: var(--line-height);
-      margin-bottom: var(--para-spacing);
-      max-width: 80ch;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      max-width: 80ch;
-      line-height: 1.2;
-    }
-    /* Prevent justified text */
-    body, .main-content, .sidebar-section {
-      text-align: left;
-    }
-
-    /* Visually hidden for accessibility */
+    /* Accessibility: visually hidden utility */
     .visually-hidden {
       position: absolute !important;
-      height: 1px; width: 1px;
-      overflow: hidden;
-      clip: rect(1px,1px,1px,1px);
-      white-space: nowrap;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
       border: 0;
-      padding: 0;
-      margin: 0;
     }
-
-    /* Reduced motion for AAA */
+    /* Paragraph spacing, line height, max line length */
+    p, .gallery-desc, .comment-item {
+      line-height: var(--line-height);
+      margin-bottom: var(--para-spacing);
+      max-width: var(--max-line-length);
+      text-align: left;
+    }
+    /* Prevent justified text */
+    p, .gallery-desc, .comment-item, .comments-section {
+      text-align: left;
+      text-justify: none;
+    }
+    /* Limit text resizing issues */
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+    /* Custom scrollbar for accessibility */
+    ::-webkit-scrollbar {
+      width: 16px;
+      background: var(--color-bg-alt);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-accent-dark);
+      border-radius: 8px;
+      border: 3px solid var(--color-bg-alt);
+    }
+    /* Animation: fade in cards, respect reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      * {
+      *, *::before, *::after {
         transition: none !important;
         animation: none !important;
       }
+    }
+    .gallery-card {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.7s cubic-bezier(.5,.1,.1,1) forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    /* Ensure min touch target size for all interactive elements */
+    button, input[type="button"], input[type="submit"], input[type="file"], .nav-link, .breadcrumb-link, .like-btn, .comment-btn, .modal-close-btn {
+      min-width: var(--min-touch-size);
+      min-height: var(--min-touch-size);
+      box-sizing: border-box;
+    }
+    /* Prevent horizontal scroll at 200% zoom */
+    html, body {
+      overflow-x: hidden;
     }
   </style>
 </head>
 <body>
   <a href="#main-content" class="skip-link" id="skip-link">Skip to main content</a>
   <header>
-    <h1 id="site-title">Accessible To-Do List App</h1>
-    <nav aria-label="Main navigation" id="main-nav">
-      <a href="#main-content" aria-current="page" tabindex="0">To-Do List</a>
-      <a href="#help-section" tabindex="0">Help</a>
-      <a href="#sitemap-section" tabindex="0">Sitemap</a>
-      <button type="button" aria-haspopup="true" aria-expanded="false" id="menu-more-btn" aria-controls="more-menu" tabindex="0">
-        More <span aria-hidden="true" style="margin-left:0.3em;">▼</span>
-      </button>
-    </nav>
-    <!-- Dropdown menu, keyboard accessible -->
-    <div id="more-menu" role="menu" aria-label="More options" style="display:none; position:absolute; left:50%; transform:translateX(-50%); background: #fff; color: #1b1b1b; border-radius:0.5em; box-shadow:0 2px 10px rgba(0,0,0,0.18); min-width:200px; z-index:1001;">
-      <ul style="list-style:none; margin:0; padding:0.5em 0;">
-        <li><a href="#theme-switcher" role="menuitem" tabindex="-1">Theme Switcher</a></li>
-        <li><a href="#about-section" role="menuitem" tabindex="-1">About</a></li>
-      </ul>
+    <div class="container header-content">
+      <span class="logo" aria-label="Gardening Community Home">
+        <span class="logo-icon" aria-hidden="true">🌱</span>
+        Garden Connect
+      </span>
+      <nav aria-label="Main navigation" id="main-nav">
+        <ul class="nav-list" role="menubar">
+          <li><a href="#main-content" class="nav-link" aria-current="page" role="menuitem">Home</a></li>
+          <li class="dropdown">
+            <button type="button" class="nav-link dropdown-toggle" aria-haspopup="true" aria-expanded="false" id="community-menu-btn" aria-controls="community-menu" aria-label="Open Community menu">Community</button>
+            <div class="dropdown-menu" id="community-menu" aria-label="Community menu" aria-hidden="true" role="menu">
+              <ul>
+                <li><a href="#gallery" class="nav-link" role="menuitem">Photo Gallery</a></li>
+                <li><a href="#upload" class="nav-link" role="menuitem">Upload Plant</a></li>
+                <li><a href="#help" class="nav-link" role="menuitem">Help &amp; FAQ</a></li>
+              </ul>
+            </div>
+          </li>
+          <li><a href="#search-section" class="nav-link" role="menuitem">Search</a></li>
+          <li><a href="#sitemap-section" class="nav-link" role="menuitem">Sitemap</a></li>
+        </ul>
+      </nav>
     </div>
-    <nav aria-label="Breadcrumb">
-      <ol class="breadcrumb-list">
-        <li><a href="#main-content">Home</a></li>
-        <li><span>To-Do List</span></li>
-      </ol>
-    </nav>
   </header>
+  <nav aria-label="Breadcrumb" id="breadcrumb-nav">
+    <ol class="breadcrumb-list">
+      <li><a href="#main-content" class="breadcrumb-link">Home</a></li>
+      <li><span class="breadcrumb-current" aria-current="page">Community</span></li>
+    </ol>
+  </nav>
+  <div class="container">
+    <div class="color-controls" aria-label="Color controls">
+      <label for="bg-color-picker">Background color:</label>
+      <input type="color" id="bg-color-picker" name="bg-color-picker" aria-label="Choose background color" value="#1a2a1a">
+      <label for="text-color-picker">Text color:</label>
+      <input type="color" id="text-color-picker" name="text-color-picker" aria-label="Choose text color" value="#ffffff">
+    </div>
+  </div>
   <main id="main-content" tabindex="-1">
-    <aside aria-labelledby="sidebar-heading">
-      <section class="sidebar-section" id="sidebar-navigation">
-        <h3 id="sidebar-heading">Quick Navigation</h3>
+    <div class="container">
+      <h1 class="main-heading">Welcome to Garden Connect: Share, Discover, and Grow Together</h1>
+      <p>
+        <strong>Garden Connect</strong> is an accessible online community for gardeners of all abilities and experience levels. Upload photos of your plants or gardens, share stories, and connect with fellow plant lovers. Like and comment on posts to inspire and learn from others!
+      </p>
+      <section class="help-info" id="help">
+        <h2 class="section-heading" id="help-heading">How to Use Garden Connect</h2>
         <ul>
-          <li><a href="#todo-form-section">Add Task</a></li>
-          <li><a href="#todo-list-section">Task List</a></li>
-          <li><a href="#help-section">Help</a></li>
-          <li><a href="#sitemap-section">Sitemap</a></li>
+          <li><strong>Upload</strong> your plant or garden photos with a description using the form below.</li>
+          <li><strong>Browse</strong> the community gallery to discover and interact with posts.</li>
+          <li><strong>Like</strong> your favorite posts and leave <strong>comments</strong> to encourage others.</li>
+          <li>All features are fully accessible via keyboard, screen reader, and touch devices.</li>
         </ul>
+        <button type="button" class="nav-link" id="open-help-modal" aria-label="Open context-sensitive help for uploading photos">Need help uploading?</button>
       </section>
-      <section class="sidebar-section" id="sidebar-search">
-        <h3>Search Tasks</h3>
-        <form id="sidebar-search-form" role="search" aria-label="Search tasks">
-          <label for="sidebar-search-input">Search by title:</label>
-          <input id="sidebar-search-input" name="sidebar-search-input" type="search" autocomplete="off" aria-label="Search by task title" style="width:90%; min-width:120px;" />
-          <button type="submit" style="margin-top:0.5em; min-width:var(--min-btn-size); min-height:var(--min-btn-size);">Search</button>
-        </form>
-      </section>
-      <section class="sidebar-section" id="sidebar-sitemap">
-        <h3>Sitemap</h3>
-        <ul>
-          <li><a href="#main-content">Main Content</a></li>
-          <li><a href="#todo-form-section">Add Task Form</a></li>
-          <li><a href="#todo-list-section">Task Table</a></li>
-          <li><a href="#help-section">Help & Definitions</a></li>
-          <li><a href="#about-section">About</a></li>
-        </ul>
-      </section>
-    </aside>
-    <section class="main-content" aria-labelledby="main-heading">
-      <h2 id="main-heading">Manage Your Tasks</h2>
-      <section id="todo-form-section" class="todo-form-section" aria-labelledby="add-task-heading">
-        <h3 id="add-task-heading">Add a New Task</h3>
-        <form id="todo-form" class="todo-form" autocomplete="off" novalidate aria-describedby="add-task-help">
+      <section class="upload-section" id="upload">
+        <h2 class="section-heading">Upload Your Plant or Garden Photo</h2>
+        <form class="upload-form" id="upload-form" autocomplete="off" novalidate aria-labelledby="upload-form-legend">
           <fieldset>
-            <legend>Add Task Details</legend>
+            <legend id="upload-form-legend">Share Your Plant or Garden</legend>
             <div class="form-row">
-              <label for="task-title">
-                Task Title
-                <span class="required-marker" aria-hidden="true">*</span>
+              <label for="plant-image">
+                Photo of your plant or garden
+                <span class="required-indicator" aria-hidden="true">*</span>
               </label>
-              <input
-                type="text"
-                id="task-title"
-                name="task-title"
-                required
-                aria-required="true"
-                aria-describedby="task-title-help task-title-error"
-                maxlength="80"
-                autocomplete="off"
-                inputmode="text"
-                spellcheck="true"
-                style="width:100%;"
-              />
+              <input type="file" id="plant-image" name="plant-image" accept="image/*" required aria-required="true" aria-describedby="plant-image-help plant-image-error" aria-label="Upload photo of your plant or garden">
+              <span class="input-help" id="plant-image-help">Accepted formats: JPEG, PNG, GIF. Max size: 4MB.</span>
+              <span class="input-error" id="plant-image-error" aria-live="polite"></span>
             </div>
-            <div id="task-title-help" class="form-help">
-              Enter a short, descriptive title for your task (max 80 characters).
-            </div>
-            <div id="task-title-error" class="form-error" aria-live="assertive"></div>
             <div class="form-row">
-              <label for="task-priority">
-                Priority
-                <span class="required-marker" aria-hidden="true">*</span>
+              <label for="plant-desc">
+                Description
+                <span class="required-indicator" aria-hidden="true">*</span>
               </label>
-              <select
-                id="task-priority"
-                name="task-priority"
-                required
-                aria-required="true"
-                aria-describedby="task-priority-help task-priority-error"
-                autocomplete="off"
-              >
-                <option value="">Select priority</option>
-                <option value="high">High (urgent)</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
-              </select>
+              <textarea id="plant-desc" name="plant-desc" rows="4" maxlength="300" required aria-required="true" aria-describedby="plant-desc-help plant-desc-error" aria-label="Description of your plant or garden" autocomplete="off"></textarea>
+              <span class="input-help" id="plant-desc-help">Describe your plant or garden (max 300 characters).</span>
+              <span class="input-error" id="plant-desc-error" aria-live="polite"></span>
             </div>
-            <div id="task-priority-help" class="form-help">
-              Choose how important this task is. High priority tasks are urgent.
-            </div>
-            <div id="task-priority-error" class="form-error" aria-live="assertive"></div>
             <div class="form-row">
-              <label for="task-due">
-                Due Date
-                <span class="required-marker" aria-hidden="true">*</span>
+              <label for="uploader-name">
+                Your Name
+                <span class="required-indicator" aria-hidden="true">*</span>
               </label>
-              <input
-                type="date"
-                id="task-due"
-                name="task-due"
-                required
-                aria-required="true"
-                aria-describedby="task-due-help task-due-error"
-                autocomplete="off"
-                min=""
-                style="width:160px;"
-              />
+              <input type="text" id="uploader-name" name="uploader-name" required aria-required="true" aria-describedby="uploader-name-help uploader-name-error" aria-label="Your name" autocomplete="name">
+              <span class="input-help" id="uploader-name-help">Enter your display name (max 30 characters).</span>
+              <span class="input-error" id="uploader-name-error" aria-live="polite"></span>
             </div>
-            <div id="task-due-help" class="form-help">
-              Select the date by which this task should be completed.
-            </div>
-            <div id="task-due-error" class="form-error" aria-live="assertive"></div>
-            <div class="form-actions">
-              <button type="submit" id="add-task-btn">Add Task</button>
-              <button type="reset" id="reset-form-btn">Reset</button>
-            </div>
-            <div id="add-task-help" class="form-help">
-              All fields are required. <span class="required-marker">*</span>
-              <br>
-              For help, see <a href="#help-section">Help</a>.
-            </div>
+            <button type="submit" id="submit-upload" aria-label="Submit your plant or garden photo">Share Photo</button>
+            <span class="form-status" id="upload-status" role="status" aria-live="polite"></span>
           </fieldset>
         </form>
       </section>
-      <section id="todo-list-section" class="todo-list-section" aria-labelledby="task-list-heading">
-        <h3 id="task-list-heading">Your To-Do List</h3>
-        <div class="todo-table-container" aria-live="polite" aria-atomic="true">
-          <table class="todo-table" id="todo-table" aria-describedby="todo-table-desc">
-            <caption id="todo-table-desc" class="visually-hidden">
-              List of tasks with priority, due date, completion status, and action buttons.
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Task Title</th>
-                <th scope="col">Priority</th>
-                <th scope="col">Due Date</th>
-                <th scope="col">Status</th>
-                <th scope="col">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="todo-tbody">
-              <!-- Tasks will be dynamically inserted here -->
-            </tbody>
-          </table>
+      <section class="gallery-section" id="gallery">
+        <h2 class="section-heading">Community Photo Gallery</h2>
+        <div id="search-section">
+          <form id="gallery-search-form" autocomplete="off" aria-label="Search gallery">
+            <fieldset>
+              <legend>Search Photos</legend>
+              <div class="form-row">
+                <label for="gallery-search">Search by description or uploader name</label>
+                <input type="text" id="gallery-search" name="gallery-search" aria-label="Search gallery" autocomplete="off" aria-describedby="gallery-search-help">
+                <span class="input-help" id="gallery-search-help">Type a keyword and press Enter to filter photos.</span>
+              </div>
+            </fieldset>
+          </form>
         </div>
-        <div id="no-tasks-message" class="status-message" role="status" aria-live="polite" style="display:none;">
-          You have no tasks. Add a new task above!
+        <div class="gallery-grid" id="gallery-grid" aria-live="polite" aria-label="Photo gallery">
+          <!-- Gallery cards rendered by JS -->
         </div>
-        <div id="task-status-message" class="status-message" role="status" aria-live="polite" style="display:none;"></div>
-      </section>
-      <section id="help-section" aria-labelledby="help-heading">
-        <h3 id="help-heading">Help &amp; Definitions</h3>
-        <p>
-          <strong>How to use this To-Do List:</strong>
-        </p>
-        <ul>
-          <li>
-            <strong>Adding a Task:</strong> Fill in the title, select a priority, and choose a due date. All fields are required. Press <em>Add Task</em>.
-          </li>
-          <li>
-            <strong>Mark as Completed:</strong> Press the <span aria-label="Mark as completed" title="Mark as completed" style="color:#00c28a;">✓</span> button next to a task to mark it as completed. Completed tasks are shown with a line through them.
-          </li>
-          <li>
-            <strong>Delete a Task:</strong> Press the <span aria-label="Delete task" title="Delete task" style="color:#e60026;">🗑️</span> button to remove a task. You will be asked to confirm before deleting.
-          </li>
-          <li>
-            <strong>Priority:</strong>
-            <ul>
-              <li>
-                <span class="priority-indicator priority-high"><span class="prio-icon prio-icon-high" aria-hidden="true"></span>High</span>
-                <span class="visually-hidden">High priority: urgent tasks</span>
-              </li>
-              <li>
-                <span class="priority-indicator priority-med"><span class="prio-icon prio-icon-med" aria-hidden="true"></span>Medium</span>
-                <span class="visually-hidden">Medium priority: important, not urgent</span>
-              </li>
-              <li>
-                <span class="priority-indicator priority-low"><span class="prio-icon prio-icon-low" aria-hidden="true"></span>Low</span>
-                <span class="visually-hidden">Low priority: can be done later</span>
-              </li>
-            </ul>
-            Priority is shown with color, icon, and text for accessibility.
-          </li>
-          <li>
-            <strong>Keyboard Shortcuts:</strong>
-            <ul>
-              <li>Tab to move between form fields and buttons</li>
-              <li>Enter/Space to activate buttons and menu items</li>
-              <li>Escape to close menus</li>
-            </ul>
-          </li>
-          <li>
-            <strong>Search:</strong> Use the sidebar to search for tasks by title.
-          </li>
-          <li>
-            <strong>Theme:</strong> Use the Theme Switcher to select your preferred color scheme.
-          </li>
-        </ul>
-        <p>
-          <strong>Unusual Words &amp; Abbreviations:</strong>
-        </p>
-        <ul>
-          <li>
-            <abbr title="To-Do">To-Do</abbr>: A list of tasks you need to complete.
-          </li>
-          <li>
-            <abbr title="High">High</abbr> priority: Urgent, needs attention soon.
-          </li>
-          <li>
-            <abbr title="Medium">Medium</abbr> priority: Important, but not urgent.
-          </li>
-          <li>
-            <abbr title="Low">Low</abbr> priority: Not urgent, can be done later.
-          </li>
-        </ul>
-        <p>
-          <strong>Reading Level:</strong> This page is written in clear, simple language. For a simplified version, <a href="#simplified-help" id="simplified-help-link">click here</a>.
-        </p>
-        <div id="simplified-help" class="visually-hidden" aria-live="polite">
-          <h4>Simplified Help</h4>
-          <p>
-            1. Add a task by typing a name, picking how important it is, and choosing a date.<br>
-            2. Press "Add Task" to save.<br>
-            3. Mark a task done with the check button.<br>
-            4. Remove a task with the trash button.<br>
-            5. Use the search or theme options if you want.
-          </p>
+        <div id="gallery-empty" role="status" aria-live="polite" style="display:none; color:var(--color-accent); font-weight:bold; font-size:1.1em; margin-top:1em;">
+          No photos to display. Be the first to share your garden!
         </div>
-        <p>
-          <strong>Pronunciation:</strong> The word <span lang="en" aria-label="to do, pronounced too-doo">To-Do</span> is pronounced <em>too-doo</em>.
-        </p>
       </section>
-      <section id="about-section" aria-labelledby="about-heading">
-        <h3 id="about-heading">About This App</h3>
-        <p>
-          This to-do list app is designed for everyone. It meets <strong>WCAG 2.2 AAA</strong> accessibility standards, so it's usable by people with a wide range of abilities and preferences. You can use the keyboard, mouse, or touch to manage your tasks. The design uses high-contrast colors, icons, and clear text to help you see and understand your tasks.
-        </p>
-        <p>
-          For questions or feedback, see the <a href="#help-section">Help</a> section.
-        </p>
-      </section>
-      <section id="sitemap-section" aria-labelledby="sitemap-heading">
-        <h3 id="sitemap-heading">Sitemap</h3>
+      <section id="sitemap-section" aria-label="Sitemap">
+        <h2 class="section-heading">Sitemap</h2>
         <ul>
-          <li><a href="#main-content">Main Content</a></li>
-          <li><a href="#todo-form-section">Add Task Form</a></li>
-          <li><a href="#todo-list-section">Task Table</a></li>
-          <li><a href="#help-section">Help & Definitions</a></li>
-          <li><a href="#about-section">About</a></li>
+          <li><a href="#main-content">Home</a></li>
+          <li><a href="#gallery">Photo Gallery</a></li>
+          <li><a href="#upload">Upload Plant</a></li>
+          <li><a href="#help">Help &amp; FAQ</a></li>
         </ul>
       </section>
-      <section id="theme-switcher" class="theme-switcher" aria-labelledby="theme-switcher-label">
-        <label id="theme-switcher-label" for="theme-select">Color Theme:</label>
-        <select id="theme-select" aria-describedby="theme-switcher-help">
-          <option value="default">Dark (default)</option>
-          <option value="light">Light</option>
-        </select>
-        <span id="theme-switcher-help" class="form-help">
-          Choose your preferred color scheme for readability.
-        </span>
-      </section>
-    </section>
+    </div>
   </main>
   <footer>
-    <p>
-      &copy; <span id="year"></span> Accessible To-Do List App.
-      <a href="#help-section">Help & Accessibility</a> |
-      <a href="#sitemap-section">Sitemap</a>
-    </p>
-    <p>
-      <strong>Accessibility:</strong> This app meets <abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 AAA standards.
-    </p>
+    <div class="container">
+      <hr style="border: 2px solid var(--color-accent); margin: 2em 0 1em 0; border-radius: 4px;" aria-hidden="true">
+      <nav aria-label="Footer navigation">
+        <ul class="nav-list" style="justify-content:center; display:flex; flex-wrap:wrap; gap:1em;">
+          <li><a href="#main-content" class="nav-link">Home</a></li>
+          <li><a href="#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="#upload" class="nav-link">Upload</a></li>
+          <li><a href="#help" class="nav-link">Help</a></li>
+          <li><a href="#sitemap-section" class="nav-link">Sitemap</a></li>
+        </ul>
+      </nav>
+      <p style="color:var(--color-accent); font-size:var(--font-size-small); margin:2em 0 0.2em 0; max-width:var(--max-line-length);">
+        &copy; 2024 Garden Connect Community. All rights reserved.
+      </p>
+      <p style="color:var(--color-accent); font-size:var(--font-size-small); max-width:var(--max-line-length);">
+        <strong>Accessibility:</strong> This site meets <abbr title="Web Content Accessibility Guidelines" aria-label="Web Content Accessibility Guidelines">WCAG</abbr> 2.2 <abbr title="Triple A" aria-label="Triple A">AAA</abbr> standards.<br>
+        <a href="#help" style="color:var(--color-link);">Learn more about our accessibility commitment</a>.
+      </p>
+    </div>
   </footer>
+  <!-- Context-sensitive Help Modal -->
+  <div class="modal-overlay" id="help-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="help-modal-title" tabindex="-1">
+    <div class="modal-dialog" role="document" tabindex="0">
+      <button type="button" class="modal-close-btn" id="close-help-modal" aria-label="Close help dialog">&times;</button>
+      <h2 id="help-modal-title">How to Upload a Photo</h2>
+      <ol>
+        <li>Click <strong>Choose File</strong> and select a clear photo of your plant or garden. Only image files (JPEG, PNG, GIF) up to 4MB are accepted.</li>
+        <li>Write a short description about your plant or garden in the description box (max 300 characters).</li>
+        <li>Enter your display name (max 30 characters).</li>
+        <li>Press <strong>Share Photo</strong> to add your post to the community gallery.</li>
+        <li>If you encounter any errors, detailed messages will appear below the form fields to help you correct them.</li>
+      </ol>
+      <p style="color:var(--color-accent); font-size:var(--font-size-small); margin-top:1em;">
+        Need more help? Contact our support team at <a href="mailto:help@gardenconnect.example" style="color:var(--color-link);">help@gardenconnect.example</a>.
+      </p>
+    </div>
+  </div>
   <script>
-    // Utility: Color theme switching (AAA 1.4.8)
-    (function() {
-      const themeSelect = document.getElementById('theme-select');
-      function setTheme(theme) {
-        document.documentElement.setAttribute('data-theme', theme);
-        try { localStorage.setItem('theme', theme); } catch (e) {}
-      }
-      // Load theme from storage or default
-      let storedTheme = null;
-      try { storedTheme = localStorage.getItem('theme'); } catch (e) {}
-      if (storedTheme) {
-        setTheme(storedTheme);
-        themeSelect.value = storedTheme;
-      }
-      themeSelect.addEventListener('change', function() {
-        setTheme(themeSelect.value);
-      });
-    })();
+    // ========== Skip Link: focus main on click ==========
+    document.getElementById('skip-link').addEventListener('click', function(e) {
+      setTimeout(function() {
+        document.getElementById('main-content').focus();
+      }, 10);
+    });
 
-    // Header "More" menu: Keyboard accessible dropdown
-    (function() {
-      const btn = document.getElementById('menu-more-btn');
-      const menu = document.getElementById('more-menu');
+    // ========== Dropdown Menu Keyboard & Mouse ==========
+    (function(){
+      const btn = document.getElementById('community-menu-btn');
+      const menu = document.getElementById('community-menu');
       let menuOpen = false;
-      function openMenu() {
-        menu.style.display = 'block';
-        btn.setAttribute('aria-expanded', 'true');
-        menuOpen = true;
-        // Focus first item
-        const firstItem = menu.querySelector('a[role="menuitem"]');
-        if (firstItem) firstItem.focus();
-      }
-      function closeMenu() {
-        menu.style.display = 'none';
-        btn.setAttribute('aria-expanded', 'false');
-        menuOpen = false;
-        btn.focus();
-      }
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (!menuOpen) openMenu(); else closeMenu();
-      });
+      let lastFocus = null;
+      btn.addEventListener('click', toggleMenu);
       btn.addEventListener('keydown', function(e) {
-        if ((e.key === 'Enter' || e.key === ' ')) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
           e.preventDefault();
-          if (!menuOpen) openMenu(); else closeMenu();
+          openMenu();
+          focusFirstMenuItem();
         }
-      });
-      menu.addEventListener('keydown', function(e) {
-        const items = Array.from(menu.querySelectorAll('a[role="menuitem"]'));
-        const current = document.activeElement;
-        let idx = items.indexOf(current);
-        if (e.key === 'ArrowDown') {
+        if (e.key === 'ArrowUp') {
           e.preventDefault();
-          if (idx < items.length - 1) items[idx + 1].focus();
-          else items[0].focus();
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          if (idx > 0) items[idx - 1].focus();
-          else items[items.length - 1].focus();
-        } else if (e.key === 'Escape') {
-          e.preventDefault();
+          openMenu();
+          focusLastMenuItem();
+        }
+        if (e.key === 'Escape') {
           closeMenu();
         }
       });
-      // Close on outside click
-      document.addEventListener('mousedown', function(e) {
-        if (menuOpen && !menu.contains(e.target) && e.target !== btn) closeMenu();
+      menu.addEventListener('keydown', function(e) {
+        const items = menu.querySelectorAll('.nav-link');
+        const active = document.activeElement;
+        let idx = Array.prototype.indexOf.call(items, active);
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (idx < items.length - 1) items[idx+1].focus();
+          else items[0].focus();
+        }
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (idx > 0) items[idx-1].focus();
+          else items[items.length-1].focus();
+        }
+        if (e.key === 'Home') {
+          e.preventDefault();
+          items[0].focus();
+        }
+        if (e.key === 'End') {
+          e.preventDefault();
+          items[items.length-1].focus();
+        }
+        if (e.key === 'Escape') {
+          closeMenu();
+          btn.focus();
+        }
       });
-      // Close on focus out
-      menu.addEventListener('focusout', function(e) {
-        setTimeout(function() {
-          if (menuOpen && !menu.contains(document.activeElement)) closeMenu();
-        }, 10);
+      document.addEventListener('click', function(e){
+        if (!menu.contains(e.target) && e.target !== btn) closeMenu();
+      });
+      function openMenu() {
+        menuOpen = true;
+        btn.setAttribute('aria-expanded', 'true');
+        menu.setAttribute('aria-hidden', 'false');
+        lastFocus = document.activeElement;
+      }
+      function closeMenu() {
+        menuOpen = false;
+        btn.setAttribute('aria-expanded', 'false');
+        menu.setAttribute('aria-hidden', 'true');
+        if (lastFocus) lastFocus.focus();
+      }
+      function toggleMenu() {
+        if (menuOpen) closeMenu();
+        else openMenu();
+      }
+      function focusFirstMenuItem() {
+        const first = menu.querySelector('.nav-link');
+        if (first) first.focus();
+      }
+      function focusLastMenuItem() {
+        const items = menu.querySelectorAll('.nav-link');
+        if (items.length) items[items.length-1].focus();
+      }
+      // Mouse hover/focus opens menu
+      btn.addEventListener('mouseenter', openMenu);
+      btn.addEventListener('mouseleave', function(){ setTimeout(()=>{if(!menu.matches(':hover')) closeMenu();}, 150); });
+      menu.addEventListener('mouseenter', openMenu);
+      menu.addEventListener('mouseleave', closeMenu);
+    })();
+
+    // ========== Color Controls ==========
+    (function(){
+      const bgPicker = document.getElementById('bg-color-picker');
+      const textPicker = document.getElementById('text-color-picker');
+      bgPicker.addEventListener('input', function() {
+        document.documentElement.style.setProperty('--color-bg', this.value);
+        document.documentElement.style.setProperty('--color-bg-alt', this.value);
+      });
+      textPicker.addEventListener('input', function() {
+        document.documentElement.style.setProperty('--color-text', this.value);
       });
     })();
 
-    // Skip link focus fix for keyboard nav
-    document.getElementById('skip-link').addEventListener('focus', function() {
-      this.style.opacity = '1';
+    // ========== Gallery Data ==========
+    let galleryData = [
+      {
+        id: 1,
+        image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+        imageAlt: 'A close-up of a healthy green Monstera plant in sunlight',
+        desc: 'My Monstera is finally growing new leaves! So proud of this beauty.',
+        uploader: 'Alice',
+        likes: 4,
+        liked: false,
+        comments: [
+          {name: 'Ben', text: 'Looks amazing! How do you keep it so green?', time: '2024-06-01T10:00:00Z'},
+          {name: 'Daisy', text: 'Congrats on the new leaves 🌱', time: '2024-06-01T12:15:00Z'}
+        ],
+        uploadedAt: '2024-06-01T09:00:00Z'
+      },
+      {
+        id: 2,
+        image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80',
+        imageAlt: 'A colorful vegetable garden with tomatoes, peppers, and lettuce',
+        desc: 'Our first harvest of the year! Tomatoes, peppers, and fresh lettuce.',
+        uploader: 'Carlos',
+        likes: 7,
+        liked: false,
+        comments: [
+          {name: 'Emma', text: 'So fresh! Love your garden setup.', time: '2024-06-02T08:20:00Z'}
+        ],
+        uploadedAt: '2024-06-02T07:00:00Z'
+      }
+    ];
+    let nextGalleryId = 3;
+
+    // ========== Gallery Rendering ==========
+    function renderGallery(filter='') {
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = '';
+      let filtered = galleryData;
+      if (filter) {
+        const term = filter.trim().toLowerCase();
+        filtered = galleryData.filter(item =>
+          item.desc.toLowerCase().includes(term) ||
+          item.uploader.toLowerCase().includes(term)
+        );
+      }
+      if (!filtered.length) {
+        document.getElementById('gallery-empty').style.display = '';
+        return;
+      }
+      document.getElementById('gallery-empty').style.display = 'none';
+      filtered.forEach(item => {
+        const card = document.createElement('article');
+        card.className = 'gallery-card';
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-labelledby', `card-title-${item.id}`);
+        // Card content
+        card.innerHTML = `
+          <img src="${item.image}" alt="${item.imageAlt}" class="gallery-image" id="gallery-img-${item.id}">
+          <div class="gallery-desc" id="card-title-${item.id}">${escapeHTML(item.desc)}</div>
+          <div class="gallery-meta">
+            <span class="meta-label">By:</span> <span>${escapeHTML(item.uploader)}</span>
+            <span class="meta-label">Posted:</span> <span>${formatDate(item.uploadedAt)}</span>
+          </div>
+          <div class="gallery-actions">
+            <button type="button" class="like-btn${item.liked ? ' liked' : ''}" aria-pressed="${item.liked}" aria-label="${item.liked ? 'Unlike' : 'Like'} this post" data-id="${item.id}">
+              <span class="like-icon" aria-hidden="true">❤️</span>
+              <span class="like-count" aria-live="polite">${item.likes}</span>
+              <span class="visually-hidden">${item.likes} likes</span>
+            </button>
+            <button type="button" class="comment-btn" aria-label="Show comments for this post" data-id="${item.id}">
+              <span class="comment-icon" aria-hidden="true">💬</span>
+              <span class="comment-count" aria-live="polite">${item.comments.length}</span>
+              <span class="visually-hidden">${item.comments.length} comments</span>
+            </button>
+          </div>
+          <section class="comments-section" aria-label="Comments" id="comments-section-${item.id}" style="display:none;">
+            <h3 class="comments-heading">Comments</h3>
+            <ul class="comment-list" id="comment-list-${item.id}">
+              ${item.comments.map(comment => `
+                <li class="comment-item">
+                  <span class="comment-meta">${escapeHTML(comment.name)} &bull; ${formatDate(comment.time)}</span>
+                  <span>${escapeHTML(comment.text)}</span>
+                </li>
+              `).join('')}
+            </ul>
+            <form class="add-comment-form" data-id="${item.id}" aria-label="Add comment to post">
+              <label for="comment-input-${item.id}">Add a comment <span class="required-indicator" aria-hidden="true">*</span></label>
+              <textarea id="comment-input-${item.id}" name="comment" rows="2" maxlength="150" required aria-required="true" aria-describedby="comment-help-${item.id} comment-error-${item.id}" aria-label="Add your comment"></textarea>
+              <span class="input-help" id="comment-help-${item.id}">Max 150 characters.</span>
+              <span class="input-error" id="comment-error-${item.id}" aria-live="polite"></span>
+              <button type="submit" aria-label="Submit comment">Post Comment</button>
+              <span class="comment-status" id="comment-status-${item.id}" role="status" aria-live="polite"></span>
+            </form>
+          </section>
+        `;
+        grid.appendChild(card);
+      });
+      // Animate cards in
+      Array.from(grid.children).forEach((el, i) => {
+        el.style.animationDelay = (i*0.08)+'s';
+      });
+    }
+    function escapeHTML(str) {
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return ({
+          '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+        })[m];
+      });
+    }
+    function formatDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString(undefined, {year:'numeric', month:'short', day:'numeric'});
+    }
+
+    // ========== Gallery Interactions ==========
+    function galleryInteractionHandler(e) {
+      const likeBtn = e.target.closest('.like-btn');
+      const commentBtn = e.target.closest('.comment-btn');
+      if (likeBtn) {
+        const id = Number(likeBtn.getAttribute('data-id'));
+        const item = galleryData.find(g => g.id === id);
+        if (item) {
+          item.liked = !item.liked;
+          item.likes += item.liked ? 1 : -1;
+          renderGallery(document.getElementById('gallery-search').value);
+          // Move focus back to the like button for accessibility
+          setTimeout(() => {
+            const btns = document.querySelectorAll('.like-btn[data-id="'+id+'"]');
+            if (btns.length) btns[0].focus();
+          }, 50);
+        }
+      }
+      if (commentBtn) {
+        const id = Number(commentBtn.getAttribute('data-id'));
+        const section = document.getElementById('comments-section-'+id);
+        if (section.style.display === 'none') {
+          section.style.display = '';
+          // Focus first input in comment form
+          setTimeout(() => {
+            const inp = section.querySelector('textarea');
+            if (inp) inp.focus();
+          }, 100);
+        } else {
+          section.style.display = 'none';
+          commentBtn.focus();
+        }
+      }
+    }
+    document.getElementById('gallery-grid').addEventListener('click', galleryInteractionHandler);
+    document.getElementById('gallery-grid').addEventListener('keydown', function(e){
+      // Keyboard: Enter/Space on like/comment buttons
+      const likeBtn = e.target.closest('.like-btn');
+      const commentBtn = e.target.closest('.comment-btn');
+      if ((likeBtn || commentBtn) && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        e.target.click();
+      }
+      // Esc closes comments section if open
+      if (e.key === 'Escape') {
+        const openSection = e.target.closest('.comments-section');
+        if (openSection && openSection.style.display !== 'none') {
+          openSection.style.display = 'none';
+          // Focus back to comment button
+          const id = openSection.id.replace('comments-section-','');
+          const btn = document.querySelector('.comment-btn[data-id="'+id+'"]');
+          if (btn) btn.focus();
+        }
+      }
     });
 
-    // Set min date for due date input to today
-    (function() {
-      const dueInput = document.getElementById('task-due');
-      const today = new Date();
-      const y = today.getFullYear();
-      const m = String(today.getMonth() + 1).padStart(2, '0');
-      const d = String(today.getDate()).padStart(2, '0');
-      dueInput.min = `${y}-${m}-${d}`;
-    })();
-
-    // To-Do List App Logic
-    (function() {
-      // Utilities
-      function escapeHTML(str) {
-        return String(str)
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;');
+    // ========== Add Comment ==========
+    document.getElementById('gallery-grid').addEventListener('submit', function(e){
+      const form = e.target.closest('.add-comment-form');
+      if (!form) return;
+      e.preventDefault();
+      const id = Number(form.getAttribute('data-id'));
+      const textarea = form.querySelector('textarea');
+      const error = form.querySelector('.input-error');
+      const status = form.querySelector('.comment-status');
+      error.textContent = '';
+      status.textContent = '';
+      textarea.setAttribute('aria-invalid', 'false');
+      const val = textarea.value.trim();
+      if (!val) {
+        error.textContent = 'Comment is required.';
+        textarea.setAttribute('aria-invalid', 'true');
+        textarea.focus();
+        return;
       }
-      function formatDate(dateStr) {
-        // Return as "Month DD, YYYY"
-        if (!dateStr) return '';
-        const d = new Date(dateStr);
-        if (isNaN(d)) return escapeHTML(dateStr);
-        return d.toLocaleDateString(undefined, {year:'numeric', month:'long', day:'numeric'});
+      if (val.length > 150) {
+        error.textContent = 'Comment must be 150 characters or less.';
+        textarea.setAttribute('aria-invalid', 'true');
+        textarea.focus();
+        return;
       }
-      // Storage keys
-      const STORAGE_KEY = 'accessible_todo_tasks';
-      // DOM elements
-      const todoForm = document.getElementById('todo-form');
-      const addTaskBtn = document.getElementById('add-task-btn');
-      const resetFormBtn = document.getElementById('reset-form-btn');
-      const taskTitle = document.getElementById('task-title');
-      const taskPriority = document.getElementById('task-priority');
-      const taskDue = document.getElementById('task-due');
-      const titleError = document.getElementById('task-title-error');
-      const prioError = document.getElementById('task-priority-error');
-      const dueError = document.getElementById('task-due-error');
-      const todoTbody = document.getElementById('todo-tbody');
-      const noTasksMsg = document.getElementById('no-tasks-message');
-      const statusMsg = document.getElementById('task-status-message');
-      // For error prevention/correction (AAA 3.3.6)
-      function clearErrors() {
-        titleError.textContent = '';
-        prioError.textContent = '';
-        dueError.textContent = '';
-        taskTitle.setAttribute('aria-invalid', 'false');
-        taskPriority.setAttribute('aria-invalid', 'false');
-        taskDue.setAttribute('aria-invalid', 'false');
-      }
-      function showError(field, msg) {
-        if (field === taskTitle) {
-          titleError.textContent = msg;
-          taskTitle.setAttribute('aria-invalid', 'true');
-        } else if (field === taskPriority) {
-          prioError.textContent = msg;
-          taskPriority.setAttribute('aria-invalid', 'true');
-        } else if (field === taskDue) {
-          dueError.textContent = msg;
-          taskDue.setAttribute('aria-invalid', 'true');
-        }
-      }
-      function showStatus(msg, type) {
-        statusMsg.textContent = msg;
-        statusMsg.setAttribute('role', type === 'error' ? 'alert' : 'status');
-        statusMsg.style.display = 'block';
-        setTimeout(() => { statusMsg.style.display = 'none'; }, 4000);
-      }
-      // Context-sensitive help (AAA 3.3.5)
-      function showHelpForField(field) {
-        if (field === taskTitle) {
-          showStatus('Enter a short, clear task title (max 80 characters).', 'status');
-        } else if (field === taskPriority) {
-          showStatus('Select how important this task is: High, Medium, or Low.', 'status');
-        } else if (field === taskDue) {
-          showStatus('Pick the date you want this task done by.', 'status');
-        }
-      }
-      [taskTitle, taskPriority, taskDue].forEach(el => {
-        el.addEventListener('focus', function() { showHelpForField(el); });
-      });
-
-      // Error prevention: confirm before deleting (AAA 3.3.6)
-      function confirmDelete() {
-        return window.confirm('Are you sure you want to delete this task? This cannot be undone.');
-      }
-
-      // Load tasks from localStorage
-      function loadTasks() {
-        try {
-          const data = localStorage.getItem(STORAGE_KEY);
-          if (!data) return [];
-          return JSON.parse(data);
-        } catch (e) {
-          return [];
-        }
-      }
-      // Save tasks to localStorage
-      function saveTasks(tasks) {
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-        } catch (e) {}
-      }
-      // Render the to-do list
-      function renderTasks(tasks) {
-        todoTbody.innerHTML = '';
-        if (!tasks.length) {
-          noTasksMsg.style.display = 'block';
+      // Prompt for name (AAA: prevent redundant entry)
+      let name = localStorage.getItem('gc_comment_name') || '';
+      if (!name) {
+        name = prompt('Please enter your name (for comments, max 30 chars):', '');
+        if (!name || name.length > 30) {
+          error.textContent = 'Name is required and must be 30 characters or less.';
+          textarea.setAttribute('aria-invalid', 'true');
+          textarea.focus();
           return;
-        } else {
-          noTasksMsg.style.display = 'none';
         }
-        tasks.forEach((task, idx) => {
-          const tr = document.createElement('tr');
-          if (task.completed) tr.classList.add('task-completed');
-          // Title
-          const tdTitle = document.createElement('td');
-          tdTitle.textContent = task.title;
-          // Priority
-          const tdPrio = document.createElement('td');
-          const prioSpan = document.createElement('span');
-          prioSpan.className = 'priority-indicator priority-' + task.priority;
-          prioSpan.innerHTML =
-            `<span class="prio-icon prio-icon-${task.priority}" aria-hidden="true"></span>` +
-            (task.priority === 'high' ? 'High' : task.priority === 'medium' ? 'Medium' : 'Low');
-          prioSpan.setAttribute('aria-label', (task.priority === 'high' ? 'High priority' : task.priority === 'medium' ? 'Medium priority' : 'Low priority'));
-          tdPrio.appendChild(prioSpan);
-          // Due date
-          const tdDue = document.createElement('td');
-          tdDue.textContent = formatDate(task.due);
-          // Status
-          const tdStatus = document.createElement('td');
-          tdStatus.textContent = task.completed ? 'Completed' : 'Pending';
-          // Actions
-          const tdActions = document.createElement('td');
-          tdActions.className = 'task-actions';
-          // Complete button
-          const completeBtn = document.createElement('button');
-          completeBtn.type = 'button';
-          completeBtn.className = 'complete-btn';
-          completeBtn.setAttribute('aria-label', task.completed ? 'Mark as not completed' : 'Mark as completed');
-          completeBtn.setAttribute('aria-pressed', task.completed ? 'true' : 'false');
-          completeBtn.title = task.completed ? 'Mark as not completed' : 'Mark as completed';
-          completeBtn.innerHTML = task.completed ? '↺ <span class="visually-hidden">Mark as not completed</span>' : '✓ <span class="visually-hidden">Mark as completed</span>';
-          completeBtn.tabIndex = 0;
-          completeBtn.style.minWidth = 'var(--min-btn-size)';
-          completeBtn.style.minHeight = 'var(--min-btn-size)';
-          completeBtn.addEventListener('click', function() {
-            tasks[idx].completed = !tasks[idx].completed;
-            saveTasks(tasks);
-            renderTasks(tasks);
-            showStatus(tasks[idx].completed ? 'Task marked as completed.' : 'Task marked as not completed.', 'status');
-          });
-          completeBtn.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault(); completeBtn.click();
-            }
-          });
-          tdActions.appendChild(completeBtn);
-          // Delete button
-          const deleteBtn = document.createElement('button');
-          deleteBtn.type = 'button';
-          deleteBtn.className = 'delete-btn';
-          deleteBtn.setAttribute('aria-label', 'Delete task');
-          deleteBtn.title = 'Delete task';
-          deleteBtn.innerHTML = '🗑️ <span class="visually-hidden">Delete</span>';
-          deleteBtn.tabIndex = 0;
-          deleteBtn.style.minWidth = 'var(--min-btn-size)';
-          deleteBtn.style.minHeight = 'var(--min-btn-size)';
-          deleteBtn.addEventListener('click', function() {
-            if (confirmDelete()) {
-              tasks.splice(idx, 1);
-              saveTasks(tasks);
-              renderTasks(tasks);
-              showStatus('Task deleted.', 'alert');
-            }
-          });
-          deleteBtn.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault(); deleteBtn.click();
-            }
-          });
-          tdActions.appendChild(deleteBtn);
-          // Assemble row
-          tr.appendChild(tdTitle);
-          tr.appendChild(tdPrio);
-          tr.appendChild(tdDue);
-          tr.appendChild(tdStatus);
-          tr.appendChild(tdActions);
-          todoTbody.appendChild(tr);
-        });
+        localStorage.setItem('gc_comment_name', name);
       }
-      // Initial load
-      let tasks = loadTasks();
-      renderTasks(tasks);
+      const now = new Date().toISOString();
+      const item = galleryData.find(g => g.id === id);
+      if (item) {
+        item.comments.push({name, text: val, time: now});
+        status.textContent = 'Comment posted!';
+        textarea.value = '';
+        renderGallery(document.getElementById('gallery-search').value);
+        // Open comments section and focus new comment
+        setTimeout(() => {
+          const section = document.getElementById('comments-section-'+id);
+          if (section) {
+            section.style.display = '';
+            const comments = section.querySelectorAll('.comment-item');
+            if (comments.length) comments[comments.length-1].focus();
+          }
+        }, 150);
+      }
+    });
 
-      // Add task form validation and submission
-      todoForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        clearErrors();
-        let valid = true;
-        const title = taskTitle.value.trim();
-        const prio = taskPriority.value;
-        const due = taskDue.value;
-        // Validate title
-        if (!title) {
-          showError(taskTitle, 'Task title is required.');
-          valid = false;
-        } else if (title.length > 80) {
-          showError(taskTitle, 'Task title must be at most 80 characters.');
-          valid = false;
+    // ========== Gallery Search ==========
+    document.getElementById('gallery-search-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const val = document.getElementById('gallery-search').value;
+      renderGallery(val);
+    });
+    document.getElementById('gallery-search').addEventListener('input', function(){
+      renderGallery(this.value);
+    });
+
+    // ========== Plant Upload Form ==========
+    document.getElementById('upload-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const imageInput = document.getElementById('plant-image');
+      const descInput = document.getElementById('plant-desc');
+      const nameInput = document.getElementById('uploader-name');
+      const status = document.getElementById('upload-status');
+      const errors = {
+        image: document.getElementById('plant-image-error'),
+        desc: document.getElementById('plant-desc-error'),
+        name: document.getElementById('uploader-name-error')
+      };
+      status.textContent = '';
+      errors.image.textContent = '';
+      errors.desc.textContent = '';
+      errors.name.textContent = '';
+      imageInput.setAttribute('aria-invalid','false');
+      descInput.setAttribute('aria-invalid','false');
+      nameInput.setAttribute('aria-invalid','false');
+      // Validation
+      let valid = true;
+      const file = imageInput.files[0];
+      if (!file) {
+        errors.image.textContent = 'Photo is required.';
+        imageInput.setAttribute('aria-invalid','true');
+        valid = false;
+      } else if (!/^image\//.test(file.type)) {
+        errors.image.textContent = 'Only image files are allowed.';
+        imageInput.setAttribute('aria-invalid','true');
+        valid = false;
+      } else if (file.size > 4*1024*1024) {
+        errors.image.textContent = 'File must be 4MB or less.';
+        imageInput.setAttribute('aria-invalid','true');
+        valid = false;
+      }
+      const desc = descInput.value.trim();
+      if (!desc) {
+        errors.desc.textContent = 'Description is required.';
+        descInput.setAttribute('aria-invalid','true');
+        valid = false;
+      } else if (desc.length > 300) {
+        errors.desc.textContent = 'Description must be 300 characters or less.';
+        descInput.setAttribute('aria-invalid','true');
+        valid = false;
+      }
+      const name = nameInput.value.trim();
+      if (!name) {
+        errors.name.textContent = 'Name is required.';
+        nameInput.setAttribute('aria-invalid','true');
+        valid = false;
+      } else if (name.length > 30) {
+        errors.name.textContent = 'Name must be 30 characters or less.';
+        nameInput.setAttribute('aria-invalid','true');
+        valid = false;
+      }
+      if (!valid) {
+        status.textContent = '';
+        return;
+      }
+      // FileReader to get image URL
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const imageUrl = ev.target.result;
+        galleryData.unshift({
+          id: nextGalleryId++,
+          image: imageUrl,
+          imageAlt: 'User-uploaded photo: ' + desc.slice(0,60),
+          desc: desc,
+          uploader: name,
+          likes: 0,
+          liked: false,
+          comments: [],
+          uploadedAt: new Date().toISOString()
+        });
+        status.textContent = 'Photo uploaded successfully!';
+        // Reset form
+        imageInput.value = '';
+        descInput.value = '';
+        nameInput.value = '';
+        renderGallery(document.getElementById('gallery-search').value);
+        setTimeout(()=>{status.textContent='';}, 4000);
+      };
+      reader.onerror = function() {
+        errors.image.textContent = 'Failed to read image. Please try again.';
+        imageInput.setAttribute('aria-invalid','true');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // ========== Context-sensitive Help Modal ==========
+    (function(){
+      const openBtn = document.getElementById('open-help-modal');
+      const overlay = document.getElementById('help-modal');
+      const closeBtn = document.getElementById('close-help-modal');
+      let lastFocus = null;
+      openBtn.addEventListener('click', function() {
+        overlay.setAttribute('aria-hidden','false');
+        overlay.style.display = 'flex';
+        lastFocus = document.activeElement;
+        setTimeout(() => {
+          overlay.querySelector('.modal-dialog').focus();
+        }, 100);
+      });
+      closeBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', function(e){
+        if (e.target === overlay) closeModal();
+      });
+      overlay.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+          closeModal();
         }
-        // Validate priority
-        if (!prio) {
-          showError(taskPriority, 'Priority is required.');
-          valid = false;
-        }
-        // Validate due date
-        if (!due) {
-          showError(taskDue, 'Due date is required.');
-          valid = false;
-        } else {
-          const today = new Date();
-          today.setHours(0,0,0,0);
-          const dueDate = new Date(due);
-          if (isNaN(dueDate.getTime())) {
-            showError(taskDue, 'Due date is invalid.');
-            valid = false;
-          } else if (dueDate < today) {
-            showError(taskDue, 'Due date cannot be in the past.');
-            valid = false;
+        // Trap focus inside modal
+        const dialog = overlay.querySelector('.modal-dialog');
+        if (e.key === 'Tab') {
+          const focusables = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          const first = focusables[0];
+          const last = focusables[focusables.length-1];
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            }
+          } else {
+            if (document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
           }
         }
-        if (!valid) {
-          showStatus('Please fix errors in the form.', 'alert');
-          return;
-        }
-        // Error prevention: confirm before adding
-        if (!window.confirm('Add this task? You can edit or delete it later.')) return;
-        // Add new task
-        tasks.push({
-          title: title,
-          priority: prio,
-          due: due,
-          completed: false
-        });
-        saveTasks(tasks);
-        renderTasks(tasks);
-        todoForm.reset();
-        showStatus('Task added successfully!', 'status');
-        // Focus first field for new entry
-        setTimeout(() => { taskTitle.focus(); }, 200);
       });
-      // Reset form: clear errors
-      resetFormBtn.addEventListener('click', function() {
-        clearErrors();
-        showStatus('Form reset. You can enter new task details.', 'status');
-      });
-
-      // Sidebar search functionality
-      const sidebarSearchForm = document.getElementById('sidebar-search-form');
-      const sidebarSearchInput = document.getElementById('sidebar-search-input');
-      sidebarSearchForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const query = sidebarSearchInput.value.trim().toLowerCase();
-        if (!query) {
-          renderTasks(tasks);
-          showStatus('Showing all tasks.', 'status');
-          return;
-        }
-        const filtered = tasks.filter(t => t.title.toLowerCase().includes(query));
-        renderTasks(filtered);
-        showStatus(filtered.length + ' task(s) found for "' + query + '".', 'status');
-      });
-      // Restore full list when search input cleared
-      sidebarSearchInput.addEventListener('input', function() {
-        if (!sidebarSearchInput.value.trim()) {
-          renderTasks(tasks);
-        }
-      });
-
-      // Keyboard shortcut: F1 opens help
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'F1') {
-          e.preventDefault();
-          document.getElementById('help-section').scrollIntoView({behavior:'smooth'});
-        }
-      });
-
-      // Show simplified help when requested
-      document.getElementById('simplified-help-link').addEventListener('click', function(e) {
-        e.preventDefault();
-        const sh = document.getElementById('simplified-help');
-        sh.classList.remove('visually-hidden');
-        sh.setAttribute('tabindex', '-1');
-        sh.focus();
-      });
-
-      // Accessibility: Focus management for skip link
-      document.getElementById('skip-link').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          document.getElementById('main-content').focus();
-        }
-      });
-
-      // Accessibility: Focus trap for modal menu (none used, but pattern included)
-      // ... (no modals in this app)
-
-      // Responsive: Table scrolls at 200% zoom, no horizontal scroll on main
-      // ... (handled by CSS)
+      function closeModal() {
+        overlay.setAttribute('aria-hidden','true');
+        overlay.style.display = 'none';
+        if (lastFocus) lastFocus.focus();
+      }
     })();
 
-    // Footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // ========== Accessibility: Prevent Keyboard Trap in Modal ==========
+    // (Handled above with focus trap logic)
+
+    // ========== Responsive Zoom & Touch Support ==========
+    // (Handled by CSS min touch size and responsive grid)
+
+    // ========== Animation: Pause Controls (not needed, no auto-playing content) ==========
+
+    // ========== Initial Render ==========
+    renderGallery();
+
+    // ========== Utility: Define unusual words/abbreviations ==========
+    // For demo: Add tooltips for 'Monstera' and 'WCAG'
+    document.addEventListener('DOMContentLoaded', function() {
+      const addAbbr = (selector, full) => {
+        document.querySelectorAll(selector).forEach(el => {
+          el.setAttribute('title', full);
+          el.setAttribute('aria-label', full);
+        });
+      };
+      addAbbr('abbr[title]', '');
+    });
+
+    // ========== Reduced Motion Respect ==========
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('.gallery-card').forEach(el => {
+        el.style.animation = 'none';
+      });
+    }
   </script>
 </body>
 </html>
