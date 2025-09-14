@@ -2,33 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2" />
-<title>Interactive Accessible Space Exploration: Constellations & Planets Gallery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+<title>Accessible Task Manager SPA - User Login & Dashboard</title>
 <style>
   /* Reset and base */
   *, *::before, *::after {
     box-sizing: border-box;
   }
   html {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #0b0f1a;
-    color: #e0e6f0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px;
     line-height: 1.6;
+    color: #1a1a1a;
+    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+    min-height: 100%;
     scroll-behavior: smooth;
   }
   body {
     margin: 0;
-    min-width: 320px;
+    padding: 0;
+    background-color: #e3f2fd;
+    color: #1a1a1a;
   }
   a {
-    color: #66ccff;
+    color: #0d47a1;
     text-decoration: underline;
   }
   a:focus,
   button:focus,
-  [tabindex]:focus {
-    outline: 3px solid #66ccff;
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 3px solid #ffbf47;
     outline-offset: 2px;
   }
   /* Skip link */
@@ -36,249 +41,396 @@
     position: absolute;
     top: -40px;
     left: 0;
-    background: #003366;
-    color: #fff;
+    background: #ffbf47;
+    color: #000;
     padding: 0.75rem 1rem;
     z-index: 100;
-    text-decoration: none;
     font-weight: 700;
     border-radius: 0 0 4px 0;
+    transition: top 0.3s ease;
   }
   #skip-link:focus {
     top: 0;
   }
-
   /* Layout */
-  header, footer, main, nav, section, article {
+  header, nav, main, footer, section, article {
     display: block;
   }
-  header, footer {
-    background: linear-gradient(135deg, #00111f 0%, #002244 100%);
-    color: #a3c9ff;
+  header {
+    background: linear-gradient(90deg, #1565c0, #42a5f5);
+    color: #fff;
     padding: 1rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
   header h1 {
-    font-size: 2rem;
     margin: 0;
-  }
-  nav[aria-label="Primary Navigation"] {
-    background-color: #001a33;
-    border-top: 3px solid #3399ff;
-  }
-  nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0.5rem 1rem;
-    display: flex;
-    gap: 1.5rem;
-  }
-  nav a {
-    color: #a3c9ff;
-    font-weight: 600;
-  }
-  nav a[aria-current="page"] {
-    color: #66ccff;
-    font-weight: 700;
-    border-bottom: 3px solid #66ccff;
-  }
-  nav a:focus-visible {
-    outline-offset: 3px;
-  }
-
-  main {
-    max-width: 1200px;
-    margin: 1rem auto 3rem;
-    padding: 0 1rem;
-  }
-  main > section {
-    margin-bottom: 3rem;
-  }
-  main h2 {
     font-size: 1.75rem;
-    margin-bottom: 0.75rem;
-    border-bottom: 3px solid #3399ff;
-    padding-bottom: 0.25rem;
+    line-height: 1.2;
   }
-  main h3 {
-    font-size: 1.25rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: #99ccff;
+  nav[aria-label="Primary"] {
+    background-color: #0d47a1;
+    box-shadow: inset 0 -3px 0 #ffbf47;
   }
-
-  /* Constellations Canvas Section */
-  #space-scene {
+  nav[aria-label="Primary"] ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  nav[aria-label="Primary"] li {
     position: relative;
-    width: 100%;
-    height: 480px;
-    border-radius: 12px;
-    box-shadow: 0 0 12px #3399ff88;
-    background: radial-gradient(ellipse at center, #0b0f1a 0%, #000000 90%);
   }
-  #constellation-info {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    max-width: 320px;
-    background-color: rgba(0, 34, 68, 0.85);
-    border: 2px solid #3399ff;
-    border-radius: 8px;
-    padding: 1rem;
-    color: #cce6ff;
+  nav[aria-label="Primary"] > ul > li {
+    margin: 0;
+  }
+  nav[aria-label="Primary"] a,
+  nav[aria-label="Primary"] button.menu-button {
+    display: block;
+    padding: 1rem 1.25rem;
+    color: #ffeb3b;
+    font-weight: 700;
     font-size: 1rem;
-    line-height: 1.4;
-    box-shadow: 0 0 10px #66ccffaa;
-  }
-  #constellation-info h3 {
-    margin-top: 0;
-    color: #99ccff;
-  }
-  #constellation-info button {
-    margin-top: 1rem;
-    background-color: #3399ff;
-    color: #fff;
+    text-decoration: none;
+    background: none;
     border: none;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 6px;
     cursor: pointer;
     min-width: 44px;
     min-height: 44px;
   }
-  #constellation-info button:hover,
-  #constellation-info button:focus {
-    background-color: #66ccff;
-    outline: 3px solid #003366;
-  }
-
-  /* Planets Gallery */
-  #planets-gallery {
-    position: relative;
-  }
-  #gallery-controls {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
-  #gallery-controls button {
-    background-color: #3399ff;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    min-width: 44px;
-    min-height: 44px;
-  }
-  #gallery-controls button:hover,
-  #gallery-controls button:focus {
-    background-color: #66ccff;
-    outline: 3px solid #003366;
-  }
-  #gallery-controls button[disabled] {
-    background-color: #1a3355;
-    color: #6688bb;
-    cursor: default;
-  }
-
-  #planets-list {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    gap: 1rem;
-    padding-bottom: 1rem;
-  }
-  #planets-list:focus {
-    outline: 3px solid #66ccff;
+  nav[aria-label="Primary"] a:hover,
+  nav[aria-label="Primary"] a:focus,
+  nav[aria-label="Primary"] button.menu-button:hover,
+  nav[aria-label="Primary"] button.menu-button:focus {
+    background-color: #ffbf47;
+    color: #0d47a1;
     outline-offset: 2px;
   }
-  .planet-card {
-    background-color: #001a33;
-    border: 2px solid #3399ff;
-    border-radius: 12px;
-    flex: 0 0 280px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 0 10px #3399ff88;
-    color: #cce6ff;
+  nav[aria-label="Primary"] li[aria-haspopup="true"] > button.menu-button::after {
+    content: "▾";
+    margin-left: 0.25rem;
+    font-size: 0.8rem;
   }
-  .planet-card:focus-within {
-    outline: 3px solid #66ccff;
-    outline-offset: 3px;
-  }
-  .planet-image-container {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 aspect ratio */
-    overflow: hidden;
-    border-bottom: 2px solid #3399ff;
-    border-radius: 12px 12px 0 0;
-    background: radial-gradient(circle at center, #001a33 0%, #000000 80%);
-  }
-  .planet-image-container img {
+  nav[aria-label="Primary"] ul ul {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    max-width: 100%;
-    max-height: 100%;
-    transform: translate(-50%, -50%);
-    border-radius: 12px 12px 0 0;
+    top: 100%;
+    left: 0;
+    background: #1565c0;
+    border: 2px solid #ffbf47;
+    border-radius: 4px;
+    min-width: 200px;
+    display: none;
+    z-index: 200;
   }
-  .planet-info {
-    padding: 1rem;
-    flex-grow: 1;
+  nav[aria-label="Primary"] ul ul li {
+    width: 100%;
   }
-  .planet-info h3 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    color: #99ccff;
+  nav[aria-label="Primary"] ul ul a {
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    color: #fffde7;
   }
-  .planet-info p {
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.4;
+  nav[aria-label="Primary"] ul ul a:hover,
+  nav[aria-label="Primary"] ul ul a:focus {
+    background-color: #ffbf47;
+    color: #0d47a1;
   }
-
-  /* Responsive */
-  @media (max-width: 640px) {
-    #planets-list {
-      flex-wrap: nowrap;
-    }
-    .planet-card {
-      flex: 0 0 90vw;
-    }
-  }
-
-  /* Stars and Constellations - Canvas styling */
-  #space-scene canvas {
+  nav[aria-label="Primary"] li[aria-expanded="true"] > ul {
     display: block;
+  }
+  /* Hamburger menu for mobile */
+  .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #ffeb3b;
+    font-size: 1.5rem;
+    padding: 1rem;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .mobile-menu-toggle:focus {
+    outline: 3px solid #ffbf47;
+    outline-offset: 2px;
+  }
+  @media (max-width: 768px) {
+    nav[aria-label="Primary"] ul {
+      flex-direction: column;
+      display: none;
+      background-color: #0d47a1;
+      border-top: 3px solid #ffbf47;
+    }
+    nav[aria-label="Primary"] ul[aria-expanded="true"] {
+      display: flex;
+    }
+    nav[aria-label="Primary"] li[aria-haspopup="true"] > ul {
+      position: static;
+      border: none;
+      background-color: #1976d2;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    .mobile-menu-toggle {
+      display: inline-block;
+    }
+  }
+  main {
+    max-width: 960px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  }
+  footer {
+    background: linear-gradient(90deg, #1565c0, #42a5f5);
+    color: #fff;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  /* Forms */
+  form {
+    max-width: 480px;
+    margin: 0 auto 2rem auto;
+  }
+  fieldset {
+    border: 2px solid #1976d2;
+    border-radius: 6px;
+    padding: 1rem 1.25rem 1.5rem 1.25rem;
+    margin-bottom: 1.5rem;
+    background-color: #e3f2fd;
+  }
+  legend {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #0d47a1;
+    padding: 0 0.5rem;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #0d47a1;
+  }
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="search"],
+  textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    font-size: 1rem;
+    border: 2px solid #1976d2;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+  }
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  input[type="text"]:focus,
+  input[type="search"]:focus,
+  textarea:focus {
+    border-color: #ffbf47;
+    outline: none;
+  }
+  .required-indicator {
+    color: #d32f2f;
+    font-weight: 700;
+    margin-left: 0.25rem;
+  }
+  .help-text {
+    font-size: 0.875rem;
+    color: #0d47a1;
+    margin-top: 0.25rem;
+  }
+  .error-message {
+    color: #d32f2f;
+    font-weight: 700;
+    margin-top: 0.25rem;
+  }
+  .error-message[aria-live] {
+    min-height: 1.5em;
+  }
+  button[type="submit"],
+  button.task-action {
+    background: linear-gradient(45deg, #ffbf47, #f9a825);
+    border: none;
+    border-radius: 6px;
+    color: #0d47a1;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.6rem 1.25rem;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    box-shadow: 0 4px 6px rgb(0 0 0 / 0.15);
+    transition: background 0.3s ease;
+  }
+  button[type="submit"]:hover,
+  button[type="submit"]:focus,
+  button.task-action:hover,
+  button.task-action:focus {
+    background: linear-gradient(45deg, #f9a825, #ffbf47);
+    outline-offset: 2px;
+  }
+  /* Dashboard */
+  #dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  #welcome-section {
+    flex: 1 1 100%;
+    background-color: #bbdefb;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px #90caf9;
+  }
+  #welcome-section h2 {
+    margin-top: 0;
+    color: #0d47a1;
+  }
+  #task-manager {
+    flex: 2 1 60%;
+    background-color: #e3f2fd;
+    border: 2px solid #1976d2;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+  }
+  #task-manager h2 {
+    margin-top: 0;
+    color: #0d47a1;
+  }
+  #task-list {
+    margin-top: 1rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+  }
+  thead tr {
+    background: linear-gradient(90deg, #0d47a1, #1976d2);
+    color: #ffeb3b;
+  }
+  th, td {
+    padding: 0.75rem 1rem;
+    border: 1px solid #1976d2;
+    text-align: left;
+    vertical-align: middle;
+  }
+  tbody tr:nth-child(even) {
+    background-color: #bbdefb;
+  }
+  tbody tr:hover,
+  tbody tr:focus-within {
+    background-color: #f9fbe7;
+    outline: 3px solid #ffbf47;
+    outline-offset: -3px;
+  }
+  .task-completed {
+    color: #388e3c;
+    font-style: italic;
+    text-decoration: line-through;
+  }
+  .task-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    border-radius: 12px;
+    background-color: rgba(13, 71, 161, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
   }
-
-  /* Focus visible enhancements */
-  button:focus-visible,
-  a:focus-visible {
-    outline-offset: 3px;
-    outline: 3px solid #66ccff;
+  .modal-overlay.active {
+    display: flex;
   }
-
-  /* Tooltip style for constellation hover/focus */
-  .tooltip {
+  .modal {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem 2rem;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+    position: relative;
+  }
+  .modal h3 {
+    margin-top: 0;
+    color: #0d47a1;
+  }
+  .modal button.close-modal {
     position: absolute;
-    background-color: #003366cc;
-    color: #ccddff;
-    padding: 0.3rem 0.6rem;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    pointer-events: none;
-    user-select: none;
-    white-space: nowrap;
-    z-index: 20;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #1976d2;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
   }
-
+  .modal button.close-modal:focus {
+    outline: 3px solid #ffbf47;
+    outline-offset: 2px;
+  }
+  /* Focus visible polyfill */
+  :focus-visible {
+    outline: 3px solid #ffbf47 !important;
+    outline-offset: 2px !important;
+  }
+  /* Responsive */
+  @media (max-width: 600px) {
+    #dashboard {
+      flex-direction: column;
+    }
+    #task-manager {
+      flex: 1 1 100%;
+    }
+  }
+  /* Color theme switcher */
+  #color-theme-controls {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+  #color-theme-controls label {
+    font-weight: 600;
+    color: #0d47a1;
+  }
+  #color-theme-controls select {
+    font-size: 1rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    border: 2px solid #1976d2;
+    background-color: #e3f2fd;
+    color: #0d47a1;
+  }
+  /* Vibrant color themes */
+  body.theme-default {
+    background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
+    color: #1a1a1a;
+  }
+  body.theme-sunset {
+    background: linear-gradient(135deg, #ff6f61 0%, #ffcc5c 100%);
+    color: #3e2723;
+  }
+  body.theme-forest {
+    background: linear-gradient(135deg, #2e7d32 0%, #a5d6a7 100%);
+    color: #1b5e20;
+  }
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     * {
@@ -290,554 +442,1129 @@
   }
 </style>
 </head>
-<body>
+<body class="theme-default">
 <a href="#main-content" id="skip-link">Skip to main content</a>
-
 <header role="banner">
-  <h1>Explore the Cosmos: Interactive Constellations & Planets Gallery</h1>
+  <h1>Accessible Task Manager SPA</h1>
 </header>
-
-<nav aria-label="Primary Navigation">
-  <ul>
-    <li><a href="#constellations-section" id="nav-constellations" aria-current="page">Constellations</a></li>
-    <li><a href="#planets-section" id="nav-planets">Planets Gallery</a></li>
-    <li><a href="#about-section" id="nav-about">About This Site</a></li>
+<nav aria-label="Primary" role="navigation">
+  <button class="mobile-menu-toggle" aria-controls="primary-menu" aria-expanded="false" aria-label="Toggle main menu">
+    ☰ Menu
+  </button>
+  <ul id="primary-menu" tabindex="-1">
+    <li><a href="#login-section" id="nav-login" aria-current="page">Login</a></li>
+    <li><a href="#dashboard-section" id="nav-dashboard" hidden>Dashboard</a></li>
+    <li><a href="#help-section" id="nav-help">Help</a></li>
   </ul>
 </nav>
-
 <main id="main-content" tabindex="-1">
-  <section id="constellations-section" aria-labelledby="constellations-heading">
-    <h2 id="constellations-heading">Interactive Constellations</h2>
-    <p>Click or keyboard-select a constellation on the star map to learn about it.</p>
-    <div id="space-scene" aria-label="Star map with interactive constellations" role="region">
-      <canvas id="stars-canvas" width="1200" height="480" aria-describedby="constellation-info-desc"></canvas>
-      <aside id="constellation-info" aria-live="polite" aria-atomic="true" aria-relevant="additions removals" hidden>
-        <h3 id="constellation-info-title">Select a constellation</h3>
-        <p id="constellation-info-desc">Information about the selected constellation will appear here.</p>
-        <button type="button" id="close-constellation-info" aria-label="Close constellation information panel">Close</button>
-      </aside>
-    </div>
-  </section>
-
-  <section id="planets-section" aria-labelledby="planets-heading">
-    <h2 id="planets-heading">Scrolling Planets Gallery</h2>
-    <p>Explore planets of our solar system with images and fun facts. Use the controls to scroll through the gallery.</p>
-    <div id="planets-gallery" role="region" aria-label="Planets image gallery with fun facts">
-      <div id="gallery-controls">
-        <button type="button" id="scroll-left" aria-label="Scroll planets gallery left" disabled>◀ Previous</button>
-        <button type="button" id="scroll-right" aria-label="Scroll planets gallery right">Next ▶</button>
-      </div>
-      <div id="planets-list" tabindex="0" aria-live="polite" aria-relevant="additions removals">
-        <!-- Planet cards inserted by JS -->
-      </div>
-    </div>
-  </section>
-
-  <section id="about-section" aria-labelledby="about-heading">
-    <h2 id="about-heading">About This Site</h2>
-    <article>
-      <p>This website is designed to provide an accessible and engaging experience exploring space. The star map features interactive constellations that reveal detailed information when selected. The planets gallery offers a scrollable collection of planets with images and interesting facts.</p>
-      <p>All interactive elements are keyboard accessible, with enhanced focus indicators and high contrast color schemes to meet WCAG 2.2 AAA standards. Motion is reduced respecting user preferences, and all images include descriptive alternative text.</p>
-      <p>We hope you enjoy your cosmic journey!</p>
-    </article>
-  </section>
+  <!-- React app mounts here -->
+  <div id="root" role="main" aria-live="polite" aria-atomic="true"></div>
 </main>
-
 <footer role="contentinfo">
-  <p>© 2024 Space Exploration Initiative. All rights reserved.</p>
-  <nav aria-label="Footer Navigation">
-    <ul>
-      <li><a href="#main-content">Back to top</a></li>
-      <li><a href="#about-section">About</a></li>
-      <li><a href="https://www.nasa.gov" target="_blank" rel="noopener noreferrer">NASA</a></li>
-      <li><a href="https://www.iau.org/public/themes/constellations/" target="_blank" rel="noopener noreferrer">IAU Constellations</a></li>
-    </ul>
-  </nav>
+  <p>© 2024 Accessible Task Manager. All rights reserved.</p>
 </footer>
 
 <script>
-  'use strict';
+  // React and ReactDOM from CDN (self-contained SPA requirement means we embed React ourselves)
+  // But the user request requires pure vanilla code with no external dependencies.
+  // However, user specifically requested React SPA.
+  // To comply with "No External Dependencies" and React SPA, we must embed React and ReactDOM ourselves.
+  // Since we cannot load external scripts, we'll embed React and ReactDOM UMD builds as inline scripts.
+  // But React UMD builds are huge and impractical to inline here.
+  // Therefore, we will implement a React-like SPA using vanilla JS with JSX-like structure manually.
+  // However, user specifically requested React SPA.
+  // To reconcile, we will simulate React SPA with vanilla JS and ARIA compliance, given constraints.
+  // We'll build a SPA with modular components, state management, routing, and accessibility.
 
-  // Data for constellations
-  const CONSTELLATIONS = [
-    {
-      id: 'orion',
-      name: 'Orion',
-      description: 'Orion is one of the most recognizable constellations in the night sky, named after a hunter in Greek mythology. It contains bright stars such as Betelgeuse and Rigel.',
-      stars: [
-        { x: 300, y: 120 },
-        { x: 350, y: 180 },
-        { x: 400, y: 140 },
-        { x: 450, y: 190 },
-        { x: 500, y: 150 },
-        { x: 520, y: 210 },
-        { x: 550, y: 170 }
-      ]
-    },
-    {
-      id: 'ursa-major',
-      name: 'Ursa Major',
-      description: 'Ursa Major, also known as the Great Bear, is famous for containing the Big Dipper asterism. It has been used for navigation for centuries.',
-      stars: [
-        { x: 800, y: 80 },
-        { x: 850, y: 120 },
-        { x: 900, y: 100 },
-        { x: 950, y: 140 },
-        { x: 1000, y: 110 },
-        { x: 1050, y: 160 },
-        { x: 1100, y: 130 }
-      ]
-    },
-    {
-      id: 'cassiopeia',
-      name: 'Cassiopeia',
-      description: 'Cassiopeia is a distinctive W-shaped constellation named after a queen in Greek mythology. It is easily visible in the northern sky.',
-      stars: [
-        { x: 600, y: 60 },
-        { x: 640, y: 100 },
-        { x: 680, y: 70 },
-        { x: 720, y: 110 },
-        { x: 760, y: 80 }
-      ]
-    }
-  ];
+  (() => {
+    "use strict";
 
-  // Data for planets
-  const PLANETS = [
-    {
-      name: 'Mercury',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/4/4a/Mercury_in_true_color.jpg',
-      alt: 'Image of planet Mercury showing a rocky surface with craters',
-      funFact: 'Mercury is the smallest planet in our solar system and closest to the Sun.'
-    },
-    {
-      name: 'Venus',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg',
-      alt: 'Image of planet Venus showing thick yellowish clouds',
-      funFact: 'Venus spins in the opposite direction to most planets and has a thick toxic atmosphere.'
-    },
-    {
-      name: 'Earth',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg',
-      alt: 'Image of planet Earth showing blue oceans and white clouds',
-      funFact: 'Earth is the only planet known to support life and has 71% of its surface covered by water.'
-    },
-    {
-      name: 'Mars',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg',
-      alt: 'Image of planet Mars showing reddish surface and polar ice caps',
-      funFact: 'Mars is known as the Red Planet due to iron oxide (rust) on its surface.'
-    },
-    {
-      name: 'Jupiter',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg',
-      alt: 'Image of planet Jupiter showing swirling clouds and Great Red Spot',
-      funFact: 'Jupiter is the largest planet and has a giant storm called the Great Red Spot.'
-    },
-    {
-      name: 'Saturn',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg',
-      alt: 'Image of planet Saturn showing its iconic rings',
-      funFact: 'Saturn is famous for its extensive ring system made of ice and rock particles.'
-    },
-    {
-      name: 'Uranus',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg',
-      alt: 'Image of planet Uranus showing a pale blue-green color',
-      funFact: 'Uranus rotates on its side, making its seasons very extreme.'
-    },
-    {
-      name: 'Neptune',
-      image: 'https://upload.wikimedia.org/wikipedia/commons/5/56/Neptune_Full.jpg',
-      alt: 'Image of planet Neptune showing deep blue color with clouds',
-      funFact: 'Neptune is the farthest planet from the Sun and has the strongest winds in the solar system.'
-    }
-  ];
-
-  // Canvas and constellation interaction
-  (function() {
-    const canvas = document.getElementById('stars-canvas');
-    const ctx = canvas.getContext('2d');
-    const infoPanel = document.getElementById('constellation-info');
-    const infoTitle = document.getElementById('constellation-info-title');
-    const infoDesc = document.getElementById('constellation-info-desc');
-    const closeBtn = document.getElementById('close-constellation-info');
-
-    // Accessibility: Store last focused constellation button for returning focus
-    let lastFocusedConstellation = null;
-
-    // Star and constellation drawing parameters
-    const starRadius = 2.5;
-    const starColor = '#ccddee';
-    const constellationLineColor = '#66ccff';
-    const constellationLineWidth = 1.8;
-    const constellationHighlightColor = '#ffcc33';
-    const constellationHighlightWidth = 3;
-
-    // For keyboard navigation and hit testing
-    const constellationHitRadius = 18;
-
-    // Store constellation center points for hit detection and focus
-    const constellationCenters = CONSTELLATIONS.map(c => {
-      // Calculate approximate center as average of stars
-      const sum = c.stars.reduce((acc, s) => ({x: acc.x + s.x, y: acc.y + s.y}), {x:0, y:0});
-      return {
-        id: c.id,
-        x: sum.x / c.stars.length,
-        y: sum.y / c.stars.length,
-        name: c.name
-      };
-    });
-
-    // Draw stars
-    function drawStars() {
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw background stars randomly for ambiance
-      for (let i = 0; i < 200; i++) {
-        const x = Math.random() * canvas.width;
-        const y = Math.random() * canvas.height;
-        const radius = Math.random() * 1.2 + 0.3;
-        const alpha = Math.random() * 0.7 + 0.3;
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, 2 * Math.PI);
-        ctx.fillStyle = `rgba(204, 221, 255, ${alpha.toFixed(2)})`;
-        ctx.fill();
-      }
-
-      // Draw constellation stars and lines
-      CONSTELLATIONS.forEach(constellation => {
-        // Draw lines connecting stars
-        ctx.strokeStyle = constellationLineColor;
-        ctx.lineWidth = constellationLineWidth;
-        ctx.beginPath();
-        constellation.stars.forEach((star, index) => {
-          if (index === 0) {
-            ctx.moveTo(star.x, star.y);
-          } else {
-            ctx.lineTo(star.x, star.y);
-          }
-        });
-        ctx.stroke();
-
-        // Draw stars
-        constellation.stars.forEach(star => {
-          ctx.beginPath();
-          ctx.arc(star.x, star.y, starRadius, 0, 2 * Math.PI);
-          ctx.fillStyle = starColor;
-          ctx.shadowColor = '#66ccff';
-          ctx.shadowBlur = 4;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        });
-      });
-    }
-
-    // Draw highlight for selected constellation
-    function drawHighlight(constellationId) {
-      if (!constellationId) return;
-      const constellation = CONSTELLATIONS.find(c => c.id === constellationId);
-      if (!constellation) return;
-
-      ctx.strokeStyle = constellationHighlightColor;
-      ctx.lineWidth = constellationHighlightWidth;
-      ctx.beginPath();
-      constellation.stars.forEach((star, index) => {
-        if (index === 0) {
-          ctx.moveTo(star.x, star.y);
+    // Utility: Create element with attributes, children, and event listeners
+    function createElement(tag, attrs = {}, ...children) {
+      const el = document.createElement(tag);
+      for (const [key, value] of Object.entries(attrs)) {
+        if (key.startsWith("on") && typeof value === "function") {
+          el.addEventListener(key.slice(2).toLowerCase(), value);
+        } else if (key === "className") {
+          el.className = value;
+        } else if (key === "htmlFor") {
+          el.htmlFor = value;
+        } else if (key === "ariaCurrent") {
+          if (value === true) el.setAttribute("aria-current", "page");
+          else if (value === false) el.removeAttribute("aria-current");
+          else el.setAttribute("aria-current", value);
+        } else if (value === false || value === null || value === undefined) {
+          // skip false/null/undefined attributes
         } else {
-          ctx.lineTo(star.x, star.y);
-        }
-      });
-      ctx.stroke();
-
-      // Draw stars bigger and glowing
-      constellation.stars.forEach(star => {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, starRadius + 1.5, 0, 2 * Math.PI);
-        ctx.fillStyle = constellationHighlightColor;
-        ctx.shadowColor = '#ffcc33';
-        ctx.shadowBlur = 10;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      });
-    }
-
-    // Find constellation at position (x, y)
-    function findConstellationAt(x, y) {
-      for (const constellation of CONSTELLATIONS) {
-        for (const star of constellation.stars) {
-          const dx = star.x - x;
-          const dy = star.y - y;
-          if (dx * dx + dy * dy <= constellationHitRadius * constellationHitRadius) {
-            return constellation;
-          }
+          el.setAttribute(key, value);
         }
       }
+      children.flat().forEach(child => {
+        if (child == null) return;
+        if (typeof child === "string" || typeof child === "number") {
+          el.appendChild(document.createTextNode(child));
+        } else if (child instanceof Node) {
+          el.appendChild(child);
+        }
+      });
+      return el;
+    }
+
+    // State management and routing for SPA
+    const state = {
+      user: null, // { email, name }
+      tasks: [], // {id, title, description, dueDate, completed}
+      authError: null,
+      taskFormError: null,
+      taskFormData: {
+        title: "",
+        description: "",
+        dueDate: ""
+      },
+      isEditingTaskId: null,
+      loading: false,
+      menuExpanded: false,
+      theme: "default",
+      timeoutWarning: false,
+      inactivityTimer: null,
+      inactivityWarningTimer: null,
+      sessionTimeoutMinutes: 15,
+      sessionWarningMinutes: 13,
+    };
+
+    // Utility for generating unique IDs for tasks
+    function generateId() {
+      return "task-" + Math.random().toString(36).slice(2, 10);
+    }
+
+    // LocalStorage keys
+    const LS_USER_KEY = "accessible-task-manager-user";
+    const LS_TASKS_KEY = "accessible-task-manager-tasks";
+    const LS_THEME_KEY = "accessible-task-manager-theme";
+
+    // Save/load user and tasks to/from localStorage to minimize repeated entry
+    function saveUserToStorage(user) {
+      if (user) {
+        localStorage.setItem(LS_USER_KEY, JSON.stringify(user));
+      } else {
+        localStorage.removeItem(LS_USER_KEY);
+      }
+    }
+    function loadUserFromStorage() {
+      try {
+        const userJson = localStorage.getItem(LS_USER_KEY);
+        if (userJson) return JSON.parse(userJson);
+      } catch {}
       return null;
     }
-
-    // Show constellation info panel
-    function showConstellationInfo(constellation) {
-      if (!constellation) return;
-      infoTitle.textContent = constellation.name;
-      infoDesc.textContent = constellation.description;
-      infoPanel.hidden = false;
-      infoPanel.focus();
-      drawStars();
-      drawHighlight(constellation.id);
+    function saveTasksToStorage(tasks) {
+      localStorage.setItem(LS_TASKS_KEY, JSON.stringify(tasks));
+    }
+    function loadTasksFromStorage() {
+      try {
+        const tasksJson = localStorage.getItem(LS_TASKS_KEY);
+        if (tasksJson) return JSON.parse(tasksJson);
+      } catch {}
+      return [];
+    }
+    function saveThemeToStorage(theme) {
+      localStorage.setItem(LS_THEME_KEY, theme);
+    }
+    function loadThemeFromStorage() {
+      try {
+        const theme = localStorage.getItem(LS_THEME_KEY);
+        if (theme) return theme;
+      } catch {}
+      return "default";
     }
 
-    // Hide constellation info panel
-    function hideConstellationInfo() {
-      infoPanel.hidden = true;
-      infoTitle.textContent = 'Select a constellation';
-      infoDesc.textContent = 'Information about the selected constellation will appear here.';
-      drawStars();
-      // Return focus to last focused constellation if any
-      if (lastFocusedConstellation) {
-        lastFocusedConstellation.focus();
+    // Authentication simulation: simple email + password validation
+    // Password is "Password123!" for demo, but we don't store it anywhere
+    function authenticate(email, password) {
+      // Validate email format
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        return { success: false, message: "Please enter a valid email address." };
+      }
+      // Password rules: min 8 chars, uppercase, lowercase, number, special char
+      if (password.length < 8) {
+        return { success: false, message: "Password must be at least 8 characters long." };
+      }
+      if (!/[A-Z]/.test(password)) {
+        return { success: false, message: "Password must contain at least one uppercase letter." };
+      }
+      if (!/[a-z]/.test(password)) {
+        return { success: false, message: "Password must contain at least one lowercase letter." };
+      }
+      if (!/[0-9]/.test(password)) {
+        return { success: false, message: "Password must contain at least one number." };
+      }
+      if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) {
+        return { success: false, message: "Password must contain at least one special character." };
+      }
+      // For demo, accept any email/password that passes above validation
+      // Return user object with name extracted from email prefix capitalized
+      const name = email.split("@")[0].replace(/[^a-zA-Z0-9]/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      return { success: true, user: { email, name } };
+    }
+
+    // Accessibility: announce status messages
+    function announce(message) {
+      const liveRegion = document.getElementById("aria-live-region");
+      if (liveRegion) {
+        liveRegion.textContent = "";
+        setTimeout(() => {
+          liveRegion.textContent = message;
+        }, 100);
       }
     }
 
-    // Initialize canvas with stars and event listeners
-    function initCanvas() {
-      drawStars();
-
-      // Tooltip for constellation names on hover/focus
-      let tooltip = null;
-      function createTooltip() {
-        tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
-        tooltip.setAttribute('role', 'tooltip');
-        tooltip.style.display = 'none';
-        document.body.appendChild(tooltip);
+    // Focus management helper: focus first focusable element inside container
+    function focusFirstFocusable(container) {
+      if (!container) return;
+      const focusableSelectors = [
+        'a[href]:not([disabled])',
+        'button:not([disabled])',
+        'input:not([disabled]):not([type="hidden"])',
+        'select:not([disabled])',
+        'textarea:not([disabled])',
+        '[tabindex]:not([tabindex="-1"])',
+      ];
+      const focusable = container.querySelectorAll(focusableSelectors.join(","));
+      if (focusable.length) {
+        focusable[0].focus();
       }
-      createTooltip();
+    }
 
-      function positionTooltip(x, y) {
-        const offset = 12;
-        const tooltipRect = tooltip.getBoundingClientRect();
-        let left = x + offset;
-        let top = y + offset;
-        if (left + tooltipRect.width > window.innerWidth) {
-          left = x - tooltipRect.width - offset;
-        }
-        if (top + tooltipRect.height > window.innerHeight) {
-          top = y - tooltipRect.height - offset;
-        }
-        tooltip.style.left = `${left}px`;
-        tooltip.style.top = `${top}px`;
-      }
+    // Keyboard navigation for menu
+    function setupMenuKeyboardNavigation(nav) {
+      const menuToggle = nav.querySelector(".mobile-menu-toggle");
+      const menu = nav.querySelector("ul#primary-menu");
+      const menuItems = menu.querySelectorAll("a, button.menu-button");
 
-      // Mouse move for tooltip display
-      canvas.addEventListener('mousemove', e => {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const constellation = findConstellationAt(x, y);
-        if (constellation) {
-          tooltip.textContent = constellation.name;
-          tooltip.style.display = 'block';
-          positionTooltip(e.clientX, e.clientY);
-          canvas.style.cursor = 'pointer';
+      // Toggle menu for mobile
+      menuToggle.addEventListener("click", () => {
+        const expanded = menuToggle.getAttribute("aria-expanded") === "true";
+        menuToggle.setAttribute("aria-expanded", String(!expanded));
+        menu.setAttribute("aria-expanded", String(!expanded));
+        if (!expanded) {
+          menu.style.display = "flex";
+          focusFirstFocusable(menu);
         } else {
-          tooltip.style.display = 'none';
-          canvas.style.cursor = 'default';
-        }
-      });
-      canvas.addEventListener('mouseleave', () => {
-        tooltip.style.display = 'none';
-        canvas.style.cursor = 'default';
-      });
-
-      // Click or keyboard select constellation
-      canvas.addEventListener('click', e => {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const constellation = findConstellationAt(x, y);
-        if (constellation) {
-          lastFocusedConstellation = null;
-          showConstellationInfo(constellation);
+          menu.style.display = "none";
+          menuToggle.focus();
         }
       });
 
-      // Keyboard navigation: create invisible buttons over constellation centers for accessibility
-      const container = canvas.parentElement;
-      constellationCenters.forEach(center => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'constellation-button';
-        btn.style.position = 'absolute';
-        btn.style.left = `${center.x - 20}px`;
-        btn.style.top = `${center.y - 20}px`;
-        btn.style.width = '40px';
-        btn.style.height = '40px';
-        btn.style.background = 'transparent';
-        btn.style.border = 'none';
-        btn.style.cursor = 'pointer';
-        btn.style.padding = '0';
-        btn.style.margin = '0';
-        btn.style.borderRadius = '50%';
-        btn.setAttribute('aria-label', `Show information about the constellation ${center.name}`);
-        btn.setAttribute('aria-haspopup', 'dialog');
-        btn.setAttribute('aria-controls', 'constellation-info');
-        btn.setAttribute('tabindex', '0');
-        btn.addEventListener('click', () => {
-          lastFocusedConstellation = btn;
-          const constellation = CONSTELLATIONS.find(c => c.id === center.id);
-          showConstellationInfo(constellation);
-        });
-        btn.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            lastFocusedConstellation = btn;
-            const constellation = CONSTELLATIONS.find(c => c.id === center.id);
-            showConstellationInfo(constellation);
+      // Keyboard navigation for submenu (if any)
+      nav.querySelectorAll("li[aria-haspopup='true'] > button.menu-button").forEach(button => {
+        button.addEventListener("keydown", e => {
+          const li = button.parentElement;
+          if (!li) return;
+          const submenu = li.querySelector("ul");
+          if (!submenu) return;
+
+          const expanded = li.getAttribute("aria-expanded") === "true";
+
+          switch (e.key) {
+            case "Enter":
+            case " ":
+              e.preventDefault();
+              if (expanded) {
+                li.setAttribute("aria-expanded", "false");
+                submenu.style.display = "none";
+                button.focus();
+              } else {
+                li.setAttribute("aria-expanded", "true");
+                submenu.style.display = "block";
+                // Focus first submenu item
+                const firstSubItem = submenu.querySelector("a, button");
+                if (firstSubItem) firstSubItem.focus();
+              }
+              break;
+            case "Escape":
+              if (expanded) {
+                e.preventDefault();
+                li.setAttribute("aria-expanded", "false");
+                submenu.style.display = "none";
+                button.focus();
+              }
+              break;
+            case "ArrowDown":
+              e.preventDefault();
+              if (!expanded) {
+                li.setAttribute("aria-expanded", "true");
+                submenu.style.display = "block";
+              }
+              const next = submenu.querySelector("a, button");
+              if (next) next.focus();
+              break;
+            case "ArrowUp":
+              e.preventDefault();
+              if (expanded) {
+                const items = submenu.querySelectorAll("a, button");
+                if (items.length) items[items.length - 1].focus();
+              }
+              break;
           }
         });
-        container.appendChild(btn);
       });
 
-      // Close button event
-      closeBtn.addEventListener('click', () => {
-        hideConstellationInfo();
+      // Close submenus on focusout if focus leaves submenu
+      nav.querySelectorAll("li[aria-haspopup='true']").forEach(li => {
+        const submenu = li.querySelector("ul");
+        if (!submenu) return;
+        li.addEventListener("focusout", e => {
+          setTimeout(() => {
+            if (!li.contains(document.activeElement)) {
+              li.setAttribute("aria-expanded", "false");
+              submenu.style.display = "none";
+            }
+          }, 100);
+        });
       });
-      closeBtn.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          hideConstellationInfo();
+    }
+
+    // Application root element
+    const root = document.getElementById("root");
+
+    // Render functions for each "page" or component
+
+    // Login form with validation and context-sensitive help
+    function renderLogin() {
+      const container = createElement("section", { id: "login-section", tabindex: "-1", "aria-labelledby": "login-heading" },
+        createElement("h2", { id: "login-heading" }, "User Login"),
+        createElement("form", { id: "login-form", novalidate: true, "aria-describedby": "login-help" },
+          createElement("fieldset", {},
+            createElement("legend", {}, "Login Credentials"),
+            createElement("label", { for: "email" }, "Email address",
+              createElement("span", { className: "required-indicator", "aria-hidden": "true" }, "*")
+            ),
+            createElement("input", {
+              type: "email",
+              id: "email",
+              name: "email",
+              autocomplete: "email",
+              required: true,
+              "aria-required": "true",
+              "aria-describedby": "email-help login-error",
+              "aria-invalid": "false",
+              minlength: "5",
+              maxlength: "254",
+              placeholder: "user@example.com",
+              inputmode: "email"
+            }),
+            createElement("div", { id: "email-help", className: "help-text" }, "Enter your registered email address.")
+          ),
+          createElement("fieldset", {},
+            createElement("legend", {}, "Password"),
+            createElement("label", { for: "password" }, "Password",
+              createElement("span", { className: "required-indicator", "aria-hidden": "true" }, "*")
+            ),
+            createElement("input", {
+              type: "password",
+              id: "password",
+              name: "password",
+              autocomplete: "current-password",
+              required: true,
+              "aria-required": "true",
+              "aria-describedby": "password-help login-error",
+              "aria-invalid": "false",
+              minlength: "8",
+              placeholder: "Your password"
+            }),
+            createElement("div", { id: "password-help", className: "help-text" },
+              "Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+            )
+          ),
+          createElement("div", {
+            id: "login-error",
+            className: "error-message",
+            role: "alert",
+            "aria-live": "assertive"
+          }, state.authError || ""),
+          createElement("button", {
+            type: "submit",
+            "aria-label": "Submit login form",
+            id: "login-submit"
+          }, "Log In")
+        ),
+        createElement("section", { id: "auth-help", "aria-live": "polite", className: "help-text" },
+          createElement("h3", {}, "Need help with login?"),
+          createElement("p", {}, "If you forgot your password, please contact support at "),
+          createElement("a", { href: "mailto:support@accessibletaskmanager.example", rel: "noopener noreferrer" }, "support@accessibletaskmanager.example")
+        )
+      );
+
+      // Event listeners for form
+      const form = container.querySelector("#login-form");
+      const emailInput = container.querySelector("#email");
+      const passwordInput = container.querySelector("#password");
+      const errorDiv = container.querySelector("#login-error");
+
+      function validateField(input) {
+        let valid = true;
+        let message = "";
+        if (input.required && !input.value.trim()) {
+          valid = false;
+          message = "This field is required.";
+        } else if (input.type === "email") {
+          const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!pattern.test(input.value.trim())) {
+            valid = false;
+            message = "Please enter a valid email address.";
+          }
+        } else if (input.type === "password") {
+          const val = input.value;
+          if (val.length < 8) {
+            valid = false;
+            message = "Password must be at least 8 characters.";
+          } else if (!/[A-Z]/.test(val)) {
+            valid = false;
+            message = "Password must contain an uppercase letter.";
+          } else if (!/[a-z]/.test(val)) {
+            valid = false;
+            message = "Password must contain a lowercase letter.";
+          } else if (!/[0-9]/.test(val)) {
+            valid = false;
+            message = "Password must contain a number.";
+          } else if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(val)) {
+            valid = false;
+            message = "Password must contain a special character.";
+          }
         }
-      });
-
-      // Close info panel on Escape key when focused inside
-      infoPanel.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          hideConstellationInfo();
+        if (!valid) {
+          input.setAttribute("aria-invalid", "true");
+          input.setAttribute("aria-describedby", input.id + "-help login-error");
+        } else {
+          input.setAttribute("aria-invalid", "false");
+          input.setAttribute("aria-describedby", input.id + "-help");
         }
+        return { valid, message };
+      }
+
+      emailInput.addEventListener("input", () => {
+        validateField(emailInput);
+        errorDiv.textContent = "";
+        state.authError = null;
       });
-    }
-
-    // Initialize on DOM ready
-    window.addEventListener('load', () => {
-      initCanvas();
-    });
-  })();
-
-  // Planets gallery scrolling and keyboard accessibility
-  (function() {
-    const gallery = document.getElementById('planets-list');
-    const btnLeft = document.getElementById('scroll-left');
-    const btnRight = document.getElementById('scroll-right');
-
-    // Insert planet cards
-    function createPlanetCard(planet) {
-      const card = document.createElement('article');
-      card.className = 'planet-card';
-      card.setAttribute('tabindex', '-1');
-      card.setAttribute('role', 'group');
-      card.setAttribute('aria-label', `Planet ${planet.name}`);
-
-      const imageContainer = document.createElement('div');
-      imageContainer.className = 'planet-image-container';
-
-      const img = document.createElement('img');
-      img.src = planet.image;
-      img.alt = planet.alt;
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      img.width = 280;
-      img.height = 158; // approximate 16:9 ratio
-      imageContainer.appendChild(img);
-
-      const info = document.createElement('div');
-      info.className = 'planet-info';
-
-      const title = document.createElement('h3');
-      title.textContent = planet.name;
-      info.appendChild(title);
-
-      const fact = document.createElement('p');
-      fact.textContent = planet.funFact;
-      info.appendChild(fact);
-
-      card.appendChild(imageContainer);
-      card.appendChild(info);
-
-      return card;
-    }
-
-    function populateGallery() {
-      PLANETS.forEach(planet => {
-        const card = createPlanetCard(planet);
-        gallery.appendChild(card);
+      passwordInput.addEventListener("input", () => {
+        validateField(passwordInput);
+        errorDiv.textContent = "";
+        state.authError = null;
       });
+
+      form.addEventListener("submit", e => {
+        e.preventDefault();
+        // Validate inputs
+        const emailValid = validateField(emailInput);
+        const passwordValid = validateField(passwordInput);
+        if (!emailValid.valid) {
+          errorDiv.textContent = emailValid.message;
+          announce(emailValid.message);
+          emailInput.focus();
+          return;
+        }
+        if (!passwordValid.valid) {
+          errorDiv.textContent = passwordValid.message;
+          announce(passwordValid.message);
+          passwordInput.focus();
+          return;
+        }
+        // Authenticate
+        state.loading = true;
+        renderApp();
+        setTimeout(() => {
+          const result = authenticate(emailInput.value.trim(), passwordInput.value);
+          if (result.success) {
+            state.user = result.user;
+            state.authError = null;
+            state.tasks = loadTasksFromStorage();
+            saveUserToStorage(state.user);
+            state.loading = false;
+            // Reset login form data
+            emailInput.value = "";
+            passwordInput.value = "";
+            // Show dashboard link, hide login link
+            document.getElementById("nav-login").hidden = true;
+            document.getElementById("nav-dashboard").hidden = false;
+            navigateTo("dashboard");
+            announce("Login successful. Welcome " + state.user.name + ".");
+            resetInactivityTimer();
+          } else {
+            state.authError = result.message;
+            state.loading = false;
+            announce("Login failed: " + result.message);
+            renderApp();
+            passwordInput.focus();
+          }
+        }, 700);
+      });
+
+      return container;
     }
 
-    // Scroll gallery by one card width
-    function scrollGallery(direction) {
-      const cardWidth = gallery.querySelector('.planet-card').offsetWidth + 16; // card width + gap
-      if (direction === 'left') {
-        gallery.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    // Task form for adding/editing tasks with validation and help text
+    function renderTaskForm() {
+      const isEditing = state.isEditingTaskId !== null;
+      const taskData = state.taskFormData;
+      const errorMessage = state.taskFormError;
+
+      const container = createElement("section", { "aria-labelledby": "taskform-heading" },
+        createElement("h3", { id: "taskform-heading" }, isEditing ? "Edit Task" : "Add New Task"),
+        createElement("form", { id: "task-form", novalidate: true, "aria-describedby": "taskform-help" },
+          createElement("fieldset", {},
+            createElement("legend", {}, "Task Details"),
+            createElement("label", { for: "task-title" }, "Title",
+              createElement("span", { className: "required-indicator", "aria-hidden": "true" }, "*")
+            ),
+            createElement("input", {
+              type: "text",
+              id: "task-title",
+              name: "title",
+              required: true,
+              "aria-required": "true",
+              "aria-describedby": "title-help taskform-error",
+              "aria-invalid": "false",
+              maxlength: "100",
+              autocomplete: "off",
+              value: taskData.title,
+              placeholder: "Task title"
+            }),
+            createElement("div", { id: "title-help", className: "help-text" }, "Enter a brief, descriptive title for the task.")
+          ),
+          createElement("fieldset", {},
+            createElement("legend", {}, "Description"),
+            createElement("label", { for: "task-desc" }, "Description"),
+            createElement("textarea", {
+              id: "task-desc",
+              name: "description",
+              rows: "3",
+              maxlength: "500",
+              autocomplete: "off",
+              placeholder: "Additional details about the task (optional)"
+            }, taskData.description)
+          ),
+          createElement("fieldset", {},
+            createElement("legend", {}, "Due Date"),
+            createElement("label", { for: "task-due" }, "Due Date",
+              createElement("span", { className: "required-indicator", "aria-hidden": "true" }, "*")
+            ),
+            createElement("input", {
+              type: "date",
+              id: "task-due",
+              name: "dueDate",
+              required: true,
+              "aria-required": "true",
+              "aria-describedby": "due-help taskform-error",
+              "aria-invalid": "false",
+              value: taskData.dueDate
+            }),
+            createElement("div", { id: "due-help", className: "help-text" }, "Select the date by which the task should be completed.")
+          ),
+          createElement("div", {
+            id: "taskform-error",
+            className: "error-message",
+            role: "alert",
+            "aria-live": "assertive"
+          }, errorMessage || ""),
+          createElement("button", {
+            type: "submit",
+            className: "task-action",
+            "aria-label": isEditing ? "Save changes to task" : "Add new task"
+          }, isEditing ? "Save Task" : "Add Task"),
+          createElement("button", {
+            type: "button",
+            className: "task-action",
+            id: "cancel-task-btn",
+            "aria-label": "Cancel task form"
+          }, "Cancel")
+        ),
+        createElement("p", { id: "taskform-help", className: "help-text" }, "Fields marked with * are required.")
+      );
+
+      // Event handlers
+      const form = container.querySelector("#task-form");
+      const titleInput = container.querySelector("#task-title");
+      const descInput = container.querySelector("#task-desc");
+      const dueInput = container.querySelector("#task-due");
+      const errorDiv = container.querySelector("#taskform-error");
+      const cancelBtn = container.querySelector("#cancel-task-btn");
+
+      function validateTaskField(input) {
+        let valid = true;
+        let message = "";
+        if (input.required && !input.value.trim()) {
+          valid = false;
+          message = "This field is required.";
+        } else if (input.id === "task-due") {
+          // Due date must be today or later
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const dueDate = new Date(input.value);
+          if (dueDate.toString() === "Invalid Date") {
+            valid = false;
+            message = "Please enter a valid date.";
+          } else if (dueDate < today) {
+            valid = false;
+            message = "Due date cannot be in the past.";
+          }
+        }
+        if (!valid) {
+          input.setAttribute("aria-invalid", "true");
+          input.setAttribute("aria-describedby", input.id + "-help taskform-error");
+        } else {
+          input.setAttribute("aria-invalid", "false");
+          input.setAttribute("aria-describedby", input.id + "-help");
+        }
+        return { valid, message };
+      }
+
+      titleInput.addEventListener("input", () => {
+        validateTaskField(titleInput);
+        errorDiv.textContent = "";
+        state.taskFormError = null;
+      });
+      dueInput.addEventListener("input", () => {
+        validateTaskField(dueInput);
+        errorDiv.textContent = "";
+        state.taskFormError = null;
+      });
+
+      form.addEventListener("submit", e => {
+        e.preventDefault();
+        const titleValid = validateTaskField(titleInput);
+        const dueValid = validateTaskField(dueInput);
+        if (!titleValid.valid) {
+          errorDiv.textContent = titleValid.message;
+          announce(titleValid.message);
+          titleInput.focus();
+          return;
+        }
+        if (!dueValid.valid) {
+          errorDiv.textContent = dueValid.message;
+          announce(dueValid.message);
+          dueInput.focus();
+          return;
+        }
+        // Save or update task
+        const newTask = {
+          id: isEditing ? state.isEditingTaskId : generateId(),
+          title: titleInput.value.trim(),
+          description: descInput.value.trim(),
+          dueDate: dueInput.value,
+          completed: false
+        };
+        if (isEditing) {
+          const idx = state.tasks.findIndex(t => t.id === state.isEditingTaskId);
+          if (idx !== -1) {
+            newTask.completed = state.tasks[idx].completed;
+            state.tasks[idx] = newTask;
+          }
+          state.isEditingTaskId = null;
+        } else {
+          state.tasks.push(newTask);
+        }
+        saveTasksToStorage(state.tasks);
+        state.taskFormData = { title: "", description: "", dueDate: "" };
+        state.taskFormError = null;
+        announce(isEditing ? "Task updated successfully." : "Task added successfully.");
+        renderApp();
+        focusFirstFocusable(document.getElementById("task-list"));
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        state.isEditingTaskId = null;
+        state.taskFormData = { title: "", description: "", dueDate: "" };
+        state.taskFormError = null;
+        renderApp();
+        focusFirstFocusable(document.getElementById("task-list"));
+      });
+
+      return container;
+    }
+
+    // Task list table with actions and keyboard accessible controls
+    function renderTaskList() {
+      if (state.tasks.length === 0) {
+        return createElement("p", { id: "no-tasks-message" }, "You have no tasks. Use the form above to add one.");
+      }
+      const table = createElement("table", { role: "grid", "aria-label": "User tasks" },
+        createElement("thead", {},
+          createElement("tr", {},
+            createElement("th", { scope: "col" }, "Title"),
+            createElement("th", { scope: "col" }, "Description"),
+            createElement("th", { scope: "col" }, "Due Date"),
+            createElement("th", { scope: "col" }, "Status"),
+            createElement("th", { scope: "col" }, "Actions")
+          )
+        ),
+        createElement("tbody", {},
+          state.tasks.map(task => {
+            const dueDateFormatted = new Date(task.dueDate).toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric"
+            });
+            const row = createElement("tr", { tabindex: "0", role: "row" },
+              createElement("td", { role: "gridcell" },
+                createElement("span", { className: task.completed ? "task-completed" : undefined }, task.title)
+              ),
+              createElement("td", { role: "gridcell" },
+                task.description ? task.description : createElement("em", {}, "No description")
+              ),
+              createElement("td", { role: "gridcell" }, dueDateFormatted),
+              createElement("td", { role: "gridcell" },
+                task.completed
+                  ? createElement("strong", { style: "color:#388e3c;" }, "Completed ✓")
+                  : createElement("span", { style: "color:#d32f2f;" }, "Pending")
+              ),
+              createElement("td", { role: "gridcell" },
+                createElement("div", { className: "task-actions" },
+                  createElement("button", {
+                    type: "button",
+                    className: "task-action",
+                    "aria-label": task.completed ? `Mark task "${task.title}" as pending` : `Mark task "${task.title}" as completed`,
+                    onClick: () => toggleTaskCompleted(task.id)
+                  }, task.completed ? "Mark Pending" : "Mark Done"),
+                  createElement("button", {
+                    type: "button",
+                    className: "task-action",
+                    "aria-label": `Edit task "${task.title}"`,
+                    onClick: () => editTask(task.id)
+                  }, "Edit"),
+                  createElement("button", {
+                    type: "button",
+                    className: "task-action",
+                    "aria-label": `Delete task "${task.title}"`,
+                    onClick: () => confirmDeleteTask(task.id)
+                  }, "Delete")
+                )
+              )
+            );
+            return row;
+          })
+        )
+      );
+      return table;
+    }
+
+    // Confirm deletion modal
+    function renderDeleteModal(task) {
+      const overlay = createElement("div", {
+        className: "modal-overlay active",
+        role: "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "delete-modal-title",
+        "aria-describedby": "delete-modal-desc",
+        tabIndex: "-1"
+      },
+        createElement("div", { className: "modal" },
+          createElement("h3", { id: "delete-modal-title" }, "Confirm Task Deletion"),
+          createElement("p", { id: "delete-modal-desc" }, `Are you sure you want to delete the task "${task.title}"? This action cannot be undone.`),
+          createElement("div", { style: "margin-top:1rem; display:flex; gap:1rem; justify-content:flex-end;" },
+            createElement("button", {
+              type: "button",
+              id: "confirm-delete-btn",
+              className: "task-action",
+              "aria-label": "Confirm task deletion"
+            }, "Delete"),
+            createElement("button", {
+              type: "button",
+              id: "cancel-delete-btn",
+              className: "task-action",
+              "aria-label": "Cancel task deletion"
+            }, "Cancel")
+          )
+        )
+      );
+      // Focus trap and keyboard handling
+      function trapFocus(e) {
+        const focusableElements = overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        const firstEl = focusableElements[0];
+        const lastEl = focusableElements[focusableElements.length - 1];
+        if (e.key === "Tab") {
+          if (e.shiftKey) {
+            if (document.activeElement === firstEl) {
+              e.preventDefault();
+              lastEl.focus();
+            }
+          } else {
+            if (document.activeElement === lastEl) {
+              e.preventDefault();
+              firstEl.focus();
+            }
+          }
+        } else if (e.key === "Escape") {
+          e.preventDefault();
+          closeModal();
+        }
+      }
+      function closeModal() {
+        overlay.removeEventListener("keydown", trapFocus);
+        overlay.remove();
+        renderApp();
+        focusFirstFocusable(document.getElementById("task-list"));
+      }
+      overlay.addEventListener("keydown", trapFocus);
+      overlay.querySelector("#cancel-delete-btn").addEventListener("click", closeModal);
+      overlay.querySelector("#confirm-delete-btn").addEventListener("click", () => {
+        deleteTask(task.id);
+        closeModal();
+        announce(`Task "${task.title}" deleted.`);
+      });
+      setTimeout(() => {
+        overlay.querySelector("#cancel-delete-btn").focus();
+      }, 100);
+      return overlay;
+    }
+
+    // Help section with multiple ways to find content
+    function renderHelp() {
+      return createElement("section", { id: "help-section", tabindex: "-1", "aria-labelledby": "help-heading" },
+        createElement("h2", { id: "help-heading" }, "Help & Support"),
+        createElement("article", {},
+          createElement("h3", {}, "Navigation"),
+          createElement("p", {}, "Use the main menu to navigate between login, dashboard, and help pages. On mobile, use the hamburger menu button."),
+          createElement("p", {}, "Keyboard users can use Tab, Shift+Tab, Enter, Space, and Arrow keys to navigate menus and controls.")
+        ),
+        createElement("article", {},
+          createElement("h3", {}, "Managing Tasks"),
+          createElement("p", {}, "Add new tasks with a title and due date. You can also provide a description."),
+          createElement("p", {}, "Edit or delete tasks using the buttons in the task list."),
+          createElement("p", {}, "Mark tasks as completed or pending with the toggle button."),
+          createElement("p", {}, "All tasks are saved locally and will persist across sessions.")
+        ),
+        createElement("article", {},
+          createElement("h3", {}, "Accessibility Features"),
+          createElement("ul", {},
+            createElement("li", {}, "High contrast color themes and enhanced focus indicators."),
+            createElement("li", {}, "Keyboard accessible navigation and controls."),
+            createElement("li", {}, "Context-sensitive help and clear error messages."),
+            createElement("li", {}, "Skip link to jump directly to main content."),
+            createElement("li", {}, "Support for reduced motion preferences."),
+            createElement("li", {}, "ARIA roles, labels, and live regions for dynamic content.")
+          )
+        ),
+        createElement("article", {},
+          createElement("h3", {}, "Contact"),
+          createElement("p", {}, "For further assistance, email "),
+          createElement("a", { href: "mailto:support@accessibletaskmanager.example", rel: "noopener noreferrer" }, "support@accessibletaskmanager.example")
+        )
+      );
+    }
+
+    // Welcome section for dashboard
+    function renderWelcome() {
+      return createElement("section", { id: "welcome-section", "aria-labelledby": "welcome-heading" },
+        createElement("h2", { id: "welcome-heading" }, `Welcome, ${state.user.name}`),
+        createElement("p", {}, "Manage your tasks efficiently and accessibly."),
+        createElement("button", {
+          type: "button",
+          id: "logout-btn",
+          "aria-label": "Log out from the application"
+        }, "Log Out")
+      );
+    }
+
+    // Dashboard main content
+    function renderDashboard() {
+      const container = createElement("section", { id: "dashboard-section", tabindex: "-1", "aria-labelledby": "dashboard-heading" },
+        createElement("h2", { id: "dashboard-heading" }, "Your Dashboard"),
+        renderWelcome(),
+        createElement("section", { id: "task-manager", "aria-labelledby": "task-manager-heading" },
+          createElement("h2", { id: "task-manager-heading" }, "Task Manager"),
+          renderTaskForm(),
+          createElement("div", { id: "task-list", tabIndex: "-1" }, renderTaskList())
+        ),
+        createElement("section", { id: "color-theme-controls", "aria-label": "Color theme selection" },
+          createElement("label", { for: "theme-select" }, "Select color theme:"),
+          createElement("select", { id: "theme-select", name: "theme-select", "aria-describedby": "theme-help" },
+            createElement("option", { value: "default", selected: state.theme === "default" }, "Blue Gradient"),
+            createElement("option", { value: "sunset", selected: state.theme === "sunset" }, "Sunset"),
+            createElement("option", { value: "forest", selected: state.theme === "forest" }, "Forest Green")
+          ),
+          createElement("p", { id: "theme-help", className: "help-text" }, "Choose a color theme that suits your preference. Themes meet AAA contrast standards.")
+        )
+      );
+
+      // Event listeners
+      container.querySelector("#logout-btn").addEventListener("click", () => {
+        logout();
+      });
+
+      container.querySelector("#theme-select").addEventListener("change", e => {
+        setTheme(e.target.value);
+      });
+
+      return container;
+    }
+
+    // Main app renderer
+    function renderApp() {
+      root.innerHTML = "";
+      // Clear any modal overlays
+      const existingModal = document.querySelector(".modal-overlay");
+      if (existingModal) existingModal.remove();
+
+      // Navigation link states
+      const navLogin = document.getElementById("nav-login");
+      const navDashboard = document.getElementById("nav-dashboard");
+      const navHelp = document.getElementById("nav-help");
+
+      // Clear aria-current
+      [navLogin, navDashboard, navHelp].forEach(link => {
+        link.setAttribute("aria-current", "false");
+      });
+
+      // Determine page to show
+      let page = currentPage;
+
+      if (!state.user) {
+        page = "login";
+        navLogin.hidden = false;
+        navDashboard.hidden = true;
+        navLogin.setAttribute("aria-current", "page");
       } else {
-        gallery.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        navLogin.hidden = true;
+        navDashboard.hidden = false;
+        if (page === "login") page = "dashboard";
+        if (page === "dashboard") navDashboard.setAttribute("aria-current", "page");
+        else if (page === "help") navHelp.setAttribute("aria-current", "page");
+      }
+
+      if (state.loading) {
+        const loadingDiv = createElement("div", { role: "status", "aria-live": "polite", style: "padding:2rem; text-align:center;" },
+          createElement("p", {}, "Loading, please wait...")
+        );
+        root.appendChild(loadingDiv);
+        return;
+      }
+
+      if (page === "login") {
+        root.appendChild(renderLogin());
+      } else if (page === "dashboard") {
+        root.appendChild(renderDashboard());
+      } else if (page === "help") {
+        root.appendChild(renderHelp());
+      }
+
+      // If delete modal is active, render it on top
+      if (state.deleteTaskId) {
+        const task = state.tasks.find(t => t.id === state.deleteTaskId);
+        if (task) {
+          const modal = renderDeleteModal(task);
+          document.body.appendChild(modal);
+          modal.focus();
+        }
       }
     }
 
-    // Update buttons disabled state based on scroll position
-    function updateButtons() {
-      const maxScrollLeft = gallery.scrollWidth - gallery.clientWidth;
-      btnLeft.disabled = gallery.scrollLeft <= 0;
-      btnRight.disabled = gallery.scrollLeft >= maxScrollLeft - 1;
+    // Navigation and routing
+    let currentPage = "login";
+
+    function navigateTo(page) {
+      if (page === currentPage) return;
+      currentPage = page;
+      renderApp();
+      // Focus main content after navigation
+      setTimeout(() => {
+        const mainContent = document.getElementById("main-content");
+        if (mainContent) mainContent.focus();
+      }, 100);
     }
 
-    // Keyboard navigation for gallery container: left/right arrows scroll gallery
-    function galleryKeydownHandler(e) {
-      if (e.key === 'ArrowRight') {
+    // Task operations
+    function toggleTaskCompleted(id) {
+      const idx = state.tasks.findIndex(t => t.id === id);
+      if (idx !== -1) {
+        state.tasks[idx].completed = !state.tasks[idx].completed;
+        saveTasksToStorage(state.tasks);
+        announce(`Task "${state.tasks[idx].title}" marked as ${state.tasks[idx].completed ? "completed" : "pending"}.`);
+        renderApp();
+      }
+    }
+    function editTask(id) {
+      const task = state.tasks.find(t => t.id === id);
+      if (task) {
+        state.isEditingTaskId = id;
+        state.taskFormData = {
+          title: task.title,
+          description: task.description,
+          dueDate: task.dueDate
+        };
+        renderApp();
+        setTimeout(() => {
+          const titleInput = document.getElementById("task-title");
+          if (titleInput) titleInput.focus();
+        }, 100);
+      }
+    }
+    function confirmDeleteTask(id) {
+      state.deleteTaskId = id;
+      renderApp();
+    }
+    function deleteTask(id) {
+      state.tasks = state.tasks.filter(t => t.id !== id);
+      saveTasksToStorage(state.tasks);
+      state.deleteTaskId = null;
+      renderApp();
+    }
+
+    // Logout
+    function logout() {
+      state.user = null;
+      state.tasks = [];
+      state.isEditingTaskId = null;
+      state.taskFormData = { title: "", description: "", dueDate: "" };
+      state.authError = null;
+      state.taskFormError = null;
+      saveUserToStorage(null);
+      renderApp();
+      navigateTo("login");
+      announce("You have been logged out.");
+      clearInactivityTimers();
+    }
+
+    // Theme management
+    function setTheme(theme) {
+      if (!["default", "sunset", "forest"].includes(theme)) theme = "default";
+      document.body.className = "theme-" + theme;
+      state.theme = theme;
+      saveThemeToStorage(theme);
+    }
+
+    // Accessibility live region for announcements
+    function createLiveRegion() {
+      let liveRegion = document.getElementById("aria-live-region");
+      if (!liveRegion) {
+        liveRegion = createElement("div", {
+          id: "aria-live-region",
+          "aria-live": "polite",
+          "aria-atomic": "true",
+          style: "position:absolute; width:1px; height:1px; margin:-1px; border:0; padding:0; overflow:hidden; clip:rect(0 0 0 0); clip-path: inset(50%);"
+        });
+        document.body.appendChild(liveRegion);
+      }
+    }
+
+    // Inactivity timeout warning & session management
+    function resetInactivityTimer() {
+      clearInactivityTimers();
+      if (!state.user) return;
+      state.timeoutWarning = false;
+      state.inactivityTimer = setTimeout(() => {
+        state.timeoutWarning = true;
+        announce("You have been inactive for a while. Your session will expire in 2 minutes. Please interact with the app to continue.");
+        renderTimeoutWarning();
+        state.inactivityWarningTimer = setTimeout(() => {
+          logout();
+          alert("Your session expired due to inactivity. You have been logged out.");
+        }, 2 * 60 * 1000);
+      }, state.sessionWarningMinutes * 60 * 1000);
+    }
+    function clearInactivityTimers() {
+      if (state.inactivityTimer) {
+        clearTimeout(state.inactivityTimer);
+        state.inactivityTimer = null;
+      }
+      if (state.inactivityWarningTimer) {
+        clearTimeout(state.inactivityWarningTimer);
+        state.inactivityWarningTimer = null;
+      }
+      state.timeoutWarning = false;
+      removeTimeoutWarning();
+    }
+    function renderTimeoutWarning() {
+      if (state.timeoutWarning) {
+        if (!document.getElementById("timeout-warning")) {
+          const warning = createElement("div", {
+            id: "timeout-warning",
+            role: "alertdialog",
+            "aria-live": "assertive",
+            "aria-modal": "true",
+            tabIndex: "-1",
+            style: "position:fixed; bottom:1rem; right:1rem; background:#ffbf47; color:#0d47a1; padding:1rem 1.5rem; border-radius:8px; box-shadow: 0 4px 12px rgb(0 0 0 / 0.3); max-width:320px; z-index:1100;"
+          },
+            createElement("p", {}, "Your session will expire in 2 minutes due to inactivity."),
+            createElement("button", {
+              type: "button",
+              id: "extend-session-btn",
+              "aria-label": "Extend session"
+            }, "Continue Session")
+          );
+          document.body.appendChild(warning);
+          warning.querySelector("#extend-session-btn").addEventListener("click", () => {
+            resetInactivityTimer();
+            announce("Session extended.");
+            removeTimeoutWarning();
+          });
+          warning.focus();
+        }
+      }
+    }
+    function removeTimeoutWarning() {
+      const warning = document.getElementById("timeout-warning");
+      if (warning) {
+        warning.remove();
+      }
+    }
+
+    // Event listeners to reset inactivity timer on user interaction
+    function setupInactivityListeners() {
+      ["click", "keydown", "mousemove", "touchstart", "scroll"].forEach(evt => {
+        document.addEventListener(evt, () => {
+          resetInactivityTimer();
+        }, { passive: true });
+      });
+    }
+
+    // Navigation link handlers
+    function setupNavigationHandlers() {
+      document.getElementById("nav-login").addEventListener("click", e => {
         e.preventDefault();
-        scrollGallery('right');
-      } else if (e.key === 'ArrowLeft') {
+        navigateTo("login");
+      });
+      document.getElementById("nav-dashboard").addEventListener("click", e => {
         e.preventDefault();
-        scrollGallery('left');
-      }
+        if (state.user) navigateTo("dashboard");
+      });
+      document.getElementById("nav-help").addEventListener("click", e => {
+        e.preventDefault();
+        navigateTo("help");
+      });
     }
 
-    // Focus management: when a card receives focus, scroll it into view
-    function cardFocusHandler(e) {
-      const card = e.target;
-      if (card.classList.contains('planet-card')) {
-        card.scrollIntoView({ behavior: 'smooth', inline: 'center' });
-      }
+    // Initialize menu keyboard navigation and mobile toggle
+    function initMenu() {
+      const nav = document.querySelector('nav[aria-label="Primary"]');
+      setupMenuKeyboardNavigation(nav);
     }
 
-    // Initialize gallery
-    window.addEventListener('load', () => {
-      populateGallery();
-      updateButtons();
+    // Initialization
+    function init() {
+      createLiveRegion();
+      state.user = loadUserFromStorage();
+      state.tasks = loadTasksFromStorage();
+      state.theme = loadThemeFromStorage();
+      setTheme(state.theme);
+      setupNavigationHandlers();
+      initMenu();
+      setupInactivityListeners();
+      if (state.user) {
+        currentPage = "dashboard";
+        resetInactivityTimer();
+      } else {
+        currentPage = "login";
+      }
+      renderApp();
+    }
 
-      btnLeft.addEventListener('click', () => {
-        scrollGallery('left');
-      });
-      btnRight.addEventListener('click', () => {
-        scrollGallery('right');
-      });
-      gallery.addEventListener('scroll', updateButtons);
-      gallery.addEventListener('keydown', galleryKeydownHandler);
+    // Start app
+    init();
 
-      // Delegate focus event for cards
-      gallery.addEventListener('focusin', cardFocusHandler);
-
-      // Accessibility: allow tabbing into cards and keyboard users can read content
-      const cards = gallery.querySelectorAll('.planet-card');
-      cards.forEach(card => {
-        card.setAttribute('tabindex', '0');
-      });
-    });
   })();
-
 </script>
 </body>
 </html>
