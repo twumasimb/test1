@@ -3,24 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessible User Profile | Interactive Profile Page</title>
+    <title>Interactive Travel Map | Share Your Adventures</title>
     <style>
-        /* Base Styles */
+        /* Reset and Base Styles */
         :root {
-            --primary-color: #3a86ff;
-            --primary-dark: #2667cc;
-            --secondary-color: #8338ec;
-            --accent-color: #ff006e;
-            --text-color: #1a1a1a;
-            --text-light: #f8f9fa;
-            --bg-color: #ffffff;
-            --gray-light: #e9ecef;
-            --gray-medium: #adb5bd;
-            --gray-dark: #495057;
-            --success-color: #38b000;
-            --error-color: #e63946;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --text-color: #333;
+            --text-light: #fff;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
             --border-radius: 8px;
-            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
         }
 
@@ -34,7 +32,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: var(--bg-color);
+            background-color: var(--light-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -46,10 +44,10 @@
             top: -40px;
             left: 0;
             background: var(--primary-color);
-            color: white;
+            color: var(--text-light);
             padding: 8px;
             z-index: 100;
-            transition: top 0.3s;
+            transition: var(--transition);
         }
 
         .skip-link:focus {
@@ -62,24 +60,29 @@
             color: var(--text-light);
             padding: 1rem 2rem;
             box-shadow: var(--box-shadow);
+            position: relative;
+            z-index: 10;
         }
 
         .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
+            color: var(--text-light);
+            text-decoration: none;
         }
 
         /* Navigation */
         nav {
             display: flex;
+            align-items: center;
         }
 
         .nav-list {
@@ -95,7 +98,7 @@
             color: var(--text-light);
             text-decoration: none;
             font-weight: 500;
-            padding: 0.5rem;
+            padding: 0.5rem 1rem;
             border-radius: var(--border-radius);
             transition: var(--transition);
         }
@@ -103,316 +106,318 @@
         .nav-link:hover,
         .nav-link:focus {
             background-color: rgba(255, 255, 255, 0.2);
-            outline: 2px solid white;
+            outline: 2px solid var(--text-light);
+        }
+
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
         }
 
         /* Main Content */
         main {
             flex: 1;
             max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
             color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 2.2rem;
         }
 
         h2 {
-            font-size: 1.8rem;
-            margin: 1.5rem 0 1rem;
             color: var(--secondary-color);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.8rem;
         }
 
         h3 {
-            font-size: 1.4rem;
+            color: var(--dark-color);
             margin: 1rem 0;
-            color: var(--primary-dark);
+            font-size: 1.4rem;
         }
 
-        p {
+        /* Map Container */
+        .map-container {
+            position: relative;
+            height: 500px;
+            width: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            background-color: #e8f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #travelMap {
+            height: 100%;
+            width: 100%;
+        }
+
+        .map-placeholder {
+            text-align: center;
+            padding: 2rem;
+            color: var(--dark-color);
+        }
+
+        .map-placeholder p {
             margin-bottom: 1rem;
         }
 
-        /* Profile Section */
-        .profile-container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        @media (max-width: 768px) {
-            .profile-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Profile Card */
-        .profile-card {
-            background-color: var(--gray-light);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--box-shadow);
-            text-align: center;
-        }
-
-        .profile-avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--primary-color);
-            margin: 0 auto 1rem;
-        }
-
-        .profile-name {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-title {
-            color: var(--gray-dark);
-            margin-bottom: 1.5rem;
-        }
-
-        /* Follow Button */
-        .follow-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: var(--transition);
-            margin-bottom: 1.5rem;
-            min-width: 150px;
-            min-height: 44px;
-        }
-
-        .follow-btn:hover,
-        .follow-btn:focus {
-            background-color: var(--primary-dark);
-            outline: 3px solid var(--accent-color);
-        }
-
-        .follow-btn:active {
-            transform: scale(0.98);
-        }
-
-        .follow-btn.following {
-            background-color: var(--success-color);
-        }
-
-        /* Social Links */
-        .social-links {
+        /* Map Controls */
+        .map-controls {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
             display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .map-control-button {
+            background-color: var(--light-color);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
             justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .map-control-button:hover,
+        .map-control-button:focus {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            outline: 2px solid var(--primary-color);
+        }
+
+        /* Pin Form */
+        .pin-form-container {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--light-color);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .pin-form-container.visible {
+            display: block;
+        }
+
+        .pin-form h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
             gap: 1rem;
             margin-top: 1.5rem;
         }
 
-        .social-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            background-color: var(--bg-color);
-            border-radius: 50%;
-            color: var(--primary-color);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .social-link:hover,
-        .social-link:focus {
-            background-color: var(--primary-color);
-            color: white;
-            outline: 2px solid var(--accent-color);
-        }
-
-        .social-icon {
-            font-size: 1.5rem;
-        }
-
-        /* Profile Bio */
-        .profile-bio {
-            background-color: var(--gray-light);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--box-shadow);
-        }
-
-        .bio-text {
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
-        }
-
-        /* Avatar Gallery */
-        .avatar-gallery {
-            margin: 3rem 0;
-        }
-
-        .gallery-title {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .gallery-nav {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .gallery-btn {
-            background-color: var(--primary-color);
-            color: white;
+        button {
+            padding: 0.75rem 1.5rem;
             border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
+            border-radius: var(--border-radius);
+            font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            min-width: 44px;
+            min-height: 44px;
         }
 
-        .gallery-btn:hover,
-        .gallery-btn:focus {
-            background-color: var(--primary-dark);
-            outline: 2px solid var(--accent-color);
+        .primary-button {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
         }
 
-        .gallery-btn:disabled {
-            background-color: var(--gray-medium);
-            cursor: not-allowed;
+        .primary-button:hover,
+        .primary-button:focus {
+            background-color: #2980b9;
+            outline: 2px solid var(--primary-color);
         }
 
-        .gallery-grid {
+        .secondary-button {
+            background-color: var(--light-color);
+            border: 1px solid var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .secondary-button:hover,
+        .secondary-button:focus {
+            background-color: #f0f8ff;
+            outline: 2px solid var(--primary-color);
+        }
+
+        .danger-button {
+            background-color: var(--error-color);
+            color: var(--text-light);
+        }
+
+        .danger-button:hover,
+        .danger-button:focus {
+            background-color: #c0392b;
+            outline: 2px solid var(--primary-color);
+        }
+
+        /* Pins List */
+        .pins-section {
+            margin-top: 2rem;
+        }
+
+        .pins-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
         }
 
-        .gallery-item {
-            position: relative;
+        .pin-card {
+            background-color: var(--light-color);
             border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
             overflow: hidden;
-            aspect-ratio: 1;
-        }
-
-        .gallery-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
             transition: var(--transition);
         }
 
-        .gallery-item:hover .gallery-img,
-        .gallery-item:focus .gallery-img {
-            transform: scale(1.05);
+        .pin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .modal.open {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background-color: var(--bg-color);
-            border-radius: var(--border-radius);
-            max-width: 800px;
-            width: 90%;
-            max-height: 90vh;
-            overflow: auto;
+        .pin-card-header {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            padding: 1rem;
             position: relative;
-            padding: 2rem;
         }
 
-        .modal-img {
-            width: 100%;
-            max-height: 70vh;
-            object-fit: contain;
-            border-radius: var(--border-radius);
+        .pin-card-title {
+            margin: 0;
+            font-size: 1.2rem;
         }
 
-        .modal-close {
+        .pin-card-location {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 0.25rem;
+        }
+
+        .pin-card-date {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background-color: var(--error-color);
-            color: white;
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .modal-close:hover,
-        .modal-close:focus {
-            background-color: #c1121f;
-            outline: 2px solid var(--accent-color);
-        }
-
-        /* Stats Section */
-        .stats-section {
-            margin: 3rem 0;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .stat-card {
-            background-color: var(--gray-light);
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem 0.5rem;
             border-radius: var(--border-radius);
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: var(--box-shadow);
+            font-size: 0.8rem;
         }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
+        .pin-card-body {
+            padding: 1rem;
+        }
+
+        .pin-card-description {
+            margin-bottom: 1rem;
+        }
+
+        .pin-card-category {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
             margin-bottom: 0.5rem;
         }
 
-        .stat-label {
-            color: var(--gray-dark);
-            font-size: 1.1rem;
+        .pin-card-actions {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 1rem 1rem;
+            gap: 0.5rem;
+        }
+
+        .pin-card-button {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* No Pins Message */
+        .no-pins-message {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            grid-column: 1 / -1;
         }
 
         /* Footer */
@@ -421,7 +426,7 @@
             color: var(--text-light);
             padding: 2rem;
             text-align: center;
-            margin-top: 3rem;
+            margin-top: 2rem;
         }
 
         .footer-content {
@@ -432,14 +437,13 @@
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 2rem;
             margin: 1rem 0;
         }
 
         .footer-link {
             color: var(--text-light);
             text-decoration: none;
-            transition: var(--transition);
         }
 
         .footer-link:hover,
@@ -451,14 +455,116 @@
         .copyright {
             margin-top: 1rem;
             font-size: 0.9rem;
+            opacity: 0.8;
         }
 
-        /* Focus Styles */
-        a:focus,
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .modal-close:hover,
+        .modal-close:focus {
+            color: var(--accent-color);
+            outline: 2px solid var(--accent-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            nav {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .nav-list {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-list.visible {
+                display: flex;
+            }
+
+            .nav-item {
+                margin: 0;
+            }
+
+            .nav-link {
+                display: block;
+                padding: 0.75rem 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .mobile-menu-button {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+
+            .pins-list {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Accessibility Focus Styles */
+        *:focus {
+            outline: 3px solid var(--accent-color);
+            outline-offset: 2px;
+        }
+
         button:focus,
         input:focus,
         select:focus,
-        textarea:focus {
+        textarea:focus,
+        a:focus {
             outline: 3px solid var(--accent-color);
             outline-offset: 2px;
         }
@@ -472,34 +578,6 @@
                 scroll-behavior: auto !important;
             }
         }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-            }
-
-            nav {
-                margin-top: 1rem;
-            }
-
-            .nav-list {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .nav-item {
-                margin: 0.5rem 0;
-            }
-
-            .profile-container {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            }
-        }
     </style>
 </head>
 <body>
@@ -509,13 +587,17 @@
     <!-- Header -->
     <header>
         <div class="header-container">
-            <div class="logo">Accessible Profiles</div>
-            <nav aria-label="Main navigation">
-                <ul class="nav-list">
+            <a href="#" class="logo">TravelMap</a>
+            <nav>
+                <button class="mobile-menu-button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-list">
+                    ☰
+                </button>
+                <ul class="nav-list" id="nav-list">
                     <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Explore</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                    <li class="nav-item"><a href="#map" class="nav-link">Map</a></li>
+                    <li class="nav-item"><a href="#pins" class="nav-link">My Pins</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -523,345 +605,389 @@
 
     <!-- Main Content -->
     <main id="main-content">
-        <h1>User Profile</h1>
-        
-        <div class="profile-container">
-            <!-- Profile Card -->
-            <section class="profile-card" aria-labelledby="profile-heading">
-                <h2 id="profile-heading" class="visually-hidden">Profile Information</h2>
-                <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Profile photo of Jane Smith" class="profile-avatar">
-                <h3 class="profile-name">Jane Smith</h3>
-                <p class="profile-title">UX Designer & Accessibility Specialist</p>
-                
-                <button class="follow-btn" id="followButton" aria-live="polite">
-                    Follow
-                </button>
-                
-                <div class="social-links">
-                    <a href="#" class="social-link" aria-label="Twitter profile">
-                        <span class="social-icon" aria-hidden="true">🐦</span>
-                    </a>
-                    <a href="#" class="social-link" aria-label="LinkedIn profile">
-                        <span class="social-icon" aria-hidden="true">🔗</span>
-                    </a>
-                    <a href="#" class="social-link" aria-label="GitHub profile">
-                        <span class="social-icon" aria-hidden="true">💻</span>
-                    </a>
-                    <a href="#" class="social-link" aria-label="Instagram profile">
-                        <span class="social-icon" aria-hidden="true">📷</span>
-                    </a>
+        <h1>Interactive Travel Map</h1>
+        <p>Create and share your travel experiences by adding pins to locations you've visited. Click on the map to add a new pin or view existing ones.</p>
+
+        <!-- Map Section -->
+        <section id="map" aria-labelledby="map-heading">
+            <h2 id="map-heading">Explore the Map</h2>
+            <div class="map-container">
+                <div id="travelMap" role="application" aria-label="Interactive travel map">
+                    <div class="map-placeholder">
+                        <h3>Interactive Map Loading</h3>
+                        <p>This area will display an interactive map where you can add and view location pins.</p>
+                        <button class="primary-button" id="addPinButton">Add a Pin</button>
+                    </div>
                 </div>
-            </section>
-            
-            <!-- Profile Bio -->
-            <section class="profile-bio" aria-labelledby="bio-heading">
-                <h2 id="bio-heading">About Me</h2>
-                <div class="bio-text">
-                    <p>Hello! I'm Jane, a passionate UX designer with over 8 years of experience creating accessible digital experiences. I specialize in inclusive design and accessibility compliance, helping organizations build products that everyone can use.</p>
-                    <p>My journey in design began when I realized how many digital products excluded people with disabilities. Since then, I've made it my mission to advocate for accessibility in every project I work on.</p>
-                    <p>When I'm not designing, you can find me hiking in the mountains, reading science fiction, or experimenting with new recipes in the kitchen.</p>
+
+                <div class="map-controls">
+                    <button class="map-control-button" id="zoomInButton" aria-label="Zoom in">+</button>
+                    <button class="map-control-button" id="zoomOutButton" aria-label="Zoom out">-</button>
+                    <button class="map-control-button" id="currentLocationButton" aria-label="Find my location">📍</button>
                 </div>
-                
-                <h3>Skills</h3>
-                <ul>
-                    <li>Accessibility Auditing (WCAG 2.2, Section 508)</li>
-                    <li>User Research & Testing</li>
-                    <li>UI/UX Design</li>
-                    <li>HTML/CSS/JavaScript</li>
-                    <li>Assistive Technology Expertise</li>
-                </ul>
-            </section>
-        </div>
-        
-        <!-- Avatar Gallery -->
-        <section class="avatar-gallery" aria-labelledby="gallery-heading">
-            <div class="gallery-title">
-                <h2 id="gallery-heading">Avatar Gallery</h2>
-                <div class="gallery-nav">
-                    <button class="gallery-btn prev-btn" aria-label="Previous image" disabled>
-                        &lt;
-                    </button>
-                    <button class="gallery-btn next-btn" aria-label="Next image">
-                        &gt;
-                    </button>
-                </div>
-            </div>
-            
-            <div class="gallery-grid" id="galleryGrid">
-                <!-- Images will be added via JavaScript -->
-            </div>
-        </section>
-        
-        <!-- Stats Section -->
-        <section class="stats-section" aria-labelledby="stats-heading">
-            <h2 id="stats-heading">Profile Stats</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" id="projectsCount">47</div>
-                    <div class="stat-label">Projects</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="followersCount">1.2k</div>
-                    <div class="stat-label">Followers</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="followingCount">356</div>
-                    <div class="stat-label">Following</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="yearsExp">8</div>
-                    <div class="stat-label">Years Experience</div>
+
+                <!-- Pin Form (hidden by default) -->
+                <div class="pin-form-container" id="pinFormContainer" role="dialog" aria-labelledby="pinFormHeading" aria-modal="true">
+                    <form class="pin-form" id="pinForm">
+                        <h3 id="pinFormHeading">Add Travel Pin</h3>
+                        <div class="form-group">
+                            <label for="pinTitle">Title *</label>
+                            <input type="text" id="pinTitle" name="pinTitle" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="pinLocation">Location *</label>
+                            <input type="text" id="pinLocation" name="pinLocation" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="pinDate">Date Visited *</label>
+                            <input type="date" id="pinDate" name="pinDate" required aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="pinCategory">Category *</label>
+                            <select id="pinCategory" name="pinCategory" required aria-required="true">
+                                <option value="">Select a category</option>
+                                <option value="adventure">Adventure</option>
+                                <option value="beach">Beach</option>
+                                <option value="city">City</option>
+                                <option value="culture">Culture</option>
+                                <option value="food">Food</option>
+                                <option value="nature">Nature</option>
+                                <option value="shopping">Shopping</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="pinDescription">Description</label>
+                            <textarea id="pinDescription" name="pinDescription" rows="4"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="secondary-button" id="cancelPinButton">Cancel</button>
+                            <button type="submit" class="primary-button">Save Pin</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>
-        
-        <!-- Modal -->
-        <div class="modal" id="imageModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
-            <div class="modal-content">
-                <button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
-                <h2 id="modalTitle" class="visually-hidden">Image Viewer</h2>
-                <img src="" alt="" class="modal-img" id="modalImage">
+
+        <!-- Pins Section -->
+        <section class="pins-section" id="pins" aria-labelledby="pins-heading">
+            <h2 id="pins-heading">My Travel Pins</h2>
+            
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="filterCategory">Filter by Category:</label>
+                    <select id="filterCategory">
+                        <option value="all">All Categories</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="beach">Beach</option>
+                        <option value="city">City</option>
+                        <option value="culture">Culture</option>
+                        <option value="food">Food</option>
+                        <option value="nature">Nature</option>
+                        <option value="shopping">Shopping</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="sortBy">Sort By:</label>
+                    <select id="sortBy">
+                        <option value="date-desc">Date (Newest First)</option>
+                        <option value="date-asc">Date (Oldest First)</option>
+                        <option value="title-asc">Title (A-Z)</option>
+                        <option value="title-desc">Title (Z-A)</option>
+                    </select>
+                </div>
             </div>
-        </div>
+
+            <div class="pins-list" id="pinsList">
+                <!-- Sample Pin (will be populated by JavaScript) -->
+                <div class="pin-card">
+                    <div class="pin-card-header">
+                        <h3 class="pin-card-title">Sample Travel Location</h3>
+                        <p class="pin-card-location">Paris, France</p>
+                        <span class="pin-card-date">May 15, 2023</span>
+                    </div>
+                    <div class="pin-card-body">
+                        <p class="pin-card-description">This is a sample description of a travel experience in Paris. The Eiffel Tower was amazing at sunset!</p>
+                        <span class="pin-card-category">City</span>
+                    </div>
+                    <div class="pin-card-actions">
+                        <button class="pin-card-button secondary-button">View on Map</button>
+                        <button class="pin-card-button danger-button">Delete</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="no-pins-message" id="noPinsMessage" style="display: none;">
+                <h3>No Pins Yet</h3>
+                <p>You haven't added any travel pins yet. Click on the map to add your first pin!</p>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" aria-labelledby="about-heading">
+            <h2 id="about-heading">About TravelMap</h2>
+            <p>TravelMap is an interactive platform that allows you to document and share your travel experiences. Create pins on locations you've visited, add details about your experiences, and share them with friends and family.</p>
+            <p>Our mission is to help travelers preserve their memories and inspire others to explore the world.</p>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" aria-labelledby="contact-heading">
+            <h2 id="contact-heading">Contact Us</h2>
+            <p>Have questions or feedback? We'd love to hear from you!</p>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="contactName">Name *</label>
+                    <input type="text" id="contactName" name="contactName" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email *</label>
+                    <input type="email" id="contactEmail" name="contactEmail" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="contactMessage">Message *</label>
+                    <textarea id="contactMessage" name="contactMessage" rows="5" required aria-required="true"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="primary-button">Send Message</button>
+                </div>
+            </form>
+        </section>
     </main>
-    
+
+    <!-- Modal for Pin Details -->
+    <div class="modal" id="pinDetailsModal" role="dialog" aria-labelledby="pinModalTitle" aria-modal="true">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModalButton" aria-label="Close modal">×</button>
+            <h2 id="pinModalTitle">Pin Details</h2>
+            <div id="pinModalContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p>Accessible Profiles - Making the web inclusive for everyone</p>
-            <nav aria-label="Footer navigation">
-                <div class="footer-links">
-                    <a href="#" class="footer-link">Privacy Policy</a>
-                    <a href="#" class="footer-link">Terms of Service</a>
-                    <a href="#" class="footer-link">Accessibility Statement</a>
-                    <a href="#" class="footer-link">Contact Us</a>
-                </div>
-            </nav>
-            <p class="copyright">&copy; 2023 Accessible Profiles. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Home</a>
+                <a href="#map" class="footer-link">Map</a>
+                <a href="#pins" class="footer-link">My Pins</a>
+                <a href="#about" class="footer-link">About</a>
+                <a href="#contact" class="footer-link">Contact</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+            </div>
+            <p class="copyright">© 2023 TravelMap. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
+        // Wait for the DOM to be fully loaded
         document.addEventListener('DOMContentLoaded', function() {
-            // Follow Button Functionality
-            const followButton = document.getElementById('followButton');
-            let isFollowing = false;
-            
-            followButton.addEventListener('click', function() {
-                isFollowing = !isFollowing;
-                if (isFollowing) {
-                    followButton.textContent = 'Following';
-                    followButton.classList.add('following');
-                    followButton.setAttribute('aria-label', 'Unfollow Jane Smith');
+            // Mobile menu toggle
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const navList = document.querySelector('.nav-list');
+
+            mobileMenuButton.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                navList.classList.toggle('visible');
+            });
+
+            // Pin management
+            const pins = JSON.parse(localStorage.getItem('travelPins')) || [];
+            const pinsList = document.getElementById('pinsList');
+            const noPinsMessage = document.getElementById('noPinsMessage');
+            const pinFormContainer = document.getElementById('pinFormContainer');
+            const pinForm = document.getElementById('pinForm');
+            const cancelPinButton = document.getElementById('cancelPinButton');
+            const addPinButton = document.getElementById('addPinButton');
+            const filterCategory = document.getElementById('filterCategory');
+            const sortBy = document.getElementById('sortBy');
+            const pinDetailsModal = document.getElementById('pinDetailsModal');
+            const closeModalButton = document.getElementById('closeModalButton');
+            const pinModalContent = document.getElementById('pinModalContent');
+
+            // Update pins display
+            function updatePinsDisplay() {
+                const categoryFilter = filterCategory.value;
+                const sortOption = sortBy.value;
+
+                // Filter pins
+                let filteredPins = pins;
+                if (categoryFilter !== 'all') {
+                    filteredPins = pins.filter(pin => pin.category === categoryFilter);
+                }
+
+                // Sort pins
+                filteredPins = [...filteredPins].sort((a, b) => {
+                    if (sortOption === 'date-desc') {
+                        return new Date(b.date) - new Date(a.date);
+                    } else if (sortOption === 'date-asc') {
+                        return new Date(a.date) - new Date(b.date);
+                    } else if (sortOption === 'title-asc') {
+                        return a.title.localeCompare(b.title);
+                    } else if (sortOption === 'title-desc') {
+                        return b.title.localeCompare(a.title);
+                    }
+                    return 0;
+                });
+
+                // Display pins or no pins message
+                if (filteredPins.length === 0) {
+                    pinsList.style.display = 'none';
+                    noPinsMessage.style.display = 'block';
                 } else {
-                    followButton.textContent = 'Follow';
-                    followButton.classList.remove('following');
-                    followButton.setAttribute('aria-label', 'Follow Jane Smith');
+                    pinsList.style.display = 'grid';
+                    noPinsMessage.style.display = 'none';
+                    renderPins(filteredPins);
                 }
-            });
-            
-            // Avatar Gallery
-            const galleryImages = [
-                { src: 'https://randomuser.me/api/portraits/women/65.jpg', alt: 'Jane Smith professional headshot' },
-                { src: 'https://randomuser.me/api/portraits/women/65.jpg?1', alt: 'Jane Smith at a conference speaking' },
-                { src: 'https://randomuser.me/api/portraits/women/65.jpg?2', alt: 'Jane Smith working on a laptop' },
-                { src: 'https://randomuser.me/api/portraits/women/65.jpg?3', alt: 'Jane Smith hiking in the mountains' },
-                { src: 'https://randomuser.me/api/portraits/women/65.jpg?4', alt: 'Jane Smith at a design workshop' },
-                { src: 'https://randomuser.me/api/portraits/women/65.jpg?5', alt: 'Jane Smith with her dog in the park' }
-            ];
-            
-            const galleryGrid = document.getElementById('galleryGrid');
-            const prevBtn = document.querySelector('.prev-btn');
-            const nextBtn = document.querySelector('.next-btn');
-            const modal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-            const modalClose = document.getElementById('modalClose');
-            
-            let currentImageIndex = 0;
-            
-            // Populate gallery
-            galleryImages.forEach((image, index) => {
-                const galleryItem = document.createElement('div');
-                galleryItem.className = 'gallery-item';
-                galleryItem.tabIndex = 0;
-                galleryItem.setAttribute('role', 'button');
-                galleryItem.setAttribute('aria-label', `View ${image.alt}`);
-                
-                const img = document.createElement('img');
-                img.src = image.src;
-                img.alt = image.alt;
-                img.className = 'gallery-img';
-                
-                galleryItem.appendChild(img);
-                galleryGrid.appendChild(galleryItem);
-                
-                // Click handler for gallery items
-                galleryItem.addEventListener('click', () => openModal(index));
-                galleryItem.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        openModal(index);
-                    }
+            }
+
+            // Render pins to the DOM
+            function renderPins(pinsToRender) {
+                pinsList.innerHTML = '';
+
+                pinsToRender.forEach((pin, index) => {
+                    const pinElement = document.createElement('div');
+                    pinElement.className = 'pin-card';
+                    pinElement.innerHTML = `
+                        <div class="pin-card-header">
+                            <h3 class="pin-card-title">${pin.title}</h3>
+                            <p class="pin-card-location">${pin.location}</p>
+                            <span class="pin-card-date">${new Date(pin.date).toLocaleDateString()}</span>
+                        </div>
+                        <div class="pin-card-body">
+                            <p class="pin-card-description">${pin.description || 'No description provided.'}</p>
+                            <span class="pin-card-category">${pin.category}</span>
+                        </div>
+                        <div class="pin-card-actions">
+                            <button class="pin-card-button secondary-button view-pin-button" data-index="${index}" aria-label="View ${pin.title} on map">View on Map</button>
+                            <button class="pin-card-button danger-button delete-pin-button" data-index="${index}" aria-label="Delete ${pin.title} pin">Delete</button>
+                        </div>
+                    `;
+                    pinsList.appendChild(pinElement);
                 });
-            });
-            
-            // Modal functions
-            function openModal(index) {
-                currentImageIndex = index;
-                modalImage.src = galleryImages[index].src;
-                modalImage.alt = galleryImages[index].alt;
-                modal.classList.add('open');
-                modal.setAttribute('aria-hidden', 'false');
-                document.body.style.overflow = 'hidden';
-                
-                // Focus trap for modal
-                modalClose.focus();
-            }
-            
-            function closeModal() {
-                modal.classList.remove('open');
-                modal.setAttribute('aria-hidden', 'true');
-                document.body.style.overflow = '';
-                
-                // Return focus to the gallery item that opened the modal
-                const galleryItems = document.querySelectorAll('.gallery-item');
-                if (galleryItems[currentImageIndex]) {
-                    galleryItems[currentImageIndex].focus();
-                }
-            }
-            
-            function navigateGallery(direction) {
-                if (direction === 'prev' && currentImageIndex > 0) {
-                    currentImageIndex--;
-                } else if (direction === 'next' && currentImageIndex < galleryImages.length - 1) {
-                    currentImageIndex++;
-                }
-                
-                modalImage.src = galleryImages[currentImageIndex].src;
-                modalImage.alt = galleryImages[currentImageIndex].alt;
-                
-                // Update button states
-                prevBtn.disabled = currentImageIndex === 0;
-                nextBtn.disabled = currentImageIndex === galleryImages.length - 1;
-            }
-            
-            // Event listeners
-            modalClose.addEventListener('click', closeModal);
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (modal.classList.contains('open')) {
-                    if (e.key === 'Escape') {
-                        closeModal();
-                    } else if (e.key === 'ArrowLeft') {
-                        navigateGallery('prev');
-                    } else if (e.key === 'ArrowRight') {
-                        navigateGallery('next');
-                    }
-                }
-            });
-            
-            // Gallery navigation buttons
-            prevBtn.addEventListener('click', () => {
-                if (currentImageIndex > 0) {
-                    currentImageIndex--;
-                    const galleryItems = document.querySelectorAll('.gallery-item');
-                    galleryItems[currentImageIndex].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest'
+
+                // Add event listeners to the new buttons
+                document.querySelectorAll('.view-pin-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        viewPinOnMap(index);
                     });
-                    
-                    // Update button states
-                    prevBtn.disabled = currentImageIndex === 0;
-                    nextBtn.disabled = false;
-                }
-            });
-            
-            nextBtn.addEventListener('click', () => {
-                if (currentImageIndex < galleryImages.length - 1) {
-                    currentImageIndex++;
-                    const galleryItems = document.querySelectorAll('.gallery-item');
-                    galleryItems[currentImageIndex].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest'
-                    });
-                    
-                    // Update button states
-                    nextBtn.disabled = currentImageIndex === galleryImages.length - 1;
-                    prevBtn.disabled = false;
-                }
-            });
-            
-            // Animate stats
-            function animateStats() {
-                const projectsCount = document.getElementById('projectsCount');
-                const followersCount = document.getElementById('followersCount');
-                const followingCount = document.getElementById('followingCount');
-                const yearsExp = document.getElementById('yearsExp');
-                
-                animateValue(projectsCount, 0, 47, 2000);
-                animateValue(followersCount, 0, 1200, 2000);
-                animateValue(followingCount, 0, 356, 2000);
-                animateValue(yearsExp, 0, 8, 2000);
-            }
-            
-            function animateValue(element, start, end, duration) {
-                let startTimestamp = null;
-                const step = (timestamp) => {
-                    if (!startTimestamp) startTimestamp = timestamp;
-                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                    const value = Math.floor(progress * (end - start) + start);
-                    
-                    if (element === followersCount) {
-                        element.textContent = value >= 1000 ? (value/1000).toFixed(1) + 'k' : value;
-                    } else {
-                        element.textContent = value;
-                    }
-                    
-                    if (progress < 1) {
-                        window.requestAnimationFrame(step);
-                    }
-                };
-                window.requestAnimationFrame(step);
-            }
-            
-            // Initialize animations when stats section is in view
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        animateStats();
-                        observer.unobserve(entry.target);
-                    }
                 });
-            }, { threshold: 0.5 });
-            
-            observer.observe(document.querySelector('.stats-section'));
-            
-            // Helper function for visually hidden elements
-            function createVisuallyHidden() {
-                const style = document.createElement('style');
-                style.textContent = `
-                    .visually-hidden {
-                        position: absolute;
-                        width: 1px;
-                        height: 1px;
-                        padding: 0;
-                        margin: -1px;
-                        overflow: hidden;
-                        clip: rect(0, 0, 0, 0);
-                        white-space: nowrap;
-                        border: 0;
-                    }
+
+                document.querySelectorAll('.delete-pin-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        deletePin(index);
+                    });
+                });
+            }
+
+            // View pin on map (placeholder for map functionality)
+            function viewPinOnMap(index) {
+                const pin = pins[index];
+                pinModalContent.innerHTML = `
+                    <h3>${pin.title}</h3>
+                    <p><strong>Location:</strong> ${pin.location}</p>
+                    <p><strong>Date:</strong> ${new Date(pin.date).toLocaleDateString()}</p>
+                    <p><strong>Category:</strong> ${pin.category}</p>
+                    <p><strong>Description:</strong> ${pin.description || 'No description provided.'}</p>
                 `;
-                document.head.appendChild(style);
+                pinDetailsModal.classList.add('visible');
+                document.getElementById('pinModalTitle').textContent = pin.title;
             }
-            
-            createVisuallyHidden();
+
+            // Delete a pin
+            function deletePin(index) {
+                if (confirm('Are you sure you want to delete this pin?')) {
+                    pins.splice(index, 1);
+                    localStorage.setItem('travelPins', JSON.stringify(pins));
+                    updatePinsDisplay();
+                }
+            }
+
+            // Show pin form
+            function showPinForm() {
+                pinFormContainer.classList.add('visible');
+                document.getElementById('pinTitle').focus();
+            }
+
+            // Hide pin form
+            function hidePinForm() {
+                pinFormContainer.classList.remove('visible');
+                pinForm.reset();
+            }
+
+            // Save new pin
+            pinForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const newPin = {
+                    title: document.getElementById('pinTitle').value,
+                    location: document.getElementById('pinLocation').value,
+                    date: document.getElementById('pinDate').value,
+                    category: document.getElementById('pinCategory').value,
+                    description: document.getElementById('pinDescription').value,
+                    lat: 0, // Placeholder for actual map coordinates
+                    lng: 0  // Placeholder for actual map coordinates
+                };
+
+                pins.push(newPin);
+                localStorage.setItem('travelPins', JSON.stringify(pins));
+                hidePinForm();
+                updatePinsDisplay();
+            });
+
+            // Close modal
+            closeModalButton.addEventListener('click', function() {
+                pinDetailsModal.classList.remove('visible');
+            });
+
+            // Close modal when clicking outside content
+            pinDetailsModal.addEventListener('click', function(e) {
+                if (e.target === pinDetailsModal) {
+                    pinDetailsModal.classList.remove('visible');
+                }
+            });
+
+            // Filter and sort event listeners
+            filterCategory.addEventListener('change', updatePinsDisplay);
+            sortBy.addEventListener('change', updatePinsDisplay);
+
+            // Button event listeners
+            addPinButton.addEventListener('click', showPinForm);
+            cancelPinButton.addEventListener('click', hidePinForm);
+
+            // Initialize pins display
+            updatePinsDisplay();
+
+            // Contact form submission
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your message! We will get back to you soon.');
+                this.reset();
+            });
+
+            // Map controls (placeholder functionality)
+            document.getElementById('zoomInButton').addEventListener('click', function() {
+                alert('Zoom in functionality would be implemented with a real map API.');
+            });
+
+            document.getElementById('zoomOutButton').addEventListener('click', function() {
+                alert('Zoom out functionality would be implemented with a real map API.');
+            });
+
+            document.getElementById('currentLocationButton').addEventListener('click', function() {
+                alert('Current location functionality would be implemented with geolocation API.');
+            });
+
+            // Keyboard navigation for modal
+            document.addEventListener('keydown', function(e) {
+                if (pinDetailsModal.classList.contains('visible') && e.key === 'Escape') {
+                    pinDetailsModal.classList.remove('visible');
+                }
+            });
         });
     </script>
 </body>
