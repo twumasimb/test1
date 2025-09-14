@@ -3,72 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Knowledge Quiz | Test Your Skills</title>
+    <title>Accessible Weather Dashboard - Get Current Conditions and Forecasts</title>
+    <meta name="description" content="Interactive weather dashboard showing current conditions and 24-hour forecasts for any city with full accessibility support">
     <style>
-        /* CSS Reset and Base Styles */
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
             --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --success-color: #27ae60;
+            --text-color: #2c3e50;
+            --light-text: #ecf0f1;
+            --bg-color: #f9f9f9;
+            --card-bg: #ffffff;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
             --warning-color: #f39c12;
-            --text-color: #333;
-            --text-light: #fff;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --border-radius: 8px;
             --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            --focus-outline: 3px solid var(--secondary-color);
         }
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: var(--font-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: var(--light-color);
+            background-color: var(--bg-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* Skip Link */
+        /* Skip link */
         .skip-link {
             position: absolute;
             top: -40px;
             left: 0;
             background: var(--primary-color);
-            color: var(--text-light);
+            color: var(--light-text);
             padding: 8px;
             z-index: 100;
-            transition: var(--transition);
+            transition: top 0.3s;
         }
 
         .skip-link:focus {
             top: 0;
+            outline: var(--focus-outline);
         }
 
-        /* Header */
         header {
-            background-color: var(--primary-color);
-            color: var(--text-light);
-            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text);
+            padding: 1rem 2rem;
             text-align: center;
             box-shadow: var(--box-shadow);
         }
 
         h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin-bottom: 0.5rem;
         }
 
-        /* Main Content */
+        nav {
+            background-color: var(--primary-color);
+            padding: 0.5rem 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        nav li {
+            margin: 0 1rem;
+        }
+
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.5rem;
+            border-radius: var(--border-radius);
+            display: inline-block;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav a:hover, nav a:focus {
+            background-color: var(--secondary-color);
+            outline: var(--focus-outline);
+        }
+
         main {
             flex: 1;
             padding: 2rem;
@@ -77,334 +111,277 @@
             width: 100%;
         }
 
-        /* Quiz Container */
-        .quiz-container {
-            background-color: var(--text-light);
+        .search-section {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
-            padding: 2rem;
             margin-bottom: 2rem;
-            transition: var(--transition);
         }
 
-        /* Quiz Intro */
-        .quiz-intro {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .quiz-intro h2 {
-            color: var(--primary-color);
+        h2 {
+            font-size: 1.5rem;
             margin-bottom: 1rem;
-            font-size: 1.8rem;
+            color: var(--primary-color);
         }
 
-        .quiz-intro p {
-            margin-bottom: 1.5rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Quiz Controls */
-        .quiz-controls {
+        .search-form {
             display: flex;
-            justify-content: center;
+            flex-wrap: wrap;
             gap: 1rem;
-            margin-top: 1.5rem;
+            align-items: center;
         }
 
-        /* Buttons */
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--secondary-color);
+            outline: var(--focus-outline);
+        }
+
         button {
             background-color: var(--secondary-color);
-            color: var(--text-light);
+            color: var(--light-text);
             border: none;
-            padding: 0.8rem 1.5rem;
+            padding: 0.75rem 1.5rem;
             border-radius: var(--border-radius);
-            cursor: pointer;
             font-size: 1rem;
+            cursor: pointer;
             font-weight: bold;
-            transition: var(--transition);
-            min-width: 120px;
+            min-width: 44px;
             min-height: 44px;
+            transition: background-color 0.3s;
         }
 
         button:hover, button:focus {
-            background-color: var(--primary-color);
-            outline: 3px solid var(--accent-color);
-            outline-offset: 2px;
+            background-color: #2980b9;
+            outline: var(--focus-outline);
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
-
-        button[disabled] {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-
-        .btn-start {
-            background-color: var(--success-color);
-        }
-
-        .btn-next {
-            background-color: var(--secondary-color);
-        }
-
-        .btn-submit {
-            background-color: var(--accent-color);
-        }
-
-        .btn-restart {
-            background-color: var(--warning-color);
-        }
-
-        /* Question Container */
-        .question-container {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .question-container.active {
-            display: block;
-        }
-
-        .question-header {
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .question-number {
+        .error-message {
+            color: var(--error-color);
+            margin-top: 0.5rem;
             font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1.2rem;
         }
 
-        .question-text {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-        }
-
-        /* Options */
-        .options-container {
+        .weather-display {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 2rem;
         }
 
-        .option {
-            background-color: var(--light-color);
-            border: 2px solid #bdc3c7;
+        @media (min-width: 768px) {
+            .weather-display {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .current-weather, .hourly-forecast {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
             border-radius: var(--border-radius);
-            padding: 1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            position: relative;
-            min-height: 44px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .weather-card {
             display: flex;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .option:hover, .option:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-        }
-
-        .option.selected {
-            background-color: var(--secondary-color);
-            color: var(--text-light);
-            border-color: var(--secondary-color);
-        }
-
-        .option.correct {
-            background-color: var(--success-color);
-            color: var(--text-light);
-            border-color: var(--success-color);
-        }
-
-        .option.incorrect {
-            background-color: var(--accent-color);
-            color: var(--text-light);
-            border-color: var(--accent-color);
-        }
-
-        .option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            height: 0;
-            width: 0;
-        }
-
-        .option-label {
-            margin-left: 1rem;
-            cursor: pointer;
-            flex-grow: 1;
-        }
-
-        /* Feedback */
-        .feedback {
+            text-align: center;
             padding: 1rem;
+        }
+
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 1rem;
+        }
+
+        .temperature {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-description {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            text-transform: capitalize;
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: rgba(52, 152, 219, 0.1);
             border-radius: var(--border-radius);
-            margin-bottom: 1.5rem;
-            display: none;
-            animation: fadeIn 0.5s ease;
         }
 
-        .feedback.show {
-            display: block;
+        .detail-label {
+            font-size: 0.875rem;
+            color: #7f8c8d;
         }
 
-        .feedback.correct {
-            background-color: rgba(39, 174, 96, 0.2);
-            border-left: 4px solid var(--success-color);
+        .detail-value {
+            font-weight: bold;
+            font-size: 1.125rem;
         }
 
-        .feedback.incorrect {
-            background-color: rgba(231, 76, 60, 0.2);
-            border-left: 4px solid var(--accent-color);
+        .hourly-forecast-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary-color) #f1f1f1;
         }
 
-        .feedback-text {
+        .hourly-forecast-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .hourly-forecast-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .hourly-forecast-container::-webkit-scrollbar-thumb {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+        }
+
+        .hourly-item {
+            min-width: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius);
+            flex-shrink: 0;
+        }
+
+        .hourly-time {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .hourly-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0.5rem 0;
+        }
+
+        .hourly-temp {
             font-weight: bold;
         }
 
-        .explanation {
-            margin-top: 0.5rem;
-            font-style: italic;
-        }
-
-        /* Progress */
-        .progress-container {
-            width: 100%;
-            background-color: #e0e0e0;
-            border-radius: var(--border-radius);
-            margin-bottom: 1.5rem;
-            height: 10px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            border-radius: var(--border-radius);
-            background-color: var(--secondary-color);
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-
-        /* Results */
-        .results-container {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .results-container.show {
-            display: block;
-        }
-
-        .results-score {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .results-message {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .results-details {
-            margin-top: 2rem;
-            text-align: left;
-        }
-
-        .results-details h3 {
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .results-list {
-            list-style-type: none;
-        }
-
-        .results-list li {
-            padding: 0.8rem;
-            border-bottom: 1px solid #eee;
+        .loading {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
         }
 
-        .results-list li.correct {
-            color: var(--success-color);
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(52, 152, 219, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--secondary-color);
+            animation: spin 1s ease-in-out infinite;
         }
 
-        .results-list li.incorrect {
-            color: var(--accent-color);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        /* Accessibility Features */
-        .visually-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        footer p {
+            margin-bottom: 0.5rem;
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
+        footer a {
+            color: var(--light-text);
+            text-decoration: underline;
         }
 
-        /* Reduced Motion */
+        footer a:hover, footer a:focus {
+            color: var(--secondary-color);
+            outline: var(--focus-outline);
+        }
+
+        /* Reduced motion preference */
         @media (prefers-reduced-motion: reduce) {
             * {
-                animation: none !important;
-                transition: none !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+            .spinner {
+                animation: none;
+                border: 4px solid var(--secondary-color);
+                border-right-color: transparent;
+                border-radius: 50%;
             }
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            main {
-                padding: 1rem;
+        /* High contrast mode */
+        @media (forced-colors: active) {
+            :root {
+                --primary-color: ButtonText;
+                --secondary-color: Highlight;
+                --accent-color: LinkText;
+                --text-color: ButtonText;
+                --light-text: Canvas;
+                --bg-color: Canvas;
+                --card-bg: Canvas;
+                --error-color: Mark;
+                --success-color: ButtonText;
+                --warning-color: ButtonText;
             }
 
-            .quiz-container {
-                padding: 1rem;
+            body {
+                forced-color-adjust: none;
             }
 
-            .quiz-intro {
-                padding: 1rem;
-            }
-
-            .question-text {
-                font-size: 1.1rem;
-            }
-
-            .quiz-controls {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            button {
-                width: 100%;
+            button, input, select, textarea {
+                forced-color-adjust: none;
             }
         }
     </style>
@@ -413,398 +390,253 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
     <header>
-        <h1>Knowledge Challenge Quiz</h1>
-        <p>Test your skills across various topics</p>
+        <h1>Accessible Weather Dashboard</h1>
+        <p>Get current conditions and hourly forecasts for any location</p>
     </header>
 
+    <nav aria-label="Main navigation">
+        <ul>
+            <li><a href="#main-content">Home</a></li>
+            <li><a href="#" aria-current="page">Weather</a></li>
+            <li><a href="#">Maps</a></li>
+            <li><a href="#">Alerts</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+    </nav>
+
     <main id="main-content">
-        <div class="quiz-container">
-            <!-- Quiz Introduction -->
-            <div class="quiz-intro" id="quiz-intro">
-                <h2>Welcome to the Knowledge Challenge!</h2>
-                <p>This quiz will test your knowledge across various topics including science, history, and general knowledge. You'll have 10 questions to answer, with immediate feedback after each response.</p>
-                <p>Good luck and have fun!</p>
-                <div class="quiz-controls">
-                    <button class="btn-start" id="start-btn">Start Quiz</button>
+        <section class="search-section" aria-labelledby="search-heading">
+            <h2 id="search-heading">Search for Weather Information</h2>
+            <form class="search-form" id="weather-form">
+                <div class="form-group">
+                    <label for="city-input">City Name</label>
+                    <input type="text" id="city-input" placeholder="Enter city name" aria-required="true" required>
+                    <div id="city-error" class="error-message" role="alert" aria-live="assertive"></div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="country-input">Country (Optional)</label>
+                    <input type="text" id="country-input" placeholder="Enter country code (e.g., US)">
+                </div>
+                <button type="submit" id="search-button">
+                    <span class="visually-hidden">Search</span>
+                    <span aria-hidden="true">🔍</span> Get Weather
+                </button>
+            </form>
+        </section>
 
-            <!-- Quiz Progress -->
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+        <div class="weather-display">
+            <section class="current-weather" aria-labelledby="current-weather-heading">
+                <h2 id="current-weather-heading">Current Weather</h2>
+                <div id="current-weather-content">
+                    <div class="weather-card">
+                        <p>Enter a city name to see current weather conditions</p>
+                    </div>
+                </div>
+            </section>
 
-            <!-- Question Container -->
-            <div class="question-container" id="question-container">
-                <div class="question-header">
-                    <span class="question-number" id="question-number">Question 1 of 10</span>
+            <section class="hourly-forecast" aria-labelledby="hourly-forecast-heading">
+                <h2 id="hourly-forecast-heading">24-Hour Forecast</h2>
+                <div id="hourly-forecast-content">
+                    <p>Hourly forecast will appear here after searching for a location</p>
                 </div>
-                <h2 class="question-text" id="question-text">What is the capital of France?</h2>
-                
-                <div class="options-container" id="options-container" role="radiogroup" aria-labelledby="question-text">
-                    <!-- Options will be inserted here by JavaScript -->
-                </div>
-
-                <div class="feedback" id="feedback">
-                    <p class="feedback-text" id="feedback-text"></p>
-                    <p class="explanation" id="explanation"></p>
-                </div>
-
-                <div class="quiz-controls">
-                    <button class="btn-next" id="next-btn" disabled>Next Question</button>
-                </div>
-            </div>
-
-            <!-- Results Container -->
-            <div class="results-container" id="results-container">
-                <h2>Quiz Completed!</h2>
-                <div class="results-score" id="results-score">Your Score: 8/10</div>
-                <p class="results-message" id="results-message">Great job! You know your stuff.</p>
-                
-                <div class="results-details">
-                    <h3>Quiz Summary</h3>
-                    <ul class="results-list" id="results-list">
-                        <!-- Results will be inserted here by JavaScript -->
-                    </ul>
-                </div>
-
-                <div class="quiz-controls">
-                    <button class="btn-restart" id="restart-btn">Restart Quiz</button>
-                </div>
-            </div>
+            </section>
         </div>
     </main>
 
+    <footer>
+        <p>© 2023 Accessible Weather Dashboard</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Accessibility Statement</a> | <a href="#">Contact Us</a></p>
+        <p>Weather data provided by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a></p>
+    </footer>
+
     <script>
-        // Quiz Questions Data
-        const quizQuestions = [
-            {
-                question: "What is the capital of France?",
-                options: ["London", "Berlin", "Paris", "Madrid"],
-                correctAnswer: 2,
-                explanation: "Paris is the capital and most populous city of France. It has been one of Europe's major centers of finance, diplomacy, commerce, fashion, science, and arts."
-            },
-            {
-                question: "Which planet is known as the Red Planet?",
-                options: ["Venus", "Mars", "Jupiter", "Saturn"],
-                correctAnswer: 1,
-                explanation: "Mars is often called the 'Red Planet' because iron minerals in the Martian soil oxidize, or rust, causing the soil and atmosphere to look red."
-            },
-            {
-                question: "Who painted the Mona Lisa?",
-                options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
-                correctAnswer: 2,
-                explanation: "Leonardo da Vinci painted the Mona Lisa between 1503 and 1506. It's considered an archetypal masterpiece of the Italian Renaissance."
-            },
-            {
-                question: "What is the largest ocean on Earth?",
-                options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-                correctAnswer: 3,
-                explanation: "The Pacific Ocean is the largest and deepest of Earth's oceanic divisions. It extends from the Arctic Ocean in the north to the Southern Ocean in the south."
-            },
-            {
-                question: "Which element has the chemical symbol 'O'?",
-                options: ["Gold", "Oxygen", "Osmium", "Oganesson"],
-                correctAnswer: 1,
-                explanation: "Oxygen is a chemical element with symbol O and atomic number 8. It's a member of the chalcogen group in the periodic table."
-            },
-            {
-                question: "In which year did World War II end?",
-                options: ["1943", "1945", "1947", "1950"],
-                correctAnswer: 1,
-                explanation: "World War II ended in 1945 with the unconditional surrender of the Axis powers. The war in Europe ended with Germany's surrender on May 8, 1945, and in the Pacific with Japan's surrender on September 2, 1945."
-            },
-            {
-                question: "What is the largest mammal in the world?",
-                options: ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
-                correctAnswer: 1,
-                explanation: "The blue whale is the largest animal known to have ever existed. They can reach lengths of up to 100 feet (30 meters) and weigh up to 200 tons."
-            },
-            {
-                question: "Which country is home to the kangaroo?",
-                options: ["New Zealand", "South Africa", "Australia", "Brazil"],
-                correctAnswer: 2,
-                explanation: "Kangaroos are marsupials native to Australia. They are known for their powerful hind legs, large feet, and long muscular tails for balance."
-            },
-            {
-                question: "What is the hardest natural substance on Earth?",
-                options: ["Gold", "Iron", "Diamond", "Quartz"],
-                correctAnswer: 2,
-                explanation: "Diamond is the hardest known natural material on Earth. It scores 10 on the Mohs scale of mineral hardness."
-            },
-            {
-                question: "Who wrote 'Romeo and Juliet'?",
-                options: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
-                correctAnswer: 1,
-                explanation: "William Shakespeare wrote the tragedy 'Romeo and Juliet' between 1591 and 1595. It's one of his most popular and frequently performed plays."
-            }
-        ];
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form submission
+            const weatherForm = document.getElementById('weather-form');
+            const cityInput = document.getElementById('city-input');
+            const countryInput = document.getElementById('country-input');
+            const cityError = document.getElementById('city-error');
+            const currentWeatherContent = document.getElementById('current-weather-content');
+            const hourlyForecastContent = document.getElementById('hourly-forecast-content');
 
-        // DOM Elements
-        const quizIntro = document.getElementById('quiz-intro');
-        const questionContainer = document.getElementById('question-container');
-        const resultsContainer = document.getElementById('results-container');
-        const questionNumberElement = document.getElementById('question-number');
-        const questionTextElement = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const feedbackElement = document.getElementById('feedback');
-        const feedbackTextElement = document.getElementById('feedback-text');
-        const explanationElement = document.getElementById('explanation');
-        const progressBar = document.getElementById('progress-bar');
-        const startBtn = document.getElementById('start-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const restartBtn = document.getElementById('restart-btn');
-        const resultsScoreElement = document.getElementById('results-score');
-        const resultsMessageElement = document.getElementById('results-message');
-        const resultsListElement = document.getElementById('results-list');
+            // Sample weather icons mapping
+            const weatherIcons = {
+                '01d': '☀️',
+                '01n': '🌙',
+                '02d': '⛅',
+                '02n': '⛅',
+                '03d': '☁️',
+                '03n': '☁️',
+                '04d': '☁️',
+                '04n': '☁️',
+                '09d': '🌧️',
+                '09n': '🌧️',
+                '10d': '🌦️',
+                '10n': '🌦️',
+                '11d': '⛈️',
+                '11n': '⛈️',
+                '13d': '❄️',
+                '13n': '❄️',
+                '50d': '🌫️',
+                '50n': '🌫️'
+            };
 
-        // Quiz State Variables
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let selectedOption = null;
-        let quizCompleted = false;
-        let userAnswers = [];
-
-        // Initialize the quiz
-        function initQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            quizCompleted = false;
-            userAnswers = [];
-            updateProgressBar();
-            
-            quizIntro.style.display = 'block';
-            questionContainer.style.display = 'none';
-            resultsContainer.style.display = 'none';
-        }
-
-        // Start the quiz
-        function startQuiz() {
-            quizIntro.style.display = 'none';
-            questionContainer.style.display = 'block';
-            resultsContainer.style.display = 'none';
-            
-            loadQuestion(currentQuestionIndex);
-        }
-
-        // Load a question
-        function loadQuestion(index) {
-            if (index >= quizQuestions.length) {
-                showResults();
-                return;
-            }
-
-            const question = quizQuestions[index];
-            selectedOption = null;
-            
-            // Update question number and text
-            questionNumberElement.textContent = `Question ${index + 1} of ${quizQuestions.length}`;
-            questionTextElement.textContent = question.question;
-            
-            // Clear previous options
-            optionsContainer.innerHTML = '';
-            
-            // Create new options
-            question.options.forEach((option, i) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                optionElement.tabIndex = 0;
-                optionElement.setAttribute('role', 'radio');
-                optionElement.setAttribute('aria-checked', 'false');
+            weatherForm.addEventListener('submit', function(e) {
+                e.preventDefault();
                 
-                const radioInput = document.createElement('input');
-                radioInput.type = 'radio';
-                radioInput.id = `option-${i}`;
-                radioInput.name = 'quiz-option';
-                radioInput.value = i;
+                // Reset errors
+                cityError.textContent = '';
+                cityInput.setAttribute('aria-invalid', 'false');
                 
-                const optionLabel = document.createElement('label');
-                optionLabel.className = 'option-label';
-                optionLabel.htmlFor = `option-${i}`;
-                optionLabel.textContent = option;
-                
-                optionElement.appendChild(radioInput);
-                optionElement.appendChild(optionLabel);
-                
-                // Add event listeners
-                optionElement.addEventListener('click', () => selectOption(i));
-                optionElement.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        selectOption(i);
+                // Validate input
+                if (!cityInput.value.trim()) {
+                    cityError.textContent = 'Please enter a city name';
+                    cityInput.setAttribute('aria-invalid', 'true');
+                    cityInput.focus();
+                    return;
+                }
+
+                // Show loading state
+                currentWeatherContent.innerHTML = '<div class="loading"><div class="spinner" aria-hidden="true"></div><span class="visually-hidden">Loading weather data...</span></div>';
+                hourlyForecastContent.innerHTML = '<div class="loading"><div class="spinner" aria-hidden="true"></div><span class="visually-hidden">Loading forecast data...</span></div>';
+
+                // In a real app, you would fetch from a weather API here
+                // For this demo, we'll use mock data
+                setTimeout(() => {
+                    const city = cityInput.value.trim();
+                    const country = countryInput.value.trim();
+                    
+                    // Generate mock current weather data
+                    const currentWeatherData = {
+                        city: city,
+                        country: country || 'N/A',
+                        temp: Math.round(Math.random() * 30) - 5, // Random temp between -5°C and 25°C
+                        feels_like: Math.round(Math.random() * 30) - 5,
+                        humidity: Math.floor(Math.random() * 100),
+                        wind_speed: (Math.random() * 20).toFixed(1),
+                        pressure: Math.floor(Math.random() * 50) + 950,
+                        visibility: Math.floor(Math.random() * 10) + 1,
+                        description: ['Clear sky', 'Partly cloudy', 'Cloudy', 'Rain', 'Snow', 'Thunderstorm'][Math.floor(Math.random() * 6)],
+                        icon: Object.keys(weatherIcons)[Math.floor(Math.random() * Object.keys(weatherIcons).length)],
+                        sunrise: '06:' + Math.floor(Math.random() * 60).toString().padStart(2, '0'),
+                        sunset: '18:' + Math.floor(Math.random() * 60).toString().padStart(2, '0')
+                    };
+
+                    // Generate mock hourly forecast
+                    const hourlyForecastData = [];
+                    const now = new Date();
+                    for (let i = 0; i < 24; i++) {
+                        const hour = new Date(now.getTime() + i * 60 * 60 * 1000);
+                        hourlyForecastData.push({
+                            time: hour.getHours().toString().padStart(2, '0') + ':00',
+                            temp: Math.round(currentWeatherData.temp + (Math.random() * 6 - 3)),
+                            icon: Object.keys(weatherIcons)[Math.floor(Math.random() * Object.keys(weatherIcons).length)],
+                            description: ['Clear', 'Partly cloudy', 'Cloudy', 'Rain', 'Snow', 'Thunderstorm'][Math.floor(Math.random() * 6)]
+                        });
                     }
+
+                    // Update UI with mock data
+                    displayCurrentWeather(currentWeatherData);
+                    displayHourlyForecast(hourlyForecastData);
+                }, 1000);
+            });
+
+            function displayCurrentWeather(data) {
+                const location = data.country === 'N/A' ? data.city : `${data.city}, ${data.country}`;
+                
+                currentWeatherContent.innerHTML = `
+                    <div class="weather-card">
+                        <h3 class="location">${location}</h3>
+                        <div class="weather-icon" aria-hidden="true">${weatherIcons[data.icon]}</div>
+                        <div class="temperature">${data.temp}°C</div>
+                        <p class="weather-description">${data.description}</p>
+                        <p class="feels-like">Feels like: ${data.feels_like}°C</p>
+                        
+                        <div class="weather-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Humidity</span>
+                                <span class="detail-value">${data.humidity}%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Wind</span>
+                                <span class="detail-value">${data.wind_speed} km/h</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Pressure</span>
+                                <span class="detail-value">${data.pressure} hPa</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Visibility</span>
+                                <span class="detail-value">${data.visibility} km</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Sunrise</span>
+                                <span class="detail-value">${data.sunrise}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Sunset</span>
+                                <span class="detail-value">${data.sunset}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function displayHourlyForecast(data) {
+                let hourlyItems = '';
+                
+                data.forEach(hour => {
+                    hourlyItems += `
+                        <div class="hourly-item">
+                            <div class="hourly-time">${hour.time}</div>
+                            <div class="hourly-icon" aria-hidden="true">${weatherIcons[hour.icon]}</div>
+                            <div class="hourly-temp">${hour.temp}°C</div>
+                            <div class="hourly-desc" aria-hidden="true">${hour.description}</div>
+                            <span class="visually-hidden">${hour.description} with temperature of ${hour.temp} degrees Celsius</span>
+                        </div>
+                    `;
                 });
                 
-                optionsContainer.appendChild(optionElement);
-            });
-            
-            // Reset feedback and next button
-            feedbackElement.className = 'feedback';
-            feedbackElement.style.display = 'none';
-            nextBtn.disabled = true;
-            
-            // Update progress bar
-            updateProgressBar();
-        }
+                hourlyForecastContent.innerHTML = `
+                    <div class="hourly-forecast-container" tabindex="0" aria-label="24-hour weather forecast scrollable list">
+                        ${hourlyItems}
+                    </div>
+                `;
+            }
 
-        // Select an option
-        function selectOption(optionIndex) {
-            // Deselect all options
-            const options = document.querySelectorAll('.option');
-            options.forEach((option, i) => {
-                option.classList.remove('selected');
-                option.setAttribute('aria-checked', 'false');
-                if (i === optionIndex) {
-                    option.focus();
+            // Keyboard navigation for the hourly forecast
+            document.addEventListener('keydown', function(e) {
+                const forecastContainer = document.querySelector('.hourly-forecast-container');
+                if (!forecastContainer || !forecastContainer.contains(document.activeElement)) return;
+                
+                if (e.key === 'ArrowLeft') {
+                    forecastContainer.scrollBy({ left: -100, behavior: 'smooth' });
+                    e.preventDefault();
+                } else if (e.key === 'ArrowRight') {
+                    forecastContainer.scrollBy({ left: 100, behavior: 'smooth' });
+                    e.preventDefault();
                 }
             });
-            
-            // Select the clicked option
-            selectedOption = optionIndex;
-            options[optionIndex].classList.add('selected');
-            options[optionIndex].setAttribute('aria-checked', 'true');
-            
-            // Enable the next button
-            nextBtn.disabled = false;
-        }
-
-        // Show feedback for the selected answer
-        function showFeedback() {
-            if (selectedOption === null) return;
-            
-            const currentQuestion = quizQuestions[currentQuestionIndex];
-            const isCorrect = selectedOption === currentQuestion.correctAnswer;
-            
-            // Update score and store user answer
-            if (isCorrect) {
-                score++;
-            }
-            userAnswers.push({
-                question: currentQuestion.question,
-                userAnswer: currentQuestion.options[selectedOption],
-                correctAnswer: currentQuestion.options[currentQuestion.correctAnswer],
-                isCorrect: isCorrect
-            });
-            
-            // Show feedback
-            feedbackElement.className = `feedback show ${isCorrect ? 'correct' : 'incorrect'}`;
-            feedbackTextElement.textContent = isCorrect ? 'Correct! Well done!' : 'Incorrect. The correct answer is:';
-            explanationElement.textContent = currentQuestion.explanation;
-            
-            // Highlight correct and incorrect answers
-            const options = document.querySelectorAll('.option');
-            options.forEach((option, i) => {
-                if (i === currentQuestion.correctAnswer) {
-                    option.classList.add('correct');
-                } else if (i === selectedOption && !isCorrect) {
-                    option.classList.add('incorrect');
-                }
-                option.style.pointerEvents = 'none';
-            });
-            
-            // Disable all options
-            optionsContainer.querySelectorAll('input').forEach(input => {
-                input.disabled = true;
-            });
-        }
-
-        // Move to the next question
-        function nextQuestion() {
-            showFeedback();
-            
-            // Wait a moment before moving to next question
-            setTimeout(() => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < quizQuestions.length) {
-                    loadQuestion(currentQuestionIndex);
-                } else {
-                    showResults();
-                }
-            }, 1500);
-        }
-
-        // Show the quiz results
-        function showResults() {
-            quizCompleted = true;
-            questionContainer.style.display = 'none';
-            resultsContainer.className = 'results-container show';
-            
-            // Calculate score percentage
-            const percentage = Math.round((score / quizQuestions.length) * 100);
-            
-            // Update results display
-            resultsScoreElement.textContent = `Your Score: ${score}/${quizQuestions.length} (${percentage}%)`;
-            
-            // Set results message based on score
-            if (percentage >= 90) {
-                resultsMessageElement.textContent = "Excellent! You're a true expert!";
-            } else if (percentage >= 70) {
-                resultsMessageElement.textContent = "Great job! You know your stuff.";
-            } else if (percentage >= 50) {
-                resultsMessageElement.textContent = "Good effort! You might want to brush up on a few topics.";
-            } else {
-                resultsMessageElement.textContent = "Keep learning! You'll do better next time.";
-            }
-            
-            // Populate results list
-            resultsListElement.innerHTML = '';
-            userAnswers.forEach((answer, index) => {
-                const li = document.createElement('li');
-                li.className = answer.isCorrect ? 'correct' : 'incorrect';
-                
-                const questionSpan = document.createElement('span');
-                questionSpan.textContent = `${index + 1}. ${answer.question}`;
-                
-                const answerSpan = document.createElement('span');
-                answerSpan.textContent = answer.isCorrect ? '✓' : `✗ (Correct: ${answer.correctAnswer})`;
-                
-                li.appendChild(questionSpan);
-                li.appendChild(answerSpan);
-                resultsListElement.appendChild(li);
-            });
-            
-            // Update progress bar to 100%
-            progressBar.style.width = '100%';
-            progressBar.setAttribute('aria-valuenow', '100');
-        }
-
-        // Update the progress bar
-        function updateProgressBar() {
-            const progress = ((currentQuestionIndex) / quizQuestions.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressBar.setAttribute('aria-valuenow', progress);
-        }
-
-        // Event Listeners
-        startBtn.addEventListener('click', startQuiz);
-        nextBtn.addEventListener('click', nextQuestion);
-        restartBtn.addEventListener('click', initQuiz);
-
-        // Keyboard navigation for options
-        optionsContainer.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-                e.preventDefault();
-                moveFocus(-1);
-            } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-                e.preventDefault();
-                moveFocus(1);
-            }
         });
 
-        // Move focus between options
-        function moveFocus(direction) {
-            const options = Array.from(document.querySelectorAll('.option'));
-            const currentIndex = options.findIndex(opt => opt === document.activeElement);
-            
-            let newIndex = currentIndex + direction;
-            if (newIndex < 0) newIndex = options.length - 1;
-            if (newIndex >= options.length) newIndex = 0;
-            
-            options[newIndex].focus();
-        }
-
-        // Initialize the quiz when the page loads
-        document.addEventListener('DOMContentLoaded', initQuiz);
+        // Helper for visually hidden text
+        document.addEventListener('DOMContentLoaded', function() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .visually-hidden {
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    padding: 0;
+                    margin: -1px;
+                    overflow: hidden;
+                    clip: rect(0, 0, 0, 0);
+                    white-space: nowrap;
+                    border: 0;
+                }
+            `;
+            document.head.appendChild(style);
+        });
     </script>
 </body>
 </html>
