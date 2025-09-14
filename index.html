@@ -3,1081 +3,1216 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Accessible Color Mixer & Theme Preview Tool</title>
+<title>Accessible Digital Art Gallery – Explore, Filter & View Artworks</title>
 <style>
   /* Reset and base */
   :root {
-    --color-bg: #ffffff;
-    --color-text: #1a1a1a;
-    --color-primary: #005a9c;
-    --color-primary-dark: #004080;
-    --color-accent: #ff6f61;
-    --color-accent-dark: #cc574d;
-    --color-error: #b00020;
-    --color-error-bg: #f9d6d5;
-    --color-focus: #ffbf47;
-    --color-border: #cccccc;
-    --color-border-focus: #ffbf47;
+    --color-bg-light: #f9f9fb;
+    --color-bg-dark: #121212;
+    --color-text-light: #111111;
+    --color-text-dark: #e0e0e0;
+    --color-primary: #0a84ff;
+    --color-primary-dark: #3794ff;
+    --color-secondary: #ff6f61;
+    --color-secondary-dark: #ff8a7b;
+    --color-accent: #ffd60a;
+    --color-accent-dark: #ffde3c;
+    --color-border-light: #cccccc;
+    --color-border-dark: #444444;
+    --color-focus: #ffde3c;
+    --color-error: #e03c3c;
+    --color-error-bg: #fceaea;
+    --color-success: #2a9d8f;
+    --color-success-bg: #daf5f2;
+
     --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     --font-size-base: 1rem;
-    --font-size-large: 1.25rem;
-    --line-height: 1.6;
-    --spacing-base: 1rem;
-    --spacing-small: 0.5rem;
-    --min-touch-size: 44px;
+    --line-height-base: 1.6;
+    --border-radius: 8px;
+    --transition-speed: 0.3s;
+    --shadow-focus: 0 0 0 3px var(--color-focus);
+    --min-target-size: 44px;
   }
+
   @media (prefers-reduced-motion: reduce) {
-    * {
+    *, *::before, *::after {
       animation-duration: 0.001ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
       scroll-behavior: auto !important;
     }
   }
-  html {
-    font-size: 100%;
-    scroll-behavior: smooth;
-  }
+
   body {
     margin: 0;
     font-family: var(--font-family);
     font-size: var(--font-size-base);
-    line-height: var(--line-height);
-    color: var(--color-text);
-    background: var(--color-bg);
-    max-width: 80ch;
-    padding: var(--spacing-base);
+    line-height: var(--line-height-base);
+    background-color: var(--color-bg-light);
+    color: var(--color-text-light);
+    min-width: 320px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    user-select: text;
   }
+
+  body.dark {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-dark);
+  }
+
   a {
     color: var(--color-primary);
     text-decoration: underline;
   }
   a:focus,
-  button:focus,
-  input:focus,
-  select:focus,
-  textarea:focus {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 2px;
+  a:hover {
+    outline: none;
+    color: var(--color-primary-dark);
   }
-  /* Skip link */
-  #skip-link {
+
+  /* Skip Link */
+  .skip-link {
     position: absolute;
     top: -40px;
     left: 0;
     background: var(--color-primary);
-    color: var(--color-bg);
-    padding: 0.5rem 1rem;
+    color: white;
+    padding: 0.75rem 1rem;
     z-index: 100;
+    text-decoration: none;
     font-weight: 700;
-    border-radius: 0 0 4px 0;
+    border-radius: 0 0 4px 4px;
+    transition: top 0.3s ease;
   }
-  #skip-link:focus {
+  .skip-link:focus {
+    top: 0;
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 4px 8px rgba(10, 132, 255, 0.3);
+  }
+  header h1 {
+    margin: 0;
+    font-size: 2rem;
+    line-height: 1.2;
+  }
+  header p {
+    margin: 0.25rem 0 0 0;
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+
+  /* Navigation */
+  nav[aria-label="Primary"] {
+    background-color: var(--color-bg-light);
+    border-bottom: 3px solid var(--color-primary);
+  }
+  body.dark nav[aria-label="Primary"] {
+    background-color: var(--color-bg-dark);
+    border-color: var(--color-primary-dark);
+  }
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Hamburger Menu */
+  .menu-toggle {
+    display: none;
+  }
+  .menu-toggle-label {
+    display: none;
+    cursor: pointer;
+    width: var(--min-target-size);
+    height: var(--min-target-size);
+    position: relative;
+  }
+  .menu-toggle-label span,
+  .menu-toggle-label span::before,
+  .menu-toggle-label span::after {
+    display: block;
+    background-color: var(--color-primary);
+    position: absolute;
+    height: 3px;
+    width: 24px;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+  }
+  .menu-toggle-label span {
+    top: 50%;
+    margin-top: -1.5px;
+  }
+  .menu-toggle-label span::before {
+    content: "";
+    top: -8px;
+  }
+  .menu-toggle-label span::after {
+    content: "";
+    top: 8px;
+  }
+  body.dark .menu-toggle-label span,
+  body.dark .menu-toggle-label span::before,
+  body.dark .menu-toggle-label span::after {
+    background-color: var(--color-primary-dark);
+  }
+  .menu-toggle:focus + .menu-toggle-label,
+  .menu-toggle-label:hover {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  .menu-toggle:checked + .menu-toggle-label span {
+    background-color: transparent;
+  }
+  .menu-toggle:checked + .menu-toggle-label span::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+  .menu-toggle:checked + .menu-toggle-label span::after {
+    transform: rotate(-45deg);
     top: 0;
   }
 
-  header, footer, main, nav, section, article {
-    display: block;
-  }
-
-  header {
-    border-bottom: 4px solid var(--color-primary);
-    margin-bottom: var(--spacing-base);
-  }
-  header h1 {
-    font-size: var(--font-size-large);
-    margin: 0;
-    padding: var(--spacing-small) 0;
-  }
-  nav[aria-label="Primary"] {
-    margin-bottom: var(--spacing-base);
-  }
-  nav ul {
+  /* Primary Menu */
+  .primary-menu {
     list-style: none;
-    padding-left: 0;
     margin: 0;
+    padding: 0;
     display: flex;
-    gap: var(--spacing-base);
+    gap: 1.5rem;
   }
-  nav a {
-    padding: 0.5rem 1rem;
-    display: inline-block;
-    border-radius: 4px;
-    background: var(--color-primary);
-    color: var(--color-bg);
+  .primary-menu li {
+    position: relative;
+  }
+  .primary-menu a,
+  .primary-menu button {
     font-weight: 600;
-  }
-  nav a[aria-current="page"] {
-    background: var(--color-accent);
-    color: var(--color-bg);
-  }
-  nav a:focus-visible {
-    outline-offset: 3px;
-  }
-
-  /* Breadcrumbs */
-  nav[aria-label="Breadcrumb"] {
-    font-size: 0.875rem;
-    margin-bottom: var(--spacing-base);
-  }
-  nav[aria-label="Breadcrumb"] ol {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-    display: flex;
-    gap: 0.25rem;
-  }
-  nav[aria-label="Breadcrumb"] li::after {
-    content: "›";
-    margin-left: 0.25rem;
-    color: var(--color-border);
-  }
-  nav[aria-label="Breadcrumb"] li:last-child::after {
-    content: "";
-  }
-  nav[aria-label="Breadcrumb"] a {
+    font-size: 1rem;
     color: var(--color-primary);
-    text-decoration: none;
-  }
-  nav[aria-label="Breadcrumb"] a:focus,
-  nav[aria-label="Breadcrumb"] a:hover {
-    text-decoration: underline;
-  }
-
-  main {
-    margin-bottom: var(--spacing-base);
-  }
-
-  /* Layout */
-  .container {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: var(--spacing-base);
-  }
-  @media (max-width: 768px) {
-    .container {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* Section headings */
-  h2 {
-    font-size: 1.5rem;
-    margin-top: 0;
-    margin-bottom: var(--spacing-small);
-    border-bottom: 3px solid var(--color-primary);
-    padding-bottom: 0.25rem;
-  }
-  h3 {
-    font-size: 1.25rem;
-    margin-top: var(--spacing-base);
-    margin-bottom: var(--spacing-small);
-  }
-
-  /* Color Mixer Form */
-  form {
-    background: #f0f4f8;
-    border-radius: 8px;
-    padding: var(--spacing-base);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  fieldset {
-    border: 2px solid var(--color-border);
-    border-radius: 6px;
-    padding: var(--spacing-base);
-    margin-bottom: var(--spacing-base);
-  }
-  legend {
-    font-weight: 700;
-    font-size: 1.125rem;
-    padding: 0 0.5rem;
-    color: var(--color-primary-dark);
-  }
-  label {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-weight: 600;
-  }
-  input[type="range"],
-  input[type="number"] {
-    width: 100%;
-    margin-bottom: var(--spacing-small);
-  }
-  input[type="number"] {
-    max-width: 6rem;
-  }
-  .input-group {
-    margin-bottom: var(--spacing-base);
-  }
-  .input-row {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-small);
-  }
-  .input-row > label {
-    flex: 1 0 3rem;
-    margin-bottom: 0;
-  }
-  .input-row > input[type="range"] {
-    flex: 3 1 auto;
-  }
-  .input-row > input[type="number"] {
-    flex: 1 0 4rem;
-  }
-
-  /* Palette display */
-  #palette-list {
-    margin-top: var(--spacing-base);
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
-    gap: var(--spacing-small);
-  }
-  .palette-swatch {
-    border: 2px solid var(--color-border);
-    border-radius: 6px;
-    overflow: hidden;
-    cursor: pointer;
-    background: var(--color-bg);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    min-height: 100px;
-  }
-  .palette-swatch:focus-visible {
-    outline: 3px solid var(--color-focus);
-    outline-offset: 2px;
-  }
-  .palette-colors {
-    display: flex;
-    flex: 1 1 auto;
-  }
-  .palette-color {
-    flex: 1 1 0;
-    height: 30px;
-  }
-  .palette-label {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    background: var(--color-primary-dark);
-    color: var(--color-bg);
-    text-align: center;
-    user-select: none;
-  }
-
-  /* Theme Preview */
-  #theme-preview {
-    border: 2px solid var(--color-border);
-    border-radius: 8px;
-    padding: var(--spacing-base);
-    background: var(--color-bg);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  #theme-preview h3 {
-    margin-top: 0;
-  }
-  .theme-sample {
-    margin-top: var(--spacing-base);
-    border-radius: 6px;
-    padding: var(--spacing-base);
-    color: var(--color-bg);
-    font-weight: 700;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-  .theme-light {
-    background: linear-gradient(135deg, #fefefe 0%, #d6e4f0 100%);
-    color: #1a1a1a;
-  }
-  .theme-dark {
-    background: linear-gradient(135deg, #1a1a1a 0%, #3a3a3a 100%);
-    color: #f0f0f0;
-  }
-  .theme-accent {
-    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
-    color: var(--color-bg);
-  }
-
-  /* Buttons */
-  button {
-    background: var(--color-primary);
-    color: var(--color-bg);
+    background: none;
     border: none;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    font-size: var(--font-size-base);
-    font-weight: 600;
     cursor: pointer;
-    min-width: var(--min-touch-size);
-    min-height: var(--min-touch-size);
+    text-decoration: none;
+    padding: 0.5rem 0;
+    min-width: var(--min-target-size);
+    min-height: var(--min-target-size);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    user-select: none;
   }
-  button:focus-visible {
+  .primary-menu a:focus,
+  .primary-menu button:focus,
+  .primary-menu a:hover,
+  .primary-menu button:hover {
+    outline: none;
+    color: var(--color-primary-dark);
+  }
+  body.dark .primary-menu a,
+  body.dark .primary-menu button {
+    color: var(--color-primary-dark);
+  }
+  body.dark .primary-menu a:focus,
+  body.dark .primary-menu button:focus,
+  body.dark .primary-menu a:hover,
+  body.dark .primary-menu button:hover {
+    color: var(--color-primary);
+  }
+
+  /* Responsive nav */
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: block;
+    }
+    .menu-toggle-label {
+      display: inline-block;
+    }
+    .primary-menu {
+      flex-direction: column;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background-color: var(--color-bg-light);
+      border-top: 1px solid var(--color-border-light);
+      margin-top: 0.5rem;
+      border-radius: 0 0 var(--border-radius) var(--border-radius);
+    }
+    body.dark .primary-menu {
+      background-color: var(--color-bg-dark);
+      border-color: var(--color-border-dark);
+    }
+    .menu-toggle:checked ~ nav[aria-label="Primary"] .primary-menu {
+      max-height: 500px;
+    }
+    .primary-menu li {
+      padding: 0.25rem 1rem;
+    }
+  }
+
+  /* Main */
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem 4rem 1rem;
+  }
+
+  /* Filter/Search Section */
+  #filter-search-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  #filter-search-section > * {
+    flex: 1 1 200px;
+    min-width: 200px;
+  }
+
+  /* Search Form */
+  #search-form {
+    display: flex;
+    align-items: center;
+  }
+  #search-form label {
+    font-weight: 700;
+    margin-right: 0.5rem;
+  }
+  #search-input {
+    flex-grow: 1;
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--border-radius);
+    background-color: var(--color-bg-light);
+    color: var(--color-text-light);
+    transition: border-color var(--transition-speed) ease;
+  }
+  #search-input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus);
+  }
+  body.dark #search-input {
+    background-color: var(--color-bg-dark);
+    border-color: var(--color-border-dark);
+    color: var(--color-text-dark);
+  }
+
+  /* Filter Fieldset */
+  #filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+  #filter-form legend {
+    font-weight: 700;
+    margin-right: 1rem;
+    align-self: center;
+  }
+  #filter-form label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  #filter-form input[type="checkbox"] {
+    width: var(--min-target-size);
+    height: var(--min-target-size);
+    min-width: var(--min-target-size);
+    min-height: var(--min-target-size);
+    cursor: pointer;
+    border-radius: 4px;
+    border: 2px solid var(--color-border-light);
+    background-color: var(--color-bg-light);
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+  }
+  #filter-form input[type="checkbox"]:focus-visible {
     outline: 3px solid var(--color-focus);
     outline-offset: 2px;
   }
-  button:disabled {
-    background: var(--color-border);
-    color: #666666;
-    cursor: not-allowed;
+  #filter-form input[type="checkbox"]:checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  body.dark #filter-form input[type="checkbox"] {
+    background-color: var(--color-bg-dark);
+    border-color: var(--color-border-dark);
+  }
+  body.dark #filter-form input[type="checkbox"]:checked {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
   }
 
-  /* Error message */
-  .error-message {
-    color: var(--color-error);
-    background-color: var(--color-error-bg);
-    border: 1px solid var(--color-error);
+  /* Dark Mode Toggle */
+  #dark-mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  #dark-mode-toggle input[type="checkbox"] {
+    width: var(--min-target-size);
+    height: var(--min-target-size);
+    min-width: var(--min-target-size);
+    min-height: var(--min-target-size);
+    cursor: pointer;
     border-radius: 4px;
-    padding: 0.5rem;
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
+    border: 2px solid var(--color-border-light);
+    background-color: var(--color-bg-light);
+    transition: border-color var(--transition-speed) ease, background-color var(--transition-speed) ease;
+  }
+  #dark-mode-toggle input[type="checkbox"]:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  #dark-mode-toggle input[type="checkbox"]:checked {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+  body.dark #dark-mode-toggle input[type="checkbox"] {
+    background-color: var(--color-bg-dark);
+    border-color: var(--color-border-dark);
+  }
+  body.dark #dark-mode-toggle input[type="checkbox"]:checked {
+    background-color: var(--color-accent-dark);
+    border-color: var(--color-accent-dark);
   }
 
-  /* Visually hidden (for aria-live, labels) */
-  .visually-hidden {
+  /* Gallery Grid */
+  #gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Artwork Card */
+  .artwork-card {
+    background-color: var(--color-bg-light);
+    border: 2px solid var(--color-border-light);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  }
+  body.dark .artwork-card {
+    background-color: #1c1c1c;
+    border-color: var(--color-border-dark);
+    box-shadow: 0 2px 8px rgba(255 255 255 / 0.1);
+  }
+  .artwork-card:focus-within,
+  .artwork-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 12px var(--color-primary);
+  }
+  .artwork-card:focus-within {
+    outline: none;
+  }
+
+  /* Thumbnail container */
+  .thumbnail-container {
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .thumbnail-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    transition: transform var(--transition-speed) ease;
+  }
+  .artwork-card:hover .thumbnail-container img,
+  .artwork-card:focus-within .thumbnail-container img {
+    transform: scale(1.05);
+  }
+
+  /* Info overlay on hover/focus */
+  .info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+    color: white;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity var(--transition-speed) ease;
+    pointer-events: none;
+  }
+  .artwork-card:hover .info-overlay,
+  .artwork-card:focus-within .info-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .info-overlay h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .info-overlay p {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  /* Artwork details */
+  .artwork-details {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .artwork-details p {
+    margin: 0.25rem 0 0 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-secondary);
+  }
+  body.dark .artwork-details p {
+    color: var(--color-secondary-dark);
+  }
+
+  /* View Button */
+  .view-button {
+    margin-top: 1rem;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    min-width: var(--min-target-size);
+    min-height: var(--min-target-size);
+    align-self: flex-start;
+    transition: background-color var(--transition-speed) ease;
+  }
+  .view-button:focus-visible,
+  .view-button:hover {
+    background-color: var(--color-primary-dark);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--color-focus);
+  }
+  body.dark .view-button {
+    background-color: var(--color-primary-dark);
+  }
+  body.dark .view-button:focus-visible,
+  body.dark .view-button:hover {
+    background-color: var(--color-primary);
+  }
+
+  /* Modal */
+  #modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+  #modal[aria-hidden="false"] {
+    display: flex;
+  }
+  #modal-content {
+    background-color: var(--color-bg-light);
+    color: var(--color-text-light);
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 24px var(--color-primary);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    outline: none;
+  }
+  body.dark #modal-content {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-dark);
+    box-shadow: 0 0 24px var(--color-primary-dark);
+  }
+
+  /* Modal header */
+  #modal-header {
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    max-width: 80%;
+  }
+  #modal-close {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    cursor: pointer;
+    min-width: var(--min-target-size);
+    min-height: var(--min-target-size);
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #modal-close:focus-visible,
+  #modal-close:hover {
+    outline: none;
+    color: var(--color-primary-dark);
+    box-shadow: 0 0 0 3px var(--color-focus);
+  }
+  body.dark #modal-close {
+    color: var(--color-primary-dark);
+  }
+  body.dark #modal-close:focus-visible,
+  body.dark #modal-close:hover {
+    color: var(--color-primary);
+  }
+
+  /* Modal image container */
+  #modal-image-container {
+    flex-grow: 1;
+    overflow: auto;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem 1rem 1rem;
+  }
+  #modal-image {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 12px rgba(0,0,0,0.7);
+  }
+
+  /* Modal description */
+  #modal-description {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--color-text-light);
+  }
+  body.dark #modal-description {
+    color: var(--color-text-dark);
+  }
+
+  /* Status live region */
+  #status-message {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* Focus outline enhancements */
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 480px) {
+    header h1 {
+      font-size: 1.5rem;
+    }
+    header p {
+      font-size: 1rem;
+    }
+    #modal-header h2 {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+</head>
+<body>
+<a href="#main-content" class="skip-link" tabindex="0">Skip to main content</a>
+
+<header role="banner">
+  <h1>Accessible Digital Art Gallery</h1>
+  <p>Browse, filter, and view stunning artworks in an inclusive experience</p>
+</header>
+
+<nav aria-label="Primary" role="navigation">
+  <div class="nav-container">
+    <ul class="primary-menu" role="menubar" aria-label="Primary navigation">
+      <li role="none"><a role="menuitem" href="#gallery" tabindex="0">Gallery</a></li>
+      <li role="none"><a role="menuitem" href="#filter-search-section" tabindex="0">Filter & Search</a></li>
+      <li role="none"><a role="menuitem" href="#dark-mode-toggle" tabindex="0">Settings</a></li>
+      <li role="none"><a role="menuitem" href="#footer" tabindex="0">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main-content" tabindex="-1">
+  <section aria-labelledby="filter-search-heading" id="filter-search-section">
+    <h2 id="filter-search-heading">Filter and Search Artworks</h2>
+
+    <form id="search-form" role="search" aria-describedby="search-help" novalidate>
+      <label for="search-input">Search artworks by title or artist:</label>
+      <input
+        type="search"
+        id="search-input"
+        name="search"
+        autocomplete="off"
+        aria-required="false"
+        aria-describedby="search-help"
+        placeholder="Enter keywords"
+        aria-label="Search artworks by title or artist"
+      />
+      <span id="search-help" class="sr-only">Type to filter artworks by title or artist name.</span>
+    </form>
+
+    <form id="filter-form" aria-labelledby="filter-legend" novalidate>
+      <fieldset>
+        <legend id="filter-legend">Filter by category (multiple selection possible):</legend>
+        <label for="filter-painting">
+          <input type="checkbox" id="filter-painting" name="category" value="Painting" aria-checked="false" />
+          Painting
+        </label>
+        <label for="filter-photography">
+          <input type="checkbox" id="filter-photography" name="category" value="Photography" aria-checked="false" />
+          Photography
+        </label>
+        <label for="filter-sculpture">
+          <input type="checkbox" id="filter-sculpture" name="category" value="Sculpture" aria-checked="false" />
+          Sculpture
+        </label>
+        <label for="filter-digital">
+          <input type="checkbox" id="filter-digital" name="category" value="Digital" aria-checked="false" />
+          Digital Art
+        </label>
+        <label for="filter-mixedmedia">
+          <input type="checkbox" id="filter-mixedmedia" name="category" value="Mixed Media" aria-checked="false" />
+          Mixed Media
+        </label>
+      </fieldset>
+    </form>
+
+    <div id="dark-mode-toggle">
+      <label for="dark-mode-checkbox">Toggle dark mode:</label>
+      <input type="checkbox" id="dark-mode-checkbox" aria-checked="false" aria-label="Toggle dark mode" />
+    </div>
+  </section>
+
+  <section aria-labelledby="gallery-heading" id="gallery-section">
+    <h2 id="gallery-heading">Artworks Gallery</h2>
+    <p id="gallery-description">Browse through the collection below. Hover or focus on an artwork for details. Click "View" to see full screen.</p>
+    <div id="gallery" role="list" aria-live="polite" aria-atomic="true" aria-relevant="additions removals">
+      <!-- Artworks inserted by JS -->
+    </div>
+  </section>
+</main>
+
+<!-- Modal for full screen artwork -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description" aria-hidden="true" tabindex="-1">
+  <div id="modal-content" tabindex="0">
+    <header id="modal-header">
+      <h2 id="modal-title"></h2>
+      <button id="modal-close" aria-label="Close full screen artwork view" type="button">&times;</button>
+    </header>
+    <div id="modal-image-container">
+      <img id="modal-image" src="" alt="" />
+    </div>
+    <div id="modal-description"></div>
+  </div>
+</div>
+
+<footer id="footer" role="contentinfo" aria-label="Footer">
+  <section aria-labelledby="footer-about-heading">
+    <h2 id="footer-about-heading">About This Gallery</h2>
+    <p>
+      This digital art gallery is designed with full accessibility compliance (WCAG 2.2 AAA) to ensure an inclusive and enjoyable experience for all users.
+      Use the search and filter options to find artworks by your preferences. Toggle dark mode for comfortable viewing in any environment.
+    </p>
+    <p>
+      <strong>Contact:</strong> <a href="mailto:info@digitalartgallery.example" aria-label="Send email to info at digital art gallery example">info@digitalartgallery.example</a>
+    </p>
+  </section>
+</footer>
+
+<!-- Status live region for announcements -->
+<div id="status-message" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  // Data for artworks
+  const artworks = [
+    {
+      id: "art1",
+      title: "Starry Night",
+      artist: "Vincent van Gogh",
+      category: "Painting",
+      description: "A famous oil on canvas painting by Vincent van Gogh depicting a swirling night sky over a quiet town.",
+      thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Vincent_van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/320px-Vincent_van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+      fullImage: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Vincent_van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+      alt: "Starry Night painting by Vincent van Gogh showing a swirling starry sky over a village"
+    },
+    {
+      id: "art2",
+      title: "The Persistence of Memory",
+      artist: "Salvador Dalí",
+      category: "Painting",
+      description: "A surreal painting by Salvador Dalí featuring melting clocks in a dream-like landscape.",
+      thumbnail: "https://upload.wikimedia.org/wikipedia/en/thumb/d/dd/The_Persistence_of_Memory.jpg/320px-The_Persistence_of_Memory.jpg",
+      fullImage: "https://upload.wikimedia.org/wikipedia/en/d/dd/The_Persistence_of_Memory.jpg",
+      alt: "The Persistence of Memory painting by Salvador Dalí with melting clocks on a barren landscape"
+    },
+    {
+      id: "art3",
+      title: "Migrant Mother",
+      artist: "Dorothea Lange",
+      category: "Photography",
+      description: "An iconic black and white photograph by Dorothea Lange showing a worried mother during the Great Depression.",
+      thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Migrant_Mother_-_NARA_-_519583.tif/lossy-page1-320px-Migrant_Mother_-_NARA_-_519583.tif.jpg",
+      fullImage: "https://upload.wikimedia.org/wikipedia/commons/3/3f/Migrant_Mother_-_NARA_-_519583.tif",
+      alt: "Migrant Mother black and white photograph by Dorothea Lange showing a worried mother with children"
+    },
+    {
+      id: "art4",
+      title: "The Thinker",
+      artist: "Auguste Rodin",
+      category: "Sculpture",
+      description: "A bronze sculpture by Auguste Rodin depicting a man in deep contemplation.",
+      thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/The_Thinker%2C_Rodin.jpg/320px-The_Thinker%2C_Rodin.jpg",
+      fullImage: "https://upload.wikimedia.org/wikipedia/commons/7/7f/The_Thinker%2C_Rodin.jpg",
+      alt: "The Thinker bronze sculpture by Auguste Rodin showing a seated man with chin resting on hand"
+    },
+    {
+      id: "art5",
+      title: "Digital Sunrise",
+      artist: "Jane Doe",
+      category: "Digital",
+      description: "A vibrant digital artwork representing a sunrise with abstract geometric shapes and bright colors.",
+      thumbnail: "https://via.placeholder.com/320x240/ffde3c/111111?text=Digital+Sunrise",
+      fullImage: "https://via.placeholder.com/1200x900/ffde3c/111111?text=Digital+Sunrise",
+      alt: "Digital artwork titled Digital Sunrise with abstract shapes and bright yellow-orange colors"
+    },
+    {
+      id: "art6",
+      title: "Urban Layers",
+      artist: "John Smith",
+      category: "Mixed Media",
+      description: "An expressive mixed media piece combining photography and painting to depict urban life.",
+      thumbnail: "https://via.placeholder.com/320x240/3794ff/ffffff?text=Urban+Layers",
+      fullImage: "https://via.placeholder.com/1200x900/3794ff/ffffff?text=Urban+Layers",
+      alt: "Mixed media artwork titled Urban Layers with layered cityscape images and brush strokes"
+    },
+    {
+      id: "art7",
+      title: "Sunflowers",
+      artist: "Vincent van Gogh",
+      category: "Painting",
+      description: "A famous series of paintings by Vincent van Gogh featuring sunflowers in a vase.",
+      thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Vincent_Willem_van_Gogh_127.jpg/320px-Vincent_Willem_van_Gogh_127.jpg",
+      fullImage: "https://upload.wikimedia.org/wikipedia/commons/4/47/Vincent_Willem_van_Gogh_127.jpg",
+      alt: "Sunflowers painting by Vincent van Gogh showing bright yellow sunflowers in a vase"
+    },
+    {
+      id: "art8",
+      title: "Moonlight Sonata",
+      artist: "Emily White",
+      category: "Photography",
+      description: "A serene night-time photograph capturing moonlight reflecting on a lake.",
+      thumbnail: "https://via.placeholder.com/320x240/0a84ff/ffffff?text=Moonlight+Sonata",
+      fullImage: "https://via.placeholder.com/1200x900/0a84ff/ffffff?text=Moonlight+Sonata",
+      alt: "Night-time photograph titled Moonlight Sonata showing moonlight reflections on a lake"
+    }
+  ];
+
+  // DOM Elements
+  const galleryEl = document.getElementById("gallery");
+  const searchInput = document.getElementById("search-input");
+  const filterForm = document.getElementById("filter-form");
+  const darkModeToggle = document.getElementById("dark-mode-checkbox");
+  const modal = document.getElementById("modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalImage = document.getElementById("modal-image");
+  const modalDescription = document.getElementById("modal-description");
+  const modalCloseBtn = document.getElementById("modal-close");
+  const statusMessage = document.getElementById("status-message");
+  const mainContent = document.getElementById("main-content");
+
+  // State
+  let currentFilters = new Set();
+  let currentSearchTerm = "";
+  let lastFocusedElement = null;
+
+  // Utility: Create element with attributes and children
+  function createElement(tag, attrs = {}, children = []) {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") {
+        el.className = v;
+      } else if (k === "dataset") {
+        for (const [dataKey, dataVal] of Object.entries(v)) {
+          el.dataset[dataKey] = dataVal;
+        }
+      } else if (k.startsWith("aria-")) {
+        el.setAttribute(k, v);
+      } else if (k === "role") {
+        el.setAttribute("role", v);
+      } else if (k === "tabindex") {
+        el.tabIndex = v;
+      } else if (k === "text") {
+        el.textContent = v;
+      } else if (k === "html") {
+        el.innerHTML = v;
+      } else {
+        el.setAttribute(k, v);
+      }
+    }
+    children.forEach(child => {
+      if (typeof child === "string") {
+        el.appendChild(document.createTextNode(child));
+      } else if (child instanceof Node) {
+        el.appendChild(child);
+      }
+    });
+    return el;
+  }
+
+  // Build and render gallery cards
+  function renderGallery() {
+    // Clear existing
+    galleryEl.innerHTML = "";
+
+    // Filter artworks by search and category
+    const filtered = artworks.filter(art => {
+      // Filter by category
+      if (currentFilters.size > 0 && !currentFilters.has(art.category)) {
+        return false;
+      }
+      // Filter by search term (title or artist)
+      if (currentSearchTerm.trim() !== "") {
+        const term = currentSearchTerm.trim().toLowerCase();
+        if (
+          !art.title.toLowerCase().includes(term) &&
+          !art.artist.toLowerCase().includes(term)
+        ) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      const noResult = createElement("p", {
+        text: "No artworks match your search and filter criteria.",
+        role: "alert",
+        style: "font-weight:700; font-size:1.25rem; color: var(--color-error);"
+      });
+      galleryEl.appendChild(noResult);
+      updateStatus("No artworks found matching current filters and search.");
+      return;
+    }
+
+    updateStatus(`${filtered.length} artworks displayed.`);
+
+    filtered.forEach(art => {
+      const card = createArtworkCard(art);
+      galleryEl.appendChild(card);
+    });
+  }
+
+  // Create individual artwork card element
+  function createArtworkCard(art) {
+    // Article container with role listitem
+    const article = createElement("article", {
+      class: "artwork-card",
+      role: "listitem",
+      tabIndex: 0,
+      "aria-labelledby": `${art.id}-title`,
+      "aria-describedby": `${art.id}-desc`
+    });
+
+    // Thumbnail container with image and overlay info
+    const thumbContainer = createElement("div", {
+      class: "thumbnail-container"
+    });
+
+    const img = createElement("img", {
+      src: art.thumbnail,
+      alt: art.alt,
+      loading: "lazy",
+      width: "320",
+      height: "240"
+    });
+
+    const infoOverlay = createElement("div", {
+      class: "info-overlay",
+      ariaHidden: "true"
+    }, [
+      createElement("h3", { id: `${art.id}-title`, text: art.title }),
+      createElement("p", { text: `by ${art.artist}` })
+    ]);
+
+    thumbContainer.appendChild(img);
+    thumbContainer.appendChild(infoOverlay);
+
+    // Details container
+    const details = createElement("div", { class: "artwork-details" }, [
+      createElement("p", { id: `${art.id}-desc`, text: `${art.category}` }),
+      createElement("button", {
+        class: "view-button",
+        type: "button",
+        "aria-label": `View full screen image of ${art.title} by ${art.artist}`,
+        tabindex: 0
+      }, ["View"])
+    ]);
+
+    // Append children
+    article.appendChild(thumbContainer);
+    article.appendChild(details);
+
+    // Event handlers
+    const viewBtn = details.querySelector(".view-button");
+    viewBtn.addEventListener("click", () => openModal(art, viewBtn));
+    viewBtn.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openModal(art, viewBtn);
+      }
+    });
+
+    // Keyboard focus styles for article
+    article.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openModal(art, article);
+      }
+    });
+
+    return article;
+  }
+
+  // Update status live region for screen readers
+  function updateStatus(message) {
+    statusMessage.textContent = "";
+    setTimeout(() => {
+      statusMessage.textContent = message;
+    }, 100);
+  }
+
+  // Open modal with artwork details
+  function openModal(art, triggerElement) {
+    lastFocusedElement = triggerElement;
+    modalTitle.textContent = art.title + " by " + art.artist;
+    modalImage.src = art.fullImage;
+    modalImage.alt = art.alt;
+    modalDescription.textContent = art.description;
+    modal.setAttribute("aria-hidden", "false");
+    modal.style.display = "flex";
+    modal.focus();
+
+    // Trap focus inside modal
+    trapFocus(modal);
+  }
+
+  // Close modal
+  function closeModal() {
+    modal.setAttribute("aria-hidden", "true");
+    modal.style.display = "none";
+    modalTitle.textContent = "";
+    modalImage.src = "";
+    modalImage.alt = "";
+    modalDescription.textContent = "";
+    releaseFocusTrap();
+    if (lastFocusedElement) {
+      lastFocusedElement.focus();
+      lastFocusedElement = null;
+    }
+  }
+
+  // Focus trap implementation for modal
+  let focusTrapElements = [];
+  let firstFocusable = null;
+  let lastFocusable = null;
+  let focusTrapActive = false;
+
+  function trapFocus(container) {
+    focusTrapElements = Array.from(
+      container.querySelectorAll(
+        'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable]'
+      )
+    ).filter(el => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement);
+
+    if (focusTrapElements.length === 0) {
+      // No focusable elements, focus container itself
+      container.tabIndex = 0;
+      container.focus();
+      firstFocusable = container;
+      lastFocusable = container;
+    } else {
+      firstFocusable = focusTrapElements[0];
+      lastFocusable = focusTrapElements[focusTrapElements.length - 1];
+      firstFocusable.focus();
+    }
+    focusTrapActive = true;
+  }
+
+  function releaseFocusTrap() {
+    focusTrapActive = false;
+  }
+
+  // Keyboard navigation for modal focus trap and close
+  document.addEventListener("keydown", e => {
+    if (focusTrapActive && modal.getAttribute("aria-hidden") === "false") {
+      if (e.key === "Tab") {
+        if (focusTrapElements.length === 0) {
+          e.preventDefault();
+          return;
+        }
+        if (e.shiftKey) {
+          if (document.activeElement === firstFocusable) {
+            e.preventDefault();
+            lastFocusable.focus();
+          }
+        } else {
+          if (document.activeElement === lastFocusable) {
+            e.preventDefault();
+            firstFocusable.focus();
+          }
+        }
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        closeModal();
+      }
+    }
+  });
+
+  // Event listeners for modal close button
+  modalCloseBtn.addEventListener("click", closeModal);
+  modalCloseBtn.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      closeModal();
+    }
+  });
+
+  // Close modal on backdrop click (only if clicked outside modal content)
+  modal.addEventListener("click", e => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Filter form change handler
+  filterForm.addEventListener("change", e => {
+    if (e.target.name === "category") {
+      const checkboxes = filterForm.querySelectorAll('input[name="category"]');
+      currentFilters.clear();
+      checkboxes.forEach(cb => {
+        cb.setAttribute("aria-checked", cb.checked ? "true" : "false");
+        if (cb.checked) {
+          currentFilters.add(cb.value);
+        }
+      });
+      renderGallery();
+    }
+  });
+
+  // Search input handler with debouncing
+  let searchTimeout = null;
+  searchInput.addEventListener("input", () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      currentSearchTerm = searchInput.value;
+      renderGallery();
+    }, 300);
+  });
+
+  // Dark mode toggle handler
+  darkModeToggle.addEventListener("change", e => {
+    const isDark = e.target.checked;
+    document.body.classList.toggle("dark", isDark);
+    e.target.setAttribute("aria-checked", isDark ? "true" : "false");
+    updateStatus(isDark ? "Dark mode enabled." : "Light mode enabled.");
+  });
+
+  // Initialize page
+  function init() {
+    // Restore dark mode preference if stored
+    try {
+      const savedDarkMode = localStorage.getItem("darkModeEnabled");
+      if (savedDarkMode === "true") {
+        darkModeToggle.checked = true;
+        document.body.classList.add("dark");
+        darkModeToggle.setAttribute("aria-checked", "true");
+      }
+    } catch {}
+
+    renderGallery();
+  }
+
+  // Save dark mode preference
+  darkModeToggle.addEventListener("change", e => {
+    try {
+      localStorage.setItem("darkModeEnabled", e.target.checked ? "true" : "false");
+    } catch {}
+  });
+
+  // Accessibility: Focus main content on skip link click
+  const skipLink = document.querySelector(".skip-link");
+  skipLink.addEventListener("click", e => {
+    mainContent.focus();
+  });
+
+  // Initialize on DOM ready
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+
+<!-- Screen reader only class -->
+<style>
+  .sr-only {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
     padding: 0 !important;
     margin: -1px !important;
     overflow: hidden !important;
-    clip: rect(0,0,0,0) !important;
+    clip: rect(0, 0, 0, 0) !important;
     white-space: nowrap !important;
     border: 0 !important;
   }
-
-  /* Focus ring enhancement */
-  :focus-visible {
-    outline-offset: 3px;
-    outline-width: 3px;
-    outline-style: solid;
-    outline-color: var(--color-focus);
-  }
-
-  /* Responsive and zoom support */
-  @media (max-width: 480px) {
-    body {
-      padding: var(--spacing-small);
-      max-width: 100%;
-    }
-  }
 </style>
-</head>
-<body>
-<a href="#main-content" id="skip-link">Skip to main content</a>
-
-<header>
-  <h1 id="page-title">Accessible Color Mixer &amp; Theme Preview Tool</h1>
-  <nav aria-label="Primary">
-    <ul>
-      <li><a href="#color-mixer" aria-current="page">Color Mixer</a></li>
-      <li><a href="#palette-section">Palettes</a></li>
-      <li><a href="#theme-preview-section">Theme Preview</a></li>
-      <li><a href="#help-section">Help</a></li>
-    </ul>
-  </nav>
-  <nav aria-label="Breadcrumb">
-    <ol>
-      <li><a href="#page-title">Home</a></li>
-      <li>Color Mixer</li>
-    </ol>
-  </nav>
-</header>
-
-<main id="main-content" tabindex="-1" aria-labelledby="page-title">
-  <div class="container">
-    <section id="color-mixer" aria-labelledby="color-mixer-heading">
-      <h2 id="color-mixer-heading">Create Your Custom Color Palette</h2>
-      <form id="color-mixer-form" novalidate aria-describedby="form-help" aria-live="polite">
-        <fieldset>
-          <legend>Color 1</legend>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color1-red">Red</label>
-              <input type="range" id="color1-red" name="color1-red" min="0" max="255" value="255" aria-describedby="color1-red-desc" required aria-required="true" />
-              <input type="number" id="color1-red-num" name="color1-red-num" min="0" max="255" value="255" aria-label="Red value for Color 1" required aria-required="true" />
-            </div>
-            <div id="color1-red-desc" class="visually-hidden">Adjust the red component from 0 to 255</div>
-          </div>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color1-green">Green</label>
-              <input type="range" id="color1-green" name="color1-green" min="0" max="255" value="0" aria-describedby="color1-green-desc" required aria-required="true" />
-              <input type="number" id="color1-green-num" name="color1-green-num" min="0" max="255" value="0" aria-label="Green value for Color 1" required aria-required="true" />
-            </div>
-            <div id="color1-green-desc" class="visually-hidden">Adjust the green component from 0 to 255</div>
-          </div>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color1-blue">Blue</label>
-              <input type="range" id="color1-blue" name="color1-blue" min="0" max="255" value="0" aria-describedby="color1-blue-desc" required aria-required="true" />
-              <input type="number" id="color1-blue-num" name="color1-blue-num" min="0" max="255" value="0" aria-label="Blue value for Color 1" required aria-required="true" />
-            </div>
-            <div id="color1-blue-desc" class="visually-hidden">Adjust the blue component from 0 to 255</div>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Color 2</legend>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color2-red">Red</label>
-              <input type="range" id="color2-red" name="color2-red" min="0" max="255" value="0" aria-describedby="color2-red-desc" required aria-required="true" />
-              <input type="number" id="color2-red-num" name="color2-red-num" min="0" max="255" value="0" aria-label="Red value for Color 2" required aria-required="true" />
-            </div>
-            <div id="color2-red-desc" class="visually-hidden">Adjust the red component from 0 to 255</div>
-          </div>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color2-green">Green</label>
-              <input type="range" id="color2-green" name="color2-green" min="0" max="255" value="0" aria-describedby="color2-green-desc" required aria-required="true" />
-              <input type="number" id="color2-green-num" name="color2-green-num" min="0" max="255" value="0" aria-label="Green value for Color 2" required aria-required="true" />
-            </div>
-            <div id="color2-green-desc" class="visually-hidden">Adjust the green component from 0 to 255</div>
-          </div>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color2-blue">Blue</label>
-              <input type="range" id="color2-blue" name="color2-blue" min="0" max="255" value="255" aria-describedby="color2-blue-desc" required aria-required="true" />
-              <input type="number" id="color2-blue-num" name="color2-blue-num" min="0" max="255" value="255" aria-label="Blue value for Color 2" required aria-required="true" />
-            </div>
-            <div id="color2-blue-desc" class="visually-hidden">Adjust the blue component from 0 to 255</div>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Color 3</legend>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color3-red">Red</label>
-              <input type="range" id="color3-red" name="color3-red" min="0" max="255" value="0" aria-describedby="color3-red-desc" required aria-required="true" />
-              <input type="number" id="color3-red-num" name="color3-red-num" min="0" max="255" value="0" aria-label="Red value for Color 3" required aria-required="true" />
-            </div>
-            <div id="color3-red-desc" class="visually-hidden">Adjust the red component from 0 to 255</div>
-          </div>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color3-green">Green</label>
-              <input type="range" id="color3-green" name="color3-green" min="0" max="255" value="255" aria-describedby="color3-green-desc" required aria-required="true" />
-              <input type="number" id="color3-green-num" name="color3-green-num" min="0" max="255" value="255" aria-label="Green value for Color 3" required aria-required="true" />
-            </div>
-            <div id="color3-green-desc" class="visually-hidden">Adjust the green component from 0 to 255</div>
-          </div>
-          <div class="input-group">
-            <div class="input-row">
-              <label for="color3-blue">Blue</label>
-              <input type="range" id="color3-blue" name="color3-blue" min="0" max="255" value="0" aria-describedby="color3-blue-desc" required aria-required="true" />
-              <input type="number" id="color3-blue-num" name="color3-blue-num" min="0" max="255" value="0" aria-label="Blue value for Color 3" required aria-required="true" />
-            </div>
-            <div id="color3-blue-desc" class="visually-hidden">Adjust the blue component from 0 to 255</div>
-          </div>
-        </fieldset>
-
-        <div class="input-group">
-          <label for="palette-name">Palette Name <span aria-hidden="true" style="color: var(--color-error);">*</span></label>
-          <input type="text" id="palette-name" name="palette-name" maxlength="30" autocomplete="off" required aria-required="true" aria-describedby="palette-name-help" />
-          <div id="palette-name-help" class="visually-hidden">Enter a name for your custom palette, maximum 30 characters.</div>
-          <div id="palette-name-error" class="error-message" role="alert" aria-live="assertive" hidden></div>
-        </div>
-
-        <button type="submit" id="save-palette-btn" aria-describedby="save-palette-desc" disabled>Save Palette</button>
-        <div id="save-palette-desc" class="visually-hidden">Saves the current colors as a palette. Enabled when all inputs are valid.</div>
-      </form>
-
-      <section aria-label="Current Palette Preview" id="current-palette-preview" style="margin-top: var(--spacing-base);">
-        <h3>Current Palette Preview</h3>
-        <div id="current-palette" aria-live="polite" aria-atomic="true" role="region" aria-label="Live preview of current color palette">
-          <!-- Color swatches inserted here -->
-        </div>
-      </section>
-    </section>
-
-    <aside id="palette-section" aria-labelledby="palette-section-heading" tabindex="0">
-      <h2 id="palette-section-heading">Saved Palettes</h2>
-      <p id="palette-count" aria-live="polite" aria-atomic="true" style="font-weight: 600;">No palettes saved yet.</p>
-      <div id="palette-list" role="list" aria-label="List of saved color palettes">
-        <!-- Saved palettes inserted here -->
-      </div>
-    </aside>
-  </div>
-
-  <section id="theme-preview-section" aria-labelledby="theme-preview-heading" tabindex="0" style="margin-top: var(--spacing-base);">
-    <h2 id="theme-preview-heading">Real-Time Theme Preview</h2>
-    <p id="theme-preview-desc">Preview how your palette colors apply to different design themes. Use keyboard to navigate and select palettes.</p>
-    <div id="theme-preview" role="region" aria-live="polite" aria-atomic="true" aria-describedby="theme-preview-desc">
-      <article class="theme-sample theme-light" tabindex="0" aria-label="Light theme preview sample">
-        <h3>Light Theme</h3>
-        <p>This theme uses your palette colors on a light background with high contrast text.</p>
-        <button id="toggle-animation" aria-pressed="false" aria-label="Toggle animation for theme preview">Toggle Animation</button>
-        <div id="light-theme-box" style="margin-top: 1rem; height: 100px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);"></div>
-      </article>
-      <article class="theme-sample theme-dark" tabindex="0" aria-label="Dark theme preview sample" style="margin-top: var(--spacing-base);">
-        <h3>Dark Theme</h3>
-        <p>This theme uses your palette colors on a dark background with bright text.</p>
-        <div id="dark-theme-box" style="margin-top: 1rem; height: 100px; border-radius: 8px; box-shadow: 0 4px 8px rgba(255,255,255,0.2);"></div>
-      </article>
-      <article class="theme-sample theme-accent" tabindex="0" aria-label="Accent theme preview sample" style="margin-top: var(--spacing-base);">
-        <h3>Accent Theme</h3>
-        <p>This theme highlights your palette colors as vibrant accents.</p>
-        <div id="accent-theme-box" style="margin-top: 1rem; height: 100px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);"></div>
-      </article>
-    </div>
-  </section>
-
-  <section id="help-section" aria-labelledby="help-heading" tabindex="0" style="margin-top: var(--spacing-base);">
-    <h2 id="help-heading">Help &amp; Instructions</h2>
-    <article>
-      <h3>How to Use the Color Mixer</h3>
-      <p>Adjust the red, green, and blue sliders or number inputs for each color to create your custom palette. The preview updates live.</p>
-      <p>Give your palette a unique name and click <strong>Save Palette</strong> to add it to your saved palettes list.</p>
-    </article>
-    <article>
-      <h3>Using Saved Palettes</h3>
-      <p>Click or keyboard select a saved palette to preview it in different design themes on the right. You can save multiple palettes and switch between them.</p>
-    </article>
-    <article>
-      <h3>Accessibility Features</h3>
-      <ul>
-        <li>Full keyboard navigation and focus management.</li>
-        <li>High contrast colors with a minimum 7:1 ratio for text.</li>
-        <li>All interactive elements have labels and ARIA attributes.</li>
-        <li>Reduced motion support and toggle for animations.</li>
-        <li>Skip link for quick navigation to main content.</li>
-      </ul>
-    </article>
-  </section>
-</main>
-
-<footer>
-  <p>© 2024 Accessible Color Mixer Tool. Developed with full WCAG 2.2 AAA compliance.</p>
-</footer>
-
-<script>
-  (() => {
-    "use strict";
-
-    // Utility: Clamp number between min and max
-    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-
-    // Elements
-    const form = document.getElementById("color-mixer-form");
-    const paletteNameInput = document.getElementById("palette-name");
-    const paletteNameError = document.getElementById("palette-name-error");
-    const saveButton = document.getElementById("save-palette-btn");
-    const currentPaletteContainer = document.getElementById("current-palette");
-    const paletteList = document.getElementById("palette-list");
-    const paletteCount = document.getElementById("palette-count");
-
-    // Theme preview boxes
-    const lightThemeBox = document.getElementById("light-theme-box");
-    const darkThemeBox = document.getElementById("dark-theme-box");
-    const accentThemeBox = document.getElementById("accent-theme-box");
-
-    // Animation toggle button
-    const toggleAnimationBtn = document.getElementById("toggle-animation");
-
-    // Reduced motion preference
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    // State
-    let savedPalettes = [];
-    let animationActive = !prefersReducedMotion;
-
-    // Inputs grouped by color
-    const colorInputs = [
-      {
-        red: document.getElementById("color1-red"),
-        green: document.getElementById("color1-green"),
-        blue: document.getElementById("color1-blue"),
-        redNum: document.getElementById("color1-red-num"),
-        greenNum: document.getElementById("color1-green-num"),
-        blueNum: document.getElementById("color1-blue-num"),
-      },
-      {
-        red: document.getElementById("color2-red"),
-        green: document.getElementById("color2-green"),
-        blue: document.getElementById("color2-blue"),
-        redNum: document.getElementById("color2-red-num"),
-        greenNum: document.getElementById("color2-green-num"),
-        blueNum: document.getElementById("color2-blue-num"),
-      },
-      {
-        red: document.getElementById("color3-red"),
-        green: document.getElementById("color3-green"),
-        blue: document.getElementById("color3-blue"),
-        redNum: document.getElementById("color3-red-num"),
-        greenNum: document.getElementById("color3-green-num"),
-        blueNum: document.getElementById("color3-blue-num"),
-      },
-    ];
-
-    // Synchronize range and number inputs bidirectionally
-    function syncInputs(rangeInput, numberInput) {
-      // When range changes, update number
-      rangeInput.addEventListener("input", () => {
-        numberInput.value = rangeInput.value;
-        updateCurrentPalettePreview();
-        validateForm();
-      });
-      // When number changes, update range (with validation)
-      numberInput.addEventListener("input", () => {
-        let val = parseInt(numberInput.value, 10);
-        if (Number.isNaN(val)) {
-          val = 0;
-        }
-        val = clamp(val, parseInt(numberInput.min, 10), parseInt(numberInput.max, 10));
-        numberInput.value = val;
-        rangeInput.value = val;
-        updateCurrentPalettePreview();
-        validateForm();
-      });
-      // Keyboard accessibility: prevent invalid input
-      numberInput.addEventListener("keydown", (e) => {
-        // Allow: backspace, delete, tab, arrows, home/end
-        const allowedKeys = [
-          "Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End"
-        ];
-        if (
-          allowedKeys.includes(e.key) ||
-          (e.key >= "0" && e.key <= "9") ||
-          (e.key === "Enter")
-        ) {
-          return;
-        }
-        e.preventDefault();
-      });
-    }
-
-    // Setup synchronization for all inputs
-    colorInputs.forEach(({red, green, blue, redNum, greenNum, blueNum}) => {
-      syncInputs(red, redNum);
-      syncInputs(green, greenNum);
-      syncInputs(blue, blueNum);
-    });
-
-    // Convert RGB components to hex string (#RRGGBB)
-    function rgbToHex(r, g, b) {
-      const toHex = (c) => c.toString(16).padStart(2, "0").toUpperCase();
-      return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-    }
-
-    // Calculate relative luminance for contrast calculation
-    // Formula from WCAG 2.2
-    function relativeLuminance(r, g, b) {
-      const srgb = [r, g, b].map(c => {
-        const cs = c / 255;
-        return cs <= 0.03928 ? cs / 12.92 : Math.pow((cs + 0.055) / 1.055, 2.4);
-      });
-      return 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2];
-    }
-
-    // Calculate contrast ratio between two RGB colors
-    function contrastRatio(rgb1, rgb2) {
-      const L1 = relativeLuminance(rgb1[0], rgb1[1], rgb1[2]);
-      const L2 = relativeLuminance(rgb2[0], rgb2[1], rgb2[2]);
-      const lighter = Math.max(L1, L2);
-      const darker = Math.min(L1, L2);
-      return (lighter + 0.05) / (darker + 0.05);
-    }
-
-    // Check if contrast ratio meets AAA standard for normal text (7:1)
-    function meetsContrastAAA(rgba1, rgba2) {
-      return contrastRatio(rgba1, rgba2) >= 7;
-    }
-
-    // Validate palette name: non-empty, max 30 chars, no duplicate names
-    function validatePaletteName(name) {
-      if (!name.trim()) {
-        return "Palette name is required.";
-      }
-      if (name.trim().length > 30) {
-        return "Palette name must be 30 characters or less.";
-      }
-      if (savedPalettes.some(p => p.name.toLowerCase() === name.trim().toLowerCase())) {
-        return "Palette name already exists. Please choose a unique name.";
-      }
-      return "";
-    }
-
-    // Validate entire form: colors in range and palette name valid
-    function validateForm() {
-      let valid = true;
-
-      // Validate palette name
-      const name = paletteNameInput.value;
-      const nameError = validatePaletteName(name);
-      if (nameError) {
-        paletteNameError.textContent = nameError;
-        paletteNameError.hidden = false;
-        paletteNameInput.setAttribute("aria-invalid", "true");
-        paletteNameInput.setAttribute("aria-describedby", "palette-name-error");
-        valid = false;
-      } else {
-        paletteNameError.textContent = "";
-        paletteNameError.hidden = true;
-        paletteNameInput.removeAttribute("aria-invalid");
-        paletteNameInput.removeAttribute("aria-describedby");
-      }
-
-      // Validate RGB inputs (0-255) - already constrained by input attributes and clamp
-      for (const color of colorInputs) {
-        for (const channel of ["red", "green", "blue"]) {
-          const rangeInput = color[channel];
-          const numInput = color[channel + "Num"];
-          const rVal = parseInt(rangeInput.value, 10);
-          const nVal = parseInt(numInput.value, 10);
-          if (
-            Number.isNaN(rVal) || Number.isNaN(nVal) ||
-            rVal < 0 || rVal > 255 || nVal < 0 || nVal > 255 ||
-            rVal !== nVal
-          ) {
-            valid = false;
-            // For simplicity, we won't show per-channel errors, but disable save
-          }
-        }
-      }
-
-      saveButton.disabled = !valid;
-      return valid;
-    }
-
-    // Generate current palette colors as array of RGB arrays
-    function getCurrentPaletteColors() {
-      return colorInputs.map(color => [
-        parseInt(color.red.value, 10),
-        parseInt(color.green.value, 10),
-        parseInt(color.blue.value, 10),
-      ]);
-    }
-
-    // Update live preview of current palette
-    function updateCurrentPalettePreview() {
-      const colors = getCurrentPaletteColors();
-      currentPaletteContainer.innerHTML = "";
-
-      colors.forEach((rgb, idx) => {
-        const hex = rgbToHex(...rgb);
-        const swatch = document.createElement("div");
-        swatch.className = "palette-swatch";
-        swatch.setAttribute("role", "img");
-        swatch.setAttribute("aria-label", `Color ${idx + 1}: ${hex} with RGB values ${rgb.join(", ")}`);
-        swatch.style.borderColor = "#666666";
-        const colorDiv = document.createElement("div");
-        colorDiv.className = "palette-color";
-        colorDiv.style.backgroundColor = hex;
-        // Add pattern for color blindness support (diagonal stripes) if color is low contrast
-        if (!meetsContrastAAA(rgb, [255, 255, 255]) && !meetsContrastAAA(rgb, [0, 0, 0])) {
-          colorDiv.style.backgroundImage = `repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 4px,
-            rgba(255,255,255,0.3) 4px,
-            rgba(255,255,255,0.3) 8px
-          )`;
-        }
-        swatch.appendChild(colorDiv);
-        const label = document.createElement("div");
-        label.className = "palette-label";
-        label.textContent = hex;
-        swatch.appendChild(label);
-        currentPaletteContainer.appendChild(swatch);
-      });
-    }
-
-    // Save palette to state and update UI
-    function savePalette(name, colors) {
-      savedPalettes.push({ name: name.trim(), colors });
-      updatePaletteList();
-      paletteNameInput.value = "";
-      saveButton.disabled = true;
-      paletteNameInput.focus();
-      announce(`Palette "${name}" saved successfully.`);
-    }
-
-    // Update saved palettes list UI
-    function updatePaletteList() {
-      paletteList.innerHTML = "";
-      if (savedPalettes.length === 0) {
-        paletteCount.textContent = "No palettes saved yet.";
-        return;
-      }
-      paletteCount.textContent = `${savedPalettes.length} palette${savedPalettes.length === 1 ? "" : "s"} saved.`;
-
-      savedPalettes.forEach((palette, index) => {
-        const item = document.createElement("div");
-        item.className = "palette-swatch";
-        item.tabIndex = 0;
-        item.setAttribute("role", "listitem");
-        item.setAttribute("aria-label", `Saved palette: ${palette.name}. Press Enter or Space to preview.`);
-        item.dataset.index = index;
-
-        const colorsDiv = document.createElement("div");
-        colorsDiv.className = "palette-colors";
-
-        palette.colors.forEach(rgb => {
-          const colorDiv = document.createElement("div");
-          colorDiv.className = "palette-color";
-          const hex = rgbToHex(...rgb);
-          colorDiv.style.backgroundColor = hex;
-          // Add pattern if low contrast for accessibility
-          if (!meetsContrastAAA(rgb, [255, 255, 255]) && !meetsContrastAAA(rgb, [0, 0, 0])) {
-            colorDiv.style.backgroundImage = `repeating-linear-gradient(
-              45deg,
-              transparent,
-              transparent 4px,
-              rgba(255,255,255,0.3) 4px,
-              rgba(255,255,255,0.3) 8px
-            )`;
-          }
-          colorsDiv.appendChild(colorDiv);
-        });
-
-        item.appendChild(colorsDiv);
-
-        const label = document.createElement("div");
-        label.className = "palette-label";
-        label.textContent = palette.name;
-        item.appendChild(label);
-
-        // Keyboard and mouse handlers for selecting palette
-        item.addEventListener("click", () => {
-          previewPalette(index);
-        });
-        item.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            previewPalette(index);
-          }
-        });
-
-        paletteList.appendChild(item);
-      });
-    }
-
-    // Announce messages for screen readers
-    function announce(message) {
-      let liveRegion = document.getElementById("aria-live-region");
-      if (!liveRegion) {
-        liveRegion = document.createElement("div");
-        liveRegion.id = "aria-live-region";
-        liveRegion.className = "visually-hidden";
-        liveRegion.setAttribute("aria-live", "polite");
-        liveRegion.setAttribute("aria-atomic", "true");
-        document.body.appendChild(liveRegion);
-      }
-      liveRegion.textContent = message;
-    }
-
-    // Preview palette in theme previews
-    function previewPalette(index) {
-      const palette = savedPalettes[index];
-      if (!palette) return;
-
-      // Use palette colors to style theme preview boxes:
-      // Light theme: background gradient from color1 to color2, text color color3 or black/white depending on contrast
-      const [c1, c2, c3] = palette.colors;
-      const c1Hex = rgbToHex(...c1);
-      const c2Hex = rgbToHex(...c2);
-      const c3Hex = rgbToHex(...c3);
-
-      // Light theme background gradient
-      lightThemeBox.style.background = `linear-gradient(135deg, ${c1Hex} 0%, ${c2Hex} 100%)`;
-
-      // Determine best text color for light theme (c3 or black/white)
-      const black = [0, 0, 0];
-      const white = [255, 255, 255];
-      let lightTextColor = c3;
-      // Ensure text contrast on light background is >=7:1
-      if (!meetsContrastAAA(c3, c1) || !meetsContrastAAA(c3, c2)) {
-        // Fallback to black or white whichever has better contrast
-        const blackContrast = Math.min(contrastRatio(black, c1), contrastRatio(black, c2));
-        const whiteContrast = Math.min(contrastRatio(white, c1), contrastRatio(white, c2));
-        lightTextColor = blackContrast >= whiteContrast ? black : white;
-      }
-      lightThemeBox.style.color = rgbToHex(...lightTextColor);
-
-      // Dark theme background gradient (inverse colors)
-      darkThemeBox.style.background = `linear-gradient(135deg, ${c2Hex} 0%, ${c1Hex} 100%)`;
-
-      // Dark theme text color: use c3 or white/black for contrast
-      let darkTextColor = c3;
-      if (!meetsContrastAAA(c3, c2) || !meetsContrastAAA(c3, c1)) {
-        const blackContrast = Math.min(contrastRatio(black, c2), contrastRatio(black, c1));
-        const whiteContrast = Math.min(contrastRatio(white, c2), contrastRatio(white, c1));
-        darkTextColor = whiteContrast >= blackContrast ? white : black;
-      }
-      darkThemeBox.style.color = rgbToHex(...darkTextColor);
-
-      // Accent theme: solid background color c3, text color black or white for contrast
-      accentThemeBox.style.background = c3Hex;
-      const blackContrastAccent = contrastRatio(black, c3);
-      const whiteContrastAccent = contrastRatio(white, c3);
-      accentThemeBox.style.color = whiteContrastAccent >= blackContrastAccent ? rgbToHex(...white) : rgbToHex(...black);
-
-      announce(`Previewing palette "${palette.name}" in theme previews.`);
-    }
-
-    // Animate light theme box background colors if animation enabled
-    let animationFrameId = null;
-    let animationStep = 0;
-    function animateLightTheme() {
-      if (!animationActive) return;
-      animationStep += 0.01;
-      if (animationStep > 1) animationStep = 0;
-      const colors = getCurrentPaletteColors();
-      if (colors.length < 2) return;
-      const c1 = colors[0];
-      const c2 = colors[1];
-
-      // Linear interpolation between c1 and c2
-      const lerp = (start, end, t) => Math.round(start + (end - start) * t);
-      const r = lerp(c1[0], c2[0], animationStep);
-      const g = lerp(c1[1], c2[1], animationStep);
-      const b = lerp(c1[2], c2[2], animationStep);
-      const hex = rgbToHex(r, g, b);
-      lightThemeBox.style.background = `linear-gradient(135deg, ${hex} 0%, ${rgbToHex(...c2)} 100%)`;
-
-      animationFrameId = requestAnimationFrame(animateLightTheme);
-    }
-
-    // Toggle animation button handler
-    toggleAnimationBtn.addEventListener("click", () => {
-      animationActive = !animationActive;
-      toggleAnimationBtn.setAttribute("aria-pressed", animationActive.toString());
-      toggleAnimationBtn.textContent = animationActive ? "Pause Animation" : "Play Animation";
-      if (animationActive) {
-        animateLightTheme();
-      } else {
-        if (animationFrameId) {
-          cancelAnimationFrame(animationFrameId);
-          animationFrameId = null;
-        }
-        // Reset to static preview
-        const colors = getCurrentPaletteColors();
-        if (colors.length >= 2) {
-          lightThemeBox.style.background = `linear-gradient(135deg, ${rgbToHex(...colors[0])} 0%, ${rgbToHex(...colors[1])} 100%)`;
-        }
-      }
-    });
-
-    // Form submit handler
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      if (!validateForm()) {
-        paletteNameInput.focus();
-        return;
-      }
-      const name = paletteNameInput.value;
-      const colors = getCurrentPaletteColors();
-      savePalette(name, colors);
-    });
-
-    // Initialize preview on page load
-    updateCurrentPalettePreview();
-
-    // Validate form on load and input
-    validateForm();
-
-    // Preview first palette if exists
-    function previewFirstPalette() {
-      if (savedPalettes.length > 0) {
-        previewPalette(0);
-      }
-    }
-
-    // Keyboard shortcut for skip link focus (for testing)
-    // No trap in keyboard navigation, focus visible by default
-
-    // Initial theme preview uses current palette colors
-    previewPalette(-1); // no saved palette, preview current colors
-
-    // When palette list changes, preview first palette automatically
-    // But only if no palette selected yet
-    // We implement preview on savePalette already
-
-    // Accessibility: Focus management on skip link
-    const skipLink = document.getElementById("skip-link");
-    skipLink.addEventListener("click", (e) => {
-      const main = document.getElementById("main-content");
-      main.focus();
-    });
-
-    // When user changes any color input, update current palette preview and theme previews
-    colorInputs.forEach(color => {
-      ["red", "green", "blue"].forEach(channel => {
-        color[channel].addEventListener("input", () => {
-          updateCurrentPalettePreview();
-          validateForm();
-          // Update theme previews only if no saved palette selected (preview current colors)
-          // We consider current colors as index -1
-          previewPalette(-1);
-        });
-      });
-    });
-
-    // Support previewPalette with index -1 = current colors
-    function previewPalette(index) {
-      let palette;
-      if (index === -1) {
-        palette = { name: "Current Colors", colors: getCurrentPaletteColors() };
-      } else {
-        palette = savedPalettes[index];
-        if (!palette) return;
-      }
-
-      const [c1, c2, c3] = palette.colors;
-      const c1Hex = rgbToHex(...c1);
-      const c2Hex = rgbToHex(...c2);
-      const c3Hex = rgbToHex(...c3);
-
-      lightThemeBox.style.background = `linear-gradient(135deg, ${c1Hex} 0%, ${c2Hex} 100%)`;
-      let black = [0, 0, 0];
-      let white = [255, 255, 255];
-
-      let lightTextColor = c3;
-      if (!meetsContrastAAA(c3, c1) || !meetsContrastAAA(c3, c2)) {
-        const blackContrast = Math.min(contrastRatio(black, c1), contrastRatio(black, c2));
-        const whiteContrast = Math.min(contrastRatio(white, c1), contrastRatio(white, c2));
-        lightTextColor = blackContrast >= whiteContrast ? black : white;
-      }
-      lightThemeBox.style.color = rgbToHex(...lightTextColor);
-
-      darkThemeBox.style.background = `linear-gradient(135deg, ${c2Hex} 0%, ${c1Hex} 100%)`;
-      let darkTextColor = c3;
-      if (!meetsContrastAAA(c3, c2) || !meetsContrastAAA(c3, c1)) {
-        const blackContrast = Math.min(contrastRatio(black, c2), contrastRatio(black, c1));
-        const whiteContrast = Math.min(contrastRatio(white, c2), contrastRatio(white, c1));
-        darkTextColor = whiteContrast >= blackContrast ? white : black;
-      }
-      darkThemeBox.style.color = rgbToHex(...darkTextColor);
-
-      accentThemeBox.style.background = c3Hex;
-      const blackContrastAccent = contrastRatio(black, c3);
-      const whiteContrastAccent = contrastRatio(white, c3);
-      accentThemeBox.style.color = whiteContrastAccent >= blackContrastAccent ? rgbToHex(...white) : rgbToHex(...black);
-
-      if (index >= 0) {
-        announce(`Previewing palette "${palette.name}" in theme previews.`);
-      } else {
-        announce("Previewing current colors in theme previews.");
-      }
-    }
-
-    // On page load, preview current colors
-    previewPalette(-1);
-
-    // Animate light theme box if animation enabled
-    if (animationActive) {
-      animateLightTheme();
-      toggleAnimationBtn.setAttribute("aria-pressed", "true");
-      toggleAnimationBtn.textContent = "Pause Animation";
-    } else {
-      toggleAnimationBtn.setAttribute("aria-pressed", "false");
-      toggleAnimationBtn.textContent = "Play Animation";
-    }
-
-  })();
-</script>
 </body>
 </html>
